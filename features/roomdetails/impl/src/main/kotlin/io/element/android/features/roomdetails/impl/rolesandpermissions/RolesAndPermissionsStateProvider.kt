@@ -18,7 +18,7 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
             aRolesAndPermissionsState(
                 adminCount = 1,
                 moderatorCount = 2,
-                changeOwnRoleAction = AsyncAction.Confirming,
+                changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
             ),
             aRolesAndPermissionsState(
                 adminCount = 1,
@@ -33,7 +33,7 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
             aRolesAndPermissionsState(
                 adminCount = 1,
                 moderatorCount = 2,
-                resetPermissionsAction = AsyncAction.Confirming,
+                resetPermissionsAction = AsyncAction.ConfirmingNoParams,
             ),
             aRolesAndPermissionsState(
                 adminCount = 1,

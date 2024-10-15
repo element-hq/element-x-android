@@ -14,7 +14,7 @@ open class DirectLogoutStateProvider : PreviewParameterProvider<DirectLogoutStat
     override val values: Sequence<DirectLogoutState>
         get() = sequenceOf(
             aDirectLogoutState(),
-            aDirectLogoutState(logoutAction = AsyncAction.Confirming),
+            aDirectLogoutState(logoutAction = AsyncAction.ConfirmingNoParams),
             aDirectLogoutState(logoutAction = AsyncAction.Loading),
             aDirectLogoutState(logoutAction = AsyncAction.Failure(Exception("Error"))),
             aDirectLogoutState(logoutAction = AsyncAction.Success("success")),

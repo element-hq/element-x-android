@@ -10,6 +10,7 @@ package io.element.android.features.invite.impl.response
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -33,7 +34,6 @@ import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import java.util.Optional
 
 class AcceptDeclineInvitePresenterTest {
     @get:Rule
@@ -46,7 +46,6 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
             }
         }
     }
@@ -61,17 +60,13 @@ class AcceptDeclineInvitePresenterTest {
                     AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.of(inviteData))
-                assertThat(state.declineAction).isInstanceOf(AsyncAction.Confirming::class.java)
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
                     InternalAcceptDeclineInviteEvents.CancelDeclineInvite
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             }
         }
@@ -93,22 +88,20 @@ class AcceptDeclineInvitePresenterTest {
                     AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
                 )
             }
-            skipItems(2)
+            assertThat(awaitItem().declineAction.isLoading()).isTrue()
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Failure::class.java)
                 state.eventSink(
                     InternalAcceptDeclineInviteEvents.DismissDeclineError
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             }
             cancelAndConsumeRemainingEvents()
@@ -141,13 +134,13 @@ class AcceptDeclineInvitePresenterTest {
                     AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
                 )
             }
-            skipItems(2)
+            assertThat(awaitItem().declineAction.isLoading()).isTrue()
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Success::class.java)
             }
@@ -173,7 +166,6 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.acceptAction).isEqualTo(AsyncAction.Loading)
             }
             awaitItem().also { state ->
@@ -183,7 +175,6 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             }
             cancelAndConsumeRemainingEvents()
@@ -220,7 +211,6 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.acceptAction).isEqualTo(AsyncAction.Loading)
             }
             awaitItem().also { state ->

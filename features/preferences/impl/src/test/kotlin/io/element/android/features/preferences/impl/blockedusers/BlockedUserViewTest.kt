@@ -65,7 +65,7 @@ class BlockedUserViewTest {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
         rule.setBlockedUsersView(
             aBlockedUsersState(
-                unblockUserAction = AsyncAction.Confirming,
+                unblockUserAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder
             ),
         )
@@ -78,7 +78,7 @@ class BlockedUserViewTest {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
         rule.setBlockedUsersView(
             aBlockedUsersState(
-                unblockUserAction = AsyncAction.Confirming,
+                unblockUserAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder
             ),
         )

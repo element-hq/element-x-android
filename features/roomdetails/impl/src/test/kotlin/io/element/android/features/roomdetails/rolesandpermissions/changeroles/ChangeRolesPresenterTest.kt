@@ -229,7 +229,7 @@ class ChangeRolesPresenterTest {
 
             awaitItem().eventSink(ChangeRolesEvent.Exit)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.exitState).isEqualTo(AsyncAction.Confirming)
+            assertThat(confirmingState.exitState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             confirmingState.eventSink(ChangeRolesEvent.CancelExit)
             assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Uninitialized)
@@ -257,7 +257,7 @@ class ChangeRolesPresenterTest {
             skipItems(1)
 
             updatedState.eventSink(ChangeRolesEvent.Exit)
-            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Confirming)
+            assertThat(awaitItem().exitState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             updatedState.eventSink(ChangeRolesEvent.Exit)
             assertThat(awaitItem().exitState).isEqualTo(AsyncAction.Success(Unit))
@@ -284,7 +284,7 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             awaitItem().eventSink(ChangeRolesEvent.Save)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.savingState).isEqualTo(AsyncAction.Confirming)
+            assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             confirmingState.eventSink(ChangeRolesEvent.Save)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
@@ -309,7 +309,7 @@ class ChangeRolesPresenterTest {
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.savingState).isEqualTo(AsyncAction.Confirming)
+            assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             confirmingState.eventSink(ChangeRolesEvent.CancelSave)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Uninitialized)

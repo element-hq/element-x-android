@@ -52,7 +52,7 @@ class RolesAndPermissionPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.ChangeOwnRole)
 
-            assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Confirming)
+            assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.ConfirmingNoParams)
         }
     }
 

@@ -98,7 +98,7 @@ class RolesAndPermissionsViewTest {
         val recorder = EventsRecorder<RolesAndPermissionsEvents>()
         rule.setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
-                resetPermissionsAction = AsyncAction.Confirming,
+                resetPermissionsAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
         )
@@ -111,7 +111,7 @@ class RolesAndPermissionsViewTest {
         val recorder = EventsRecorder<RolesAndPermissionsEvents>()
         rule.setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
-                resetPermissionsAction = AsyncAction.Confirming,
+                resetPermissionsAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
         )
@@ -124,7 +124,7 @@ class RolesAndPermissionsViewTest {
         val recorder = EventsRecorder<RolesAndPermissionsEvents>()
         rule.setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
-                changeOwnRoleAction = AsyncAction.Confirming,
+                changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
         )
@@ -138,7 +138,7 @@ class RolesAndPermissionsViewTest {
         val recorder = EventsRecorder<RolesAndPermissionsEvents>()
         rule.setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
-                changeOwnRoleAction = AsyncAction.Confirming,
+                changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
         )
@@ -152,7 +152,7 @@ class RolesAndPermissionsViewTest {
         val recorder = EventsRecorder<RolesAndPermissionsEvents>()
         rule.setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
-                changeOwnRoleAction = AsyncAction.Confirming,
+                changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
         )

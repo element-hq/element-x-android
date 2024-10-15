@@ -158,7 +158,7 @@ fun VerifySelfSessionView(
                 latestOnSuccessLogout(state.signOutAction.data)
             }
         }
-        AsyncAction.Confirming,
+        is AsyncAction.Confirming,
         is AsyncAction.Failure,
         AsyncAction.Uninitialized -> Unit
     }

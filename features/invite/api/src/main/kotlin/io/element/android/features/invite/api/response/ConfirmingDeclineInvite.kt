@@ -8,10 +8,7 @@
 package io.element.android.features.invite.api.response
 
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.RoomId
 
-data class AcceptDeclineInviteState(
-    val acceptAction: AsyncAction<RoomId>,
-    val declineAction: AsyncAction<RoomId>,
-    val eventSink: (AcceptDeclineInviteEvents) -> Unit,
-)
+data class ConfirmingDeclineInvite(
+    val inviteData: InviteData,
+) : AsyncAction.Confirming
