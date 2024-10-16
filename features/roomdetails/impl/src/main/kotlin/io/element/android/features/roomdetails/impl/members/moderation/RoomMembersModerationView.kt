@@ -62,7 +62,7 @@ fun RoomMembersModerationView(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
-        if (state.actions.isNotEmpty()) {
+        if (state.selectedRoomMember != null && state.actions.isNotEmpty()) {
             RoomMemberActionsBottomSheet(
                 roomMember = state.selectedRoomMember,
                 actions = state.actions,
@@ -186,97 +186,95 @@ fun RoomMembersModerationView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomMemberActionsBottomSheet(
-    roomMember: RoomMember?,
+    roomMember: RoomMember,
     actions: ImmutableList<ModerationAction>,
     onSelectAction: (ModerationAction) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    if (roomMember != null && actions.isNotEmpty()) {
-        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        ModalBottomSheet(
-            modifier = Modifier.systemBarsPadding(),
-            sheetState = bottomSheetState,
-            onDismissRequest = {
-                coroutineScope.launch {
-                    bottomSheetState.hide()
-                    onDismiss()
-                }
-            },
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        modifier = Modifier.systemBarsPadding(),
+        sheetState = bottomSheetState,
+        onDismissRequest = {
+            coroutineScope.launch {
+                bottomSheetState.hide()
+                onDismiss()
+            }
+        },
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = 16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(vertical = 16.dp)
-            ) {
-                Avatar(
-                    avatarData = roomMember.getAvatarData(size = AvatarSize.RoomListManageUser),
-                    modifier = Modifier
-                        .padding(bottom = 28.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-                roomMember.displayName?.let {
-                    Text(
-                        text = it,
-                        style = ElementTheme.typography.fontHeadingLgBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                            .fillMaxWidth()
-                    )
-                }
+            Avatar(
+                avatarData = roomMember.getAvatarData(size = AvatarSize.RoomListManageUser),
+                modifier = Modifier
+                    .padding(bottom = 28.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            roomMember.displayName?.let {
                 Text(
-                    text = roomMember.userId.toString(),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textSecondary,
+                    text = it,
+                    style = ElementTheme.typography.fontHeadingLgBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                         .fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+            }
+            Text(
+                text = roomMember.userId.toString(),
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = ElementTheme.colors.textSecondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(32.dp))
 
-                for (action in actions) {
-                    when (action) {
-                        is ModerationAction.DisplayProfile -> {
-                            ListItem(
-                                headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_user_info)) },
-                                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        onSelectAction(action)
-                                        bottomSheetState.hide()
-                                    }
+            for (action in actions) {
+                when (action) {
+                    is ModerationAction.DisplayProfile -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_user_info)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
+                            onClick = {
+                                coroutineScope.launch {
+                                    onSelectAction(action)
+                                    bottomSheetState.hide()
                                 }
-                            )
-                        }
-                        is ModerationAction.KickUser -> {
-                            ListItem(
-                                headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_remove)) },
-                                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        onSelectAction(action)
-                                    }
+                            }
+                        )
+                    }
+                    is ModerationAction.KickUser -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_remove)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action)
                                 }
-                            )
-                        }
-                        is ModerationAction.BanUser -> {
-                            ListItem(
-                                headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)) },
-                                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-                                style = ListItemStyle.Destructive,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        onSelectAction(action)
-                                    }
+                            }
+                        )
+                    }
+                    is ModerationAction.BanUser -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                            style = ListItemStyle.Destructive,
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action)
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
             }
