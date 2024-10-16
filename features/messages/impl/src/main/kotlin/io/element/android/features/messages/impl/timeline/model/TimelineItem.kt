@@ -18,10 +18,11 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -76,7 +77,8 @@ sealed interface TimelineItem {
         val inReplyTo: InReplyToDetails?,
         val isThreaded: Boolean,
         val origin: TimelineItemEventOrigin?,
-        val lazyTimelineItemProvider: LazyTimelineItemProvider,
+        val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
+        val messageShieldProvider: MessageShieldProvider,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
@@ -91,10 +93,10 @@ sealed interface TimelineItem {
         val isRemote = eventId != null
 
         // No need to be lazy here?
-        val messageShield: MessageShield? = lazyTimelineItemProvider.getShield(strict = false)
+        val messageShield: MessageShield? = messageShieldProvider(strict = false)
 
         val debugInfo: TimelineItemDebugInfo
-            get() = lazyTimelineItemProvider.getTimelineItemDebugInfo()
+            get() = timelineItemDebugInfoProvider()
     }
 
     @Immutable

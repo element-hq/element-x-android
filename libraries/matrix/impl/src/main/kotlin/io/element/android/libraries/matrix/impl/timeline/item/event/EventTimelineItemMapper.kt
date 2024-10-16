@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -32,7 +31,6 @@ import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
-import org.matrix.rustcomponents.sdk.LazyTimelineItemProvider as RustLazyTimelineItemProvider
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 import org.matrix.rustcomponents.sdk.Receipt as RustReceipt
 import uniffi.matrix_sdk_ui.EventItemOrigin as RustEventItemOrigin
@@ -56,7 +54,8 @@ class EventTimelineItemMapper(
             timestamp = timestamp.toLong(),
             content = contentMapper.map(content),
             origin = origin?.map(),
-            lazyTimelineItemProvider = LazyTimelineItemProviderWrapper(lazyProvider)
+            timelineItemDebugInfoProvider = { lazyProvider.debugInfo().map() },
+            messageShieldProvider = { strict -> lazyProvider.getShields(strict)?.map() },
         )
     }
 }
@@ -161,16 +160,6 @@ private fun ShieldState?.map(): MessageShield? {
         ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
         ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
         ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
-    }
-}
-
-class LazyTimelineItemProviderWrapper(private val provider: RustLazyTimelineItemProvider) : LazyTimelineItemProvider {
-    override fun getTimelineItemDebugInfo(): TimelineItemDebugInfo {
-        return provider.debugInfo().map()
-    }
-
-    override fun getShield(strict: Boolean): MessageShield? {
-        return provider.getShields(strict)?.map()
     }
 }
 

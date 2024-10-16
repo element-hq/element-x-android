@@ -18,7 +18,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -43,10 +42,8 @@ class TimelineItemGrouperTest {
         inReplyTo = null,
         isThreaded = false,
         origin = null,
-        lazyTimelineItemProvider = object : LazyTimelineItemProvider {
-            override fun getTimelineItemDebugInfo() = aTimelineItemDebugInfo()
-            override fun getShield(strict: Boolean) = null
-        },
+        timelineItemDebugInfoProvider = { aTimelineItemDebugInfo() },
+        messageShieldProvider = { null },
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual(UniqueId("virtual"), aTimelineItemDaySeparatorModel("Today"))

@@ -17,7 +17,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import kotlinx.collections.immutable.toImmutableList
 
 @PreviewsDayNight
@@ -28,10 +27,7 @@ internal fun TimelineViewMessageShieldPreview() = ElementPreview {
     val messageShield = aCriticalShield()
     val items = listOf(
         (timelineItems.first() as TimelineItem.Event).copy(
-            lazyTimelineItemProvider = object : LazyTimelineItemProvider {
-                override fun getTimelineItemDebugInfo() = aTimelineItemDebugInfo()
-                override fun getShield(strict: Boolean) = messageShield
-            }
+            messageShieldProvider = { messageShield },
         )
     ) + timelineItems.drop(1)
     CompositionLocalProvider(

@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -167,10 +166,8 @@ internal fun aTimelineItemEvent(
         inReplyTo = inReplyTo,
         isThreaded = isThreaded,
         origin = null,
-        lazyTimelineItemProvider = object : LazyTimelineItemProvider {
-            override fun getTimelineItemDebugInfo(): TimelineItemDebugInfo = debugInfo
-            override fun getShield(strict: Boolean): MessageShield? = messageShield
-        }
+        timelineItemDebugInfoProvider = { debugInfo },
+        messageShieldProvider = { messageShield },
     )
 }
 
