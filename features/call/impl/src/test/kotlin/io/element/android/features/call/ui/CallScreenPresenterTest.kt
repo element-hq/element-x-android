@@ -73,6 +73,7 @@ class CallScreenPresenterTest {
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
             assertThat(initialState.webViewError).isNull()
             assertThat(initialState.isInWidgetMode).isFalse()
+            assertThat(initialState.isCallActive).isFalse()
             analyticsLambda.assertions().isNeverCalled()
             joinedCallLambda.assertions().isCalledOnce()
         }
@@ -106,6 +107,7 @@ class CallScreenPresenterTest {
             joinedCallLambda.assertions().isCalledOnce()
             val initialState = awaitItem()
             assertThat(initialState.urlState).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(initialState.isCallActive).isFalse()
             assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
@@ -200,6 +202,44 @@ class CallScreenPresenterTest {
             assertThat(widgetDriver.closeCalledCount).isEqualTo(1)
 
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a received room member message makes the call to be active`() = runTest {
+        val navigator = FakeCallScreenNavigator()
+        val widgetDriver = FakeMatrixWidgetDriver()
+        val presenter = createCallScreenPresenter(
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            widgetDriver = widgetDriver,
+            navigator = navigator,
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            screenTracker = FakeScreenTracker {},
+        )
+        val messageInterceptor = FakeWidgetMessageInterceptor()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.isCallActive).isFalse()
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            messageInterceptor.givenInterceptedMessage(
+                """
+                    {
+                        "action":"send_event",
+                        "api":"fromWidget",
+                        "widgetId":"1",
+                        "requestId":"1",
+                        "data":{
+                            "type":"org.matrix.msc3401.call.member"
+                        }
+                    }
+                """.trimIndent()
+            )
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.isCallActive).isTrue()
         }
     }
 
