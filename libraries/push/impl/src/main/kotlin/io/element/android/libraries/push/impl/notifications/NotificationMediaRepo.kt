@@ -47,13 +47,13 @@ interface NotificationMediaRepo {
      *
      * @param mediaSource the media source of the media.
      * @param mimeType the mime type of the media.
-     * @param body optional body which will be used to name the file.
+     * @param filename optional String which will be used to name the file.
      * @return A [Result] holding either the media [File] from the cache directory or an [Exception].
      */
     suspend fun getMediaFile(
         mediaSource: MediaSource,
         mimeType: String?,
-        body: String?,
+        filename: String?,
     ): Result<File>
 }
 
@@ -75,7 +75,7 @@ class DefaultNotificationMediaRepo @AssistedInject constructor(
     override suspend fun getMediaFile(
         mediaSource: MediaSource,
         mimeType: String?,
-        body: String?,
+        filename: String?,
     ): Result<File> {
         val cachedFile = mediaSource.cachedFile()
         return when {
@@ -84,7 +84,7 @@ class DefaultNotificationMediaRepo @AssistedInject constructor(
             else -> matrixMediaLoader.downloadMediaFile(
                 source = mediaSource,
                 mimeType = mimeType,
-                body = body,
+                filename = filename,
             ).mapCatching {
                 it.use { mediaFile ->
                     val dest = cachedFile.apply { parentFile?.mkdirs() }

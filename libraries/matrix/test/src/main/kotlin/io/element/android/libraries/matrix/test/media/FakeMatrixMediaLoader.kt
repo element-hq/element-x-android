@@ -35,7 +35,7 @@ class FakeMatrixMediaLoader : MatrixMediaLoader {
     override suspend fun downloadMediaFile(
         source: MediaSource,
         mimeType: String?,
-        body: String?,
+        filename: String?,
         useCache: Boolean,
     ): Result<MediaFile> = simulateLongTask {
         if (shouldFail) {

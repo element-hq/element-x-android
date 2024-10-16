@@ -25,14 +25,14 @@ interface MatrixMediaLoader {
     /**
      * @param source to fetch the data for.
      * @param mimeType: optional mime type.
-     * @param body: optional body which will be used to name the file.
+     * @param filename: optional String which will be used to name the file.
      * @param useCache: if true, the rust sdk will cache the media in its store.
      * @return a [Result] of [MediaFile]
      */
     suspend fun downloadMediaFile(
         source: MediaSource,
         mimeType: String?,
-        body: String?,
+        filename: String?,
         useCache: Boolean = true,
     ): Result<MediaFile>
 }

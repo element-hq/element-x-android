@@ -279,7 +279,7 @@ private fun createDefaultVoiceMessagePlayer(
         json = null
     ),
     mimeType = MimeTypes.Ogg,
-    body = "someBody.ogg"
+    filename = "someBody.ogg"
 )
 
 private const val MXC_URI = "mxc://matrix.org/1234567890abcdefg"
