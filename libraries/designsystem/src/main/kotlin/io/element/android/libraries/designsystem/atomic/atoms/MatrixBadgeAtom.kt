@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.components
+package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,14 +21,15 @@ import io.element.android.libraries.designsystem.theme.badgeNeutralContentColor
 import io.element.android.libraries.designsystem.theme.badgePositiveBackgroundColor
 import io.element.android.libraries.designsystem.theme.badgePositiveContentColor
 
-object RoomBadge {
+object MatrixBadgeAtom {
     enum class Type {
         Positive,
         Neutral,
         Negative
     }
 
-    @Composable fun View(
+    @Composable
+    fun View(
         text: String,
         icon: ImageVector,
         type: Type,
@@ -60,36 +61,30 @@ object RoomBadge {
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgePositivePreview() {
-    ElementPreview {
-        RoomBadge.View(
-            text = "Trusted",
-            icon = CompoundIcons.Verified(),
-            type = RoomBadge.Type.Positive,
-        )
-    }
+internal fun MatrixBadgeAtomPositivePreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        text = "Trusted",
+        icon = CompoundIcons.Verified(),
+        type = MatrixBadgeAtom.Type.Positive,
+    )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgeNeutralPreview() {
-    ElementPreview {
-        RoomBadge.View(
-            text = "Public room",
-            icon = CompoundIcons.Public(),
-            type = RoomBadge.Type.Neutral,
-        )
-    }
+internal fun MatrixBadgeAtomNeutralPreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        text = "Public room",
+        icon = CompoundIcons.Public(),
+        type = MatrixBadgeAtom.Type.Neutral,
+    )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgeNegativePreview() {
-    ElementPreview {
-        RoomBadge.View(
-            text = "Not trusted",
-            icon = CompoundIcons.Error(),
-            type = RoomBadge.Type.Negative,
-        )
-    }
+internal fun MatrixBadgeAtomNegativePreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        text = "Not trusted",
+        icon = CompoundIcons.Error(),
+        type = MatrixBadgeAtom.Type.Negative,
+    )
 }
