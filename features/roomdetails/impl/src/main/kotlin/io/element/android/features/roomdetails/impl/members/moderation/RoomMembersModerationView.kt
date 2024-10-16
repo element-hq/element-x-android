@@ -147,7 +147,7 @@ fun RoomMembersModerationView(
 
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                if (action is ConfirmingBanUser) {
+                if (action is ConfirmingRoomMemberAction) {
                     ConfirmationDialog(
                         title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
                         content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),

@@ -60,7 +60,7 @@ class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersM
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                unbanUserAsyncAction = ConfirmingBanUser(anAlice()),
+                unbanUserAsyncAction = ConfirmingRoomMemberAction(anAlice()),
             ),
             aRoomMembersModerationState(
                 kickUserAsyncAction = AsyncAction.Success(Unit),

@@ -10,6 +10,6 @@ package io.element.android.features.roomdetails.impl.members.moderation
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
 
-data class ConfirmingBanUser(
+data class ConfirmingRoomMemberAction(
     val roomMember: RoomMember,
 ) : AsyncAction.Confirming

@@ -13,7 +13,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
-import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingBanUser
+import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
 import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
@@ -165,7 +165,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = ConfirmingBanUser(roomMember),
+            unbanUserAsyncAction = ConfirmingRoomMemberAction(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -182,7 +182,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = ConfirmingBanUser(roomMember),
+            unbanUserAsyncAction = ConfirmingRoomMemberAction(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(

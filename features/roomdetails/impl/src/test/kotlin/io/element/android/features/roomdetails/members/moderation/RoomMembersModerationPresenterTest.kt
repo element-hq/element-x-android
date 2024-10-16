@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
-import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingBanUser
+import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
 import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
@@ -153,7 +153,7 @@ class RoomMembersModerationPresenterTest {
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             with(awaitItem()) {
                 assertThat(selectedRoomMember).isNull()
-                assertThat(unbanUserAsyncAction).isEqualTo(ConfirmingBanUser(selectedMember))
+                assertThat(unbanUserAsyncAction).isEqualTo(ConfirmingRoomMemberAction(selectedMember))
             }
         }
     }
@@ -244,7 +244,7 @@ class RoomMembersModerationPresenterTest {
             val confirmingState = awaitItem()
             assertThat(confirmingState.selectedRoomMember).isNull()
             assertThat(confirmingState.actions).isEmpty()
-            assertThat(confirmingState.unbanUserAsyncAction).isEqualTo(ConfirmingBanUser(selectedMember))
+            assertThat(confirmingState.unbanUserAsyncAction).isEqualTo(ConfirmingRoomMemberAction(selectedMember))
             // Confirms unban
             confirmingState.eventSink(RoomMembersModerationEvents.UnbanUser(selectedMember.userId))
             assertThat(awaitItem().unbanUserAsyncAction).isEqualTo(AsyncAction.Loading)

@@ -88,8 +88,10 @@ class RoomMembersModerationPresenter @Inject constructor(
             when (event) {
                 is RoomMembersModerationEvents.SelectRoomMember -> {
                     if (event.roomMember.membership == RoomMembershipState.BAN && canBan) {
-                        unbanUserAsyncAction.value = ConfirmingBanUser(event.roomMember)
+                        // In this case the view will render a dialog to confirm the unbanning of the user
+                        unbanUserAsyncAction.value = ConfirmingRoomMemberAction(event.roomMember)
                     } else {
+                        // In this case the view will render a bottom sheet.
                         selectedMember = event.roomMember
                     }
                 }
