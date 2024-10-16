@@ -25,9 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -39,14 +42,18 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun ComposerModeView(
     composerMode: MessageComposerMode.Special,
     onResetComposerMode: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (composerMode) {
         is MessageComposerMode.Edit -> {
-            EditingModeView(onResetComposerMode = onResetComposerMode)
+            EditingModeView(
+                modifier = modifier,
+                onResetComposerMode = onResetComposerMode,
+            )
         }
         is MessageComposerMode.Reply -> {
             ReplyToModeView(
-                modifier = Modifier.padding(8.dp),
+                modifier = modifier.padding(8.dp),
                 replyToDetails = composerMode.replyToDetails,
                 hideImage = composerMode.hideImage,
                 onResetComposerMode = onResetComposerMode,
@@ -58,11 +65,12 @@ internal fun ComposerModeView(
 @Composable
 private fun EditingModeView(
     onResetComposerMode: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 12.dp)
     ) {
@@ -133,4 +141,16 @@ private fun ReplyToModeView(
                 ),
         )
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ComposerModeViewPreview(
+    @PreviewParameter(MessageComposerModeSpecialProvider::class) mode: MessageComposerMode.Special
+) = ElementPreview {
+    ComposerModeView(
+        composerMode = mode,
+        onResetComposerMode = {},
+        modifier = Modifier.background(ElementTheme.colors.bgSubtleSecondary)
+    )
 }
