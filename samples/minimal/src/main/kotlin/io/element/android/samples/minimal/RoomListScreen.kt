@@ -24,6 +24,7 @@ import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresente
 import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
+import io.element.android.libraries.androidutils.system.DefaultDateTimeObserver
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -59,9 +60,8 @@ class RoomListScreen(
 ) {
     private val clock = Clock.System
     private val locale = Locale.getDefault()
-    private val timeZone = TimeZone.currentSystemDefault()
-    private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
-    private val dateFormatters = DateFormatters(locale, clock, timeZone)
+    private val dateTimeProvider = LocalDateTimeProvider(clock) { TimeZone.currentSystemDefault() }
+    private val dateFormatters = DateFormatters(locale, clock) { TimeZone.currentSystemDefault() }
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val encryptionService = matrixClient.encryptionService()
     private val stringProvider = AndroidStringProvider(context.resources)
@@ -92,7 +92,8 @@ class RoomListScreen(
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
             coroutineDispatchers = coroutineDispatchers,
             notificationSettingsService = matrixClient.notificationSettingsService(),
-            appScope = Singleton.appScope
+            appScope = Singleton.appScope,
+            dateTimeObserver = DefaultDateTimeObserver(context),
         ),
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
