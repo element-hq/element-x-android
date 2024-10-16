@@ -45,6 +45,7 @@ import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
+import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRowMolecule
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -84,6 +85,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -114,9 +116,9 @@ fun RoomDetailsView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-                    .consumeWindowInsets(padding)
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -273,8 +275,8 @@ private fun MainActionsSection(
 ) {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -333,8 +335,8 @@ private fun RoomHeaderSection(
 ) {
     Column(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompositeAvatar(
@@ -343,8 +345,8 @@ private fun RoomHeaderSection(
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
-                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                    .testTag(TestTags.roomDetailAvatar)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
     }
@@ -360,8 +362,8 @@ private fun DmHeaderSection(
 ) {
     Column(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DmAvatars(
@@ -406,32 +408,37 @@ private fun BadgeList(
     modifier: Modifier = Modifier,
 ) {
     if (isEncrypted || isPublic) {
-        Row(
-            modifier = modifier
-                .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (isEncrypted) {
-                MatrixBadgeAtom.View(
-                    text = stringResource(R.string.screen_room_details_badge_encrypted),
-                    icon = CompoundIcons.LockSolid(),
-                    type = MatrixBadgeAtom.Type.Positive,
-                )
-            } else {
-                MatrixBadgeAtom.View(
-                    text = stringResource(R.string.screen_room_details_badge_not_encrypted),
-                    icon = CompoundIcons.LockOff(),
-                    type = MatrixBadgeAtom.Type.Neutral,
-                )
-            }
-            if (isPublic) {
-                MatrixBadgeAtom.View(
-                    text = stringResource(R.string.screen_room_details_badge_public),
-                    icon = CompoundIcons.Public(),
-                    type = MatrixBadgeAtom.Type.Neutral,
-                )
-            }
-        }
+        MatrixBadgeRowMolecule(
+            modifier = modifier,
+            data = buildList {
+                if (isEncrypted) {
+                    add(
+                        MatrixBadgeAtom.MatrixBadgeData(
+                            text = stringResource(R.string.screen_room_details_badge_encrypted),
+                            icon = CompoundIcons.LockSolid(),
+                            type = MatrixBadgeAtom.Type.Positive,
+                        )
+                    )
+                } else {
+                    add(
+                        MatrixBadgeAtom.MatrixBadgeData(
+                            text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                            icon = CompoundIcons.LockOff(),
+                            type = MatrixBadgeAtom.Type.Neutral,
+                        )
+                    )
+                }
+                if (isPublic) {
+                    add(
+                        MatrixBadgeAtom.MatrixBadgeData(
+                            text = stringResource(R.string.screen_room_details_badge_public),
+                            icon = CompoundIcons.Public(),
+                            type = MatrixBadgeAtom.Type.Neutral,
+                        )
+                    )
+                }
+            }.toImmutableList(),
+        )
     }
 }
 
