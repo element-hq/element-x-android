@@ -41,10 +41,10 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.roomdetails.impl.components.RoomBadge
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -412,23 +412,23 @@ private fun BadgeList(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (isEncrypted) {
-                RoomBadge.View(
+                MatrixBadgeAtom.View(
                     text = stringResource(R.string.screen_room_details_badge_encrypted),
                     icon = CompoundIcons.LockSolid(),
-                    type = RoomBadge.Type.Positive,
+                    type = MatrixBadgeAtom.Type.Positive,
                 )
             } else {
-                RoomBadge.View(
+                MatrixBadgeAtom.View(
                     text = stringResource(R.string.screen_room_details_badge_not_encrypted),
                     icon = CompoundIcons.LockOff(),
-                    type = RoomBadge.Type.Neutral,
+                    type = MatrixBadgeAtom.Type.Neutral,
                 )
             }
             if (isPublic) {
-                RoomBadge.View(
+                MatrixBadgeAtom.View(
                     text = stringResource(R.string.screen_room_details_badge_public),
                     icon = CompoundIcons.Public(),
-                    type = RoomBadge.Type.Neutral,
+                    type = MatrixBadgeAtom.Type.Neutral,
                 )
             }
         }
