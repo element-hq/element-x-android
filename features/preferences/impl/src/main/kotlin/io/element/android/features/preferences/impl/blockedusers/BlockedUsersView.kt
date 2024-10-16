@@ -123,7 +123,7 @@ private fun BlockedUserItem(
 
 @PreviewsDayNight
 @Composable
-internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStatePreviewProvider::class) state: BlockedUsersState) {
+internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStateProvider::class) state: BlockedUsersState) {
     ElementPreview {
         BlockedUsersView(
             state = state,

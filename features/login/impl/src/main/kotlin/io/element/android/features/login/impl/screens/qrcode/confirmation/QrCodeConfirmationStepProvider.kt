@@ -9,7 +9,7 @@ package io.element.android.features.login.impl.screens.qrcode.confirmation
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-class QrCodeConfirmationStepPreviewProvider : PreviewParameterProvider<QrCodeConfirmationStep> {
+class QrCodeConfirmationStepProvider : PreviewParameterProvider<QrCodeConfirmationStep> {
     override val values: Sequence<QrCodeConfirmationStep>
         get() = sequenceOf(
             QrCodeConfirmationStep.DisplayCheckCode("12"),

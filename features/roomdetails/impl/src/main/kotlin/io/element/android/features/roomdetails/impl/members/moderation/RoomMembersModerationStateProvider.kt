@@ -13,7 +13,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.toPersistentList
 
-class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomMembersModerationState> {
+class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersModerationState> {
     override val values: Sequence<RoomMembersModerationState>
         get() = sequenceOf(
             aRoomMembersModerationState(
