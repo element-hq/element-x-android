@@ -22,7 +22,7 @@ import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
-import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
@@ -651,7 +651,7 @@ class RoomListPresenterTest {
         leaveRoomPresenter = { leaveRoomState },
         roomListDataSource = RoomListDataSource(
             roomListService = client.roomListService,
-            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+            roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
                 lastMessageTimestampFormatter = lastMessageTimestampFormatter,
                 roomLastMessageFormatter = roomLastMessageFormatter,
             ),

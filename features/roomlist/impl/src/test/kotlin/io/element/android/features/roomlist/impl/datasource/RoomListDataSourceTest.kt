@@ -76,10 +76,7 @@ class RoomListDataSourceTest {
 
     private fun TestScope.createRoomListDataSource(
         roomListService: FakeRoomListService = FakeRoomListService(),
-        roomListRoomSummaryFactory: RoomListRoomSummaryFactory = RoomListRoomSummaryFactory(
-            lastMessageTimestampFormatter = { _ -> "Yesterday" },
-            roomLastMessageFormatter = { _, _ -> "Hey" }
-        ),
+        roomListRoomSummaryFactory: RoomListRoomSummaryFactory = aRoomListRoomSummaryFactory(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         dateTimeObserver: FakeDateTimeObserver = FakeDateTimeObserver(),
     ) = RoomListDataSource(
