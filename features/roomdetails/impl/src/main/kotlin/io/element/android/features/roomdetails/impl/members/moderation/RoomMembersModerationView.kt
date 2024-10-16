@@ -117,7 +117,7 @@ fun RoomMembersModerationView(
                     title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
                     content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
-                    onSubmitClick = { state.selectedRoomMember?.userId?.let { state.eventSink(RoomMembersModerationEvents.BanUser) } },
+                    onSubmitClick = { state.eventSink(RoomMembersModerationEvents.BanUser) },
                     onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) }
                 )
             }
@@ -147,22 +147,20 @@ fun RoomMembersModerationView(
 
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                state.selectedRoomMember?.let {
+                if (action is ConfirmingRoomMemberAction) {
                     ConfirmationDialog(
                         title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
                         content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
                         submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
-                        onSubmitClick = { state.eventSink(RoomMembersModerationEvents.UnbanUser) },
+                        onSubmitClick = {
+                            val userDisplayName = action.roomMember.getBestName()
+                            asyncIndicatorState.enqueue {
+                                AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
+                            }
+                            state.eventSink(RoomMembersModerationEvents.UnbanUser(action.roomMember.userId))
+                        },
                         onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     )
-                }
-            }
-            is AsyncAction.Loading -> {
-                LaunchedEffect(action) {
-                    val userDisplayName = state.selectedRoomMember?.getBestName().orEmpty()
-                    asyncIndicatorState.enqueue {
-                        AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
-                    }
                 }
             }
             is AsyncAction.Failure -> {
@@ -178,7 +176,8 @@ fun RoomMembersModerationView(
             is AsyncAction.Success -> {
                 LaunchedEffect(action) { asyncIndicatorState.clear() }
             }
-            else -> Unit
+            is AsyncAction.Loading,
+            AsyncAction.Uninitialized -> Unit
         }
     }
 }

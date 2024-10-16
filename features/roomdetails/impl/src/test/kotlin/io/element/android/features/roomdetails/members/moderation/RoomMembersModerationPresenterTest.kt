@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
+import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
 import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
@@ -37,7 +38,14 @@ import org.junit.Test
 class RoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when room is DM is false`() = runTest {
-        val room = FakeMatrixRoom(isDirect = true, isPublic = true, activeMemberCount = 2).apply {
+        val room = FakeMatrixRoom(
+            isDirect = true,
+            isPublic = true,
+            activeMemberCount = 2,
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+        ).apply {
             givenRoomInfo(aRoomInfo(isDirect = true, isPublic = false, activeMembersCount = 2))
         }
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room)
@@ -53,6 +61,7 @@ class RoomMembersModerationPresenterTest {
             activeMemberCount = 10,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
         )
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room)
         presenter.test {
@@ -66,7 +75,9 @@ class RoomMembersModerationPresenterTest {
         val room = FakeMatrixRoom(
             isDirect = false,
             activeMemberCount = 10,
+            canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
         )
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room)
         presenter.test {
@@ -141,8 +152,8 @@ class RoomMembersModerationPresenterTest {
             skipItems(1)
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             with(awaitItem()) {
-                assertThat(selectedRoomMember).isNotNull()
-                assertThat(unbanUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+                assertThat(selectedRoomMember).isNull()
+                assertThat(unbanUserAsyncAction).isEqualTo(ConfirmingRoomMemberAction(selectedMember))
             }
         }
     }
@@ -165,8 +176,9 @@ class RoomMembersModerationPresenterTest {
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
             skipItems(1)
-            assertThat(awaitItem().actions).isEmpty()
-            assertThat(awaitItem().kickUserAsyncAction).isEqualTo(AsyncAction.Loading)
+            val loadingState = awaitItem()
+            assertThat(loadingState.actions).isEmpty()
+            assertThat(loadingState.kickUserAsyncAction).isEqualTo(AsyncAction.Loading)
             with(awaitItem()) {
                 assertThat(kickUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
                 assertThat(selectedRoomMember).isNull()
@@ -198,8 +210,10 @@ class RoomMembersModerationPresenterTest {
             // Confirm
             confirmingState.eventSink(RoomMembersModerationEvents.BanUser)
             skipItems(1)
-            assertThat(awaitItem().actions).isEmpty()
-            assertThat(awaitItem().banUserAsyncAction).isEqualTo(AsyncAction.Loading)
+            val loadingItem = awaitItem()
+            assertThat(loadingItem.actions).isEmpty()
+            assertThat(loadingItem.selectedRoomMember).isNull()
+            assertThat(loadingItem.banUserAsyncAction).isEqualTo(AsyncAction.Loading)
             with(awaitItem()) {
                 assertThat(banUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
                 assertThat(selectedRoomMember).isNull()
@@ -225,11 +239,14 @@ class RoomMembersModerationPresenterTest {
             presenter.present()
         }.test {
             skipItems(1)
-            // Displays confirmation dialog
+            // Displays unban confirmation dialog
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
+            val confirmingState = awaitItem()
+            assertThat(confirmingState.selectedRoomMember).isNull()
+            assertThat(confirmingState.actions).isEmpty()
+            assertThat(confirmingState.unbanUserAsyncAction).isEqualTo(ConfirmingRoomMemberAction(selectedMember))
             // Confirms unban
-            awaitItem().eventSink(RoomMembersModerationEvents.UnbanUser)
-            assertThat(awaitItem().actions).isEmpty()
+            confirmingState.eventSink(RoomMembersModerationEvents.UnbanUser(selectedMember.userId))
             assertThat(awaitItem().unbanUserAsyncAction).isEqualTo(AsyncAction.Loading)
             with(awaitItem()) {
                 assertThat(unbanUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
@@ -251,12 +268,13 @@ class RoomMembersModerationPresenterTest {
             presenter.present()
         }.test {
             skipItems(1)
-            // Displays confirmation dialog
+            // Select a user
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
             // Reset state
             awaitItem().eventSink(RoomMembersModerationEvents.Reset)
-            assertThat(awaitItem().selectedRoomMember).isNull()
-            assertThat(awaitItem().actions).isEmpty()
+            val finalItem = awaitItem()
+            assertThat(finalItem.selectedRoomMember).isNull()
+            assertThat(finalItem.actions).isEmpty()
         }
     }
 
@@ -278,7 +296,7 @@ class RoomMembersModerationPresenterTest {
             // Kick user and fail
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
             awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
-            skipItems(2)
+            skipItems(1)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)
             // Reset it
@@ -289,7 +307,7 @@ class RoomMembersModerationPresenterTest {
             initialItem.eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
             awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
             awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
-            skipItems(2)
+            skipItems(1)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)
             // Reset it
@@ -300,8 +318,7 @@ class RoomMembersModerationPresenterTest {
             initialItem.eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor().copy(membership = RoomMembershipState.BAN)))
             val confirmingState = awaitItem()
             assertThat(confirmingState.unbanUserAsyncAction).isInstanceOf(AsyncAction.Confirming::class.java)
-            confirmingState.eventSink(RoomMembersModerationEvents.UnbanUser)
-            skipItems(1)
+            confirmingState.eventSink(RoomMembersModerationEvents.UnbanUser(aVictor().userId))
             assertThat(awaitItem().unbanUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().unbanUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)
             // Reset it
