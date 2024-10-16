@@ -37,7 +37,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun ComposerModeView(
-    composerMode: MessageComposerMode,
+    composerMode: MessageComposerMode.Special,
     onResetComposerMode: () -> Unit,
 ) {
     when (composerMode) {
@@ -52,7 +52,6 @@ internal fun ComposerModeView(
                 onResetComposerMode = onResetComposerMode,
             )
         }
-        else -> Unit
     }
 }
 
