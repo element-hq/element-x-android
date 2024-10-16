@@ -131,7 +131,7 @@ private fun ReplyToModeView(
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
-                .padding(end = 4.dp, top = 4.dp, start = 16.dp, bottom = 16.dp)
+                .padding(end = 4.dp, top = 4.dp, start = 8.dp, bottom = 16.dp)
                 .size(16.dp)
                 .clickable(
                     enabled = true,
