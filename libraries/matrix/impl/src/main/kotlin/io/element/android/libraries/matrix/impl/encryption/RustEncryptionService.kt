@@ -204,6 +204,11 @@ internal class RustEncryptionService(
         }
     }
 
+    override suspend fun isUserVerified(userId: UserId): Result<Boolean> = runCatching {
+        val userIdentity = service.getUserIdentity(userId.value) ?: error("User identity not found")
+        userIdentity.isVerified()
+    }
+
     override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatching {
         val userIdentity = service.getUserIdentity(userId.value) ?: error("User identity not found")
         userIdentity.pin()

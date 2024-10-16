@@ -60,6 +60,8 @@ interface EncryptionService {
      */
     suspend fun startIdentityReset(): Result<IdentityResetHandle?>
 
+    suspend fun isUserVerified(userId: UserId): Result<Boolean>
+
     /**
      * Remember this identity, ensuring it does not result in a pin violation.
      */

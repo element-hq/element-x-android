@@ -75,6 +75,7 @@ class UserProfilePresenter @AssistedInject constructor(
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        var isVerified by remember { mutableStateOf(false) }
         val dmRoomId by getDmRoomId()
         val canCall by getCanCall(dmRoomId)
         LaunchedEffect(Unit) {
@@ -86,6 +87,9 @@ class UserProfilePresenter @AssistedInject constructor(
         }
         LaunchedEffect(Unit) {
             userProfile = client.getProfile(userId).getOrNull()
+        }
+        LaunchedEffect(Unit) {
+            isVerified = client.encryptionService().isUserVerified(userId).getOrNull().orFalse()
         }
 
         fun handleEvents(event: UserProfileEvents) {
@@ -126,6 +130,7 @@ class UserProfilePresenter @AssistedInject constructor(
             userName = userProfile?.displayName,
             avatarUrl = userProfile?.avatarUrl,
             isBlocked = isBlocked.value,
+            isVerified = isVerified,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
             isCurrentUser = isCurrentUser,
