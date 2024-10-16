@@ -46,7 +46,8 @@ class DefaultPinnedMessagesBannerFormatter @Inject constructor(
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(event, content)
             is StickerContent -> {
-                content.body.prefixWith(CommonStrings.common_sticker)
+                val text = content.body ?: content.filename
+                text.prefixWith(CommonStrings.common_sticker)
             }
             is UnableToDecryptContent -> {
                 sp.getString(CommonStrings.common_waiting_for_decryption_key)
@@ -76,25 +77,25 @@ class DefaultPinnedMessagesBannerFormatter @Inject constructor(
                 messageType.toPlainText(permalinkParser)
             }
             is VideoMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_video)
+                messageType.bestDescription.prefixWith(CommonStrings.common_video)
             }
             is ImageMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_image)
+                messageType.bestDescription.prefixWith(CommonStrings.common_image)
             }
             is StickerMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_sticker)
+                messageType.bestDescription.prefixWith(CommonStrings.common_sticker)
             }
             is LocationMessageType -> {
                 messageType.body.prefixWith(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_file)
+                messageType.bestDescription.prefixWith(CommonStrings.common_file)
             }
             is AudioMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_audio)
+                messageType.bestDescription.prefixWith(CommonStrings.common_audio)
             }
             is VoiceMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_voice_message)
+                messageType.bestDescription.prefixWith(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body

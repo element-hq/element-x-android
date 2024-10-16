@@ -43,7 +43,7 @@ fun TimelineItemStickerView(
     onShowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = content.body.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
+    val description = content.bestDescription.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
     Column(
         modifier = modifier.semantics { contentDescription = description },
     ) {
@@ -65,7 +65,7 @@ fun TimelineItemStickerView(
                     model = MediaRequestData(
                         source = content.preferredMediaSource,
                         kind = MediaRequestData.Kind.File(
-                            body = content.body,
+                            fileName = content.filename,
                             mimeType = content.mimeType,
                         ),
                     ),

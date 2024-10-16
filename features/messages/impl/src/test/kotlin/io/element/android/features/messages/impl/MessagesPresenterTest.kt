@@ -335,9 +335,9 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
-                    body = "image.jpg",
-                    formatted = null,
-                    filename = null,
+                    filename = "image.jpg",
+                    caption = null,
+                    formattedCaption = null,
                     mediaSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = null,
                     mimeType = MimeTypes.Jpeg,
@@ -374,9 +374,9 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
-                    body = "video.mp4",
-                    formatted = null,
-                    filename = null,
+                    filename = "video.mp4",
+                    caption = null,
+                    formattedCaption = null,
                     duration = 10.milliseconds,
                     videoSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
@@ -414,7 +414,9 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
-                    body = "file.pdf",
+                    filename = "file.pdf",
+                    caption = null,
+                    formattedCaption = null,
                     fileSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
                     formattedFileSize = "10 MB",

@@ -84,7 +84,8 @@ class TimelineEventContentMapper(
                 }
                 is TimelineItemContent.Sticker -> {
                     StickerContent(
-                        body = it.body,
+                        filename = it.body,
+                        body = null,
                         info = it.info.map(),
                         source = it.source.map(),
                     )

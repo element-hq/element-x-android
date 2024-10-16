@@ -44,7 +44,7 @@ internal class CoilMediaFetcher(
      *
      */
     private suspend fun fetchFile(mediaSource: MediaSource, kind: MediaRequestData.Kind.File): FetchResult? {
-        return mediaLoader.downloadMediaFile(mediaSource, kind.mimeType, kind.body)
+        return mediaLoader.downloadMediaFile(mediaSource, kind.mimeType, kind.fileName)
             .map { mediaFile ->
                 val file = mediaFile.toFile()
                 SourceResult(
