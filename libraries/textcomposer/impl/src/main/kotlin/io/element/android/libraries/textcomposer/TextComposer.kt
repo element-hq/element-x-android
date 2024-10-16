@@ -432,7 +432,7 @@ private fun TextInputBox(
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
                 // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
                 .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
