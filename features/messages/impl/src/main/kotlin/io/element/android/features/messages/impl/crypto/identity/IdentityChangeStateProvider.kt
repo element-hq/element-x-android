@@ -20,14 +20,30 @@ class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState
             anIdentityChangeState(),
             anIdentityChangeState(
                 roomMemberIdentityStateChanges = listOf(
-                    RoomMemberIdentityStateChange(
-                        identityRoomMember = anIdentityRoomMember(disambiguatedDisplayName = "Alice"),
+                    aRoomMemberIdentityStateChange(
+                        identityRoomMember = anIdentityRoomMember(),
+                        identityState = IdentityState.PinViolation,
+                    ),
+                ),
+            ),
+            anIdentityChangeState(
+                roomMemberIdentityStateChanges = listOf(
+                    aRoomMemberIdentityStateChange(
+                        identityRoomMember = anIdentityRoomMember(displayNameOrDefault = "Alice"),
                         identityState = IdentityState.PinViolation,
                     ),
                 ),
             ),
         )
 }
+
+internal fun aRoomMemberIdentityStateChange(
+    identityRoomMember: IdentityRoomMember = anIdentityRoomMember(),
+    identityState: IdentityState = IdentityState.PinViolation,
+) = RoomMemberIdentityStateChange(
+    identityRoomMember = identityRoomMember,
+    identityState = identityState,
+)
 
 internal fun anIdentityChangeState(
     roomMemberIdentityStateChanges: List<RoomMemberIdentityStateChange> = emptyList(),
@@ -38,7 +54,7 @@ internal fun anIdentityChangeState(
 
 internal fun anIdentityRoomMember(
     userId: UserId = UserId("@alice:example.com"),
-    disambiguatedDisplayName: String = userId.value,
+    displayNameOrDefault: String = userId.extractedDisplayName,
     avatarData: AvatarData = AvatarData(
         id = userId.value,
         name = null,
@@ -47,6 +63,6 @@ internal fun anIdentityRoomMember(
     ),
 ) = IdentityRoomMember(
     userId = userId,
-    disambiguatedDisplayName = disambiguatedDisplayName,
+    displayNameOrDefault = displayNameOrDefault,
     avatarData = avatarData,
 )
