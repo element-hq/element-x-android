@@ -7,8 +7,6 @@
 
 package io.element.android.tests.testutils.lambda
 
-import kotlinx.coroutines.runBlocking
-
 /**
  * A recorder that can be used to record the parameters of lambda invocation.
  */
@@ -95,21 +93,21 @@ inline fun <reified R> lambdaAnyRecorder(
 class LambdaNoParamRecorder<out R>(ensureNeverCalled: Boolean, val block: () -> R) : LambdaRecorder(ensureNeverCalled), () -> R {
     override fun invoke(): R {
         onInvoke()
-        return runBlocking { block() }
+        return block()
     }
 }
 
 class LambdaOneParamRecorder<in T, out R>(ensureNeverCalled: Boolean, val block: (T) -> R) : LambdaRecorder(ensureNeverCalled), (T) -> R {
     override fun invoke(p: T): R {
         onInvoke(p)
-        return runBlocking { block(p) }
+        return block(p)
     }
 }
 
 class LambdaTwoParamsRecorder<in T1, in T2, out R>(ensureNeverCalled: Boolean, val block: (T1, T2) -> R) : LambdaRecorder(ensureNeverCalled), (T1, T2) -> R {
     override fun invoke(p1: T1, p2: T2): R {
         onInvoke(p1, p2)
-        return runBlocking { block(p1, p2) }
+        return block(p1, p2)
     }
 }
 
@@ -118,7 +116,7 @@ class LambdaThreeParamsRecorder<in T1, in T2, in T3, out R>(ensureNeverCalled: B
 ), (T1, T2, T3) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3): R {
         onInvoke(p1, p2, p3)
-        return runBlocking { block(p1, p2, p3) }
+        return block(p1, p2, p3)
     }
 }
 
@@ -127,7 +125,7 @@ class LambdaFourParamsRecorder<in T1, in T2, in T3, in T4, out R>(ensureNeverCal
 ), (T1, T2, T3, T4) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4): R {
         onInvoke(p1, p2, p3, p4)
-        return runBlocking { block(p1, p2, p3, p4) }
+        return block(p1, p2, p3, p4)
     }
 }
 
@@ -139,7 +137,7 @@ class LambdaFiveParamsRecorder<in T1, in T2, in T3, in T4, in T5, out R>(
 ), (T1, T2, T3, T4, T5) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5): R {
         onInvoke(p1, p2, p3, p4, p5)
-        return runBlocking { block(p1, p2, p3, p4, p5) }
+        return block(p1, p2, p3, p4, p5)
     }
 }
 
@@ -149,7 +147,7 @@ class LambdaSixParamsRecorder<in T1, in T2, in T3, in T4, in T5, in T6, out R>(
 ) : LambdaRecorder(ensureNeverCalled), (T1, T2, T3, T4, T5, T6) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5, p6: T6): R {
         onInvoke(p1, p2, p3, p4, p5, p6)
-        return runBlocking { block(p1, p2, p3, p4, p5, p6) }
+        return block(p1, p2, p3, p4, p5, p6)
     }
 }
 
@@ -159,7 +157,7 @@ class LambdaSevenParamsRecorder<in T1, in T2, in T3, in T4, in T5, in T6, in T7,
 ) : LambdaRecorder(ensureNeverCalled), (T1, T2, T3, T4, T5, T6, T7) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5, p6: T6, p7: T7): R {
         onInvoke(p1, p2, p3, p4, p5, p6, p7)
-        return runBlocking { block(p1, p2, p3, p4, p5, p6, p7) }
+        return block(p1, p2, p3, p4, p5, p6, p7)
     }
 }
 
@@ -169,7 +167,7 @@ class LambdaEightParamsRecorder<in T1, in T2, in T3, in T4, in T5, in T6, in T7,
 ) : LambdaRecorder(ensureNeverCalled), (T1, T2, T3, T4, T5, T6, T7, T8) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5, p6: T6, p7: T7, p8: T8): R {
         onInvoke(p1, p2, p3, p4, p5, p6, p7, p8)
-        return runBlocking { block(p1, p2, p3, p4, p5, p6, p7, p8) }
+        return block(p1, p2, p3, p4, p5, p6, p7, p8)
     }
 }
 
@@ -179,7 +177,7 @@ class LambdaNineParamsRecorder<in T1, in T2, in T3, in T4, in T5, in T6, in T7, 
 ) : LambdaRecorder(ensureNeverCalled), (T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5, p6: T6, p7: T7, p8: T8, p9: T9): R {
         onInvoke(p1, p2, p3, p4, p5, p6, p7, p8, p9)
-        return runBlocking { block(p1, p2, p3, p4, p5, p6, p7, p8, p9) }
+        return block(p1, p2, p3, p4, p5, p6, p7, p8, p9)
     }
 }
 
