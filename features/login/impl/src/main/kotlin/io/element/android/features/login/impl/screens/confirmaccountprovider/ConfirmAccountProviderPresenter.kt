@@ -93,7 +93,8 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
-                    LoginFlow.OidcFlow(authenticationService.getOidcUrl(OidcPrompt.Consent).getOrThrow())
+                    val oidcPrompt = if (params.isAccountCreation) OidcPrompt.Create else OidcPrompt.Consent
+                    LoginFlow.OidcFlow(authenticationService.getOidcUrl(oidcPrompt).getOrThrow())
                 } else if (params.isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
                     LoginFlow.AccountCreationFlow(url)
