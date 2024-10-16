@@ -40,6 +40,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class UserProfileViewTest {
@@ -123,6 +124,7 @@ class UserProfileViewTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `on Block user clicked - a BlockUser event is emitted with needsConfirmation`() = runTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
@@ -161,6 +163,7 @@ class UserProfileViewTest {
         eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `on Unblock user clicked - an UnblockUser event is emitted with needsConfirmation`() = runTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
