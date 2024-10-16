@@ -432,7 +432,7 @@ private fun TextInputBox(
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
                 // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
                 .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
@@ -579,7 +579,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
         ATextComposer(
             TextEditorState.Rich(aRichTextEditorState(initialText = "A message", initialFocus = true)),
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), TransactionId("1234"), "Some text"),
+            composerMode = aMessageComposerModeEdit(),
             enableVoiceMessages = true,
         )
     }))
@@ -592,7 +592,7 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
         ATextComposer(
             TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), TransactionId("1234"), "Some text"),
+            composerMode = aMessageComposerModeEdit(),
             enableVoiceMessages = true,
         )
     }))
@@ -604,9 +604,8 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
     ATextComposer(
         state = TextEditorState.Rich(aRichTextEditorState()),
         voiceMessageState = VoiceMessageState.Idle,
-        composerMode = MessageComposerMode.Reply(
+        composerMode = aMessageComposerModeReply(
             replyToDetails = inReplyToDetails,
-            hideImage = false,
         ),
         enableVoiceMessages = true,
     )
@@ -717,4 +716,22 @@ fun aRichTextEditorState(
     initialHtml = initialHtml,
     initialMarkdown = initialMarkdown,
     initialFocus = initialFocus,
+)
+
+fun aMessageComposerModeEdit(
+    eventId: EventId? = EventId("$1234"),
+    transactionId: TransactionId? = TransactionId("1234"),
+    content: String = "Some text",
+) = MessageComposerMode.Edit(
+    eventId = eventId,
+    transactionId = transactionId,
+    content = content
+)
+
+fun aMessageComposerModeReply(
+    replyToDetails: InReplyToDetails,
+    hideImage: Boolean = false,
+) = MessageComposerMode.Reply(
+    replyToDetails = replyToDetails,
+    hideImage = hideImage,
 )
