@@ -103,8 +103,9 @@ class ElementCallActivity :
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 eventSink = state.eventSink
-                LaunchedEffect(state.isCallActive) {
-                    if (state.isCallActive) {
+                LaunchedEffect(state.isCallActive, state.isInWidgetMode) {
+                    // Note when not in WidgetMode, isCallActive will never be true, so consider the call is active
+                    if (state.isCallActive || !state.isInWidgetMode) {
                         setCallIsActive()
                     }
                 }
