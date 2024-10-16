@@ -11,15 +11,11 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.FakeDateTimeObserver
 import io.element.android.libraries.androidutils.system.DateTimeObserver
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -49,8 +45,6 @@ class RoomListDataSourceTest {
             // Check there is a new list and it's not the same as the previous one (although it has the same content)
             val newRoomList = awaitItem()
             assertThat(newRoomList).isNotSameInstanceAs(initialRoomList)
-
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -77,28 +71,23 @@ class RoomListDataSourceTest {
             // Check there is a new list and it's not the same as the previous one (although it has the same content)
             val newRoomList = awaitItem()
             assertThat(newRoomList).isNotSameInstanceAs(initialRoomList)
-
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
     private fun TestScope.createRoomListDataSource(
         roomListService: FakeRoomListService = FakeRoomListService(),
-        roomListRoomSummaryFactory: RoomListRoomSummaryFactory =
-        RoomListRoomSummaryFactory(
-            lastMessageTimestampFormatter = LastMessageTimestampFormatter { _ -> "Yesterday" },
-            roomLastMessageFormatter = RoomLastMessageFormatter { _, _ -> "Hey" }
+        roomListRoomSummaryFactory: RoomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+            lastMessageTimestampFormatter = { _ -> "Yesterday" },
+            roomLastMessageFormatter = { _, _ -> "Hey" }
         ),
-        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
-        appScope: CoroutineScope = backgroundScope,
         dateTimeObserver: FakeDateTimeObserver = FakeDateTimeObserver(),
     ) = RoomListDataSource(
         roomListService = roomListService,
         roomListRoomSummaryFactory = roomListRoomSummaryFactory,
-        coroutineDispatchers = dispatchers,
+        coroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService = notificationSettingsService,
-        appScope = appScope,
+        appScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
     )
 }
