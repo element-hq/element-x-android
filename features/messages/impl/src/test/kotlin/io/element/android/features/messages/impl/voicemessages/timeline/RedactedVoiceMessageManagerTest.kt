@@ -79,7 +79,6 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             transactionId = null,
             isEditable = false,
             canBeRepliedTo = false,
-            isLocal = false,
             isOwn = false,
             isRemote = false,
             localSendState = null,

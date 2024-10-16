@@ -18,7 +18,6 @@ data class EventTimelineItem(
     val transactionId: TransactionId?,
     val isEditable: Boolean,
     val canBeRepliedTo: Boolean,
-    val isLocal: Boolean,
     val isOwn: Boolean,
     val isRemote: Boolean,
     val localSendState: LocalEventSendState?,

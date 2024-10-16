@@ -46,8 +46,6 @@ class EventTimelineItemMapper(
             transactionId = eventOrTransactionId.transactionId(),
             isEditable = isEditable,
             canBeRepliedTo = canBeRepliedTo,
-            // TODO Remove this field
-            isLocal = !isRemote,
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
