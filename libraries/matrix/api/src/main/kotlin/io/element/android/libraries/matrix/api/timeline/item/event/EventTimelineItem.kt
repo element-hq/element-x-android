@@ -28,9 +28,8 @@ data class EventTimelineItem(
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,
     val content: EventContent,
-    val debugInfoProvider: EventDebugInfoProvider,
     val origin: TimelineItemEventOrigin?,
-    val messageShieldProvider: EventShieldsProvider,
+    val lazyTimelineItemProvider: LazyTimelineItemProvider,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
@@ -46,10 +45,7 @@ data class EventTimelineItem(
     }
 }
 
-fun interface EventDebugInfoProvider {
-    fun get(): TimelineItemDebugInfo
-}
-
-fun interface EventShieldsProvider {
+interface LazyTimelineItemProvider {
+    fun getTimelineItemDebugInfo(): TimelineItemDebugInfo
     fun getShield(strict: Boolean): MessageShield?
 }

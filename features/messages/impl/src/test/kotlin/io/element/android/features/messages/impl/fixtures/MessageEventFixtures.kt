@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -58,8 +59,10 @@ internal fun aMessageEvent(
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
-    debugInfoProvider = { debugInfo },
     isThreaded = isThreaded,
     origin = null,
-    messageShield = messageShield,
+    lazyTimelineItemProvider = object : LazyTimelineItemProvider {
+        override fun getTimelineItemDebugInfo() = debugInfo
+        override fun getShield(strict: Boolean) = messageShield
+    },
 )

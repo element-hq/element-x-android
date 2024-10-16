@@ -85,9 +85,8 @@ class TimelineItemEventFactory @AssistedInject constructor(
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             isThreaded = currentTimelineItem.event.isThreaded(),
-            debugInfoProvider = currentTimelineItem.event.debugInfoProvider,
             origin = currentTimelineItem.event.origin,
-            messageShield = currentTimelineItem.event.messageShieldProvider.getShield(strict = false)
+            lazyTimelineItemProvider = currentTimelineItem.event.lazyTimelineItemProvider,
         )
     }
 

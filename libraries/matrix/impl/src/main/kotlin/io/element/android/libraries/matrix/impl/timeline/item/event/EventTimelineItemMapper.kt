@@ -12,10 +12,9 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.EventDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.EventShieldsProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -27,14 +26,13 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.EventSendState
-import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfoProvider
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
-import org.matrix.rustcomponents.sdk.EventShieldsProvider as RustEventShieldsProvider
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
+import org.matrix.rustcomponents.sdk.LazyTimelineItemProvider as RustLazyTimelineItemProvider
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 import org.matrix.rustcomponents.sdk.Receipt as RustReceipt
 import uniffi.matrix_sdk_ui.EventItemOrigin as RustEventItemOrigin
@@ -48,7 +46,8 @@ class EventTimelineItemMapper(
             transactionId = eventOrTransactionId.transactionId(),
             isEditable = isEditable,
             canBeRepliedTo = canBeRepliedTo,
-            isLocal = isLocal,
+            // TODO Remove this field
+            isLocal = !isRemote,
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
@@ -58,9 +57,8 @@ class EventTimelineItemMapper(
             senderProfile = senderProfile.map(),
             timestamp = timestamp.toLong(),
             content = contentMapper.map(content),
-            debugInfoProvider = RustEventDebugInfoProvider(debugInfoProvider),
             origin = origin?.map(),
-            messageShieldProvider = RustEventShieldsProvider(shieldsProvider)
+            lazyTimelineItemProvider = LazyTimelineItemProviderWrapper(lazyProvider)
         )
     }
 }
@@ -168,15 +166,13 @@ private fun ShieldState?.map(): MessageShield? {
     }
 }
 
-class RustEventDebugInfoProvider(private val debugInfoProvider: EventTimelineItemDebugInfoProvider) : EventDebugInfoProvider {
-    override fun get(): TimelineItemDebugInfo {
-        return debugInfoProvider.get().map()
+class LazyTimelineItemProviderWrapper(private val provider: RustLazyTimelineItemProvider) : LazyTimelineItemProvider {
+    override fun getTimelineItemDebugInfo(): TimelineItemDebugInfo {
+        return provider.debugInfo().map()
     }
-}
 
-class RustEventShieldsProvider(private val shieldsProvider: RustEventShieldsProvider) : EventShieldsProvider {
     override fun getShield(strict: Boolean): MessageShield? {
-        return shieldsProvider.getShields(strict)?.map()
+        return provider.getShields(strict)?.map()
     }
 }
 

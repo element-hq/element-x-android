@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -88,15 +89,16 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,
             content = RedactedContent,
-            debugInfoProvider = {
-                TimelineItemDebugInfo(
+            origin = null,
+            lazyTimelineItemProvider = object : LazyTimelineItemProvider {
+                override fun getTimelineItemDebugInfo() = TimelineItemDebugInfo(
                     model = "enim",
                     originalJson = null,
                     latestEditedJson = null
                 )
+
+                override fun getShield(strict: Boolean) = null
             },
-            origin = null,
-            messageShieldProvider = { null },
         ),
     )
 )

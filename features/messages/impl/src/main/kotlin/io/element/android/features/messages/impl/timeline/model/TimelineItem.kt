@@ -17,7 +17,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventDebugInfoProvider
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -74,9 +75,8 @@ sealed interface TimelineItem {
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
         val isThreaded: Boolean,
-        val debugInfoProvider: EventDebugInfoProvider,
         val origin: TimelineItemEventOrigin?,
-        val messageShield: MessageShield?,
+        val lazyTimelineItemProvider: LazyTimelineItemProvider,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
@@ -90,7 +90,11 @@ sealed interface TimelineItem {
 
         val isRemote = eventId != null
 
-        val debugInfo = debugInfoProvider.get()
+        // No need to be lazy here?
+        val messageShield: MessageShield? = lazyTimelineItemProvider.getShield(strict = false)
+
+        val debugInfo: TimelineItemDebugInfo
+            get() = lazyTimelineItemProvider.getTimelineItemDebugInfo()
     }
 
     @Immutable

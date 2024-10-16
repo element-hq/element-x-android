@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LazyTimelineItemProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -69,9 +70,11 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
-    debugInfoProvider = { debugInfo },
     origin = null,
-    messageShieldProvider = { messageShield },
+    lazyTimelineItemProvider = object : LazyTimelineItemProvider {
+        override fun getTimelineItemDebugInfo() = debugInfo
+        override fun getShield(strict: Boolean) = messageShield
+    },
 )
 
 fun aProfileTimelineDetails(
