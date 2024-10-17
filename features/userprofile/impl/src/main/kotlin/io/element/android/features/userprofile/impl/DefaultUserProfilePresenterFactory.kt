@@ -8,8 +8,8 @@
 package io.element.android.features.userprofile.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope

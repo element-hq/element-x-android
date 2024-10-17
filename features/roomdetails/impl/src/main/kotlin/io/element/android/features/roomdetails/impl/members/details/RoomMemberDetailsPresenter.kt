@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
