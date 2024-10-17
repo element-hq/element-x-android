@@ -88,7 +88,8 @@ class RoomDetailsPresenterTest {
                     room = room,
                     userProfileStatePresenterFactory = {
                         Presenter { aUserProfileState() }
-                    })
+                    },
+                )
             }
         }
         val featureFlagService = FakeFeatureFlagService(
