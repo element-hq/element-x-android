@@ -10,6 +10,6 @@ package io.element.android.features.userprofile.api
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 
-fun interface UserProfileStatePresenterFactory {
+fun interface UserProfilePresenterFactory {
     fun create(userId: UserId): Presenter<UserProfileState>
 }

@@ -9,7 +9,7 @@ package io.element.android.features.userprofile.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.userprofile.api.UserProfileState
-import io.element.android.features.userprofile.api.UserProfileStatePresenterFactory
+import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
@@ -17,8 +17,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultUserProfileStatePresenterFactory @Inject constructor(
+class DefaultUserProfilePresenterFactory @Inject constructor(
     private val factory: UserProfilePresenter.Factory,
-) : UserProfileStatePresenterFactory {
+) : UserProfilePresenterFactory {
     override fun create(userId: UserId): Presenter<UserProfileState> = factory.create(userId)
 }

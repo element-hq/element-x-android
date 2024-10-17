@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
-import io.element.android.features.userprofile.api.UserProfileStatePresenterFactory
+import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
@@ -139,7 +139,7 @@ class RoomMemberDetailsPresenterTest {
         )
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
-            userProfileStatePresenterFactory = {
+            userProfilePresenterFactory = {
                 Presenter {
                     aUserProfileState(
                         userName = null,
@@ -159,7 +159,7 @@ class RoomMemberDetailsPresenterTest {
 
     private fun createRoomMemberDetailsPresenter(
         room: MatrixRoom,
-        userProfileStatePresenterFactory: UserProfileStatePresenterFactory = UserProfileStatePresenterFactory {
+        userProfilePresenterFactory: UserProfilePresenterFactory = UserProfilePresenterFactory {
             Presenter {
                 aUserProfileState(
                     userName = "Profile user name",
@@ -171,7 +171,7 @@ class RoomMemberDetailsPresenterTest {
         return RoomMemberDetailsPresenter(
             roomMemberId = UserId("@alice:server.org"),
             room = room,
-            userProfileStatePresenterFactory = userProfileStatePresenterFactory
+            userProfilePresenterFactory = userProfilePresenterFactory
         )
     }
 }

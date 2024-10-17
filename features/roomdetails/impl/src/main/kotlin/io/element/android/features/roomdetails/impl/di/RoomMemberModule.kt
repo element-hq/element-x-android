@@ -11,7 +11,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
-import io.element.android.features.userprofile.api.UserProfileStatePresenterFactory
+import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -22,11 +22,15 @@ object RoomMemberModule {
     @Provides
     fun provideRoomMemberDetailsPresenterFactory(
         room: MatrixRoom,
-        userProfileStatePresenterFactory: UserProfileStatePresenterFactory,
+        userProfilePresenterFactory: UserProfilePresenterFactory,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(roomMemberId, room, userProfileStatePresenterFactory)
+                return RoomMemberDetailsPresenter(
+                    roomMemberId = roomMemberId,
+                    room = room,
+                    userProfilePresenterFactory = userProfilePresenterFactory,
+                )
             }
         }
     }

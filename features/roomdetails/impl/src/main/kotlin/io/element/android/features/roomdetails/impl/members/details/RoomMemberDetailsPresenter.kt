@@ -14,7 +14,7 @@ import androidx.compose.runtime.produceState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.userprofile.api.UserProfileState
-import io.element.android.features.userprofile.api.UserProfileStatePresenterFactory
+import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -22,18 +22,18 @@ import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 
 /**
  * Presenter for room member details screen.
- * Rely on UserProfileStatePresenter, but override some fields with room member info when available.
+ * Rely on UserProfilePresenter, but override some fields with room member info when available.
  */
 class RoomMemberDetailsPresenter @AssistedInject constructor(
     @Assisted private val roomMemberId: UserId,
     private val room: MatrixRoom,
-    userProfileStatePresenterFactory: UserProfileStatePresenterFactory,
+    userProfilePresenterFactory: UserProfilePresenterFactory,
 ) : Presenter<UserProfileState> {
     interface Factory {
         fun create(roomMemberId: UserId): RoomMemberDetailsPresenter
     }
 
-    private val userProfilePresenter = userProfileStatePresenterFactory.create(roomMemberId)
+    private val userProfilePresenter = userProfilePresenterFactory.create(roomMemberId)
 
     @Composable
     override fun present(): UserProfileState {

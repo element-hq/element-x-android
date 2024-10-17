@@ -86,7 +86,7 @@ class RoomDetailsPresenterTest {
                 return RoomMemberDetailsPresenter(
                     roomMemberId = roomMemberId,
                     room = room,
-                    userProfileStatePresenterFactory = {
+                    userProfilePresenterFactory = {
                         Presenter { aUserProfileState() }
                     },
                 )
