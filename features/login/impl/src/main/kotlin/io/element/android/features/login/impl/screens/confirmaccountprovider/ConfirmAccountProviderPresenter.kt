@@ -27,6 +27,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.OidcPrompt
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 import kotlinx.coroutines.CoroutineScope
@@ -92,7 +93,8 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
-                    LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
+                    val oidcPrompt = if (params.isAccountCreation) OidcPrompt.Create else OidcPrompt.Consent
+                    LoginFlow.OidcFlow(authenticationService.getOidcUrl(oidcPrompt).getOrThrow())
                 } else if (params.isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
                     LoginFlow.AccountCreationFlow(url)

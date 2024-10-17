@@ -42,7 +42,6 @@ fun anEventTimelineItem(
     transactionId: TransactionId? = null,
     isEditable: Boolean = false,
     canBeRepliedTo: Boolean = false,
-    isLocal: Boolean = false,
     isOwn: Boolean = false,
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
@@ -59,7 +58,6 @@ fun anEventTimelineItem(
     transactionId = transactionId,
     isEditable = isEditable,
     canBeRepliedTo = canBeRepliedTo,
-    isLocal = isLocal,
     isOwn = isOwn,
     isRemote = isRemote,
     localSendState = localSendState,
@@ -69,8 +67,8 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
-    debugInfoProvider = { debugInfo },
     origin = null,
+    timelineItemDebugInfoProvider = { debugInfo },
     messageShieldProvider = { messageShield },
 )
 

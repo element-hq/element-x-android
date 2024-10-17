@@ -299,7 +299,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 .getMediaFile(
                     mediaSource = messageType.source,
                     mimeType = messageType.info?.mimetype,
-                    body = messageType.filename,
+                    filename = messageType.filename,
                 )
             is VideoMessageType -> null // Use the thumbnail here?
             else -> null

@@ -9,11 +9,14 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.anEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo
-import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfoProvider
+import org.matrix.rustcomponents.sdk.LazyTimelineItemProvider
 import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.ShieldState
 
-class FakeRustEventTimelineItemDebugInfoProvider(
+class FakeRustLazyTimelineItemProvider(
     private val debugInfo: EventTimelineItemDebugInfo = anEventTimelineItemDebugInfo(),
-) : EventTimelineItemDebugInfoProvider(NoPointer) {
-    override fun get(): EventTimelineItemDebugInfo = debugInfo
+    private val shieldsState: ShieldState? = null,
+) : LazyTimelineItemProvider(NoPointer) {
+    override fun getShields(strict: Boolean) = shieldsState
+    override fun debugInfo() = debugInfo
 }

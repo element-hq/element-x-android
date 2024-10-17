@@ -78,7 +78,6 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             transactionId = null,
             isEditable = false,
             canBeRepliedTo = false,
-            isLocal = false,
             isOwn = false,
             isRemote = false,
             localSendState = null,
@@ -88,14 +87,14 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,
             content = RedactedContent,
-            debugInfoProvider = {
+            origin = null,
+            timelineItemDebugInfoProvider = {
                 TimelineItemDebugInfo(
                     model = "enim",
                     originalJson = null,
-                    latestEditedJson = null
+                    latestEditedJson = null,
                 )
             },
-            origin = null,
             messageShieldProvider = { null },
         ),
     )
