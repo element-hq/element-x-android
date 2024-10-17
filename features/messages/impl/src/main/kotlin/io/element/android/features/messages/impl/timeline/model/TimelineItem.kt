@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
@@ -91,6 +92,9 @@ sealed interface TimelineItem {
         val isSticker: Boolean = content is TimelineItemStickerContent
 
         val isRemote = eventId != null
+
+        val eventOrTransactionId: EventOrTransactionId
+            get() = EventOrTransactionId.from(eventId = eventId, transactionId = transactionId)
 
         // No need to be lazy here?
         val messageShield: MessageShield? = messageShieldProvider(strict = false)

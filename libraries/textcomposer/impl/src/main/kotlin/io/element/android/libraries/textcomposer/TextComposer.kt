@@ -42,7 +42,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 import io.element.android.libraries.testtags.TestTags
@@ -719,12 +720,10 @@ fun aRichTextEditorState(
 )
 
 fun aMessageComposerModeEdit(
-    eventId: EventId? = EventId("$1234"),
-    transactionId: TransactionId? = TransactionId("1234"),
+    eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
     content: String = "Some text",
 ) = MessageComposerMode.Edit(
-    eventId = eventId,
-    transactionId = transactionId,
+    eventOrTransactionId = eventOrTransactionId,
     content = content
 )
 

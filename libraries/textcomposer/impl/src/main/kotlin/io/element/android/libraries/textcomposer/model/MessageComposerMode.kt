@@ -9,7 +9,7 @@ package io.element.android.libraries.textcomposer.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
@@ -21,8 +21,7 @@ sealed interface MessageComposerMode {
     sealed interface Special : MessageComposerMode
 
     data class Edit(
-        val eventId: EventId?,
-        val transactionId: TransactionId?,
+        val eventOrTransactionId: EventOrTransactionId,
         val content: String
     ) : Special
 
@@ -36,7 +35,7 @@ sealed interface MessageComposerMode {
     val relatedEventId: EventId?
         get() = when (this) {
             is Normal -> null
-            is Edit -> eventId
+            is Edit -> eventOrTransactionId.eventId
             is Reply -> eventId
         }
 
