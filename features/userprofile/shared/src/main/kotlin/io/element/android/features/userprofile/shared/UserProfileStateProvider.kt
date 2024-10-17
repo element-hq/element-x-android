@@ -8,6 +8,8 @@
 package io.element.android.features.userprofile.shared
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId

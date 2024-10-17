@@ -19,10 +19,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
-import io.element.android.features.userprofile.shared.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
 import io.element.android.features.userprofile.shared.UserProfilePresenterHelper
-import io.element.android.features.userprofile.shared.UserProfileState
-import io.element.android.features.userprofile.shared.UserProfileState.ConfirmationDialog
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -55,6 +55,7 @@ class UserProfilePresenter @AssistedInject constructor(
     @Composable
     override fun present(): UserProfileState {
         val coroutineScope = rememberCoroutineScope()
+        val isCurrentUser = remember { client.isMe(userId) }
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
@@ -112,7 +113,7 @@ class UserProfilePresenter @AssistedInject constructor(
             isBlocked = isBlocked.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = client.isMe(userId),
+            isCurrentUser = isCurrentUser,
             dmRoomId = dmRoomId,
             canCall = canCall,
             eventSink = ::handleEvents
