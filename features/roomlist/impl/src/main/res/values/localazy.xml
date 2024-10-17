@@ -16,6 +16,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Decline chat"</string>
   <string name="screen_invites_empty_list">"No Invites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) invited you"</string>
+  <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
   <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
   <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>

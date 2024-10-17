@@ -156,7 +156,8 @@
         "banner\\.migrate_to_native_sliding_sync\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
-        "screen_invites_.*"
+        "screen_invites_.*",
+        "screen\\.join_room\\.knock_sent_title"
       ]
     },
     {
@@ -280,7 +281,8 @@
     {
       "name" : ":features:joinroom:impl",
       "includeRegex" : [
-        "screen_join_room_.*"
+        "screen_join_room_.*",
+        "screen\\.join_room\\..*"
       ]
     }
   ]
