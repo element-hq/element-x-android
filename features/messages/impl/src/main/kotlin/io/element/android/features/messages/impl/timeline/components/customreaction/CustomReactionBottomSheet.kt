@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
-import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
-    onSelectEmoji: (UniqueId, Emoji) -> Unit,
+    onSelectEmoji: (EventOrTransactionId, Emoji) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -37,7 +37,7 @@ fun CustomReactionBottomSheet(
         if (target?.event == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
-            onSelectEmoji(target.event.id, emoji)
+            onSelectEmoji(target.event.eventOrTransactionId, emoji)
         }
     }
 

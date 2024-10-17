@@ -10,8 +10,6 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -23,6 +21,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -63,35 +62,31 @@ class FakeTimeline(
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = sendMessageLambda(body, htmlBody, intentionalMentions)
 
-    var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Unit> = { _, _, _ ->
+    var redactEventLambda: (eventOrTransactionId: EventOrTransactionId, reason: String?) -> Result<Unit> = { _, _ ->
         Result.success(Unit)
     }
 
     override suspend fun redactEvent(
-        eventId: EventId?,
-        transactionId: TransactionId?,
+        eventOrTransactionId: EventOrTransactionId,
         reason: String?
-    ): Result<Unit> = redactEventLambda(eventId, transactionId, reason)
+    ): Result<Unit> = redactEventLambda(eventOrTransactionId, reason)
 
     var editMessageLambda: (
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
+        eventOrTransactionId: EventOrTransactionId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ) -> Result<Unit> = { _, _, _, _, _ ->
+    ) -> Result<Unit> = { _, _, _, _ ->
         Result.success(Unit)
     }
 
     override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
+        eventOrTransactionId: EventOrTransactionId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = editMessageLambda(
-        originalEventId,
-        transactionId,
+        eventOrTransactionId,
         body,
         htmlBody,
         intentionalMentions
@@ -211,13 +206,14 @@ class FakeTimeline(
         progressCallback
     )
 
-    var toggleReactionLambda: (emoji: String, uniqueId: UniqueId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
-    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> = toggleReactionLambda(emoji, uniqueId)
+    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = toggleReactionLambda(
+        emoji,
+        eventOrTransactionId
+    )
 
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = redactEvent(null, transactionId, null)
 
     var sendLocationLambda: (
         body: String,
