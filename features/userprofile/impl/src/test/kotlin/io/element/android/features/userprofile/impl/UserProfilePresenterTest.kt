@@ -20,14 +20,18 @@ import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -57,6 +61,72 @@ class UserProfilePresenterTest {
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(false))
             assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.canCall).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - canCall is true when all the conditions are met`() {
+        testCanCall(
+            expectedResult = true,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when canUserJoinCall returns false`() {
+        testCanCall(
+            canUserJoinCallResult = Result.success(false),
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when canUserJoinCall fails`() {
+        testCanCall(
+            canUserJoinCallResult = Result.failure(AN_EXCEPTION),
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when there is no DM`() {
+        testCanCall(
+            dmRoom = null,
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when room is not found`() {
+        testCanCall(
+            canFindRoom = false,
+            expectedResult = false,
+        )
+    }
+
+    private fun testCanCall(
+        canUserJoinCallResult: Result<Boolean> = Result.success(true),
+        dmRoom: RoomId? = A_ROOM_ID,
+        canFindRoom: Boolean = true,
+        expectedResult: Boolean,
+    ) = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { canUserJoinCallResult },
+        )
+        val client = FakeMatrixClient().apply {
+            if (canFindRoom) {
+                givenGetRoomResult(A_ROOM_ID, room)
+            }
+            givenFindDmResult(dmRoom)
+        }
+        val presenter = createUserProfilePresenter(
+            userId = A_USER_ID_2,
+            client = client,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.canCall).isEqualTo(expectedResult)
         }
     }
 

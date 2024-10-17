@@ -50,14 +50,14 @@ class UserProfilePresenter @AssistedInject constructor(
     }
 
     @Composable
-    fun getDmRoomId(): State<RoomId?> {
+    private fun getDmRoomId(): State<RoomId?> {
         return produceState<RoomId?>(initialValue = null) {
             value = client.findDM(userId)
         }
     }
 
     @Composable
-    fun getCanCall(roomId: RoomId?): State<Boolean> {
+    private fun getCanCall(roomId: RoomId?): State<Boolean> {
         return produceState(initialValue = false, roomId) {
             value = if (client.isMe(userId)) {
                 false
