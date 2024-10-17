@@ -13,9 +13,9 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
-import io.element.android.features.userprofile.shared.UserProfileEvents
-import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.UserProfileView
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.AsyncData

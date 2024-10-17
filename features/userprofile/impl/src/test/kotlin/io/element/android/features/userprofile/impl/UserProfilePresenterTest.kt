@@ -7,27 +7,29 @@
 
 package io.element.android.features.userprofile.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
-import io.element.android.features.userprofile.shared.UserProfileEvents
-import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -47,9 +49,7 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(
             client = client,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.userId).isEqualTo(matrixUser.userId)
             assertThat(initialState.userName).isEqualTo(matrixUser.displayName)
@@ -61,6 +61,70 @@ class UserProfilePresenterTest {
     }
 
     @Test
+    fun `present - canCall is true when all the conditions are met`() {
+        testCanCall(
+            expectedResult = true,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when canUserJoinCall returns false`() {
+        testCanCall(
+            canUserJoinCallResult = Result.success(false),
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when canUserJoinCall fails`() {
+        testCanCall(
+            canUserJoinCallResult = Result.failure(AN_EXCEPTION),
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when there is no DM`() {
+        testCanCall(
+            dmRoom = null,
+            expectedResult = false,
+        )
+    }
+
+    @Test
+    fun `present - canCall is false when room is not found`() {
+        testCanCall(
+            canFindRoom = false,
+            expectedResult = false,
+        )
+    }
+
+    private fun testCanCall(
+        canUserJoinCallResult: Result<Boolean> = Result.success(true),
+        dmRoom: RoomId? = A_ROOM_ID,
+        canFindRoom: Boolean = true,
+        expectedResult: Boolean,
+    ) = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { canUserJoinCallResult },
+        )
+        val client = FakeMatrixClient().apply {
+            if (canFindRoom) {
+                givenGetRoomResult(A_ROOM_ID, room)
+            }
+            givenFindDmResult(dmRoom)
+        }
+        val presenter = createUserProfilePresenter(
+            userId = A_USER_ID_2,
+            client = client,
+        )
+        presenter.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.canCall).isEqualTo(expectedResult)
+        }
+    }
+
+    @Test
     fun `present - returns empty data in case of failure`() = runTest {
         val client = FakeMatrixClient().apply {
             givenGetProfileResult(A_USER_ID, Result.failure(AN_EXCEPTION))
@@ -68,9 +132,7 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(
             client = client,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.userId).isEqualTo(A_USER_ID)
             assertThat(initialState.userName).isNull()
@@ -82,9 +144,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
         val presenter = createUserProfilePresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = true))
 
@@ -105,9 +165,7 @@ class UserProfilePresenterTest {
             client = client,
             userId = A_USER_ID
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
@@ -126,9 +184,7 @@ class UserProfilePresenterTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
         val presenter = createUserProfilePresenter(client = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
@@ -145,9 +201,7 @@ class UserProfilePresenterTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
         val presenter = createUserProfilePresenter(client = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
@@ -162,9 +216,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
         val presenter = createUserProfilePresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = true))
 
@@ -182,9 +234,7 @@ class UserProfilePresenterTest {
     fun `present - start DM action complete scenario`() = runTest {
         val startDMAction = FakeStartDMAction()
         val presenter = createUserProfilePresenter(startDMAction = startDMAction)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
             val startDMSuccessResult = AsyncAction.Success(A_ROOM_ID)
