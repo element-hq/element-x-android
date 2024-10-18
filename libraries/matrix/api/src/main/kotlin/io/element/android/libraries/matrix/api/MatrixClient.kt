@@ -65,7 +65,7 @@ interface MatrixClient : Closeable {
     suspend fun removeAvatar(): Result<Unit>
     suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?>
     suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?>
-    suspend fun knockRoom(roomId: RoomId): Result<Unit>
+    suspend fun knockRoom(roomId: RoomId): Result<RoomSummary?>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService

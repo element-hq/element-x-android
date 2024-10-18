@@ -114,8 +114,8 @@ class FakeMatrixClient(
     var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomSummary?> = { _, _ ->
         Result.success(null)
     }
-    var knockRoomLambda: (RoomId) -> Result<Unit> = {
-        Result.success(Unit)
+    var knockRoomLambda: (RoomId) -> Result<RoomSummary?> = {
+        Result.success(null)
     }
     var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
         flowOf<Optional<RoomSummary>>(Optional.empty())
@@ -223,7 +223,7 @@ class FakeMatrixClient(
         return joinRoomByIdOrAliasLambda(roomIdOrAlias, serverNames)
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
+    override suspend fun knockRoom(roomId: RoomId): Result<RoomSummary?> = knockRoomLambda(roomId)
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
