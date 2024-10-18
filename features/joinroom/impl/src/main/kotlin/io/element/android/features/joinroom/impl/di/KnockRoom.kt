@@ -19,5 +19,9 @@ interface KnockRoom {
 
 @ContributesBinding(SessionScope::class)
 class DefaultKnockRoom @Inject constructor(private val client: MatrixClient) : KnockRoom {
-    override suspend fun invoke(roomId: RoomId) = client.knockRoom(roomId)
+    override suspend fun invoke(roomId: RoomId): Result<Unit> {
+        return client
+            .knockRoom(roomId)
+            .map { }
+    }
 }

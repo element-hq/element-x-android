@@ -214,7 +214,7 @@ class JoinRoomPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
-                state.eventSink(JoinRoomEvents.ClearError)
+                state.eventSink(JoinRoomEvents.ClearActionStates)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Uninitialized)

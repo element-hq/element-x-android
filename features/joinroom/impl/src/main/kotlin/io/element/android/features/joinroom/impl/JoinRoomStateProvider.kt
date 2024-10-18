@@ -81,6 +81,12 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     isDm = true,
                 )
             ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = "A knocked Room",
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
+                )
+            )
         )
 }
 
@@ -124,12 +130,14 @@ fun aJoinRoomState(
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     joinAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     joinAction = joinAction,
     knockAction = knockAction,
+    cancelKnockAction = cancelKnockAction,
     applicationName = "AppName",
     eventSink = eventSink
 )
