@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.InvitedRoom
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -251,19 +251,21 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
-    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
-        return roomFactory.createInvitedRoom(roomId)
+    override suspend fun getPendingRoom(roomId: RoomId): PendingRoom? {
+        return roomFactory.createPendingRoom(roomId)
     }
 
     /**
-     * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
+     * Wait for the room to be available in the room list with the correct membership for the current user.
      * @param roomIdOrAlias the room id or alias to wait for
      * @param timeout the timeout to wait for the room to be available
+     * @param currentUserMembership the membership to wait for
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitJoinedRoom(
+    private suspend fun awaitRoom(
         roomIdOrAlias: RoomIdOrAlias,
-        timeout: Duration
+        timeout: Duration,
+        currentUserMembership: CurrentUserMembership,
     ): RoomSummary {
         return withTimeout(timeout) {
             getRoomSummaryFlow(roomIdOrAlias)
