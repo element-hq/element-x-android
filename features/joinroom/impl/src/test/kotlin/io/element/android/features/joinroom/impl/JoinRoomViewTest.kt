@@ -79,7 +79,7 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
     }
 
     @Test
@@ -93,7 +93,7 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
     }
 
     @Test

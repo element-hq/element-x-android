@@ -24,6 +24,7 @@ data class JoinRoomState(
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val joinAction: AsyncAction<Unit>,
     val knockAction: AsyncAction<Unit>,
+    val cancelKnockAction: AsyncAction<Unit>,
     val applicationName: String,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
@@ -68,6 +69,7 @@ sealed interface ContentState {
 
 sealed interface JoinAuthorisationStatus {
     data class IsInvited(val inviteSender: InviteSender?) : JoinAuthorisationStatus
+    data object IsKnocked : JoinAuthorisationStatus
     data object CanKnock : JoinAuthorisationStatus
     data object CanJoin : JoinAuthorisationStatus
     data object Unknown : JoinAuthorisationStatus

@@ -75,6 +75,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         val roomInfo by matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias()).collectAsState(initial = Optional.empty())
         val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val cancelKnockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
             key1 = roomInfo,
@@ -110,7 +111,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
-                JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction)
+                is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, event.message)
                 JoinRoomEvents.AcceptInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
@@ -123,12 +124,14 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
+                is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
                 JoinRoomEvents.RetryFetchingContent -> {
                     retryCount++
                 }
-                JoinRoomEvents.ClearError -> {
+                JoinRoomEvents.ClearActionStates -> {
                     knockAction.value = AsyncAction.Uninitialized
                     joinAction.value = AsyncAction.Uninitialized
+                    cancelKnockAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -138,6 +141,7 @@ class JoinRoomPresenter @AssistedInject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             joinAction = joinAction.value,
             knockAction = knockAction.value,
+            cancelKnockAction = cancelKnockAction.value,
             applicationName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )
@@ -153,9 +157,21 @@ class JoinRoomPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>, message: String) = launch {
         knockAction.runUpdatingState {
             knockRoom(roomId)
+        }
+    }
+
+    private fun CoroutineScope.cancelKnockRoom(requiresConfirmation: Boolean, cancelKnockAction: MutableState<AsyncAction<Unit>>) = launch {
+        if (requiresConfirmation) {
+            cancelKnockAction.value = AsyncAction.ConfirmingNoParams
+        } else {
+            matrixClient.getPendingRoom(roomId)?.use { room ->
+                cancelKnockAction.runUpdatingState {
+                    room.leave()
+                }
+            }
         }
     }
 }
@@ -206,7 +222,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         name = name,
         topic = topic,
         alias = canonicalAlias,
-        numberOfMembers = activeMembersCount.toLong(),
+        numberOfMembers = activeMembersCount,
         isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
@@ -214,6 +230,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
             currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
                 inviteSender = inviter?.toInviteSender()
             )
+            currentUserMembership == CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }
