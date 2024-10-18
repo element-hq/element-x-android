@@ -276,13 +276,6 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
-  <string name="screen_room_member_details_block_alert_action">"Заблокувати"</string>
-  <string name="screen_room_member_details_block_alert_description">"Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час."</string>
-  <string name="screen_room_member_details_block_user">"Заблокувати користувача"</string>
-  <string name="screen_room_member_details_title">"Профіль"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Розблокувати"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
-  <string name="screen_room_member_details_unblock_user">"Розблокувати користувача"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закріплених повідомлень"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Переглянути всі"</string>

@@ -260,13 +260,6 @@ Alasan: %1$s."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Tidak dapat mengambil detail pengguna"</string>
-  <string name="screen_room_member_details_block_alert_action">"Blokir"</string>
-  <string name="screen_room_member_details_block_alert_description">"Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja."</string>
-  <string name="screen_room_member_details_block_user">"Blokir pengguna"</string>
-  <string name="screen_room_member_details_title">"Profil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Buka blokir"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
-  <string name="screen_room_member_details_unblock_user">"Buka blokir pengguna"</string>
   <string name="screen_room_title">"Obrolan"</string>
   <string name="screen_share_location_title">"Bagikan lokasi"</string>
   <string name="screen_share_my_location_action">"Bagikan lokasi saya"</string>

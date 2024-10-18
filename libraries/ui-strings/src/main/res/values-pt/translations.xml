@@ -317,15 +317,6 @@ Razão: %1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Mensagens afixadas"</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Não foi possível obter os detalhes de utilizador."</string>
-  <string name="screen_room_member_details_block_alert_action">"Bloquear"</string>
-  <string name="screen_room_member_details_block_alert_description">"Os utilizadores bloqueados não poderão enviar-te mensagens e todas as suas mensagens ficarão ocultas. Podes desbloqueá-los em qualquer altura."</string>
-  <string name="screen_room_member_details_block_user">"Bloquear utilizador"</string>
-  <string name="screen_room_member_details_title">"Perfil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Poderás voltar a ver todas as suas mensagens."</string>
-  <string name="screen_room_member_details_unblock_user">"Desbloquear utilizador"</string>
-  <string name="screen_room_member_details_verify_button_subtitle">"Utiliza a aplicação Web para verificar este utilizador."</string>
-  <string name="screen_room_member_details_verify_button_title">"Verifique %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s mensagens afixadas"</string>
   <string name="screen_room_pinned_banner_loading_description">"A carregar mensagem…"</string>
