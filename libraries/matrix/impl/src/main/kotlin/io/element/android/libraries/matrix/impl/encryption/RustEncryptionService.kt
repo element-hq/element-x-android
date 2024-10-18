@@ -205,8 +205,10 @@ internal class RustEncryptionService(
     }
 
     override suspend fun isUserVerified(userId: UserId): Result<Boolean> = runCatching {
-        val userIdentity = service.getUserIdentity(userId.value) ?: error("User identity not found")
-        userIdentity.isVerified()
+        // TODO Need SDK update with https://github.com/matrix-org/matrix-rust-sdk/pull/4142
+        // val userIdentity = service.getUserIdentity(userId.value) ?: error("User identity not found")
+        //  userIdentity.isVerified()
+        false
     }
 
     override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatching {
