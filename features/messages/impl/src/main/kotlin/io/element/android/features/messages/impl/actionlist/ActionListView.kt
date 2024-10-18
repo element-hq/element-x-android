@@ -146,7 +146,7 @@ fun ActionListView(
             onDismissRequest = ::onDismiss,
             modifier = modifier,
         ) {
-            SheetContent(
+            ActionListViewContent(
                 state = state,
                 onActionClick = ::onItemActionClick,
                 onEmojiReactionClick = ::onEmojiReactionClick,
@@ -161,7 +161,7 @@ fun ActionListView(
 }
 
 @Composable
-private fun SheetContent(
+private fun ActionListViewContent(
     state: ActionListState,
     onActionClick: (TimelineItemAction) -> Unit,
     onEmojiReactionClick: (String) -> Unit,
@@ -442,10 +442,10 @@ private fun EmojiButton(
 
 @PreviewsDayNight
 @Composable
-internal fun SheetContentPreview(
+internal fun ActionListViewContentPreview(
     @PreviewParameter(ActionListStateProvider::class) state: ActionListState
 ) = ElementPreview {
-    SheetContent(
+    ActionListViewContent(
         state = state,
         onActionClick = {},
         onEmojiReactionClick = {},
