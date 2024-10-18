@@ -102,6 +102,10 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         displayName = "Bob",
                     ),
                 ),
+                aRoomListRoomSummary(
+                    name = "A knocked room",
+                    displayType = RoomSummaryDisplayType.KNOCKED,
+                )
             ),
         ).flatten()
 }

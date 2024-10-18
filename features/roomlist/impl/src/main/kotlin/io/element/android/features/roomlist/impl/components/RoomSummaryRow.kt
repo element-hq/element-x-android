@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.R
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
@@ -120,6 +121,30 @@ internal fun RoomSummaryRow(
                     isHighlighted = room.isHighlighted
                 )
                 LastMessageAndIndicatorRow(room = room)
+            }
+        }
+        RoomSummaryDisplayType.KNOCKED -> {
+            RoomSummaryScaffoldRow(
+                room = room,
+                onClick = onClick,
+                onLongClick = {
+                    Timber.d("Long click on knocked room")
+                },
+                modifier = modifier
+            ) {
+                NameAndTimestampRow(
+                    name = room.name,
+                    timestamp = room.timestamp,
+                    isHighlighted = room.isHighlighted
+                )
+                Text(
+                    text = stringResource(id = R.string.screen_join_room_knock_sent_title),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    modifier = modifier,
+                )
             }
         }
     }
