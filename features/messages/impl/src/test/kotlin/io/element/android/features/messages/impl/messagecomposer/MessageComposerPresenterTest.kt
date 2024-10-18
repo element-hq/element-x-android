@@ -32,7 +32,6 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -44,7 +43,9 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -355,7 +356,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit sent message`() = runTest {
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
+        val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -392,7 +393,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+                .with(value(AN_EVENT_ID.toEventOrTransactionId()), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -407,7 +408,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit sent message event not found`() = runTest {
-        val timelineEditMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
+        val timelineEditMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.failure<Unit>(TimelineException.EventNotFound)
         }
         val timeline = FakeTimeline().apply {
@@ -448,7 +449,7 @@ class MessageComposerPresenterTest {
 
             assert(timelineEditMessageLambda)
                 .isCalledOnce()
-                .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+                .with(value(AN_EVENT_ID.toEventOrTransactionId()), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assert(roomEditMessageLambda)
                 .isCalledOnce()
@@ -467,7 +468,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit not sent message`() = runTest {
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
+        val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -487,7 +488,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
-            val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
+            val mode = anEditMode(eventOrTransactionId = A_TRANSACTION_ID.toEventOrTransactionId())
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
@@ -504,7 +505,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(value(null), value(A_TRANSACTION_ID), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+                .with(value(A_TRANSACTION_ID.toEventOrTransactionId()), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -1058,7 +1059,7 @@ class MessageComposerPresenterTest {
         val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
+        val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -1128,7 +1129,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_3))))
+                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_3))))
 
             skipItems(1)
         }
@@ -1516,10 +1517,9 @@ class MessageComposerPresenterTest {
 }
 
 fun anEditMode(
-    eventId: EventId? = AN_EVENT_ID,
+    eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
     message: String = A_MESSAGE,
-    transactionId: TransactionId? = null,
-) = MessageComposerMode.Edit(eventId, transactionId, message)
+) = MessageComposerMode.Edit(eventOrTransactionId, message)
 
 fun aReplyMode() = MessageComposerMode.Reply(
     replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),

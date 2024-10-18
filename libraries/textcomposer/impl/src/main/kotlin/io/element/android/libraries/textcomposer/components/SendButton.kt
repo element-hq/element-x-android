@@ -26,6 +26,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -77,7 +79,7 @@ internal fun SendButton(
 @Composable
 internal fun SendButtonPreview() = ElementPreview {
     val normalMode = MessageComposerMode.Normal
-    val editMode = MessageComposerMode.Edit(null, null, "")
+    val editMode = MessageComposerMode.Edit(EventId("\$id").toEventOrTransactionId(), "")
     Row {
         SendButton(canSendMessage = true, onClick = {}, composerMode = normalMode)
         SendButton(canSendMessage = false, onClick = {}, composerMode = normalMode)

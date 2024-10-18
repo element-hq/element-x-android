@@ -62,7 +62,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -73,6 +72,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
@@ -191,7 +191,7 @@ class MessagesPresenter @AssistedInject constructor(
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
-                    localCoroutineScope.toggleReaction(event.emoji, event.uniqueId)
+                    localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
                 }
                 is MessagesEvents.InviteDialogDismissed -> {
                     hasDismissedInviteDialog = true
@@ -327,10 +327,10 @@ class MessagesPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.toggleReaction(
         emoji: String,
-        uniqueId: UniqueId,
+        eventOrTransactionId: EventOrTransactionId,
     ) = launch(dispatchers.io) {
         timelineController.invokeOnCurrentTimeline {
-            toggleReaction(emoji, uniqueId)
+            toggleReaction(emoji, eventOrTransactionId)
                 .onFailure { Timber.e(it) }
         }
     }
@@ -360,7 +360,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
         timelineController.invokeOnCurrentTimeline {
-            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
+            redactEvent(eventOrTransactionId = event.eventOrTransactionId, reason = null)
                 .onFailure { Timber.e(it) }
         }
     }
@@ -377,8 +377,7 @@ class MessagesPresenter @AssistedInject constructor(
             }
             else -> {
                 val composerMode = MessageComposerMode.Edit(
-                    targetEvent.eventId,
-                    targetEvent.transactionId,
+                    targetEvent.eventOrTransactionId,
                     (targetEvent.content as? TimelineItemTextBasedContent)?.let {
                         if (enableTextFormatting) {
                             it.htmlBody ?: it.body

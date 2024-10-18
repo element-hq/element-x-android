@@ -355,7 +355,7 @@ class MessagesViewTest {
             state = state,
         )
         rule.onAllNodesWithText("👍️").onFirst().performClick()
-        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.id))
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.eventOrTransactionId))
     }
 
     @Test
@@ -484,7 +484,7 @@ class MessagesViewTest {
         // Give time for the close animation to complete
         rule.mainClock.advanceTimeBy(milliseconds = 1_000)
         customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
-        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.id))
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventOrTransactionId))
     }
 
     @Test
