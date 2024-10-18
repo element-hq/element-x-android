@@ -147,8 +147,8 @@ fun ListItem(
         headlineContent = decoratedHeadlineContent,
         modifier = if (onClick != null) {
             Modifier
-                    .clickable(enabled = enabled, onClick = onClick)
-                    .then(modifier)
+                .clickable(enabled = enabled, onClick = onClick)
+                .then(modifier)
         } else {
             modifier
         },
@@ -377,15 +377,75 @@ internal fun ListItemPrimaryActionWithIconPreview() = PreviewItems.OneLineListIt
 // endregion
 
 // region: Error state
-@Preview(name = "List item - Error", group = PreviewGroup.ListItems)
+@Preview(name = "List item (2 lines) - Simple - Error", group = PreviewGroup.ListItems)
 @Composable
-internal fun ListItemErrorPreview() = PreviewItems.OneLineListItemPreview(style = ListItemStyle.Destructive)
+internal fun ListItemTwoLinesSimpleErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    style = ListItemStyle.Destructive
+)
 
-@Preview(name = "List item - Error & Icon", group = PreviewGroup.ListItems)
+@Preview(name = "List item (2 lines) - Trailing Checkbox - Error", group = PreviewGroup.ListItems)
 @Composable
-internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPreview(
+internal fun ListItemTwoLinesTrailingCheckBoxErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    trailingContent = PreviewItems.checkbox(),
     style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Trailing RadioButton - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesTrailingRadioButtonErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    trailingContent = PreviewItems.radioButton(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Trailing Switch - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesTrailingSwitchErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    trailingContent = PreviewItems.switch(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Trailing Icon - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesTrailingIconErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    trailingContent = PreviewItems.icon(),
+    style = ListItemStyle.Destructive,
+)
+
+// region: Leading Checkbox
+@Preview(name = "List item (2 lines) - Leading Checkbox - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesLeadingCheckboxErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.checkbox(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Leading RadioButton - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesLeadingRadioButtonErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.radioButton(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Leading Switch - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesLeadingSwitchErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.switch(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Leading Icon - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesLeadingIconErrorPreview() = PreviewItems.TwoLinesListItemPreview(
     leadingContent = PreviewItems.icon(),
+    style = ListItemStyle.Destructive,
+)
+
+@Preview(name = "List item (2 lines) - Both Icons - Error", group = PreviewGroup.ListItems)
+@Composable
+internal fun ListItemTwoLinesBothIconsErrorPreview() = PreviewItems.TwoLinesListItemPreview(
+    leadingContent = PreviewItems.icon(),
+    trailingContent = PreviewItems.icon(),
+    style = ListItemStyle.Destructive,
 )
 // endregion
 
