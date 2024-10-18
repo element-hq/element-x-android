@@ -10,6 +10,7 @@ import os
 import re
 import sys
 import time
+
 from util import compare
 
 
@@ -100,6 +101,34 @@ def computeDarkFileName(lightFileName):
         return match.group(1) + "_Night_" + match.group(2) + "_" + match.group(3)
     return ""
 
+
+def checkForScreenshotNameDuplication():
+    __doc__ = "Check for screenshots name duplication"
+    print("Check for screenshots name duplication...")
+    files = os.listdir("tests/uitests/src/test/snapshots/images/")
+    dict = {}
+    for file in files:
+        start = file.find("_") + 1
+        end = file.find("_", start)
+        screenshotName = file[start:end]
+        if screenshotName in dict:
+            dict[screenshotName].append(file[:end])
+        else:
+            dict[screenshotName] = [file[:end]]
+    error = 0
+    for key in dict:
+        if key in ["Icon", "RoundIcon"]:
+            continue
+        values = set(dict[key])
+        if len(values) > 1:
+            print("Duplicated screenshot name: %s" % key)
+            for value in values:
+                print("    - %s" % value)
+            error += 1
+    if error:
+        print("Warning: %d duplicated screenshot name(s) found" % error)
+
+
 def generateJavascriptFile():
     __doc__ = "Generate a javascript file to load the screenshots"
     print("Generating javascript file...")
@@ -151,11 +180,13 @@ def generateJavascriptFile():
 
 
 def main():
+    checkForScreenshotNameDuplication()
     generateAllScreenshots(readArguments())
     lang = detectLanguages()
     for l in lang:
         deleteDuplicatedScreenshots(l)
         moveScreenshots(l)
     generateJavascriptFile()
+
 
 main()
