@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import org.matrix.rustcomponents.sdk.MembershipState
 import uniffi.matrix_sdk.RoomMemberRole
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
@@ -36,10 +37,11 @@ object RoomMemberMapper {
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =
         when (membershipState) {
-            RustMembershipState.BAN -> RoomMembershipState.BAN
-            RustMembershipState.INVITE -> RoomMembershipState.INVITE
-            RustMembershipState.JOIN -> RoomMembershipState.JOIN
-            RustMembershipState.KNOCK -> RoomMembershipState.KNOCK
-            RustMembershipState.LEAVE -> RoomMembershipState.LEAVE
+            MembershipState.Ban -> RoomMembershipState.BAN
+            MembershipState.Invite -> RoomMembershipState.INVITE
+            MembershipState.Join -> RoomMembershipState.JOIN
+            MembershipState.Knock -> RoomMembershipState.KNOCK
+            MembershipState.Leave -> RoomMembershipState.LEAVE
+            is MembershipState.Custom -> TODO()
         }
 }
