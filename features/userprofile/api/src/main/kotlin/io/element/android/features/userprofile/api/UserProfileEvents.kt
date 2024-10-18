@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.userprofile.shared
+package io.element.android.features.userprofile.api
 
 sealed interface UserProfileEvents {
     data object StartDM : UserProfileEvents
