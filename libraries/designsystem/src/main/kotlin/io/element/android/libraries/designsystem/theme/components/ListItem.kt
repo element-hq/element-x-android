@@ -103,6 +103,7 @@ fun ListItem(
 ) {
     // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
     val headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor
+    val supportingColor = if (enabled) colors.supportingTextColor else colors.disabledHeadlineColor.copy(alpha = 0.80f)
     val leadingContentColor = if (enabled) colors.leadingIconColor else colors.disabledLeadingIconColor
     val trailingContentColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor
 
@@ -118,6 +119,7 @@ fun ListItem(
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.materialTypography.bodyMedium,
+                LocalContentColor provides supportingColor,
             ) {
                 content()
             }
