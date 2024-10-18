@@ -270,7 +270,7 @@ class RustMatrixClient(
         return withTimeout(timeout) {
             getRoomSummaryFlow(roomIdOrAlias)
                 .mapNotNull { optionalRoomSummary -> optionalRoomSummary.getOrNull() }
-                .filter { roomSummary -> roomSummary.info.currentUserMembership == CurrentUserMembership.JOINED }
+                .filter { roomSummary -> roomSummary.info.currentUserMembership == currentUserMembership }
                 .first()
                 // Ensure that the room is ready
                 .also { client.awaitRoomRemoteEcho(it.roomId.value) }
@@ -316,7 +316,7 @@ class RustMatrixClient(
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 30.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 30.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
@@ -371,7 +371,7 @@ class RustMatrixClient(
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 10.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -386,7 +386,7 @@ class RustMatrixClient(
                 serverNames = serverNames,
             ).destroy()
             try {
-                awaitJoinedRoom(roomIdOrAlias, 10.seconds)
+                awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -394,8 +394,16 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<Unit> {
-        return Result.failure(NotImplementedError("Not yet implemented"))
+    override suspend fun knockRoom(roomId: RoomId): Result<RoomSummary?>  = withContext(sessionDispatcher){
+        runCatching {
+            client.knock(roomId.toRoomIdOrAlias().identifier).destroy()
+            try {
+                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds, CurrentUserMembership.KNOCKED)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
+                null
+            }
+        }
     }
 
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
