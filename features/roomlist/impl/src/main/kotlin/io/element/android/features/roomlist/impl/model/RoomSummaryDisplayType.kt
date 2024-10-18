@@ -13,5 +13,6 @@ package io.element.android.features.roomlist.impl.model
 enum class RoomSummaryDisplayType {
     PLACEHOLDER,
     ROOM,
-    INVITE
+    INVITE,
+    KNOCKED,
 }
