@@ -8,6 +8,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
@@ -146,8 +147,8 @@ fun ListItem(
         headlineContent = decoratedHeadlineContent,
         modifier = if (onClick != null) {
             Modifier
-                .clickable(enabled = enabled, onClick = onClick)
-                .then(modifier)
+                    .clickable(enabled = enabled, onClick = onClick)
+                    .then(modifier)
         } else {
             modifier
         },
@@ -388,21 +389,20 @@ internal fun ListItemErrorWithIconPreview() = PreviewItems.OneLineListItemPrevie
 )
 // endregion
 
-// region: Disabled state
-@Preview(name = "List item - Disabled", group = PreviewGroup.ListItems)
-@Composable
-internal fun ListItemDisabledPreview() = PreviewItems.OneLineListItemPreview(enabled = false)
-
-@Preview(name = "List item - Disabled & Icon", group = PreviewGroup.ListItems)
-@Composable
-internal fun ListItemDisabledWithIconPreview() = PreviewItems.OneLineListItemPreview(
-    enabled = false,
-    leadingContent = PreviewItems.icon(),
-)
-// endregion
-
 @Suppress("ModifierMissing")
 private object PreviewItems {
+
+    @Composable
+    private fun EnabledDisabledElementThemedPreview(
+        content: @Composable (Boolean) -> Unit,
+    ) = ElementThemedPreview {
+        Column {
+            sequenceOf(true, false).forEach {
+                content(it)
+            }
+        }
+    }
+
     @Composable
     fun ThreeLinesListItemPreview(
         modifier: Modifier = Modifier,
@@ -410,12 +410,13 @@ private object PreviewItems {
         leadingContent: ListItemContent? = null,
         trailingContent: ListItemContent? = null,
     ) {
-        ElementThemedPreview {
+        EnabledDisabledElementThemedPreview {
             ListItem(
                 headlineContent = headline(),
                 supportingContent = text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                enabled = it,
                 style = style,
                 modifier = modifier,
             )
@@ -429,12 +430,13 @@ private object PreviewItems {
         leadingContent: ListItemContent? = null,
         trailingContent: ListItemContent? = null,
     ) {
-        ElementThemedPreview {
+        EnabledDisabledElementThemedPreview {
             ListItem(
                 headlineContent = headline(),
                 supportingContent = textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
+                enabled = it,
                 style = style,
                 modifier = modifier,
             )
@@ -447,14 +449,13 @@ private object PreviewItems {
         style: ListItemStyle = ListItemStyle.Default,
         leadingContent: ListItemContent? = null,
         trailingContent: ListItemContent? = null,
-        enabled: Boolean = true,
     ) {
-        ElementThemedPreview {
+        EnabledDisabledElementThemedPreview {
             ListItem(
                 headlineContent = headline(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
-                enabled = enabled,
+                enabled = it,
                 style = style,
                 modifier = modifier,
             )
