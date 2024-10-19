@@ -193,6 +193,9 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
+ramaniMaplibre = "org.ramani-maps:ramani-maplibre:0.6.1"
+playServicesLocation = "com.google.android.gms:play-services-location:21.3.0"
+
 # Analytics
 posthog = "com.posthog:posthog-android:3.10.0"
 sentry = "io.sentry:sentry-android:7.19.1"
