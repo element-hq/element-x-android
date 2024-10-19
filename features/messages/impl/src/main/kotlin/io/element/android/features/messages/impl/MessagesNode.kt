@@ -101,6 +101,7 @@ class MessagesNode @AssistedInject constructor(
         fun onJoinCallClick(roomId: RoomId)
         fun onViewAllPinnedEvents()
         fun onViewKnockRequests()
+        fun onShowMapClick()
     }
 
     override fun onBuilt() {
@@ -213,6 +214,10 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onViewKnockRequests() }
     }
 
+    private fun onShowMapClick() {
+        callbacks.forEach { it.onShowMapClick() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
@@ -245,6 +250,7 @@ class MessagesNode @AssistedInject constructor(
                     )
                 },
                 modifier = modifier,
+                onShowMapClick = this::onShowMapClick
             )
 
             var focusedEventId by rememberSaveable {

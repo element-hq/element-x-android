@@ -28,6 +28,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -115,6 +117,7 @@ fun MessagesView(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onShowMapClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
@@ -189,6 +192,9 @@ fun MessagesView(
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
+                    onShowMapClick = {
+                        state.eventSink(MessagesEvents.ShowMapClicked)
+                    }
                 )
             }
         },
@@ -196,8 +202,8 @@ fun MessagesView(
             MessagesViewContent(
                 state = state,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
@@ -290,9 +296,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -402,13 +408,13 @@ private fun MessagesViewComposerBottomSheetContents(
         Column(modifier = Modifier.fillMaxWidth()) {
             SuggestionsPickerView(
                 modifier = Modifier
-                        .heightIn(max = 230.dp)
-                        // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                        .nestedScroll(object : NestedScrollConnection {
-                            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                                return available
-                            }
-                        }),
+                    .heightIn(max = 230.dp)
+                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                    .nestedScroll(object : NestedScrollConnection {
+                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                            return available
+                        }
+                    }),
                 roomId = state.roomId,
                 roomName = state.roomName.dataOrNull(),
                 roomAvatarData = state.roomAvatar.dataOrNull(),
@@ -448,6 +454,7 @@ private fun MessagesViewTopBar(
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
+    onShowMapClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
@@ -456,8 +463,8 @@ private fun MessagesViewTopBar(
         title = {
             val roundedCornerShape = RoundedCornerShape(8.dp)
             val titleModifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() }
+                .clip(roundedCornerShape)
+                .clickable { onRoomDetailsClick() }
             if (roomName != null && roomAvatar != null) {
                 RoomAvatarAndNameRow(
                     roomName = roomName,
@@ -473,6 +480,7 @@ private fun MessagesViewTopBar(
             }
         },
         actions = {
+            MapRealtimeMenuItem(onShowMapClick = onShowMapClick)
             CallMenuItem(
                 roomCallState = roomCallState,
                 onJoinCallClick = onJoinCallClick,
@@ -481,6 +489,34 @@ private fun MessagesViewTopBar(
         },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+private fun MapRealtimeMenuItem(
+    onShowMapClick: () -> Unit,
+) {
+    // Create a button with a map icon
+    IconButton(onClick = { onShowMapClick() }) {
+        Icon(Icons.Outlined.Public, contentDescription = "Map description")
+    }
+}
+
+@Composable
+private fun CallMenuItem(
+    isCallOngoing: Boolean,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
+    if (isCallOngoing) {
+        JoinCallMenuItem(onJoinCallClick = onClick)
+    } else {
+        IconButton(onClick = onClick, enabled = enabled) {
+            Icon(
+                imageVector = CompoundIcons.VideoCallSolid(),
+                contentDescription = stringResource(CommonStrings.a11y_start_call),
+            )
+        }
+    }
 }
 
 @Composable
@@ -512,9 +548,9 @@ private fun RoomAvatarAndNameRow(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .padding(16.dp),
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -544,5 +580,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        onShowMapClick = {}
     )
 }
