@@ -308,6 +308,7 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    allow("MPL-2.0")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

@@ -30,6 +30,7 @@ import io.element.android.features.knockrequests.api.list.KnockRequestsListEntry
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
+import io.element.android.features.maprealtime.api.MapRealtimeEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -101,6 +102,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val timelineController: TimelineController,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val dateFormatter: DateFormatter,
+    private val showRealtimeMapEntryPoint: MapRealtimeEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -156,6 +158,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object KnockRequestsList : NavTarget
+
+        @Parcelize
+        data object ShowRealtimeMap : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -239,6 +244,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onViewKnockRequests() {
                         backstack.push(NavTarget.KnockRequestsList)
+                    }
+
+                    override fun onShowMapClick() {
+                        backstack.push(NavTarget.ShowRealtimeMap)
                     }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
@@ -342,6 +351,10 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)
+            }
+
+            NavTarget.ShowRealtimeMap -> {
+                showRealtimeMapEntryPoint.createNode(this, buildContext)
             }
         }
     }
