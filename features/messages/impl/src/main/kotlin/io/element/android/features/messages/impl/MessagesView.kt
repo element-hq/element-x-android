@@ -192,9 +192,7 @@ fun MessagesView(
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
-                    onShowMapClick = {
-                        state.eventSink(MessagesEvents.ShowMapClicked)
-                    }
+                    onShowMapClick = onShowMapClick
                 )
             }
         },

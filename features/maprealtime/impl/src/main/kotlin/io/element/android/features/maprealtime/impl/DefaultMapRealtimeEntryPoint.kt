@@ -5,23 +5,23 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.maprealtime.api
+package io.element.android.features.maprealtime.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.maprealtime.api.MapRealtimeEntryPoint
+import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-interface MapRealtimeEntryPoint : FeatureEntryPoint {
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
+@ContributesBinding(AppScope::class)
+class DefaultMapRealtimeEntryPoint @Inject constructor() : MapRealtimeEntryPoint {
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MapRealtimeEntryPoint.NodeBuilder {
+        TODO("Not yet implemented")
     }
 
-    interface Callback : Plugin {
-        // Add your callbacks
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<MapRealtimePresenterNode>(buildContext)
     }
 }

@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.matrix.emojibase.bindings)
     implementation(projects.features.knockrequests.api)
 
+    implementation(projects.features.maprealtime.api)
+
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

@@ -62,7 +62,7 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
-minSdkVersion=24
+minSdkVersion=25
 buildToolsVersion="35.0.0"
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
