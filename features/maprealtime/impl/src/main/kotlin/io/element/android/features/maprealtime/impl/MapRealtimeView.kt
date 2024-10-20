@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.location.impl.all.composables.MapToolbar
 import io.element.android.features.maprealtime.impl.common.PermissionDeniedDialog
 import io.element.android.features.maprealtime.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -41,6 +42,7 @@ import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.Style
 import org.ramani.compose.CameraPosition
+import org.ramani.compose.LocationRequestProperties
 import org.ramani.compose.MapLibre
 
 @Composable
@@ -77,6 +79,7 @@ fun MapRealtimeView(
                 .fillMaxSize(),
             styleBuilder = Style.Builder().fromUri(state.styleUrl),
             cameraPosition = cameraPosition.value,
+            locationRequestProperties = LocationRequestProperties(interval = 250L),
             renderMode = RenderMode.COMPASS,
             userLocation = currentUserLocation,
             onMapLongClick = { latLng ->
@@ -92,6 +95,7 @@ fun MapRealtimeView(
             verticalArrangement = Arrangement.spacedBy(8.dp), // Space between buttons,
             horizontalAlignment = Alignment.End
         ) {
+            MapToolbar(onBackPressed = onBackPressed, title = state.roomName)
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {

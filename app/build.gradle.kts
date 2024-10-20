@@ -306,6 +306,7 @@ licensee {
     allowUrl("https://asm.ow2.io/license.html")
     allowUrl("https://www.gnu.org/licenses/agpl-3.0.txt")
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
+    allow("MPL-2.0")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

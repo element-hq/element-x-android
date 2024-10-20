@@ -16,6 +16,8 @@ interface MapRealtimeEntryPoint : FeatureEntryPoint {
 
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
+    fun createNode(parentNode: Node, buildContext: BuildContext): Node
+
     interface NodeBuilder {
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node
