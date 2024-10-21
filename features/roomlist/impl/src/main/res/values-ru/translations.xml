@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"Выйти и обновить"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь ваш сервер поддерживает новый, более быстрый протокол. Выйдите из системы и снова войдите в систему для обновления прямо сейчас. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
-  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш homeserver больше не поддерживает старый протокол. Пожалуйста, выйдите из системы и войдите снова, чтобы продолжить использование приложения."</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш домашний сервер больше не поддерживает старый протокол. Пожалуйста, выйдите и войдите в свою учётную запись снова, чтобы продолжить использование приложения."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Доступно обновление"</string>
   <string name="banner_set_up_recovery_content">"Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам."</string>
   <string name="banner_set_up_recovery_title">"Настроить восстановление"</string>
-  <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата."</string>
+  <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия ваших чатов не синхронизирована. Вам потребуется ввести свой ключ восстановления, чтобы сохранить доступ к резервной копии чатов."</string>
   <string name="confirm_recovery_key_banner_title">
     "Введите "
     <b>"ключ восстановления"</b>
   </string>
-  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
+  <string name="full_screen_intent_banner_message">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
   <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
   <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Отклонить приглашение"</string>
@@ -28,7 +28,7 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Добавить чат в избранное можно в настройках чата.
 На данный момент вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пока нет избранных чатов"</string>
-  <string name="screen_roomlist_filter_invites">"Приглашает"</string>
+  <string name="screen_roomlist_filter_invites">"Приглашения"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"У вас нет отложенных приглашений."</string>
   <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
@@ -38,7 +38,7 @@
   <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пока нет ни в одной комнате"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
-  <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляю!
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
 У вас нет непрочитанных сообщений!"</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>

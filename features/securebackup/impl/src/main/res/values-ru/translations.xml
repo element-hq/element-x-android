@@ -12,10 +12,10 @@
     "Введите "
     <b>"ключ восстановления"</b>
   </string>
-  <string name="screen_chat_backup_recovery_action_confirm_description">"Резервная копия чата в настоящее время не синхронизирована."</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"В настоящее время резервная копия ваших чатов не синхронизирована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Настроить восстановление"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Получите доступ к зашифрованным сообщениям, если вы потеряете все свои устройства или выйдете из системы %1$s отовсюду."</string>
-  <string name="screen_create_new_recovery_key_list_item_1">"Откройте %1$s на настольном устройстве"</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Откройте %1$s на компьютере"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Когда вас попросят подтвердить устройство, выберите %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Сбросить все”"</string>

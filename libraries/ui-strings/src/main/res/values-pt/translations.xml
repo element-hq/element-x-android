@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Esqueceu-se da senha?"</string>
   <string name="action_forward">"Reencaminhar"</string>
   <string name="action_go_back">"Voltar"</string>
+  <string name="action_ignore">"Ignorar"</string>
   <string name="action_invite">"Convidar"</string>
   <string name="action_invite_friends">"Convidar pessoas"</string>
   <string name="action_invite_friends_to_app">"Convidar amigos para %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de decifragem"</string>
   <string name="common_developer_options">"Opções de programador"</string>
+  <string name="common_device_id">"ID do dispositivo"</string>
   <string name="common_direct_chat">"Conversa direta"</string>
   <string name="common_do_not_show_this_again">"Não mostrar novamente"</string>
   <string name="common_edited_suffix">"(editada)"</string>
@@ -185,7 +187,7 @@ Razão: %1$s."</string>
   <string name="common_permalink">"Ligação permanente"</string>
   <string name="common_permission">"Permissão"</string>
   <string name="common_pinned">"Afixado"</string>
-  <string name="common_please_wait">"Por favor, aguarda…"</string>
+  <string name="common_please_wait">"Por favor, aguarde…"</string>
   <string name="common_poll_end_confirmation">"Tens a certeza que queres concluir esta sondagem?"</string>
   <string name="common_poll_summary">"Sondagem: %1$s"</string>
   <string name="common_poll_total_votes">"Total de votos: %1$s"</string>
@@ -245,6 +247,7 @@ Razão: %1$s."</string>
   <string name="common_username">"Nome de utilizador"</string>
   <string name="common_verification_cancelled">"Verificação cancelada"</string>
   <string name="common_verification_complete">"Verificação concluída"</string>
+  <string name="common_verified">"Verificado"</string>
   <string name="common_verify_device">"Verificar o dispositivo"</string>
   <string name="common_video">"Vídeo"</string>
   <string name="common_voice_message">"Mensagem de voz"</string>
@@ -252,6 +255,8 @@ Razão: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"À espera desta mensagem"</string>
   <string name="common_you">"Você"</string>
   <string name="crypto_identity_change_pin_violation">"A identidade de %1$s parece ter mudado. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s (username: %2$s ) aparenta ter mudado. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Confirmação"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
@@ -269,7 +274,7 @@ Razão: %1$s."</string>
   <string name="error_missing_location_rationale_android">"A %1$s não tem permissão para aceder à tua localização. Continua para ativares o acesso."</string>
   <string name="error_missing_microphone_voice_rationale_android">"A %1$s não tem permissão para aceder ao teu microfone. Permite o acesso para gravar uma mensagem de voz."</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
-  <string name="error_unknown">"Ocorreu um erro, desculpa"</string>
+  <string name="error_unknown">"Desculpe, ocorreu um erro"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>
   <string name="event_shield_reason_previously_verified">"Criptografado por um usuário verificado anteriormente."</string>
   <string name="event_shield_reason_sent_in_clear">"Não cifrado."</string>
@@ -280,6 +285,15 @@ Razão: %1$s."</string>
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agita o dispositivo em fúria para comunicar um problema"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Qualquer pessoa pode entrar nesta sala"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Qualquer pessoa"</string>
+  <string name="screen_create_room_access_section_header">"Acesso à sala"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou um moderador terá de aceitar o pedido"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Pedir para participar"</string>
+  <string name="screen_join_room_cancel_knock_action">"Cancelar pedido"</string>
+  <string name="screen_join_room_knock_message_description">"Mensagem (opcional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Irá receber um convite para participar na sala se seu pedido for aceite."</string>
+  <string name="screen_join_room_knock_sent_title">"Pedido de adesão enviado"</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar multimédia, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Falhar ao carregar multimédia, por favor tente novamente."</string>
@@ -310,6 +324,8 @@ Razão: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Poderás voltar a ver todas as suas mensagens."</string>
   <string name="screen_room_member_details_unblock_user">"Desbloquear utilizador"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Utiliza a aplicação Web para verificar este utilizador."</string>
+  <string name="screen_room_member_details_verify_button_title">"Verifique %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s mensagens afixadas"</string>
   <string name="screen_room_pinned_banner_loading_description">"A carregar mensagem…"</string>

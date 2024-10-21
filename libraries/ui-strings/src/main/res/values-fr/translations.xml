@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
   <string name="action_go_back">"Retour"</string>
+  <string name="action_ignore">"Ignorer"</string>
   <string name="action_invite">"Inviter"</string>
   <string name="action_invite_friends">"Inviter des amis"</string>
   <string name="action_invite_friends_to_app">"Inviter des amis à %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
+  <string name="common_device_id">"Identifiant de session"</string>
   <string name="common_direct_chat">"Discussion à deux"</string>
   <string name="common_do_not_show_this_again">"Ne plus afficher"</string>
   <string name="common_edited_suffix">"(modifié)"</string>
@@ -245,6 +247,7 @@ Raison: %1$s."</string>
   <string name="common_username">"Nom d’utilisateur"</string>
   <string name="common_verification_cancelled">"Vérification annulée"</string>
   <string name="common_verification_complete">"Vérification terminée"</string>
+  <string name="common_verified">"Vérifié(e)"</string>
   <string name="common_verify_device">"Vérifier la session"</string>
   <string name="common_video">"Vidéo"</string>
   <string name="common_voice_message">"Message vocal"</string>
@@ -252,6 +255,8 @@ Raison: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
   <string name="crypto_identity_change_pin_violation">"L’identité de %1$s semble avoir changé. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s semble avoir changé. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
@@ -285,6 +290,10 @@ Raison: %1$s."</string>
   <string name="screen_create_room_access_section_header">"Accès au salon"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
+  <string name="screen_join_room_cancel_knock_action">"Annuler la demande"</string>
+  <string name="screen_join_room_knock_message_description">"Message (facultatif)"</string>
+  <string name="screen_join_room_knock_sent_description">"Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée."</string>
+  <string name="screen_join_room_knock_sent_title">"Demande de rejoindre le salon envoyée"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
@@ -315,6 +324,8 @@ Raison: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Utilisez l’application Web pour vérifier cet utilisateur."</string>
+  <string name="screen_room_member_details_verify_button_title">"Vérifier %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>

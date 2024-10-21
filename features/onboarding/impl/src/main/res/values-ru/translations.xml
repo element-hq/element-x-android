@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_onboarding_sign_in_manually">"Вход в систему вручную"</string>
-  <string name="screen_onboarding_sign_in_with_qr_code">"Войти с помощью QR-кода"</string>
+  <string name="screen_onboarding_sign_in_manually">"Войти вручную"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Войти QR-кодом"</string>
   <string name="screen_onboarding_sign_up">"Создать учетную запись"</string>
-  <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый %1$s. Сверхзаряженность на скорость и простоту."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Сверхзаряжен для скорости и простоты."</string>
-  <string name="screen_onboarding_welcome_title">"Будьте в своем element"</string>
+  <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый клиент %1$s. Ориентирован на скорость и простоту."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Ориентирован на скорость и простоту."</string>
+  <string name="screen_onboarding_welcome_title">"Чувствуйте себя как дома с Element"</string>
 </resources>

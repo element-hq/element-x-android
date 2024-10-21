@@ -23,6 +23,7 @@
     "Введите "
     <b>"ключ восстановления"</b>
   </string>
+  <string name="screen_session_verification_failed_subtitle">"Запрос был отклонен, так как время ожидания запроса истекло, либо произошла ошибка при проверке."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы."</string>
   <string name="screen_session_verification_open_existing_session_title">"Открыть существующий сеанс"</string>
   <string name="screen_session_verification_positive_button_canceled">"Повторить проверку"</string>
@@ -30,6 +31,10 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Ожидание соответствия"</string>
   <string name="screen_session_verification_ready_subtitle">"Сравните уникальный набор эмодзи."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Сравните уникальные смайлики, убедившись, что они расположены в том же порядке."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Вход выполнен"</string>
+  <string name="screen_session_verification_request_footer">"Продолжайте только в том случае, если вы инициировали эту проверку."</string>
+  <string name="screen_session_verification_request_subtitle">"Чтобы сохранить историю сообщений в безопасности, проверьте другое устройство."</string>
+  <string name="screen_session_verification_request_title">"Запрос на верификация"</string>
   <string name="screen_session_verification_they_dont_match">"Они не совпадают"</string>
   <string name="screen_session_verification_they_match">"Они совпадают"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Для продолжения работы примите запрос на запуск процесса проверки в другом сеансе."</string>

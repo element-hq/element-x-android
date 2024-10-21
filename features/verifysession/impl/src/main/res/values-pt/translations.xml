@@ -24,6 +24,10 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"A aguardar correspondência"</string>
   <string name="screen_session_verification_ready_subtitle">"Compara um conjunto único de emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Compara os emojis únicos, certificando-te de que aparecem pela mesma ordem."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Sessão iniciada"</string>
+  <string name="screen_session_verification_request_footer">"Continue apenas se tiver iniciado esta verificação."</string>
+  <string name="screen_session_verification_request_subtitle">"Verifique o outro dispositivo para manter o histórico de mensagens seguro."</string>
+  <string name="screen_session_verification_request_title">"Verificação solicitada"</string>
   <string name="screen_session_verification_they_dont_match">"Não correspondem"</string>
   <string name="screen_session_verification_they_match">"Correspondem"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>
