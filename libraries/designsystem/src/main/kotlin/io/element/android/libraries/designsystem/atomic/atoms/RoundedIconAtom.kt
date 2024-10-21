@@ -71,6 +71,7 @@ fun RoundedIconAtom(
 private fun RoundedIconAtomSize.toContainerSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 30.dp
+        RoundedIconAtomSize.Big -> 36.dp
         RoundedIconAtomSize.Large -> 70.dp
     }
 }
@@ -78,6 +79,7 @@ private fun RoundedIconAtomSize.toContainerSize(): Dp {
 private fun RoundedIconAtomSize.toCornerSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 8.dp
+        RoundedIconAtomSize.Big -> 8.dp
         RoundedIconAtomSize.Large -> 14.dp
     }
 }
@@ -85,6 +87,7 @@ private fun RoundedIconAtomSize.toCornerSize(): Dp {
 private fun RoundedIconAtomSize.toIconSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 16.dp
+        RoundedIconAtomSize.Big -> 24.dp
         RoundedIconAtomSize.Large -> 48.dp
     }
 }
@@ -98,6 +101,10 @@ internal fun RoundedIconAtomPreview() = ElementPreview {
             imageVector = Icons.Filled.Home,
         )
         RoundedIconAtom(
+            size = RoundedIconAtomSize.Big,
+            imageVector = Icons.Filled.Home,
+        )
+        RoundedIconAtom(
             size = RoundedIconAtomSize.Large,
             imageVector = Icons.Filled.Home,
         )
@@ -106,5 +113,6 @@ internal fun RoundedIconAtomPreview() = ElementPreview {
 
 enum class RoundedIconAtomSize {
     Medium,
+    Big,
     Large
 }
