@@ -95,7 +95,7 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
                     confirmExitAction = if (!hasChanges || confirmExitAction.isConfirming()) {
                         AsyncAction.Success(Unit)
                     } else {
-                        AsyncAction.Confirming
+                        AsyncAction.ConfirmingNoParams
                     }
                 }
                 is ChangeRoomPermissionsEvent.ResetPendingActions -> {

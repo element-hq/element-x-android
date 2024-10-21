@@ -146,7 +146,7 @@ fun ActionListView(
             onDismissRequest = ::onDismiss,
             modifier = modifier,
         ) {
-            SheetContent(
+            ActionListViewContent(
                 state = state,
                 onActionClick = ::onItemActionClick,
                 onEmojiReactionClick = ::onEmojiReactionClick,
@@ -161,7 +161,7 @@ fun ActionListView(
 }
 
 @Composable
-private fun SheetContent(
+private fun ActionListViewContent(
     state: ActionListState,
     onActionClick: (TimelineItemAction) -> Unit,
     onEmojiReactionClick: (String) -> Unit,
@@ -269,19 +269,19 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             content = { ContentForBody(stringResource(CommonStrings.common_shared_location)) }
         }
         is TimelineItemImageContent -> {
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(event.content.bestDescription) }
         }
         is TimelineItemStickerContent -> {
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(event.content.bestDescription) }
         }
         is TimelineItemVideoContent -> {
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(event.content.bestDescription) }
         }
         is TimelineItemFileContent -> {
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(event.content.bestDescription) }
         }
         is TimelineItemAudioContent -> {
-            content = { ContentForBody(event.content.body) }
+            content = { ContentForBody(event.content.bestDescription) }
         }
         is TimelineItemVoiceContent -> {
             content = { ContentForBody(textContent) }
@@ -442,10 +442,10 @@ private fun EmojiButton(
 
 @PreviewsDayNight
 @Composable
-internal fun SheetContentPreview(
+internal fun ActionListViewContentPreview(
     @PreviewParameter(ActionListStateProvider::class) state: ActionListState
 ) = ElementPreview {
-    SheetContent(
+    ActionListViewContent(
         state = state,
         onActionClick = {},
         onEmojiReactionClick = {},

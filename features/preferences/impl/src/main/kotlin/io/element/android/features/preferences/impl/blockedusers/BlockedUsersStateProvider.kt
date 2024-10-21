@@ -13,13 +13,13 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toPersistentList
 
-class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersState> {
+class BlockedUsersStateProvider : PreviewParameterProvider<BlockedUsersState> {
     override val values: Sequence<BlockedUsersState>
         get() = sequenceOf(
             aBlockedUsersState(),
             aBlockedUsersState(blockedUsers = aMatrixUserList().map { it.copy(displayName = null, avatarUrl = null) }),
             aBlockedUsersState(blockedUsers = emptyList()),
-            aBlockedUsersState(unblockUserAction = AsyncAction.Confirming),
+            aBlockedUsersState(unblockUserAction = AsyncAction.ConfirmingNoParams),
             aBlockedUsersState(unblockUserAction = AsyncAction.Loading),
             aBlockedUsersState(unblockUserAction = AsyncAction.Failure(Throwable("Failed to unblock user"))),
             aBlockedUsersState(unblockUserAction = AsyncAction.Success(Unit)),

@@ -82,7 +82,7 @@ class ChangeRoomPermissionsViewTest {
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
                 hasChanges = true,
-                confirmExitAction = AsyncAction.Confirming,
+                confirmExitAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
             eventsRecorder = recorder,
@@ -98,7 +98,7 @@ class ChangeRoomPermissionsViewTest {
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
                 hasChanges = true,
-                confirmExitAction = AsyncAction.Confirming,
+                confirmExitAction = AsyncAction.ConfirmingNoParams,
                 eventSink = recorder,
             ),
             eventsRecorder = recorder,

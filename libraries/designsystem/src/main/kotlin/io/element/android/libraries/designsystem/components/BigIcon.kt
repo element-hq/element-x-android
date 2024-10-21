@@ -126,7 +126,7 @@ object BigIcon {
 internal fun BigIconPreview() {
     ElementPreview {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(10.dp)) {
-            val provider = BigIconStylePreviewProvider()
+            val provider = BigIconStyleProvider()
             for (style in provider.values) {
                 BigIcon(style = style)
             }
@@ -134,7 +134,7 @@ internal fun BigIconPreview() {
     }
 }
 
-internal class BigIconStylePreviewProvider : PreviewParameterProvider<BigIcon.Style> {
+internal class BigIconStyleProvider : PreviewParameterProvider<BigIcon.Style> {
     override val values: Sequence<BigIcon.Style>
         get() = sequenceOf(
             BigIcon.Style.Default(Icons.Filled.CatchingPokemon),

@@ -67,7 +67,7 @@ class BlockedUsersPresenter @Inject constructor(
             when (event) {
                 is BlockedUsersEvents.Unblock -> {
                     pendingUserToUnblock = event.userId
-                    unblockUserAction.value = AsyncAction.Confirming
+                    unblockUserAction.value = AsyncAction.ConfirmingNoParams
                 }
                 BlockedUsersEvents.ConfirmUnblock -> {
                     pendingUserToUnblock?.let {

@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Porovnejte čísla"</string>
   <string name="screen_session_verification_complete_subtitle">"Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou."</string>
   <string name="screen_session_verification_enter_recovery_key">"Zadejte klíč pro obnovení"</string>
+  <string name="screen_session_verification_failed_subtitle">"Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy."</string>
   <string name="screen_session_verification_open_existing_session_title">"Otevřete existující relaci"</string>
   <string name="screen_session_verification_positive_button_canceled">"Opakovat ověření"</string>
@@ -24,6 +25,10 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Čekání na shodu"</string>
   <string name="screen_session_verification_ready_subtitle">"Porovnejte jedinečnou sadu emotikonů."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Porovnejte jedinečné emotikony a ujistěte se, že jsou zobrazeny ve stejném pořadí."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Přihlášen"</string>
+  <string name="screen_session_verification_request_footer">"Pokračujte, pouze pokud jste toto ověření zahájili."</string>
+  <string name="screen_session_verification_request_subtitle">"Ověřte druhé zařízení, aby byla vaše historie zpráv zabezpečená."</string>
+  <string name="screen_session_verification_request_title">"Požadováno ověření"</string>
   <string name="screen_session_verification_they_dont_match">"Neshodují se"</string>
   <string name="screen_session_verification_they_match">"Shodují se"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci."</string>

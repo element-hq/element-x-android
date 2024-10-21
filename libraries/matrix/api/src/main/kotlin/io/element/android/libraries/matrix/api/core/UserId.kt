@@ -24,4 +24,9 @@ value class UserId(val value: String) : Serializable {
     }
 
     override fun toString(): String = value
+
+    val extractedDisplayName: String
+        get() = value
+            .removePrefix("@")
+            .substringBefore(":")
 }

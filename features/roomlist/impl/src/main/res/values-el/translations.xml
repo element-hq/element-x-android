@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_action">"Αποσύνδεση &amp;amp; Αναβάθμιση"</string>
+  <string name="banner_migrate_to_native_sliding_sync_action">"Αποσύνδεση &amp; Αναβάθμιση"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα."</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ο οικιακός διακομιστής σου δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς την εφαρμογή."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Διαθέσιμη αναβάθμιση"</string>

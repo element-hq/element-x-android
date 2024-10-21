@@ -31,103 +31,109 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
             return sequenceOf(
                 anActionListState(),
                 anActionListState().copy(target = ActionListState.Target.Loading(aTimelineItemEvent())),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent().copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(
                             content = aTimelineItemImageContent(),
                             displayNameAmbiguous = true,
-                        ).copy(
-                            reactionsState = reactionsState,
+                            timelineItemReactions = reactionsState,
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemVideoContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemVideoContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemFileContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemFileContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemAudioContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemAudioContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemVoiceContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemVoiceContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemLocationContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemLocationContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = false,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     ),
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent(content = aTimelineItemPollContent()).copy(
-                            reactionsState = reactionsState
+                        event = aTimelineItemEvent(
+                            content = aTimelineItemPollContent(),
+                            timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = false,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemPollActionList(),
                     ),
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
-                        event = aTimelineItemEvent().copy(
-                            reactionsState = reactionsState,
+                        event = aTimelineItemEvent(
+                            timelineItemReactions = reactionsState,
                             messageShield = MessageShield.UnknownDevice(isCritical = true)
                         ),
                         displayEmojiReactions = true,
@@ -135,7 +141,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         actions = aTimelineItemActionList(),
                     )
                 ),
-                anActionListState().copy(
+                anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(),
                         displayEmojiReactions = true,

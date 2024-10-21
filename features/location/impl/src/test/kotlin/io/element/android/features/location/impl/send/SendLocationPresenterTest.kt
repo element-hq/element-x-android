@@ -22,6 +22,8 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -397,8 +399,7 @@ class SendLocationPresenterTest {
         )
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
-                eventId = null,
-                transactionId = null,
+                eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
                 content = ""
             )
         }
@@ -446,8 +447,7 @@ class SendLocationPresenterTest {
         )
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
-                eventId = null,
-                transactionId = null,
+                eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
                 content = ""
             )
         }

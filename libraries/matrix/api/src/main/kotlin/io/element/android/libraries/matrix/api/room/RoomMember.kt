@@ -51,6 +51,12 @@ data class RoomMember(
         isNameAmbiguous -> "$displayName ($userId)"
         else -> displayName
     }
+
+    val displayNameOrDefault: String
+        get() = when {
+            displayName == null -> userId.extractedDisplayName
+            else -> displayName
+        }
 }
 
 enum class RoomMembershipState {

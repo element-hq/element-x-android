@@ -8,16 +8,19 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAndSize
 
 data class TimelineItemFileContent(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val fileSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val formattedFileSize: String,
     val fileExtension: String,
     val mimeType: String,
-) : TimelineItemEventContent {
+) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemFileContent"
 
     val fileExtensionAndSize = formatFileExtensionAndSize(fileExtension, formattedFileSize)

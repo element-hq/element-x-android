@@ -64,7 +64,7 @@ class LogoutPresenter @Inject constructor(
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
-                        logoutAction.value = AsyncAction.Confirming
+                        logoutAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
                 LogoutEvents.CloseDialogs -> {

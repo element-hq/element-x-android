@@ -134,7 +134,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 is ChangeRolesEvent.Save -> {
                     if (role == RoomMember.Role.ADMIN && selectedUsers != usersWithRole && !saveState.value.isConfirming()) {
                         // Confirm adding admin
-                        saveState.value = AsyncAction.Confirming
+                        saveState.value = AsyncAction.ConfirmingNoParams
                     } else if (!saveState.value.isLoading()) {
                         coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
                     }
@@ -145,7 +145,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 is ChangeRolesEvent.Exit -> {
                     exitState.value = if (exitState.value.isUninitialized() && hasPendingChanges) {
                         // Has pending changes, confirm exit
-                        AsyncAction.Confirming
+                        AsyncAction.ConfirmingNoParams
                     } else {
                         // No pending changes, exit immediately
                         AsyncAction.Success(Unit)

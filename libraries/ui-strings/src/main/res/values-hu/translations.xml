@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_go_back">"Visszalépés"</string>
+  <string name="action_ignore">"Mellőzés"</string>
   <string name="action_invite">"Meghívás"</string>
   <string name="action_invite_friends">"Ismerősök meghívása"</string>
   <string name="action_invite_friends_to_app">"Ismerősök meghívása ide: %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Sötét"</string>
   <string name="common_decryption_error">"Visszafejtési hiba"</string>
   <string name="common_developer_options">"Fejlesztői beállítások"</string>
+  <string name="common_device_id">"Eszközazonosító"</string>
   <string name="common_direct_chat">"Közvetlen csevegés"</string>
   <string name="common_do_not_show_this_again">"Ne jelenjen meg többé"</string>
   <string name="common_edited_suffix">"(szerkesztve)"</string>
@@ -245,6 +247,8 @@ Ok: %1$s."</string>
   <string name="common_username">"Felhasználónév"</string>
   <string name="common_verification_cancelled">"Az ellenőrzés megszakítva"</string>
   <string name="common_verification_complete">"Az ellenőrzés befejeződött"</string>
+  <string name="common_verification_failed">"Az ellenőrzés sikertelen"</string>
+  <string name="common_verified">"Ellenőrizve"</string>
   <string name="common_verify_device">"Eszköz ellenőrzése"</string>
   <string name="common_video">"Videó"</string>
   <string name="common_voice_message">"Hangüzenet"</string>
@@ -252,6 +256,8 @@ Ok: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"Várakozás a visszafejtési kulcsra"</string>
   <string name="common_you">"Ön"</string>
   <string name="crypto_identity_change_pin_violation">"Úgy tűnik, hogy %1$s személyazonossága megváltozott. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Úgy tűnik, hogy %1$s %2$s személyazonossága megváltozott. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Megerősítés"</string>
   <string name="dialog_title_error">"Hiba"</string>
   <string name="dialog_title_success">"Sikeres"</string>
@@ -285,6 +291,13 @@ Ok: %1$s."</string>
   <string name="screen_create_room_access_section_header">"Szobahozzáférés"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Csatlakozás kérése"</string>
+  <string name="screen_join_room_cancel_knock_action">"Kérés visszavonása"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Igen, visszavonás"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Biztos, hogy visszavonja a szobához való csatlakozási kérését?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Csatlakozási kérés visszavonása"</string>
+  <string name="screen_join_room_knock_message_description">"Üzenet (nem kötelező)"</string>
+  <string name="screen_join_room_knock_sent_description">"Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz."</string>
+  <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
@@ -315,6 +328,8 @@ Ok: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_room_member_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Használja a webes alkalmazást a felhasználó ellenőrzéséhez."</string>
+  <string name="screen_room_member_details_verify_button_title">"A(z) %1$s ellenőrzése"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
   <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>

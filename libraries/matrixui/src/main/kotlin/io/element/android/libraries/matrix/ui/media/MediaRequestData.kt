@@ -26,7 +26,12 @@ data class MediaRequestData(
 ) {
     sealed interface Kind {
         data object Content : Kind
-        data class File(val body: String?, val mimeType: String) : Kind
+
+        data class File(
+            val fileName: String,
+            val mimeType: String,
+        ) : Kind
+
         data class Thumbnail(val width: Long, val height: Long) : Kind {
             constructor(size: Long) : this(size, size)
         }

@@ -189,7 +189,7 @@ private fun ColumnScope.Buttons(
                 }
             }
             AsyncAction.Uninitialized,
-            AsyncAction.Confirming -> Unit
+            is AsyncAction.Confirming -> Unit
         }
     }
 }

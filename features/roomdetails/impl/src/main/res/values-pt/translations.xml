@@ -17,7 +17,7 @@
   <string name="screen_room_change_permissions_room_name">"Altera o nome da sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Alterar a descrição da sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensagens"</string>
-  <string name="screen_room_change_role_administrators_title">"Editar administradores"</string>
+  <string name="screen_room_change_role_administrators_title">"Editar Administradores"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Não poderás desfazer esta ação. Estás a promover o utilizador para ter o mesmo nível de poder que tu."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Adicionar administrador?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Despromover"</string>
@@ -26,7 +26,7 @@
   <string name="screen_room_change_role_invited_member_name">"%1$s (pendente)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(pendente)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Os administradores têm automaticamente privilégios de moderador"</string>
-  <string name="screen_room_change_role_moderators_title">"Editar moderadores"</string>
+  <string name="screen_room_change_role_moderators_title">"Editar Moderadores"</string>
   <string name="screen_room_change_role_section_administrators">"Administradores"</string>
   <string name="screen_room_change_role_section_moderators">"Moderadores"</string>
   <string name="screen_room_change_role_section_users">"Participantes"</string>

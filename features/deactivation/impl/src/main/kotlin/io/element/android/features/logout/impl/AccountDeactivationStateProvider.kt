@@ -20,7 +20,7 @@ open class AccountDeactivationStateProvider : PreviewParameterProvider<AccountDe
             ),
             anAccountDeactivationState(
                 deactivateFormState = filledForm,
-                accountDeactivationAction = AsyncAction.Confirming,
+                accountDeactivationAction = AsyncAction.ConfirmingNoParams,
             ),
             anAccountDeactivationState(
                 deactivateFormState = filledForm,

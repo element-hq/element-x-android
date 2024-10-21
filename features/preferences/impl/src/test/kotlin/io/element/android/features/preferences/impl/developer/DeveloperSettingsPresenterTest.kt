@@ -26,6 +26,7 @@ import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -168,11 +169,15 @@ class DeveloperSettingsPresenterTest {
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+            // Give time for the logout to be called, but for some reason using runCurrent() is not enough
+            delay(2)
             logoutCallRecorder.assertions().isCalledOnce()
 
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
+            // Give time for the logout to be called, but for some reason using runCurrent() is not enough
+            delay(2)
             logoutCallRecorder.assertions().isCalledExactly(times = 2)
         }
     }

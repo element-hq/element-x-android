@@ -51,7 +51,7 @@ class AccountDeactivationPresenter @Inject constructor(
                             action
                         )
                     } else {
-                        action.value = AsyncAction.Confirming
+                        action.value = AsyncAction.ConfirmingNoParams
                     }
                 AccountDeactivationEvents.CloseDialogs -> {
                     action.value = AsyncAction.Uninitialized

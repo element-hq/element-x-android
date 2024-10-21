@@ -24,7 +24,7 @@ fun AccountDeactivationActionDialog(
     when (state) {
         AsyncAction.Uninitialized ->
             Unit
-        AsyncAction.Confirming ->
+        is AsyncAction.Confirming ->
             AccountDeactivationConfirmationDialog(
                 onSubmitClick = onConfirmClick,
                 onDismiss = onDismissDialog

@@ -25,7 +25,7 @@
   <string name="screen_room_invite_again_alert_message">"Хотите пригласить их снова?"</string>
   <string name="screen_room_invite_again_alert_title">"Вы одни в этой комнате"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Уведомить всю комнату"</string>
-  <string name="screen_room_mentions_at_room_title">"Для всех"</string>
+  <string name="screen_room_mentions_at_room_title">"Все"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Отправить снова"</string>
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
   <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>

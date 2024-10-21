@@ -34,7 +34,7 @@ fun <T> AsyncActionView(
     async: AsyncAction<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
-    confirmationDialog: @Composable () -> Unit = { },
+    confirmationDialog: @Composable (AsyncAction.Confirming) -> Unit = { },
     progressDialog: @Composable () -> Unit = { AsyncActionViewDefaults.ProgressDialog() },
     errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
     errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
@@ -42,7 +42,7 @@ fun <T> AsyncActionView(
 ) {
     when (async) {
         AsyncAction.Uninitialized -> Unit
-        AsyncAction.Confirming -> confirmationDialog()
+        is AsyncAction.Confirming -> confirmationDialog(async)
         is AsyncAction.Loading -> progressDialog()
         is AsyncAction.Failure -> {
             if (onRetry == null) {

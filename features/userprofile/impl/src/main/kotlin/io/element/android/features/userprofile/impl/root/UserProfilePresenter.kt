@@ -10,18 +10,20 @@ package io.element.android.features.userprofile.impl.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
-import io.element.android.features.userprofile.shared.UserProfileEvents
-import io.element.android.features.userprofile.shared.UserProfilePresenterHelper
-import io.element.android.features.userprofile.shared.UserProfileState
-import io.element.android.features.userprofile.shared.UserProfileState.ConfirmationDialog
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -30,6 +32,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -41,24 +44,39 @@ class UserProfilePresenter @AssistedInject constructor(
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
 ) : Presenter<UserProfileState> {
+    @AssistedFactory
     interface Factory {
         fun create(userId: UserId): UserProfilePresenter
     }
 
-    private val userProfilePresenterHelper = UserProfilePresenterHelper(
-        userId = userId,
-        client = client,
-    )
+    @Composable
+    private fun getDmRoomId(): State<RoomId?> {
+        return produceState<RoomId?>(initialValue = null) {
+            value = client.findDM(userId)
+        }
+    }
+
+    @Composable
+    private fun getCanCall(roomId: RoomId?): State<Boolean> {
+        return produceState(initialValue = false, roomId) {
+            value = if (client.isMe(userId)) {
+                false
+            } else {
+                roomId?.let { client.getRoom(it)?.canUserJoinCall(client.sessionId)?.getOrNull() == true }.orFalse()
+            }
+        }
+    }
 
     @Composable
     override fun present(): UserProfileState {
         val coroutineScope = rememberCoroutineScope()
+        val isCurrentUser = remember { client.isMe(userId) }
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
-        val dmRoomId by userProfilePresenterHelper.getDmRoomId()
-        val canCall by userProfilePresenterHelper.getCanCall(dmRoomId)
+        val dmRoomId by getDmRoomId()
+        val canCall by getCanCall(dmRoomId)
         LaunchedEffect(Unit) {
             client.ignoredUsersFlow
                 .map { ignoredUsers -> userId in ignoredUsers }
@@ -77,7 +95,7 @@ class UserProfilePresenter @AssistedInject constructor(
                         confirmationDialog = ConfirmationDialog.Block
                     } else {
                         confirmationDialog = null
-                        userProfilePresenterHelper.blockUser(coroutineScope, isBlocked)
+                        coroutineScope.blockUser(isBlocked)
                     }
                 }
                 is UserProfileEvents.UnblockUser -> {
@@ -85,7 +103,7 @@ class UserProfilePresenter @AssistedInject constructor(
                         confirmationDialog = ConfirmationDialog.Unblock
                     } else {
                         confirmationDialog = null
-                        userProfilePresenterHelper.unblockUser(coroutineScope, isBlocked)
+                        coroutineScope.unblockUser(isBlocked)
                     }
                 }
                 UserProfileEvents.ClearConfirmationDialog -> confirmationDialog = null
@@ -110,10 +128,32 @@ class UserProfilePresenter @AssistedInject constructor(
             isBlocked = isBlocked.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = client.isMe(userId),
+            isCurrentUser = isCurrentUser,
             dmRoomId = dmRoomId,
             canCall = canCall,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.blockUser(
+        isBlockedState: MutableState<AsyncData<Boolean>>,
+    ) = launch {
+        isBlockedState.value = AsyncData.Loading(false)
+        client.ignoreUser(userId)
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, false)
+            }
+        // Note: on success, ignoredUsersFlow will emit new item.
+    }
+
+    private fun CoroutineScope.unblockUser(
+        isBlockedState: MutableState<AsyncData<Boolean>>,
+    ) = launch {
+        isBlockedState.value = AsyncData.Loading(true)
+        client.unignoreUser(userId)
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, true)
+            }
+        // Note: on success, ignoredUsersFlow will emit new item.
     }
 }

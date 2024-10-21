@@ -58,8 +58,8 @@ internal fun aMessageEvent(
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
-    debugInfoProvider = { debugInfo },
     isThreaded = isThreaded,
     origin = null,
-    messageShield = messageShield,
+    timelineItemDebugInfoProvider = { debugInfo },
+    messageShieldProvider = { messageShield },
 )

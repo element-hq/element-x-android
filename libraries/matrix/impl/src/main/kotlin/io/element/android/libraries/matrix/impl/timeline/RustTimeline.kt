@@ -10,8 +10,6 @@ package io.element.android.libraries.matrix.impl.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -26,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
@@ -65,8 +64,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
-import org.matrix.rustcomponents.sdk.EventOrTransactionId
-import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
@@ -75,6 +72,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
+import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
@@ -280,31 +278,23 @@ class RustTimeline(
         }
     }
 
-    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Unit> = withContext(dispatcher) {
+    override suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val eventOrTransactionId = if (eventId != null) {
-                EventOrTransactionId.EventId(eventId.value)
-            } else {
-                EventOrTransactionId.TransactionId(transactionId!!.value)
-            }
-            inner.redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
+            inner.redactEvent(
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+                reason = reason,
+            )
         }
     }
 
     override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
+        eventOrTransactionId: EventOrTransactionId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
-                val eventOrTransactionId = if (originalEventId != null) {
-                    EventOrTransactionId.EventId(originalEventId.value)
-                } else {
-                    EventOrTransactionId.TransactionId(transactionId!!.value)
-                }
                 val editedContent = EditedContent.RoomMessage(
                     content = MessageEventContent.from(
                         body = body,
@@ -314,7 +304,7 @@ class RustTimeline(
                 )
                 inner.edit(
                     newContent = editedContent,
-                    eventOrTransactionId = eventOrTransactionId,
+                    eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
                 )
             }
         }
@@ -351,21 +341,6 @@ class RustTimeline(
                 },
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
-        }
-    }
-
-    @Throws
-    @Suppress("UnusedPrivateMember")
-    private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
-        return try {
-            when {
-                eventId != null -> inner.getEventTimelineItemByEventId(eventId.value)
-                transactionId != null -> inner.getEventTimelineItemByTransactionId(transactionId.value)
-                else -> error("Either eventId or transactionId must be non-null")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to get event timeline item")
-            throw TimelineException.EventNotFound
         }
     }
 
@@ -410,9 +385,12 @@ class RustTimeline(
         }
     }
 
-    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> = withContext(dispatcher) {
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.toggleReaction(key = emoji, uniqueId = uniqueId.value)
+            inner.toggleReaction(
+                key = emoji,
+                itemId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
         }
     }
 
@@ -423,9 +401,6 @@ class RustTimeline(
             Timber.e(it)
         }
     }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
-        redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,
@@ -479,7 +454,7 @@ class RustTimeline(
             )
             inner.edit(
                 newContent = editedContent,
-                eventOrTransactionId = EventOrTransactionId.EventId(pollStartId.value),
+                eventOrTransactionId = RustEventOrTransactionId.EventId(pollStartId.value),
             )
         }.map { }
     }

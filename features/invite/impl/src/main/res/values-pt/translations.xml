@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para %1$s?"</string>
-  <string name="screen_invites_decline_chat_title">"Rejeitar conite"</string>
-  <string name="screen_invites_decline_direct_chat_message">"Tens a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
+  <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para entra em %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rejeitar convite"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Tem a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
   <string name="screen_invites_empty_list">"Sem convites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>

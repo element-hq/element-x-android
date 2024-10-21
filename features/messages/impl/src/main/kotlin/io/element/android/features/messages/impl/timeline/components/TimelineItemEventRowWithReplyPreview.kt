@@ -49,7 +49,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                 event = aTimelineItemEvent(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
-                    content = aTimelineItemImageContent().copy(
+                    content = aTimelineItemImageContent(
                         aspectRatio = 2.5f
                     ),
                     inReplyTo = inReplyToDetails,

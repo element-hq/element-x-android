@@ -36,7 +36,7 @@ class DefaultDirectLogoutViewTest {
         val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
         rule.setDefaultDirectLogoutView(
             state = aDirectLogoutState(
-                logoutAction = AsyncAction.Confirming,
+                logoutAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             )
         )
@@ -49,7 +49,7 @@ class DefaultDirectLogoutViewTest {
         val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
         rule.setDefaultDirectLogoutView(
             state = aDirectLogoutState(
-                logoutAction = AsyncAction.Confirming,
+                logoutAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             )
         )
@@ -63,7 +63,7 @@ class DefaultDirectLogoutViewTest {
         val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
         rule.setDefaultDirectLogoutView(
             state = aDirectLogoutState(
-                logoutAction = AsyncAction.Confirming,
+                logoutAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             )
         )

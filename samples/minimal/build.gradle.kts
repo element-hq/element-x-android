@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.permissions.noop)
     implementation(projects.libraries.sessionStorage.implMemory)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.network)

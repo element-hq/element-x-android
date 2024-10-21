@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import kotlinx.collections.immutable.toPersistentList
 
-class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
+class ChangeRoomPermissionsStateProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
     override val values: Sequence<ChangeRoomPermissionsState>
         get() = sequenceOf(
             aChangeRoomPermissionsState(section = ChangeRoomPermissionsSection.RoomDetails),
@@ -26,7 +26,11 @@ class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<Chang
                 hasChanges = true,
                 saveAction = AsyncAction.Failure(IllegalStateException("Failed to save changes"))
             ),
-            aChangeRoomPermissionsState(section = ChangeRoomPermissionsSection.RoomDetails, hasChanges = true, confirmExitAction = AsyncAction.Confirming),
+            aChangeRoomPermissionsState(
+                section = ChangeRoomPermissionsSection.RoomDetails,
+                hasChanges = true,
+                confirmExitAction = AsyncAction.ConfirmingNoParams,
+            ),
         )
 }
 

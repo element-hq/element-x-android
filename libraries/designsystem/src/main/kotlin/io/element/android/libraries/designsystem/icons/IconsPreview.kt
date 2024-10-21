@@ -30,7 +30,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
-internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
+internal class CompoundIconChunkProvider : PreviewParameterProvider<IconChunk> {
     override val values: Sequence<IconChunk>
         get() {
             val chunks = CompoundIcons.allResIds.chunked(36)
@@ -41,7 +41,7 @@ internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconCh
         }
 }
 
-internal class OtherIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
+internal class OtherIconChunkProvider : PreviewParameterProvider<IconChunk> {
     override val values: Sequence<IconChunk>
         get() {
             val chunks = iconsOther.chunked(36)
@@ -60,7 +60,7 @@ internal data class IconChunk(
 
 @PreviewsDayNight
 @Composable
-internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvider::class) chunk: IconChunk) = ElementPreview {
+internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconChunkProvider::class) chunk: IconChunk) = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_compound_* ${chunk.index}/${chunk.total}",
         iconsList = chunk.icons,
@@ -73,7 +73,7 @@ internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvi
 
 @PreviewsDayNight
 @Composable
-internal fun IconsOtherPreview(@PreviewParameter(OtherIconListPreviewProvider::class) iconChunk: IconChunk) = ElementPreview {
+internal fun IconsOtherPreview(@PreviewParameter(OtherIconChunkProvider::class) iconChunk: IconChunk) = ElementPreview {
     IconsPreview(
         title = "R.drawable.ic_*  ${iconChunk.index}/${iconChunk.total}",
         iconsList = iconChunk.icons,

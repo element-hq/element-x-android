@@ -105,13 +105,13 @@ class IdentityChangeStatePresenter @Inject constructor(
 
 private fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
     userId = userId,
-    disambiguatedDisplayName = disambiguatedDisplayName,
+    displayNameOrDefault = displayNameOrDefault,
     avatarData = getAvatarData(AvatarSize.ComposerAlert),
 )
 
 private fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
     userId = userId,
-    disambiguatedDisplayName = userId.value,
+    displayNameOrDefault = userId.extractedDisplayName,
     avatarData = AvatarData(
         id = userId.value,
         name = null,

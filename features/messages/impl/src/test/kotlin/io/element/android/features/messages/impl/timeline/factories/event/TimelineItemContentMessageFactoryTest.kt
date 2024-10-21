@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
 import kotlinx.collections.immutable.persistentListOf
@@ -228,14 +229,14 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create VideoMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = VideoMessageType("body", null, null, MediaSource("url"), null)),
+            content = createMessageContent(type = VideoMessageType("filename", null, null, MediaSource("url"), null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVideoContent(
-            body = "body",
-            formatted = null,
-            filename = null,
+            filename = "filename",
+            caption = null,
+            formattedCaption = null,
             duration = Duration.ZERO,
             videoSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
@@ -256,9 +257,9 @@ class TimelineItemContentMessageFactoryTest {
         val result = sut.create(
             content = createMessageContent(
                 type = VideoMessageType(
-                    body = "body.mp4 caption",
-                    formatted = FormattedBody(MessageFormat.HTML, "formatted"),
                     filename = "body.mp4",
+                    caption = "body.mp4 caption",
+                    formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
                     source = MediaSource("url"),
                     info = VideoInfo(
                         duration = 1.minutes,
@@ -281,9 +282,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVideoContent(
-            body = "body.mp4 caption",
-            formatted = FormattedBody(MessageFormat.HTML, "formatted"),
             filename = "body.mp4",
+            caption = "body.mp4 caption",
+            formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
             duration = 1.minutes,
             videoSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
@@ -302,12 +303,14 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create AudioMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = AudioMessageType("body", MediaSource("url"), null)),
+            content = createMessageContent(type = AudioMessageType("filename", null, null, MediaSource("url"), null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
-            body = "body",
+            filename = "filename",
+            caption = null,
+            formattedCaption = null,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
@@ -323,7 +326,9 @@ class TimelineItemContentMessageFactoryTest {
         val result = sut.create(
             content = createMessageContent(
                 type = AudioMessageType(
-                    body = "body.mp3",
+                    filename = "body.mp3",
+                    caption = null,
+                    formattedCaption = null,
                     source = MediaSource("url"),
                     info = AudioInfo(
                         duration = 1.minutes,
@@ -336,7 +341,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
-            body = "body.mp3",
+            filename = "body.mp3",
+            caption = null,
+            formattedCaption = null,
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Mp3,
@@ -350,13 +357,15 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create VoiceMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = VoiceMessageType("body", MediaSource("url"), null, null)),
+            content = createMessageContent(type = VoiceMessageType("filename", null, null, MediaSource("url"), null, null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVoiceContent(
+            filename = "filename",
             eventId = AN_EVENT_ID,
-            body = "body",
+            caption = null,
+            formattedCaption = null,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
@@ -371,7 +380,9 @@ class TimelineItemContentMessageFactoryTest {
         val result = sut.create(
             content = createMessageContent(
                 type = VoiceMessageType(
-                    body = "body.ogg",
+                    filename = "body.ogg",
+                    caption = null,
+                    formattedCaption = null,
                     source = MediaSource("url"),
                     info = AudioInfo(
                         duration = 1.minutes,
@@ -389,7 +400,9 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVoiceContent(
             eventId = AN_EVENT_ID,
-            body = "body.ogg",
+            filename = "body.ogg",
+            caption = null,
+            formattedCaption = null,
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
@@ -408,12 +421,14 @@ class TimelineItemContentMessageFactoryTest {
             )
         )
         val result = sut.create(
-            content = createMessageContent(type = VoiceMessageType("body", MediaSource("url"), null, null)),
+            content = createMessageContent(type = VoiceMessageType("filename", null, null, MediaSource("url"), null, null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
-            body = "body",
+            filename = "filename",
+            caption = null,
+            formattedCaption = null,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
@@ -427,14 +442,14 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create ImageMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = ImageMessageType("body", null, null, MediaSource("url"), null)),
+            content = createMessageContent(type = ImageMessageType("filename", "body", null, MediaSource("url"), null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
-            body = "body",
-            formatted = null,
-            filename = null,
+            filename = "filename",
+            caption = "body",
+            formattedCaption = null,
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
@@ -453,13 +468,15 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentStickerFactory()
         val result = sut.create(
             content = createStickerContent(
-                "body",
-                ImageInfo(32, 32, "image/webp", 8192, null, MediaSource("thumbnail://url"), null),
-                "url"
+                filename = "filename",
+                inImageInfo = ImageInfo(32, 32, "image/webp", 8192, null, MediaSource("thumbnail://url"), null),
+                inUrl = "url"
             )
         )
         val expected = TimelineItemStickerContent(
-            body = "body",
+            filename = "filename",
+            caption = null,
+            formattedCaption = null,
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource(url = "thumbnail://url", json = null),
             formattedFileSize = "8192 Bytes",
@@ -479,9 +496,9 @@ class TimelineItemContentMessageFactoryTest {
         val result = sut.create(
             content = createMessageContent(
                 type = ImageMessageType(
-                    body = "body.jpg caption",
-                    formatted = FormattedBody(MessageFormat.HTML, "formatted"),
                     filename = "body.jpg",
+                    caption = "body.jpg caption",
+                    formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
                     source = MediaSource("url"),
                     info = ImageInfo(
                         height = 10L,
@@ -503,9 +520,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
-            body = "body.jpg caption",
-            formatted = FormattedBody(MessageFormat.HTML, "formatted"),
             filename = "body.jpg",
+            formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
+            caption = "body.jpg caption",
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             formattedFileSize = "888 Bytes",
@@ -523,12 +540,14 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create FileMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = FileMessageType("body", MediaSource("url"), null)),
+            content = createMessageContent(type = FileMessageType("filename", null, null, MediaSource("url"), null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemFileContent(
-            body = "body",
+            filename = "filename",
+            caption = null,
+            formattedCaption = null,
             fileSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
@@ -544,7 +563,9 @@ class TimelineItemContentMessageFactoryTest {
         val result = sut.create(
             content = createMessageContent(
                 type = FileMessageType(
-                    body = "body.pdf",
+                    filename = "body.pdf",
+                    caption = null,
+                    formattedCaption = null,
                     source = MediaSource("url"),
                     info = FileInfo(
                         mimetype = MimeTypes.Pdf,
@@ -563,7 +584,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemFileContent(
-            body = "body.pdf",
+            filename = "body.pdf",
+            caption = null,
+            formattedCaption = null,
             fileSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             formattedFileSize = "123 Bytes",
@@ -749,14 +772,16 @@ class TimelineItemContentMessageFactoryTest {
     )
 
     private fun createStickerContent(
-        body: String = "Body",
+        filename: String = "filename",
         inImageInfo: ImageInfo,
-        inUrl: String
+        inUrl: String,
+        body: String? = null,
     ): StickerContent {
-        return StickerContent(
+        return aStickerContent(
+            filename = filename,
             body = body,
             info = inImageInfo,
-            source = aMediaSource(url = inUrl),
+            mediaSource = aMediaSource(url = inUrl),
         )
     }
 
