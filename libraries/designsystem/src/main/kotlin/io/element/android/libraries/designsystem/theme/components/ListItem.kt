@@ -453,7 +453,6 @@ internal fun ListItemTwoLinesBothIconsErrorPreview() = PreviewItems.TwoLinesList
 
 @Suppress("ModifierMissing")
 private object PreviewItems {
-
     @Composable
     private fun EnabledDisabledElementThemedPreview(
         content: @Composable (Boolean) -> Unit,
