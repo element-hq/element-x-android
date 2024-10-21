@@ -106,6 +106,7 @@
   <string name="action_send_message">"Адправіць паведамленне"</string>
   <string name="action_share">"Падзяліцца"</string>
   <string name="action_share_link">"Абагуліць спасылку"</string>
+  <string name="action_show">"Паказаць"</string>
   <string name="action_sign_in_again">"Увайдзіце яшчэ раз"</string>
   <string name="action_signout">"Выйсці"</string>
   <string name="action_signout_anyway">"Усё роўна выйсці"</string>
@@ -132,6 +133,7 @@
   <string name="common_call_invite">"Ідзе званок (не падтрымліваецца)"</string>
   <string name="common_call_started">"Званок пачаўся"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
+  <string name="common_copied_to_clipboard">"Скапіравана ў буфер абмену"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
   <string name="common_current_user_left_room">"Выйшаў з пакоя"</string>
@@ -253,6 +255,7 @@
   <string name="common_waiting">"Чакаем…"</string>
   <string name="common_waiting_for_decryption_key">"Чакаю гэта паведамленне"</string>
   <string name="common_you">"Вы"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Пацвярджэнне"</string>
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>
@@ -281,6 +284,9 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Хто заўгодна"</string>
+  <string name="screen_create_room_access_section_header">"Доступ у пакой"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Папрасіце далучыцца"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>

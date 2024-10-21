@@ -245,6 +245,7 @@
   <string name="common_username">"Όνομα χρήστη"</string>
   <string name="common_verification_cancelled">"Η επαλήθευση ακυρώθηκε"</string>
   <string name="common_verification_complete">"Η επαλήθευση ολοκληρώθηκε"</string>
+  <string name="common_verified">"Επαληθεύτηκε"</string>
   <string name="common_verify_device">"Επαλήθευση συσκευής"</string>
   <string name="common_video">"Βίντεο"</string>
   <string name="common_voice_message">"Φωνητικό μήνυμα"</string>
@@ -252,6 +253,8 @@
   <string name="common_waiting_for_decryption_key">"Αναμονή για αυτό το μήνυμα"</string>
   <string name="common_you">"Εσύ"</string>
   <string name="crypto_identity_change_pin_violation">"Η ταυτότητα του χρήστη %1$s φαίνεται να έχει αλλάξει. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Η ταυτότητα του %1$s %2$s φαίνεται να έχει αλλάξει. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Επιβεβαίωση"</string>
   <string name="dialog_title_error">"Σφάλμα"</string>
   <string name="dialog_title_success">"Επιτυχία"</string>
@@ -280,6 +283,12 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτό το δωμάτιο"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Οποιοσδήποτε"</string>
+  <string name="screen_create_room_access_section_header">"Πρόσβαση Δωματίου"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
+  <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>

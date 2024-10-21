@@ -66,6 +66,7 @@
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_forward">"Přeposlat"</string>
   <string name="action_go_back">"Přejít zpět"</string>
+  <string name="action_ignore">"Ignorovat"</string>
   <string name="action_invite">"Pozvat"</string>
   <string name="action_invite_friends">"Pozvat přátele"</string>
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
@@ -140,6 +141,7 @@
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
+  <string name="common_device_id">"ID zařízení"</string>
   <string name="common_direct_chat">"Přímý chat"</string>
   <string name="common_do_not_show_this_again">"Znovu nezobrazovat"</string>
   <string name="common_edited_suffix">"(upraveno)"</string>
@@ -249,6 +251,8 @@ Důvod: %1$s."</string>
   <string name="common_username">"Uživatelské jméno"</string>
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
   <string name="common_verification_complete">"Ověření dokončeno"</string>
+  <string name="common_verification_failed">"Ověření se nezdařilo"</string>
+  <string name="common_verified">"Ověřeno"</string>
   <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
@@ -256,6 +260,8 @@ Důvod: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
   <string name="common_you">"Vy"</string>
   <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Zdá se, že identita %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
@@ -289,6 +295,13 @@ Důvod: %1$s."</string>
   <string name="screen_create_room_access_section_header">"Přístup do místnosti"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Požádat o připojení"</string>
+  <string name="screen_join_room_cancel_knock_action">"Zrušit žádost"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ano, zrušit"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Opravdu chcete zrušit svou žádost o vstup do této místnosti?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Zrušit žádost o vstup"</string>
+  <string name="screen_join_room_knock_message_description">"Zpráva (nepovinné)"</string>
+  <string name="screen_join_room_knock_sent_description">"Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti."</string>
+  <string name="screen_join_room_knock_sent_title">"Žádost o vstup odeslána"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
@@ -320,6 +333,8 @@ Důvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovat"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"K ověření tohoto uživatele použijte webovou aplikaci."</string>
+  <string name="screen_room_member_details_verify_button_title">"Ověřit %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>

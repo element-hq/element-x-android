@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
+  <string name="action_ignore">"Eira"</string>
   <string name="action_invite">"Kutsu"</string>
   <string name="action_invite_friends">"Kutsu osalejaid"</string>
   <string name="action_invite_friends_to_app">"Kutsu huvilisi kasutama rakendust %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
+  <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
   <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
@@ -245,6 +247,8 @@ Põhjus: %1$s."</string>
   <string name="common_username">"Kasutajanimi"</string>
   <string name="common_verification_cancelled">"Verifitseerimine on katkestatud"</string>
   <string name="common_verification_complete">"Verifitseerimine on tehtud"</string>
+  <string name="common_verification_failed">"Verifitseerimine ei õnnestunud"</string>
+  <string name="common_verified">"Verifitseeritud"</string>
   <string name="common_verify_device">"Verifitseeri seade"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Häälsõnum"</string>
@@ -252,6 +256,8 @@ Põhjus: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
   <string name="common_you">"Sina"</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet tundub olema muutunud. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet tundub olema muutunud. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
@@ -285,6 +291,13 @@ Põhjus: %1$s."</string>
   <string name="screen_create_room_access_section_header">"Ligipääs jututoale"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_join_room_cancel_knock_action">"Tühista liitumispalve"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Jah, tühista"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Kas sa oled kindel, et soovid tühistada oma palve jututoaga liitumiseks?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Tühista liitumispalve"</string>
+  <string name="screen_join_room_knock_message_description">"Selgitus (kui soovid lisada)"</string>
+  <string name="screen_join_room_knock_sent_description">"Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks."</string>
+  <string name="screen_join_room_knock_sent_title">"Liitumispalve on saadetud"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti."</string>
@@ -315,6 +328,8 @@ Põhjus: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Eemalda blokeering"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Nüüd näed sa jälle kõiki tema sõnumeid"</string>
   <string name="screen_room_member_details_unblock_user">"Eemalda kasutajalt blokeering"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Kasutaja verifitseerimiseks kasuta veebirakendust."</string>
+  <string name="screen_room_member_details_verify_button_title">"Verifitseeri kasutaja %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laadime sõnumit…"</string>

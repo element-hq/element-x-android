@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
+  <string name="full_screen_intent_banner_message">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
   <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Выберите способ получения уведомлений"</string>
   <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
@@ -32,23 +32,23 @@
   <string name="screen_notification_settings_configuration_mismatch_description">"Мы упростили настройки уведомлений, чтобы упростить поиск опций. Некоторые пользовательские настройки, выбранные вами ранее, не отображаются в данном меню, но они все еще активны. 
 
 Если вы продолжите, некоторые настройки могут быть изменены."</string>
-  <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
+  <string name="screen_notification_settings_direct_chats">"В личных чатах"</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Персональные настройки для каждого чата"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"Все сообщения"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Произошла ошибка при обновлении настройки уведомления."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"О всех сообщениях"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"Уведомлять меня в личных чатах"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"Уведомлять меня в групповых чатах"</string>
   <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте еще раз."</string>
-  <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
+  <string name="screen_notification_settings_group_chats">"В групповых чатах"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Приглашения"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления."</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
   <string name="screen_notification_settings_mode_all">"Все"</string>
   <string name="screen_notification_settings_mode_mentions">"Упоминания"</string>
-  <string name="screen_notification_settings_notification_section_title">"Уведомить меня"</string>
-  <string name="screen_notification_settings_room_mention_label">"Уведомить меня в @room"</string>
+  <string name="screen_notification_settings_notification_section_title">"Уведомлять меня"</string>
+  <string name="screen_notification_settings_room_mention_label">"Уведомлять меня при упоминании @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Чтобы получать уведомления, измените свой %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"настройки системы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>

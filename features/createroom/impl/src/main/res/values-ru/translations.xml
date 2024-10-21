@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_create_room_action_create_room">"Новая комната"</string>
+  <string name="screen_create_room_action_create_room">"Создать новую комнату"</string>
   <string name="screen_create_room_add_people_title">"Пригласить в комнату"</string>
   <string name="screen_create_room_error_creating_room">"Произошла ошибка при создании комнаты"</string>
-  <string name="screen_create_room_private_option_description">"Сообщения в этой комнате зашифрованы. Отключить шифрование позже будет невозможно."</string>
-  <string name="screen_create_room_private_option_title">"Приватная комната (только по приглашению)"</string>
-  <string name="screen_create_room_public_option_description">"Сообщения не зашифрованы, каждый может их прочитать. Вы можете включить шифрование позже."</string>
-  <string name="screen_create_room_public_option_title">"Публичная комната (любой)"</string>
+  <string name="screen_create_room_private_option_description">"Сообщения в этой комнате будут зашифрованы. Отключить шифрование позже будет невозможно."</string>
+  <string name="screen_create_room_private_option_title">"Частная комната (только по приглашениям)"</string>
+  <string name="screen_create_room_public_option_description">"Сообщения не будут зашифрованы и каждый сможет их прочитать. Шифрование можно будет включить позже."</string>
+  <string name="screen_create_room_public_option_title">"Общедоступная комната (для всех)"</string>
   <string name="screen_create_room_room_name_label">"Название комнаты"</string>
   <string name="screen_create_room_title">"Создать комнату"</string>
   <string name="screen_create_room_topic_label">"Тема (необязательно)"</string>
-  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
+  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при запуске чата"</string>
 </resources>
