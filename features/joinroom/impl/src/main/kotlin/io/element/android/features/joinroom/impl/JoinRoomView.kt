@@ -80,6 +80,7 @@ fun JoinRoomView(
     onBackClick: () -> Unit,
     onJoinSuccess: () -> Unit,
     onKnockSuccess: () -> Unit,
+    onCancelKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -139,7 +140,7 @@ fun JoinRoomView(
     )
     AsyncActionView(
         async = state.cancelKnockAction,
-        onSuccess = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        onSuccess = { onCancelKnockSuccess() },
         onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
         confirmationDialog = {
             ConfirmationDialog(
@@ -464,5 +465,6 @@ internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class)
         onBackClick = { },
         onJoinSuccess = { },
         onKnockSuccess = { },
+        onCancelKnockSuccess = { },
     )
 }
