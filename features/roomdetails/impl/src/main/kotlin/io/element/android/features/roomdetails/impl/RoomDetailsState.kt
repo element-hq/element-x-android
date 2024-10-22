@@ -62,5 +62,5 @@ sealed interface RoomTopicState {
 enum class RoomBadge {
     ENCRYPTED,
     NOT_ENCRYPTED,
-    PUBLIC;
+    PUBLIC,
 }
