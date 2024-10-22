@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.maprealtime.impl.common.permissions.PermissionsEvents
@@ -37,6 +38,7 @@ import io.element.android.features.maprealtime.impl.common.permissions.Permissio
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -104,6 +106,11 @@ class MapRealtimePresenterPresenter @Inject constructor(
                     showMapTypeDialog = true
                 }
                 MapRealtimeEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                is MapRealtimeEvents.SendLongPressLocation -> {
+                    scope.launch {
+                        sendLocation(event)
+                    }
+                }
             }
         }
 
@@ -122,7 +129,25 @@ class MapRealtimePresenterPresenter @Inject constructor(
     private fun CoroutineScope.setMapTileProvider(mapProvider: String) = launch {
         mapTypeStore.setMapTileProvider(mapProvider)
     }
+
+    private suspend fun sendLocation(event: MapRealtimeEvents.SendLongPressLocation) {
+        val location = Location(
+            lat = event.coords.latitude,
+            lon = event.coords.longitude,
+            accuracy = 1.0.toFloat() // TODO (tb): fix this to use the actual accuracy
+        )
+        val geoUri = location.toGeoUri()
+        room.sendLocation(
+            body = generateBody(geoUri),
+            geoUri = geoUri,
+            description = null,
+            zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
+            assetType = AssetType.SENDER
+        )
+    }
 }
+
+private fun generateBody(uri: String): String = "Location was shared at $uri"
 
 /**
  * An effect that request location updates based on the provided request and ensures that the
