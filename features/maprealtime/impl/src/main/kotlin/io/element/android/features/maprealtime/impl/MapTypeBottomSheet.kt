@@ -24,10 +24,9 @@ package io.element.android.features.maprealtime.impl
  */
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,8 +44,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
@@ -83,6 +87,7 @@ internal fun MapTypeBottomSheet(
         }
     }
 
+
     if (isVisible) {
         ModalBottomSheet(
             modifier = modifier,
@@ -94,10 +99,13 @@ internal fun MapTypeBottomSheet(
             Row {
                 Column(Modifier.padding(16.dp, 0.dp, 16.dp, 16.dp)) {
                     Text(
-                        text = "CHOOSE MAP "
+                        text = "CHOOSE MAP ",
+                        style = TextStyle(fontWeight = FontWeight.Bold)
                     )
                     Text(
                         text = "Select map type",
+                        style = TextStyle(color = Color(0xFFF6993A)),
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 
@@ -116,17 +124,29 @@ private fun ProviderItem(
     provider: MapType,
     onTileProviderSelected: (MapType) -> Unit
 ) {
+
+    val resourceId = when (provider.mapKey) {
+        "openstreetmap" -> R.drawable.osm
+        "satellite" -> R.drawable.satellite
+        "streets-v2" -> R.drawable.traffic
+        "topo-v2" -> R.drawable.topo
+        else -> R.drawable.osm
+    }
+
     Surface(onClick = { onTileProviderSelected(provider) }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(
+            Image(
+                painter = painterResource(id = resourceId), // Replace with your image resource
+                contentDescription = "Your image description",
                 modifier = Modifier
-                    .background(Color.Gray, shape = RoundedCornerShape(8.dp)) // Add rounded corners
                     .size(72.dp)
+                    .clip(RoundedCornerShape(8.dp))
                     .border(
                         width = 2.dp,
-                        color = if (selected) Color.Blue else Color.Transparent,
+                        color = if (selected) Color(0xFFF6993A) else Color.Transparent,
                         shape = RoundedCornerShape(8.dp)
-                    )
+                    ),
+                contentScale = ContentScale.Crop // Adjust contentScale as needed
             )
             Text(text = provider.displayName.uppercase(), modifier = Modifier.padding(top = 12.dp))
         }
