@@ -67,7 +67,6 @@ class KonsistPreviewTest {
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
-                "IconTitleSubtitleMoleculeWithResIconPreview",
                 "IconsCompoundPreview",
                 "IconsOtherPreview",
                 "MarkdownTextComposerEditPreview",
