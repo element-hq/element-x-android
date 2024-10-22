@@ -43,5 +43,11 @@ internal fun MessagesViewWithIdentityChangePreview(
         knockRequestsBannerView = {}
         onShowMapClick = TODO(),
         modifier = TODO(),
+<<<<<<< HEAD
         forceJumpToBottomVisibility = TODO(),)
+=======
+        forceJumpToBottomVisibility = TODO(),
+        mapRealtimeState = TODO(),
+    )
+>>>>>>> 2b344bc0c5 (simple map with call changing)
 }

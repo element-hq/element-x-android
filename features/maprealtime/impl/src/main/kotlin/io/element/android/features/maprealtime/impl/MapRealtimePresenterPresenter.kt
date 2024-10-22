@@ -34,11 +34,9 @@ import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.maprealtime.impl.common.permissions.PermissionsEvents
 import io.element.android.features.maprealtime.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.maprealtime.impl.common.permissions.PermissionsState
-import io.element.android.features.messages.impl.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.room.canCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,17 +54,6 @@ class MapRealtimePresenterPresenter @Inject constructor(
 
     @Composable
     override fun present(): MapRealtimePresenterState {
-
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val roomInfo by room.roomInfoFlow.collectAsState(null)
-
-        val canJoinCall by room.canCall(updateKey = syncUpdateFlow.value)
-
-        val callState = when {
-            !canJoinCall -> RoomCallState.DISABLED
-            roomInfo?.hasRoomCall == true -> RoomCallState.ONGOING
-            else -> RoomCallState.ENABLED
-        }
 
         // create a list of map tile providers to choose from
         val mapTypes = listOf(
@@ -129,7 +116,6 @@ class MapRealtimePresenterPresenter @Inject constructor(
             roomName = roomName,
             isSharingLocation = false,
             mapType = mapTypes.find { it.mapKey == mapTile } ?: mapTypes[2],
-            callState = callState
         )
     }
 

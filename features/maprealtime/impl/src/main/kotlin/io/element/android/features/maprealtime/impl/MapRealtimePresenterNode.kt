@@ -30,7 +30,10 @@ class MapRealtimePresenterNode @AssistedInject constructor(
         val state = presenter.present()
         MapRealtimeView(
             state = state,
-            onBackPressed = ::navigateUp
+            onBackPressed = ::navigateUp,
+            onMessagesPressed = TODO(),
+            onJoinCallClick = TODO(), // TODO(tb): This isnt used since we are using the view directly in MessagesView and not creating a new screen
+            isCallOngoing = false,
         )
     }
 }
