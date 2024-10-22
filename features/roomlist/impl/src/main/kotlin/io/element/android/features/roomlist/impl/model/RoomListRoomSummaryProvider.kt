@@ -105,6 +105,11 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 aRoomListRoomSummary(
                     name = "A knocked room",
                     displayType = RoomSummaryDisplayType.KNOCKED,
+                ),
+                aRoomListRoomSummary(
+                    name = "A knocked room with alias",
+                    canonicalAlias = RoomAlias("#knockable:matrix.org"),
+                    displayType = RoomSummaryDisplayType.KNOCKED,
                 )
             ),
         ).flatten()
