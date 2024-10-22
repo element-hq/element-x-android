@@ -7,8 +7,6 @@
 
 package io.element.android.features.maprealtime.impl
 
-import io.element.android.features.messages.impl.RoomCallState
-
 // TODO add your ui models. Remove the eventSink if you don't have events.
 // Do not use default value, so no member get forgotten in the presenters.
 data class MapRealtimePresenterState(
@@ -20,7 +18,6 @@ data class MapRealtimePresenterState(
     val eventSink: (MapRealtimeEvents) -> Unit,
     val isSharingLocation: Boolean,
     val mapType: MapType,
-    val callState: RoomCallState
 ) {
     sealed interface Dialog {
         data object None : Dialog

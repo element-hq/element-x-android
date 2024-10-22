@@ -50,5 +50,6 @@ data class MessagesState(
     val roomCallState: RoomCallState,
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
-    val eventSink: (MessagesEvents) -> Unit
+    val eventSink: (MessagesEvents) -> Unit,
+    val isMessagesCollapsed: Boolean = false
 )

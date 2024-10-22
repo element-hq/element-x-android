@@ -69,6 +69,7 @@ dependencies {
     implementation(projects.features.knockrequests.api)
 
     implementation(projects.features.maprealtime.api)
+    implementation(project(":features:maprealtime:impl"))
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
