@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,13 +31,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.RoomCallState
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MapToolbar(onBackPressed: () -> Unit, title: String) {
+internal fun MapToolbar(onBackPressed: () -> Unit, title: String, callState: RoomCallState) {
     TopAppBar(
         title = {
             Box(
@@ -57,7 +60,7 @@ internal fun MapToolbar(onBackPressed: () -> Unit, title: String) {
             IconButton(
                 onClick = { /*TODO*/ },
             ) {
-                Icon(CompoundIcons.VideoCall(), contentDescription = "", tint = Color.White)
+                Icon(Icons.Outlined.Phone, contentDescription = "", tint = Color.White)
             }
         },
         modifier = Modifier

@@ -44,6 +44,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.accompanist.permission)
     implementation(project(":features:location:impl"))
+    implementation(project(":features:messages:impl"))
 
 
     testImplementation(libs.test.junit)

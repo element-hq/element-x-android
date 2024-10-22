@@ -42,8 +42,11 @@ import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.Style
 import org.ramani.compose.CameraPosition
+import org.ramani.compose.CompassMargins
 import org.ramani.compose.LocationRequestProperties
+import org.ramani.compose.LocationStyling
 import org.ramani.compose.MapLibre
+import org.ramani.compose.UiSettings
 
 @Composable
 fun MapRealtimeView(
@@ -65,12 +68,16 @@ fun MapRealtimeView(
         )
     }
 
+    println("MapRealtimeView: ${state.callState}")
+
     val cameraPosition = rememberSaveable {
         mutableStateOf(CameraPosition())
     }
 
     val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
 
+    val myCompassMargins = CompassMargins(left = 0, top = 650, right = 45)
+    val uiSettings = UiSettings(compassMargins = myCompassMargins)
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -85,6 +92,11 @@ fun MapRealtimeView(
             onMapLongClick = { latLng ->
                 state.eventSink(MapRealtimeEvents.MapLongPress(latLng))
             },
+            locationStyling = LocationStyling(
+                enablePulse = false,
+                accuracyColor = 0xFF2496F9.toInt(),
+            ),
+            uiSettings = uiSettings
         ) {}
 
         Column(
@@ -95,7 +107,7 @@ fun MapRealtimeView(
             verticalArrangement = Arrangement.spacedBy(8.dp), // Space between buttons,
             horizontalAlignment = Alignment.End
         ) {
-            MapToolbar(onBackPressed = onBackPressed, title = state.roomName)
+            MapToolbar(onBackPressed = onBackPressed, title = state.roomName, callState = state.callState)
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {
