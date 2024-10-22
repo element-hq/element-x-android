@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 @Composable
 fun RoundedIconAtom(
     modifier: Modifier = Modifier,
-    size: RoundedIconAtomSize = RoundedIconAtomSize.Large,
+    size: RoundedIconAtomSize = RoundedIconAtomSize.Big,
     resourceId: Int? = null,
     imageVector: ImageVector? = null,
     tint: Color = MaterialTheme.colorScheme.secondary,
@@ -72,7 +72,6 @@ private fun RoundedIconAtomSize.toContainerSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 30.dp
         RoundedIconAtomSize.Big -> 36.dp
-        RoundedIconAtomSize.Large -> 70.dp
     }
 }
 
@@ -80,7 +79,6 @@ private fun RoundedIconAtomSize.toCornerSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 8.dp
         RoundedIconAtomSize.Big -> 8.dp
-        RoundedIconAtomSize.Large -> 14.dp
     }
 }
 
@@ -88,7 +86,6 @@ private fun RoundedIconAtomSize.toIconSize(): Dp {
     return when (this) {
         RoundedIconAtomSize.Medium -> 16.dp
         RoundedIconAtomSize.Big -> 24.dp
-        RoundedIconAtomSize.Large -> 48.dp
     }
 }
 
@@ -104,15 +101,10 @@ internal fun RoundedIconAtomPreview() = ElementPreview {
             size = RoundedIconAtomSize.Big,
             imageVector = Icons.Filled.Home,
         )
-        RoundedIconAtom(
-            size = RoundedIconAtomSize.Large,
-            imageVector = Icons.Filled.Home,
-        )
     }
 }
 
 enum class RoundedIconAtomSize {
     Medium,
     Big,
-    Large
 }
