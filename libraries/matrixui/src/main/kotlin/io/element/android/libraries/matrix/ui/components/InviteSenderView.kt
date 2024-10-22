@@ -8,7 +8,9 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,11 +32,12 @@ fun InviteSenderView(
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
     ) {
+        Box(modifier = Modifier.padding(vertical = 2.dp)){
         Avatar(avatarData = inviteSender.avatarData)
+            }
         Text(
             text = inviteSender.annotatedString(),
             style = ElementTheme.typography.fontBodyMdRegular,
