@@ -7,7 +7,6 @@
 
 package io.element.android.features.joinroom.impl
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -43,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
@@ -55,6 +53,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMem
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.LightGradientBackground
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -142,6 +141,9 @@ fun JoinRoomView(
         async = state.cancelKnockAction,
         onSuccess = { onCancelKnockSuccess() },
         onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        errorMessage = {
+            stringResource(CommonStrings.error_unknown)
+        },
         confirmationDialog = {
             ConfirmationDialog(
                 content = stringResource(R.string.screen_join_room_cancel_knock_alert_description),
@@ -167,7 +169,9 @@ private fun JoinRoomFooter(
     onGoBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxWidth().padding(top = 8.dp)) {
+    Box(modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)) {
         if (state.contentState is ContentState.Failure) {
             Button(
                 text = stringResource(CommonStrings.action_retry),
@@ -321,17 +325,15 @@ private fun JoinRoomContent(
 fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier
-            .fillMaxHeight()
-            .padding(horizontal = 16.dp),
+                .fillMaxHeight()
+                .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
         IconTitleSubtitleMolecule(
-            modifier = Modifier.sizeIn(minHeight = maxHeight*0.7f),
-            iconImageVector = CompoundIcons.CheckCircleSolid(),
+            modifier = Modifier.sizeIn(minHeight = maxHeight * 0.7f),
+            iconStyle = BigIcon.Style.SuccessSolid,
             title = stringResource(R.string.screen_join_room_knock_sent_title),
             subTitle = stringResource(R.string.screen_join_room_knock_sent_description),
-            iconTint = ElementTheme.colors.iconSuccessPrimary,
-            iconBackgroundTint = ElementTheme.colors.bgSuccessSubtle,
         )
     }
 }

@@ -167,9 +167,14 @@ class JoinRoomPresenter @AssistedInject constructor(
         if (requiresConfirmation) {
             cancelKnockAction.value = AsyncAction.ConfirmingNoParams
         } else {
-            matrixClient.getPendingRoom(roomId)?.use { room ->
-                cancelKnockAction.runUpdatingState {
-                    room.leave()
+            val room = matrixClient.getRoom(roomId)
+            if (room == null) {
+                cancelKnockAction.value = AsyncAction.Failure(RuntimeException())
+            } else {
+                room.use {
+                    cancelKnockAction.runUpdatingState {
+                        room.leave()
+                    }
                 }
             }
         }
