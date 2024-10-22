@@ -22,8 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Textsms
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,14 +34,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.RoomCallState
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import androidx.compose.material3.IconButton as MuiIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MapToolbar(onBackPressed: () -> Unit, title: String, callState: RoomCallState) {
+internal fun MapToolbar(onBackPressed: () -> Unit, title: String, onMessagesPressed: () -> Unit, onJoinCallClicked: () -> Unit, isCallOngoing: Boolean) {
+
     TopAppBar(
         title = {
             Box(
@@ -58,9 +62,22 @@ internal fun MapToolbar(onBackPressed: () -> Unit, title: String, callState: Roo
         },
         actions = {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { onMessagesPressed() },
             ) {
-                Icon(Icons.Outlined.Phone, contentDescription = "", tint = Color.White)
+                Icon(Icons.Outlined.Textsms, contentDescription = "", tint = Color.White)
+            }
+            MuiIconButton(
+                onClick = { onJoinCallClicked() },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = Color(0xFF00B548),
+                    contentColor = Color.Red
+                )
+            ) {
+                if (isCallOngoing) {
+                    Icon(Icons.Filled.Phone, contentDescription = "", tint = Color.White)
+                } else {
+                    Icon(Icons.Outlined.Phone, contentDescription = "", tint = Color.White)
+                }
             }
         },
         modifier = Modifier

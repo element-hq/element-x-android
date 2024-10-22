@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,6 +48,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -52,6 +57,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.maprealtime.impl.MapRealtimePresenterState
+import io.element.android.features.maprealtime.impl.MapRealtimeView
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -109,6 +117,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun MessagesView(
     state: MessagesState,
+    mapRealtimeState: MapRealtimePresenterState,
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (event: TimelineItem.Event) -> Boolean,
@@ -177,49 +186,98 @@ fun MessagesView(
         state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
+    fun onMessagesPressed() {
+        state.eventSink(MessagesEvents.ShowMapClicked)
+    }
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             Column {
                 ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                MessagesViewTopBar(
-                    roomName = state.roomName.dataOrNull(),
-                    roomAvatar = state.roomAvatar.dataOrNull(),
-                    heroes = state.heroes,
-                    roomCallState = state.roomCallState,
-                    onBackClick = { hidingKeyboard { onBackClick() } },
-                    onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                    onJoinCallClick = onJoinCallClick,
-                    onShowMapClick = onShowMapClick
-                )
+                if (!state.isMessagesCollapsed) {
+                    MessagesViewTopBar(
+                        roomName = state.roomName.dataOrNull(),
+                        roomAvatar = state.roomAvatar.dataOrNull(),
+                        heroes = state.heroes,
+                        roomCallState = state.roomCallState,
+                        onBackClick = {
+                            // Since the textfield is now based on an Android view, this is no longer done automatically.
+                            // We need to hide the keyboard when navigating out of this screen.
+                            localView.hideKeyboard()
+                            onBackClick()
+                        },
+                        onRoomDetailsClick = onRoomDetailsClick,
+                        onJoinCallClick = onJoinCallClick,
+                        onShowMapClick = {
+                            state.eventSink(MessagesEvents.ShowMapClicked)
+                        }
+                    )
+                }
             }
         },
         content = { padding ->
-            MessagesViewContent(
-                state = state,
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
-                onContentClick = ::onContentClick,
-                onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
-                onLinkClick = onLinkClick,
-                onReactionClick = ::onEmojiReactionClick,
-                onReactionLongClick = ::onEmojiReactionLongClick,
-                onMoreReactionsClick = ::onMoreReactionsClick,
-                onReadReceiptClick = { event ->
-                    state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
-                },
-                onSendLocationClick = onSendLocationClick,
-                onCreatePollClick = onCreatePollClick,
-                onSwipeToReply = { targetEvent ->
-                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
-                },
-                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                onJoinCallClick = onJoinCallClick,
-                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-            )
+            Box {
+                if (state.isMessagesCollapsed) {
+                    MapRealtimeView(
+                        state = mapRealtimeState,
+                        onBackPressed = onBackClick,
+                        onJoinCallClick = onJoinCallClick,
+                        isCallOngoing = state.callState == RoomCallState.ONGOING,
+                        onMessagesPressed = {
+                            state.eventSink(MessagesEvents.ShowMapClicked)
+                        })
+                }
+                val isKeyboardVisible by keyboardAsState()
+                if (state.isMessagesCollapsed) {
+                    Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .height(if (isKeyboardVisible) 500.dp else 390.dp)
+                        .align(Alignment.BottomCenter)
+                } else {
+                    Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                }
+
+                val messagesModifier = if (state.isMessagesCollapsed) {
+                    Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .height(if (isKeyboardVisible) 500.dp else 300.dp)
+                        .align(Alignment.BottomCenter)
+                        .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
+                } else {
+                    Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                }
+
+                MessagesViewContent(
+                    state = state,
+                    modifier = messagesModifier,
+                    onMessageClick = ::onMessageClick,
+                    onMessageLongClick = ::onMessageLongClick,
+                    onUserDataClick = onUserDataClick,
+                    onLinkClick = onLinkClick,
+                    onReactionClick = ::onEmojiReactionClick,
+                    onReactionLongClick = ::onEmojiReactionLongClick,
+                    onMoreReactionsClick = ::onMoreReactionsClick,
+                    onReadReceiptClick = { event ->
+                        state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
+                    },
+                    onSendLocationClick = onSendLocationClick,
+                    onCreatePollClick = onCreatePollClick,
+                    onSwipeToReply = { targetEvent ->
+                        state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                    },
+                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                    onJoinCallClick = onJoinCallClick,
+                    onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                )
+            }
         },
         snackbarHost = {
             SnackbarHost(
@@ -254,6 +312,12 @@ fun MessagesView(
         onUserDataClick = onUserDataClick,
     )
     ReinviteDialog(state = state)
+}
+
+@Composable
+fun keyboardAsState(): State<Boolean> {
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    return rememberUpdatedState(newValue = isImeVisible)
 }
 
 @Composable
@@ -573,6 +637,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onJoinCallClick = {},
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
-        onShowMapClick = {}
+        onShowMapClick = {},
+        mapRealtimeState = TODO()
     )
 }

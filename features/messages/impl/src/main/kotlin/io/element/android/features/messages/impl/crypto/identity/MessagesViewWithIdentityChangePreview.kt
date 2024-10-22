@@ -43,5 +43,6 @@ internal fun MessagesViewWithIdentityChangePreview(
         onShowMapClick = TODO(),
         modifier = TODO(),
         forceJumpToBottomVisibility = TODO(),
+        mapRealtimeState = TODO(),
     )
 }

@@ -52,7 +52,10 @@ import org.ramani.compose.UiSettings
 fun MapRealtimeView(
     state: MapRealtimePresenterState,
     onBackPressed: () -> Unit,
-    modifer: Modifier = Modifier
+    modifer: Modifier = Modifier,
+    onMessagesPressed: () -> Unit,
+    onJoinCallClick: () -> Unit,
+    isCallOngoing: Boolean
 ) {
     when (state.permissionDialog) {
         MapRealtimePresenterState.Dialog.None -> Unit
@@ -67,8 +70,6 @@ fun MapRealtimeView(
             appName = state.appName,
         )
     }
-
-    println("MapRealtimeView: ${state.callState}")
 
     val cameraPosition = rememberSaveable {
         mutableStateOf(CameraPosition())
@@ -107,7 +108,13 @@ fun MapRealtimeView(
             verticalArrangement = Arrangement.spacedBy(8.dp), // Space between buttons,
             horizontalAlignment = Alignment.End
         ) {
-            MapToolbar(onBackPressed = onBackPressed, title = state.roomName, callState = state.callState)
+            MapToolbar(
+                onBackPressed = onBackPressed,
+                title = state.roomName,
+                onMessagesPressed = onMessagesPressed,
+                onJoinCallClicked = onJoinCallClick,
+                isCallOngoing = isCallOngoing
+            )
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {
@@ -154,6 +161,9 @@ internal fun MapRealtimeViewPreview(
         state = state,
         onBackPressed = TODO(),
         modifer = TODO(),
+        onMessagesPressed = TODO(),
+        onJoinCallClick = TODO(),
+        isCallOngoing = false
     )
 }
 

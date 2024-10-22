@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.matrix.emojibase.bindings)
     implementation(projects.features.maprealtime.api)
+    implementation(project(":features:maprealtime:impl"))
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
