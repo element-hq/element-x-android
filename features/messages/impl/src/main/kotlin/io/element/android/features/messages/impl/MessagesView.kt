@@ -187,10 +187,6 @@ fun MessagesView(
         state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
     }
 
-    fun onMessagesPressed() {
-        state.eventSink(MessagesEvents.ShowMapClicked)
-    }
-
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
