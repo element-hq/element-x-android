@@ -8,6 +8,8 @@
 package io.element.android.features.maprealtime.impl
 
 // TODO add your ui models. Remove the eventSink if you don't have events.
+// TODO (tb): This all could live on the MessagesState as we are only using the View aspect and not the Presenter aspect.
+// Refactor this to be a part of the MessagesState in the future.
 // Do not use default value, so no member get forgotten in the presenters.
 data class MapRealtimePresenterState(
     val permissionDialog: Dialog,

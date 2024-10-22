@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -57,6 +58,11 @@ fun MapRealtimeView(
     onJoinCallClick: () -> Unit,
     isCallOngoing: Boolean
 ) {
+
+    LaunchedEffect(Unit) {
+        state.eventSink(MapRealtimeEvents.RequestPermissions)
+    }
+
     when (state.permissionDialog) {
         MapRealtimePresenterState.Dialog.None -> Unit
         MapRealtimePresenterState.Dialog.PermissionDenied -> PermissionDeniedDialog(

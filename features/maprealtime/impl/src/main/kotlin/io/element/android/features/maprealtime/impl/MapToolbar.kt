@@ -69,8 +69,7 @@ internal fun MapToolbar(onBackPressed: () -> Unit, title: String, onMessagesPres
             MuiIconButton(
                 onClick = { onJoinCallClicked() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0xFF00B548),
-                    contentColor = Color.Red
+                    containerColor = if (isCallOngoing) Color(0xFF00B548) else Color(0xFF1E1E1E),
                 )
             ) {
                 if (isCallOngoing) {
