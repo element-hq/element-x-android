@@ -29,8 +29,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
  *
  * @param title the title to display
  * @param subTitle the subtitle to display
- * @param modifier the modifier to apply to this layout
  * @param iconStyle the style of the [BigIcon] to display
+ * @param modifier the modifier to apply to this layout
  */
 @Composable
 fun IconTitleSubtitleMolecule(
