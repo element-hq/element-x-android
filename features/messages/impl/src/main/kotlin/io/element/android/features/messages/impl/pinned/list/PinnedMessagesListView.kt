@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -36,9 +37,9 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -154,7 +155,7 @@ private fun PinnedMessagesListEmpty(
         IconTitleSubtitleMolecule(
             title = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_headline),
             subTitle = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_description, pinActionText),
-            iconResourceId = CompoundDrawables.ic_compound_pin,
+            iconStyle = BigIcon.Style.Default(CompoundIcons.Pin()),
         )
     }
 }

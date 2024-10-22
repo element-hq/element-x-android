@@ -22,7 +22,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,6 +33,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderVie
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -74,8 +74,7 @@ fun ChangeAccountProviderView(
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp),
-                    iconImageVector = Icons.Filled.Home,
-                    iconTint = MaterialTheme.colorScheme.primary,
+                    iconStyle = BigIcon.Style.Default(Icons.Filled.Home),
                     title = stringResource(id = R.string.screen_change_account_provider_title),
                     subTitle = stringResource(id = R.string.screen_change_account_provider_subtitle),
                 )

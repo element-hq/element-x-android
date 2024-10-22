@@ -27,6 +27,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -59,7 +60,7 @@ fun ConfirmAccountProviderView(
         header = {
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 60.dp),
-                iconImageVector = Icons.Filled.AccountCircle,
+                iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
                         R.string.screen_account_provider_signup_title

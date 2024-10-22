@@ -51,7 +51,7 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypad
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -299,7 +299,7 @@ private fun PinUnlockHeader(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (isInAppUnlock) {
-            RoundedIconAtom(imageVector = Icons.Filled.Lock)
+            BigIcon(style = BigIcon.Style.Default(Icons.Filled.Lock))
         } else {
             Icon(
                 modifier = Modifier
