@@ -147,8 +147,7 @@ fun RoomDetailsView(
                 }
             }
             BadgeList(
-                isEncrypted = state.isEncrypted,
-                isPublic = state.isPublic,
+                roomBadge = state.roomBadges,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(Modifier.height(32.dp))
@@ -403,42 +402,42 @@ private fun ColumnScope.TitleAndSubtitle(
 
 @Composable
 private fun BadgeList(
-    isEncrypted: Boolean,
-    isPublic: Boolean,
+    roomBadge: ImmutableList<RoomBadge>,
     modifier: Modifier = Modifier,
 ) {
-    if (isEncrypted || isPublic) {
-        MatrixBadgeRowMolecule(
-            modifier = modifier,
-            data = buildList {
-                if (isEncrypted) {
-                    add(
-                        MatrixBadgeAtom.MatrixBadgeData(
-                            text = stringResource(R.string.screen_room_details_badge_encrypted),
-                            icon = CompoundIcons.LockSolid(),
-                            type = MatrixBadgeAtom.Type.Positive,
-                        )
-                    )
-                } else {
-                    add(
-                        MatrixBadgeAtom.MatrixBadgeData(
-                            text = stringResource(R.string.screen_room_details_badge_not_encrypted),
-                            icon = CompoundIcons.LockOff(),
-                            type = MatrixBadgeAtom.Type.Neutral,
-                        )
-                    )
-                }
-                if (isPublic) {
-                    add(
-                        MatrixBadgeAtom.MatrixBadgeData(
-                            text = stringResource(R.string.screen_room_details_badge_public),
-                            icon = CompoundIcons.Public(),
-                            type = MatrixBadgeAtom.Type.Neutral,
-                        )
-                    )
-                }
-            }.toImmutableList(),
-        )
+    if (roomBadge.isEmpty()) return
+    MatrixBadgeRowMolecule(
+        modifier = modifier,
+        data = roomBadge.map {
+            it.toMatrixBadgeData()
+        }.toImmutableList(),
+    )
+}
+
+@Composable
+private fun RoomBadge.toMatrixBadgeData(): MatrixBadgeAtom.MatrixBadgeData {
+    return when (this) {
+        RoomBadge.ENCRYPTED -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_encrypted),
+                icon = CompoundIcons.LockSolid(),
+                type = MatrixBadgeAtom.Type.Positive,
+            )
+        }
+        RoomBadge.NOT_ENCRYPTED -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                icon = CompoundIcons.LockOff(),
+                type = MatrixBadgeAtom.Type.Neutral,
+            )
+        }
+        RoomBadge.PUBLIC -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_public),
+                icon = CompoundIcons.Public(),
+                type = MatrixBadgeAtom.Type.Neutral,
+            )
+        }
     }
 }
 

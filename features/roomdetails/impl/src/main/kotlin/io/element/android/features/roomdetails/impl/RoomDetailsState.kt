@@ -36,6 +36,7 @@ data class RoomDetailsState(
     val isFavorite: Boolean,
     val displayRolesAndPermissionsSettings: Boolean,
     val isPublic: Boolean,
+    val roomBadges: ImmutableList<RoomBadge>,
     val heroes: ImmutableList<MatrixUser>,
     val canShowPinnedMessages: Boolean,
     val pinnedMessagesCount: Int?,
@@ -56,4 +57,10 @@ sealed interface RoomTopicState {
     data object Hidden : RoomTopicState
     data object CanAddTopic : RoomTopicState
     data class ExistingTopic(val topic: String) : RoomTopicState
+}
+
+enum class RoomBadge {
+    ENCRYPTED,
+    NOT_ENCRYPTED,
+    PUBLIC;
 }

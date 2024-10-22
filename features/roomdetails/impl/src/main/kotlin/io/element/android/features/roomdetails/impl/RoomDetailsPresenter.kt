@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -112,6 +113,21 @@ class RoomDetailsPresenter @Inject constructor(
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
 
+        val roomBadges by produceState(persistentListOf(), isPublic) {
+            value = buildList {
+                if (room.isEncrypted || isPublic) {
+                    if (room.isEncrypted) {
+                        add(RoomBadge.ENCRYPTED)
+                    } else {
+                        add(RoomBadge.NOT_ENCRYPTED)
+                    }
+                }
+                if (isPublic) {
+                    add(RoomBadge.PUBLIC)
+                }
+            }.toPersistentList()
+        }
+
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
                 RoomDetailsEvent.LeaveRoom ->
@@ -151,6 +167,7 @@ class RoomDetailsPresenter @Inject constructor(
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
             isPublic = isPublic,
+            roomBadges = roomBadges,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
             pinnedMessagesCount = pinnedMessagesCount,
