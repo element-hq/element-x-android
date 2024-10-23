@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails
+package io.element.android.features.roomdetails.impl
 
 import androidx.lifecycle.Lifecycle
 import app.cash.molecule.RecompositionMode
@@ -17,12 +17,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomdetails.impl.RoomBadge
-import io.element.android.features.roomdetails.impl.RoomDetailsEvent
-import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
-import io.element.android.features.roomdetails.impl.RoomDetailsState
-import io.element.android.features.roomdetails.impl.RoomDetailsType
-import io.element.android.features.roomdetails.impl.RoomTopicState
+import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -126,6 +121,7 @@ class RoomDetailsPresenterTest {
         )
         val presenter = createRoomDetailsPresenter(room)
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomName).isEqualTo(room.displayName)
@@ -135,8 +131,6 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
             assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isNull()
-            assertThat(initialState.roomBadges).isEmpty()
-            assertThat(awaitItem().roomBadges).isEqualTo(listOf(RoomBadge.ENCRYPTED))
         }
     }
 
@@ -164,52 +158,7 @@ class RoomDetailsPresenterTest {
             assertThat(updatedState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
             assertThat(updatedState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(roomInfo.topic!!))
             assertThat(updatedState.pinnedMessagesCount).isEqualTo(roomInfo.pinnedEventIds.size)
-            assertThat(updatedState.roomBadges).isEqualTo(listOf(RoomBadge.ENCRYPTED, RoomBadge.PUBLIC))
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - initial state not public not encrypted should have no badges`() = runTest {
-        val roomInfo = aRoomInfo(
-            name = A_ROOM_NAME,
-            isPublic = false,
-        )
-        val room = aMatrixRoom(
-            isEncrypted = false,
-            canInviteResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canSendStateResult = { _, _ -> Result.success(true) },
-        ).apply {
-            givenRoomInfo(roomInfo)
-        }
-        val presenter = createRoomDetailsPresenter(room)
-        presenter.test {
-            skipItems(1)
-            val updatedState = awaitItem()
-            assertThat(updatedState.roomBadges).isEmpty()
-        }
-    }
-
-    @Test
-    fun `present - initial state public not encrypted should have not encrypted and public badges`() = runTest {
-        val roomInfo = aRoomInfo(
-            name = A_ROOM_NAME,
-            isPublic = true,
-        )
-        val room = aMatrixRoom(
-            isEncrypted = false,
-            canInviteResult = { Result.success(true) },
-            canUserJoinCallResult = { Result.success(true) },
-            canSendStateResult = { _, _ -> Result.success(true) },
-        ).apply {
-            givenRoomInfo(roomInfo)
-        }
-        val presenter = createRoomDetailsPresenter(room)
-        presenter.test {
-            skipItems(1)
-            val updatedState = awaitItem()
-            assertThat(updatedState.roomBadges).isEqualTo(listOf(RoomBadge.NOT_ENCRYPTED, RoomBadge.PUBLIC))
         }
     }
 

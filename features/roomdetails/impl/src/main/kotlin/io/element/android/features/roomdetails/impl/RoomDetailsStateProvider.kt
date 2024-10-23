@@ -96,18 +96,6 @@ fun aRoomDetailsState(
     isFavorite: Boolean = false,
     displayAdminSettings: Boolean = false,
     isPublic: Boolean = true,
-    roomBadges: List<RoomBadge> = buildList {
-        if (isEncrypted || isPublic) {
-            if (isEncrypted) {
-                add(RoomBadge.ENCRYPTED)
-            } else {
-                add(RoomBadge.NOT_ENCRYPTED)
-            }
-        }
-        if (isPublic) {
-            add(RoomBadge.PUBLIC)
-        }
-    },
     heroes: List<MatrixUser> = emptyList(),
     canShowPinnedMessages: Boolean = true,
     pinnedMessagesCount: Int? = null,
@@ -131,7 +119,6 @@ fun aRoomDetailsState(
     isFavorite = isFavorite,
     displayRolesAndPermissionsSettings = displayAdminSettings,
     isPublic = isPublic,
-    roomBadges = roomBadges.toPersistentList(),
     heroes = heroes.toPersistentList(),
     canShowPinnedMessages = canShowPinnedMessages,
     pinnedMessagesCount = pinnedMessagesCount,

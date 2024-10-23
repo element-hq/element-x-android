@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 data class RoomDetailsState(
     val roomId: RoomId,
@@ -36,12 +37,24 @@ data class RoomDetailsState(
     val isFavorite: Boolean,
     val displayRolesAndPermissionsSettings: Boolean,
     val isPublic: Boolean,
-    val roomBadges: ImmutableList<RoomBadge>,
     val heroes: ImmutableList<MatrixUser>,
     val canShowPinnedMessages: Boolean,
     val pinnedMessagesCount: Int?,
     val eventSink: (RoomDetailsEvent) -> Unit
-)
+) {
+    val roomBadges = buildList {
+        if (isEncrypted || isPublic) {
+            if (isEncrypted) {
+                add(RoomBadge.ENCRYPTED)
+            } else {
+                add(RoomBadge.NOT_ENCRYPTED)
+            }
+        }
+        if (isPublic) {
+            add(RoomBadge.PUBLIC)
+        }
+    }.toPersistentList()
+}
 
 @Immutable
 sealed interface RoomDetailsType {
