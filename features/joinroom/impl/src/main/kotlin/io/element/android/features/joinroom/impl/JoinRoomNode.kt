@@ -43,7 +43,8 @@ class JoinRoomNode @AssistedInject constructor(
             state = state,
             onBackClick = ::navigateUp,
             onJoinSuccess = ::navigateUp,
-            onKnockSuccess = ::navigateUp,
+            onCancelKnockSuccess = ::navigateUp,
+            onKnockSuccess = { },
             modifier = modifier
         )
         acceptDeclineInviteView.Render(

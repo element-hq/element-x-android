@@ -9,20 +9,20 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.room.InvitedRoom
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import org.matrix.rustcomponents.sdk.Room
 
-class RustInvitedRoom(
+class RustPendingRoom(
     override val sessionId: SessionId,
-    private val invitedRoom: Room,
-) : InvitedRoom {
-    override val roomId = RoomId(invitedRoom.id())
+    private val inner: Room,
+) : PendingRoom {
+    override val roomId = RoomId(inner.id())
 
-    override suspend fun declineInvite(): Result<Unit> = runCatching {
-        invitedRoom.leave()
+    override suspend fun leave(): Result<Unit> = runCatching {
+        inner.leave()
     }
 
     override fun close() {
-        invitedRoom.destroy()
+        inner.destroy()
     }
 }

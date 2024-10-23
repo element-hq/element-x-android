@@ -30,8 +30,8 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -251,24 +251,26 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
-    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
-        return roomFactory.createInvitedRoom(roomId)
+    override suspend fun getPendingRoom(roomId: RoomId): PendingRoom? {
+        return roomFactory.createPendingRoom(roomId)
     }
 
     /**
-     * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
+     * Wait for the room to be available in the room list with the correct membership for the current user.
      * @param roomIdOrAlias the room id or alias to wait for
      * @param timeout the timeout to wait for the room to be available
+     * @param currentUserMembership the membership to wait for
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitJoinedRoom(
+    private suspend fun awaitRoom(
         roomIdOrAlias: RoomIdOrAlias,
-        timeout: Duration
+        timeout: Duration,
+        currentUserMembership: CurrentUserMembership,
     ): RoomSummary {
         return withTimeout(timeout) {
             getRoomSummaryFlow(roomIdOrAlias)
                 .mapNotNull { optionalRoomSummary -> optionalRoomSummary.getOrNull() }
-                .filter { roomSummary -> roomSummary.info.currentUserMembership == CurrentUserMembership.JOINED }
+                .filter { roomSummary -> roomSummary.info.currentUserMembership == currentUserMembership }
                 .first()
                 // Ensure that the room is ready
                 .also { client.awaitRoomRemoteEcho(it.roomId.value) }
@@ -314,7 +316,7 @@ class RustMatrixClient(
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 30.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 30.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
@@ -369,7 +371,7 @@ class RustMatrixClient(
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 10.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -384,7 +386,7 @@ class RustMatrixClient(
                 serverNames = serverNames,
             ).destroy()
             try {
-                awaitJoinedRoom(roomIdOrAlias, 10.seconds)
+                awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.JOINED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -392,8 +394,18 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<Unit> {
-        return Result.failure(NotImplementedError("Not yet implemented"))
+    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> = withContext(
+        sessionDispatcher
+    ) {
+        runCatching {
+            client.knock(roomIdOrAlias.identifier).destroy()
+            try {
+                awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.KNOCKED)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
+                null
+            }
+        }
     }
 
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {

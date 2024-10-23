@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -24,6 +25,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
@@ -46,6 +48,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
 
+private const val MAX_KNOCK_MESSAGE_LENGTH = 500
+
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
@@ -55,6 +59,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val joinRoom: JoinRoom,
     private val knockRoom: KnockRoom,
+    private val cancelKnockRoom: CancelKnockRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
 ) : Presenter<JoinRoomState> {
@@ -75,6 +80,8 @@ class JoinRoomPresenter @AssistedInject constructor(
         val roomInfo by matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias()).collectAsState(initial = Optional.empty())
         val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val cancelKnockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        var knockMessage by rememberSaveable { mutableStateOf("") }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
             key1 = roomInfo,
@@ -110,7 +117,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
-                JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction)
+                is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
                 JoinRoomEvents.AcceptInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
@@ -123,12 +130,17 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
+                is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
                 JoinRoomEvents.RetryFetchingContent -> {
                     retryCount++
                 }
-                JoinRoomEvents.ClearError -> {
+                JoinRoomEvents.ClearActionStates -> {
                     knockAction.value = AsyncAction.Uninitialized
                     joinAction.value = AsyncAction.Uninitialized
+                    cancelKnockAction.value = AsyncAction.Uninitialized
+                }
+                is JoinRoomEvents.UpdateKnockMessage -> {
+                    knockMessage = event.message.take(MAX_KNOCK_MESSAGE_LENGTH)
                 }
             }
         }
@@ -138,7 +150,9 @@ class JoinRoomPresenter @AssistedInject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             joinAction = joinAction.value,
             knockAction = knockAction.value,
+            cancelKnockAction = cancelKnockAction.value,
             applicationName = buildMeta.applicationName,
+            knockMessage = knockMessage,
             eventSink = ::handleEvents
         )
     }
@@ -153,9 +167,19 @@ class JoinRoomPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>, message: String) = launch {
         knockAction.runUpdatingState {
-            knockRoom(roomId)
+            knockRoom(roomIdOrAlias, message, serverNames)
+        }
+    }
+
+    private fun CoroutineScope.cancelKnockRoom(requiresConfirmation: Boolean, cancelKnockAction: MutableState<AsyncAction<Unit>>) = launch {
+        if (requiresConfirmation) {
+            cancelKnockAction.value = AsyncAction.ConfirmingNoParams
+        } else {
+            cancelKnockAction.runUpdatingState {
+                cancelKnockRoom(roomId)
+            }
         }
     }
 }
@@ -206,7 +230,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         name = name,
         topic = topic,
         alias = canonicalAlias,
-        numberOfMembers = activeMembersCount.toLong(),
+        numberOfMembers = activeMembersCount,
         isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
@@ -214,6 +238,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
             currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
                 inviteSender = inviter?.toInviteSender()
             )
+            currentUserMembership == CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }
