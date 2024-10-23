@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -114,7 +114,7 @@ class FakeMatrixClient(
     var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomSummary?> = { _, _ ->
         Result.success(null)
     }
-    var knockRoomLambda: (RoomId) -> Result<RoomSummary?> = {
+    var knockRoomLambda: (RoomIdOrAlias, String, List<String>) -> Result<RoomSummary?> = { _, _, _ ->
         Result.success(null)
     }
     var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
@@ -223,7 +223,9 @@ class FakeMatrixClient(
         return joinRoomByIdOrAliasLambda(roomIdOrAlias, serverNames)
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<RoomSummary?> = knockRoomLambda(roomId)
+    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> {
+        return knockRoomLambda(roomIdOrAlias, message, serverNames)
+    }
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 

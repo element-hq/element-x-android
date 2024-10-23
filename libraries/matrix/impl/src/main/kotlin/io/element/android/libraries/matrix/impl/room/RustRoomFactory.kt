@@ -50,7 +50,6 @@ class RustRoomFactory(
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
 ) {
-
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()

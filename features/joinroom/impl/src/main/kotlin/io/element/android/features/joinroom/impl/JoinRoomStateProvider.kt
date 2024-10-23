@@ -131,6 +131,7 @@ fun aJoinRoomState(
     joinAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    knockMessage: String = "",
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
@@ -139,6 +140,7 @@ fun aJoinRoomState(
     knockAction = knockAction,
     cancelKnockAction = cancelKnockAction,
     applicationName = "AppName",
+    knockMessage = knockMessage,
     eventSink = eventSink
 )
 

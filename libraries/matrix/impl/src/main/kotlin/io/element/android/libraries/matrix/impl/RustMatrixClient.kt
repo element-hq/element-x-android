@@ -30,8 +30,8 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -394,11 +394,13 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<RoomSummary?>  = withContext(sessionDispatcher){
+    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> = withContext(
+        sessionDispatcher
+    ) {
         runCatching {
-            client.knock(roomId.toRoomIdOrAlias().identifier).destroy()
+            client.knock(roomIdOrAlias.identifier).destroy()
             try {
-                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds, CurrentUserMembership.KNOCKED)
+                awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.KNOCKED)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null

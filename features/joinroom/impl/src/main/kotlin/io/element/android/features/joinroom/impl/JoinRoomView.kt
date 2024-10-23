@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
@@ -27,10 +26,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -85,7 +80,6 @@ fun JoinRoomView(
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        var knockMessage by rememberSaveable { mutableStateOf("") }
         LightGradientBackground()
         HeaderFooterPage(
             containerColor = Color.Transparent,
@@ -97,8 +91,8 @@ fun JoinRoomView(
                 JoinRoomContent(
                     contentState = state.contentState,
                     applicationName = state.applicationName,
-                    knockMessage = knockMessage,
-                    onKnockMessageUpdate = { knockMessage = it },
+                    knockMessage = state.knockMessage,
+                    onKnockMessageUpdate = { state.eventSink(JoinRoomEvents.UpdateKnockMessage(it)) },
                 )
             },
             footer = {
@@ -114,7 +108,7 @@ fun JoinRoomView(
                         state.eventSink(JoinRoomEvents.JoinRoom)
                     },
                     onKnockRoom = {
-                        state.eventSink(JoinRoomEvents.KnockRoom(knockMessage))
+                        state.eventSink(JoinRoomEvents.KnockRoom)
                     },
                     onCancelKnock = {
                         state.eventSink(JoinRoomEvents.CancelKnock(requiresConfirmation = true))
@@ -169,9 +163,11 @@ private fun JoinRoomFooter(
     onGoBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)) {
+    Box(
+        modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+    ) {
         if (state.contentState is ContentState.Failure) {
             Button(
                 text = stringResource(CommonStrings.action_retry),
@@ -322,7 +318,7 @@ private fun JoinRoomContent(
 }
 
 @Composable
-fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
+private fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier
                 .fillMaxHeight()
@@ -397,9 +393,9 @@ private fun DefaultLoadedContent(
                     OutlinedTextField(
                         value = knockMessage,
                         onValueChange = onKnockMessageUpdate,
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 90.dp)
+                        maxLines = 3,
+                        minLines = 3,
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Text(
                         text = stringResource(R.string.screen_join_room_knock_message_description),
