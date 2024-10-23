@@ -321,15 +321,6 @@ Reason: %1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
-  <string name="screen_room_member_details_block_alert_action">"Block"</string>
-  <string name="screen_room_member_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
-  <string name="screen_room_member_details_block_user">"Block user"</string>
-  <string name="screen_room_member_details_title">"Profile"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
-  <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
-  <string name="screen_room_member_details_verify_button_subtitle">"Use the web app to verify this user."</string>
-  <string name="screen_room_member_details_verify_button_title">"Verify %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>

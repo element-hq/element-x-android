@@ -18,9 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
+import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -30,12 +35,15 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun UserProfileHeaderSection(
     avatarUrl: String?,
     userId: UserId,
     userName: String?,
+    isUserVerified: AsyncData<Boolean>,
     openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,8 +56,8 @@ fun UserProfileHeaderSection(
         Avatar(
             avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
             modifier = Modifier
-                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                    .testTag(TestTags.memberDetailAvatar)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.memberDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
@@ -65,11 +73,19 @@ fun UserProfileHeaderSection(
             text = userId.value,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
         )
+        if (isUserVerified.dataOrNull() == true) {
+            MatrixBadgeRowMolecule(
+                data = listOf(
+                    MatrixBadgeAtom.MatrixBadgeData(
+                        text = stringResource(CommonStrings.common_verified),
+                        icon = CompoundIcons.Verified(),
+                        type = MatrixBadgeAtom.Type.Positive,
+                    )
+                ).toImmutableList(),
+            )
+        }
         Spacer(Modifier.height(40.dp))
     }
 }
@@ -81,6 +97,7 @@ internal fun UserProfileHeaderSectionPreview() = ElementPreview {
         avatarUrl = null,
         userId = UserId("@alice:example.com"),
         userName = "Alice",
+        isUserVerified = AsyncData.Success(true),
         openAvatarPreview = {},
     )
 }

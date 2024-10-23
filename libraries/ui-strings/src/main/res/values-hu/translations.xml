@@ -321,15 +321,6 @@ Ok: %1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Kitűzött üzenetek"</string>
   <string name="screen_room_error_failed_processing_media">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nem sikerült letölteni a felhasználói adatokat"</string>
-  <string name="screen_room_member_details_block_alert_action">"Letiltás"</string>
-  <string name="screen_room_member_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
-  <string name="screen_room_member_details_block_user">"Felhasználó letiltása"</string>
-  <string name="screen_room_member_details_title">"Profil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Letiltás feloldása"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
-  <string name="screen_room_member_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
-  <string name="screen_room_member_details_verify_button_subtitle">"Használja a webes alkalmazást a felhasználó ellenőrzéséhez."</string>
-  <string name="screen_room_member_details_verify_button_title">"A(z) %1$s ellenőrzése"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
   <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>

@@ -6,5 +6,12 @@
   <string name="screen_dm_details_unblock_alert_action">"Odblokuj"</string>
   <string name="screen_dm_details_unblock_alert_description">"Będziesz mógł ponownie zobaczyć wszystkie wiadomości od tego użytkownika."</string>
   <string name="screen_dm_details_unblock_user">"Odblokuj użytkownika"</string>
+  <string name="screen_room_member_details_block_alert_action">"Zablokuj"</string>
+  <string name="screen_room_member_details_block_alert_description">"Zablokowani użytkownicy nie będą mogli wysyłać Ci wiadomości, a wszystkie ich wiadomości zostaną ukryte. Możesz odblokować ich w dowolnym momencie."</string>
+  <string name="screen_room_member_details_block_user">"Zablokuj użytkownika"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Odblokuj"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Będziesz mógł ponownie zobaczyć wszystkie wiadomości od tego użytkownika."</string>
+  <string name="screen_room_member_details_unblock_user">"Odblokuj użytkownika"</string>
   <string name="screen_start_chat_error_starting_chat">"Wystąpił błąd podczas próby rozpoczęcia czatu"</string>
 </resources>

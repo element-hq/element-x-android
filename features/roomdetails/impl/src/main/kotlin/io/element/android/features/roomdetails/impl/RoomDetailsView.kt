@@ -10,6 +10,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -41,10 +42,11 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.roomdetails.impl.components.RoomBadge
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.atomic.atoms.MatrixBadgeAtom
+import io.element.android.libraries.designsystem.atomic.molecules.MatrixBadgeRowMolecule
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -84,6 +86,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -114,9 +117,9 @@ fun RoomDetailsView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-                    .consumeWindowInsets(padding)
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -145,8 +148,7 @@ fun RoomDetailsView(
                 }
             }
             BadgeList(
-                isEncrypted = state.isEncrypted,
-                isPublic = state.isPublic,
+                roomBadge = state.roomBadges,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(Modifier.height(32.dp))
@@ -273,8 +275,8 @@ private fun MainActionsSection(
 ) {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -333,8 +335,8 @@ private fun RoomHeaderSection(
 ) {
     Column(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompositeAvatar(
@@ -343,8 +345,8 @@ private fun RoomHeaderSection(
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
-                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                    .testTag(TestTags.roomDetailAvatar)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
     }
@@ -360,8 +362,8 @@ private fun DmHeaderSection(
 ) {
     Column(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DmAvatars(
@@ -401,36 +403,43 @@ private fun ColumnScope.TitleAndSubtitle(
 
 @Composable
 private fun BadgeList(
-    isEncrypted: Boolean,
-    isPublic: Boolean,
+    roomBadge: ImmutableList<RoomBadge>,
     modifier: Modifier = Modifier,
 ) {
-    if (isEncrypted || isPublic) {
-        Row(
-            modifier = modifier
-                .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (isEncrypted) {
-                RoomBadge.View(
-                    text = stringResource(R.string.screen_room_details_badge_encrypted),
-                    icon = CompoundIcons.LockSolid(),
-                    type = RoomBadge.Type.Positive,
-                )
-            } else {
-                RoomBadge.View(
-                    text = stringResource(R.string.screen_room_details_badge_not_encrypted),
-                    icon = CompoundIcons.LockOff(),
-                    type = RoomBadge.Type.Neutral,
-                )
-            }
-            if (isPublic) {
-                RoomBadge.View(
-                    text = stringResource(R.string.screen_room_details_badge_public),
-                    icon = CompoundIcons.Public(),
-                    type = RoomBadge.Type.Neutral,
-                )
-            }
+    Box(modifier = modifier) {
+        if (roomBadge.isNotEmpty()) {
+            MatrixBadgeRowMolecule(
+                data = roomBadge.map {
+                    it.toMatrixBadgeData()
+                }.toImmutableList(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun RoomBadge.toMatrixBadgeData(): MatrixBadgeAtom.MatrixBadgeData {
+    return when (this) {
+        RoomBadge.ENCRYPTED -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_encrypted),
+                icon = CompoundIcons.LockSolid(),
+                type = MatrixBadgeAtom.Type.Positive,
+            )
+        }
+        RoomBadge.NOT_ENCRYPTED -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                icon = CompoundIcons.LockOff(),
+                type = MatrixBadgeAtom.Type.Neutral,
+            )
+        }
+        RoomBadge.PUBLIC -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.screen_room_details_badge_public),
+                icon = CompoundIcons.Public(),
+                type = MatrixBadgeAtom.Type.Neutral,
+            )
         }
     }
 }

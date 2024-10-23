@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.components
+package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,36 +21,41 @@ import io.element.android.libraries.designsystem.theme.badgeNeutralContentColor
 import io.element.android.libraries.designsystem.theme.badgePositiveBackgroundColor
 import io.element.android.libraries.designsystem.theme.badgePositiveContentColor
 
-object RoomBadge {
+object MatrixBadgeAtom {
+    data class MatrixBadgeData(
+        val text: String,
+        val icon: ImageVector,
+        val type: Type,
+    )
+
     enum class Type {
         Positive,
         Neutral,
         Negative
     }
 
-    @Composable fun View(
-        text: String,
-        icon: ImageVector,
-        type: Type,
+    @Composable
+    fun View(
+        data: MatrixBadgeData,
     ) {
-        val backgroundColor = when (type) {
+        val backgroundColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.badgePositiveBackgroundColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralBackgroundColor
             Type.Negative -> ElementTheme.colors.badgeNegativeBackgroundColor
         }
-        val textColor = when (type) {
+        val textColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.badgePositiveContentColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralContentColor
             Type.Negative -> ElementTheme.colors.badgeNegativeContentColor
         }
-        val iconColor = when (type) {
+        val iconColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.iconSuccessPrimary
             Type.Neutral -> ElementTheme.colors.iconSecondary
             Type.Negative -> ElementTheme.colors.iconCriticalPrimary
         }
         Badge(
-            text = text,
-            icon = icon,
+            text = data.text,
+            icon = data.icon,
             backgroundColor = backgroundColor,
             iconColor = iconColor,
             textColor = textColor,
@@ -60,36 +65,36 @@ object RoomBadge {
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgePositivePreview() {
-    ElementPreview {
-        RoomBadge.View(
+internal fun MatrixBadgeAtomPositivePreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
             text = "Trusted",
             icon = CompoundIcons.Verified(),
-            type = RoomBadge.Type.Positive,
+            type = MatrixBadgeAtom.Type.Positive,
         )
-    }
+    )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgeNeutralPreview() {
-    ElementPreview {
-        RoomBadge.View(
+internal fun MatrixBadgeAtomNeutralPreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
             text = "Public room",
             icon = CompoundIcons.Public(),
-            type = RoomBadge.Type.Neutral,
+            type = MatrixBadgeAtom.Type.Neutral,
         )
-    }
+    )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomBadgeNegativePreview() {
-    ElementPreview {
-        RoomBadge.View(
+internal fun MatrixBadgeAtomNegativePreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
             text = "Not trusted",
             icon = CompoundIcons.Error(),
-            type = RoomBadge.Type.Negative,
+            type = MatrixBadgeAtom.Type.Negative,
         )
-    }
+    )
 }

@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails
+package io.element.android.features.roomdetails.impl
 
 import androidx.lifecycle.Lifecycle
 import app.cash.molecule.RecompositionMode
@@ -17,11 +17,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomdetails.impl.RoomDetailsEvent
-import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
-import io.element.android.features.roomdetails.impl.RoomDetailsState
-import io.element.android.features.roomdetails.impl.RoomDetailsType
-import io.element.android.features.roomdetails.impl.RoomTopicState
+import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -125,6 +121,7 @@ class RoomDetailsPresenterTest {
         )
         val presenter = createRoomDetailsPresenter(room)
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomName).isEqualTo(room.displayName)
@@ -134,7 +131,6 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
             assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isNull()
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -142,6 +138,7 @@ class RoomDetailsPresenterTest {
     fun `present - initial state is updated with roomInfo if it exists`() = runTest {
         val roomInfo = aRoomInfo(
             name = A_ROOM_NAME,
+            isPublic = true,
             topic = A_ROOM_TOPIC,
             avatarUrl = AN_AVATAR_URL,
             pinnedEventIds = listOf(AN_EVENT_ID),
