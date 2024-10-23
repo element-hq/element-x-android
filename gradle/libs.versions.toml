@@ -5,7 +5,7 @@
 # Project
 android_gradle_plugin = "8.7.1"
 kotlin = "2.0.20"
-kotlinpoetKsp = "2.0.0"
+kotlinpoet = "2.0.0"
 ksp = "2.0.20-1.0.25"
 firebaseAppDistribution = "5.0.0"
 
@@ -67,7 +67,8 @@ compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-grad
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.2"
 anvil_gradle_plugin = { module = "dev.zacsweers.anvil:gradle-plugin", version.ref = "anvil" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoetKsp" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
@@ -186,7 +187,6 @@ maplibre = "org.maplibre.gl:android-sdk:11.5.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.1"
 opusencoder = "io.element.android:opusencoder:1.1.0"
-kotlinpoet = "com.squareup:kotlinpoet:1.18.1"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
