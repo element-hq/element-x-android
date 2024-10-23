@@ -140,8 +140,11 @@ private fun RustMembershipChange.map(): MembershipChange {
 
 private fun RustUtdCause.map(): UtdCause {
     return when (this) {
-        RustUtdCause.MEMBERSHIP -> UtdCause.Membership
+        RustUtdCause.SENT_BEFORE_WE_JOINED -> UtdCause.SentBeforeWeJoined
         RustUtdCause.UNKNOWN -> UtdCause.Unknown
+        RustUtdCause.VERIFICATION_VIOLATION -> UtdCause.VerificationViolation
+        RustUtdCause.UNSIGNED_DEVICE -> UtdCause.UnsignedDevice
+        RustUtdCause.UNKNOWN_DEVICE -> UtdCause.UnknownDevice
     }
 }
 
