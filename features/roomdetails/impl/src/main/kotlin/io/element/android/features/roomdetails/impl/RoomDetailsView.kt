@@ -10,6 +10,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -405,13 +406,15 @@ private fun BadgeList(
     roomBadge: ImmutableList<RoomBadge>,
     modifier: Modifier = Modifier,
 ) {
-    if (roomBadge.isEmpty()) return
-    MatrixBadgeRowMolecule(
-        modifier = modifier,
-        data = roomBadge.map {
-            it.toMatrixBadgeData()
-        }.toImmutableList(),
-    )
+    Box(modifier = modifier) {
+        if (roomBadge.isNotEmpty()) {
+            MatrixBadgeRowMolecule(
+                data = roomBadge.map {
+                    it.toMatrixBadgeData()
+                }.toImmutableList(),
+            )
+        }
+    }
 }
 
 @Composable
