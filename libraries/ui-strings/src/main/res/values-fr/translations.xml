@@ -317,15 +317,6 @@ Raison: %1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
-  <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>
-  <string name="screen_room_member_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
-  <string name="screen_room_member_details_block_user">"Bloquer l’utilisateur"</string>
-  <string name="screen_room_member_details_title">"Profil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
-  <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
-  <string name="screen_room_member_details_verify_button_subtitle">"Utilisez l’application Web pour vérifier cet utilisateur."</string>
-  <string name="screen_room_member_details_verify_button_title">"Vérifier %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>

@@ -238,12 +238,6 @@
   <string name="screen_media_upload_preview_error_failed_sending">"მედიის ატვირთვა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_processing_media">"მედიის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"მომხმარებლის მონაცემების მოძიება ვერ მოხერხდა"</string>
-  <string name="screen_room_member_details_block_alert_action">"დაბლოკვა"</string>
-  <string name="screen_room_member_details_block_alert_description">"დაბლოკილი მომხმარებლები ვერ შეძლებენ თქვენთვის შეტყობინების გაგზავნას და ყველა მათი შეტყობინება თქვენთვის დამალული იქნება. თქვენ მათი განბლოკვა ნებისმეირ დროს შეგიძლიათ."</string>
-  <string name="screen_room_member_details_block_user">"მომხმარებლის დაბლოკვა"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"განბლოკვა"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას."</string>
-  <string name="screen_room_member_details_unblock_user">"Მომხმარებლის განბლოკვა"</string>
   <string name="screen_share_location_title">"მდებარეობის გაზიარება"</string>
   <string name="screen_share_my_location_action">"ჩემი მდებარეობის გაზიარება"</string>
   <string name="screen_share_open_apple_maps">"Apple Maps-ში გახსნა"</string>

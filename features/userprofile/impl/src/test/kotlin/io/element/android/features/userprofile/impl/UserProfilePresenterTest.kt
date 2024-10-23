@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
@@ -43,7 +44,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - returns the user profile data`() = runTest {
         val matrixUser = aMatrixUser(A_USER_ID.value, "Alice", "anAvatarUrl")
-        val client = FakeMatrixClient().apply {
+        val client = createFakeMatrixClient().apply {
             givenGetProfileResult(A_USER_ID, Result.success(matrixUser))
         }
         val presenter = createUserProfilePresenter(
@@ -55,6 +56,7 @@ class UserProfilePresenterTest {
             assertThat(initialState.userName).isEqualTo(matrixUser.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(matrixUser.avatarUrl)
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(false))
+            assertThat(initialState.isVerified.dataOrNull()).isFalse()
             assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.canCall).isFalse()
         }
@@ -108,7 +110,7 @@ class UserProfilePresenterTest {
         val room = FakeMatrixRoom(
             canUserJoinCallResult = { canUserJoinCallResult },
         )
-        val client = FakeMatrixClient().apply {
+        val client = createFakeMatrixClient().apply {
             if (canFindRoom) {
                 givenGetRoomResult(A_ROOM_ID, room)
             }
@@ -126,7 +128,7 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - returns empty data in case of failure`() = runTest {
-        val client = FakeMatrixClient().apply {
+        val client = createFakeMatrixClient().apply {
             givenGetProfileResult(A_USER_ID, Result.failure(AN_EXCEPTION))
         }
         val presenter = createUserProfilePresenter(
@@ -153,14 +155,12 @@ class UserProfilePresenterTest {
 
             dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
-
-            ensureAllEventsConsumed()
         }
     }
 
     @Test
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
-        val client = FakeMatrixClient()
+        val client = createFakeMatrixClient()
         val presenter = createUserProfilePresenter(
             client = client,
             userId = A_USER_ID
@@ -181,7 +181,7 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - BlockUser with error`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = createFakeMatrixClient()
         matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
@@ -198,7 +198,7 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - UnblockUser with error`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = createFakeMatrixClient()
         matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
@@ -225,8 +225,6 @@ class UserProfilePresenterTest {
 
             dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
-
-            ensureAllEventsConsumed()
         }
     }
 
@@ -262,13 +260,34 @@ class UserProfilePresenterTest {
         }
     }
 
+    @Test
+    fun `present - when user is verified, the value in the state is true`() = runTest {
+        val client = createFakeMatrixClient(isUserVerified = true)
+        val presenter = createUserProfilePresenter(
+            client = client,
+        )
+        presenter.test {
+            assertThat(awaitItem().isVerified.isUninitialized()).isTrue()
+            assertThat(awaitItem().isVerified.isLoading()).isTrue()
+            assertThat(awaitItem().isVerified.dataOrNull()).isTrue()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(1)
+        skipItems(2)
         return awaitItem()
     }
 
+    private fun createFakeMatrixClient(
+        isUserVerified: Boolean = false,
+    ) = FakeMatrixClient(
+        encryptionService = FakeEncryptionService(
+            isUserVerifiedResult = { Result.success(isUserVerified) }
+        ),
+    )
+
     private fun createUserProfilePresenter(
-        client: MatrixClient = FakeMatrixClient(),
+        client: MatrixClient = createFakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): UserProfilePresenter {

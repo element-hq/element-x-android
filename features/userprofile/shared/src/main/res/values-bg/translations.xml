@@ -4,4 +4,8 @@
   <string name="screen_dm_details_block_user">"Блокиране на потребителя"</string>
   <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
   <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
+  <string name="screen_room_member_details_block_alert_action">"Блокиране"</string>
+  <string name="screen_room_member_details_block_user">"Блокиране на потребителя"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_room_member_details_unblock_user">"Отблокиране на потребителя"</string>
 </resources>

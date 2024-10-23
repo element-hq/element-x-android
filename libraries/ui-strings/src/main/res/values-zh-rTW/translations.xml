@@ -242,13 +242,6 @@
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
-  <string name="screen_room_member_details_block_alert_action">"封鎖"</string>
-  <string name="screen_room_member_details_block_alert_description">"被封鎖的使用者無法傳訊息給您，他們的訊息會被隱藏。您可以在任何時候解除封鎖。"</string>
-  <string name="screen_room_member_details_block_user">"封鎖使用者"</string>
-  <string name="screen_room_member_details_title">"個人檔案"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"解除封鎖"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"您將無法看到任何來自他們的訊息。"</string>
-  <string name="screen_room_member_details_unblock_user">"解除封鎖使用者"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中開啟"</string>

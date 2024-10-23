@@ -6,5 +6,11 @@
   <string name="screen_dm_details_unblock_alert_action">"Desbloquear"</string>
   <string name="screen_dm_details_unblock_alert_description">"Você poderá ver todas as mensagens deles novamente."</string>
   <string name="screen_dm_details_unblock_user">"Desbloquear usuário"</string>
+  <string name="screen_room_member_details_block_alert_action">"Bloquear"</string>
+  <string name="screen_room_member_details_block_alert_description">"Usuários bloqueados não poderão enviar mensagens para você e todas as mensagens deles serão ocultadas. Você pode desbloqueá-los a qualquer momento."</string>
+  <string name="screen_room_member_details_block_user">"Bloquear usuário"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Você poderá ver todas as mensagens deles novamente."</string>
+  <string name="screen_room_member_details_unblock_user">"Desbloquear usuário"</string>
   <string name="screen_start_chat_error_starting_chat">"Ocorreu um erro ao tentar iniciar um chat"</string>
 </resources>

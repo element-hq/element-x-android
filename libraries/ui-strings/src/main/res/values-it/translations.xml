@@ -302,13 +302,6 @@ Motivo:. %1$s"</string>
   <string name="screen_room_details_pinned_events_row_title">"Messaggi fissati"</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
-  <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
-  <string name="screen_room_member_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti messaggi e tutti quelli già ricevuti saranno nascosti. Puoi sbloccarli in qualsiasi momento."</string>
-  <string name="screen_room_member_details_block_user">"Blocca utente"</string>
-  <string name="screen_room_member_details_title">"Profilo"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
-  <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
   <string name="screen_room_pinned_banner_loading_description">"Caricamento messaggio…"</string>

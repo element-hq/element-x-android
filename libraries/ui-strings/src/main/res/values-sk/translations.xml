@@ -308,13 +308,6 @@ Dôvod: %1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Pripnuté správy"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
-  <string name="screen_room_member_details_block_alert_action">"Zablokovať"</string>
-  <string name="screen_room_member_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
-  <string name="screen_room_member_details_block_user">"Zablokovať používateľa"</string>
-  <string name="screen_room_member_details_title">"Profil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Odblokovať"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
-  <string name="screen_room_member_details_unblock_user">"Odblokovať používateľa"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pripnutých správ"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítava sa správa…"</string>
