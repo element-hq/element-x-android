@@ -33,7 +33,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isEncrypted = false),
             aRoomDetailsState(roomAlias = null),
             aDmRoomDetailsState(),
-            aDmRoomDetailsState(isDmMemberIgnored = true),
+            aDmRoomDetailsState(isDmMemberIgnored = true, roomName = "Daniel (ignored and clear)", isEncrypted = false),
             aRoomDetailsState(canInvite = true),
             aRoomDetailsState(isFavorite = true),
             aRoomDetailsState(
@@ -136,12 +136,14 @@ fun aRoomNotificationSettings(
 fun aDmRoomDetailsState(
     isDmMemberIgnored: Boolean = false,
     roomName: String = "Daniel",
+    isEncrypted: Boolean = true,
 ) = aRoomDetailsState(
     roomName = roomName,
     isPublic = false,
+    isEncrypted = isEncrypted,
     roomType = RoomDetailsType.Dm(
-        aRoomMember(),
-        aDmRoomMember(isIgnored = isDmMemberIgnored),
+        me = aRoomMember(),
+        otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
     ),
     roomMemberDetailsState = aUserProfileState()
 )
