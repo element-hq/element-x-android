@@ -56,6 +56,7 @@ fun Switch(
 internal fun compoundSwitchColors() = SwitchDefaults.colors(
     uncheckedThumbColor = ElementTheme.colors.bgActionPrimaryRest,
     uncheckedTrackColor = Color.Transparent,
+    checkedTrackColor = ElementTheme.colors.bgAccentRest,
     disabledUncheckedBorderColor = ElementTheme.colors.borderDisabled,
     disabledUncheckedThumbColor = ElementTheme.colors.iconDisabled,
     disabledCheckedTrackColor = ElementTheme.colors.iconDisabled,
