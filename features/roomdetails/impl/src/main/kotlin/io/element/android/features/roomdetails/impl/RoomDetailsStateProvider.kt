@@ -13,6 +13,7 @@ import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -145,5 +146,7 @@ fun aDmRoomDetailsState(
         me = aRoomMember(),
         otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
     ),
-    roomMemberDetailsState = aUserProfileState()
+    roomMemberDetailsState = aUserProfileState(
+        isBlocked = AsyncData.Success(isDmMemberIgnored),
+    )
 )
