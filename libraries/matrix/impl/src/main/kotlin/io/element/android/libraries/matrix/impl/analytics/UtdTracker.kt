@@ -21,7 +21,12 @@ class UtdTracker(
         Timber.d("onUtd for event ${info.eventId}, timeToDecryptMs: ${info.timeToDecryptMs}")
         val name = when (info.cause) {
             UtdCause.UNKNOWN -> Error.Name.OlmKeysNotSentError
-            UtdCause.MEMBERSHIP -> Error.Name.ExpectedDueToMembership
+            UtdCause.SENT_BEFORE_WE_JOINED -> Error.Name.ExpectedDueToMembership
+            UtdCause.VERIFICATION_VIOLATION -> Error.Name.ExpectedVerificationViolation
+            UtdCause.UNSIGNED_DEVICE,
+            UtdCause.UNKNOWN_DEVICE -> {
+                Error.Name.ExpectedSentByInsecureDevice
+            }
         }
         val event = Error(
             context = null,

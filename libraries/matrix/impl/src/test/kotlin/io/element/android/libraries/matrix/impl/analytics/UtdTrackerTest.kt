@@ -74,7 +74,7 @@ class UtdTrackerTest {
             UnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = 123.toULong(),
-                cause = UtdCause.MEMBERSHIP,
+                cause = UtdCause.SENT_BEFORE_WE_JOINED,
             )
         )
         assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
@@ -89,5 +89,51 @@ class UtdTrackerTest {
         )
         assertThat(fakeAnalyticsService.screenEvents).isEmpty()
         assertThat(fakeAnalyticsService.trackedErrors).isEmpty()
+    }
+
+    @Test
+    fun `when onUtd is called with insecure cause, the expected analytics Event is sent`() {
+        val fakeAnalyticsService = FakeAnalyticsService()
+        val sut = UtdTracker(fakeAnalyticsService)
+        sut.onUtd(
+            UnableToDecryptInfo(
+                eventId = AN_EVENT_ID.value,
+                timeToDecryptMs = 123.toULong(),
+                cause = UtdCause.UNSIGNED_DEVICE,
+            )
+        )
+        assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
+            Error(
+                context = null,
+                cryptoModule = Error.CryptoModule.Rust,
+                cryptoSDK = Error.CryptoSDK.Rust,
+                timeToDecryptMillis = 123,
+                domain = Error.Domain.E2EE,
+                name = Error.Name.ExpectedSentByInsecureDevice
+            )
+        )
+    }
+
+    @Test
+    fun `when onUtd is called with verification violation cause, the expected analytics Event is sent`() {
+        val fakeAnalyticsService = FakeAnalyticsService()
+        val sut = UtdTracker(fakeAnalyticsService)
+        sut.onUtd(
+            UnableToDecryptInfo(
+                eventId = AN_EVENT_ID.value,
+                timeToDecryptMs = 123.toULong(),
+                cause = UtdCause.VERIFICATION_VIOLATION,
+            )
+        )
+        assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
+            Error(
+                context = null,
+                cryptoModule = Error.CryptoModule.Rust,
+                cryptoSDK = Error.CryptoSDK.Rust,
+                timeToDecryptMillis = 123,
+                domain = Error.Domain.E2EE,
+                name = Error.Name.ExpectedVerificationViolation
+            )
+        )
     }
 }

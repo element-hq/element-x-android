@@ -9,5 +9,8 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 
 enum class UtdCause {
     Unknown,
-    Membership,
+    SentBeforeWeJoined,
+    VerificationViolation,
+    UnsignedDevice,
+    UnknownDevice
 }
