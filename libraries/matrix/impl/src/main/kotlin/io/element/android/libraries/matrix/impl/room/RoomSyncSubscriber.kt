@@ -9,17 +9,12 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.RoomListService
-import org.matrix.rustcomponents.sdk.RoomSubscription
 import timber.log.Timber
-
-private const val DEFAULT_TIMELINE_LIMIT = 20u
 
 class RoomSyncSubscriber(
     private val roomListService: RoomListService,
@@ -28,28 +23,13 @@ class RoomSyncSubscriber(
     private val subscribedRoomIds = mutableSetOf<RoomId>()
     private val mutex = Mutex()
 
-    private val settings = RoomSubscription(
-        requiredState = listOf(
-            RequiredState(key = EventType.STATE_ROOM_NAME, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_AVATAR, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
-            RequiredState(key = EventType.STATE_ROOM_PINNED_EVENT, value = ""),
-        ),
-        timelineLimit = DEFAULT_TIMELINE_LIMIT,
-        // We don't need heroes here as they're already included in the `all_rooms` list
-        includeHeroes = false,
-    )
-
     suspend fun subscribe(roomId: RoomId) {
         mutex.withLock {
             withContext(dispatchers.io) {
                 try {
                     if (!isSubscribedTo(roomId)) {
                         Timber.d("Subscribing to room $roomId}")
-                        roomListService.subscribeToRooms(listOf(roomId.value), settings)
+                        roomListService.subscribeToRooms(listOf(roomId.value))
                     }
                     subscribedRoomIds.add(roomId)
                 } catch (exception: Exception) {
@@ -65,7 +45,7 @@ class RoomSyncSubscriber(
                 val roomIdsToSubscribeTo = roomIds.filterNot { isSubscribedTo(it) }
                 if (roomIdsToSubscribeTo.isNotEmpty()) {
                     Timber.d("Subscribing to rooms: $roomIds")
-                    roomListService.subscribeToRooms(roomIdsToSubscribeTo.map { it.value }, settings)
+                    roomListService.subscribeToRooms(roomIdsToSubscribeTo.map { it.value })
                     subscribedRoomIds.addAll(roomIds)
                 }
             } catch (cancellationException: CancellationException) {
