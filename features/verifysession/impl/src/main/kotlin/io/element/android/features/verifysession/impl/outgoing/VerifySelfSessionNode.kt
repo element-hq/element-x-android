@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.verifysession.impl.outgoing
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
