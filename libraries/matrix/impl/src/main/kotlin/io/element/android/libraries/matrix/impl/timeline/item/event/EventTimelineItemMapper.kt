@@ -78,19 +78,17 @@ fun RustEventSendState?.map(): LocalEventSendState? {
         null -> null
         RustEventSendState.NotSentYet -> LocalEventSendState.Sending
         is RustEventSendState.SendingFailed -> {
-            when (error) {
+            when (val queueWedgeError = error) {
                 QueueWedgeError.CrossVerificationRequired -> {
                     // The current device is not cross-signed (or cross signing is not setup)
                     LocalEventSendState.Failed.SendingFromUnverifiedDevice
                 }
                 is QueueWedgeError.IdentityViolations -> {
-                    // smart cast impossible because 'error' is a public API property declared in different module
-                    LocalEventSendState.Failed.VerifiedUserChangedIdentity((error as QueueWedgeError.IdentityViolations).users.map { UserId(it) })
+                    LocalEventSendState.Failed.VerifiedUserChangedIdentity(queueWedgeError.users.map { UserId(it) })
                 }
                 is QueueWedgeError.InsecureDevices -> {
                     LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
-                        // smart cast impossible because 'error' is a public API property declared in different module
-                        devices = (error as QueueWedgeError.InsecureDevices).userDeviceMap.entries.associate { entry ->
+                        devices = queueWedgeError.userDeviceMap.entries.associate { entry ->
                             UserId(entry.key) to entry.value.map { DeviceId(it) }
                         }
                     )
@@ -99,7 +97,7 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                     if (isRecoverable) {
                         LocalEventSendState.Sending
                     } else {
-                        LocalEventSendState.Failed.Unknown((error as QueueWedgeError.GenericApiError).msg)
+                        LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
                     }
                 }
             }
