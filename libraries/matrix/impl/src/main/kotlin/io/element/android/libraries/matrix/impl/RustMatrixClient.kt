@@ -398,7 +398,7 @@ class RustMatrixClient(
         sessionDispatcher
     ) {
         runCatching {
-            client.knock(roomIdOrAlias.identifier).destroy()
+            client.knock(roomIdOrAlias.identifier, message, serverNames).destroy()
             try {
                 awaitRoom(roomIdOrAlias, 10.seconds, CurrentUserMembership.KNOCKED)
             } catch (e: Exception) {
