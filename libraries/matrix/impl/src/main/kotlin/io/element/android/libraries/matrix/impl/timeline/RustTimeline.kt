@@ -339,6 +339,7 @@ class RustTimeline(
                 formattedCaption = formattedBody?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
+                storeInCache = true,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
@@ -361,6 +362,7 @@ class RustTimeline(
                 formattedCaption = formattedBody?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
+                storeInCache = true,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
@@ -374,6 +376,7 @@ class RustTimeline(
                 // Maybe allow a caption in the future?
                 caption = null,
                 formattedCaption = null,
+                storeInCache = true,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
@@ -381,7 +384,7 @@ class RustTimeline(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
-            inner.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
+            inner.sendFile(file.path, fileInfo.map(), false, progressCallback?.toProgressWatcher())
         }
     }
 
@@ -496,6 +499,7 @@ class RustTimeline(
             // Maybe allow a caption in the future?
             caption = null,
             formattedCaption = null,
+            storeInCache = true,
             progressWatcher = progressCallback?.toProgressWatcher(),
         )
     }
