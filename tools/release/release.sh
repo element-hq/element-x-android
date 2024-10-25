@@ -185,10 +185,23 @@ targetPath="./tmp/Element/${version}"
 printf "\n================================================================================\n"
 printf "Downloading the artifacts...\n"
 
-python3 ./tools/github/download_all_github_artifacts.py \
+ret=1
+
+while [[ $ret -ne 0 ]]; do
+  python3 ./tools/github/download_all_github_artifacts.py \
      --token "${gitHubToken}" \
      --runUrl "${runUrl}" \
      --directory "${targetPath}"
+
+  ret=$?
+  if [[ $ret -ne 0 ]]; then
+    read -p "Error while downloading the artifacts. You may want to fix the issue and retry. Retry (yes/no) default to yes? " doRetry
+    doRetry=${doRetry:-yes}
+    if [ "${doRetry}" == "no" ]; then
+      exit 1
+    fi
+  fi
+done
 
 printf "\n================================================================================\n"
 printf "Unzipping the F-Droid artifact...\n"
