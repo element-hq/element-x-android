@@ -24,7 +24,10 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aMatrixUserList().toImmutableList(),
-                    privacy = RoomPrivacy.Public,
+                    roomVisibility = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Room 101"),
+                        roomAccess = RoomAccess.Knocking
+                    ),
                 ),
             ),
         )

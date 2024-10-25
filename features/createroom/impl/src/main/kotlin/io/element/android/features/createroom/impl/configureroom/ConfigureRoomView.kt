@@ -11,16 +11,22 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,22 +35,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.createroom.impl.components.RoomPrivacyOption
+import io.element.android.features.createroom.impl.components.RoomAccessOption
+import io.element.android.features.createroom.impl.components.RoomVisibilityOption
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
@@ -103,23 +113,38 @@ fun ConfigureRoomView(
             )
             if (state.config.invites.isNotEmpty()) {
                 SelectedUsersRowList(
-                    modifier = Modifier.padding(bottom = 16.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     selectedUsers = state.config.invites,
                     onUserRemove = {
                         focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                        state.eventSink(ConfigureRoomEvents.RemoveUserFromSelection(it))
                     },
                 )
             }
-            RoomPrivacyOptions(
-                modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.config.privacy,
+            RoomVisibilityOptions(
+                selected = when (state.config.roomVisibility) {
+                    is RoomVisibilityState.Private -> RoomVisibilityItem.Private
+                    is RoomVisibilityState.Public -> RoomVisibilityItem.Public
+                },
                 onOptionClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                    state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
                 },
             )
+            if (state.config.roomVisibility is RoomVisibilityState.Public) {
+                RoomAccessOptions(
+                    selected = state.config.roomVisibility.roomAccess,
+                    onOptionClick = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RoomAccessChanged(it))
+                    },
+                )
+                RoomAddress(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    address = state.config.roomVisibility.roomAddress,
+                    onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
+                )
+            }
         }
     }
 
@@ -221,24 +246,125 @@ private fun RoomTopic(
 }
 
 @Composable
-private fun RoomPrivacyOptions(
-    selected: RoomPrivacy?,
-    onOptionClick: (RoomPrivacyItem) -> Unit,
+private fun ConfigureRoomOptions(
+    title: String,
+    verticalArrangement: Arrangement.Vertical,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .selectableGroup()
+            .padding(horizontal = 12.dp),
+        verticalArrangement = verticalArrangement,
+    ) {
+        Text(
+            text = title,
+            style = ElementTheme.typography.fontBodyLgMedium,
+            color = ElementTheme.colors.textPrimary,
+        )
+        content()
+    }
+}
+
+@Composable
+private fun RoomVisibilityOptions(
+    selected: RoomVisibilityItem,
+    onOptionClick: (RoomVisibilityItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val items = roomPrivacyItems()
-    Column(modifier = modifier.selectableGroup()) {
-        items.forEach { item ->
-            RoomPrivacyOption(
+    ConfigureRoomOptions(
+        title = "Room visibility",
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        RoomVisibilityItem.entries.forEach { item ->
+            RoomVisibilityOption(
                 roomPrivacyItem = item,
-                isSelected = selected == item.privacy,
+                isSelected = item == selected,
                 onOptionClick = onOptionClick,
             )
         }
     }
 }
 
+@Composable
+private fun RoomAccessOptions(
+    selected: RoomAccess,
+    onOptionClick: (RoomAccessItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ConfigureRoomOptions(
+        title = "Room access",
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        RoomAccessItem.entries.forEach { item ->
+            RoomAccessOption(
+                roomAccessItem = item,
+                isSelected = when (item) {
+                    RoomAccessItem.Anyone -> selected == RoomAccess.Anyone
+                    RoomAccessItem.AskToJoin -> selected == RoomAccess.Knocking
+                },
+                onOptionClick = onOptionClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RoomAddress(
+    address: RoomAddress,
+    onAddressChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+){
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.primary,
+            text = "Room address",
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = when(address) {
+                is RoomAddress.AutoFilled -> address.address
+                is RoomAddress.Edited -> address.address
+            },
+            leadingIcon = {
+                Text(
+                    text = "#",
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = ":myserver.com",
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textSecondary,
+                    modifier = Modifier.padding(end = 16.dp)
+                )
+            },
+            supportingText = {
+                Text(
+                    text = "In order for this room to be visible in the public room directory, you will need to a room address. ",
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            onValueChange = onAddressChange,
+            singleLine = true,
+        )
+    }
+}
+
 @PreviewsDayNight
+@PreviewWithLargeHeight
 @Composable
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(

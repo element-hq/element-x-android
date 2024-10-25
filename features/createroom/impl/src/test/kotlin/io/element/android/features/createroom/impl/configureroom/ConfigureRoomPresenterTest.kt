@@ -103,7 +103,7 @@ class ConfigureRoomPresenterTest {
             assertThat(initialState.config.topic).isNull()
             assertThat(initialState.config.invites).isEmpty()
             assertThat(initialState.config.avatarUri).isNull()
-            assertThat(initialState.config.privacy).isEqualTo(RoomPrivacy.Private)
+            assertThat(initialState.config.roomVisibility).isEqualTo(RoomVisibilityState.Private)
         }
     }
 
@@ -200,13 +200,13 @@ class ConfigureRoomPresenterTest {
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room privacy
-            newState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Public))
+            newState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityState.Public))
             newState = awaitItem()
-            expectedConfig = expectedConfig.copy(privacy = RoomPrivacy.Public)
+            expectedConfig = expectedConfig.copy(roomVisibility = RoomVisibilityState.Public)
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Remove user
-            newState.eventSink(ConfigureRoomEvents.RemoveFromSelection(selectedUser1))
+            newState.eventSink(ConfigureRoomEvents.RemoveUserFromSelection(selectedUser1))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(invites = expectedConfig.invites.minus(selectedUser1).toImmutableList())
             assertThat(newState.config).isEqualTo(expectedConfig)

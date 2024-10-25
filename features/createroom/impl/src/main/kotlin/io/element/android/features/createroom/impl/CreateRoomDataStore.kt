@@ -8,7 +8,11 @@
 package io.element.android.features.createroom.impl
 
 import android.net.Uri
-import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
+import io.element.android.features.createroom.impl.configureroom.RoomAccess
+import io.element.android.features.createroom.impl.configureroom.RoomAccessItem
+import io.element.android.features.createroom.impl.configureroom.RoomAddress
+import io.element.android.features.createroom.impl.configureroom.RoomVisibilityItem
+import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.features.createroom.impl.di.CreateRoomScope
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -17,7 +21,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.getAndUpdate
 import java.io.File
+import java.text.Normalizer
 import javax.inject.Inject
 
 @SingleIn(CreateRoomScope::class)
@@ -31,28 +37,87 @@ class CreateRoomDataStore @Inject constructor(
             field = value
         }
 
-    fun getCreateRoomConfig(): Flow<CreateRoomConfig> = combine(
+    val createRoomConfig: Flow<CreateRoomConfig> = combine(
         selectedUserListDataStore.selectedUsers(),
         createRoomConfigFlow,
     ) { selectedUsers, config ->
         config.copy(invites = selectedUsers.toImmutableList())
     }
 
-    fun setRoomName(roomName: String?) {
-        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(roomName = roomName?.takeIf { it.isNotEmpty() }))
+    fun setRoomName(roomName: String) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            val newVisibility = when (config.roomVisibility) {
+                is RoomVisibilityState.Public -> {
+                    val roomAddress = config.roomVisibility.roomAddress
+                    if (roomAddress is RoomAddress.AutoFilled || roomName.isEmpty()) {
+                        config.roomVisibility.copy(
+                            roomAddress = RoomAddress.AutoFilled(roomName),
+                        )
+                    } else {
+                        config.roomVisibility
+                    }
+                }
+                else -> config.roomVisibility
+            }
+            config.copy(
+                roomName = roomName.takeIf { it.isNotEmpty() },
+                roomVisibility = newVisibility,
+            )
+        }
     }
 
-    fun setTopic(topic: String?) {
-        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(topic = topic?.takeIf { it.isNotEmpty() }))
+    fun setTopic(topic: String) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(topic = topic.takeIf { it.isNotEmpty() })
+        }
     }
 
     fun setAvatarUri(uri: Uri?, cached: Boolean = false) {
         cachedAvatarUri = uri.takeIf { cached }
-        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(avatarUri = uri))
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(avatarUri = uri)
+        }
     }
 
-    fun setPrivacy(privacy: RoomPrivacy) {
-        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(privacy = privacy))
+    fun setRoomVisibility(visibility: RoomVisibilityItem) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(
+                roomVisibility = when (visibility) {
+                    RoomVisibilityItem.Private -> RoomVisibilityState.Private
+                    RoomVisibilityItem.Public -> RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled(config.roomName.orEmpty()),
+                        roomAccess = RoomAccess.Anyone,
+                    )
+                }
+            )
+        }
+    }
+
+    fun setRoomAddress(address: String) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(
+                roomVisibility = when (config.roomVisibility) {
+                    is RoomVisibilityState.Public -> config.roomVisibility.copy(roomAddress = RoomAddress.Edited(address))
+                    else -> config.roomVisibility
+                }
+            )
+        }
+    }
+
+    fun setRoomAccess(access: RoomAccessItem) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(
+                roomVisibility = when (config.roomVisibility) {
+                    is RoomVisibilityState.Public -> {
+                        when (access) {
+                            RoomAccessItem.Anyone -> config.roomVisibility.copy(roomAccess = RoomAccess.Anyone)
+                            RoomAccessItem.AskToJoin -> config.roomVisibility.copy(roomAccess = RoomAccess.Knocking)
+                        }
+                    }
+                    else -> config.roomVisibility
+                }
+            )
+        }
     }
 
     fun clearCachedData() {

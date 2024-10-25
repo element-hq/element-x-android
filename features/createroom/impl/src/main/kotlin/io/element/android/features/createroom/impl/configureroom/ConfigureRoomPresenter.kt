@@ -54,7 +54,7 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
+        val createRoomConfig = dataStore.createRoomConfig.collectAsState(CreateRoomConfig())
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -92,8 +92,10 @@ class ConfigureRoomPresenter @Inject constructor(
             when (event) {
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
-                is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
-                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
+                is ConfigureRoomEvents.RoomVisibilityChanged -> dataStore.setRoomVisibility(event.visibilityItem)
+                is ConfigureRoomEvents.RemoveUserFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
+                is ConfigureRoomEvents.RoomAccessChanged -> dataStore.setRoomAccess(event.roomAccess)
+                is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
                 is ConfigureRoomEvents.CreateRoom -> createRoom(event.config)
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
@@ -109,6 +111,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 }
 
                 ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = AsyncAction.Uninitialized
+
             }
         }
 
@@ -130,10 +133,10 @@ class ConfigureRoomPresenter @Inject constructor(
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,
-                isEncrypted = config.privacy == RoomPrivacy.Private,
+                isEncrypted = config.roomVisibility is RoomVisibilityState.Private,
                 isDirect = false,
-                visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
-                preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
+                visibility = if (config.roomVisibility is RoomVisibilityState.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
+                preset = if (config.roomVisibility is RoomVisibilityState.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
                 avatar = avatarUrl,
             )

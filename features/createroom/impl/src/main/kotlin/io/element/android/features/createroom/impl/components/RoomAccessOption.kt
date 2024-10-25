@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright 2024 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  * Please see LICENSE in the repository root for full details.
@@ -18,21 +18,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.createroom.impl.configureroom.RoomPrivacyItem
-import io.element.android.features.createroom.impl.configureroom.roomPrivacyItems
+import io.element.android.features.createroom.impl.configureroom.RoomAccessItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
-fun RoomPrivacyOption(
-    roomPrivacyItem: RoomPrivacyItem,
-    onOptionClick: (RoomPrivacyItem) -> Unit,
+fun RoomAccessOption(
+    roomAccessItem: RoomAccessItem,
+    onOptionClick: (RoomAccessItem) -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
 ) {
@@ -41,36 +40,23 @@ fun RoomPrivacyOption(
             .fillMaxWidth()
             .selectable(
                 selected = isSelected,
-                onClick = { onOptionClick(roomPrivacyItem) },
+                onClick = { onOptionClick(roomAccessItem) },
                 role = Role.RadioButton,
             )
-            .padding(8.dp),
     ) {
-        Icon(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            resourceId = roomPrivacyItem.icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.secondary,
-        )
-
-        Column(
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-        ) {
+        Column(Modifier.weight(1f)) {
             Text(
-                text = roomPrivacyItem.title,
+                text = stringResource(roomAccessItem.title),
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.primary,
             )
-            Spacer(Modifier.size(3.dp))
+            Spacer(Modifier.size(8.dp))
             Text(
-                text = roomPrivacyItem.description,
+                text = stringResource(roomAccessItem.description),
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = MaterialTheme.colorScheme.tertiary,
             )
         }
-
         RadioButton(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
@@ -84,16 +70,16 @@ fun RoomPrivacyOption(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomPrivacyOptionPreview() = ElementPreview {
-    val aRoomPrivacyItem = roomPrivacyItems().first()
+internal fun RoomAccessOptionPreview() = ElementPreview {
+    val aRoomAccessItem = RoomAccessItem.Anyone
     Column {
-        RoomPrivacyOption(
-            roomPrivacyItem = aRoomPrivacyItem,
+        RoomAccessOption(
+            roomAccessItem = aRoomAccessItem,
             onOptionClick = {},
             isSelected = true,
         )
-        RoomPrivacyOption(
-            roomPrivacyItem = aRoomPrivacyItem,
+        RoomAccessOption(
+            roomAccessItem = aRoomAccessItem,
             onOptionClick = {},
             isSelected = false,
         )
