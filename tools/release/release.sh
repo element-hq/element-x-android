@@ -325,8 +325,8 @@ printf "\n======================================================================
 printf "The file ${signedBundlePath} has been signed and can be uploaded to the PlayStore!\n"
 
 printf "\n================================================================================\n"
-read -p "Do you want to build the APKs from the app bundle? You need to do this step if you want to install the application to your device. (yes/no) default to yes " doBuildApks
-doBuildApks=${doBuildApks:-yes}
+read -p "Do you want to build the APKs from the app bundle? You need to do this step if you want to install the application to your device. (yes/no) default to no " doBuildApks
+doBuildApks=${doBuildApks:-no}
 
 if [ "${doBuildApks}" == "yes" ]; then
   printf "Building apks...\n"
