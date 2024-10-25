@@ -14,15 +14,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -133,7 +129,10 @@ fun ConfigureRoomView(
             )
             if (state.config.roomVisibility is RoomVisibilityState.Public) {
                 RoomAccessOptions(
-                    selected = state.config.roomVisibility.roomAccess,
+                    selected = when (state.config.roomVisibility.roomAccess) {
+                        RoomAccess.Anyone -> RoomAccessItem.Anyone
+                        RoomAccess.Knocking -> RoomAccessItem.AskToJoin
+                    },
                     onOptionClick = {
                         focusManager.clearFocus()
                         state.eventSink(ConfigureRoomEvents.RoomAccessChanged(it))
@@ -290,7 +289,7 @@ private fun RoomVisibilityOptions(
 
 @Composable
 private fun RoomAccessOptions(
-    selected: RoomAccess,
+    selected: RoomAccessItem,
     onOptionClick: (RoomAccessItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -302,10 +301,7 @@ private fun RoomAccessOptions(
         RoomAccessItem.entries.forEach { item ->
             RoomAccessOption(
                 roomAccessItem = item,
-                isSelected = when (item) {
-                    RoomAccessItem.Anyone -> selected == RoomAccess.Anyone
-                    RoomAccessItem.AskToJoin -> selected == RoomAccess.Knocking
-                },
+                isSelected = item == selected,
                 onOptionClick = onOptionClick,
             )
         }
@@ -317,7 +313,7 @@ private fun RoomAddress(
     address: RoomAddress,
     onAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -331,7 +327,7 @@ private fun RoomAddress(
 
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            value = when(address) {
+            value = when (address) {
                 is RoomAddress.AutoFilled -> address.address
                 is RoomAddress.Edited -> address.address
             },

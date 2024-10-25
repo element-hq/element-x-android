@@ -8,14 +8,10 @@
 package io.element.android.features.createroom.impl.configureroom
 
 sealed interface RoomVisibilityState {
-    val roomAccess: RoomAccess
-
-    data object Private : RoomVisibilityState {
-        override val roomAccess: RoomAccess = RoomAccess.Invite
-    }
+    data object Private : RoomVisibilityState
 
     data class Public(
         val roomAddress: RoomAddress,
-        override val roomAccess: RoomAccess
+        val roomAccess: RoomAccess
     ) : RoomVisibilityState
 }

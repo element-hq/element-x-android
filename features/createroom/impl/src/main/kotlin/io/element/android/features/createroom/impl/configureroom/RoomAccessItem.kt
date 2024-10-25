@@ -21,6 +21,6 @@ enum class RoomAccessItem(
     AskToJoin(
         title = CommonStrings.screen_create_room_access_section_knocking_option_title,
         description = CommonStrings.screen_create_room_access_section_knocking_option_description,
-    )
+    ),
 }
 

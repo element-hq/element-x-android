@@ -8,5 +8,5 @@
 package io.element.android.features.createroom.impl.configureroom
 
 enum class RoomAccess {
-    Anyone, Knocking, Invite
+    Anyone, Knocking
 }
