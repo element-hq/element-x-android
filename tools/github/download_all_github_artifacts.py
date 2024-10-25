@@ -10,7 +10,7 @@ import argparse
 import hashlib
 import json
 import os
-# Run `pip3 install requests` if not installed yet
+# Run `pip3 install requests --break-system-packages` if not installed yet
 import requests
 # Run `pip3 install re` if not installed yet
 import re
