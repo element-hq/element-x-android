@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
@@ -46,6 +45,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
@@ -91,7 +91,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
     fun `Sticker content`() {
         val body = "a sticker body"
         val info = ImageInfo(null, null, null, null, null, null, null)
-        val message = createRoomEvent(false, null, StickerContent(body, info, aMediaSource(url = "url")))
+        val message = createRoomEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message)
         val expectedBody = "Sticker: a sticker body"
         assertThat(result.toString()).isEqualTo(expectedBody)
@@ -135,11 +135,11 @@ class DefaultPinnedMessagesBannerFormatterTest {
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
             VideoMessageType(body, null, null, MediaSource("url"), null),
-            AudioMessageType(body, MediaSource("url"), null),
-            VoiceMessageType(body, MediaSource("url"), null, null),
+            AudioMessageType(body, null, null, MediaSource("url"), null),
+            VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
-            StickerMessageType(body, MediaSource("url"), null),
-            FileMessageType(body, MediaSource("url"), null),
+            StickerMessageType(body, null, null, MediaSource("url"), null),
+            FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),

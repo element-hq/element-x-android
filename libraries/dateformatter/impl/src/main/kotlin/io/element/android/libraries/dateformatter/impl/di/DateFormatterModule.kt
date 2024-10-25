@@ -10,6 +10,7 @@ package io.element.android.libraries.dateformatter.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.libraries.dateformatter.impl.TimezoneProvider
 import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -25,5 +26,5 @@ object DateFormatterModule {
     fun providesLocale(): Locale = Locale.getDefault()
 
     @Provides
-    fun providesTimezone(): TimeZone = TimeZone.currentSystemDefault()
+    fun providesTimezone(): TimezoneProvider = TimezoneProvider { TimeZone.currentSystemDefault() }
 }

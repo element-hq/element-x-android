@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -98,9 +99,8 @@ private fun PinnedMessagesBannerRow(
                 }
             },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = spacedBy(10.dp)
     ) {
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(26.dp))
         PinIndicators(
             pinIndex = state.currentPinnedMessageIndex(),
             pinsCount = state.pinnedMessagesCount(),
@@ -109,7 +109,9 @@ private fun PinnedMessagesBannerRow(
             imageVector = CompoundIcons.PinSolid(),
             contentDescription = null,
             tint = ElementTheme.materialColors.secondary,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .size(20.dp)
         )
         PinnedMessageItem(
             index = state.currentPinnedMessageIndex(),

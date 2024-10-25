@@ -10,9 +10,9 @@
   <string name="confirm_recovery_key_banner_title">"Insere a tua chave de recuperação"</string>
   <string name="full_screen_intent_banner_message">"Para garantir que nunca perdes uma chamada importante, altera as configurações para permitir notificações em ecrã inteiro quando o telemóvel está bloqueado."</string>
   <string name="full_screen_intent_banner_title">"Melhora a tua experiência de chamada"</string>
-  <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para %1$s?"</string>
-  <string name="screen_invites_decline_chat_title">"Rejeitar conite"</string>
-  <string name="screen_invites_decline_direct_chat_message">"Tens a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
+  <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para entra em %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rejeitar convite"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Tem a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
   <string name="screen_invites_empty_list">"Sem convites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>

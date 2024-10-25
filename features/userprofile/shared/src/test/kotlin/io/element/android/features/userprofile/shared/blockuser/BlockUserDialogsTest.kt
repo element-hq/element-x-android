@@ -10,9 +10,9 @@ package io.element.android.features.userprofile.shared.blockuser
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
-import io.element.android.features.userprofile.shared.UserProfileEvents
-import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder

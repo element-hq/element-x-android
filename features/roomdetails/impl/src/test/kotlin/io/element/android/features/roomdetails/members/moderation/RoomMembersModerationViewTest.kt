@@ -13,6 +13,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
+import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
 import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
@@ -130,7 +131,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.Confirming,
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -147,7 +148,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.Confirming,
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -164,7 +165,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming,
+            unbanUserAsyncAction = ConfirmingRoomMemberAction(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -181,7 +182,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming,
+            unbanUserAsyncAction = ConfirmingRoomMemberAction(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -189,7 +190,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_manage_member_unban_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.UnbanUser)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.UnbanUser(roomMember.userId))
     }
 }
 

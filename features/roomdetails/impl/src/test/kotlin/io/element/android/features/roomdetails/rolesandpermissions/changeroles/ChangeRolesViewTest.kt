@@ -140,7 +140,7 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 isSearchActive = true,
-                exitState = AsyncAction.Confirming,
+                exitState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             ),
         )
@@ -156,7 +156,7 @@ class ChangeRolesViewTest {
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 isSearchActive = true,
-                exitState = AsyncAction.Confirming,
+                exitState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             ),
         )
@@ -173,7 +173,7 @@ class ChangeRolesViewTest {
             state = aChangeRolesState(
                 role = RoomMember.Role.ADMIN,
                 isSearchActive = true,
-                savingState = AsyncAction.Confirming,
+                savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             ),
         )
@@ -190,7 +190,7 @@ class ChangeRolesViewTest {
             state = aChangeRolesState(
                 role = RoomMember.Role.ADMIN,
                 isSearchActive = true,
-                savingState = AsyncAction.Confirming,
+                savingState = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             ),
         )

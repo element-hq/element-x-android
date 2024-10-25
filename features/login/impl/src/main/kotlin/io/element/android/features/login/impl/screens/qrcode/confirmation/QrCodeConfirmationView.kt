@@ -148,7 +148,7 @@ private fun Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun QrCodeConfirmationViewPreview(@PreviewParameter(QrCodeConfirmationStepPreviewProvider::class) step: QrCodeConfirmationStep) {
+internal fun QrCodeConfirmationViewPreview(@PreviewParameter(QrCodeConfirmationStepProvider::class) step: QrCodeConfirmationStep) {
     ElementPreview {
         QrCodeConfirmationView(
             step = step,

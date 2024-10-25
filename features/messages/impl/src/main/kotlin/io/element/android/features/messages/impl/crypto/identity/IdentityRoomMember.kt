@@ -12,6 +12,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 
 data class IdentityRoomMember(
     val userId: UserId,
-    val disambiguatedDisplayName: String,
+    val displayNameOrDefault: String,
     val avatarData: AvatarData,
 )

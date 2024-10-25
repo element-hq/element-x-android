@@ -14,7 +14,7 @@ open class AsyncActionProvider : PreviewParameterProvider<AsyncAction<Unit>> {
     override val values: Sequence<AsyncAction<Unit>>
         get() = sequenceOf(
             AsyncAction.Uninitialized,
-            AsyncAction.Confirming,
+            AsyncAction.ConfirmingNoParams,
             AsyncAction.Loading,
             AsyncAction.Failure(Exception("An error occurred")),
             AsyncAction.Success(Unit),

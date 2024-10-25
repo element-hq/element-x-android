@@ -73,7 +73,7 @@ private fun TimelineItemReactionsView(
         else -> LayoutDirection.Ltr
     }
 
-    return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
+    CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
         TimelineItemReactionsLayout(
             modifier = modifier,
             itemSpacing = 4.dp,
@@ -96,11 +96,13 @@ private fun TimelineItemReactionsView(
             },
             addMoreButton = if (userCanSendReaction) {
                 {
-                    MessagesReactionButton(
-                        content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
-                        onClick = onMoreReactionsClick,
-                        onLongClick = {}
-                    )
+                    CompositionLocalProvider(LocalLayoutDirection provides currentLayout) {
+                        MessagesReactionButton(
+                            content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
+                            onClick = onMoreReactionsClick,
+                            onLongClick = {}
+                        )
+                    }
                 }
             } else {
                 null

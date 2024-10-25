@@ -15,7 +15,7 @@ class FakeNotificationMediaRepo : NotificationMediaRepo {
     override suspend fun getMediaFile(
         mediaSource: MediaSource,
         mimeType: String?,
-        body: String?,
+        filename: String?,
     ): Result<File> {
         return Result.failure(IllegalStateException("Fake class"))
     }

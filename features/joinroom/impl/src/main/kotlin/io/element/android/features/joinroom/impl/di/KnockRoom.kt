@@ -10,14 +10,26 @@ package io.element.android.features.joinroom.impl.di
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import javax.inject.Inject
 
 interface KnockRoom {
-    suspend operator fun invoke(roomId: RoomId): Result<Unit>
+    suspend operator fun invoke(
+        roomIdOrAlias: RoomIdOrAlias,
+        message: String,
+        serverNames: List<String>,
+    ): Result<Unit>
 }
 
 @ContributesBinding(SessionScope::class)
 class DefaultKnockRoom @Inject constructor(private val client: MatrixClient) : KnockRoom {
-    override suspend fun invoke(roomId: RoomId) = client.knockRoom(roomId)
+    override suspend fun invoke(
+        roomIdOrAlias: RoomIdOrAlias,
+        message: String,
+        serverNames: List<String>
+    ): Result<Unit> {
+        return client
+            .knockRoom(roomIdOrAlias, message, serverNames)
+            .map { }
+    }
 }

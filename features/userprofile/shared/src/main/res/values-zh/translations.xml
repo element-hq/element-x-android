@@ -6,5 +6,12 @@
   <string name="screen_dm_details_unblock_alert_action">"解封"</string>
   <string name="screen_dm_details_unblock_alert_description">"可以重新接收他们的消息。"</string>
   <string name="screen_dm_details_unblock_user">"解封用户"</string>
+  <string name="screen_room_member_details_block_alert_action">"封禁"</string>
+  <string name="screen_room_member_details_block_alert_description">"被封禁的用户无法给你发消息，并且他们的消息会被隐藏。你可以随时解封。"</string>
+  <string name="screen_room_member_details_block_user">"封禁用户"</string>
+  <string name="screen_room_member_details_title">"个人资料"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"解封"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"可以重新接收他们的消息。"</string>
+  <string name="screen_room_member_details_unblock_user">"解封用户"</string>
   <string name="screen_start_chat_error_starting_chat">"在开始聊天时发生了错误"</string>
 </resources>

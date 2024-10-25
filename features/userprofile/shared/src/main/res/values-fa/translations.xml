@@ -5,4 +5,10 @@
   <string name="screen_dm_details_unblock_alert_action">"رفع انسداد"</string>
   <string name="screen_dm_details_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>
   <string name="screen_dm_details_unblock_user">"رفع انسداد کاربر"</string>
+  <string name="screen_room_member_details_block_alert_action">"بلوک"</string>
+  <string name="screen_room_member_details_block_user">"انسداد کاربر"</string>
+  <string name="screen_room_member_details_title">"نمایه"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"رفع انسداد"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>
+  <string name="screen_room_member_details_unblock_user">"رفع انسداد کاربر"</string>
 </resources>

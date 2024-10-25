@@ -5,9 +5,9 @@
   <string name="screen_account_provider_form_notice">"Введите поисковый запрос или адрес домена."</string>
   <string name="screen_account_provider_form_subtitle">"Поиск компании, сообщества или частного сервера."</string>
   <string name="screen_account_provider_form_title">"Поиск сервера учетной записи"</string>
-  <string name="screen_account_provider_signin_subtitle">"Здесь будут храниться ваши разговоры - точно так же, как вы используете почтового провайдера для хранения своих писем."</string>
+  <string name="screen_account_provider_signin_subtitle">"Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем."</string>
   <string name="screen_account_provider_signin_title">"Вы собираетесь войти в %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Здесь будут храниться ваши разговоры - точно так же, как вы используете почтового провайдера для хранения своих писем."</string>
+  <string name="screen_account_provider_signup_subtitle">"Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем."</string>
   <string name="screen_account_provider_signup_title">"Вы собираетесь создать учетную запись на %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org — это большой бесплатный сервер в общедоступной сети Matrix для безопасной децентрализованной связи, управляемый Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Другое"</string>
@@ -27,14 +27,14 @@
   <string name="screen_login_error_invalid_user_id">"Это не корректный идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля."</string>
   <string name="screen_login_error_unsupported_authentication">"Выбранный домашний сервер не поддерживает пароль или логин OIDC. Пожалуйста, свяжитесь с администратором или выберите другой домашний сервер."</string>
-  <string name="screen_login_form_header">"Введите сведения о себе"</string>
+  <string name="screen_login_form_header">"Введите свои данные"</string>
   <string name="screen_login_subtitle">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>
   <string name="screen_login_title">"Рады видеть вас снова!"</string>
   <string name="screen_login_title_with_homeserver">"Войти в %1$s"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Установление безопасного соединения"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Не удалось установить безопасное соединение с новым устройством. Существующие устройства по-прежнему в безопасности, и вам не нужно беспокоиться о них."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Что теперь?"</string>
-  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Попробуйте снова войти в систему с помощью QR-кода, если это была сетевая проблема"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Попробуйте снова войти в систему с помощью QR-кода, если это была проблема с соединением"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Если вы столкнулись с той же проблемой, попробуйте сменить точку доступа Wi-Fi или используйте мобильные данные"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Если это не помогло, войдите вручную"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Соединение не защищено"</string>
@@ -55,11 +55,12 @@
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Поставщик учетной записи не поддерживает %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s не поддерживается"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Готово к сканированию"</string>
-  <string name="screen_qr_code_login_initial_state_item_1">"Откройте %1$s на настольном устройстве"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Откройте %1$s на компьютере"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Нажмите на свое изображение"</string>
-  <string name="screen_qr_code_login_initial_state_item_3">"Выбрать %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Выберите %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"\"Привязать новое устройство\""</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Отсканируйте QR-код с помощью этого устройства"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Доступно только в том случае, если ваш поставщик учетной записи поддерживает это."</string>
   <string name="screen_qr_code_login_initial_state_title">"Откройте %1$s на другом устройстве, чтобы получить QR-код"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Используйте QR-код, показанный на другом устройстве."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторить попытку"</string>
@@ -76,7 +77,7 @@
   <string name="screen_server_confirmation_change_server">"Сменить поставщика учетной записи"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Частный сервер для сотрудников Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>
-  <string name="screen_server_confirmation_message_register">"Здесь будут храниться ваши разговоры - точно так же, как вы используете почтового провайдера для хранения своих писем."</string>
+  <string name="screen_server_confirmation_message_register">"Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем."</string>
   <string name="screen_server_confirmation_title_login">"Вы собираетесь войти в %1$s"</string>
   <string name="screen_server_confirmation_title_register">"Вы собираетесь создать учетную запись на %1$s"</string>
 </resources>

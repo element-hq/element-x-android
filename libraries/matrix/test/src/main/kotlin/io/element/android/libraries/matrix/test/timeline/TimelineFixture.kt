@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -25,6 +27,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -39,7 +42,6 @@ fun anEventTimelineItem(
     transactionId: TransactionId? = null,
     isEditable: Boolean = false,
     canBeRepliedTo: Boolean = false,
-    isLocal: Boolean = false,
     isOwn: Boolean = false,
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
@@ -56,7 +58,6 @@ fun anEventTimelineItem(
     transactionId = transactionId,
     isEditable = isEditable,
     canBeRepliedTo = canBeRepliedTo,
-    isLocal = isLocal,
     isOwn = isOwn,
     isRemote = isRemote,
     localSendState = localSendState,
@@ -66,8 +67,8 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
-    debugInfoProvider = { debugInfo },
     origin = null,
+    timelineItemDebugInfoProvider = { debugInfo },
     messageShieldProvider = { messageShield },
 )
 
@@ -108,6 +109,18 @@ fun aMessageContent(
     isEdited = isEdited,
     isThreaded = isThreaded,
     type = messageType
+)
+
+fun aStickerContent(
+    filename: String = "filename",
+    info: ImageInfo,
+    mediaSource: MediaSource,
+    body: String? = null,
+) = StickerContent(
+    filename = filename,
+    body = body,
+    info = info,
+    source = mediaSource,
 )
 
 fun aTimelineItemDebugInfo(

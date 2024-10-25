@@ -17,10 +17,13 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventDebugInfoProvider
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -74,9 +77,9 @@ sealed interface TimelineItem {
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
         val isThreaded: Boolean,
-        val debugInfoProvider: EventDebugInfoProvider,
         val origin: TimelineItemEventOrigin?,
-        val messageShield: MessageShield?,
+        val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
+        val messageShieldProvider: MessageShieldProvider,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
@@ -90,7 +93,14 @@ sealed interface TimelineItem {
 
         val isRemote = eventId != null
 
-        val debugInfo = debugInfoProvider.get()
+        val eventOrTransactionId: EventOrTransactionId
+            get() = EventOrTransactionId.from(eventId = eventId, transactionId = transactionId)
+
+        // No need to be lazy here?
+        val messageShield: MessageShield? = messageShieldProvider(strict = false)
+
+        val debugInfo: TimelineItemDebugInfo
+            get() = timelineItemDebugInfoProvider()
     }
 
     @Immutable

@@ -9,9 +9,9 @@ package io.element.android.features.userprofile.shared.blockuser
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
-import io.element.android.features.userprofile.shared.UserProfileEvents
-import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 
 @Composable

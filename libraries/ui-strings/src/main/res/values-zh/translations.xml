@@ -281,13 +281,6 @@
   <string name="screen_room_details_pinned_events_row_title">"置顶消息"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
-  <string name="screen_room_member_details_block_alert_action">"封禁"</string>
-  <string name="screen_room_member_details_block_alert_description">"被封禁的用户无法给你发消息，并且他们的消息会被隐藏。你可以随时解封。"</string>
-  <string name="screen_room_member_details_block_user">"封禁用户"</string>
-  <string name="screen_room_member_details_title">"个人资料"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"解封"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"可以重新接收他们的消息。"</string>
-  <string name="screen_room_member_details_unblock_user">"解封用户"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"置顶消息 %1$s"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在加载消息…"</string>

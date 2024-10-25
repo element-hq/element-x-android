@@ -1,4 +1,4 @@
-import extensions.setupAnvil
+import extension.setupAnvil
 
 plugins {
     id("io.element.android-compose-library")
@@ -12,7 +12,7 @@ android {
 setupAnvil()
 
 dependencies {
-    api(projects.features.${ MODULE_NAME }.api)
+    api(projects.features.${MODULE_NAME}.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

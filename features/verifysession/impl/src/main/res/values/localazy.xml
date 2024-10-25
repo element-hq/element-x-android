@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Compare numbers"</string>
   <string name="screen_session_verification_complete_subtitle">"Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted."</string>
   <string name="screen_session_verification_enter_recovery_key">"Enter recovery key"</string>
+  <string name="screen_session_verification_failed_subtitle">"Either the request timed out, the request was denied, or there was a verification mismatch."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prove it’s you in order to access your encrypted message history."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open an existing session"</string>
   <string name="screen_session_verification_positive_button_canceled">"Retry verification"</string>
@@ -24,6 +25,10 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Waiting to match"</string>
   <string name="screen_session_verification_ready_subtitle">"Compare a unique set of emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Compare the unique emoji, ensuring they appear in the same order."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Signed in"</string>
+  <string name="screen_session_verification_request_footer">"Only continue if you initiated this verification."</string>
+  <string name="screen_session_verification_request_subtitle">"Verify the other device to keep your message history secure."</string>
+  <string name="screen_session_verification_request_title">"Verification requested"</string>
   <string name="screen_session_verification_they_dont_match">"They don’t match"</string>
   <string name="screen_session_verification_they_match">"They match"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accept the request to start the verification process in your other session to continue."</string>

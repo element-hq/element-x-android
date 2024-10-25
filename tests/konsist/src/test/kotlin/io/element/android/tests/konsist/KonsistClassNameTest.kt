@@ -9,6 +9,7 @@ package io.element.android.tests.konsist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bumble.appyx.core.node.Node
+import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withAnnotationNamed
@@ -44,19 +45,26 @@ class KonsistClassNameTest {
 
     @Test
     fun `Classes extending 'PreviewParameterProvider' name MUST end with 'Provider' and MUST contain provided class name`() {
-        Konsist.scopeFromProject()
+        Konsist.scopeFromProduction()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)
-            .assertTrue {
+            .also {
+                // Check that classes are actually found
+                assertThat(it.size).isGreaterThan(100)
+            }
+            .assertTrue { klass ->
                 // Cannot find a better way to get the type of the generic
-                val providedType = it.text
+                val providedType = klass.text
+                    .substringAfter("PreviewParameterProvider<")
                     .substringBefore(">")
-                    .substringAfter("<")
                     // Get the substring before the first '<' to remove the generic type
                     .substringBefore("<")
                     .removeSuffix("?")
                     .replace(".", "")
-                it.name.endsWith("Provider") && (it.name.contains("IconList") || it.name.contains(providedType))
+                val name = klass.name
+                name.endsWith("Provider") &&
+                    name.endsWith("PreviewProvider").not() &&
+                    name.contains(providedType)
             }
     }
 

@@ -7,6 +7,6 @@
 
 package io.element.android.libraries.dateformatter.api
 
-interface LastMessageTimestampFormatter {
+fun interface LastMessageTimestampFormatter {
     fun format(timestamp: Long?): String
 }

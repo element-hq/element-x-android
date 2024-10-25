@@ -226,14 +226,14 @@ fun TestScope.createVoiceMessagePresenter(
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
-    voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
+    voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, filename ->
         DefaultVoiceMessagePlayer(
             mediaPlayer = mediaPlayer,
             voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
             eventId = eventId,
             mediaSource = mediaSource,
             mimeType = mimeType,
-            body = body
+            filename = filename
         )
     },
     analyticsService = analyticsService,

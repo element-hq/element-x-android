@@ -40,7 +40,7 @@ class SecureBackupDisablePresenter @Inject constructor(
                 is SecureBackupDisableEvents.DisableBackup -> if (disableAction.value.isConfirming()) {
                     coroutineScope.disableBackup(disableAction)
                 } else {
-                    disableAction.value = AsyncAction.Confirming
+                    disableAction.value = AsyncAction.ConfirmingNoParams
                 }
                 SecureBackupDisableEvents.DismissDialogs -> {
                     disableAction.value = AsyncAction.Uninitialized

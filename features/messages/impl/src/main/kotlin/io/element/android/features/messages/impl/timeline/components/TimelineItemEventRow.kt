@@ -301,6 +301,8 @@ private fun TimelineItemEventRowContent(
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
+                        // Required for correct RTL layout
+                        start.linkTo(parent.start)
                     }
                     .padding(horizontal = 16.dp)
                     .zIndex(1f)
@@ -629,7 +631,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = isMine,
-                    content = aTimelineItemImageContent().copy(
+                    content = aTimelineItemImageContent(
                         aspectRatio = 2.5f
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,

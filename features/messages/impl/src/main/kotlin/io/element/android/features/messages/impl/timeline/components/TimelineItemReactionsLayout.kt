@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -192,7 +193,7 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
             )
         },
         reactions = {
-            io.element.android.features.messages.impl.timeline.aTimelineItemReactions(count = 18).reactions.forEach {
+            aTimelineItemReactions(count = 18).reactions.forEach {
                 MessagesReactionButton(
                     content = MessagesReactionsButtonContent.Reaction(
                         it

@@ -36,10 +36,11 @@ object RoomMemberMapper {
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =
         when (membershipState) {
-            RustMembershipState.BAN -> RoomMembershipState.BAN
-            RustMembershipState.INVITE -> RoomMembershipState.INVITE
-            RustMembershipState.JOIN -> RoomMembershipState.JOIN
-            RustMembershipState.KNOCK -> RoomMembershipState.KNOCK
-            RustMembershipState.LEAVE -> RoomMembershipState.LEAVE
+            RustMembershipState.Ban -> RoomMembershipState.BAN
+            RustMembershipState.Invite -> RoomMembershipState.INVITE
+            RustMembershipState.Join -> RoomMembershipState.JOIN
+            RustMembershipState.Knock -> RoomMembershipState.KNOCK
+            RustMembershipState.Leave -> RoomMembershipState.LEAVE
+            is RustMembershipState.Custom -> TODO()
         }
 }

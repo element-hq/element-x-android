@@ -6,4 +6,11 @@
   <string name="screen_dm_details_unblock_alert_action">"解除封鎖"</string>
   <string name="screen_dm_details_unblock_alert_description">"您將無法看到任何來自他們的訊息。"</string>
   <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
+  <string name="screen_room_member_details_block_alert_action">"封鎖"</string>
+  <string name="screen_room_member_details_block_alert_description">"被封鎖的使用者無法傳訊息給您，他們的訊息會被隱藏。您可以在任何時候解除封鎖。"</string>
+  <string name="screen_room_member_details_block_user">"封鎖使用者"</string>
+  <string name="screen_room_member_details_title">"個人檔案"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"解除封鎖"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"您將無法看到任何來自他們的訊息。"</string>
+  <string name="screen_room_member_details_unblock_user">"解除封鎖使用者"</string>
 </resources>

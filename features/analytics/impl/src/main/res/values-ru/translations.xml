@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_analytics_prompt_data_usage">"Мы не будем записывать или профилировать какие-либо персональные данные"</string>
-  <string name="screen_analytics_prompt_help_us_improve">"Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы."</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Предоставьте разработчикам анонимные данные об использовании, чтобы помочь им выявлять проблемы эффективнее."</string>
   <string name="screen_analytics_prompt_read_terms">"Вы можете ознакомиться со всеми нашими условиями %1$s."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"здесь"</string>
   <string name="screen_analytics_prompt_settings">"Вы можете отключить эту функцию в любое время"</string>

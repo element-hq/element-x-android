@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Bellen"</string>
   <string name="notification_channel_listening_for_events">"Wachten op gebeurtenissen"</string>
   <string name="notification_channel_noisy">"Luide meldingen"</string>
+  <string name="notification_channel_ringing_calls">"Overgaande oproepen"</string>
   <string name="notification_channel_silent">"Stille meldingen"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d bericht"</item>
@@ -13,8 +14,10 @@
     <item quantity="other">"%d meldingen"</item>
   </plurals>
   <string name="notification_fallback_content">"Melding"</string>
+  <string name="notification_incoming_call">"Inkomende oproep"</string>
   <string name="notification_inline_reply_failed">"** Verzenden is mislukt - open de kamer"</string>
   <string name="notification_invitation_action_join">"Deelnemen"</string>
+  <string name="notification_invitation_action_reject">"Weiger"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d uitnodiging"</item>
     <item quantity="other">"%d uitnodigingen"</item>

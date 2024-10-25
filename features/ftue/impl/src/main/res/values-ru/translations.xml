@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Вы можете изменить настройки позже."</string>
-  <string name="screen_notification_optin_title">"Разрешите уведомления и никогда не пропустите сообщение"</string>
+  <string name="screen_notification_optin_title">"Разрешите отправку уведомлений и ни одно сообщение не будет пропущено"</string>
   <string name="screen_welcome_bullet_1">"Звонки, опросы, поиск и многое другое будут добавлены позже в этом году."</string>
   <string name="screen_welcome_bullet_2">"История сообщений для зашифрованных комнат в этом обновлении будет недоступна."</string>
   <string name="screen_welcome_bullet_3">"Мы будем рады услышать ваше мнение, сообщите нам об этом через страницу настроек."</string>

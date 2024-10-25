@@ -286,13 +286,6 @@ Anledning:%1$s."</string>
   <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
-  <string name="screen_room_member_details_block_alert_action">"Blockera"</string>
-  <string name="screen_room_member_details_block_alert_description">"Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst."</string>
-  <string name="screen_room_member_details_block_user">"Blockera användare"</string>
-  <string name="screen_room_member_details_title">"Profil"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Avblockera"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
-  <string name="screen_room_member_details_unblock_user">"Avblockera användare"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Fästa meddelanden"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>

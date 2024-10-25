@@ -12,6 +12,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -38,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.R
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
@@ -72,54 +74,86 @@ internal fun RoomSummaryRow(
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (room.displayType) {
-        RoomSummaryDisplayType.PLACEHOLDER -> {
-            RoomSummaryPlaceholderRow(modifier = modifier)
-        }
-        RoomSummaryDisplayType.INVITE -> {
-            RoomSummaryScaffoldRow(
-                room = room,
-                onClick = onClick,
-                onLongClick = {
-                    Timber.d("Long click on invite room")
-                },
-                modifier = modifier
-            ) {
-                InviteNameAndIndicatorRow(name = room.name)
-                InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
-                if (!room.isDm && room.inviteSender != null) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    InviteSenderView(
-                        modifier = Modifier.fillMaxWidth(),
-                        inviteSender = room.inviteSender,
+    Box(modifier = modifier) {
+        when (room.displayType) {
+            RoomSummaryDisplayType.PLACEHOLDER -> {
+                RoomSummaryPlaceholderRow()
+            }
+            RoomSummaryDisplayType.INVITE -> {
+                RoomSummaryScaffoldRow(
+                    room = room,
+                    onClick = onClick,
+                    onLongClick = {
+                        Timber.d("Long click on invite room")
+                    },
+                ) {
+                    InviteNameAndIndicatorRow(name = room.name)
+                    InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
+                    if (!room.isDm && room.inviteSender != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        InviteSenderView(
+                            modifier = Modifier.fillMaxWidth(),
+                            inviteSender = room.inviteSender,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    InviteButtonsRow(
+                        onAcceptClick = {
+                            eventSink(RoomListEvents.AcceptInvite(room))
+                        },
+                        onDeclineClick = {
+                            eventSink(RoomListEvents.DeclineInvite(room))
+                        }
                     )
                 }
-                Spacer(modifier = Modifier.height(12.dp))
-                InviteButtonsRow(
-                    onAcceptClick = {
-                        eventSink(RoomListEvents.AcceptInvite(room))
-                    },
-                    onDeclineClick = {
-                        eventSink(RoomListEvents.DeclineInvite(room))
-                    }
-                )
             }
-        }
-        RoomSummaryDisplayType.ROOM -> {
-            RoomSummaryScaffoldRow(
-                room = room,
-                onClick = onClick,
-                onLongClick = {
-                    eventSink(RoomListEvents.ShowContextMenu(room))
-                },
-                modifier = modifier
-            ) {
-                NameAndTimestampRow(
-                    name = room.name,
-                    timestamp = room.timestamp,
-                    isHighlighted = room.isHighlighted
-                )
-                LastMessageAndIndicatorRow(room = room)
+            RoomSummaryDisplayType.ROOM -> {
+                RoomSummaryScaffoldRow(
+                    room = room,
+                    onClick = onClick,
+                    onLongClick = {
+                        eventSink(RoomListEvents.ShowContextMenu(room))
+                    },
+                ) {
+                    NameAndTimestampRow(
+                        name = room.name,
+                        timestamp = room.timestamp,
+                        isHighlighted = room.isHighlighted
+                    )
+                    LastMessageAndIndicatorRow(room = room)
+                }
+            }
+            RoomSummaryDisplayType.KNOCKED -> {
+                RoomSummaryScaffoldRow(
+                    room = room,
+                    onClick = onClick,
+                    onLongClick = {
+                        Timber.d("Long click on knocked room")
+                    },
+                ) {
+                    NameAndTimestampRow(
+                        name = room.name,
+                        timestamp = null,
+                        isHighlighted = room.isHighlighted
+                    )
+                    if (room.canonicalAlias != null) {
+                        Text(
+                            text = room.canonicalAlias.value,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = ElementTheme.typography.fontBodyMdRegular,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
+                    Text(
+                        text = stringResource(id = R.string.screen_join_room_knock_sent_title),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                }
             }
         }
     }

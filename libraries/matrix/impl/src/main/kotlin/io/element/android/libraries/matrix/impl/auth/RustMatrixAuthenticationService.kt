@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OidcPrompt
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -181,11 +182,14 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     private var pendingOidcAuthorizationData: OidcAuthorizationData? = null
 
-    override suspend fun getOidcUrl(): Result<OidcDetails> {
+    override suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails> {
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val oidcAuthenticationData = client.urlForOidcLogin(oidcConfigurationProvider.get())
+                val oidcAuthenticationData = client.urlForOidc(
+                    oidcConfiguration = oidcConfigurationProvider.get(),
+                    prompt = prompt.toRustPrompt(),
+                )
                 val url = oidcAuthenticationData.loginUrl()
                 pendingOidcAuthorizationData = oidcAuthenticationData
                 OidcDetails(url)

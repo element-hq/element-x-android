@@ -26,7 +26,9 @@ internal fun TimelineViewMessageShieldPreview() = ElementPreview {
     // For consistency, ensure that there is a message in the timeline (the last one) with an error.
     val messageShield = aCriticalShield()
     val items = listOf(
-        (timelineItems.first() as TimelineItem.Event).copy(messageShield = messageShield)
+        (timelineItems.first() as TimelineItem.Event).copy(
+            messageShieldProvider = { messageShield },
+        )
     ) + timelineItems.drop(1)
     CompositionLocalProvider(
         LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),

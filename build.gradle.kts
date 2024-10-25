@@ -49,7 +49,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.15")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.16")
     }
 
     // KtLint
