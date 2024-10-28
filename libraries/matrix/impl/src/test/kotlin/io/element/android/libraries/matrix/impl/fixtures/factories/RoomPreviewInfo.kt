@@ -9,16 +9,16 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import org.matrix.rustcomponents.sdk.RoomPreview
+import org.matrix.rustcomponents.sdk.JoinRule
+import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.RoomPreviewInfo
 
-internal fun aRustRoomPreview(
+internal fun aRustRoomPreviewInfo(
     canonicalAlias: String? = A_ROOM_ALIAS.value,
-    isJoined: Boolean = true,
-    isInvited: Boolean = true,
-    isPublic: Boolean = true,
-    canKnock: Boolean = true,
-): RoomPreview {
-    return RoomPreview(
+    membership: Membership? = Membership.JOINED,
+    joinRule: JoinRule = JoinRule.Public,
+): RoomPreviewInfo {
+    return RoomPreviewInfo(
         roomId = A_ROOM_ID.value,
         canonicalAlias = canonicalAlias,
         name = "name",
@@ -27,9 +27,7 @@ internal fun aRustRoomPreview(
         numJoinedMembers = 1u,
         roomType = null,
         isHistoryWorldReadable = true,
-        isJoined = isJoined,
-        isInvited = isInvited,
-        isPublic = isPublic,
-        canKnock = canKnock,
+        membership = membership,
+        joinRule = joinRule,
     )
 }
