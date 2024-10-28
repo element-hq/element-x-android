@@ -20,6 +20,7 @@ data class MapRealtimePresenterState(
     val eventSink: (MapRealtimeEvents) -> Unit,
     val isSharingLocation: Boolean,
     val mapType: MapType,
+    val vehicleLocations: List<MapRealtimeLocationDot>
 ) {
     sealed interface Dialog {
         data object None : Dialog
