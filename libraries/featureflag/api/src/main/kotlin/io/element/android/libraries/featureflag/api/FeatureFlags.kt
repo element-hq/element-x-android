@@ -9,7 +9,6 @@ package io.element.android.libraries.featureflag.api
 
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
@@ -125,18 +124,5 @@ enum class FeatureFlags(
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
         isFinished = false,
-    ),
-    IdentityPinningViolationNotifications(
-        key = "feature.identityPinningViolationNotifications",
-        title = "Identity pinning violation notifications",
-        description = null,
-        defaultValue = { buildMeta ->
-            when (buildMeta.buildType) {
-                // Do not enable this feature in release builds
-                BuildType.RELEASE -> false
-                else -> true
-            }
-        },
-        isFinished = false,
-    ),
+    )
 }
