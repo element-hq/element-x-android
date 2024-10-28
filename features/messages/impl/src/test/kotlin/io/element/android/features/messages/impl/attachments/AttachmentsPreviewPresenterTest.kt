@@ -17,6 +17,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
+import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
@@ -26,6 +27,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.mockk.mockk
@@ -120,8 +122,8 @@ class AttachmentsPreviewPresenterTest {
         room: MatrixRoom = FakeMatrixRoom()
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachment = Attachment.Media(localMedia, compressIfPossible = false),
-            mediaSender = MediaSender(mediaPreProcessor, room)
+            attachment = aMediaAttachment(localMedia),
+            mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore())
         )
     }
 }

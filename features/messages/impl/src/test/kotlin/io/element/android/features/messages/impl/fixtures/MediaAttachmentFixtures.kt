@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.fixtures
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 
-fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(
+fun aMediaAttachment(localMedia: LocalMedia) = Attachment.Media(
     localMedia = localMedia,
-    compressIfPossible = compressIfPossible,
 )
