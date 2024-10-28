@@ -34,6 +34,7 @@
   <string name="action_back">"Kembali"</string>
   <string name="action_call">"Panggil"</string>
   <string name="action_cancel">"Batal"</string>
+  <string name="action_cancel_for_now">"Batalkan untuk saat ini"</string>
   <string name="action_choose_photo">"Pilih foto"</string>
   <string name="action_clear">"Hapus"</string>
   <string name="action_close">"Tutup"</string>
@@ -78,6 +79,7 @@
   <string name="action_ok">"Oke"</string>
   <string name="action_open_settings">"Pengaturan"</string>
   <string name="action_open_with">"Buka dengan"</string>
+  <string name="action_pin">"Sematkan"</string>
   <string name="action_quick_reply">"Balas cepat"</string>
   <string name="action_quote">"Kutip"</string>
   <string name="action_react">"Bereaksi"</string>
@@ -88,6 +90,7 @@
   <string name="action_report_bug">"Laporkan kutu"</string>
   <string name="action_report_content">"Laporkan Konten"</string>
   <string name="action_reset">"Atur ulang"</string>
+  <string name="action_reset_identity">"Atur ulang identitas"</string>
   <string name="action_retry">"Coba lagi"</string>
   <string name="action_retry_decryption">"Coba dekripsi ulang"</string>
   <string name="action_save">"Simpan"</string>
@@ -107,6 +110,8 @@
   <string name="action_take_photo">"Ambil foto"</string>
   <string name="action_tap_for_options">"Ketuk untuk opsi"</string>
   <string name="action_try_again">"Coba lagi"</string>
+  <string name="action_unpin">"Lepaskan sematan"</string>
+  <string name="action_view_in_timeline">"Lihat di lini masa"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
   <string name="common_about">"Tentang"</string>
@@ -165,11 +170,13 @@ Alasan: %1$s."</string>
   <string name="common_no_results">"Tidak ada hasil"</string>
   <string name="common_no_room_name">"Tidak ada nama ruangan"</string>
   <string name="common_offline">"Luring"</string>
+  <string name="common_open_source_licenses">"Lisensi sumber terbuka"</string>
   <string name="common_or">"atau"</string>
   <string name="common_password">"Kata sandi"</string>
   <string name="common_people">"Orang"</string>
   <string name="common_permalink">"Tautan Permanen"</string>
   <string name="common_permission">"Perizinan"</string>
+  <string name="common_pinned">"Disematkan"</string>
   <string name="common_please_wait">"Mohon tunggu…"</string>
   <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri pemungutan suara ini?"</string>
   <string name="common_poll_summary">"Pemungutan suara: %1$s"</string>
@@ -251,6 +258,12 @@ Alasan: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s tidak memiliki izin untuk mengakses mikrofon. Aktifkan akses untuk merekam pesan suara."</string>
   <string name="error_some_messages_have_not_been_sent">"Beberapa pesan belum terkirim"</string>
   <string name="error_unknown">"Maaf, terjadi kesalahan"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini."</string>
+  <string name="event_shield_reason_previously_verified">"Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya."</string>
+  <string name="event_shield_reason_sent_in_clear">"Tidak dienkripsi."</string>
+  <string name="event_shield_reason_unknown_device">"Dienkripsi oleh perangkat yang tidak dikenal atau dihapus."</string>
+  <string name="event_shield_reason_unsigned_device">"Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya."</string>
+  <string name="event_shield_reason_unverified_identity">"Dienkripsi oleh pengguna yang tidak terverifikasi."</string>
   <string name="invite_friends_rich_title">"🔐️ Bergabunglah dengan saya di %1$s"</string>
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -258,8 +271,24 @@ Alasan: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Tekan pesan dan pilih “%1$s” untuk disertakan di sini."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Sematkan pesan penting agar mudah ditemukan"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d Pesan yang disematkan"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pesan yang disematkan"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Anda akan pergi ke akun %1$s Anda untuk mengatur ulang identitas Anda. Setelah itu Anda akan dibawa kembali ke aplikasi."</string>
+  <string name="screen_reset_identity_confirmation_title">"Tidak dapat mengonfirmasi? Buka akun Anda untuk mengatur ulang identitas Anda."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Kirim pesan saja"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s menggunakan satu atau beberapa perangkat yang belum diverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkan untuk saat ini dan mencoba lagi nanti setelah %2$s telah memverifikasi semua perangkat mereka."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Pesan Anda tidak terkirim karena %1$s belum memverifikasi semua perangkat"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pesan yang disematkan"</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Tidak dapat mengambil detail pengguna"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s dari %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Pesan yang disematkan"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Memuat pesan…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Lihat Semua"</string>
   <string name="screen_room_title">"Obrolan"</string>
   <string name="screen_share_location_title">"Bagikan lokasi"</string>
   <string name="screen_share_my_location_action">"Bagikan lokasi saya"</string>
@@ -267,6 +296,8 @@ Alasan: %1$s."</string>
   <string name="screen_share_open_google_maps">"Buka di Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Buka di OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Bagikan lokasi ini"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Pesan tidak terkirim karena identitas terverifikasi %1$s telah berubah."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Pesan tidak terkirim karena %1$s belum memverifikasi semua perangkat."</string>
   <string name="screen_view_location_title">"Lokasi"</string>
   <string name="settings_version_number">"Versi: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"id"</string>

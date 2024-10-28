@@ -16,6 +16,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
   <string name="screen_invites_empty_list">"Sem convites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>
+  <string name="screen_join_room_knock_sent_title">"Pedido de adesão enviado"</string>
   <string name="screen_migration_message">"Este processo só acontece uma única vez, obrigado por esperares."</string>
   <string name="screen_migration_title">"A configurar a tua conta…"</string>
   <string name="screen_roomlist_a11y_create_message">"Criar uma nova conversa ou sala"</string>

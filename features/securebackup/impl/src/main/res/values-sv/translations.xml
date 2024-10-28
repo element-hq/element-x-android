@@ -3,7 +3,7 @@
   <string name="screen_chat_backup_key_backup_action_disable">"Stäng av säkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Slå på säkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_description">"Säkerhetskopior ser till att du inte blir av med din meddelandehistorik. %1$s."</string>
-  <string name="screen_chat_backup_key_backup_title">"Säkerhetskopia"</string>
+  <string name="screen_chat_backup_key_backup_title">"Nyckellagring"</string>
   <string name="screen_chat_backup_recovery_action_change">"Byt återställningsnyckel"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Ange återställningsnyckel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Din chattsäkerhetskopia är för närvarande osynkroniserad."</string>

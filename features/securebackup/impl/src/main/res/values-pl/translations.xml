@@ -31,7 +31,7 @@
   <string name="screen_key_backup_disable_title">"Czy na pewno chcesz wyłączyć backup?"</string>
   <string name="screen_recovery_key_change_description">"Uzyskaj nowy klucz przywracania, jeśli straciłeś dostęp do obecnego. Po zmianie klucza przywracania stary nie będzie już działał."</string>
   <string name="screen_recovery_key_change_generate_key">"Generuj nowy klucz przywracania"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Upewnij się, że klucz przywracania będzie trzymany w bezpiecznym miejscu"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Upewnij się, że klucz przywracania możesz przechowywać w bezpiecznym miejscu"</string>
   <string name="screen_recovery_key_change_success">"Zmieniono klucz przywracania"</string>
   <string name="screen_recovery_key_change_title">"Zmienić klucz przywracania?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Utwórz nowy klucz przywracania"</string>
