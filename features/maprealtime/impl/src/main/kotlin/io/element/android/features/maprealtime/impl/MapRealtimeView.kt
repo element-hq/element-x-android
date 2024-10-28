@@ -104,7 +104,12 @@ fun MapRealtimeView(
                 accuracyColor = 0xFF2496F9.toInt(),
             ),
             uiSettings = uiSettings
-        ) {}
+        ) {
+            state.vehicleLocations.map { item ->
+                print(item)
+                LocationSymbol(item)
+            }
+        }
 
         Column(
             modifier = Modifier
