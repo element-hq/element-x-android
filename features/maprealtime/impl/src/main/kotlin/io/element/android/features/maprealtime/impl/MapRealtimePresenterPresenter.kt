@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.transit.realtime.GtfsRealtime.FeedMessage
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
@@ -40,7 +41,12 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 class MapRealtimePresenterPresenter @Inject constructor(
@@ -53,6 +59,10 @@ class MapRealtimePresenterPresenter @Inject constructor(
 ) : Presenter<MapRealtimePresenterState> {
 
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
+
+    // This is for demo purposes only. This should be replaced with actual vehicle locations.
+    private val _vehicleLocations = MutableStateFlow<List<MapRealtimeLocationDot>>(emptyList())
+    val vehicleLocations: StateFlow<List<MapRealtimeLocationDot>> = _vehicleLocations
 
     @Composable
     override fun present(): MapRealtimePresenterState {
@@ -74,13 +84,25 @@ class MapRealtimePresenterPresenter @Inject constructor(
             mutableStateOf(MapRealtimePresenterState.Dialog.None)
         }
 
+        val locations by vehicleLocations.collectAsState()
+
         val scope = rememberCoroutineScope()
 
         val mapTile by mapTypeStore.mapTileProviderFlow.collectAsState(initial = "")
+//
+//        LaunchedEffect(permissionsState.permissions) {
+//            if (permissionsState.isAnyGranted) {
+//                permissionDialog = MapRealtimePresenterState.Dialog.None
+//            }
+//        }
 
-        LaunchedEffect(permissionsState.permissions) {
+        LaunchedEffect(Unit) {
             if (permissionsState.isAnyGranted) {
                 permissionDialog = MapRealtimePresenterState.Dialog.None
+            }
+            // Start fetching GTFS-realtime data
+            scope.launch(Dispatchers.IO) {
+                startFetchingRealtimeLocations()
             }
         }
 
@@ -123,7 +145,47 @@ class MapRealtimePresenterPresenter @Inject constructor(
             roomName = roomName,
             isSharingLocation = false,
             mapType = mapTypes.find { it.mapKey == mapTile } ?: mapTypes[2],
+            vehicleLocations = locations,
         )
+    }
+
+    private suspend fun startFetchingRealtimeLocations() {
+        // Coroutine to periodically fetch and update the vehicle positions
+        while (true) {
+            try {
+                val feedUrl = URL("https://www.fairfaxcounty.gov/gtfsrt/vehicles") // Replace with your GTFS URL
+                val feed = FeedMessage.parseFrom(feedUrl.openStream())
+
+                val locations = feed.entityList.mapNotNull { entity ->
+                    entity.vehicle?.let { vehicle ->
+                        MapRealtimeLocationDot(
+                            userName = busIdToString(vehicle.vehicle.id.toInt()),
+                            location = Location(
+                                lat = vehicle.position.latitude.toDouble(),
+                                lon = vehicle.position.longitude.toDouble(),
+                                accuracy = 1.0.toFloat() // TODO (tb): fix this to use the actual accuracy
+                            )
+                        )
+
+                    }
+                }
+
+                _vehicleLocations.value = locations
+            } catch (e: Exception) {
+                e.printStackTrace() // Catch-all for any other exceptions
+            }
+            delay(5000) // Update interval, e.g., every 5 seconds
+        }
+    }
+
+    fun busIdToString(busId: Int): String {
+        // Map the bus ID to a string representation based on a mod and a base character
+        val baseChar = 'A'
+        val idValue = busId % 26  // Get a value between 0-25
+        val letter = baseChar + idValue  // Convert to a letter between 'A' and 'Z'
+        busId.toString().takeLast(2)  // Take last 2 digits as a suffix for uniqueness
+
+        return "$letter"
     }
 
     private fun CoroutineScope.setMapTileProvider(mapProvider: String) = launch {
