@@ -190,7 +190,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.8.2"
+posthog = "com.posthog:posthog-android:3.8.3"
 sentry = "io.sentry:sentry-android:7.16.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.27.0"
