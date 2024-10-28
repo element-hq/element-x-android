@@ -31,6 +31,5 @@ interface SessionPreferencesStore {
     suspend fun setCompressMedia(compress: Boolean)
     fun doesCompressMedia(): Flow<Boolean>
 
-
     suspend fun clear()
 }
