@@ -15,6 +15,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -33,7 +35,7 @@ class MediaSenderTest {
         val sender = aMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
 
         assertThat(preProcessor.processCallCount).isEqualTo(1)
     }
@@ -49,7 +51,7 @@ class MediaSenderTest {
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
         sendMediaResult.assertions().isCalledOnce()
     }
 
@@ -61,7 +63,7 @@ class MediaSenderTest {
         val sender = aMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -74,7 +76,7 @@ class MediaSenderTest {
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -88,7 +90,7 @@ class MediaSenderTest {
         val sender = aMediaSender(room = room)
         val sendJob = launch {
             val uri = Uri.parse("content://image.jpg")
-            sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
+            sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
         }
         // Wait until several internal tasks run and the file is being uploaded
         advanceTimeBy(3L)
@@ -109,8 +111,10 @@ class MediaSenderTest {
     private fun aMediaSender(
         preProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         room: MatrixRoom = FakeMatrixRoom(),
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
     ) = MediaSender(
-        preProcessor,
-        room,
+        preProcessor = preProcessor,
+        room = room,
+        sessionPreferencesStore = sessionPreferencesStore,
     )
 }

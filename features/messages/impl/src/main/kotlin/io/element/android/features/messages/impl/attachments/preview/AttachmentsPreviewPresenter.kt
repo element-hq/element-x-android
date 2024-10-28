@@ -96,7 +96,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         mediaSender.sendMedia(
             uri = mediaAttachment.localMedia.uri,
             mimeType = mediaAttachment.localMedia.info.mimeType,
-            compressIfPossible = mediaAttachment.compressIfPossible,
             progressCallback = progressCallback
         ).getOrThrow()
     }.fold(
