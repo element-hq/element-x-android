@@ -18,7 +18,7 @@
   <string name="screen_key_backup_disable_title">"¿Estás seguro de que quieres desactivar la copia de seguridad?"</string>
   <string name="screen_recovery_key_change_description">"Obtén una nueva clave de recuperación si has perdido la que tenías. Después de cambiar la clave de recuperación, la anterior dejará de funcionar."</string>
   <string name="screen_recovery_key_change_generate_key">"Generar una nueva clave de recuperación"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Asegúrate de poder guardar su clave de recuperación en un lugar seguro"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Asegúrate de que puedes guardar tu clave de recuperación en algún lugar seguro"</string>
   <string name="screen_recovery_key_change_success">"Clave de recuperación cambiada"</string>
   <string name="screen_recovery_key_change_title">"¿Cambiar la clave de recuperación?"</string>
   <string name="screen_recovery_key_confirm_description">"Introduce tu clave de recuperación para confirmar el acceso a la copia de seguridad de tú chat."</string>

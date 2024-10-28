@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Απενεργοποίηση αντιγράφων ασφαλείας"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Ενεργοποίηση αντιγράφων ασφαλείας"</string>
-  <string name="screen_chat_backup_key_backup_description">"Η δημιουργία αντιγράφων ασφαλείας διασφαλίζει ότι δεν θα χάσεις το ιστορικό μηνυμάτων σου. %1$s."</string>
-  <string name="screen_chat_backup_key_backup_title">"Αντίγραφο ασφαλείας"</string>
+  <string name="screen_chat_backup_key_backup_description">"Αποθήκευσε την κρυπτογραφική σου ταυτότητα και τα κλειδιά μηνυμάτων με ασφάλεια στον διακομιστή. Αυτό θα σου επιτρέψει να δεις το ιστορικό μηνυμάτων σου σε οποιεσδήποτε νέες συσκευές. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_title">"Χώρος αποθήκευσης κλειδιού"</string>
   <string name="screen_chat_backup_recovery_action_change">"Αλλαγή κλειδιού ανάκτησης"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Εισαγωγή κλειδιού ανάκτησης"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Το αντίγραφο ασφαλείας της συνομιλίας σου δεν είναι συγχρονισμένο αυτήν τη στιγμή."</string>
@@ -31,7 +31,7 @@
   <string name="screen_key_backup_disable_title">"Σίγουρα θες να απενεργοποιήσεις τα αντίγραφα ασφαλείας;"</string>
   <string name="screen_recovery_key_change_description">"Απόκτησε ένα νέο κλειδί ανάκτησης εάν έχεις χάσει το υπάρχον. Αφού αλλάξεις το κλειδί ανάκτησης, το παλιό δεν θα λειτουργεί πλέον."</string>
   <string name="screen_recovery_key_change_generate_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Βεβαιώσου ότι μπορείς να αποθηκεύσεις το κλειδί ανάκτησης σε ασφαλές μέρος"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Μην το μοιραστείς με κανέναν!"</string>
   <string name="screen_recovery_key_change_success">"Το κλειδί ανάκτησης άλλαξε"</string>
   <string name="screen_recovery_key_change_title">"Αλλαγή κλειδιού ανάκτησης;"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
@@ -46,14 +46,14 @@
   <string name="screen_recovery_key_copied_to_clipboard">"Αντιγράφηκε το κλειδί ανάκτησης"</string>
   <string name="screen_recovery_key_generating_key">"Δημιουργία…"</string>
   <string name="screen_recovery_key_save_action">"Αποθήκευση κλειδιού ανάκτησης"</string>
-  <string name="screen_recovery_key_save_description">"Γράψε το κλειδί ανάκτησης κάπου ασφαλές ή αποθήκευσέ το σε έναν διαχειριστή κωδικών πρόσβασης."</string>
+  <string name="screen_recovery_key_save_description">"Γράψε αυτό το κλειδί ανάκτησης κάπου ασφαλές, όπως έναν διαχειριστή κωδικών πρόσβασης, μια κρυπτογραφημένη σημείωση ή ένα φυσικό χρηματοκιβώτιο."</string>
   <string name="screen_recovery_key_save_key_description">"Πάτα για να αντιγράψεις το κλειδί ανάκτησης"</string>
   <string name="screen_recovery_key_save_title">"Αποθήκευσε το κλειδί ανάκτησης"</string>
   <string name="screen_recovery_key_setup_confirmation_description">"Δεν θα μπορείς να αποκτήσεις πρόσβαση στο νέο κλειδί ανάκτησης μετά από αυτό το βήμα."</string>
   <string name="screen_recovery_key_setup_confirmation_title">"Έχεις αποθηκεύσει το κλειδί ανάκτησης;"</string>
   <string name="screen_recovery_key_setup_description">"Το αντίγραφο ασφαλείας της συνομιλίας σου προστατεύεται από ένα κλειδί ανάκτησης. Εάν χρειαστείς ένα νέο κλειδί ανάκτησης μετά την εγκατάσταση, μπορείς να δημιουργήσεις ξανά επιλέγοντας «Αλλαγή κλειδιού ανάκτησης»."</string>
   <string name="screen_recovery_key_setup_generate_key">"Δημιουργία κλειδιού ανάκτησης"</string>
-  <string name="screen_recovery_key_setup_generate_key_description">"Βεβαιώσου ότι μπορείς να αποθηκεύσεις το κλειδί ανάκτησης κάπου ασφαλές"</string>
+  <string name="screen_recovery_key_setup_generate_key_description">"Μην το μοιραστείς με κανέναν!"</string>
   <string name="screen_recovery_key_setup_success">"Επιτυχής ρύθμιση ανάκτησης"</string>
   <string name="screen_recovery_key_setup_title">"Ρύθμιση ανάκτησης"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ναι, επαναφορά τώρα"</string>

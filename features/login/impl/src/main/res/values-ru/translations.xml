@@ -22,7 +22,7 @@
   <string name="screen_change_server_subtitle">"Какой адрес у вашего сервера?"</string>
   <string name="screen_change_server_title">"Выберите свой сервер"</string>
   <string name="screen_create_account_title">"Создать учетную запись"</string>
-  <string name="screen_login_error_deactivated_account">"Данная учетная запись была деактивирована."</string>
+  <string name="screen_login_error_deactivated_account">"Данная учётная запись была отключена."</string>
   <string name="screen_login_error_invalid_credentials">"Неверное имя пользователя и/или пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Это не корректный идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля."</string>
