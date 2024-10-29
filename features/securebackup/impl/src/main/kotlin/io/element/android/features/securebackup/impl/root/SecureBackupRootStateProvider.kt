@@ -8,6 +8,7 @@
 package io.element.android.features.securebackup.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -22,28 +23,47 @@ open class SecureBackupRootStateProvider : PreviewParameterProvider<SecureBackup
             aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = AsyncData.Failure(Exception("An error"))),
             aSecureBackupRootState(backupState = BackupState.WAITING_FOR_SYNC),
             aSecureBackupRootState(backupState = BackupState.CREATING),
+            aSecureBackupRootState(
+                backupState = BackupState.CREATING,
+                enableAction = AsyncAction.Failure(Exception("Error")),
+            ),
+            aSecureBackupRootState(backupState = BackupState.ENABLING),
             aSecureBackupRootState(backupState = BackupState.RESUMING),
             aSecureBackupRootState(backupState = BackupState.DOWNLOADING),
             aSecureBackupRootState(backupState = BackupState.DISABLING),
             aSecureBackupRootState(backupState = BackupState.ENABLED),
-            aSecureBackupRootState(recoveryState = RecoveryState.UNKNOWN),
-            aSecureBackupRootState(recoveryState = RecoveryState.ENABLED),
-            aSecureBackupRootState(recoveryState = RecoveryState.DISABLED),
-            aSecureBackupRootState(recoveryState = RecoveryState.INCOMPLETE),
-            // Add other states here
+            aSecureBackupRootState(backupState = BackupState.ENABLED, recoveryState = RecoveryState.UNKNOWN),
+            aSecureBackupRootState(backupState = BackupState.ENABLED, recoveryState = RecoveryState.ENABLED),
+            aSecureBackupRootState(backupState = BackupState.ENABLED, recoveryState = RecoveryState.DISABLED),
+            aSecureBackupRootState(backupState = BackupState.ENABLED, recoveryState = RecoveryState.INCOMPLETE),
+            aSecureBackupRootState(
+                backupState = BackupState.UNKNOWN,
+                doesBackupExistOnServer = AsyncData.Success(false),
+                recoveryState = RecoveryState.ENABLED,
+            ),
+            aSecureBackupRootState(
+                backupState = BackupState.UNKNOWN,
+                doesBackupExistOnServer = AsyncData.Success(false),
+                recoveryState = RecoveryState.ENABLED,
+                displayKeyStorageDisabledError = true,
+            ),
         )
 }
 
 fun aSecureBackupRootState(
+    enableAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     backupState: BackupState = BackupState.UNKNOWN,
     doesBackupExistOnServer: AsyncData<Boolean> = AsyncData.Uninitialized,
     recoveryState: RecoveryState = RecoveryState.UNKNOWN,
+    displayKeyStorageDisabledError: Boolean = false,
     snackbarMessage: SnackbarMessage? = null,
 ) = SecureBackupRootState(
+    enableAction = enableAction,
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
     appName = "Element",
+    displayKeyStorageDisabledError = displayKeyStorageDisabledError,
     snackbarMessage = snackbarMessage,
     eventSink = {},
 )
