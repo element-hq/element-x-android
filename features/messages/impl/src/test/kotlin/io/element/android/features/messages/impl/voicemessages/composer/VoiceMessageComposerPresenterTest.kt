@@ -30,6 +30,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.aPermissionsState
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -61,7 +62,7 @@ class VoiceMessageComposerPresenterTest {
         sendMediaResult = sendMediaResult
     )
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
-    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom)
+    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom, InMemorySessionPreferencesStore())
     private val messageComposerContext = FakeMessageComposerContext()
 
     companion object {
