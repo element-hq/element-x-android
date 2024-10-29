@@ -19,6 +19,7 @@ data class ConfigureRoomState(
     val avatarActions: ImmutableList<AvatarAction>,
     val createRoomAction: AsyncAction<RoomId>,
     val cameraPermissionState: PermissionsState,
+    val homeserverName: String,
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {
     val isCreateButtonEnabled: Boolean = config.roomName.isNullOrEmpty().not()

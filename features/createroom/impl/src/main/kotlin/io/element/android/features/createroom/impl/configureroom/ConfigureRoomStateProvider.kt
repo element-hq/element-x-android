@@ -38,5 +38,6 @@ fun aConfigureRoomState() = ConfigureRoomState(
     avatarActions = persistentListOf(),
     createRoomAction = AsyncAction.Uninitialized,
     cameraPermissionState = aPermissionsState(showDialog = false),
+    homeserverName = "matrix.org",
     eventSink = { },
 )

@@ -55,6 +55,7 @@ class ConfigureRoomPresenter @Inject constructor(
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig = dataStore.createRoomConfig.collectAsState(CreateRoomConfig())
+        val homeserverName = remember { matrixClient.userIdServerName() }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -120,6 +121,7 @@ class ConfigureRoomPresenter @Inject constructor(
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             cameraPermissionState = cameraPermissionState,
+            homeserverName = homeserverName,
             eventSink = ::handleEvents,
         )
     }

@@ -141,6 +141,7 @@ fun ConfigureRoomView(
                 RoomAddress(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     address = state.config.roomVisibility.roomAddress,
+                    homeserverName = state.homeserverName,
                     onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
                 )
             }
@@ -311,6 +312,7 @@ private fun RoomAccessOptions(
 @Composable
 private fun RoomAddress(
     address: RoomAddress,
+    homeserverName: String,
     onAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -340,7 +342,7 @@ private fun RoomAddress(
             },
             trailingIcon = {
                 Text(
-                    text = ":myserver.com",
+                    text = homeserverName,
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textSecondary,
                     modifier = Modifier.padding(end = 16.dp)
