@@ -120,10 +120,10 @@ fun VerifySelfSessionView(
                 )
             },
             header = {
-                HeaderContent(step = step)
+                VerifySelfSessionHeader(step = step)
             },
             footer = {
-                BottomMenu(
+                VerifySelfSessionBottomMenu(
                     screenState = state,
                     onCancelClick = ::cancelOrResetFlow,
                     onEnterRecoveryKey = onEnterRecoveryKey,
@@ -132,7 +132,7 @@ fun VerifySelfSessionView(
                 )
             }
         ) {
-            Content(
+            VerifySelfSessionContent(
                 flowState = step,
                 onLearnMoreClick = onLearnMoreClick,
             )
@@ -156,9 +156,9 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-private fun HeaderContent(step: Step) {
+private fun VerifySelfSessionHeader(step: Step) {
     val iconStyle = when (step) {
-        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        Step.Loading -> error("Should not happen")
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         Step.Canceled -> BigIcon.Style.AlertSolid
         Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
@@ -166,7 +166,7 @@ private fun HeaderContent(step: Step) {
         is Step.Skipped -> return
     }
     val titleTextId = when (step) {
-        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        Step.Loading -> error("Should not happen")
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
         Step.Canceled -> CommonStrings.common_verification_cancelled
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
@@ -178,7 +178,7 @@ private fun HeaderContent(step: Step) {
         is Step.Skipped -> return
     }
     val subtitleTextId = when (step) {
-        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        Step.Loading -> error("Should not happen")
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
         Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
@@ -198,12 +198,12 @@ private fun HeaderContent(step: Step) {
 }
 
 @Composable
-private fun Content(
+private fun VerifySelfSessionContent(
     flowState: Step,
     onLearnMoreClick: () -> Unit,
 ) {
     when (flowState) {
-        is VerifySelfSessionState.Step.Initial -> {
+        is Step.Initial -> {
             ContentInitial(onLearnMoreClick)
         }
         is Step.Verifying -> {
@@ -232,7 +232,7 @@ private fun ContentInitial(
 }
 
 @Composable
-private fun BottomMenu(
+private fun VerifySelfSessionBottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
@@ -245,7 +245,7 @@ private fun BottomMenu(
     val isVerifying = (verificationViewState as? Step.Verifying)?.state is AsyncData.Loading<Unit>
 
     when (verificationViewState) {
-        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        Step.Loading -> error("Should not happen")
         is Step.Initial -> {
             VerificationBottomMenu {
                 if (verificationViewState.isLastDevice) {

@@ -63,7 +63,7 @@ fun IncomingVerificationView(
             )
         },
         header = {
-            HeaderContent(step = step)
+            IncomingVerificationHeader(step = step)
         },
         footer = {
             IncomingVerificationBottomMenu(
@@ -71,14 +71,14 @@ fun IncomingVerificationView(
             )
         }
     ) {
-        Content(
+        IncomingVerificationContent(
             step = step,
         )
     }
 }
 
 @Composable
-private fun HeaderContent(step: Step) {
+private fun IncomingVerificationHeader(step: Step) {
     val iconStyle = when (step) {
         Step.Canceled,
         is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
@@ -114,7 +114,7 @@ private fun HeaderContent(step: Step) {
 }
 
 @Composable
-private fun Content(
+private fun IncomingVerificationContent(
     step: Step,
 ) {
     when (step) {
