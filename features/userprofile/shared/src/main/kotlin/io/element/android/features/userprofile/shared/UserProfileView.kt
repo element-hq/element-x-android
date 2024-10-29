@@ -106,7 +106,7 @@ fun UserProfileView(
 private fun VerifyUserSection(state: UserProfileState) {
     if (state.isVerified.dataOrNull() == false) {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_member_details_verify_button_title, state.userName ?: state.userId)) },
+            headlineContent = { Text(stringResource(CommonStrings.common_verify_identity)) },
             supportingContent = { Text(stringResource(R.string.screen_room_member_details_verify_button_subtitle)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
             enabled = false,
