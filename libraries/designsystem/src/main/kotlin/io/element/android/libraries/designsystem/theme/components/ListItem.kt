@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
  * @param trailingContent The content to be displayed after the headline content.
  * @param style The style to use for the list item. This may change the color and text styles of the contents. [ListItemStyle.Default] is used by default.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param alwaysClickable Whether the list item should always be clickable, even when disabled.
  * @param onClick The callback to be called when the list item is clicked.
  */
 @Suppress("LongParameterList")
@@ -54,6 +55,7 @@ fun ListItem(
     trailingContent: ListItemContent? = null,
     style: ListItemStyle = ListItemStyle.Default,
     enabled: Boolean = true,
+    alwaysClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
     val colors = ListItemDefaults.colors(
@@ -74,6 +76,7 @@ fun ListItem(
         trailingContent = trailingContent,
         colors = colors,
         enabled = enabled,
+        alwaysClickable = alwaysClickable,
         onClick = onClick,
     )
 }
@@ -87,6 +90,7 @@ fun ListItem(
  * @param leadingContent The content to be displayed before the headline content.
  * @param trailingContent The content to be displayed after the headline content.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param alwaysClickable Whether the list item should always be clickable, even when disabled.
  * @param onClick The callback to be called when the list item is clicked.
  */
 @Suppress("LongParameterList")
@@ -99,6 +103,7 @@ fun ListItem(
     leadingContent: ListItemContent? = null,
     trailingContent: ListItemContent? = null,
     enabled: Boolean = true,
+    alwaysClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
     // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
@@ -149,7 +154,7 @@ fun ListItem(
         headlineContent = decoratedHeadlineContent,
         modifier = if (onClick != null) {
             Modifier
-                .clickable(enabled = enabled, onClick = onClick)
+                .clickable(enabled = enabled || alwaysClickable, onClick = onClick)
                 .then(modifier)
         } else {
             modifier
