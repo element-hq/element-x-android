@@ -5,12 +5,14 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.verifysession.impl.R
+import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -36,7 +38,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled,
+                step = VerifySelfSessionState.Step.Canceled,
                 eventSink = eventsRecorder
             ),
         )
@@ -49,7 +51,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse,
+                step = VerifySelfSessionState.Step.AwaitingOtherDeviceResponse,
                 eventSink = eventsRecorder
             ),
         )
@@ -62,7 +64,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready,
+                step = VerifySelfSessionState.Step.Ready,
                 eventSink = eventsRecorder
             ),
         )
@@ -75,7 +77,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(
+                step = VerifySelfSessionState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -91,7 +93,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(
+                step = VerifySelfSessionState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Loading(),
                 ),
@@ -107,7 +109,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
+                step = VerifySelfSessionState.Step.Completed,
                 eventSink = eventsRecorder
             ),
         )
@@ -121,7 +123,7 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
+                    step = VerifySelfSessionState.Step.Completed,
                     eventSink = eventsRecorder
                 ),
                 onFinished = callback,
@@ -137,7 +139,7 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
+                    step = VerifySelfSessionState.Step.Initial(true),
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = callback,
@@ -153,7 +155,7 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
+                    step = VerifySelfSessionState.Step.Initial(true),
                     eventSink = eventsRecorder
                 ),
                 onLearnMoreClick = callback,
@@ -167,7 +169,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(
+                step = VerifySelfSessionState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -183,7 +185,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(
+                step = VerifySelfSessionState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -199,7 +201,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true),
+                step = VerifySelfSessionState.Step.Initial(canEnterRecoveryKey = true),
                 displaySkipButton = true,
                 eventSink = eventsRecorder
             ),
@@ -213,7 +215,7 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Skipped,
+                    step = VerifySelfSessionState.Step.Skipped,
                     displaySkipButton = true,
                     eventSink = EnsureNeverCalledWithParam(),
                 ),
