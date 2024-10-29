@@ -24,6 +24,7 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Αναμονή για αντιστοίχιση"</string>
   <string name="screen_session_verification_ready_subtitle">"Σύγκρινε ένα μοναδικό σύνολο emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Σύγκρινε τα μοναδικά emoji και σιγουρέψου ότι εμφανίζονται με την ίδια σειρά."</string>
+  <string name="screen_session_verification_request_title">"Ζητήθηκε επαλήθευση"</string>
   <string name="screen_session_verification_they_dont_match">"Δεν ταιριάζουν"</string>
   <string name="screen_session_verification_they_match">"Ταιριάζουν"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις."</string>

@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Ξέχασες τον κωδικό πρόσβασης;"</string>
   <string name="action_forward">"Προώθηση"</string>
   <string name="action_go_back">"Πήγαινε πίσω"</string>
+  <string name="action_ignore">"Παράβλεψη"</string>
   <string name="action_invite">"Πρόσκληση"</string>
   <string name="action_invite_friends">"Πρόσκληση ατόμων"</string>
   <string name="action_invite_friends_to_app">"Πρόσκληση ατόμων στο %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Σκοτεινό"</string>
   <string name="common_decryption_error">"Σφάλμα αποκρυπτογράφησης"</string>
   <string name="common_developer_options">"Επιλογές προγραμματιστή"</string>
+  <string name="common_device_id">"ID συσκευής"</string>
   <string name="common_direct_chat">"Άμεση συνομιλία"</string>
   <string name="common_do_not_show_this_again">"Να μην εμφανιστεί ξανά"</string>
   <string name="common_edited_suffix">"(επεξεργάστηκε)"</string>
@@ -288,7 +290,6 @@
   <string name="screen_create_room_access_section_header">"Πρόσβαση Δωματίου"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
-  <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>

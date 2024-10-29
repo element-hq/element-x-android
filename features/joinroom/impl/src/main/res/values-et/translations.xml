@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Tühista liitumispalve"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Jah, tühista"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Kas sa oled kindel, et soovid tühistada oma palve jututoaga liitumiseks?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Tühista liitumispalve"</string>
   <string name="screen_join_room_join_action">"Liitu jututoaga"</string>
   <string name="screen_join_room_knock_action">"Liitumiseks koputa jututoa uksele"</string>
+  <string name="screen_join_room_knock_message_description">"Selgitus (kui soovid lisada)"</string>
+  <string name="screen_join_room_knock_sent_description">"Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks."</string>
+  <string name="screen_join_room_knock_sent_title">"Liitumispalve on saadetud"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s veel ei toeta kogukondadega liitumise ja kasutamise võimalust. Vajadusel saad seda teha veebiliidese vahendusel."</string>
   <string name="screen_join_room_space_not_supported_title">"Kogukonnad pole veel toetatud"</string>
   <string name="screen_join_room_subtitle_knock">"Klõpsi allolevat nuppu ja jututoa haldaja saab asjakohase teate. Sa saad liituda, kui haldaja sinu soovi heaks kiidab."</string>

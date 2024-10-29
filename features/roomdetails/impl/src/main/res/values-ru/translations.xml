@@ -99,7 +99,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"О всех сообщениях"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
-  <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомлять меня"</string>
   <string name="screen_room_roles_and_permissions_admins">"Администраторы"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Изменить мою роль"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Понизить до участника"</string>

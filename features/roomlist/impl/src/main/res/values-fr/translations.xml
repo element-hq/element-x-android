@@ -16,6 +16,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Refuser l’invitation"</string>
   <string name="screen_invites_empty_list">"Aucune invitation"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vous a invité(e)"</string>
+  <string name="screen_join_room_knock_sent_title">"Demande de rejoindre le salon envoyée"</string>
   <string name="screen_migration_message">"Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants."</string>
   <string name="screen_migration_title">"Configuration de votre compte."</string>
   <string name="screen_roomlist_a11y_create_message">"Créer une nouvelle discussion ou un nouveau salon"</string>

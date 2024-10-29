@@ -42,7 +42,7 @@
   <string name="action_choose_photo">"Выбрать фото"</string>
   <string name="action_clear">"Очистить"</string>
   <string name="action_close">"Закрыть"</string>
-  <string name="action_complete_verification">"Полная проверка"</string>
+  <string name="action_complete_verification">"Завершите подтверждение"</string>
   <string name="action_confirm">"Подтвердить"</string>
   <string name="action_confirm_password">"Подтвердите пароль"</string>
   <string name="action_continue">"Продолжить"</string>
@@ -51,7 +51,7 @@
   <string name="action_copy_link_to_message">"Скопировать ссылку в сообщение"</string>
   <string name="action_create">"Создать"</string>
   <string name="action_create_a_room">"Создать комнату"</string>
-  <string name="action_deactivate">"Деактивировать"</string>
+  <string name="action_deactivate">"Отключить"</string>
   <string name="action_deactivate_account">"Отключить учётную запись"</string>
   <string name="action_decline">"Отклонить"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
@@ -78,7 +78,7 @@
   <string name="action_leave_conversation">"Покинуть беседу"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
   <string name="action_load_more">"Загрузить еще"</string>
-  <string name="action_manage_account">"Настройки аккаунта"</string>
+  <string name="action_manage_account">"Настройки учетной записи"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
   <string name="action_message">"Сообщение"</string>
   <string name="action_next">"Далее"</string>
@@ -147,6 +147,7 @@
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
+  <string name="common_encryption">"Шифрование"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
@@ -160,6 +161,7 @@
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>
+  <string name="common_frequently_used">"Часто используемые"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Изображения"</string>
   <string name="common_in_reply_to">"В ответ на %1$s"</string>
@@ -186,7 +188,7 @@
   <string name="common_open_source_licenses">"Лицензии с открытым исходным кодом"</string>
   <string name="common_or">"или"</string>
   <string name="common_password">"Пароль"</string>
-  <string name="common_people">"Люди"</string>
+  <string name="common_people">"Пользователи"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
   <string name="common_pinned">"Закрепленный"</string>
@@ -203,9 +205,7 @@
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
-  <string name="common_recovery_key">
-    <b>"Ключ восстановления"</b>
-  </string>
+  <string name="common_recovery_key">"Ключ восстановления"</string>
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
@@ -244,15 +244,17 @@
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"О чем эта комната?"</string>
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Отправлено с незащищенного устройства"</string>
   <string name="common_unable_to_decrypt_no_access">"Вы не имеете доступа к этому сообщению"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Подтвержденная личность отправителя изменилась"</string>
   <string name="common_unable_to_invite_message">"Не удалось отправить приглашения одному или нескольким пользователям."</string>
   <string name="common_unable_to_invite_title">"Не удалось отправить приглашение(я)"</string>
   <string name="common_unlock">"Разблокировать"</string>
   <string name="common_unmute">"Вкл. звук"</string>
   <string name="common_unsupported_event">"Неподдерживаемое событие"</string>
   <string name="common_username">"Имя пользователя"</string>
-  <string name="common_verification_cancelled">"Проверка отменена"</string>
-  <string name="common_verification_complete">"Проверка завершена"</string>
+  <string name="common_verification_cancelled">"Подтверждение отменено"</string>
+  <string name="common_verification_complete">"Подтверждение завершено"</string>
   <string name="common_verification_failed">"Сбой проверки"</string>
   <string name="common_verified">"Проверено"</string>
   <string name="common_verify_device">"Подтверждение устройства"</string>
@@ -297,13 +299,9 @@
   <string name="screen_create_room_access_section_header">"Доступ в комнату"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос."</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Попросить присоединиться"</string>
-  <string name="screen_join_room_cancel_knock_action">"Отменить запрос"</string>
-  <string name="screen_join_room_cancel_knock_alert_confirmation">"Да, отменить"</string>
-  <string name="screen_join_room_cancel_knock_alert_description">"Вы действительно хотите отменить заявку на вступление в эту комнату?"</string>
-  <string name="screen_join_room_cancel_knock_alert_title">"Отменить запрос на присоединение"</string>
-  <string name="screen_join_room_knock_message_description">"Сообщение (опционально)"</string>
-  <string name="screen_join_room_knock_sent_description">"Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят."</string>
-  <string name="screen_join_room_knock_sent_title">"Запрос на присоединение отправлен"</string>
+  <string name="screen_create_room_room_address_section_footer">"Чтобы эта комната была видна в каталоге общедоступных, вам необходим ее адрес"</string>
+  <string name="screen_create_room_room_address_section_title">"Адрес комнаты"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Видимость комнаты"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
@@ -317,7 +315,7 @@
   <string name="screen_pinned_timeline_screen_title_empty">"Закрепленные сообщения"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Вы собираетесь перейти в свою учетную запись %1$s, чтобы сбросить идентификацию. После этого вы вернетесь в приложение."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свою учетную запись, чтобы сбросить свою идентификацию."</string>
-  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Отозвать верификацию и отправить"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Отозвать статус и отправить"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете отозвать свою верификацию и отправить это сообщение в любом случае или вы можете отменить ее сейчас и повторить попытку позже после повторной верификации %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что изменилась подтвержденная личность %1$s"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Отправь сообщение в любом случае"</string>
@@ -333,6 +331,7 @@
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
   <string name="screen_room_title">"Чат"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

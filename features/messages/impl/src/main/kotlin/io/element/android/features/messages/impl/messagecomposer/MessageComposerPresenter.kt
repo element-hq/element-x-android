@@ -169,7 +169,7 @@ class MessageComposerPresenter @Inject constructor(
             handlePickedMedia(attachmentsState, uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(attachmentsState, uri, compressIfPossible = false)
+            handlePickedMedia(attachmentsState, uri)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             handlePickedMedia(attachmentsState, uri, MimeTypes.IMAGE_JPEG)
@@ -294,7 +294,6 @@ class MessageComposerPresenter @Inject constructor(
                             name = null,
                             formattedFileSize = null
                         ),
-                        compressIfPossible = true
                     ),
                     attachmentState = attachmentsState,
                 )
@@ -493,7 +492,6 @@ class MessageComposerPresenter @Inject constructor(
         attachmentsState: MutableState<AttachmentsState>,
         uri: Uri?,
         mimeType: String? = null,
-        compressIfPossible: Boolean = true,
     ) {
         if (uri == null) {
             attachmentsState.value = AttachmentsState.None
@@ -505,7 +503,7 @@ class MessageComposerPresenter @Inject constructor(
             name = null,
             formattedFileSize = null
         )
-        val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
+        val mediaAttachment = Attachment.Media(localMedia)
         val isPreviewable = when {
             MimeTypes.isImage(localMedia.info.mimeType) -> true
             MimeTypes.isVideo(localMedia.info.mimeType) -> true
@@ -535,7 +533,6 @@ class MessageComposerPresenter @Inject constructor(
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            compressIfPossible = false,
             progressCallback = progressCallback
         ).getOrThrow()
     }

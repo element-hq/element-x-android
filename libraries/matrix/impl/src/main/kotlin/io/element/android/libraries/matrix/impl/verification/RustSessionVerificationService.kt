@@ -35,6 +35,7 @@ import org.matrix.rustcomponents.sdk.RecoveryState
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
+import org.matrix.rustcomponents.sdk.SessionVerificationRequestDetails
 import org.matrix.rustcomponents.sdk.VerificationState
 import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
@@ -150,7 +151,7 @@ class RustSessionVerificationService(
             // It also sometimes unexpectedly fails to report the session as verified, so we have to handle that possibility and fail if needed
             runCatching {
                 withTimeout(30.seconds) {
-                    while (!verificationController.isVerified()) {
+                    while (encryptionService.verificationState() != VerificationState.VERIFIED) {
                         delay(100)
                     }
                 }
@@ -174,6 +175,10 @@ class RustSessionVerificationService(
     // When the actual SAS verification starts
     override fun didStartSasVerification() {
         _verificationFlowState.value = VerificationFlowState.StartedSasVerification
+    }
+
+    override fun didReceiveVerificationRequest(details: SessionVerificationRequestDetails) {
+        // TODO
     }
 
     // end-region
@@ -227,7 +232,7 @@ class RustSessionVerificationService(
             Timber.d("Updating verification status: flow is pending or was finished some time ago")
             runCatching {
                 initVerificationControllerIfNeeded()
-                _sessionVerifiedStatus.value = if (verificationController.isVerified()) {
+                _sessionVerifiedStatus.value = if (encryptionService.verificationState() == VerificationState.VERIFIED) {
                     SessionVerifiedStatus.Verified
                 } else {
                     SessionVerifiedStatus.NotVerified

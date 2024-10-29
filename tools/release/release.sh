@@ -185,10 +185,23 @@ targetPath="./tmp/Element/${version}"
 printf "\n================================================================================\n"
 printf "Downloading the artifacts...\n"
 
-python3 ./tools/github/download_all_github_artifacts.py \
+ret=1
+
+while [[ $ret -ne 0 ]]; do
+  python3 ./tools/github/download_all_github_artifacts.py \
      --token "${gitHubToken}" \
      --runUrl "${runUrl}" \
      --directory "${targetPath}"
+
+  ret=$?
+  if [[ $ret -ne 0 ]]; then
+    read -p "Error while downloading the artifacts. You may want to fix the issue and retry. Retry (yes/no) default to yes? " doRetry
+    doRetry=${doRetry:-yes}
+    if [ "${doRetry}" == "no" ]; then
+      exit 1
+    fi
+  fi
+done
 
 printf "\n================================================================================\n"
 printf "Unzipping the F-Droid artifact...\n"
@@ -312,8 +325,8 @@ printf "\n======================================================================
 printf "The file ${signedBundlePath} has been signed and can be uploaded to the PlayStore!\n"
 
 printf "\n================================================================================\n"
-read -p "Do you want to build the APKs from the app bundle? You need to do this step if you want to install the application to your device. (yes/no) default to yes " doBuildApks
-doBuildApks=${doBuildApks:-yes}
+read -p "Do you want to build the APKs from the app bundle? You need to do this step if you want to install the application to your device. (yes/no) default to no " doBuildApks
+doBuildApks=${doBuildApks:-no}
 
 if [ "${doBuildApks}" == "yes" ]; then
   printf "Building apks...\n"

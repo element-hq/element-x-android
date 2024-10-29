@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Kérés visszavonása"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Igen, visszavonás"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Biztos, hogy visszavonja a szobához való csatlakozási kérését?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Csatlakozási kérés visszavonása"</string>
   <string name="screen_join_room_join_action">"Csatlakozás a szobához"</string>
   <string name="screen_join_room_knock_action">"Kopogtasson a csatlakozáshoz"</string>
+  <string name="screen_join_room_knock_message_description">"Üzenet (nem kötelező)"</string>
+  <string name="screen_join_room_knock_sent_description">"Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz."</string>
+  <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>
   <string name="screen_join_room_space_not_supported_description">"Az %1$s még nem támogatja a tereket. A tereket a weben érheti el."</string>
   <string name="screen_join_room_space_not_supported_title">"A terek még nem támogatottak"</string>
   <string name="screen_join_room_subtitle_knock">"Kattintson az alábbi gombra, és a szoba adminisztrátora értesítést kap. A jóváhagyást követően csatlakozhat a beszélgetéshez."</string>

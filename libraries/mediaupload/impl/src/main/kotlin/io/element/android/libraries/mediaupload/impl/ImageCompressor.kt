@@ -36,7 +36,7 @@ class ImageCompressor @Inject constructor(
         resizeMode: ResizeMode,
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
-        desiredQuality: Int = 80,
+        desiredQuality: Int = 78,
     ): Result<ImageCompressionResult> = withContext(dispatchers.io) {
         runCatching {
             val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()

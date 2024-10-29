@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.themes
 import io.element.android.features.preferences.impl.R
@@ -23,6 +24,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.compose.LocalAnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -32,6 +35,7 @@ fun AdvancedSettingsView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val analyticsService = LocalAnalyticsService.current
     PreferencePage(
         modifier = modifier,
         onBackClick = onBackClick,
@@ -71,6 +75,28 @@ fun AdvancedSettingsView(
                 checked = state.isSharePresenceEnabled,
             ),
             onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
+        )
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_media_compression_title))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_media_compression_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.doesCompressMedia,
+            ),
+            onClick = {
+                val newValue = !state.doesCompressMedia
+                analyticsService.captureInteraction(
+                    if (newValue) {
+                        Interaction.Name.MobileSettingsOptimizeMediaUploadsEnabled
+                    } else {
+                        Interaction.Name.MobileSettingsOptimizeMediaUploadsDisabled
+                    }
+                )
+                state.eventSink(AdvancedSettingsEvents.SetCompressMedia(newValue))
+            }
         )
     }
 
