@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -15,22 +15,22 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 
 @Immutable
 data class VerifySelfSessionState(
-    val verificationFlowStep: VerificationStep,
+    val step: Step,
     val signOutAction: AsyncAction<String?>,
     val displaySkipButton: Boolean,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 ) {
     @Stable
-    sealed interface VerificationStep {
-        data object Loading : VerificationStep
+    sealed interface Step {
+        data object Loading : Step
 
         // FIXME canEnterRecoveryKey value is never read.
-        data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean = false) : VerificationStep
-        data object Canceled : VerificationStep
-        data object AwaitingOtherDeviceResponse : VerificationStep
-        data object Ready : VerificationStep
-        data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : VerificationStep
-        data object Completed : VerificationStep
-        data object Skipped : VerificationStep
+        data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean = false) : Step
+        data object Canceled : Step
+        data object AwaitingOtherDeviceResponse : Step
+        data object Ready : Step
+        data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : Step
+        data object Completed : Step
+        data object Skipped : Step
     }
 }

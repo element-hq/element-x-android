@@ -8,9 +8,11 @@
 @file:Suppress("WildcardImport")
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.verifysession.impl.outgoing
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
+import io.element.android.features.verifysession.impl.util.andLogStateChange
+import io.element.android.features.verifysession.impl.util.logReceivedEvents
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -37,10 +39,10 @@ class VerifySelfSessionStateMachine @Inject constructor(
         spec {
             inState<State.Initial> {
                 on { _: Event.RequestVerification, state ->
-                    state.override { State.RequestingVerification }
+                    state.override { State.RequestingVerification.andLogStateChange() }
                 }
                 on { _: Event.StartSasVerification, state ->
-                    state.override { State.StartingSasVerification }
+                    state.override { State.StartingSasVerification.andLogStateChange() }
                 }
             }
             inState<State.RequestingVerification> {
@@ -48,7 +50,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                     sessionVerificationService.requestVerification()
                 }
                 on { _: Event.DidAcceptVerificationRequest, state ->
-                    state.override { State.VerificationRequestAccepted }
+                    state.override { State.VerificationRequestAccepted.andLogStateChange() }
                 }
             }
             inState<State.StartingSasVerification> {
@@ -58,28 +60,28 @@ class VerifySelfSessionStateMachine @Inject constructor(
             }
             inState<State.VerificationRequestAccepted> {
                 on { _: Event.StartSasVerification, state ->
-                    state.override { State.StartingSasVerification }
+                    state.override { State.StartingSasVerification.andLogStateChange() }
                 }
             }
             inState<State.Canceled> {
                 on { _: Event.RequestVerification, state ->
-                    state.override { State.RequestingVerification }
+                    state.override { State.RequestingVerification.andLogStateChange() }
                 }
                 on { _: Event.Reset, state ->
-                    state.override { State.Initial }
+                    state.override { State.Initial.andLogStateChange() }
                 }
             }
             inState<State.SasVerificationStarted> {
                 on { event: Event.DidReceiveChallenge, state ->
-                    state.override { State.Verifying.ChallengeReceived(event.data) }
+                    state.override { State.Verifying.ChallengeReceived(event.data).andLogStateChange() }
                 }
             }
             inState<State.Verifying.ChallengeReceived> {
                 on { _: Event.AcceptChallenge, state ->
-                    state.override { State.Verifying.Replying(state.snapshot.data, accept = true) }
+                    state.override { State.Verifying.Replying(state.snapshot.data, accept = true).andLogStateChange() }
                 }
                 on { _: Event.DeclineChallenge, state ->
-                    state.override { State.Verifying.Replying(state.snapshot.data, accept = false) }
+                    state.override { State.Verifying.Replying(state.snapshot.data, accept = false).andLogStateChange() }
                 }
             }
             inState<State.Verifying.Replying> {
@@ -100,7 +102,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                                 .first()
                         }
                     }
-                    state.override { State.Completed }
+                    state.override { State.Completed.andLogStateChange() }
                 }
             }
             inState<State.Canceling> {
@@ -110,8 +112,9 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 }
             }
             inState {
+                logReceivedEvents()
                 on { _: Event.DidStartSasVerification, state: MachineState<State> ->
-                    state.override { State.SasVerificationStarted }
+                    state.override { State.SasVerificationStarted.andLogStateChange() }
                 }
                 on { _: Event.Cancel, state: MachineState<State> ->
                     when (state.snapshot) {
@@ -120,17 +123,17 @@ class VerifySelfSessionStateMachine @Inject constructor(
                         // `Canceling` state to `Canceled` automatically anymore
                         else -> {
                             sessionVerificationService.cancelVerification()
-                            state.override { State.Canceled }
+                            state.override { State.Canceled.andLogStateChange() }
                         }
                     }
                 }
                 on { _: Event.DidCancel, state: MachineState<State> ->
-                    state.override { State.Canceled }
+                    state.override { State.Canceled.andLogStateChange() }
                 }
                 on { _: Event.DidFail, state: MachineState<State> ->
                     when (state.snapshot) {
-                        is State.RequestingVerification -> state.override { State.Initial }
-                        else -> state.override { State.Canceled }
+                        is State.RequestingVerification -> state.override { State.Initial.andLogStateChange() }
+                        else -> state.override { State.Canceled.andLogStateChange() }
                     }
                 }
             }

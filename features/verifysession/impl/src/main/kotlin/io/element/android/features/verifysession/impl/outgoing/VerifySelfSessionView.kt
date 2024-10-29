@@ -5,25 +5,19 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,18 +25,17 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.verifysession.impl.emoji.toEmojiResource
+import io.element.android.features.verifysession.impl.R
+import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionState.Step
+import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
+import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
@@ -56,9 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
-import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,12 +62,13 @@ fun VerifySelfSessionView(
     onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val step = state.step
     fun cancelOrResetFlow() {
-        when (state.verificationFlowStep) {
-            is FlowStep.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
-            is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
-            is FlowStep.Verifying -> {
-                if (!state.verificationFlowStep.state.isLoading()) {
+        when (step) {
+            is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            is Step.AwaitingOtherDeviceResponse, Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            is Step.Verifying -> {
+                if (!step.state.isLoading()) {
                     state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
                 }
             }
@@ -85,18 +77,17 @@ fun VerifySelfSessionView(
     }
 
     val latestOnFinish by rememberUpdatedState(newValue = onFinish)
-    LaunchedEffect(state.verificationFlowStep, latestOnFinish) {
-        if (state.verificationFlowStep is FlowStep.Skipped) {
+    LaunchedEffect(step, latestOnFinish) {
+        if (step is Step.Skipped) {
             latestOnFinish()
         }
     }
     BackHandler {
         cancelOrResetFlow()
     }
-    val verificationFlowStep = state.verificationFlowStep
 
-    if (state.verificationFlowStep is FlowStep.Loading ||
-        state.verificationFlowStep is FlowStep.Skipped) {
+    if (step is Step.Loading ||
+        step is Step.Skipped) {
         // Just display a loader in this case, to avoid UI glitch.
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -111,7 +102,7 @@ fun VerifySelfSessionView(
                 TopAppBar(
                     title = {},
                     actions = {
-                        if (state.verificationFlowStep !is FlowStep.Completed &&
+                        if (step !is Step.Completed &&
                             state.displaySkipButton &&
                             LocalInspectionMode.current.not()) {
                             TextButton(
@@ -119,7 +110,7 @@ fun VerifySelfSessionView(
                                 onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
                             )
                         }
-                        if (state.verificationFlowStep is FlowStep.Initial) {
+                        if (step is Step.Initial) {
                             TextButton(
                                 text = stringResource(CommonStrings.action_signout),
                                 onClick = { state.eventSink(VerifySelfSessionViewEvents.SignOut) }
@@ -129,7 +120,7 @@ fun VerifySelfSessionView(
                 )
             },
             header = {
-                HeaderContent(verificationFlowStep = verificationFlowStep)
+                HeaderContent(step = step)
             },
             footer = {
                 BottomMenu(
@@ -142,7 +133,7 @@ fun VerifySelfSessionView(
             }
         ) {
             Content(
-                flowState = verificationFlowStep,
+                flowState = step,
                 onLearnMoreClick = onLearnMoreClick,
             )
         }
@@ -165,38 +156,38 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-private fun HeaderContent(verificationFlowStep: FlowStep) {
-    val iconStyle = when (verificationFlowStep) {
-        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
-        is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
-        FlowStep.Canceled -> BigIcon.Style.AlertSolid
-        FlowStep.Ready, is FlowStep.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
-        FlowStep.Completed -> BigIcon.Style.SuccessSolid
-        is FlowStep.Skipped -> return
+private fun HeaderContent(step: Step) {
+    val iconStyle = when (step) {
+        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        is Step.Initial, Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
+        Step.Canceled -> BigIcon.Style.AlertSolid
+        Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
+        Step.Completed -> BigIcon.Style.SuccessSolid
+        is Step.Skipped -> return
     }
-    val titleTextId = when (verificationFlowStep) {
-        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
-        is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
-        FlowStep.Canceled -> CommonStrings.common_verification_cancelled
-        FlowStep.Ready -> R.string.screen_session_verification_compare_emojis_title
-        FlowStep.Completed -> R.string.screen_identity_confirmed_title
-        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+    val titleTextId = when (step) {
+        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
+        Step.Canceled -> CommonStrings.common_verification_cancelled
+        Step.Ready -> R.string.screen_session_verification_compare_emojis_title
+        Step.Completed -> R.string.screen_identity_confirmed_title
+        is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
         }
-        is FlowStep.Skipped -> return
+        is Step.Skipped -> return
     }
-    val subtitleTextId = when (verificationFlowStep) {
-        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
-        is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
-        FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
-        FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
-        FlowStep.Completed -> R.string.screen_identity_confirmed_subtitle
-        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+    val subtitleTextId = when (step) {
+        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
+        Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
+        Step.Ready -> R.string.screen_session_verification_ready_subtitle
+        Step.Completed -> R.string.screen_identity_confirmed_subtitle
+        is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
         }
-        is FlowStep.Skipped -> return
+        is Step.Skipped -> return
     }
 
     PageTitle(
@@ -208,15 +199,15 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
 
 @Composable
 private fun Content(
-    flowState: FlowStep,
+    flowState: Step,
     onLearnMoreClick: () -> Unit,
 ) {
     when (flowState) {
-        is VerifySelfSessionState.VerificationStep.Initial -> {
+        is VerifySelfSessionState.Step.Initial -> {
             ContentInitial(onLearnMoreClick)
         }
-        is FlowStep.Verifying -> {
-            ContentVerifying(flowState)
+        is Step.Verifying -> {
+            VerificationContentVerifying(flowState.data)
         }
         else -> Unit
     }
@@ -241,63 +232,6 @@ private fun ContentInitial(
 }
 
 @Composable
-private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        when (verificationFlowStep.data) {
-            is SessionVerificationData.Decimals -> {
-                val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = text,
-                    style = ElementTheme.typography.fontHeadingLgBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                )
-            }
-            is SessionVerificationData.Emojis -> {
-                // We want each row to have up to 4 emojis
-                val rows = verificationFlowStep.data.emojis.chunked(4)
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(40.dp),
-                ) {
-                    rows.forEach { emojis ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                            for (emoji in emojis) {
-                                EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
-    val emojiResource = emoji.number.toEmojiResource()
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(id = emojiResource.drawableRes),
-            contentDescription = null,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = emojiResource.nameRes),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-@Composable
 private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
@@ -305,15 +239,15 @@ private fun BottomMenu(
     onCancelClick: () -> Unit,
     onContinueClick: () -> Unit,
 ) {
-    val verificationViewState = screenState.verificationFlowStep
+    val verificationViewState = screenState.step
     val eventSink = screenState.eventSink
 
-    val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is AsyncData.Loading<Unit>
+    val isVerifying = (verificationViewState as? Step.Verifying)?.state is AsyncData.Loading<Unit>
 
     when (verificationViewState) {
-        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
-        is FlowStep.Initial -> {
-            BottomMenu {
+        VerifySelfSessionState.Step.Loading -> error("Should not happen")
+        is Step.Initial -> {
+            VerificationBottomMenu {
                 if (verificationViewState.isLastDevice) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
@@ -340,8 +274,8 @@ private fun BottomMenu(
                 )
             }
         }
-        is FlowStep.Canceled -> {
-            BottomMenu {
+        is Step.Canceled -> {
+            VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_session_verification_positive_button_canceled),
@@ -354,8 +288,8 @@ private fun BottomMenu(
                 )
             }
         }
-        is FlowStep.Ready -> {
-            BottomMenu {
+        is Step.Ready -> {
+            VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_start),
@@ -368,8 +302,8 @@ private fun BottomMenu(
                 )
             }
         }
-        is FlowStep.AwaitingOtherDeviceResponse -> {
-            BottomMenu {
+        is Step.AwaitingOtherDeviceResponse -> {
+            VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_waiting_on_other_device),
@@ -380,13 +314,13 @@ private fun BottomMenu(
                 Spacer(modifier = Modifier.height(40.dp))
             }
         }
-        is FlowStep.Verifying -> {
+        is Step.Verifying -> {
             val positiveButtonTitle = if (isVerifying) {
                 stringResource(R.string.screen_session_verification_positive_button_verifying_ongoing)
             } else {
                 stringResource(R.string.screen_session_verification_they_match)
             }
-            BottomMenu {
+            VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = positiveButtonTitle,
@@ -404,8 +338,8 @@ private fun BottomMenu(
                 )
             }
         }
-        is FlowStep.Completed -> {
-            BottomMenu {
+        is Step.Completed -> {
+            VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_continue),
@@ -415,19 +349,7 @@ private fun BottomMenu(
                 Spacer(modifier = Modifier.height(48.dp))
             }
         }
-        is FlowStep.Skipped -> return
-    }
-}
-
-@Composable
-private fun BottomMenu(
-    modifier: Modifier = Modifier,
-    buttons: @Composable ColumnScope.() -> Unit,
-) {
-    ButtonColumnMolecule(
-        modifier = modifier.padding(bottom = 16.dp)
-    ) {
-        buttons()
+        is Step.Skipped -> return
     }
 }
 
