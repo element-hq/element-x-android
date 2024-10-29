@@ -539,8 +539,11 @@ private fun MessageEventBubbleContent(
             ContentPadding.Textual ->
                 Modifier.padding(start = 12.dp, end = 12.dp, top = topPadding, bottom = 8.dp)
             ContentPadding.Media -> {
-                if (inReplyToDetails == null) Modifier
-                else Modifier.clip(RoundedCornerShape(10.dp))
+                if (inReplyToDetails == null) {
+                    Modifier
+                } else {
+                    Modifier.clip(RoundedCornerShape(10.dp))
+                }
             }
             ContentPadding.CaptionedMedia ->
                 Modifier.padding(start = 8.dp, end = 8.dp, top = topPadding, bottom = 8.dp)

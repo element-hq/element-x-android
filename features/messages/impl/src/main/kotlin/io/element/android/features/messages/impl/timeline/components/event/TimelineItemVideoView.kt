@@ -137,7 +137,7 @@ fun TimelineItemVideoView(
                 val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)  // This is (12.dp - 8.dp) contentPadding from CommonLayout
+                        .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
