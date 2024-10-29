@@ -20,4 +20,3 @@ fun RustSessionVerificationRequestDetails.map() = SessionVerificationRequestDeta
     displayName = displayName,
     firstSeenTimestamp = firstSeenTimestamp.toLong(),
 )
-
