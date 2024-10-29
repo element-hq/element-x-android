@@ -23,6 +23,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.verifysession.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
+import io.element.android.libraries.designsystem.atomic.molecules.TextWithLabelMolecule
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -77,26 +78,6 @@ fun SessionDetailsView(
                 modifier = Modifier.weight(5f),
             )
         }
-    }
-}
-
-@Composable
-private fun TextWithLabelMolecule(
-    label: String,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = label,
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
-        )
-        Text(
-            text = text,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textPrimary,
-        )
     }
 }
 
