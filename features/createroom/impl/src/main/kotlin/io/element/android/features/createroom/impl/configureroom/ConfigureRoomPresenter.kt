@@ -27,6 +27,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.createroom.JoinRuleOverride
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -38,6 +39,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Optional
 import javax.inject.Inject
 
 class ConfigureRoomPresenter @Inject constructor(
@@ -138,6 +140,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 isEncrypted = config.roomVisibility is RoomVisibilityState.Private,
                 isDirect = false,
                 visibility = if (config.roomVisibility is RoomVisibilityState.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
+                joinRuleOverride = if (config.roomVisibility is RoomVisibilityState.Public) config.roomVisibility.roomAccess.toJoinRule() else JoinRuleOverride.None,
                 preset = if (config.roomVisibility is RoomVisibilityState.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
                 avatar = avatarUrl,

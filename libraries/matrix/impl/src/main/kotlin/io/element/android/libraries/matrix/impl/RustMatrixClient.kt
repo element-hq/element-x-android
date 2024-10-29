@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.createroom.JoinRuleOverride
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -108,6 +109,7 @@ import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
+import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
@@ -304,14 +306,25 @@ class RustMatrixClient(
                     RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
                     RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
                 },
-                preset = when (createRoomParams.preset) {
-                    RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
-                    RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
-                    RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                preset = when (createRoomParams.visibility) {
+                    RoomVisibility.PRIVATE -> {
+                        if (createRoomParams.isDirect) {
+                            RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                        } else {
+                            RustRoomPreset.PRIVATE_CHAT
+                        }
+                    }
+                    RoomVisibility.PUBLIC -> {
+                        RustRoomPreset.PUBLIC_CHAT
+                    }
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
                 powerLevelContentOverride = defaultRoomCreationPowerLevels,
+                joinRuleOverride = when (createRoomParams.joinRuleOverride) {
+                    JoinRuleOverride.Knock -> RustJoinRule.Knock
+                    JoinRuleOverride.None -> null
+                }
             )
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.

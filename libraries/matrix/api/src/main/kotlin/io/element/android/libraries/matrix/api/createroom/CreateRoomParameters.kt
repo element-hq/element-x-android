@@ -18,4 +18,5 @@ data class CreateRoomParameters(
     val preset: RoomPreset,
     val invite: List<UserId>? = null,
     val avatar: String? = null,
+    val joinRuleOverride: JoinRuleOverride = JoinRuleOverride.None,
 )
