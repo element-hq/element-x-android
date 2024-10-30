@@ -11,6 +11,7 @@ import android.net.Uri
 import io.element.android.features.createroom.impl.configureroom.RoomAccess
 import io.element.android.features.createroom.impl.configureroom.RoomAccessItem
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
+import io.element.android.features.createroom.impl.configureroom.RoomAddressErrorState
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityItem
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.features.createroom.impl.di.CreateRoomScope
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.getAndUpdate
 import java.io.File
-import java.text.Normalizer
 import javax.inject.Inject
 
 @SingleIn(CreateRoomScope::class)
@@ -86,6 +86,7 @@ class CreateRoomDataStore @Inject constructor(
                     RoomVisibilityItem.Private -> RoomVisibilityState.Private
                     RoomVisibilityItem.Public -> RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled(config.roomName.orEmpty()),
+                        roomAddressErrorState = RoomAddressErrorState.None,
                         roomAccess = RoomAccess.Anyone,
                     )
                 }

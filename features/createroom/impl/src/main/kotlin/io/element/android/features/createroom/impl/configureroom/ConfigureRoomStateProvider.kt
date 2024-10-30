@@ -26,7 +26,8 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     invites = aMatrixUserList().toImmutableList(),
                     roomVisibility = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room 101"),
-                        roomAccess = RoomAccess.Knocking
+                        roomAccess = RoomAccess.Knocking,
+                        roomAddressErrorState = RoomAddressErrorState.None,
                     ),
                 ),
             ),

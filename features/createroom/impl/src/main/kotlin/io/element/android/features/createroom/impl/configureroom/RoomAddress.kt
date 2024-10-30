@@ -7,7 +7,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-sealed interface RoomAddress {
-    data class AutoFilled(val address: String) : RoomAddress
-    data class Edited(val address: String) : RoomAddress
+sealed class RoomAddress(open val value: String) {
+    data class AutoFilled(override val value: String) : RoomAddress(value)
+    data class Edited(override val value: String) : RoomAddress(value)
 }

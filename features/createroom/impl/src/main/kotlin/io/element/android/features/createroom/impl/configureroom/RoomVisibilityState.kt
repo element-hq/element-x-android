@@ -7,11 +7,28 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import java.util.Optional
+
 sealed interface RoomVisibilityState {
     data object Private : RoomVisibilityState
 
     data class Public(
         val roomAddress: RoomAddress,
-        val roomAccess: RoomAccess
+        val roomAddressErrorState: RoomAddressErrorState,
+        val roomAccess: RoomAccess,
     ) : RoomVisibilityState
+
+    fun roomAddress(): Optional<String> {
+        return when (this) {
+            is Private -> Optional.empty()
+            is Public -> Optional.of(roomAddress.value)
+        }
+    }
+
+    fun isValid(): Boolean {
+        return when (this) {
+            is Private -> true
+            is Public -> roomAddressErrorState is RoomAddressErrorState.None && roomAddress.value.isNotEmpty()
+        }
+    }
 }

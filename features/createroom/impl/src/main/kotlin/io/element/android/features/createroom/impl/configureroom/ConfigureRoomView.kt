@@ -78,7 +78,7 @@ fun ConfigureRoomView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
-                isNextActionEnabled = state.isCreateButtonEnabled,
+                isNextActionEnabled = state.config.isValid,
                 onBackClick = onBackClick,
                 onNextClick = {
                     focusManager.clearFocus()
@@ -138,7 +138,7 @@ fun ConfigureRoomView(
                         state.eventSink(ConfigureRoomEvents.RoomAccessChanged(it))
                     },
                 )
-                RoomAddress(
+                RoomAddressField(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     address = state.config.roomVisibility.roomAddress,
                     homeserverName = state.homeserverName,
@@ -310,7 +310,7 @@ private fun RoomAccessOptions(
 }
 
 @Composable
-private fun RoomAddress(
+private fun RoomAddressField(
     address: RoomAddress,
     homeserverName: String,
     onAddressChange: (String) -> Unit,
@@ -326,13 +326,10 @@ private fun RoomAddress(
             color = MaterialTheme.colorScheme.primary,
             text = "Room address",
         )
-
+        
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            value = when (address) {
-                is RoomAddress.AutoFilled -> address.address
-                is RoomAddress.Edited -> address.address
-            },
+            value = address.value,
             leadingIcon = {
                 Text(
                     text = "#",

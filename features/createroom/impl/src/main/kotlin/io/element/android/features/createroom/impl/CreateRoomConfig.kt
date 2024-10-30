@@ -19,4 +19,6 @@ data class CreateRoomConfig(
     val avatarUri: Uri? = null,
     val invites: ImmutableList<MatrixUser> = persistentListOf(),
     val roomVisibility: RoomVisibilityState = RoomVisibilityState.Private,
-)
+) {
+    val isValid = roomName.isNullOrEmpty().not() && roomVisibility.isValid()
+}

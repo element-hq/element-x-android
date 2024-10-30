@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.createroom
 
 import io.element.android.libraries.matrix.api.core.UserId
+import java.util.Optional
 
 data class CreateRoomParameters(
     val name: String?,
@@ -19,4 +20,5 @@ data class CreateRoomParameters(
     val invite: List<UserId>? = null,
     val avatar: String? = null,
     val joinRuleOverride: JoinRuleOverride = JoinRuleOverride.None,
+    val canonicalAlias: Optional<String> = Optional.empty(),
 )

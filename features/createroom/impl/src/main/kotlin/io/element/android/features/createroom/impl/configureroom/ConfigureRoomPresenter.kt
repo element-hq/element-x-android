@@ -22,7 +22,7 @@ import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -39,7 +39,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.util.Optional
+import timber.log.Timber
 import javax.inject.Inject
 
 class ConfigureRoomPresenter @Inject constructor(
@@ -132,7 +132,7 @@ class ConfigureRoomPresenter @Inject constructor(
         config: CreateRoomConfig,
         createRoomAction: MutableState<AsyncAction<RoomId>>
     ) = launch {
-        suspend {
+        runUpdatingState(createRoomAction) {
             val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }
             val params = CreateRoomParameters(
                 name = config.roomName,
@@ -144,13 +144,17 @@ class ConfigureRoomPresenter @Inject constructor(
                 preset = if (config.roomVisibility is RoomVisibilityState.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
                 avatar = avatarUrl,
+                canonicalAlias = config.roomVisibility.roomAddress()
             )
-            matrixClient.createRoom(params).getOrThrow()
-                .also {
+            matrixClient.createRoom(params)
+                .onFailure { failure ->
+                    Timber.e(failure, "Failed to create room")
+                }
+                .onSuccess {
                     dataStore.clearCachedData()
                     analyticsService.capture(CreatedRoom(isDM = false))
                 }
-        }.runCatchingUpdatingState(createRoomAction)
+        }
     }
 
     private suspend fun uploadAvatar(avatarUri: Uri): String {
