@@ -21,6 +21,8 @@ class FakePushProvider(
     private val currentUserPushConfig: CurrentUserPushConfig? = null,
     private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
     private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
+    private val canRotateTokenResult: () -> Boolean = { lambdaError() },
+    private val rotateTokenLambda: () -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
     override fun getDistributors(): List<Distributor> = distributors
 
@@ -38,5 +40,13 @@ class FakePushProvider(
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return currentUserPushConfig
+    }
+
+    override fun canRotateToken(): Boolean {
+        return canRotateTokenResult()
+    }
+
+    override suspend fun rotateToken(): Result<Unit> {
+        return rotateTokenLambda()
     }
 }

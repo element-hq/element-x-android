@@ -53,4 +53,6 @@ class UnifiedPushProvider @Inject constructor(
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return unifiedPushCurrentUserPushConfigProvider.provide()
     }
+
+    override fun canRotateToken(): Boolean = false
 }

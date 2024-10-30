@@ -35,7 +35,7 @@ class FirebaseTokenTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
-            assertThat(lastItem.description).contains(FAKE_TOKEN.take(8))
+            assertThat(lastItem.description).contains(FAKE_TOKEN.takeLast(8))
             assertThat(lastItem.description).doesNotContain(FAKE_TOKEN)
         }
     }
