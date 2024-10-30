@@ -22,7 +22,7 @@ constraintlayout_compose = "1.0.1"
 lifecycle = "2.8.6"
 activity = "1.9.3"
 media3 = "1.4.1"
-camera = "1.3.4"
+camera = "1.4.0"
 
 # Compose
 compose_bom = "2024.10.00"
