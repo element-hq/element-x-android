@@ -48,7 +48,7 @@ class FirebaseTokenTest @Inject constructor(
             delegate.updateState(
                 description = stringProvider.getString(
                     R.string.troubleshoot_notifications_test_firebase_token_success,
-                    "${token.take(8)}*****"
+                    "*****${token.takeLast(8)}"
                 ),
                 status = NotificationTroubleshootTestState.Status.Success
             )
