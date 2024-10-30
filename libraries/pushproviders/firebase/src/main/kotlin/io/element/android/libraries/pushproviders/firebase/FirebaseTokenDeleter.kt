@@ -17,37 +17,32 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 interface FirebaseTokenDeleter {
+    /**
+     * Deletes the current Firebase token.
+     */
     suspend fun delete()
 }
 
-/**
- * This class deletes the current Firebase token.
- */
 @ContributesBinding(AppScope::class)
 class DefaultFirebaseTokenDeleter @Inject constructor(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : FirebaseTokenDeleter {
     override suspend fun delete() {
+        // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
+        isPlayServiceAvailable.checkAvailableOrThrow()
         suspendCoroutine { continuation ->
-            // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
-            if (isPlayServiceAvailable.isAvailable()) {
-                try {
-                    FirebaseMessaging.getInstance().deleteToken()
-                        .addOnSuccessListener {
-                            continuation.resume(Unit)
-                        }
-                        .addOnFailureListener { e ->
-                            Timber.e(e, "## deleteFirebaseToken() : failed")
-                            continuation.resumeWithException(e)
-                        }
-                } catch (e: Throwable) {
-                    Timber.e(e, "## deleteFirebaseToken() : failed")
-                    continuation.resumeWithException(e)
-                }
-            } else {
-                val e = Exception("No valid Google Play Services found. Cannot use FCM.")
-                Timber.e(e)
-                throw e
+            try {
+                FirebaseMessaging.getInstance().deleteToken()
+                    .addOnSuccessListener {
+                        continuation.resume(Unit)
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e(e, "## deleteFirebaseToken() : failed")
+                        continuation.resumeWithException(e)
+                    }
+            } catch (e: Throwable) {
+                Timber.e(e, "## deleteFirebaseToken() : failed")
+                continuation.resumeWithException(e)
             }
         }
     }
