@@ -576,14 +576,20 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
-    ATextComposer(
-        state = aTextEditorStateRich(),
-        voiceMessageState = VoiceMessageState.Idle,
-        composerMode = aMessageComposerModeReply(
-            replyToDetails = inReplyToDetails,
-        ),
-        enableVoiceMessages = true,
-    )
+    PreviewColumn(
+        items = persistentListOf(
+            aMessageComposerModeReply(
+                replyToDetails = inReplyToDetails,
+            ),
+        )
+    ) { composerMode ->
+        ATextComposer(
+            state = aTextEditorStateRich(),
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = composerMode,
+            enableVoiceMessages = true,
+        )
+    }
 }
 
 @PreviewsDayNight
