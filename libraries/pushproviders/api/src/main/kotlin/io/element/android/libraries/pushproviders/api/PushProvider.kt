@@ -44,4 +44,10 @@ interface PushProvider {
     suspend fun unregister(matrixClient: MatrixClient): Result<Unit>
 
     suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
+
+    fun canRotateToken(): Boolean
+
+    suspend fun rotateToken(): Result<Unit> {
+        error("rotateToken() not implemented, you need to override this method in your implementation")
+    }
 }
