@@ -79,8 +79,8 @@ fun MarkdownTextInput(
 
     AndroidView(
         modifier = Modifier
-                .padding(top = 6.dp, bottom = 6.dp)
-                .fillMaxWidth(),
+            .padding(top = 6.dp, bottom = 6.dp)
+            .fillMaxWidth(),
         factory = { context ->
             MarkdownEditText(context).apply {
                 tag = TestTags.plainTextEditor.value // Needed for UI tests
