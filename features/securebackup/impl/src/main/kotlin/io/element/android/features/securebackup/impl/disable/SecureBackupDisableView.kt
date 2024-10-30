@@ -7,6 +7,7 @@
 
 package io.element.android.features.securebackup.impl.disable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -25,7 +26,6 @@ import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -44,7 +44,7 @@ fun SecureBackupDisableView(
         onBackClick = onBackClick,
         title = stringResource(id = R.string.screen_key_backup_disable_title),
         subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
-        iconStyle = BigIcon.Style.Default(CompoundIcons.KeyOffSolid()),
+        iconStyle = BigIcon.Style.AlertSolid,
         buttons = { Buttons(state = state) },
     ) {
         Content(state = state)
@@ -52,28 +52,10 @@ fun SecureBackupDisableView(
 
     AsyncActionView(
         async = state.disableAction,
-        confirmationDialog = {
-            SecureBackupDisableConfirmationDialog(
-                onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup) },
-                onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
-            )
-        },
         progressDialog = {},
         errorMessage = { it.message ?: it.toString() },
         onErrorDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
         onSuccess = { onSuccess() },
-    )
-}
-
-@Composable
-private fun SecureBackupDisableConfirmationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
-    ConfirmationDialog(
-        title = stringResource(id = R.string.screen_key_backup_disable_confirmation_title),
-        content = stringResource(id = R.string.screen_key_backup_disable_confirmation_description),
-        submitText = stringResource(id = R.string.screen_key_backup_disable_confirmation_action_turn_off),
-        destructiveSubmit = true,
-        onSubmitClick = onConfirm,
-        onDismiss = onDismiss,
     )
 }
 
@@ -105,15 +87,20 @@ private fun Content(state: SecureBackupDisableState) {
 
 @Composable
 private fun SecureBackupDisableItem(text: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = ElementTheme.colors.bgActionSecondaryHovered)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = null,
             tint = ElementTheme.colors.iconCriticalPrimary,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(24.dp)
         )
         Text(
-            modifier = Modifier.padding(start = 8.dp, end = 4.dp),
             text = text,
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdRegular,

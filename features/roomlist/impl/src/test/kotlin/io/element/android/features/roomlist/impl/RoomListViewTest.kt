@@ -121,12 +121,9 @@ class RoomListViewTest {
                 ),
                 onSetUpRecoveryClick = callback,
             )
-
             // Remove automatic initial events
             eventsRecorder.clear()
-
-            rule.clickOn(CommonStrings.action_continue)
-
+            rule.clickOn(R.string.banner_set_up_recovery_submit)
             eventsRecorder.assertEmpty()
         }
     }

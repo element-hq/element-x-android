@@ -11,6 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -38,6 +39,8 @@ class SecureBackupRootPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.doesBackupExistOnServer.dataOrNull()).isTrue()
+            assertThat(initialState.enableAction).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.displayKeyStorageDisabledError).isFalse()
             assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
             assertThat(initialState.appName).isEqualTo("Element")
             assertThat(initialState.snackbarMessage).isNull()
@@ -67,6 +70,35 @@ class SecureBackupRootPresenterTest {
             assertThat(loadingState2.doesBackupExistOnServer).isInstanceOf(AsyncData.Loading::class.java)
             val finalState = awaitItem()
             assertThat(finalState.doesBackupExistOnServer.dataOrNull()).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - setting up encryption when key storage is disabled should emit a state to render a dialog`() = runTest {
+        val presenter = createSecureBackupRootPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            val initialState = awaitItem()
+            initialState.eventSink(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
+            assertThat(awaitItem().displayKeyStorageDisabledError).isTrue()
+            initialState.eventSink(SecureBackupRootEvents.DismissDialog)
+            assertThat(awaitItem().displayKeyStorageDisabledError).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - enable key storage invoke the expected API`() = runTest {
+        val presenter = createSecureBackupRootPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            val initialState = awaitItem()
+            initialState.eventSink(SecureBackupRootEvents.EnableKeyStorage)
+            assertThat(awaitItem().enableAction.isLoading()).isTrue()
+            assertThat(awaitItem().enableAction.isSuccess()).isTrue()
         }
     }
 

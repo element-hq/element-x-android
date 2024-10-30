@@ -15,7 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.features.securebackup.impl.loggerTagDisable
 import io.element.android.features.securebackup.impl.loggerTagRoot
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -41,7 +44,8 @@ class SecureBackupRootPresenter @Inject constructor(
 
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-
+        val enableAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        var displayKeyStorageDisabledError by remember { mutableStateOf(false) }
         Timber.tag(loggerTagRoot.value).d("backupState: $backupState")
         Timber.tag(loggerTagRoot.value).d("recoveryState: $recoveryState")
 
@@ -56,14 +60,22 @@ class SecureBackupRootPresenter @Inject constructor(
         fun handleEvents(event: SecureBackupRootEvents) {
             when (event) {
                 SecureBackupRootEvents.RetryKeyBackupState -> localCoroutineScope.getKeyBackupStatus(doesBackupExistOnServerAction)
+                SecureBackupRootEvents.EnableKeyStorage -> localCoroutineScope.enableBackup(enableAction)
+                SecureBackupRootEvents.DismissDialog -> {
+                    enableAction.value = AsyncAction.Uninitialized
+                    displayKeyStorageDisabledError = false
+                }
+                SecureBackupRootEvents.DisplayKeyStorageDisabledError -> displayKeyStorageDisabledError = true
             }
         }
 
         return SecureBackupRootState(
+            enableAction = enableAction.value,
             backupState = backupState,
             doesBackupExistOnServer = doesBackupExistOnServerAction.value,
             recoveryState = recoveryState,
             appName = buildMeta.applicationName,
+            displayKeyStorageDisabledError = displayKeyStorageDisabledError,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents,
         )
@@ -72,6 +84,13 @@ class SecureBackupRootPresenter @Inject constructor(
     private fun CoroutineScope.getKeyBackupStatus(action: MutableState<AsyncData<Boolean>>) = launch {
         suspend {
             encryptionService.doesBackupExistOnServer().getOrThrow()
+        }.runCatchingUpdatingState(action)
+    }
+
+    private fun CoroutineScope.enableBackup(action: MutableState<AsyncAction<Unit>>) = launch {
+        suspend {
+            Timber.tag(loggerTagDisable.value).d("Calling encryptionService.enableBackups()")
+            encryptionService.enableBackups().getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 }
