@@ -254,6 +254,7 @@ Reason: %1$s."</string>
   <string name="common_verification_failed">"Verification failed"</string>
   <string name="common_verified">"Verified"</string>
   <string name="common_verify_device">"Verify device"</string>
+  <string name="common_verify_identity">"Verify identity"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
