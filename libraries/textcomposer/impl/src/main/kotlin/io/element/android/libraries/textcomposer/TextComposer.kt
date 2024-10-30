@@ -494,19 +494,29 @@ private fun TextInput(
     }
 }
 
+private fun aTextEditorStateMarkdownList() = persistentListOf(
+    aTextEditorStateMarkdown(initialText = "", initialFocus = true),
+    aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
+    aTextEditorStateMarkdown(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+        initialFocus = true,
+    ),
+    aTextEditorStateMarkdown(initialText = "A message without focus", initialFocus = false),
+)
+
+private fun aTextEditorStateRichList() = persistentListOf(
+    aTextEditorStateRich(),
+    aTextEditorStateRich(initialText = "A message"),
+    aTextEditorStateRich(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+    ),
+)
+
 @PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            aTextEditorStateMarkdown(initialText = "", initialFocus = true),
-            aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
-            aTextEditorStateMarkdown(
-                initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                initialFocus = true,
-            ),
-            aTextEditorStateMarkdown(initialText = "A message without focus", initialFocus = false),
-        )
+        items = aTextEditorStateMarkdownList()
     ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -521,13 +531,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            aTextEditorStateRich(),
-            aTextEditorStateRich(initialText = "A message"),
-            aTextEditorStateRich(
-                initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-            ),
-        )
+        items = aTextEditorStateRichList()
     ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -543,9 +547,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            aTextEditorStateRich(initialText = "A message", initialFocus = true),
-        )
+        items = aTextEditorStateRichList()
     ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -560,9 +562,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
 @Composable
 internal fun MarkdownTextComposerEditPreview() = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
-        )
+        items = aTextEditorStateMarkdownList()
     ) { textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -577,16 +577,14 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
 @Composable
 internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            aMessageComposerModeReply(
+        items = aTextEditorStateRichList()
+    ) { textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeReply(
                 replyToDetails = inReplyToDetails,
             ),
-        )
-    ) { composerMode ->
-        ATextComposer(
-            state = aTextEditorStateRich(),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = composerMode,
             enableVoiceMessages = true,
         )
     }
