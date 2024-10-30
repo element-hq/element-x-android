@@ -3,10 +3,11 @@
   <string name="screen_create_room_action_create_room">"Nová místnost"</string>
   <string name="screen_create_room_add_people_title">"Pozvat přátele"</string>
   <string name="screen_create_room_error_creating_room">"Při vytváření místnosti došlo k chybě"</string>
-  <string name="screen_create_room_private_option_description">"Zprávy v této místnosti jsou šifrované. Šifrování nelze později vypnout."</string>
-  <string name="screen_create_room_private_option_title">"Soukromá místnost (jen pro pozvané)"</string>
-  <string name="screen_create_room_public_option_description">"Zprávy nejsou šifrované a může si je přečíst kdokoli. Šifrování můžete povolit později."</string>
-  <string name="screen_create_room_public_option_title">"Veřejná místnost (kdokoli)"</string>
+  <string name="screen_create_room_private_option_description">"Do této místnosti mají přístup pouze pozvaní lidé. Všechny zprávy jsou koncově šifrovány."</string>
+  <string name="screen_create_room_private_option_title">"Soukromá místnost"</string>
+  <string name="screen_create_room_public_option_description">"Tuto místnost může najít kdokoli.
+To můžete kdykoli změnit v nastavení místnosti."</string>
+  <string name="screen_create_room_public_option_title">"Veřejná místnost"</string>
   <string name="screen_create_room_room_name_label">"Název místnosti"</string>
   <string name="screen_create_room_title">"Vytvořit místnost"</string>
   <string name="screen_create_room_topic_label">"Téma (nepovinné)"</string>

@@ -54,8 +54,8 @@ if [ "${sdkCorrect}" != "yes" ]; then
 fi
 
 # Ask if the user wants to build the app after
-read -p "Do you want to build the app after (yes/no) default to yes? " buildApp
-buildApp=${buildApp:-yes}
+read -p "Do you want to build the app after (yes/no) default to no? " buildApp
+buildApp=${buildApp:-no}
 
 cd "${elementPwd}"
 

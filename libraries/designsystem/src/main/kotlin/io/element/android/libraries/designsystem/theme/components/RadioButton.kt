@@ -51,6 +51,7 @@ fun RadioButton(
 internal fun compoundRadioButtonColors(): RadioButtonColors {
     return RadioButtonDefaults.colors(
         unselectedColor = ElementTheme.colors.borderInteractivePrimary,
+        selectedColor = ElementTheme.colors.bgAccentRest,
         disabledUnselectedColor = ElementTheme.colors.borderDisabled,
         disabledSelectedColor = ElementTheme.colors.iconDisabled,
     )

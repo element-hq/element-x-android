@@ -24,10 +24,10 @@ class RoomMemberMapperTest {
 
     @Test
     fun mapMembership() {
-        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.BAN)).isEqualTo(RoomMembershipState.BAN)
-        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.INVITE)).isEqualTo(RoomMembershipState.INVITE)
-        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.JOIN)).isEqualTo(RoomMembershipState.JOIN)
-        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.KNOCK)).isEqualTo(RoomMembershipState.KNOCK)
-        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.LEAVE)).isEqualTo(RoomMembershipState.LEAVE)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Ban)).isEqualTo(RoomMembershipState.BAN)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Invite)).isEqualTo(RoomMembershipState.INVITE)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Join)).isEqualTo(RoomMembershipState.JOIN)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Knock)).isEqualTo(RoomMembershipState.KNOCK)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Leave)).isEqualTo(RoomMembershipState.LEAVE)
     }
 }

@@ -29,7 +29,7 @@ class VideoCompressor @Inject constructor(
         val future = Transcoder.into(tmpFile.path)
             .setVideoTrackStrategy(
                 DefaultVideoStrategy.Builder()
-                    .addResizer(AtMostResizer(1920, 1080))
+                    .addResizer(AtMostResizer(720, 480))
                     .build()
             )
             .addDataSource(context, uri)

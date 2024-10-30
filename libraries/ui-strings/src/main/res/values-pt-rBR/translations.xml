@@ -266,12 +266,6 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Falha ao enviar mídia. Tente novamente."</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar mídia para upload. Tente novamente."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Não foi possível recuperar os detalhes do usuário"</string>
-  <string name="screen_room_member_details_block_alert_action">"Bloquear"</string>
-  <string name="screen_room_member_details_block_alert_description">"Usuários bloqueados não poderão enviar mensagens para você e todas as mensagens deles serão ocultadas. Você pode desbloqueá-los a qualquer momento."</string>
-  <string name="screen_room_member_details_block_user">"Bloquear usuário"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Você poderá ver todas as mensagens deles novamente."</string>
-  <string name="screen_room_member_details_unblock_user">"Desbloquear usuário"</string>
   <string name="screen_share_location_title">"Compartilhar localização"</string>
   <string name="screen_share_my_location_action">"Compartilhar minha localização"</string>
   <string name="screen_share_open_apple_maps">"Abrir no Apple Maps"</string>

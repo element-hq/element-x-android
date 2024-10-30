@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -63,8 +64,7 @@ private fun SignedOutHeader(state: SignedOutState) {
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = stringResource(id = R.string.screen_signed_out_title),
         subTitle = stringResource(id = R.string.screen_signed_out_subtitle, state.appName),
-        iconImageVector = Icons.Filled.AccountCircle,
-        iconTint = ElementTheme.colors.iconSecondary,
+        iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
     )
 }
 

@@ -1489,7 +1489,7 @@ class MessageComposerPresenterTest {
         featureFlagService,
         sessionPreferencesStore,
         localMediaFactory,
-        MediaSender(mediaPreProcessor, room),
+        MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
         snackbarDispatcher,
         analyticsService,
         DefaultMessageComposerContext(),

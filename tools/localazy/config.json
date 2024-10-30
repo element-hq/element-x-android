@@ -156,7 +156,8 @@
         "banner\\.migrate_to_native_sliding_sync\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
-        "screen_invites_.*"
+        "screen_invites_.*",
+        "screen\\.join_room\\.knock_sent_title"
       ]
     },
     {
@@ -176,7 +177,8 @@
       "name" : ":features:userprofile:shared",
       "includeRegex" : [
         "screen_start_chat_error_starting_chat",
-        "screen_dm_details_.*"
+        "screen_dm_details_.*",
+        "screen_room_member_details_.*"
       ]
     },
     {
@@ -280,7 +282,8 @@
     {
       "name" : ":features:joinroom:impl",
       "includeRegex" : [
-        "screen_join_room_.*"
+        "screen_join_room_.*",
+        "screen\\.join_room\\..*"
       ]
     }
   ]

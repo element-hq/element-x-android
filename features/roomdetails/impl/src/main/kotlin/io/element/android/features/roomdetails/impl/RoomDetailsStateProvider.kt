@@ -13,6 +13,7 @@ import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -33,7 +34,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isEncrypted = false),
             aRoomDetailsState(roomAlias = null),
             aDmRoomDetailsState(),
-            aDmRoomDetailsState(isDmMemberIgnored = true),
+            aDmRoomDetailsState(isDmMemberIgnored = true, roomName = "Daniel (ignored and clear)", isEncrypted = false),
             aRoomDetailsState(canInvite = true),
             aRoomDetailsState(isFavorite = true),
             aRoomDetailsState(
@@ -136,12 +137,16 @@ fun aRoomNotificationSettings(
 fun aDmRoomDetailsState(
     isDmMemberIgnored: Boolean = false,
     roomName: String = "Daniel",
+    isEncrypted: Boolean = true,
 ) = aRoomDetailsState(
     roomName = roomName,
     isPublic = false,
+    isEncrypted = isEncrypted,
     roomType = RoomDetailsType.Dm(
-        aRoomMember(),
-        aDmRoomMember(isIgnored = isDmMemberIgnored),
+        me = aRoomMember(),
+        otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
     ),
-    roomMemberDetailsState = aUserProfileState()
+    roomMemberDetailsState = aUserProfileState(
+        isBlocked = AsyncData.Success(isDmMemberIgnored),
+    )
 )

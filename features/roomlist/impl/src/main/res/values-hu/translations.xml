@@ -16,6 +16,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
   <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
+  <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>

@@ -16,7 +16,7 @@ fun aRustRoomMember(
     userId: UserId,
     displayName: String? = null,
     avatarUrl: String? = null,
-    membership: MembershipState = MembershipState.JOIN,
+    membership: MembershipState = MembershipState.Join,
     isNameAmbiguous: Boolean = false,
     powerLevel: Long = 0L,
     isIgnored: Boolean = false,

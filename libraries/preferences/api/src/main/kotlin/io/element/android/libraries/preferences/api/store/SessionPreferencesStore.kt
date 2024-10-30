@@ -28,5 +28,8 @@ interface SessionPreferencesStore {
     suspend fun setSkipSessionVerification(skip: Boolean)
     fun isSessionVerificationSkipped(): Flow<Boolean>
 
+    suspend fun setCompressMedia(compress: Boolean)
+    fun doesCompressMedia(): Flow<Boolean>
+
     suspend fun clear()
 }

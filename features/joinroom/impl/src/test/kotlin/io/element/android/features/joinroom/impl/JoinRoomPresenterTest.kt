@@ -12,6 +12,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
@@ -37,6 +38,7 @@ import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -59,6 +61,8 @@ class JoinRoomPresenterTest {
                 assertThat(state.contentState).isEqualTo(ContentState.Loading(A_ROOM_ID.toRoomIdOrAlias()))
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
                 assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
+                assertThat(state.cancelKnockAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(state.knockAction).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(state.applicationName).isEqualTo("AppName")
                 cancelAndIgnoreRemainingEvents()
             }
@@ -214,7 +218,7 @@ class JoinRoomPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
-                state.eventSink(JoinRoomEvents.ClearError)
+                state.eventSink(JoinRoomEvents.ClearActionStates)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Uninitialized)
@@ -325,16 +329,20 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - emit knock room event`() = runTest {
-        val knockRoomSuccess = lambdaRecorder { _: RoomId ->
+        val knockMessage = "Knock message"
+        val knockRoomSuccess = lambdaRecorder { _: RoomIdOrAlias, _: String, _: List<String> ->
             Result.success(Unit)
         }
-        val knockRoomFailure = lambdaRecorder { roomId: RoomId ->
-            Result.failure<Unit>(RuntimeException("Failed to knock room $roomId"))
+        val knockRoomFailure = lambdaRecorder { roomIdOrAlias: RoomIdOrAlias, _: String, _: List<String> ->
+            Result.failure<Unit>(RuntimeException("Failed to knock room $roomIdOrAlias"))
         }
         val fakeKnockRoom = FakeKnockRoom(knockRoomSuccess)
         val presenter = createJoinRoomPresenter(knockRoom = fakeKnockRoom)
         presenter.test {
             skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(JoinRoomEvents.UpdateKnockMessage(knockMessage))
+            }
             awaitItem().also { state ->
                 state.eventSink(JoinRoomEvents.KnockRoom)
             }
@@ -353,8 +361,46 @@ class JoinRoomPresenterTest {
         }
         assert(knockRoomSuccess)
             .isCalledOnce()
-            .with(value(A_ROOM_ID))
+            .with(value(A_ROOM_ID.toRoomIdOrAlias()), value(knockMessage), any())
         assert(knockRoomFailure)
+            .isCalledOnce()
+            .with(value(A_ROOM_ID.toRoomIdOrAlias()), value(knockMessage), any())
+    }
+
+    @Test
+    fun `present - emit cancel knock room event`() = runTest {
+        val cancelKnockRoomSuccess = lambdaRecorder { _: RoomId ->
+            Result.success(Unit)
+        }
+        val cancelKnockRoomFailure = lambdaRecorder { roomId: RoomId ->
+            Result.failure<Unit>(RuntimeException("Failed to knock room $roomId"))
+        }
+        val cancelKnockRoom = FakeCancelKnockRoom(cancelKnockRoomSuccess)
+        val presenter = createJoinRoomPresenter(cancelKnockRoom = cancelKnockRoom)
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(JoinRoomEvents.CancelKnock(true))
+            }
+            awaitItem().also { state ->
+                assertThat(state.cancelKnockAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+                state.eventSink(JoinRoomEvents.CancelKnock(false))
+            }
+            assertThat(awaitItem().cancelKnockAction).isEqualTo(AsyncAction.Loading)
+            awaitItem().also { state ->
+                assertThat(state.cancelKnockAction).isEqualTo(AsyncAction.Success(Unit))
+                cancelKnockRoom.lambda = cancelKnockRoomFailure
+                state.eventSink(JoinRoomEvents.CancelKnock(false))
+            }
+            assertThat(awaitItem().cancelKnockAction).isEqualTo(AsyncAction.Loading)
+            awaitItem().also { state ->
+                assertThat(state.cancelKnockAction).isInstanceOf(AsyncAction.Failure::class.java)
+            }
+        }
+        assert(cancelKnockRoomFailure)
+            .isCalledOnce()
+            .with(value(A_ROOM_ID))
+        assert(cancelKnockRoomSuccess)
             .isCalledOnce()
             .with(value(A_ROOM_ID))
     }
@@ -474,6 +520,7 @@ class JoinRoomPresenterTest {
             Result.success(Unit)
         },
         knockRoom: KnockRoom = FakeKnockRoom(),
+        cancelKnockRoom: CancelKnockRoom = FakeCancelKnockRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
     ): JoinRoomPresenter {
@@ -486,6 +533,7 @@ class JoinRoomPresenterTest {
             matrixClient = matrixClient,
             joinRoom = FakeJoinRoom(joinRoomLambda),
             knockRoom = knockRoom,
+            cancelKnockRoom = cancelKnockRoom,
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
         )

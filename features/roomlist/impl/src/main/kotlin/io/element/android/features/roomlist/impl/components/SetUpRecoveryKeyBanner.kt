@@ -25,6 +25,7 @@ internal fun SetUpRecoveryKeyBanner(
         modifier = modifier,
         title = stringResource(R.string.banner_set_up_recovery_title),
         content = stringResource(R.string.banner_set_up_recovery_content),
+        actionText = stringResource(R.string.banner_set_up_recovery_submit),
         onSubmitClick = onContinueClick,
         onDismissClick = onDismissClick,
     )

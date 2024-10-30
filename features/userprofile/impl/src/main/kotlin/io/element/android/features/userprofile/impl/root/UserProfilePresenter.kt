@@ -27,6 +27,7 @@ import io.element.android.features.userprofile.api.UserProfileState.Confirmation
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -75,6 +76,7 @@ class UserProfilePresenter @AssistedInject constructor(
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val isVerified: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by getDmRoomId()
         val canCall by getCanCall(dmRoomId)
         LaunchedEffect(Unit) {
@@ -86,6 +88,11 @@ class UserProfilePresenter @AssistedInject constructor(
         }
         LaunchedEffect(Unit) {
             userProfile = client.getProfile(userId).getOrNull()
+        }
+        LaunchedEffect(Unit) {
+            suspend {
+                client.encryptionService().isUserVerified(userId).getOrThrow()
+            }.runCatchingUpdatingState(isVerified)
         }
 
         fun handleEvents(event: UserProfileEvents) {
@@ -126,6 +133,7 @@ class UserProfilePresenter @AssistedInject constructor(
             userName = userProfile?.displayName,
             avatarUrl = userProfile?.avatarUrl,
             isBlocked = isBlocked.value,
+            isVerified = isVerified.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
             isCurrentUser = isCurrentUser,

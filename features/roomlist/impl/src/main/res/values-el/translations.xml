@@ -16,6 +16,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Απόρριψη συνομιλίας"</string>
   <string name="screen_invites_empty_list">"Χωρίς προσκλήσεις"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) σέ προσκάλεσε"</string>
+  <string name="screen_join_room_knock_sent_title">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_migration_message">"Αυτή είναι μια εφάπαξ διαδικασία, ευχαριστώ που περίμενες."</string>
   <string name="screen_migration_title">"Ρύθμιση του λογαριασμού σου."</string>
   <string name="screen_roomlist_a11y_create_message">"Δημιουργία νέας συνομιλίας ή δωματίου"</string>

@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -154,7 +155,8 @@ class SharePresenterTest {
             appCoroutineScope = this,
             shareIntentHandler = shareIntentHandler,
             matrixClient = matrixClient,
-            mediaPreProcessor = mediaPreProcessor
+            mediaPreProcessor = mediaPreProcessor,
+            InMemorySessionPreferencesStore(),
         )
     }
 }

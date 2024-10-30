@@ -9,12 +9,15 @@ package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
+import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +31,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
@@ -41,6 +45,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
+import org.matrix.rustcomponents.sdk.SessionVerificationRequestDetails as RustSessionVerificationRequestDetails
 
 class RustSessionVerificationService(
     private val client: Client,
@@ -100,6 +105,16 @@ class RustSessionVerificationService(
             .launchIn(sessionCoroutineScope)
     }
 
+    override fun didReceiveVerificationRequest(details: RustSessionVerificationRequestDetails) {
+        listener?.onIncomingSessionRequest(details.map())
+    }
+
+    private var listener: SessionVerificationServiceListener? = null
+
+    override fun setListener(listener: SessionVerificationServiceListener?) {
+        this.listener = listener
+    }
+
     override suspend fun requestVerification() = tryOrFail {
         initVerificationControllerIfNeeded()
         verificationController.requestVerification()
@@ -119,9 +134,24 @@ class RustSessionVerificationService(
         verificationController.startSasVerification()
     }
 
+    override suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) = tryOrFail {
+        verificationController.acknowledgeVerificationRequest(
+            senderId = details.senderId.value,
+            flowId = details.flowId.value,
+        )
+    }
+
+    override suspend fun acceptVerificationRequest() = tryOrFail {
+        verificationController.acceptVerificationRequest()
+    }
+
     private suspend fun tryOrFail(block: suspend () -> Unit) {
         runCatching {
-            block()
+            // Ensure the block cannot be cancelled, else if the Rust SDK emit a new state during the API execution,
+            // the state machine may cancel the api call.
+            withContext(NonCancellable) {
+                block()
+            }
         }.onFailure {
             Timber.e(it, "Failed to verify session")
             didFail()
@@ -132,16 +162,16 @@ class RustSessionVerificationService(
 
     // When verification attempt is accepted by the other device
     override fun didAcceptVerificationRequest() {
-        _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
+        _verificationFlowState.value = VerificationFlowState.DidAcceptVerificationRequest
     }
 
     override fun didCancel() {
-        _verificationFlowState.value = VerificationFlowState.Canceled
+        _verificationFlowState.value = VerificationFlowState.DidCancel
     }
 
     override fun didFail() {
         Timber.e("Session verification failed with an unknown error")
-        _verificationFlowState.value = VerificationFlowState.Failed
+        _verificationFlowState.value = VerificationFlowState.DidFail
     }
 
     override fun didFinish() {
@@ -150,14 +180,14 @@ class RustSessionVerificationService(
             // It also sometimes unexpectedly fails to report the session as verified, so we have to handle that possibility and fail if needed
             runCatching {
                 withTimeout(30.seconds) {
-                    while (!verificationController.isVerified()) {
+                    while (encryptionService.verificationState() != VerificationState.VERIFIED) {
                         delay(100)
                     }
                 }
             }
                 .onSuccess {
                     // Order here is important, first set the flow state as finished, then update the verification status
-                    _verificationFlowState.value = VerificationFlowState.Finished
+                    _verificationFlowState.value = VerificationFlowState.DidFinish
                     updateVerificationStatus()
                 }
                 .onFailure {
@@ -168,18 +198,18 @@ class RustSessionVerificationService(
     }
 
     override fun didReceiveVerificationData(data: RustSessionVerificationData) {
-        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(data.map())
+        _verificationFlowState.value = VerificationFlowState.DidReceiveVerificationData(data.map())
     }
 
     // When the actual SAS verification starts
     override fun didStartSasVerification() {
-        _verificationFlowState.value = VerificationFlowState.StartedSasVerification
+        _verificationFlowState.value = VerificationFlowState.DidStartSasVerification
     }
 
     // end-region
 
-    override suspend fun reset() {
-        if (isReady.value) {
+    override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
+        if (isReady.value && cancelAnyPendingVerificationAttempt) {
             // Cancel any pending verification attempt
             tryOrNull { verificationController.cancelVerification() }
         }
@@ -208,7 +238,7 @@ class RustSessionVerificationService(
     }
 
     private suspend fun updateVerificationStatus() {
-        if (verificationFlowState.value == VerificationFlowState.Finished) {
+        if (verificationFlowState.value == VerificationFlowState.DidFinish) {
             // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network
             // So we need to check that *only* if we know there is network connection, which is the case when the verification flow just finished
             Timber.d("Updating verification status: flow just finished")
@@ -227,7 +257,7 @@ class RustSessionVerificationService(
             Timber.d("Updating verification status: flow is pending or was finished some time ago")
             runCatching {
                 initVerificationControllerIfNeeded()
-                _sessionVerifiedStatus.value = if (verificationController.isVerified()) {
+                _sessionVerifiedStatus.value = if (encryptionService.verificationState() == VerificationState.VERIFIED) {
                     SessionVerifiedStatus.Verified
                 } else {
                     SessionVerifiedStatus.NotVerified

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Cancel request"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Yes, cancel"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Are you sure that you want to cancel your request to join this room?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Cancel request to join"</string>
   <string name="screen_join_room_join_action">"Join room"</string>
   <string name="screen_join_room_knock_action">"Send request to join"</string>
+  <string name="screen_join_room_knock_message_description">"Message (optional)"</string>
+  <string name="screen_join_room_knock_sent_description">"You will receive an invite to join the room if your request is accepted."</string>
+  <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s does not support spaces yet. You can access spaces on web."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces are not supported yet"</string>
   <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>

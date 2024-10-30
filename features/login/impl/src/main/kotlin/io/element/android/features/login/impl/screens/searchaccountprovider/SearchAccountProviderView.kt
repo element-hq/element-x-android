@@ -48,6 +48,7 @@ import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -94,7 +95,7 @@ fun SearchAccountProviderView(
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconImageVector = CompoundIcons.Search(),
+                        iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )

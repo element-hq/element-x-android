@@ -48,6 +48,7 @@ import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -110,7 +111,7 @@ fun LoginPasswordView(
             // Title
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                iconImageVector = Icons.Filled.AccountCircle,
+                iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
                 title = stringResource(
                     id = R.string.screen_account_provider_signin_title,
                     state.accountProvider.title

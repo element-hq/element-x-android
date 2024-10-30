@@ -24,7 +24,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.EventOrTransactionId
-import org.matrix.rustcomponents.sdk.EventSendState
+import org.matrix.rustcomponents.sdk.QueueWedgeError
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import uniffi.matrix_sdk_common.ShieldStateCode
@@ -78,25 +78,31 @@ fun RustEventSendState?.map(): LocalEventSendState? {
         null -> null
         RustEventSendState.NotSentYet -> LocalEventSendState.Sending
         is RustEventSendState.SendingFailed -> {
-            if (isRecoverable) {
-                LocalEventSendState.Sending
-            } else {
-                LocalEventSendState.Failed.Unknown(error)
+            when (val queueWedgeError = error) {
+                QueueWedgeError.CrossVerificationRequired -> {
+                    // The current device is not cross-signed (or cross signing is not setup)
+                    LocalEventSendState.Failed.SendingFromUnverifiedDevice
+                }
+                is QueueWedgeError.IdentityViolations -> {
+                    LocalEventSendState.Failed.VerifiedUserChangedIdentity(queueWedgeError.users.map { UserId(it) })
+                }
+                is QueueWedgeError.InsecureDevices -> {
+                    LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
+                        devices = queueWedgeError.userDeviceMap.entries.associate { entry ->
+                            UserId(entry.key) to entry.value.map { DeviceId(it) }
+                        }
+                    )
+                }
+                is QueueWedgeError.GenericApiError -> {
+                    if (isRecoverable) {
+                        LocalEventSendState.Sending
+                    } else {
+                        LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
+                    }
+                }
             }
         }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
-        is RustEventSendState.VerifiedUserChangedIdentity -> {
-            LocalEventSendState.Failed.VerifiedUserChangedIdentity(users.map { UserId(it) })
-        }
-        is RustEventSendState.VerifiedUserHasUnsignedDevice -> {
-            LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
-                devices = devices.entries.associate { entry ->
-                    UserId(entry.key) to entry.value.map { DeviceId(it) }
-                }
-            )
-        }
-        EventSendState.CrossSigningNotSetup -> LocalEventSendState.Failed.CrossSigningNotSetup
-        EventSendState.SendingFromUnverifiedDevice -> LocalEventSendState.Failed.SendingFromUnverifiedDevice
     }
 }
 

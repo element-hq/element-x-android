@@ -33,6 +33,7 @@ import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.components.PinEntryTextField
 import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPinFailure
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -88,7 +89,7 @@ private fun SetupPinHeader(
                 stringResource(id = R.string.screen_app_lock_setup_choose_pin)
             },
             subTitle = stringResource(id = R.string.screen_app_lock_setup_pin_context, appName),
-            iconImageVector = Icons.Filled.Lock,
+            iconStyle = BigIcon.Style.Default(Icons.Filled.Lock),
         )
     }
 }

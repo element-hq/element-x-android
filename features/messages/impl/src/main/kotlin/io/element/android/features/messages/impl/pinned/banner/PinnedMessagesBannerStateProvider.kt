@@ -19,7 +19,11 @@ internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<Pinn
             aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 1),
             aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 5),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 1, currentPinnedMessageIndex = 0),
-            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 2, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(
+                knownPinnedMessagesCount = 2,
+                currentPinnedMessageIndex = 0,
+                message = "This is a pinned long message to check the wrapping behavior",
+            ),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 3, currentPinnedMessageIndex = 0),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 0),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 1),
@@ -40,9 +44,10 @@ internal fun aLoadingPinnedMessagesBannerState(
 internal fun aLoadedPinnedMessagesBannerState(
     currentPinnedMessageIndex: Int = 0,
     knownPinnedMessagesCount: Int = 1,
+    message: String = "This is a pinned message",
     currentPinnedMessage: PinnedMessagesBannerItem = PinnedMessagesBannerItem(
         eventId = EventId("\$" + Random.nextInt().toString()),
-        formatted = AnnotatedString("This is a pinned message")
+        formatted = AnnotatedString(message)
     ),
     eventSink: (PinnedMessagesBannerEvents) -> Unit = {}
 ) = PinnedMessagesBannerState.Loaded(

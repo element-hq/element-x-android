@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Ξέχασες τον κωδικό πρόσβασης;"</string>
   <string name="action_forward">"Προώθηση"</string>
   <string name="action_go_back">"Πήγαινε πίσω"</string>
+  <string name="action_ignore">"Παράβλεψη"</string>
   <string name="action_invite">"Πρόσκληση"</string>
   <string name="action_invite_friends">"Πρόσκληση ατόμων"</string>
   <string name="action_invite_friends_to_app">"Πρόσκληση ατόμων στο %1$s"</string>
@@ -138,6 +139,7 @@
   <string name="common_dark">"Σκοτεινό"</string>
   <string name="common_decryption_error">"Σφάλμα αποκρυπτογράφησης"</string>
   <string name="common_developer_options">"Επιλογές προγραμματιστή"</string>
+  <string name="common_device_id">"ID συσκευής"</string>
   <string name="common_direct_chat">"Άμεση συνομιλία"</string>
   <string name="common_do_not_show_this_again">"Να μην εμφανιστεί ξανά"</string>
   <string name="common_edited_suffix">"(επεξεργάστηκε)"</string>
@@ -288,7 +290,6 @@
   <string name="screen_create_room_access_section_header">"Πρόσβαση Δωματίου"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
-  <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>
@@ -312,13 +313,6 @@
   <string name="screen_room_details_pinned_events_row_title">"Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_error_failed_processing_media">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Δεν ήταν δυνατή η ανάκτηση στοιχείων χρήστη"</string>
-  <string name="screen_room_member_details_block_alert_action">"Αποκλεισμός"</string>
-  <string name="screen_room_member_details_block_alert_description">"Οι αποκλεισμένοι χρήστες δεν θα μπορούν να σου στέλνουν μηνύματα και όλα τα μηνύματά τους θα είναι κρυμμένα. Μπορείς να τα ξεμπλοκάρεις ανά πάσα στιγμή."</string>
-  <string name="screen_room_member_details_block_user">"Αποκλεισμός χρήστη"</string>
-  <string name="screen_room_member_details_title">"Προφίλ"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Άρση αποκλεισμού"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Θα μπορείς να δεις ξανά όλα τα μηνύματα του."</string>
-  <string name="screen_room_member_details_unblock_user">"Κατάργηση αποκλεισμού χρήστη"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>

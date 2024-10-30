@@ -30,12 +30,12 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.bigIconDefaultBackgroundColor
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Compound component that display a big icon centered in a rounded square.
+ * Figma: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=1960-553&node-type=frame&m=dev
  */
 object BigIcon {
     /**
@@ -84,7 +84,7 @@ object BigIcon {
         modifier: Modifier = Modifier,
     ) {
         val backgroundColor = when (style) {
-            is Style.Default -> ElementTheme.colors.bigIconDefaultBackgroundColor
+            is Style.Default -> ElementTheme.colors.bgSubtleSecondary
             Style.Alert, Style.Success -> Color.Transparent
             Style.AlertSolid -> ElementTheme.colors.bgCriticalSubtle
             Style.SuccessSolid -> ElementTheme.colors.bgSuccessSubtle
@@ -100,7 +100,7 @@ object BigIcon {
             Style.Success, Style.SuccessSolid -> stringResource(CommonStrings.common_success)
         }
         val iconTint = when (style) {
-            is Style.Default -> ElementTheme.colors.iconSecondaryAlpha
+            is Style.Default -> ElementTheme.colors.iconSecondary
             Style.Alert, Style.AlertSolid -> ElementTheme.colors.iconCriticalPrimary
             Style.Success, Style.SuccessSolid -> ElementTheme.colors.iconSuccessPrimary
         }

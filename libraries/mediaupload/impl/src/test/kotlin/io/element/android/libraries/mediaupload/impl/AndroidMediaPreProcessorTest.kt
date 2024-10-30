@@ -55,8 +55,8 @@ class AndroidMediaPreProcessorTest {
                 height = 1_178,
                 width = 1_818,
                 mimetype = MimeTypes.Png,
-                size = 114_867,
-                ThumbnailInfo(height = 294, width = 454, mimetype = "image/jpeg", size = 4567),
+                size = 109_908,
+                ThumbnailInfo(height = 294, width = 454, mimetype = "image/jpeg", size = 4484),
                 thumbnailSource = null,
                 blurhash = "K13]7q%zWC00R4of%\$baad"
             )
@@ -84,7 +84,7 @@ class AndroidMediaPreProcessorTest {
                 height = 1_178,
                 width = 1_818,
                 mimetype = MimeTypes.Png,
-                size = 114_867,
+                size = 109_908,
                 thumbnailInfo = null,
                 thumbnailSource = null,
                 blurhash = null,

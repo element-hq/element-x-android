@@ -48,10 +48,16 @@ class RoomListRoomSummaryFactory @Inject constructor(
             inviteSender = roomInfo.inviter?.toInviteSender(),
             isDm = roomInfo.isDm,
             canonicalAlias = roomInfo.canonicalAlias,
-            displayType = if (roomInfo.currentUserMembership == CurrentUserMembership.INVITED) {
-                RoomSummaryDisplayType.INVITE
-            } else {
-                RoomSummaryDisplayType.ROOM
+            displayType = when (roomInfo.currentUserMembership) {
+                CurrentUserMembership.INVITED -> {
+                    RoomSummaryDisplayType.INVITE
+                }
+                CurrentUserMembership.KNOCKED -> {
+                    RoomSummaryDisplayType.KNOCKED
+                }
+                else -> {
+                    RoomSummaryDisplayType.ROOM
+                }
             },
             heroes = roomInfo.heroes.map { user ->
                 user.getAvatarData(size = AvatarSize.RoomListItem)
