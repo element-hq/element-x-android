@@ -37,9 +37,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -97,7 +96,7 @@ fun aMessagesState(
     roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userEventPermissions: UserEventPermissions = aUserEventPermissions(),
     composerState: MessageComposerState = aMessageComposerState(
-        textEditorState = TextEditorState.Rich(aRichTextEditorState(initialText = "Hello", initialFocus = true)),
+        textEditorState = aTextEditorStateRich(initialText = "Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
