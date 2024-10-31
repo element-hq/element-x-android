@@ -10,19 +10,23 @@ package io.element.android.libraries.matrix.impl.room.preview
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
-import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPreview
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPreviewInfo
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomPreview
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.JoinRule
+import org.matrix.rustcomponents.sdk.Membership
 
 class RoomPreviewMapperTest {
     @Test
     fun `map should map values 1`() {
         assertThat(
             RoomPreviewMapper.map(
-                aRustRoomPreview(
-                    isJoined = false,
-                    isInvited = false,
+                FakeRustRoomPreview(
+                    info = aRustRoomPreviewInfo(
+                        membership = null,
+                    )
                 )
             )
         ).isEqualTo(
@@ -38,7 +42,7 @@ class RoomPreviewMapperTest {
                 isJoined = false,
                 isInvited = false,
                 isPublic = true,
-                canKnock = true,
+                canKnock = false,
             )
         )
     }
@@ -47,10 +51,12 @@ class RoomPreviewMapperTest {
     fun `map should map values 2`() {
         assertThat(
             RoomPreviewMapper.map(
-                aRustRoomPreview(
-                    canonicalAlias = null,
-                    isPublic = false,
-                    canKnock = false,
+                FakeRustRoomPreview(
+                    info = aRustRoomPreviewInfo(
+                        canonicalAlias = null,
+                        membership = Membership.JOINED,
+                        joinRule = JoinRule.Knock,
+                    )
                 )
             )
         ).isEqualTo(
@@ -64,9 +70,9 @@ class RoomPreviewMapperTest {
                 roomType = RoomType.Room,
                 isHistoryWorldReadable = true,
                 isJoined = true,
-                isInvited = true,
+                isInvited = false,
                 isPublic = false,
-                canKnock = false,
+                canKnock = true,
             )
         )
     }

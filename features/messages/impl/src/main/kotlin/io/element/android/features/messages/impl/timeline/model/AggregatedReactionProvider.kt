@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
+import java.util.TimeZone
 
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
     override val values: Sequence<AggregatedReaction>
@@ -29,7 +30,9 @@ fun anAggregatedReaction(
     count: Int = 1,
     isHighlighted: Boolean = false,
 ): AggregatedReaction {
-    val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.US)
+    val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
     val date = Date(1_689_061_264L)
     val senders = buildList {
         repeat(count) { index ->

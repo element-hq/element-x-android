@@ -31,7 +31,6 @@ fun anAttachmentsPreviewState(
 ) = AttachmentsPreviewState(
     attachment = Attachment.Media(
         localMedia = LocalMedia("file://path".toUri(), mediaInfo),
-        compressIfPossible = true
     ),
     sendActionState = sendActionState,
     eventSink = {}

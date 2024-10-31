@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -31,6 +32,7 @@ class SharePresenter @AssistedInject constructor(
     private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<ShareState> {
     @AssistedFactory
     interface Factory {
@@ -71,13 +73,16 @@ class SharePresenter @AssistedInject constructor(
                         roomIds
                             .map { roomId ->
                                 val room = matrixClient.getRoom(roomId) ?: return@map false
-                                val mediaSender = MediaSender(preProcessor = mediaPreProcessor, room = room)
+                                val mediaSender = MediaSender(
+                                    preProcessor = mediaPreProcessor,
+                                    room = room,
+                                    sessionPreferencesStore = sessionPreferencesStore,
+                                )
                                 filesToShare
                                     .map { fileToShare ->
                                         mediaSender.sendMedia(
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
-                                            compressIfPossible = true,
                                         ).isSuccess
                                     }
                                     .all { it }

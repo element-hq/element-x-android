@@ -166,15 +166,27 @@ class FirebasePushProviderTest {
         assertThat(result).isEqualTo(CurrentUserPushConfig(FirebaseConfig.PUSHER_HTTP_URL, "aToken"))
     }
 
+    @Test
+    fun `rotateToken invokes the FirebaseTokenRotator`() = runTest {
+        val lambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val firebasePushProvider = createFirebasePushProvider(
+            firebaseTokenRotator = FakeFirebaseTokenRotator(lambda),
+        )
+        firebasePushProvider.rotateToken()
+        lambda.assertions().isCalledOnce()
+    }
+
     private fun createFirebasePushProvider(
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         isPlayServiceAvailable: IsPlayServiceAvailable = FakeIsPlayServiceAvailable(false),
+        firebaseTokenRotator: FirebaseTokenRotator = FakeFirebaseTokenRotator(),
     ): FirebasePushProvider {
         return FirebasePushProvider(
             firebaseStore = firebaseStore,
             pusherSubscriber = pusherSubscriber,
             isPlayServiceAvailable = isPlayServiceAvailable,
+            firebaseTokenRotator = firebaseTokenRotator,
         )
     }
 }

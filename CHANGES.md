@@ -1,3 +1,19 @@
+Changes in Element X v0.7.2 (2024-10-29)
+========================================
+
+## What's Changed
+### 🙌 Improvements
+* Add setting to compress image and video by @bmarty in https://github.com/element-hq/element-x-android/pull/3744
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3743
+### 🧱 Build
+* Release script improvement by @bmarty in https://github.com/element-hq/element-x-android/pull/3741
+### Dependency upgrades
+* Update dependency org.maplibre.gl:android-sdk to v11.5.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3720
+* Update dependency io.sentry:sentry-android to v7.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3726
+* Update dependencyAnalysis to v2.3.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3740
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.58 by @renovate in https://github.com/element-hq/element-x-android/pull/3749
+
 Changes in Element X v0.7.1 (2024-10-25)
 ========================================
 

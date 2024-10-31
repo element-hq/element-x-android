@@ -52,9 +52,10 @@ class PushLoopbackTest @Inject constructor(
         val testPushResult = try {
             pushService.testPush()
         } catch (pusherRejected: PushGatewayFailure.PusherRejected) {
+            val hasQuickFix = pushService.getCurrentPushProvider()?.canRotateToken() == true
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_1),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
+                status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix)
             )
             job.cancel()
             return
@@ -94,6 +95,12 @@ class PushLoopbackTest @Inject constructor(
                 )
             }
         )
+    }
+
+    override suspend fun quickFix(coroutineScope: CoroutineScope) {
+        delegate.start()
+        pushService.getCurrentPushProvider()?.rotateToken()
+        run(coroutineScope)
     }
 
     override suspend fun reset() = delegate.reset()
