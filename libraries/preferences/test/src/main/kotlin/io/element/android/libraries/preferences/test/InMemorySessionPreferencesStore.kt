@@ -18,7 +18,7 @@ class InMemorySessionPreferencesStore(
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
-    doesCompressMedia: Boolean = false,
+    doesCompressMedia: Boolean = true,
 ) : SessionPreferencesStore {
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
