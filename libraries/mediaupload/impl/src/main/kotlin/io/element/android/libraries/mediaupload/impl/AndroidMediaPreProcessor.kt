@@ -128,7 +128,10 @@ class AndroidMediaPreProcessor @Inject constructor(
                 mimeType = mimeType,
                 orientation = orientation,
             ).getOrThrow()
-            val thumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)
+            val thumbnailResult = thumbnailFactory.createImageThumbnail(
+                file = compressionResult.file,
+                mimeType = mimeType,
+            )
             val imageInfo = compressionResult.toImageInfo(
                 mimeType = mimeType,
                 thumbnailResult = thumbnailResult
@@ -143,7 +146,10 @@ class AndroidMediaPreProcessor @Inject constructor(
 
         suspend fun processImageWithoutCompression(): MediaUploadInfo {
             val file = copyToTmpFile(uri)
-            val thumbnailResult = thumbnailFactory.createImageThumbnail(file)
+            val thumbnailResult = thumbnailFactory.createImageThumbnail(
+                file = file,
+                mimeType = mimeType,
+            )
             val imageInfo = contentResolver.openInputStream(uri).use { input ->
                 val bitmap = BitmapFactory.decodeStream(input, null, null)!!
                 ImageInfo(
