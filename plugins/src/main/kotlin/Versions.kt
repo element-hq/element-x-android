@@ -52,8 +52,8 @@ private const val versionPatch = 3
 object Versions {
     val versionCode = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
     val versionName = "$versionMajor.$versionMinor.$versionPatch"
-    const val compileSdk = 34
-    const val targetSdk = 34
+    const val compileSdk = 35
+    const val targetSdk = 35
 
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     val minSdk = if (isEnterpriseBuild) 26 else 24
