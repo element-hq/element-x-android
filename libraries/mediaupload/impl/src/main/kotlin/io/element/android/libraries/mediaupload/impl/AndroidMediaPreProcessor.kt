@@ -171,17 +171,13 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
-        val resultFile = if (shouldBeCompressed) {
-            videoCompressor.compress(uri)
-                .onEach {
-                    // TODO handle progress
-                }
-                .filterIsInstance<VideoTranscodingEvent.Completed>()
-                .first()
-                .file
-        } else {
-            copyToTmpFile(uri)
-        }
+        val resultFile = videoCompressor.compress(uri, shouldBeCompressed)
+            .onEach {
+                // TODO handle progress
+            }
+            .filterIsInstance<VideoTranscodingEvent.Completed>()
+            .first()
+            .file
         val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
         val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
         return MediaUploadInfo.Video(
