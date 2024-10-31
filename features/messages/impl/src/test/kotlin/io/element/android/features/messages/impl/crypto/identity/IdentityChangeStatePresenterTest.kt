@@ -9,9 +9,6 @@ package io.element.android.features.messages.impl.crypto.identity
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -60,43 +57,6 @@ class IdentityChangeStatePresenterTest {
                     ),
                 )
             )
-            val finalItem = awaitItem()
-            assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
-            val value = finalItem.roomMemberIdentityStateChanges.first()
-            assertThat(value.identityRoomMember.userId).isEqualTo(A_USER_ID_2)
-            assertThat(value.identityState).isEqualTo(IdentityState.PinViolation)
-        }
-    }
-
-    @Test
-    fun `present - when the room emits identity change, but the feature is disabled, the presenter does not emit new state`() = runTest {
-        val room = FakeMatrixRoom(
-            isEncrypted = true,
-        )
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.IdentityPinningViolationNotifications.key to false,
-            )
-        )
-        val presenter = createIdentityChangeStatePresenter(
-            room = room,
-            featureFlagService = featureFlagService,
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-            room.emitIdentityStateChanges(
-                listOf(
-                    IdentityStateChange(
-                        userId = A_USER_ID_2,
-                        identityState = IdentityState.PinViolation,
-                    ),
-                )
-            )
-            // No item emitted.
-            expectNoEvents()
-            // Enable the feature
-            featureFlagService.setFeatureEnabled(FeatureFlags.IdentityPinningViolationNotifications, true)
             val finalItem = awaitItem()
             assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
             val value = finalItem.roomMemberIdentityStateChanges.first()
@@ -188,16 +148,10 @@ class IdentityChangeStatePresenterTest {
     private fun createIdentityChangeStatePresenter(
         room: MatrixRoom = FakeMatrixRoom(),
         encryptionService: EncryptionService = FakeEncryptionService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.IdentityPinningViolationNotifications.key to true,
-            )
-        ),
     ): IdentityChangeStatePresenter {
         return IdentityChangeStatePresenter(
             room = room,
             encryptionService = encryptionService,
-            featureFlagService = featureFlagService,
         )
     }
 }
