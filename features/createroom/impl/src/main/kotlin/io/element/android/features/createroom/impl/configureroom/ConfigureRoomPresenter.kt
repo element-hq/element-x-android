@@ -24,6 +24,8 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -49,6 +51,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     private val analyticsService: AnalyticsService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<ConfigureRoomState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -58,6 +61,7 @@ class ConfigureRoomPresenter @Inject constructor(
         val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig = dataStore.createRoomConfig.collectAsState(CreateRoomConfig())
         val homeserverName = remember { matrixClient.userIdServerName() }
+        val isKnockFeatureEnabled  by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(initial = false)
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -119,6 +123,7 @@ class ConfigureRoomPresenter @Inject constructor(
         }
 
         return ConfigureRoomState(
+            isKnockFeatureEnabled = isKnockFeatureEnabled,
             config = createRoomConfig.value,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,

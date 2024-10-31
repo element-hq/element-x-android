@@ -127,7 +127,7 @@ fun ConfigureRoomView(
                     state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
                 },
             )
-            if (state.config.roomVisibility is RoomVisibilityState.Public) {
+            if (state.config.roomVisibility is RoomVisibilityState.Public && state.isKnockFeatureEnabled) {
                 RoomAccessOptions(
                     selected = when (state.config.roomVisibility.roomAccess) {
                         RoomAccess.Anyone -> RoomAccessItem.Anyone
