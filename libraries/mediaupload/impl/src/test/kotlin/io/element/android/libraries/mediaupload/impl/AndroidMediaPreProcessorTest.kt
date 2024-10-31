@@ -68,7 +68,7 @@ class AndroidMediaPreProcessorTest {
                 height = assetImagePng.height,
                 width = assetImagePng.width,
                 mimetype = assetImagePng.mimeType,
-                size = assetImagePng.size,
+                size = 2_026_433,
                 ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Png, size = 91),
                 thumbnailSource = null,
                 blurhash = "K00000fQfQfQfQfQfQfQfQ"
@@ -90,7 +90,7 @@ class AndroidMediaPreProcessorTest {
                 height = assetImagePng.height,
                 width = assetImagePng.width,
                 mimetype = assetImagePng.mimeType,
-                size = assetImagePng.size,
+                size = 2_026_433,
                 thumbnailInfo = null,
                 thumbnailSource = null,
                 blurhash = null,
