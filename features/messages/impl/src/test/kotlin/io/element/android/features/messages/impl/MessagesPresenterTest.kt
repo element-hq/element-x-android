@@ -69,9 +69,9 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
@@ -1005,7 +1005,7 @@ class MessagesPresenterTest {
         messageComposerPresenter: Presenter<MessageComposerState> = Presenter {
             aMessageComposerState(
                 // Use TextEditorState.Markdown, so that we can request focus manually.
-                textEditorState = TextEditorState.Markdown(MarkdownTextEditorState(initialText = "", initialFocus = false))
+                textEditorState = aTextEditorStateMarkdown(initialText = "", initialFocus = false)
             )
         },
         actionListEventSink: (ActionListEvents) -> Unit = {},
