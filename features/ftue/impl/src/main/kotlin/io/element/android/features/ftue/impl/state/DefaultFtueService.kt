@@ -15,6 +15,7 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -32,12 +33,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.timeout
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(SessionScope::class)
+@SingleIn(SessionScope::class)
 class DefaultFtueService @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
@@ -130,7 +131,7 @@ class DefaultFtueService @Inject constructor(
     private suspend fun shouldAskNotificationPermissions(): Boolean {
         return if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             val permission = Manifest.permission.POST_NOTIFICATIONS
-            val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
+            val isPermissionDenied = permissionStateProvider.isPermissionDenied(permission).first()
             val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)
             !isPermissionGranted && !isPermissionDenied
         } else {
