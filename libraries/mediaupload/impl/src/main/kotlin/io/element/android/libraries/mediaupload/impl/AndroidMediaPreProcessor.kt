@@ -125,6 +125,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             val compressionResult = imageCompressor.compressToTmpFile(
                 inputStreamProvider = { contentResolver.openInputStream(uri)!! },
                 resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                mimeType = mimeType,
                 orientation = orientation,
             ).getOrThrow()
             val thumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)

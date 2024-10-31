@@ -16,6 +16,7 @@ import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -34,14 +35,23 @@ class ImageCompressor @Inject constructor(
     suspend fun compressToTmpFile(
         inputStreamProvider: () -> InputStream,
         resizeMode: ResizeMode,
-        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        mimeType: String,
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         desiredQuality: Int = 78,
     ): Result<ImageCompressionResult> = withContext(dispatchers.io) {
         runCatching {
+            val format = when (mimeType) {
+                MimeTypes.Png -> Bitmap.CompressFormat.PNG
+                else -> Bitmap.CompressFormat.JPEG
+            }
+            val extension = when (mimeType) {
+                MimeTypes.Png -> "png"
+                else -> "jpeg"
+            }
+
             val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()
             // Encode bitmap to the destination temporary file
-            val tmpFile = context.createTmpFile(extension = "jpeg")
+            val tmpFile = context.createTmpFile(extension = extension)
             tmpFile.outputStream().use {
                 compressedBitmap.compress(format, desiredQuality, it)
             }
