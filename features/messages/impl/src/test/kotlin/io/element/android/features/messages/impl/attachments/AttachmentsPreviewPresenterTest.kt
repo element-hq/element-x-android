@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -35,6 +36,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class AttachmentsPreviewPresenterTest {
     @get:Rule
@@ -45,7 +47,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media success scenario`() = runTest {
-        val sendMediaResult = lambdaRecorder<ProgressCallback?, Result<FakeMediaUploadHandler>> {
+        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -54,7 +56,7 @@ class AttachmentsPreviewPresenterTest {
                 Pair(5, 10),
                 Pair(10, 10)
             ),
-            sendMediaResult = sendMediaResult,
+            sendFileResult = sendFileResult,
         )
         val presenter = createAttachmentsPreviewPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -69,18 +71,18 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f))
             val successState = awaitItem()
             assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
-            sendMediaResult.assertions().isCalledOnce()
+            sendFileResult.assertions().isCalledOnce()
         }
     }
 
     @Test
     fun `present - send media failure scenario`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
-        val sendMediaResult = lambdaRecorder<ProgressCallback?, Result<FakeMediaUploadHandler>> {
+        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
             Result.failure(failure)
         }
         val room = FakeMatrixRoom(
-            sendMediaResult = sendMediaResult,
+            sendFileResult = sendFileResult,
         )
         val presenter = createAttachmentsPreviewPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -93,7 +95,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(loadingState.sendActionState).isEqualTo(SendActionState.Sending.Processing)
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
-            sendMediaResult.assertions().isCalledOnce()
+            sendFileResult.assertions().isCalledOnce()
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
             val clearedState = awaitItem()
             assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)

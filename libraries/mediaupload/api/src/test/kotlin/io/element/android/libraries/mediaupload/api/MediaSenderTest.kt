@@ -11,6 +11,8 @@ import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -26,13 +28,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class MediaSenderTest {
     @Test
     fun `given an attachment when sending it the preprocessor always runs`() = runTest {
         val preProcessor = FakeMediaPreProcessor()
-        val sender = aMediaSender(preProcessor)
+        val sender = createMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
         sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
@@ -42,17 +45,17 @@ class MediaSenderTest {
 
     @Test
     fun `given an attachment when sending it the MatrixRoom will call sendMedia`() = runTest {
-        val sendMediaResult = lambdaRecorder<ProgressCallback?, Result<FakeMediaUploadHandler>> {
-            Result.success(FakeMediaUploadHandler())
-        }
+        val sendImageResult =
+            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
         val room = FakeMatrixRoom(
-            sendMediaResult = sendMediaResult
+            sendImageResult = sendImageResult
         )
-        val sender = aMediaSender(room = room)
+        val sender = createMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
         sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
-        sendMediaResult.assertions().isCalledOnce()
     }
 
     @Test
@@ -60,7 +63,7 @@ class MediaSenderTest {
         val preProcessor = FakeMediaPreProcessor().apply {
             givenResult(Result.failure(Exception()))
         }
-        val sender = aMediaSender(preProcessor)
+        val sender = createMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
         val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
@@ -70,10 +73,14 @@ class MediaSenderTest {
 
     @Test
     fun `given a failure in the media upload when sending the whole process fails`() = runTest {
+        val sendImageResult =
+            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+                Result.failure(Exception())
+            }
         val room = FakeMatrixRoom(
-            sendMediaResult = { Result.failure(Exception()) }
+            sendImageResult = sendImageResult
         )
-        val sender = aMediaSender(room = room)
+        val sender = createMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
         val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
@@ -84,10 +91,13 @@ class MediaSenderTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
+        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+            Result.success(FakeMediaUploadHandler())
+        }
         val room = FakeMatrixRoom(
-            sendMediaResult = { Result.success(FakeMediaUploadHandler()) }
+            sendFileResult = sendFileResult
         )
-        val sender = aMediaSender(room = room)
+        val sender = createMediaSender(room = room)
         val sendJob = launch {
             val uri = Uri.parse("content://image.jpg")
             sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
@@ -106,9 +116,10 @@ class MediaSenderTest {
 
         // Assert the file is not being uploaded anymore
         assertThat(sender.hasOngoingMediaUploads).isFalse()
+        sendFileResult.assertions().isCalledOnce()
     }
 
-    private fun aMediaSender(
+    private fun createMediaSender(
         preProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         room: MatrixRoom = FakeMatrixRoom(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
