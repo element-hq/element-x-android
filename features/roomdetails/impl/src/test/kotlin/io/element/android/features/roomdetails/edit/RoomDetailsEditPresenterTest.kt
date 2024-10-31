@@ -17,6 +17,7 @@ import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -513,7 +514,7 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(4)
-            updateAvatarResult.assertions().isCalledOnce().with(value("image/jpeg"), value(fakeFileContents))
+            updateAvatarResult.assertions().isCalledOnce().with(value(MimeTypes.Jpeg), value(fakeFileContents))
         }
     }
 
