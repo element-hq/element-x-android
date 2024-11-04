@@ -23,4 +23,3 @@ enum class RoomAccessItem(
         description = CommonStrings.screen_create_room_access_section_knocking_option_description,
     ),
 }
-

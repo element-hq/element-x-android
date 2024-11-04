@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
@@ -23,6 +22,7 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
         get() = sequenceOf(
             aConfigureRoomState(),
             aConfigureRoomState(
+                isKnockFeatureEnabled = false,
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
@@ -35,7 +35,6 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 ),
             ),
             aConfigureRoomState(
-                isKnockFeatureEnabled = false,
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",

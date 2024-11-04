@@ -46,6 +46,7 @@ class CreateRoomDataStore @Inject constructor(
 
     fun setRoomName(roomName: String) {
         createRoomConfigFlow.getAndUpdate { config ->
+            /*
             val newVisibility = when (config.roomVisibility) {
                 is RoomVisibilityState.Public -> {
                     val roomAddress = config.roomVisibility.roomAddress
@@ -59,9 +60,9 @@ class CreateRoomDataStore @Inject constructor(
                 }
                 else -> config.roomVisibility
             }
+             */
             config.copy(
                 roomName = roomName.takeIf { it.isNotEmpty() },
-                roomVisibility = newVisibility,
             )
         }
     }

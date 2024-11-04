@@ -50,7 +50,7 @@ fun RoomVisibilityOption(
             )
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .size(30.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(ElementTheme.colors.bgSubtleSecondary)
@@ -60,7 +60,7 @@ fun RoomVisibilityOption(
             Icon(
                 resourceId = roomPrivacyItem.icon,
                 contentDescription = null,
-                tint = if(isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
+                tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
             )
         }
         Spacer(Modifier.size(16.dp))

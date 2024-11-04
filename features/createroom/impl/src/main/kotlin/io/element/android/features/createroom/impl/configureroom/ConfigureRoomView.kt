@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -82,7 +81,7 @@ fun ConfigureRoomView(
                 onBackClick = onBackClick,
                 onNextClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
+                    state.eventSink(ConfigureRoomEvents.CreateRoom)
                 },
             )
         }
@@ -164,7 +163,7 @@ fun ConfigureRoomView(
         },
         onSuccess = { onCreateRoomSuccess(it) },
         errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
-        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
+        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
     )
 
@@ -326,7 +325,7 @@ private fun RoomAddressField(
             color = MaterialTheme.colorScheme.primary,
             text = "Room address",
         )
-        
+
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = address.value,
@@ -359,7 +358,6 @@ private fun RoomAddressField(
 }
 
 @PreviewsDayNight
-@PreviewWithLargeHeight
 @Composable
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(

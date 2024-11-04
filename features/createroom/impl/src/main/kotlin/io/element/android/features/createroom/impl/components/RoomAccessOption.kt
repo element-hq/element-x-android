@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
@@ -36,13 +35,13 @@ fun RoomAccessOption(
     isSelected: Boolean = false,
 ) {
     Row(
-        modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                onClick = { onOptionClick(roomAccessItem) },
-                role = Role.RadioButton,
-            )
+            modifier
+                    .fillMaxWidth()
+                    .selectable(
+                            selected = isSelected,
+                            onClick = { onOptionClick(roomAccessItem) },
+                            role = Role.RadioButton,
+                    )
     ) {
         Column(Modifier.weight(1f)) {
             Text(
@@ -59,8 +58,8 @@ fun RoomAccessOption(
         }
         RadioButton(
             modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .size(48.dp),
+                    .align(Alignment.CenterVertically)
+                    .size(48.dp),
             selected = isSelected,
             // null recommended for accessibility with screenreaders
             onClick = null
