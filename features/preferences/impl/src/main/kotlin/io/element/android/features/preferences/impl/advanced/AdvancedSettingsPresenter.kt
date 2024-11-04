@@ -37,7 +37,7 @@ class AdvancedSettingsPresenter @Inject constructor(
             .collectAsState(initial = true)
         val doesCompressMedia by sessionPreferencesStore
             .doesCompressMedia()
-            .collectAsState(initial = false)
+            .collectAsState(initial = true)
         val theme by remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }
