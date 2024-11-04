@@ -95,7 +95,9 @@ class DefaultPinnedMessagesBannerFormatter @Inject constructor(
                 messageType.bestDescription.prefixWith(CommonStrings.common_audio)
             }
             is VoiceMessageType -> {
-                messageType.bestDescription.prefixWith(CommonStrings.common_voice_message)
+                // In this case, do not use bestDescription, because the filename is useless, only use the caption if available.
+                messageType.caption?.prefixWith(sp.getString(CommonStrings.common_voice_message))
+                    ?: sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body
