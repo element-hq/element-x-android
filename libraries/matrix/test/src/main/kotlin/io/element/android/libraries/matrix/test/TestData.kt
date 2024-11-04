@@ -61,6 +61,7 @@ const val A_ROOM_RAW_NAME = "A room raw name"
 const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"
+const val A_CAPTION = "A media caption"
 
 const val A_REDACTION_REASON = "A redaction reason"
 

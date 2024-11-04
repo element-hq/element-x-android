@@ -125,16 +125,22 @@ fun TextComposer(
 
     val composerOptionsButton: @Composable () -> Unit = remember {
         @Composable {
-            ComposerOptionsButton(
-                modifier = Modifier
-                    .size(48.dp),
-                onClick = onAddAttachment
-            )
+            if (composerMode == MessageComposerMode.Caption) {
+                Spacer(modifier = Modifier.width(9.dp))
+            } else {
+                ComposerOptionsButton(
+                    modifier = Modifier
+                        .size(48.dp),
+                    onClick = onAddAttachment
+                )
+            }
         }
     }
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
+    } else if (composerMode == MessageComposerMode.Caption) {
+        stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
@@ -180,7 +186,7 @@ fun TextComposer(
         }
     }
 
-    val canSendMessage = markdown.isNotBlank()
+    val canSendMessage = markdown.isNotBlank() || composerMode == MessageComposerMode.Caption
     val sendButton = @Composable {
         SendButton(
             canSendMessage = canSendMessage,
@@ -588,6 +594,21 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
                 replyToDetails = inReplyToDetails,
             ),
             enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerCaptionPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateMarkdownList()
+    ) { textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Caption,
+            enableVoiceMessages = false,
         )
     }
 }

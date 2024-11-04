@@ -9,10 +9,12 @@ package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.libraries.textcomposer.model.TextEditorState
 
 data class AttachmentsPreviewState(
     val attachment: Attachment,
     val sendActionState: SendActionState,
+    val textEditorState: TextEditorState,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 )
 

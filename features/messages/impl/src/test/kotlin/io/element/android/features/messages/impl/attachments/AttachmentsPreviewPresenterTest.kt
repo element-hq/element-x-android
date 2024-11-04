@@ -20,8 +20,13 @@ import io.element.android.features.messages.impl.attachments.preview.SendActionS
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -30,19 +35,23 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import java.io.File
 
+@RunWith(RobolectricTestRunner::class)
 class AttachmentsPreviewPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val mediaPreProcessor = FakeMediaPreProcessor()
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 
     @Test
@@ -72,6 +81,80 @@ class AttachmentsPreviewPresenterTest {
             val successState = awaitItem()
             assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - send image with caption success scenario`() = runTest {
+        val sendImageResult =
+            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
+        val mediaPreProcessor = FakeMediaPreProcessor().apply {
+            givenImageResult()
+        }
+        val room = FakeMatrixRoom(
+            sendImageResult = sendImageResult,
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            mediaPreProcessor = mediaPreProcessor,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.textEditorState.setMarkdown(A_CAPTION)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            val successState = awaitItem()
+            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
+            sendImageResult.assertions().isCalledOnce().with(
+                any(),
+                any(),
+                any(),
+                value(A_CAPTION),
+                any(),
+                any(),
+            )
+        }
+    }
+
+    @Test
+    fun `present - send video with caption success scenario`() = runTest {
+        val sendVideoResult =
+            lambdaRecorder<File, File?, VideoInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
+        val mediaPreProcessor = FakeMediaPreProcessor().apply {
+            givenVideoResult()
+        }
+        val room = FakeMatrixRoom(
+            sendVideoResult = sendVideoResult,
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            mediaPreProcessor = mediaPreProcessor,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.textEditorState.setMarkdown(A_CAPTION)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            val successState = awaitItem()
+            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
+            sendVideoResult.assertions().isCalledOnce().with(
+                any(),
+                any(),
+                any(),
+                value(A_CAPTION),
+                any(),
+                any(),
+            )
         }
     }
 
@@ -121,11 +204,14 @@ class AttachmentsPreviewPresenterTest {
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
-        room: MatrixRoom = FakeMatrixRoom()
+        room: MatrixRoom = FakeMatrixRoom(),
+        permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
+        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
-            mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore())
+            mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
+            permalinkBuilder = permalinkBuilder,
         )
     }
 }

@@ -132,8 +132,8 @@ interface MatrixRoom : Closeable {
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
@@ -141,8 +141,8 @@ interface MatrixRoom : Closeable {
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
