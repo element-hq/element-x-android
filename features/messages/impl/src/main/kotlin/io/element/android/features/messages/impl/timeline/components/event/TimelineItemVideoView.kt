@@ -70,7 +70,7 @@ fun TimelineItemVideoView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(CommonStrings.common_image)
+    val description = stringResource(CommonStrings.common_video)
     Column(
         modifier = modifier.semantics { contentDescription = description }
     ) {
