@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Annak érdekében, hogy soha ne maradjon le egyetlen fontos hívásról sem, módosítsa a beállításokat, hogy engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
-  <string name="full_screen_intent_banner_title">"Növelje a hívásélményét"</string>
+  <string name="full_screen_intent_banner_message">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
+  <string name="full_screen_intent_banner_title">"Fokozza a hívásélményét"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Válassza ki az értesítések fogadási módját"</string>
   <string name="screen_advanced_settings_developer_mode">"Fejlesztői mód"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Engedélyezze, hogy elérje a fejlesztőknek szánt funkciókat."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Egyéni Element Call alapwebcím"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Egyéni alapwebcím beállítása az Element Callhoz."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím."</string>
-  <string name="screen_advanced_settings_push_provider_android">"Leküldéses értesítési szolgáltató"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Töltse fel gyorsabban a fényképeket és videókat, valamint csökkentse az adatforgalmat"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Média minőségének optimalizálása"</string>
+  <string name="screen_advanced_settings_push_provider_android">"Leküldéses értesítések szolgáltatója"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Olvasási visszaigazolások"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Ha ki van kapcsolva, az olvasási visszaigazolások nem lesznek elküldve senkinek. A többi felhasználó olvasási visszaigazolását továbbra is meg fogja kapni."</string>

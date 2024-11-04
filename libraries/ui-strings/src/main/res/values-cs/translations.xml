@@ -161,6 +161,7 @@ Důvod: %1$s."</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
   <string name="common_forward_message">"Přeposlat zprávu"</string>
+  <string name="common_frequently_used">"Často používané"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázek"</string>
   <string name="common_in_reply_to">"V odpovědi na %1$s"</string>
@@ -257,6 +258,7 @@ Důvod: %1$s."</string>
   <string name="common_verification_failed">"Ověření se nezdařilo"</string>
   <string name="common_verified">"Ověřeno"</string>
   <string name="common_verify_device">"Ověřit zařízení"</string>
+  <string name="common_verify_identity">"Ověření totožnosti"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>

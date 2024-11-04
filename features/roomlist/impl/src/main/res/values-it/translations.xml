@@ -5,6 +5,7 @@
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Il tuo homeserver non supporta più il vecchio protocollo. Esci e rientra per continuare a usare l\'app."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Aggiornamento disponibile"</string>
   <string name="banner_set_up_recovery_content">"Genera una nuova chiave di recupero che può essere usata per ripristinare la cronologia dei messaggi crittografati nel caso in cui tu perda l\'accesso ai tuoi dispositivi."</string>
+  <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
   <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
   <string name="confirm_recovery_key_banner_message">"Il backup della chat non è attualmente sincronizzato. Devi confermare la chiave di recupero per mantenere l\'accesso al backup della chat."</string>
   <string name="confirm_recovery_key_banner_title">"Inserisci la chiave di recupero"</string>

@@ -8,8 +8,8 @@
   <string name="screen_advanced_settings_element_call_base_url">"Базовый URL сервера звонков Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайте свой сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
-  <string name="screen_advanced_settings_media_compression_description">"Оптимизировать для загрузки"</string>
-  <string name="screen_advanced_settings_media_compression_title">"Медиа"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Загружайте фотографии и видео быстрее и сокращайте потребление трафика"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Оптимизировать качество мультимедиа"</string>
   <string name="screen_advanced_settings_push_provider_android">"Поставщик push-уведомлений"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>

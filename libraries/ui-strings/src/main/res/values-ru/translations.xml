@@ -258,6 +258,7 @@
   <string name="common_verification_failed">"Сбой проверки"</string>
   <string name="common_verified">"Проверено"</string>
   <string name="common_verify_device">"Подтверждение устройства"</string>
+  <string name="common_verify_identity">"Подтвердить личность"</string>
   <string name="common_video">"Видео"</string>
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
@@ -316,7 +317,7 @@
   <string name="screen_reset_identity_confirmation_subtitle">"Вы собираетесь перейти в свою учетную запись %1$s, чтобы сбросить идентификацию. После этого вы вернетесь в приложение."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свою учетную запись, чтобы сбросить свою идентификацию."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Отозвать статус и отправить"</string>
-  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете отозвать свою верификацию и отправить это сообщение в любом случае или вы можете отменить ее сейчас и повторить попытку позже после повторной верификации %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете либо отозвать свой статус подтверждения и всё равно отправить это сообщение, либо отменить его сейчас и повторить попытку после повторного подтверждения %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что изменилась подтвержденная личность %1$s"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Отправь сообщение в любом случае"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s использует одно или несколько непроверенных устройств. Вы все равно можете отправить сообщение или отменить его пока и повторить попытку позже %2$s, проверив все устройства пользователя."</string>

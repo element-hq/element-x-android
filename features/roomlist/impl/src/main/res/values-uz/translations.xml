@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"Qayta tiklashni sozlang"</string>
   <string name="screen_invites_decline_chat_message">"Haqiqatan ham qo\'shilish taklifini rad qilmoqchimisiz%1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Taklifni rad etish"</string>
   <string name="screen_invites_decline_direct_chat_message">"Haqiqatan ham bu shaxsiy chatni rad qilmoqchimisiz%1$s ?"</string>

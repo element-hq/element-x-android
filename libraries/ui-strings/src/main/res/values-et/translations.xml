@@ -254,6 +254,7 @@ Põhjus: %1$s."</string>
   <string name="common_verification_failed">"Verifitseerimine ei õnnestunud"</string>
   <string name="common_verified">"Verifitseeritud"</string>
   <string name="common_verify_device">"Verifitseeri seade"</string>
+  <string name="common_verify_identity">"Verifitseeri võrguidentiteet"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>

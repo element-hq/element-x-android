@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Anda hanya dapat terhubung ke server yang ada yang mendukung sinkronisasi geser. Admin homeserver Anda perlu mengaturnya. %1$s"</string>
   <string name="screen_change_server_subtitle">"Apa alamat server Anda?"</string>
   <string name="screen_change_server_title">"Pilih server Anda"</string>
+  <string name="screen_create_account_title">"Buat akun"</string>
   <string name="screen_login_error_deactivated_account">"Akun ini telah dinonaktifkan."</string>
   <string name="screen_login_error_invalid_credentials">"Nama pengguna dan/atau kata sandi salah"</string>
   <string name="screen_login_error_invalid_user_id">"Ini bukan pengenal pengguna yang valid. Format yang diharapkan: \'@pengguna:homeserver.org\'"</string>
@@ -59,6 +60,7 @@ Coba masuk secara manual, atau pindai kode QR dengan perangkat lain."</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Pilih %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Tautkan perangkat baru”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Pindai kode QR dengan perangkat ini"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Hanya tersedia jika penyedia akun Anda mendukungnya."</string>
   <string name="screen_qr_code_login_initial_state_title">"Buka %1$s di perangkat lain untuk mendapatkan kode QR"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Gunakan kode QR yang ditampilkan di perangkat lain."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Coba lagi"</string>

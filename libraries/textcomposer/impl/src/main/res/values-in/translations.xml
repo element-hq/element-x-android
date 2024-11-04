@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Alihkan daftar poin"</string>
   <string name="rich_text_editor_close_formatting_options">"Tutup opsi pemformatan"</string>
   <string name="rich_text_editor_code_block">"Alihkan blok kode"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Keterangan opsional…"</string>
   <string name="rich_text_editor_composer_placeholder">"Kirim pesan…"</string>
   <string name="rich_text_editor_create_link">"Buat tautan"</string>
   <string name="rich_text_editor_edit_link">"Sunting tautan"</string>

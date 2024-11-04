@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"Налаштувати відновлення"</string>
   <string name="confirm_recovery_key_banner_message">"Ваша резервна копія чату наразі не синхронізована. Вам потрібно підтвердити ключ відновлення, щоб зберегти доступ до резервної копії чату."</string>
   <string name="confirm_recovery_key_banner_title">"Підтвердіть ключ відновлення"</string>
   <string name="full_screen_intent_banner_message">"Щоб ніколи не пропустити важливий дзвінок, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>

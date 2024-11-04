@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Ativar/desativar lista de pontos"</string>
   <string name="rich_text_editor_close_formatting_options">"Fechar opções de formatação"</string>
   <string name="rich_text_editor_code_block">"Ativar/desativar bloco de código"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Legenda opcional…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mensagem…"</string>
   <string name="rich_text_editor_create_link">"Criar uma ligação"</string>
   <string name="rich_text_editor_edit_link">"Editar ligação"</string>
