@@ -325,7 +325,12 @@ private fun TimelineItemEventRowContent(
         MessageEventBubble(
             modifier = Modifier
                 .constrainAs(message) {
-                    top.linkTo(sender.bottom, margin = NEGATIVE_MARGIN_FOR_BUBBLE)
+                    val topMargin = if (bubbleState.cutTopStart) {
+                        NEGATIVE_MARGIN_FOR_BUBBLE
+                    } else {
+                        0.dp
+                    }
+                    top.linkTo(sender.bottom, margin = topMargin)
                     if (event.isMine) {
                         end.linkTo(parent.end, margin = 16.dp)
                     } else {
