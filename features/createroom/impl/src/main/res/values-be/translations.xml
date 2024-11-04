@@ -7,6 +7,9 @@
   <string name="screen_create_room_private_option_title">"Прыватны пакой (толькі па запрашэнні)"</string>
   <string name="screen_create_room_public_option_description">"Паведамленні не зашыфраваны, і кожны можа іх прачытаць. Вы можаце ўключыць шыфраванне пазней."</string>
   <string name="screen_create_room_public_option_title">"Публічны пакой (для ўсіх)"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Хто заўгодна"</string>
+  <string name="screen_create_room_room_access_section_header">"Доступ у пакой"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Папрасіце далучыцца"</string>
   <string name="screen_create_room_room_name_label">"Назва пакоя"</string>
   <string name="screen_create_room_title">"Стварыце пакой"</string>
   <string name="screen_create_room_topic_label">"Тэма (неабавязкова)"</string>

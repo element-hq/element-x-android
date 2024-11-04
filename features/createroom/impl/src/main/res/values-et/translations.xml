@@ -8,7 +8,15 @@
   <string name="screen_create_room_public_option_description">"Kõik saavad seda jututuba leida.
 Sa võid seda jututoa seadistustest alati muuta."</string>
   <string name="screen_create_room_public_option_title">"Avalik jututuba"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Kõik võivad selle jututoaga liituda"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Kõik"</string>
+  <string name="screen_create_room_room_access_section_header">"Ligipääs jututoale"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_create_room_room_address_section_footer">"Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi."</string>
+  <string name="screen_create_room_room_address_section_title">"Jututoa aadress"</string>
   <string name="screen_create_room_room_name_label">"Jututoa nimi"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Jututoa nähtavus"</string>
   <string name="screen_create_room_title">"Loo jututuba"</string>
   <string name="screen_create_room_topic_label">"Teema (kui soovid lisada)"</string>
   <string name="screen_start_chat_error_starting_chat">"Vestluse alustamisel tekkis viga"</string>

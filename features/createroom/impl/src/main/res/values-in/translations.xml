@@ -8,7 +8,15 @@
   <string name="screen_create_room_public_option_description">"Siapa pun dapat mencari ruangan ini.
 Anda dapat mengubah ini kapan pun dalam pengaturan ruangan."</string>
   <string name="screen_create_room_public_option_title">"Ruangan publik"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Siapa pun dapat bergabung dengan ruangan ini"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Siapa pun"</string>
+  <string name="screen_create_room_room_access_section_header">"Akses Ruangan"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Minta untuk bergabung"</string>
+  <string name="screen_create_room_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
+  <string name="screen_create_room_room_address_section_title">"Alamat ruangan"</string>
   <string name="screen_create_room_room_name_label">"Nama ruangan"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Keterlihatan ruangan"</string>
   <string name="screen_create_room_title">"Buat ruangan"</string>
   <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
   <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>

@@ -291,14 +291,6 @@ Razão: %1$s."</string>
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agita o dispositivo em fúria para comunicar um problema"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Qualquer pessoa pode entrar nesta sala"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Qualquer pessoa"</string>
-  <string name="screen_create_room_access_section_header">"Acesso à sala"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou um moderador terá de aceitar o pedido"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Pedir para participar"</string>
-  <string name="screen_create_room_room_address_section_footer">"Para que esta sala seja visível no diretório público de salas, precisas de um endereço de sala."</string>
-  <string name="screen_create_room_room_address_section_title">"Endereço da sala"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Visibilidade da sala"</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar multimédia, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Falhar ao carregar multimédia, por favor tente novamente."</string>

@@ -273,7 +273,7 @@ private fun RoomVisibilityOptions(
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
-        title = "Room visibility",
+        title = stringResource(R.string.screen_create_room_room_visibility_section_title),
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -294,7 +294,7 @@ private fun RoomAccessOptions(
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
-        title = "Room access",
+        title = stringResource(R.string.screen_create_room_room_access_section_header),
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -323,7 +323,7 @@ private fun RoomAddressField(
             modifier = Modifier.padding(horizontal = 16.dp),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.primary,
-            text = "Room address",
+            text = stringResource(R.string.screen_create_room_room_address_section_title),
         )
 
         TextField(
@@ -346,7 +346,7 @@ private fun RoomAddressField(
             },
             supportingText = {
                 Text(
-                    text = "In order for this room to be visible in the public room directory, you will need to a room address. ",
+                    text = stringResource(R.string.screen_create_room_room_address_section_footer),
                     style = ElementTheme.typography.fontBodySmRegular,
                     color = ElementTheme.colors.textSecondary,
                 )

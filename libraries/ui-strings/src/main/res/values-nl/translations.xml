@@ -283,11 +283,6 @@ Reden: %1$s."</string>
   <string name="invite_friends_text">"Hé, praat met me op %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schudden om een bug te melden"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Iedereen kan toetreden tot deze kamer"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Iedereen"</string>
-  <string name="screen_create_room_access_section_header">"Toegang tot de kamer"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Iedereen kan vragen om toe te treden tot de kamer, maar een beheerder of moderator moet het verzoek accepteren"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Vraag om toe te treden"</string>
   <string name="screen_media_picker_error_failed_selection">"Het selecteren van media is mislukt. Probeer het opnieuw."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Het uploaden van media is mislukt. Probeer het opnieuw."</string>
