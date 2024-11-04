@@ -26,8 +26,12 @@
   <string name="screen_session_verification_ready_subtitle">"Egyedi emodzsik összehasonlítása."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Hasonlítsa össze az egyedi emodzsikat, meggyőződve arról, hogy azonos a sorrendjük."</string>
   <string name="screen_session_verification_request_details_timestamp">"Bejelentkezve"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"A kérés túllépte az időkorlátot, el lett utasítva, vagy ellenőrzési eltérés történt."</string>
+  <string name="screen_session_verification_request_failure_title">"Az ellenőrzés sikertelen"</string>
   <string name="screen_session_verification_request_footer">"Csak akkor folytassa, ha Ön kezdeményezte ezt az ellenőrzést."</string>
   <string name="screen_session_verification_request_subtitle">"Az üzenetelőzmények biztonságának megőrzése érdekében ellenőrizze a másik eszközt."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Mostantól biztonságosan olvashat vagy küldhet üzeneteket a másik eszközén."</string>
+  <string name="screen_session_verification_request_success_title">"Eszköz ellenőrizve"</string>
   <string name="screen_session_verification_request_title">"Ellenőrzés kérve"</string>
   <string name="screen_session_verification_they_dont_match">"Nem egyeznek"</string>
   <string name="screen_session_verification_they_match">"Megegyeznek"</string>

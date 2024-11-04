@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_cancel_knock_action">"Annuler la demande"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Oui, annuler"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Êtes-vous sûr de vouloir annuler votre demande d’accès à ce salon?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Annuler la demande d’adhésion"</string>
   <string name="screen_join_room_join_action">"Rejoindre"</string>
   <string name="screen_join_room_knock_action">"Demander à joindre"</string>
   <string name="screen_join_room_knock_message_description">"Message (facultatif)"</string>

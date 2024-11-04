@@ -145,6 +145,7 @@
   <string name="common_edited_suffix">"(modifié)"</string>
   <string name="common_editing">"Édition"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption">"Chiffrement"</string>
   <string name="common_encryption_enabled">"Chiffrement activé"</string>
   <string name="common_enter_your_pin">"Saisissez votre code PIN"</string>
   <string name="common_error">"Erreur"</string>
@@ -158,6 +159,7 @@ Raison: %1$s."</string>
   <string name="common_file">"Fichier"</string>
   <string name="common_file_saved_on_disk_android">"Fichier enregistré dans Téléchargements"</string>
   <string name="common_forward_message">"Transférer le message"</string>
+  <string name="common_frequently_used">"Fréquemment utilisé"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"En réponse à %1$s"</string>
@@ -238,7 +240,9 @@ Raison: %1$s."</string>
   <string name="common_topic">"Sujet"</string>
   <string name="common_topic_placeholder">"De quoi s’agit-il dans ce salon ?"</string>
   <string name="common_unable_to_decrypt">"Échec de déchiffrement"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Envoyé depuis un appareil non sécurisé"</string>
   <string name="common_unable_to_decrypt_no_access">"Vous ne pouvez pas voir ce message"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"L’identité vérifiée de l’expéditeur a changé"</string>
   <string name="common_unable_to_invite_message">"Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs."</string>
   <string name="common_unable_to_invite_title">"Impossible d’envoyer une ou plusieurs invitations"</string>
   <string name="common_unlock">"Déverrouillage"</string>
@@ -247,6 +251,7 @@ Raison: %1$s."</string>
   <string name="common_username">"Nom d’utilisateur"</string>
   <string name="common_verification_cancelled">"Vérification annulée"</string>
   <string name="common_verification_complete">"Vérification terminée"</string>
+  <string name="common_verification_failed">"Échec de la vérification"</string>
   <string name="common_verified">"Vérifié(e)"</string>
   <string name="common_verify_device">"Vérifier la session"</string>
   <string name="common_video">"Vidéo"</string>
@@ -290,6 +295,9 @@ Raison: %1$s."</string>
   <string name="screen_create_room_access_section_header">"Accès au salon"</string>
   <string name="screen_create_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
   <string name="screen_create_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
+  <string name="screen_create_room_room_address_section_footer">"Pour que ce salon soit visible dans le répertoire des salons publics, vous aurez besoin d’une adresse de salon."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresse du salon"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
@@ -318,6 +326,7 @@ Raison: %1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
   <string name="screen_room_title">"Discussion"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Demande d’adhésion envoyée"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

@@ -5,6 +5,7 @@
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш хатні сервер больш не падтрымлівае стары пратакол. Калі ласка, выйдзіце і ўвайдзіце зноў, каб працягнуць выкарыстанне праграмы."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Даступна абнаўленне"</string>
   <string name="banner_set_up_recovery_content">"Стварыце новы ключ аднаўлення, які можна выкарыстоўваць для аднаўлення зашыфраванай гісторыі паведамленняў у выпадку страты доступу да вашых прылад."</string>
+  <string name="banner_set_up_recovery_submit">"Наладзьце аднаўленне"</string>
   <string name="banner_set_up_recovery_title">"Наладзіць аднаўленне"</string>
   <string name="confirm_recovery_key_banner_message">"Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата."</string>
   <string name="confirm_recovery_key_banner_title">"Увядзіце ключ аднаўлення"</string>

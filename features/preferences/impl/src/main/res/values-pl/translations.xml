@@ -54,5 +54,5 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>
   <string name="screen_notification_settings_title">"Powiadomienia"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Rozwiązywanie problemów"</string>
-  <string name="troubleshoot_notifications_entry_point_title">"Powiadomienia rozwiązywania problemów"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Rozwiązywanie problemów powiadomień"</string>
 </resources>

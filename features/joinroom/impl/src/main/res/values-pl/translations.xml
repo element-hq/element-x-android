@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Anuluj prośbę"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Tak, anuluj"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Czy na pewno chcesz anulować prośbę o dołączenie do tego pokoju?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Anuluj prośbę o dołączenie"</string>
   <string name="screen_join_room_join_action">"Dołącz do pokoju"</string>
-  <string name="screen_join_room_knock_action">"Zapukaj, by dołączyć"</string>
+  <string name="screen_join_room_knock_action">"Wyślij prośbę o dołączenie"</string>
+  <string name="screen_join_room_knock_message_description">"Wiadomość (opcjonalne)"</string>
+  <string name="screen_join_room_knock_sent_description">"Otrzymasz zaproszenie dołączenia do pokoju, jeśli prośba zostanie zaakceptowana."</string>
+  <string name="screen_join_room_knock_sent_title">"Wysłano prośbę o dołączenie"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s jeszcze nie obsługuje przestrzeni. Uzyskaj dostęp do przestrzeni w wersji web."</string>
   <string name="screen_join_room_space_not_supported_title">"Przestrzenie nie są jeszcze obsługiwane"</string>
   <string name="screen_join_room_subtitle_knock">"Kliknij przycisk poniżej, aby powiadomić administratora pokoju. Po zatwierdzeniu będziesz mógł dołączyć do rozmowy."</string>

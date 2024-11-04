@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_chat_backup_key_backup_action_disable">"Отключить резервное копирование"</string>
+  <string name="screen_chat_backup_key_backup_action_disable">"Удалить хранилище ключей"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Включить резервное копирование"</string>
   <string name="screen_chat_backup_key_backup_description">"Сохраните вашу криптографическую идентификацию и ключи сообщений в безопасности на сервере. Это позволит вам просматривать историю сообщений на любых новых устройствах.%1$s ."</string>
   <string name="screen_chat_backup_key_backup_title">"Хранилище ключей"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"Для настройки восстановления необходимо включить хранилище ключей."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Загрузить ключи с этого устройства"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Разрешить хранение ключей"</string>
   <string name="screen_chat_backup_recovery_action_change">"Изменить ключ восстановления"</string>
@@ -28,10 +29,10 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
-  <string name="screen_key_backup_disable_description">"Отключение резервного копирования удалит текущую резервную копию ключа шифрования и отключит другие функции безопасности. В этом случае вы выполните следующие действия:"</string>
+  <string name="screen_key_backup_disable_description">"Удаление хранилища ключей приведёт к удалению вашей криптографической идентификации и ключей сообщений с сервера, а также отключению следующих функций безопасности:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Нет зашифрованной истории сообщений на новых устройствах"</string>
   <string name="screen_key_backup_disable_description_point_2">"Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$s везде"</string>
-  <string name="screen_key_backup_disable_title">"Вы действительно хотите отключить резервное копирование?"</string>
+  <string name="screen_key_backup_disable_title">"Вы уверены, что хотите отключить хранение ключей и удалить их?"</string>
   <string name="screen_recovery_key_change_description">"Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать."</string>
   <string name="screen_recovery_key_change_generate_key">"Создать новый ключ восстановления"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Не сообщайте эту информацию никому!"</string>
@@ -54,7 +55,7 @@
   <string name="screen_recovery_key_save_title">"Сохраните ключ восстановления"</string>
   <string name="screen_recovery_key_setup_confirmation_description">"После этого шага вы не сможете получить доступ к новому ключу восстановления."</string>
   <string name="screen_recovery_key_setup_confirmation_title">"Вы сохранили ключ восстановления?"</string>
-  <string name="screen_recovery_key_setup_description">"Резервная копия чата защищена ключом восстановления. Если после настройки вам понадобится новый ключ восстановления, вы можете создать его заново, выбрав «Изменить ключ восстановления»."</string>
+  <string name="screen_recovery_key_setup_description">"Ваше хранилище ключей защищено ключом восстановления. Если после настройки вам понадобится новый ключ восстановления, вы можете его пересоздать, выбрав «Изменить ключ восстановления»."</string>
   <string name="screen_recovery_key_setup_generate_key">"Создайте ключ восстановления"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Не сообщайте эту информацию никому!"</string>
   <string name="screen_recovery_key_setup_success">"Настройка восстановления выполнена успешно"</string>
