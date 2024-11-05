@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -89,7 +90,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 // We don't need to compute those values
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,
-                isCallOngoing = false,
+                // We do not care about the call state here.
+                roomCallState = aStandByCallState(),
                 // don't compute this value or the pin icon will be shown
                 pinnedEventIds = emptyList(),
                 typingNotificationState = TypingNotificationState(

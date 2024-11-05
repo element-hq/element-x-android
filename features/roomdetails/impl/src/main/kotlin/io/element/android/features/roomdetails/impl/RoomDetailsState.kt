@@ -9,6 +9,7 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -31,7 +32,7 @@ data class RoomDetailsState(
     val canEdit: Boolean,
     val canInvite: Boolean,
     val canShowNotificationSettings: Boolean,
-    val canCall: Boolean,
+    val roomCallState: RoomCallState,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val isFavorite: Boolean,

@@ -33,6 +33,9 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
+import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.features.roomcall.api.anOngoingCallState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -70,7 +73,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState(
-                callState = RoomCallState.ONGOING,
+                roomCallState = anOngoingCallState(),
             ),
             aMessagesState(
                 enableVoiceMessages = true,
@@ -80,7 +83,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState(
-                callState = RoomCallState.DISABLED,
+                roomCallState = aStandByCallState(canStartCall = false),
             ),
             aMessagesState(
                 pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
@@ -115,7 +118,7 @@ fun aMessagesState(
     hasNetworkConnection: Boolean = true,
     showReinvitePrompt: Boolean = false,
     enableVoiceMessages: Boolean = true,
-    callState: RoomCallState = RoomCallState.ENABLED,
+    roomCallState: RoomCallState = aStandByCallState(),
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
@@ -139,7 +142,7 @@ fun aMessagesState(
     showReinvitePrompt = showReinvitePrompt,
     enableTextFormatting = true,
     enableVoiceMessages = enableVoiceMessages,
-    callState = callState,
+    roomCallState = roomCallState,
     appName = "Element",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     eventSink = eventSink,

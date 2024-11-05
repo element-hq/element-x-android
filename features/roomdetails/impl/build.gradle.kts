@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.services.analytics.compose)
     implementation(projects.features.poll.api)
     implementation(projects.features.messages.api)
+    implementation(projects.features.roomcall.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
