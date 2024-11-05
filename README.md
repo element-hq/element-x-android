@@ -8,7 +8,7 @@
 
 # Element X Android
 
-Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [element.io](https://element.io/). This app is currently in a pre-alpha release stage with only basic functionalities.
+Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [element.io](https://element.io/).
 
 The application is a total rewrite of [Element-Android](https://github.com/element-hq/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 7+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
 
@@ -71,7 +71,7 @@ We're doing this as a way to share code between platforms and while we've seen p
 
 ## Status
 
-This project is in work in progress. The app does not cover yet all functionalities we expect. The list of supported features can be found in [this issue](https://github.com/element-hq/element-x-android/issues/911).
+This project is in an early rollout and migration phase.
 
 ## Contributing
 
