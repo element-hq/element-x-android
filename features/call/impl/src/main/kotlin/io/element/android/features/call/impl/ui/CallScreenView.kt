@@ -183,6 +183,7 @@ private fun WebView.setup(
         allowFileAccess = true
         domStorageEnabled = true
         mediaPlaybackRequiresUserGesture = false
+        @Suppress("DEPRECATION")
         databaseEnabled = true
         loadsImagesAutomatically = true
         userAgentString = userAgent
