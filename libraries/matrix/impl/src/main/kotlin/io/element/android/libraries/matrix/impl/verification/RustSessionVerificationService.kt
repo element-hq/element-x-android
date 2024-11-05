@@ -231,6 +231,10 @@ class RustSessionVerificationService(
     private suspend fun initVerificationControllerIfNeeded() = initControllerMutex.withLock {
         if (!this::verificationController.isInitialized) {
             tryOrFail {
+                // We may have a race condition if we try to get the user identity before the encryption service is ready
+                withTimeout(5.seconds) {
+                    encryptionService.waitForE2eeInitializationTasks()
+                }
                 verificationController = client.getSessionVerificationController()
                 verificationController.setDelegate(this)
             }
@@ -245,11 +249,7 @@ class RustSessionVerificationService(
             runCatching {
                 encryptionService.waitForE2eeInitializationTasks()
             }.onSuccess {
-                _sessionVerifiedStatus.value = when (encryptionService.verificationState()) {
-                    VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
-                    VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
-                    VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
-                }
+                _sessionVerifiedStatus.value = encryptionService.verificationState().map()
                 Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
             }
         } else {
@@ -257,14 +257,18 @@ class RustSessionVerificationService(
             Timber.d("Updating verification status: flow is pending or was finished some time ago")
             runCatching {
                 initVerificationControllerIfNeeded()
-                _sessionVerifiedStatus.value = if (encryptionService.verificationState() == VerificationState.VERIFIED) {
-                    SessionVerifiedStatus.Verified
-                } else {
-                    SessionVerifiedStatus.NotVerified
-                }
+                _sessionVerifiedStatus.value = encryptionService.verificationState().map()
                 Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
             }
         }
+    }
+}
+
+private fun VerificationState.map(): SessionVerifiedStatus {
+    return when (this) {
+        VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
+        VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
+        VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
     }
 }
 
