@@ -91,7 +91,7 @@ fun RoomVisibilityOption(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomPrivacyOptionPreview() = ElementPreview {
+internal fun RoomVisibilityOptionPreview() = ElementPreview {
     val aRoomPrivacyItem = RoomVisibilityItem.Private
     Column {
         RoomVisibilityOption(
