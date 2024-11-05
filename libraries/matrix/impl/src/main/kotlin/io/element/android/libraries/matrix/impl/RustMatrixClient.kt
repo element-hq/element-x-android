@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.PendingRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -320,7 +321,14 @@ class RustMatrixClient(
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
-                powerLevelContentOverride = defaultRoomCreationPowerLevels,
+                powerLevelContentOverride = defaultRoomCreationPowerLevels.copy(
+                    invite = if (createRoomParams.joinRuleOverride == JoinRuleOverride.Knock) {
+                        // override the invite power level so it's the same as kick.
+                        RoomMember.Role.MODERATOR.powerLevel.toInt()
+                    } else {
+                        null
+                    }
+                ),
                 joinRuleOverride = when (createRoomParams.joinRuleOverride) {
                     JoinRuleOverride.Knock -> RustJoinRule.Knock
                     JoinRuleOverride.None -> null
