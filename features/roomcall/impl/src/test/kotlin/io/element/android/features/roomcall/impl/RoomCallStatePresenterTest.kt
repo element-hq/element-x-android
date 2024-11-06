@@ -8,6 +8,9 @@
 package io.element.android.features.roomcall.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.call.api.CurrentCall
+import io.element.android.features.call.api.CurrentCallObserver
+import io.element.android.features.call.test.FakeCurrentCallObserver
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -18,29 +21,179 @@ import org.junit.Test
 
 class RoomCallStatePresenterTest {
     @Test
+    fun `present - initial state`() = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { Result.success(false) },
+        )
+        val presenter = createRoomCallStatePresenter(matrixRoom = room)
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - initial state - user can join call`() = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { Result.success(true) },
+        )
+        val presenter = createRoomCallStatePresenter(matrixRoom = room)
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = true,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
         val room = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(false) },
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            typingNoticeResult = { Result.success(Unit) },
-            canUserPinUnpinResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(RoomCallState.OnGoing(canJoinCall = false))
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = false,
+                    isUserInTheCall = false,
+                    isUserLocallyInTheCall = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - user has joined the call on another session`() = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { Result.success(true) },
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    hasRoomCall = true,
+                    activeRoomCallParticipants = listOf(sessionId),
+                )
+            )
+        }
+        val presenter = createRoomCallStatePresenter(matrixRoom = room)
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isUserInTheCall = true,
+                    isUserLocallyInTheCall = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - user has joined the call locally`() = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { Result.success(true) },
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    hasRoomCall = true,
+                    activeRoomCallParticipants = listOf(sessionId),
+                )
+            )
+        }
+        val presenter = createRoomCallStatePresenter(
+            matrixRoom = room,
+            currentCallObserver = FakeCurrentCallObserver(initialValue = CurrentCall.RoomCall(room.roomId)),
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isUserInTheCall = true,
+                    isUserLocallyInTheCall = true,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - user leaves the call`() = runTest {
+        val room = FakeMatrixRoom(
+            canUserJoinCallResult = { Result.success(true) },
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    hasRoomCall = true,
+                    activeRoomCallParticipants = listOf(sessionId),
+                )
+            )
+        }
+        val currentCallObserver = FakeCurrentCallObserver(initialValue = CurrentCall.RoomCall(room.roomId))
+        val presenter = createRoomCallStatePresenter(
+            matrixRoom = room,
+            currentCallObserver = currentCallObserver
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isUserInTheCall = true,
+                    isUserLocallyInTheCall = true,
+                )
+            )
+            currentCallObserver.setCurrentCall(CurrentCall.None)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isUserInTheCall = true,
+                    isUserLocallyInTheCall = false,
+                )
+            )
+            room.givenRoomInfo(
+                aRoomInfo(
+                    hasRoomCall = true,
+                    activeRoomCallParticipants = emptyList(),
+                )
+            )
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isUserInTheCall = false,
+                    isUserLocallyInTheCall = false,
+                )
+            )
+            room.givenRoomInfo(
+                aRoomInfo(
+                    hasRoomCall = false,
+                    activeRoomCallParticipants = emptyList(),
+                )
+            )
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = true,
+                )
+            )
         }
     }
 
     private fun createRoomCallStatePresenter(
-        matrixRoom: MatrixRoom
+        matrixRoom: MatrixRoom,
+        currentCallObserver: CurrentCallObserver = FakeCurrentCallObserver(),
     ): RoomCallStatePresenter {
         return RoomCallStatePresenter(
             room = matrixRoom,
+            currentCallObserver = currentCallObserver,
         )
     }
 }
