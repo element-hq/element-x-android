@@ -85,7 +85,7 @@ fun TimelineItemImageView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                    model = content.thumbnailMediaRequest,
+                    model = content.thumbnailMediaRequestData,
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                     contentDescription = description,
