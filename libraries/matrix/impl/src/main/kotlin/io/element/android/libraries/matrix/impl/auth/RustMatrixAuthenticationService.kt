@@ -14,6 +14,7 @@ import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.ClientAuthenticationObserver
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -66,6 +67,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val passphraseGenerator: PassphraseGenerator,
     private val oidcConfigurationProvider: OidcConfigurationProvider,
     private val appPreferencesStore: AppPreferencesStore,
+    private val authenticationObserver: ClientAuthenticationObserver,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
@@ -155,8 +157,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         sessionPaths = currentSessionPaths,
                     )
-                clear()
                 sessionStore.storeData(sessionData)
+                authenticationObserver.onClientAuthenticationSucceeded(rustMatrixClientFactory.create(client))
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
@@ -226,10 +228,10 @@ class RustMatrixAuthenticationService @Inject constructor(
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
-                clear()
                 pendingOidcAuthorizationData?.close()
                 pendingOidcAuthorizationData = null
                 sessionStore.storeData(sessionData)
+                authenticationObserver.onClientAuthenticationSucceeded(rustMatrixClientFactory.create(client))
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()

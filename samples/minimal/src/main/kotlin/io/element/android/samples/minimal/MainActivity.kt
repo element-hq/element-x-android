@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
             passphraseGenerator = NullPassphraseGenerator(),
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
             appPreferencesStore = InMemoryAppPreferencesStore(),
+            authenticationObserver = { _ -> },
         )
     }
 

@@ -19,14 +19,14 @@ class MatrixClientsHolderTest {
     @Test
     fun `test getOrNull`() {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, DefaultClientAuthenticationObserver())
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()
     }
 
     @Test
     fun `test getOrRestore`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, DefaultClientAuthenticationObserver())
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()
@@ -39,7 +39,7 @@ class MatrixClientsHolderTest {
     @Test
     fun `test remove`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, DefaultClientAuthenticationObserver())
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixClientsHolder.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
@@ -52,7 +52,7 @@ class MatrixClientsHolderTest {
     @Test
     fun `test remove all`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, DefaultClientAuthenticationObserver())
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixClientsHolder.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
@@ -65,7 +65,7 @@ class MatrixClientsHolderTest {
     @Test
     fun `test save and restore`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, DefaultClientAuthenticationObserver())
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         matrixClientsHolder.getOrRestore(A_SESSION_ID)
@@ -80,5 +80,17 @@ class MatrixClientsHolderTest {
         // Restore again
         matrixClientsHolder.restoreWithSavedState(savedStateMap)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
+    }
+
+    @Test
+    fun `test ClientAuthenticationObserver emits a value and we save it`() {
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
+        val clientAuthenticationObserver = DefaultClientAuthenticationObserver()
+        val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService, clientAuthenticationObserver)
+        assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()
+
+        clientAuthenticationObserver.onClientAuthenticationSucceeded(FakeMatrixClient(sessionId = A_SESSION_ID))
+
+        assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNotNull()
     }
 }
