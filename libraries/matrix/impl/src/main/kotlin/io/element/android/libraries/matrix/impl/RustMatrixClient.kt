@@ -73,7 +73,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
@@ -115,7 +114,6 @@ import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: Client,
     private val baseDirectory: File,
@@ -442,13 +440,15 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = withContext(sessionDispatcher) {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>> = withContext(sessionDispatcher) {
         runCatching {
-            val result = client.resolveRoomAlias(roomAlias.value)
-            ResolvedRoomAlias(
-                roomId = RoomId(result.roomId),
-                servers = result.servers,
-            )
+            val result = client.resolveRoomAlias(roomAlias.value)?.let {
+                ResolvedRoomAlias(
+                    roomId = RoomId(it.roomId),
+                    servers = it.servers,
+                )
+            }
+            Optional.ofNullable(result)
         }
     }
 
