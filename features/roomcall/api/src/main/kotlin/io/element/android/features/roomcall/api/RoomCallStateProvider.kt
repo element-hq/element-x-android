@@ -22,9 +22,11 @@ open class RoomCallStateProvider : PreviewParameterProvider<RoomCallState> {
 fun anOngoingCallState(
     canJoinCall: Boolean = true,
     isUserInTheCall: Boolean = false,
+    isUserLocallyInTheCall: Boolean = isUserInTheCall,
 ) = RoomCallState.OnGoing(
     canJoinCall = canJoinCall,
     isUserInTheCall = isUserInTheCall,
+    isUserLocallyInTheCall = isUserLocallyInTheCall,
 )
 
 fun aStandByCallState(

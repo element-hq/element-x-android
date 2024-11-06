@@ -79,7 +79,7 @@ private fun OnGoingCallMenuItem(
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!roomCallState.isUserInTheCall) {
+    if (!roomCallState.isUserLocallyInTheCall) {
         Button(
             onClick = onJoinCallClick,
             colors = ButtonDefaults.buttonColors(

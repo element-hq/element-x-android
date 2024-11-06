@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.di.AppScope
@@ -82,6 +83,7 @@ class DefaultActiveCallManager @Inject constructor(
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
     private val notificationManagerCompat: NotificationManagerCompat,
     private val matrixClientProvider: MatrixClientProvider,
+    private val defaultCurrentCallObserver: DefaultCurrentCallObserver,
 ) : ActiveCallManager {
     private var timedOutCallJob: Job? = null
 
@@ -89,6 +91,7 @@ class DefaultActiveCallManager @Inject constructor(
 
     init {
         observeRingingCall()
+        observeCurrentCall()
     }
 
     override fun registerIncomingCall(notificationData: CallNotificationData) {
@@ -205,6 +208,28 @@ class DefaultActiveCallManager @Inject constructor(
                     // The call was cancelled
                     timedOutCallJob?.cancel()
                     incomingCallTimedOut()
+                }
+            }
+            .launchIn(coroutineScope)
+    }
+
+    private fun observeCurrentCall() {
+        activeCall
+            .onEach { value ->
+                if (value == null) {
+                    defaultCurrentCallObserver.onCallEnded()
+                } else {
+                    when (value.callState) {
+                        is CallState.Ringing -> {
+                            // Nothing to do
+                        }
+                        is CallState.InCall -> {
+                            when (val callType = value.callType) {
+                                is CallType.ExternalUrl -> defaultCurrentCallObserver.onCallStarted(CurrentCall.ExternalUrl(callType.url))
+                                is CallType.RoomCall -> defaultCurrentCallObserver.onCallStarted(CurrentCall.RoomCall(callType.roomId))
+                            }
+                        }
+                    }
                 }
             }
             .launchIn(coroutineScope)
