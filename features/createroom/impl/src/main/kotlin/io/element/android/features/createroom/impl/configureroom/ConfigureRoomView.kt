@@ -36,16 +36,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.createroom.impl.components.RoomAccessOption
-import io.element.android.features.createroom.impl.components.RoomVisibilityOption
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -247,20 +249,17 @@ private fun RoomTopic(
 @Composable
 private fun ConfigureRoomOptions(
     title: String,
-    verticalArrangement: Arrangement.Vertical,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .selectableGroup()
-            .padding(horizontal = 12.dp),
-        verticalArrangement = verticalArrangement,
+        modifier = modifier.selectableGroup()
     ) {
         Text(
             text = title,
             style = ElementTheme.typography.fontBodyLgMedium,
             color = ElementTheme.colors.textPrimary,
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
         content()
     }
@@ -275,13 +274,21 @@ private fun RoomVisibilityOptions(
     ConfigureRoomOptions(
         title = stringResource(R.string.screen_create_room_room_visibility_section_title),
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         RoomVisibilityItem.entries.forEach { item ->
-            RoomVisibilityOption(
-                roomPrivacyItem = item,
-                isSelected = item == selected,
-                onOptionClick = onOptionClick,
+            val isSelected = item == selected
+            ListItem(
+                leadingContent = ListItemContent.Custom {
+                    RoundedIconAtom(
+                        size = RoundedIconAtomSize.Big,
+                        resourceId = item.icon,
+                        tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
+                    )
+                },
+                headlineContent = { Text(text = stringResource(item.title)) },
+                supportingContent = { Text(text = stringResource(item.description)) },
+                trailingContent = ListItemContent.RadioButton(selected = isSelected),
+                onClick = { onOptionClick(item) },
             )
         }
     }
@@ -296,13 +303,13 @@ private fun RoomAccessOptions(
     ConfigureRoomOptions(
         title = stringResource(R.string.screen_create_room_room_access_section_header),
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         RoomAccessItem.entries.forEach { item ->
-            RoomAccessOption(
-                roomAccessItem = item,
-                isSelected = item == selected,
-                onOptionClick = onOptionClick,
+            ListItem(
+                headlineContent = { Text(text = stringResource(item.title)) },
+                supportingContent = { Text(text = stringResource(item.description)) },
+                trailingContent = ListItemContent.RadioButton(selected = item == selected),
+                onClick = { onOptionClick(item) },
             )
         }
     }

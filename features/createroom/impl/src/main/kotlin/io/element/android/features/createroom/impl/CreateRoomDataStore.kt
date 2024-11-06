@@ -37,7 +37,7 @@ class CreateRoomDataStore @Inject constructor(
             field = value
         }
 
-    val createRoomConfig: Flow<CreateRoomConfig> = combine(
+    val createRoomConfigWithInvites: Flow<CreateRoomConfig> = combine(
         selectedUserListDataStore.selectedUsers(),
         createRoomConfigFlow,
     ) { selectedUsers, config ->

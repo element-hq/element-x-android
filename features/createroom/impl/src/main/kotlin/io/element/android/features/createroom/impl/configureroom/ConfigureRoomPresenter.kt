@@ -58,7 +58,7 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig = dataStore.createRoomConfig.collectAsState(CreateRoomConfig())
+        val createRoomConfig = dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
         val homeserverName = remember { matrixClient.userIdServerName() }
         val isKnockFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(initial = false)
 
