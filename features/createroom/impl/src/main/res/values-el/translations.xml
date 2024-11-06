@@ -8,6 +8,11 @@
   <string name="screen_create_room_public_option_description">"Ο καθένας μπορεί να βρει αυτό το δωμάτιο.
 Μπορείς να το αλλάξεις ανά πάσα στιγμή στις ρυθμίσεις δωματίου."</string>
   <string name="screen_create_room_public_option_title">"Δημόσιο δωμάτιο"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτό το δωμάτιο"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Οποιοσδήποτε"</string>
+  <string name="screen_create_room_room_access_section_header">"Πρόσβαση Δωματίου"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
   <string name="screen_create_room_room_name_label">"Όνομα δωματίου"</string>
   <string name="screen_create_room_title">"Δημιούργησε ένα δωμάτιο"</string>
   <string name="screen_create_room_topic_label">"Θέμα (προαιρετικό)"</string>

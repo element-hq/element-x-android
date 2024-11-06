@@ -8,6 +8,11 @@
   <string name="screen_create_room_public_option_description">"Iedereen kan deze kamer vinden.
 Je kunt dit op elk gewenst moment wijzigen in de kamerinstellingen."</string>
   <string name="screen_create_room_public_option_title">"Openbare kamer"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Iedereen kan toetreden tot deze kamer"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Iedereen"</string>
+  <string name="screen_create_room_room_access_section_header">"Toegang tot de kamer"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Iedereen kan vragen om toe te treden tot de kamer, maar een beheerder of moderator moet het verzoek accepteren"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Vraag om toe te treden"</string>
   <string name="screen_create_room_room_name_label">"Naam van de kamer"</string>
   <string name="screen_create_room_title">"Creëer een kamer"</string>
   <string name="screen_create_room_topic_label">"Onderwerp (optioneel)"</string>

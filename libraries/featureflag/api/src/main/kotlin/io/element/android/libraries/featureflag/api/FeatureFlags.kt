@@ -124,5 +124,12 @@ enum class FeatureFlags(
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
         isFinished = false,
-    )
+    ),
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

@@ -293,14 +293,6 @@ Dôvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Do tejto miestnosti sa môže pripojiť ktokoľvek"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Ktokoľvek"</string>
-  <string name="screen_create_room_access_section_header">"Prístup do miestnosti"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Ktokoľvek môže požiadať o pripojenie sa k miestnosti, ale administrátor alebo moderátor bude musieť žiadosť schváliť"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Požiadať o pripojenie"</string>
-  <string name="screen_create_room_room_address_section_footer">"Aby bola táto miestnosť viditeľná v adresári verejných miestností, budete potrebovať adresu miestnosti."</string>
-  <string name="screen_create_room_room_address_section_title">"Adresa miestnosti"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Viditeľnosť miestnosti"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>

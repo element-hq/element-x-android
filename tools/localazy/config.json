@@ -61,6 +61,7 @@
       "name" : ":features:createroom:impl",
       "includeRegex" : [
         "screen_create_room_.*",
+        "screen\\.create_room\\..*",
         "screen_start_chat_.*"
       ]
     },
