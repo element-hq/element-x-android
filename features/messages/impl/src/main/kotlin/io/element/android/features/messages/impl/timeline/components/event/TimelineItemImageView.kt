@@ -51,6 +51,8 @@ import io.element.android.libraries.designsystem.components.blurhash.blurHashBac
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -86,13 +88,23 @@ fun TimelineItemImageView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                    model = MediaRequestData(
-                        source = content.preferredMediaSource,
-                        kind = MediaRequestData.Kind.File(
-                            fileName = content.filename,
-                            mimeType = content.mimeType,
-                        ),
-                    ),
+                    model = if (content.thumbnailSource != null) {
+                        MediaRequestData(
+                            source = content.thumbnailSource,
+                            kind = MediaRequestData.Kind.Thumbnail(
+                                width = content.thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
+                                height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
+                            ),
+                        )
+                    } else {
+                        MediaRequestData(
+                            source = content.thumbnailSource,
+                            kind = MediaRequestData.Kind.File(
+                                fileName = content.filename,
+                                mimeType = content.mimeType,
+                            ),
+                        )
+                    },
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                     contentDescription = description,

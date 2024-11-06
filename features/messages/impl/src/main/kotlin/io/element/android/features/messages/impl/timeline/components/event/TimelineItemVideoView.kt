@@ -57,6 +57,8 @@ import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -97,9 +99,9 @@ fun TimelineItemVideoView(
                             .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
-                        kind = MediaRequestData.Kind.File(
-                            fileName = content.filename,
-                            mimeType = content.mimeType
+                        kind = MediaRequestData.Kind.Thumbnail(
+                            width = content.thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
+                            height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
                         )
                     ),
                     contentScale = ContentScale.Fit,

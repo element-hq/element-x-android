@@ -93,6 +93,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     blurhash = messageType.info?.blurhash,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
+                    thumbnailWidth = messageType.info?.thumbnailInfo?.width?.toInt(),
+                    thumbnailHeight = messageType.info?.thumbnailInfo?.height?.toInt(),
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.filename)
@@ -146,6 +148,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
+                    thumbnailWidth = messageType.info?.thumbnailInfo?.width?.toInt(),
+                    thumbnailHeight = messageType.info?.thumbnailInfo?.height?.toInt(),
                     duration = messageType.info?.duration ?: Duration.ZERO,
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,

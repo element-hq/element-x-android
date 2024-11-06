@@ -23,6 +23,8 @@ data class TimelineItemImageContent(
     val blurhash: String?,
     val width: Int?,
     val height: Int?,
+    val thumbnailWidth: Int?,
+    val thumbnailHeight: Int?,
     val aspectRatio: Float?
 ) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemImageContent"
