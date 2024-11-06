@@ -24,6 +24,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.util.Optional
 
 class RoomAliasResolverPresenterTest {
     @get:Rule
@@ -42,7 +43,7 @@ class RoomAliasResolverPresenterTest {
 
     @Test
     fun `present - resolve alias to roomId`() = runTest {
-        val result = aResolvedRoomAlias()
+        val result = Optional.of(aResolvedRoomAlias())
         val client = FakeMatrixClient(
             resolveRoomAliasResult = { Result.success(result) }
         )
@@ -54,7 +55,7 @@ class RoomAliasResolverPresenterTest {
             assertThat(awaitItem().resolveState.isLoading()).isTrue()
             val resultState = awaitItem()
             assertThat(resultState.roomAlias).isEqualTo(A_ROOM_ALIAS)
-            assertThat(resultState.resolveState.dataOrNull()).isEqualTo(result)
+            assertThat(resultState.resolveState.dataOrNull()).isEqualTo(result.get())
         }
     }
 

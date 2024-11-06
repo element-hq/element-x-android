@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private const val SEARCH_BATCH_SIZE = 20
+
 class RoomDirectoryPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val roomDirectoryService: RoomDirectoryService,
@@ -51,7 +53,7 @@ class RoomDirectoryPresenter @Inject constructor(
             loadingMore = false
             // debounce search query
             delay(300)
-            roomDirectoryList.filter(searchQuery, 20)
+            roomDirectoryList.filter(filter = searchQuery, batchSize = SEARCH_BATCH_SIZE, viaServerName = null)
         }
         LaunchedEffect(loadingMore) {
             if (loadingMore) {
