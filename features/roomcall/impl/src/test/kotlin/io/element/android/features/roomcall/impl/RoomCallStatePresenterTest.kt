@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -112,7 +113,7 @@ class RoomCallStatePresenterTest {
         }
         val presenter = createRoomCallStatePresenter(
             matrixRoom = room,
-            currentCallService = FakeCurrentCallService(initialValue = CurrentCall.RoomCall(room.roomId)),
+            currentCallService = FakeCurrentCallService(MutableStateFlow(CurrentCall.RoomCall(room.roomId))),
         )
         presenter.test {
             skipItems(1)
@@ -138,7 +139,8 @@ class RoomCallStatePresenterTest {
                 )
             )
         }
-        val currentCallService = FakeCurrentCallService(initialValue = CurrentCall.RoomCall(room.roomId))
+        val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.RoomCall(room.roomId))
+        val currentCallService = FakeCurrentCallService(currentCall = currentCall)
         val presenter = createRoomCallStatePresenter(
             matrixRoom = room,
             currentCallService = currentCallService
@@ -152,7 +154,7 @@ class RoomCallStatePresenterTest {
                     isUserLocallyInTheCall = true,
                 )
             )
-            currentCallService.setCurrentCall(CurrentCall.None)
+            currentCall.value = CurrentCall.None
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,

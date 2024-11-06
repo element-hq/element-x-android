@@ -12,11 +12,5 @@ import io.element.android.features.call.api.CurrentCallService
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeCurrentCallService(
-    initialValue: CurrentCall = CurrentCall.None,
-) : CurrentCallService {
-    override val currentCall = MutableStateFlow(initialValue)
-
-    fun setCurrentCall(value: CurrentCall) {
-        currentCall.value = value
-    }
-}
+    override val currentCall: MutableStateFlow<CurrentCall> = MutableStateFlow(CurrentCall.None),
+) : CurrentCallService
