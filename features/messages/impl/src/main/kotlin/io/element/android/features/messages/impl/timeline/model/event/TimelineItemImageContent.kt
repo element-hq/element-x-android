@@ -8,8 +8,12 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAnimatedImage
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 data class TimelineItemImageContent(
     override val filename: String,
@@ -31,7 +35,21 @@ data class TimelineItemImageContent(
 
     val showCaption = caption != null
 
-    val preferredMediaSource = if (mimeType == MimeTypes.Gif) {
+    val thumbnailMediaRequest: MediaRequestData by lazy {
+        val kind = when (preferredMediaSource) {
+            mediaSource -> MediaRequestData.Kind.File(
+                fileName = filename,
+                mimeType = mimeType
+            )
+            else -> MediaRequestData.Kind.Thumbnail(
+                width = thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
+                height = thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT
+            )
+        }
+        MediaRequestData(source = preferredMediaSource, kind = kind)
+    }
+
+    val preferredMediaSource = if (mimeType.isMimeTypeAnimatedImage()) {
         mediaSource
     } else {
         thumbnailSource ?: mediaSource
