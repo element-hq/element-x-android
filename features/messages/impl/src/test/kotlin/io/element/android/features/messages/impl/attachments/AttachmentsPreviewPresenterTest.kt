@@ -18,6 +18,7 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -35,6 +36,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -207,11 +209,13 @@ class AttachmentsPreviewPresenterTest {
         room: MatrixRoom = FakeMatrixRoom(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
+        temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
             mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
             permalinkBuilder = permalinkBuilder,
+            temporaryUriDeleter = temporaryUriDeleter,
         )
     }
 }

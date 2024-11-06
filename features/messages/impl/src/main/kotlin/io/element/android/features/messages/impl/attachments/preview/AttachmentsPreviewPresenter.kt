@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +19,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -36,6 +38,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     private val mediaSender: MediaSender,
     private val permalinkBuilder: PermalinkBuilder,
+    private val temporaryUriDeleter: TemporaryUriDeleter,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -56,6 +59,20 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         )
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                // Delete the temporary file when the composable is disposed, in case it was not sent
+                if (sendActionState.value == SendActionState.Idle) {
+                    // Attachment has not been sent, maybe delete it
+                    when (attachment) {
+                        is Attachment.Media -> {
+                            temporaryUriDeleter.delete(attachment.localMedia.uri)
+                        }
+                    }
+                }
+            }
+        }
 
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
