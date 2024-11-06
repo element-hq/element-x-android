@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
@@ -82,6 +83,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             }
             if (deleteOriginal) {
                 tryOrNull {
+                    Timber.w("Deleting original uri $uri")
                     contentResolver.delete(uri, null, null)
                 }
             }
