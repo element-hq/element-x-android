@@ -83,7 +83,7 @@ class DefaultActiveCallManager @Inject constructor(
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
     private val notificationManagerCompat: NotificationManagerCompat,
     private val matrixClientProvider: MatrixClientProvider,
-    private val defaultCurrentCallObserver: DefaultCurrentCallObserver,
+    private val defaultCurrentCallService: DefaultCurrentCallService,
 ) : ActiveCallManager {
     private var timedOutCallJob: Job? = null
 
@@ -217,7 +217,7 @@ class DefaultActiveCallManager @Inject constructor(
         activeCall
             .onEach { value ->
                 if (value == null) {
-                    defaultCurrentCallObserver.onCallEnded()
+                    defaultCurrentCallService.onCallEnded()
                 } else {
                     when (value.callState) {
                         is CallState.Ringing -> {
@@ -225,8 +225,8 @@ class DefaultActiveCallManager @Inject constructor(
                         }
                         is CallState.InCall -> {
                             when (val callType = value.callType) {
-                                is CallType.ExternalUrl -> defaultCurrentCallObserver.onCallStarted(CurrentCall.ExternalUrl(callType.url))
-                                is CallType.RoomCall -> defaultCurrentCallObserver.onCallStarted(CurrentCall.RoomCall(callType.roomId))
+                                is CallType.ExternalUrl -> defaultCurrentCallService.onCallStarted(CurrentCall.ExternalUrl(callType.url))
+                                is CallType.RoomCall -> defaultCurrentCallService.onCallStarted(CurrentCall.RoomCall(callType.roomId))
                             }
                         }
                     }

@@ -9,7 +9,7 @@ package io.element.android.features.call.impl.utils
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.api.CurrentCall
-import io.element.android.features.call.api.CurrentCallObserver
+import io.element.android.features.call.api.CurrentCallService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultCurrentCallObserver @Inject constructor() : CurrentCallObserver {
+class DefaultCurrentCallService @Inject constructor() : CurrentCallService {
     override val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.None)
 
     fun onCallStarted(call: CurrentCall) {

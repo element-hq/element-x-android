@@ -9,8 +9,8 @@ package io.element.android.features.roomcall.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CurrentCall
-import io.element.android.features.call.api.CurrentCallObserver
-import io.element.android.features.call.test.FakeCurrentCallObserver
+import io.element.android.features.call.api.CurrentCallService
+import io.element.android.features.call.test.FakeCurrentCallService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -112,7 +112,7 @@ class RoomCallStatePresenterTest {
         }
         val presenter = createRoomCallStatePresenter(
             matrixRoom = room,
-            currentCallObserver = FakeCurrentCallObserver(initialValue = CurrentCall.RoomCall(room.roomId)),
+            currentCallService = FakeCurrentCallService(initialValue = CurrentCall.RoomCall(room.roomId)),
         )
         presenter.test {
             skipItems(1)
@@ -138,10 +138,10 @@ class RoomCallStatePresenterTest {
                 )
             )
         }
-        val currentCallObserver = FakeCurrentCallObserver(initialValue = CurrentCall.RoomCall(room.roomId))
+        val currentCallService = FakeCurrentCallService(initialValue = CurrentCall.RoomCall(room.roomId))
         val presenter = createRoomCallStatePresenter(
             matrixRoom = room,
-            currentCallObserver = currentCallObserver
+            currentCallService = currentCallService
         )
         presenter.test {
             skipItems(1)
@@ -152,7 +152,7 @@ class RoomCallStatePresenterTest {
                     isUserLocallyInTheCall = true,
                 )
             )
-            currentCallObserver.setCurrentCall(CurrentCall.None)
+            currentCallService.setCurrentCall(CurrentCall.None)
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
@@ -189,11 +189,11 @@ class RoomCallStatePresenterTest {
 
     private fun createRoomCallStatePresenter(
         matrixRoom: MatrixRoom,
-        currentCallObserver: CurrentCallObserver = FakeCurrentCallObserver(),
+        currentCallService: CurrentCallService = FakeCurrentCallService(),
     ): RoomCallStatePresenter {
         return RoomCallStatePresenter(
             room = matrixRoom,
-            currentCallObserver = currentCallObserver,
+            currentCallService = currentCallService,
         )
     }
 }

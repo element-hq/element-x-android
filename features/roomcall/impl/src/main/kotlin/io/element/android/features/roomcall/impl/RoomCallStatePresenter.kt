@@ -13,7 +13,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import io.element.android.features.call.api.CurrentCall
-import io.element.android.features.call.api.CurrentCallObserver
+import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class RoomCallStatePresenter @Inject constructor(
     private val room: MatrixRoom,
-    private val currentCallObserver: CurrentCallObserver,
+    private val currentCallService: CurrentCallService,
 ) : Presenter<RoomCallState> {
     @Composable
     override fun present(): RoomCallState {
@@ -34,7 +34,7 @@ class RoomCallStatePresenter @Inject constructor(
                 room.sessionId in roomInfo?.activeRoomCallParticipants.orEmpty()
             }
         }
-        val currentCall by currentCallObserver.currentCall.collectAsState()
+        val currentCall by currentCallService.currentCall.collectAsState()
         val isUserLocallyInTheCall by remember {
             derivedStateOf {
                 (currentCall as? CurrentCall.RoomCall)?.roomId == room.roomId

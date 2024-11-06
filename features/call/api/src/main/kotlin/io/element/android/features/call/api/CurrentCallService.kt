@@ -9,7 +9,7 @@ package io.element.android.features.call.api
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface CurrentCallObserver {
+interface CurrentCallService {
     /**
      * The current call state flow, which will be updated when the active call changes.
      * This value reflect the local state of the call. It is not updated if the user answers

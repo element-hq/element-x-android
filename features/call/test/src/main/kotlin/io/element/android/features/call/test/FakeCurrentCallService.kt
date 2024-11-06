@@ -8,12 +8,12 @@
 package io.element.android.features.call.test
 
 import io.element.android.features.call.api.CurrentCall
-import io.element.android.features.call.api.CurrentCallObserver
+import io.element.android.features.call.api.CurrentCallService
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeCurrentCallObserver(
+class FakeCurrentCallService(
     initialValue: CurrentCall = CurrentCall.None,
-) : CurrentCallObserver {
+) : CurrentCallService {
     override val currentCall = MutableStateFlow(initialValue)
 
     fun setCurrentCall(value: CurrentCall) {
