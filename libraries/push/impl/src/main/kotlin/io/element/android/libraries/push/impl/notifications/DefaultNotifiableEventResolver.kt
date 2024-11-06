@@ -107,6 +107,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
                     imageUriString = content.fetchImageIfPresent(client)?.toString(),
+                    imageMimeType = content.getImageMimetype(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -316,6 +317,17 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             .getOrNull()
     }
+
+    private suspend fun NotificationContent.MessageLike.RoomMessage.getImageMimetype(): String? {
+        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+            return null
+        }
+        return when (val messageType = messageType) {
+            is ImageMessageType -> messageType.info?.mimetype
+            is VideoMessageType -> null // Use the thumbnail here?
+            else -> null
+        }
+    }
 }
 
 @Suppress("LongParameterList")
@@ -333,6 +345,7 @@ internal fun buildNotifiableMessageEvent(
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage
     imageUriString: String? = null,
+    imageMimeType: String? = null,
     threadId: ThreadId? = null,
     roomName: String? = null,
     roomIsDm: Boolean = false,
@@ -358,6 +371,7 @@ internal fun buildNotifiableMessageEvent(
     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
     body = body,
     imageUriString = imageUriString,
+    imageMimeType = imageMimeType,
     threadId = threadId,
     roomName = roomName,
     roomIsDm = roomIsDm,

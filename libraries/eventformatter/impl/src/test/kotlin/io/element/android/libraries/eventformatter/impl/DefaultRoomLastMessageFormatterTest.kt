@@ -208,32 +208,51 @@ class DefaultRoomLastMessageFormatterTest {
 
         // Verify results of DM mode
         for ((type, result) in resultsInDm) {
+            val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "Video"
-                is AudioMessageType -> "Audio"
+                is VideoMessageType -> "Video: Shared body"
+                is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
-                is ImageMessageType -> "Image"
-                is StickerMessageType -> "Sticker"
-                is FileMessageType -> "File"
+                is ImageMessageType -> "Image: Shared body"
+                is StickerMessageType -> "Sticker: Shared body"
+                is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location"
                 is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType,
                 is NoticeMessageType,
                 is OtherMessageType -> body
             }
-            assertWithMessage("$type was not properly handled for DM").that(result).isEqualTo(expectedResult)
+            val shouldCreateAnnotatedString = when (type) {
+                is VideoMessageType -> true
+                is AudioMessageType -> true
+                is VoiceMessageType -> false
+                is ImageMessageType -> true
+                is StickerMessageType -> true
+                is FileMessageType -> true
+                is LocationMessageType -> false
+                is EmoteMessageType -> false
+                is TextMessageType -> false
+                is NoticeMessageType -> false
+                is OtherMessageType -> false
+            }
+            if (shouldCreateAnnotatedString) {
+                assertWithMessage("$type doesn't produce an AnnotatedString")
+                    .that(result)
+                    .isInstanceOf(AnnotatedString::class.java)
+            }
+            assertWithMessage("$type was not properly handled for DM").that(string).isEqualTo(expectedResult)
         }
 
         // Verify results of Room mode
         for ((type, result) in resultsInRoom) {
             val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "$expectedPrefix: Video"
-                is AudioMessageType -> "$expectedPrefix: Audio"
+                is VideoMessageType -> "$expectedPrefix: Video: Shared body"
+                is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
-                is ImageMessageType -> "$expectedPrefix: Image"
-                is StickerMessageType -> "$expectedPrefix: Sticker"
-                is FileMessageType -> "$expectedPrefix: File"
+                is ImageMessageType -> "$expectedPrefix: Image: Shared body"
+                is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
+                is FileMessageType -> "$expectedPrefix: File: Shared body"
                 is LocationMessageType -> "$expectedPrefix: Shared location"
                 is TextMessageType,
                 is NoticeMessageType,
@@ -249,7 +268,8 @@ class DefaultRoomLastMessageFormatterTest {
                 is FileMessageType -> true
                 is LocationMessageType -> false
                 is EmoteMessageType -> false
-                is TextMessageType, is NoticeMessageType -> true
+                is TextMessageType -> true
+                is NoticeMessageType -> true
                 is OtherMessageType -> true
             }
             if (shouldCreateAnnotatedString) {

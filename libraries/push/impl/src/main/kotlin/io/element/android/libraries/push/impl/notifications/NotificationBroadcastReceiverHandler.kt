@@ -150,6 +150,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 ?: stringProvider.getString(R.string.notification_sender_me),
             body = message,
             imageUriString = null,
+            imageMimeType = null,
             threadId = threadId,
             roomName = room.displayName,
             roomIsDm = room.isDm,

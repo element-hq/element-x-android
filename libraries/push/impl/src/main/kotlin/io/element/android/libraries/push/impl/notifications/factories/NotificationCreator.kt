@@ -419,11 +419,22 @@ class DefaultNotificationCreator @Inject constructor(
                         senderPerson
                     ).also { message ->
                         event.imageUri?.let {
-                            message.setData("image/", it)
+                            message.setData(event.imageMimeType ?: "image/", it)
                         }
                         message.extras.putString(MESSAGE_EVENT_ID, event.eventId.value)
                     }
                     addMessage(message)
+
+                    // Add additional message for captions
+                    if (event.imageUri != null && event.body != null) {
+                        addMessage(
+                            MessagingStyle.Message(
+                                event.body,
+                                event.timestamp,
+                                senderPerson,
+                            )
+                        )
+                    }
                 }
             }
         }
