@@ -202,7 +202,12 @@ class RoomDetailsEditPresenter @Inject constructor(
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
         return runCatching {
             if (avatarUri != null) {
-                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+                val preprocessed = mediaPreProcessor.process(
+                    uri = avatarUri,
+                    mimeType = MimeTypes.Jpeg,
+                    deleteOriginal = false,
+                    compressIfPossible = false,
+                ).getOrThrow()
                 room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {
                 room.removeAvatar().getOrThrow()
