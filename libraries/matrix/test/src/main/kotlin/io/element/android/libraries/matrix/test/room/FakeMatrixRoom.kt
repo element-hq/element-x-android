@@ -321,8 +321,8 @@ class FakeMatrixRoom(
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
@@ -330,8 +330,8 @@ class FakeMatrixRoom(
             file,
             thumbnailFile,
             imageInfo,
-            body,
-            formattedBody,
+            caption,
+            formattedCaption,
             progressCallback,
         )
     }
@@ -340,8 +340,8 @@ class FakeMatrixRoom(
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
@@ -349,8 +349,8 @@ class FakeMatrixRoom(
             file,
             thumbnailFile,
             videoInfo,
-            body,
-            formattedBody,
+            caption,
+            formattedCaption,
             progressCallback,
         )
     }

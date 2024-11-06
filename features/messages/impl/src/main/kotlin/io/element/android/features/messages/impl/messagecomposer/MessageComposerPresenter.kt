@@ -436,6 +436,7 @@ class MessageComposerPresenter @Inject constructor(
         // Reset composer right away
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
+            is MessageComposerMode.Attachment,
             is MessageComposerMode.Normal -> room.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
@@ -605,6 +606,7 @@ class MessageComposerPresenter @Inject constructor(
     ): ComposerDraft? {
         val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = false)
         val draftType = when (val mode = messageComposerContext.composerMode) {
+            is MessageComposerMode.Attachment,
             is MessageComposerMode.Normal -> ComposerDraftType.NewMessage
             is MessageComposerMode.Edit -> {
                 mode.eventOrTransactionId.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }

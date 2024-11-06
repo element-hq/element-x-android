@@ -101,6 +101,7 @@ class KonsistPreviewTest {
                 "SasEmojisPreview",
                 "SecureBackupSetupViewChangePreview",
                 "SelectedUserCannotRemovePreview",
+                "TextComposerCaptionPreview",
                 "TextComposerEditPreview",
                 "TextComposerFormattingPreview",
                 "TextComposerLinkDialogCreateLinkPreview",
