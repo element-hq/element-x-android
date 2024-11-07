@@ -107,7 +107,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
                     override fun onDone() {
-                        lifecycleScope.launch { moveToNextStepIfNeeded() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 createNode<FtueSessionVerificationFlowNode>(buildContext, listOf(callback))
@@ -115,7 +115,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.NotificationsOptIn -> {
                 val callback = object : NotificationsOptInNode.Callback {
                     override fun onNotificationsOptInFinished() {
-                        lifecycleScope.launch { moveToNextStepIfNeeded() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 createNode<NotificationsOptInNode>(buildContext, listOf(callback))
@@ -126,7 +126,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.LockScreenSetup -> {
                 val callback = object : LockScreenEntryPoint.Callback {
                     override fun onSetupDone() {
-                        lifecycleScope.launch { moveToNextStepIfNeeded() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Setup)
