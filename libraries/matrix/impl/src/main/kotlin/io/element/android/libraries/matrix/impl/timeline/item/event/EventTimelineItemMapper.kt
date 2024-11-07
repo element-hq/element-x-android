@@ -100,6 +100,12 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                         LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
                     }
                 }
+                is QueueWedgeError.InvalidMimeType -> {
+                    LocalEventSendState.Failed.InvalidMimeType(queueWedgeError.mimeType)
+                }
+                is QueueWedgeError.MissingMediaContent -> {
+                    LocalEventSendState.Failed.MissingMediaContent
+                }
             }
         }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
