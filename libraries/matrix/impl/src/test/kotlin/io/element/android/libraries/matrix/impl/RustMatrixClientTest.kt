@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
@@ -46,5 +47,6 @@ class RustMatrixClientTest {
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),
         timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
+        featureFlagService = FakeFeatureFlagService(),
     )
 }

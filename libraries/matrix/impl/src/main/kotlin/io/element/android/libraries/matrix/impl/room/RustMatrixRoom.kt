@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -103,6 +104,7 @@ class RustMatrixRoom(
     private val roomContentForwarder: RoomContentForwarder,
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
+    private val featureFlagService: FeatureFlagService,
 ) : MatrixRoom {
     override val roomId = RoomId(innerRoom.id())
 
@@ -700,6 +702,7 @@ class RustMatrixRoom(
             dispatcher = roomDispatcher,
             roomContentForwarder = roomContentForwarder,
             onNewSyncedEvent = onNewSyncedEvent,
+            featureFlagsService = featureFlagService,
         )
     }
 }
