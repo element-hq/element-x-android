@@ -58,11 +58,6 @@ class DefaultFtueService @Inject constructor(
     @OptIn(FlowPreview::class)
     val isVerificationStatusKnown = sessionVerificationService.sessionVerifiedStatus
         .map { it != SessionVerifiedStatus.Unknown }
-        .timeout(5.seconds)
-        .catch {
-            Timber.e(it, "Failed to get session verification status, assume it's not verified")
-            emit(false)
-        }
         .distinctUntilChanged()
 
     override suspend fun reset() {
