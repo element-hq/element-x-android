@@ -248,25 +248,18 @@ private fun VerifySelfSessionBottomMenu(
         Step.Loading -> error("Should not happen")
         is Step.Initial -> {
             VerificationBottomMenu {
-                if (verificationViewState.isLastDevice) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                        onClick = onEnterRecoveryKey,
-                    )
-                } else {
+                if (verificationViewState.isLastDevice.not()) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
                     )
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                        onClick = onEnterRecoveryKey,
-                    )
                 }
-                // This option should always be displayed
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                    onClick = onEnterRecoveryKey,
+                )
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
