@@ -116,7 +116,7 @@ class EditUserProfilePresenterTest {
         val presenter = createEditUserProfilePresenter(
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -150,7 +150,7 @@ class EditUserProfilePresenterTest {
         val presenter = createEditUserProfilePresenter(
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -175,7 +175,7 @@ class EditUserProfilePresenterTest {
             matrixUser = user,
             permissionsPresenter = fakePermissionsPresenter,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = deleteCallback,
+                deleteLambda = deleteCallback,
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -212,7 +212,7 @@ class EditUserProfilePresenterTest {
         val presenter = createEditUserProfilePresenter(
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = deleteCallback
+                deleteLambda = deleteCallback
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -255,7 +255,7 @@ class EditUserProfilePresenterTest {
         val presenter = createEditUserProfilePresenter(
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = deleteCallback
+                deleteLambda = deleteCallback
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -298,7 +298,7 @@ class EditUserProfilePresenterTest {
             matrixClient = matrixClient,
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -367,7 +367,7 @@ class EditUserProfilePresenterTest {
             matrixClient = matrixClient,
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -389,7 +389,7 @@ class EditUserProfilePresenterTest {
             matrixClient = matrixClient,
             matrixUser = user,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
@@ -460,7 +460,7 @@ class EditUserProfilePresenterTest {
             matrixUser = matrixUser,
             matrixClient = matrixClient,
             temporaryUriDeleter = FakeTemporaryUriDeleter(
-                deleteCallback = { assertThat(it).isEqualTo(userAvatarUri) }
+                deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {

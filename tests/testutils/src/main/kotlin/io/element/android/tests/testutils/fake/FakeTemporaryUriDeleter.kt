@@ -12,9 +12,9 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeTemporaryUriDeleter(
-    val deleteCallback: (uri: Uri?) -> Unit = { lambdaError() }
+    val deleteLambda: (uri: Uri?) -> Unit = { lambdaError() }
 ) : TemporaryUriDeleter {
     override fun delete(uri: Uri?) {
-        deleteCallback(uri)
+        deleteLambda(uri)
     }
 }
