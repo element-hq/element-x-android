@@ -10,6 +10,8 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -42,7 +44,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
                 roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
-            aRoomDetailsState(canCall = false, canInvite = false),
+            aRoomDetailsState(roomCallState = aStandByCallState(false), canInvite = false),
             aRoomDetailsState(isPublic = false),
             aRoomDetailsState(heroes = aMatrixUserList()),
             aRoomDetailsState(pinnedMessagesCount = 3),
@@ -89,7 +91,7 @@ fun aRoomDetailsState(
     canInvite: Boolean = false,
     canEdit: Boolean = false,
     canShowNotificationSettings: Boolean = true,
-    canCall: Boolean = true,
+    roomCallState: RoomCallState = aStandByCallState(),
     roomType: RoomDetailsType = RoomDetailsType.Room,
     roomMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -112,7 +114,7 @@ fun aRoomDetailsState(
     canInvite = canInvite,
     canEdit = canEdit,
     canShowNotificationSettings = canShowNotificationSettings,
-    canCall = canCall,
+    roomCallState = roomCallState,
     roomType = roomType,
     roomMemberDetailsState = roomMemberDetailsState,
     leaveRoomState = leaveRoomState,

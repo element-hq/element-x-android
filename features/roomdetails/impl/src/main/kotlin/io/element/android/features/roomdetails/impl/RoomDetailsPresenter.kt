@@ -21,6 +21,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
@@ -37,7 +38,6 @@ import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
@@ -57,6 +57,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
+    private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
@@ -87,18 +88,16 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
-        val syncUpdateTimestamp by room.syncUpdateFlow.collectAsState()
-
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
-        val canJoinCall by room.canCall(updateKey = syncUpdateTimestamp)
         val dmMember by room.getDirectRoomMember(membersState)
         val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember, currentMember)
+        val roomCallState = roomCallStatePresenter.present()
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -143,7 +142,7 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
             canShowNotificationSettings = canShowNotificationSettings.value,
-            canCall = canJoinCall,
+            roomCallState = roomCallState,
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
