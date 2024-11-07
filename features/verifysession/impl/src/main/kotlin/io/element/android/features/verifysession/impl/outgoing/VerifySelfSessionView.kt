@@ -335,6 +335,7 @@ private fun VerifySelfSessionBottomMenu(
                     modifier = Modifier.fillMaxWidth(),
                     text = positiveButtonTitle,
                     showProgress = isVerifying,
+                    enabled = !isVerifying,
                     onClick = {
                         if (!isVerifying) {
                             eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
