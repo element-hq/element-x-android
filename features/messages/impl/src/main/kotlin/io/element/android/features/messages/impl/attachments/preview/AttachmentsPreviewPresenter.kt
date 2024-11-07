@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,13 +35,17 @@ import kotlin.coroutines.coroutineContext
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
+    @Assisted private val onDoneListener: OnDoneListener,
     private val mediaSender: MediaSender,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
-        fun create(attachment: Attachment): AttachmentsPreviewPresenter
+        fun create(
+            attachment: Attachment,
+            onDoneListener: OnDoneListener,
+        ): AttachmentsPreviewPresenter
     }
 
     @Composable
@@ -60,20 +63,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        DisposableEffect(Unit) {
-            onDispose {
-                // Delete the temporary file when the composable is disposed, in case it was not sent
-                if (sendActionState.value == SendActionState.Idle) {
-                    // Attachment has not been sent, maybe delete it
-                    when (attachment) {
-                        is Attachment.Media -> {
-                            temporaryUriDeleter.delete(attachment.localMedia.uri)
-                        }
-                    }
-                }
-            }
-        }
-
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
                 is AttachmentsPreviewEvents.SendAttachment -> {
@@ -84,6 +73,9 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                         caption = caption,
                         sendActionState = sendActionState,
                     )
+                }
+                AttachmentsPreviewEvents.Cancel -> {
+                    coroutineScope.cancel(attachment)
                 }
                 AttachmentsPreviewEvents.ClearSendState -> {
                     ongoingSendAttachmentJob.value?.let {
@@ -119,6 +111,18 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         }
     }
 
+    private fun CoroutineScope.cancel(
+        attachment: Attachment,
+    ) = launch {
+        // Delete the temporary file
+        when (attachment) {
+            is Attachment.Media -> {
+                temporaryUriDeleter.delete(attachment.localMedia.uri)
+            }
+        }
+        onDoneListener()
+    }
+
     private suspend fun sendMedia(
         mediaAttachment: Attachment.Media,
         caption: String?,
@@ -141,7 +145,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         ).getOrThrow()
     }.fold(
         onSuccess = {
-            sendActionState.value = SendActionState.Done
+            onDoneListener()
         },
         onFailure = { error ->
             Timber.e(error, "Failed to send attachment")

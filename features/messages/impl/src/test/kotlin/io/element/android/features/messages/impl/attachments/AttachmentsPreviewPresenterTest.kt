@@ -16,6 +16,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
@@ -42,6 +43,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -69,7 +71,11 @@ class AttachmentsPreviewPresenterTest {
             ),
             sendFileResult = sendFileResult,
         )
-        val presenter = createAttachmentsPreviewPresenter(room = room)
+        val onDoneListener = lambdaRecorder<Unit> { }
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            onDoneListener = { onDoneListener() },
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -80,9 +86,28 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f))
-            val successState = awaitItem()
-            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
+            advanceUntilIdle()
             sendFileResult.assertions().isCalledOnce()
+            onDoneListener.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - cancel scenario`() = runTest {
+        val onDoneListener = lambdaRecorder<Unit> { }
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createAttachmentsPreviewPresenter(
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+            onDoneListener = { onDoneListener() },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.Cancel)
+            deleteCallback.assertions().isCalledOnce()
+            onDoneListener.assertions().isCalledOnce()
         }
     }
 
@@ -98,9 +123,11 @@ class AttachmentsPreviewPresenterTest {
         val room = FakeMatrixRoom(
             sendImageResult = sendImageResult,
         )
+        val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
             mediaPreProcessor = mediaPreProcessor,
+            onDoneListener = { onDoneListener() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -110,8 +137,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            val successState = awaitItem()
-            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
+            advanceUntilIdle()
             sendImageResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
@@ -120,6 +146,7 @@ class AttachmentsPreviewPresenterTest {
                 any(),
                 any(),
             )
+            onDoneListener.assertions().isCalledOnce()
         }
     }
 
@@ -135,9 +162,11 @@ class AttachmentsPreviewPresenterTest {
         val room = FakeMatrixRoom(
             sendVideoResult = sendVideoResult,
         )
+        val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
             mediaPreProcessor = mediaPreProcessor,
+            onDoneListener = { onDoneListener() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,8 +176,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            val successState = awaitItem()
-            assertThat(successState.sendActionState).isEqualTo(SendActionState.Done)
+            advanceUntilIdle()
             sendVideoResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
@@ -157,6 +185,7 @@ class AttachmentsPreviewPresenterTest {
                 any(),
                 any(),
             )
+            onDoneListener.assertions().isCalledOnce()
         }
     }
 
@@ -210,9 +239,11 @@ class AttachmentsPreviewPresenterTest {
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
+        onDoneListener: OnDoneListener = OnDoneListener {},
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
+            onDoneListener = onDoneListener,
             mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
