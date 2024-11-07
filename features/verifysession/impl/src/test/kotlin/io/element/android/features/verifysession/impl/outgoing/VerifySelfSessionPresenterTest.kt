@@ -7,10 +7,7 @@
 
 package io.element.android.features.verifysession.impl.outgoing
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.logout.test.FakeLogoutUseCase
@@ -33,6 +30,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -48,9 +46,7 @@ class VerifySelfSessionPresenterTest {
         val presenter = createVerifySelfSessionPresenter(
             service = unverifiedSessionService(),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().run {
                 assertThat(step).isEqualTo(Step.Initial(false))
                 assertThat(displaySkipButton).isTrue()
@@ -65,9 +61,7 @@ class VerifySelfSessionPresenterTest {
             service = unverifiedSessionService(),
             buildMeta = buildMeta,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(awaitItem().displaySkipButton).isFalse()
         }
     }
@@ -83,9 +77,7 @@ class VerifySelfSessionPresenterTest {
                 emitRecoveryState(RecoveryState.INCOMPLETE)
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(awaitItem().step).isEqualTo(Step.Initial(true))
             resetLambda.assertions().isCalledOnce().with(value(true))
         }
@@ -100,9 +92,7 @@ class VerifySelfSessionPresenterTest {
                 emitRecoveryState(RecoveryState.INCOMPLETE)
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(awaitItem().step).isEqualTo(Step.Initial(canEnterRecoveryKey = true, isLastDevice = true))
         }
     }
@@ -114,32 +104,8 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             requestVerificationAndAwaitVerifyingState(service)
-        }
-    }
-
-    @Test
-    fun `present - Handles startSasVerification`() = runTest {
-        val service = unverifiedSessionService(
-            startVerificationLambda = { },
-        )
-        val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.step).isEqualTo(Step.Initial(false))
-            initialState.eventSink(VerifySelfSessionViewEvents.StartSasVerification)
-            // Await for other device response:
-            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
-            service.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
-            // ChallengeReceived:
-            service.emitVerificationFlowState(VerificationFlowState.DidReceiveVerificationData(SessionVerificationData.Emojis(emptyList())))
-            val verifyingState = awaitItem()
-            assertThat(verifyingState.step).isInstanceOf(Step.Verifying::class.java)
         }
     }
 
@@ -148,9 +114,7 @@ class VerifySelfSessionPresenterTest {
         val presenter = createVerifySelfSessionPresenter(
             service = unverifiedSessionService(),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(Step.Initial(false))
             val eventSink = initialState.eventSink
@@ -167,9 +131,7 @@ class VerifySelfSessionPresenterTest {
             approveVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
             // Cancelling
@@ -186,9 +148,8 @@ class VerifySelfSessionPresenterTest {
             requestVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            awaitItem().eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
             awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
@@ -204,9 +165,7 @@ class VerifySelfSessionPresenterTest {
             cancelVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.Cancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
@@ -220,32 +179,10 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             requestVerificationAndAwaitVerifyingState(service)
             service.emitVerificationFlowState(VerificationFlowState.DidReceiveVerificationData(SessionVerificationData.Emojis(emptyList())))
             ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
-    fun `present - Restart after cancellation returns to requesting verification`() = runTest {
-        val service = unverifiedSessionService(
-            requestVerificationLambda = { },
-            startVerificationLambda = { },
-        )
-        val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val state = requestVerificationAndAwaitVerifyingState(service)
-            service.emitVerificationFlowState(VerificationFlowState.DidCancel)
-            assertThat(awaitItem().step).isEqualTo(Step.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
-            // Went back to requesting verification
-            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -256,9 +193,7 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.emitVerificationFlowState(VerificationFlowState.DidCancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
@@ -280,9 +215,7 @@ class VerifySelfSessionPresenterTest {
             approveVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(
                 service,
                 SessionVerificationData.Emojis(emojis)
@@ -307,9 +240,7 @@ class VerifySelfSessionPresenterTest {
             declineVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
             assertThat(awaitItem().step).isEqualTo(
@@ -330,9 +261,7 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
         )
         val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.SkipVerification)
             assertThat(awaitItem().step).isEqualTo(Step.Skipped)
@@ -352,9 +281,7 @@ class VerifySelfSessionPresenterTest {
             service = service,
             showDeviceVerifiedScreen = true,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(awaitItem().step).isEqualTo(Step.Completed)
         }
     }
@@ -372,9 +299,7 @@ class VerifySelfSessionPresenterTest {
             service = service,
             showDeviceVerifiedScreen = false,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             assertThat(awaitItem().step).isEqualTo(Step.Skipped)
         }
@@ -394,9 +319,7 @@ class VerifySelfSessionPresenterTest {
             service,
             logoutUseCase = FakeLogoutUseCase(signOutLambda)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialItem = awaitItem()
             initialItem.eventSink(VerifySelfSessionViewEvents.SignOut)
@@ -414,6 +337,9 @@ class VerifySelfSessionPresenterTest {
     ): VerifySelfSessionState {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial(false))
+        state.eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
+        state = awaitItem()
+        assertThat(state.step).isEqualTo(Step.UseAnotherDevice)
         state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)

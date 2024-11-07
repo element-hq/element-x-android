@@ -80,14 +80,14 @@ fun IncomingVerificationView(
 @Composable
 private fun IncomingVerificationHeader(step: Step) {
     val iconStyle = when (step) {
-        Step.Canceled,
+        Step.Canceled -> BigIcon.Style.AlertSolid
         is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
         Step.Completed -> BigIcon.Style.SuccessSolid
         Step.Failure -> BigIcon.Style.AlertSolid
     }
     val titleTextId = when (step) {
-        Step.Canceled -> CommonStrings.common_verification_cancelled
+        Step.Canceled -> R.string.screen_session_verification_request_failure_title
         is Step.Initial -> R.string.screen_session_verification_request_title
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
@@ -97,7 +97,7 @@ private fun IncomingVerificationHeader(step: Step) {
         Step.Failure -> R.string.screen_session_verification_request_failure_title
     }
     val subtitleTextId = when (step) {
-        Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
+        Step.Canceled -> R.string.screen_session_verification_request_failure_subtitle
         is Step.Initial -> R.string.screen_session_verification_request_subtitle
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
