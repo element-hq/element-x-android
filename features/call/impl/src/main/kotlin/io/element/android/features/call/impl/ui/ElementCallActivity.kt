@@ -35,6 +35,7 @@ import androidx.core.content.IntentCompat
 import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallType.ExternalUrl
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
@@ -48,6 +49,8 @@ import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
 import javax.inject.Inject
+
+private const val loggerTag = "ElementCallActivity"
 
 class ElementCallActivity :
     AppCompatActivity(),
@@ -132,7 +135,7 @@ class ElementCallActivity :
         DisposableEffect(Unit) {
             val listener = Runnable {
                 if (requestPermissionCallback != null) {
-                    Timber.w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
+                    Timber.tag(loggerTag).w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
                 } else {
                     pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
                 }
@@ -146,7 +149,7 @@ class ElementCallActivity :
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
                 pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                    Timber.d("Exiting PiP mode: Hangup the call")
+                    Timber.tag(loggerTag).d("Exiting PiP mode: Hangup the call")
                     eventSink?.invoke(CallScreenEvents.Hangup)
                 }
             }
@@ -185,23 +188,23 @@ class ElementCallActivity :
 
     private fun setCallType(intent: Intent?) {
         val callType = intent?.let {
-            IntentCompat.getParcelableExtra(it, DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, CallType::class.java)
+            IntentCompat.getParcelableExtra(intent, DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, CallType::class.java)
+                ?: intent.dataString?.let(::parseUrl)?.let(::ExternalUrl)
         }
-        val intentUrl = intent?.dataString?.let(::parseUrl)
-        when {
-            // Re-opened the activity but we have no url to load or a cached one, finish the activity
-            intent?.dataString == null && callType == null && webViewTarget.value == null -> finish()
-            callType != null -> {
-                webViewTarget.value = callType
-                presenter = presenterFactory.create(callType, this)
-            }
-            intentUrl != null -> {
-                val fallbackInputs = CallType.ExternalUrl(intentUrl)
-                webViewTarget.value = fallbackInputs
-                presenter = presenterFactory.create(fallbackInputs, this)
-            }
-            // Coming back from notification, do nothing
-            else -> return
+        val currentCallType = webViewTarget.value
+        if (currentCallType == null && callType == null) {
+            Timber.tag(loggerTag).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
+            finish()
+        } else if (currentCallType == null) {
+            Timber.tag(loggerTag).d("Set the call type and create the presenter")
+            webViewTarget.value = callType
+            presenter = presenterFactory.create(callType!!, this)
+        } else if (callType != currentCallType) {
+            Timber.tag(loggerTag).d("User starts another call, restart the Activity")
+            setIntent(intent)
+            recreate()
+        } else {
+            Timber.tag(loggerTag).d("Coming back from notification, do nothing")
         }
     }
 
