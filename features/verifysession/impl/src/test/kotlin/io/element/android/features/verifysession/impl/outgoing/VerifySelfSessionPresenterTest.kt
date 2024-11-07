@@ -122,28 +122,6 @@ class VerifySelfSessionPresenterTest {
     }
 
     @Test
-    fun `present - Handles startSasVerification`() = runTest {
-        val service = unverifiedSessionService(
-            startVerificationLambda = { },
-        )
-        val presenter = createVerifySelfSessionPresenter(service)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.step).isEqualTo(Step.Initial(false))
-            initialState.eventSink(VerifySelfSessionViewEvents.StartSasVerification)
-            // Await for other device response:
-            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
-            service.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
-            // ChallengeReceived:
-            service.emitVerificationFlowState(VerificationFlowState.DidReceiveVerificationData(SessionVerificationData.Emojis(emptyList())))
-            val verifyingState = awaitItem()
-            assertThat(verifyingState.step).isInstanceOf(Step.Verifying::class.java)
-        }
-    }
-
-    @Test
     fun `present - Cancellation on initial state does nothing`() = runTest {
         val presenter = createVerifySelfSessionPresenter(
             service = unverifiedSessionService(),
@@ -189,6 +167,7 @@ class VerifySelfSessionPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            awaitItem().eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
             awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
@@ -414,6 +393,9 @@ class VerifySelfSessionPresenterTest {
     ): VerifySelfSessionState {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial(false))
+        state.eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
+        state = awaitItem()
+        assertThat(state.step).isEqualTo(Step.UseAnotherDevice)
         state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
