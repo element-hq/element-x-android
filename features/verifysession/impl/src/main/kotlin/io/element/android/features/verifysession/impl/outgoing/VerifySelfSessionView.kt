@@ -342,11 +342,16 @@ private fun VerifySelfSessionBottomMenu(
                         }
                     },
                 )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_they_dont_match),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
-                )
+                if (isVerifying) {
+                    // Placeholder so the 1st button keeps its vertical position
+                    Spacer(modifier = Modifier.height(40.dp))
+                } else {
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_they_dont_match),
+                        onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
+                    )
+                }
             }
         }
         is Step.Completed -> {
