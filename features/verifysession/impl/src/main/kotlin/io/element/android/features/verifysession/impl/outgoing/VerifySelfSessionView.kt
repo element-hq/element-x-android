@@ -66,7 +66,9 @@ fun VerifySelfSessionView(
     fun cancelOrResetFlow() {
         when (step) {
             is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
-            is Step.AwaitingOtherDeviceResponse, Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            is Step.AwaitingOtherDeviceResponse,
+            Step.UseAnotherDevice,
+            Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
                     state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
@@ -159,6 +161,7 @@ fun VerifySelfSessionView(
 private fun VerifySelfSessionHeader(step: Step) {
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
+        Step.UseAnotherDevice -> BigIcon.Style.Default(CompoundIcons.Devices())
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         Step.Canceled -> BigIcon.Style.AlertSolid
         Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
@@ -167,6 +170,7 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val titleTextId = when (step) {
         Step.Loading -> error("Should not happen")
+        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_title
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
         Step.Canceled -> CommonStrings.common_verification_cancelled
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
@@ -179,6 +183,7 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val subtitleTextId = when (step) {
         Step.Loading -> error("Should not happen")
+        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_subtitle
         is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
         Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
@@ -252,7 +257,7 @@ private fun VerifySelfSessionBottomMenu(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                        onClick = { eventSink(VerifySelfSessionViewEvents.UseAnotherDevice) },
                     )
                 }
                 Button(
@@ -265,6 +270,17 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
                     onClick = onResetKey,
                 )
+            }
+        }
+        is Step.UseAnotherDevice -> {
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_start_verification),
+                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                )
+                // Placeholder so the 1st button keeps its vertical position
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
         is Step.Canceled -> {

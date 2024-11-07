@@ -56,6 +56,9 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState(
                 step = Step.Skipped
             ),
+            aVerifySelfSessionState(
+                step = Step.UseAnotherDevice
+            ),
             // Add other state here
         )
 }

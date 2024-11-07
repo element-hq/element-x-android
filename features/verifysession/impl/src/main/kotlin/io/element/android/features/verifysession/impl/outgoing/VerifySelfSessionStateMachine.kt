@@ -38,11 +38,13 @@ class VerifySelfSessionStateMachine @Inject constructor(
     init {
         spec {
             inState<State.Initial> {
+                on { _: Event.UseAnotherDevice, state ->
+                    state.override { State.UseAnotherDevice.andLogStateChange() }
+                }
+            }
+            inState<State.UseAnotherDevice> {
                 on { _: Event.RequestVerification, state ->
                     state.override { State.RequestingVerification.andLogStateChange() }
-                }
-                on { _: Event.StartSasVerification, state ->
-                    state.override { State.StartingSasVerification.andLogStateChange() }
                 }
             }
             inState<State.RequestingVerification> {
@@ -119,6 +121,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 on { _: Event.Cancel, state: MachineState<State> ->
                     when (state.snapshot) {
                         State.Initial, State.Completed, State.Canceled -> state.noChange()
+                        State.UseAnotherDevice -> state.override { State.Initial.andLogStateChange() }
                         // For some reason `cancelVerification` is not calling its delegate `didCancel` method so we don't pass from
                         // `Canceling` state to `Canceled` automatically anymore
                         else -> {
@@ -143,6 +146,9 @@ class VerifySelfSessionStateMachine @Inject constructor(
     sealed interface State {
         /** The initial state, before verification started. */
         data object Initial : State
+
+        /** Let the user know that they need to get ready on their other session. */
+        data object UseAnotherDevice : State
 
         /** Waiting for verification acceptance. */
         data object RequestingVerification : State
@@ -175,6 +181,9 @@ class VerifySelfSessionStateMachine @Inject constructor(
     }
 
     sealed interface Event {
+        /** User wants to use another session. */
+        data object UseAnotherDevice : Event
+
         /** Request verification. */
         data object RequestVerification : Event
 
