@@ -161,8 +161,9 @@ fun VerifySelfSessionView(
 private fun VerifySelfSessionHeader(step: Step) {
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
+        is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         Step.UseAnotherDevice -> BigIcon.Style.Default(CompoundIcons.Devices())
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
+        Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.Devices())
         Step.Canceled -> BigIcon.Style.AlertSolid
         Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
         Step.Completed -> BigIcon.Style.SuccessSolid
@@ -170,8 +171,9 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val titleTextId = when (step) {
         Step.Loading -> error("Should not happen")
+        is Step.Initial -> R.string.screen_identity_confirmation_title
         Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_title
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
+        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_title
         Step.Canceled -> CommonStrings.common_verification_cancelled
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
         Step.Completed -> R.string.screen_identity_confirmed_title
@@ -183,8 +185,9 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val subtitleTextId = when (step) {
         Step.Loading -> error("Should not happen")
+        is Step.Initial -> R.string.screen_identity_confirmation_subtitle
         Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_subtitle
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
+        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_subtitle
         Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
         Step.Completed -> R.string.screen_identity_confirmed_subtitle
@@ -318,6 +321,7 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(R.string.screen_identity_waiting_on_other_device),
                     onClick = {},
                     showProgress = true,
+                    enabled = false,
                 )
                 // Placeholder so the 1st button keeps its vertical position
                 Spacer(modifier = Modifier.height(40.dp))
