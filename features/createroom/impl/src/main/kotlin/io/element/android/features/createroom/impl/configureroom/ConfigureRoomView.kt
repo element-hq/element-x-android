@@ -23,7 +23,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,13 +44,14 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.TextField2
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
@@ -90,10 +90,10 @@ fun ConfigureRoomView(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+                    .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoomNameWithAvatar(
@@ -217,7 +217,7 @@ private fun RoomNameWithAvatar(
             modifier = Modifier.clickable(onClick = onAvatarClick),
         )
 
-        LabelledTextField(
+        TextField2(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
@@ -233,7 +233,7 @@ private fun RoomTopic(
     onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LabelledTextField(
+    TextField2(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
@@ -322,49 +322,33 @@ private fun RoomAddressField(
     onAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.primary,
-            text = stringResource(R.string.screen_create_room_room_address_section_title),
-        )
 
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = address.value,
-            leadingIcon = {
-                Text(
-                    text = "#",
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            },
-            trailingIcon = {
-                Text(
-                    text = homeserverName,
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(end = 16.dp)
-                )
-            },
-            supportingText = {
-                Text(
-                    text = stringResource(R.string.screen_create_room_room_address_section_footer),
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            },
-            onValueChange = onAddressChange,
-            singleLine = true,
-        )
-    }
+    TextField2(
+        modifier = modifier.fillMaxWidth(),
+        value = address.value,
+        label = stringResource(R.string.screen_create_room_room_address_section_title),
+        leadingIcon = {
+            Text(
+                text = "#",
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        trailingIcon = {
+            Text(
+                text = homeserverName,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
+        onValueChange = onAddressChange,
+        singleLine = true,
+    )
 }
 
 @PreviewsDayNight
+@PreviewWithLargeHeight
 @Composable
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(
