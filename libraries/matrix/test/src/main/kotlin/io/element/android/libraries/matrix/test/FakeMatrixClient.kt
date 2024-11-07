@@ -73,7 +73,11 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
+    private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
+        Result.success(
+        Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
+    )
+    },
     private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
@@ -305,7 +309,7 @@ class FakeMatrixClient(
         return Result.success(Unit)
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = simulateLongTask {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>> = simulateLongTask {
         resolveRoomAliasResult(roomAlias)
     }
 

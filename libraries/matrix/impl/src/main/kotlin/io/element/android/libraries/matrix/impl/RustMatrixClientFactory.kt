@@ -82,6 +82,7 @@ class RustMatrixClientFactory @Inject constructor(
             baseCacheDirectory = cacheDirectory,
             clock = clock,
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
+            featureFlagService = featureFlagService,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

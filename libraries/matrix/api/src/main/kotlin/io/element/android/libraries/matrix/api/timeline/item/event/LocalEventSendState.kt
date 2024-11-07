@@ -34,6 +34,10 @@ sealed interface LocalEventSendState {
              */
             val users: List<UserId>
         ) : VerifiedUser
+
+        data class InvalidMimeType(val mimeType: String) : Failed
+
+        data object MissingMediaContent : Failed
     }
 
     data class Sent(

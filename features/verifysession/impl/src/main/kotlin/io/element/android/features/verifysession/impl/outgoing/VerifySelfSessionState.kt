@@ -26,6 +26,7 @@ data class VerifySelfSessionState(
 
         // FIXME canEnterRecoveryKey value is never read.
         data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean = false) : Step
+        data object UseAnotherDevice : Step
         data object Canceled : Step
         data object AwaitingOtherDeviceResponse : Step
         data object Ready : Step

@@ -9,6 +9,7 @@ package io.element.android.libraries.featureflag.api
 
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
@@ -124,5 +125,19 @@ enum class FeatureFlags(
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
         isFinished = false,
-    )
+    ),
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    MediaUploadOnSendQueue(
+        key = "feature.media_upload_through_send_queue",
+        title = "Media upload through send queue",
+        description = "Experimental support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
+        isFinished = false,
+    ),
 }

@@ -27,6 +27,7 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -685,5 +686,6 @@ internal fun TestScope.createTimelinePresenter(
         timelineController = TimelineController(room),
         resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
         typingNotificationPresenter = { aTypingNotificationState() },
+        roomCallStatePresenter = { aStandByCallState() },
     )
 }

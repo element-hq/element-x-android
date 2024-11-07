@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -21,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.createroom.JoinRuleOverride
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -32,6 +34,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.PendingRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -71,7 +74,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
@@ -108,11 +110,11 @@ import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
+import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: Client,
     private val baseDirectory: File,
@@ -124,6 +126,7 @@ class RustMatrixClient(
     baseCacheDirectory: File,
     clock: SystemClock,
     timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
+    featureFlagService: FeatureFlagService,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: DeviceId = DeviceId(client.deviceId())
@@ -187,6 +190,7 @@ class RustMatrixClient(
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
         timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
+        featureFlagService = featureFlagService,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -304,14 +308,33 @@ class RustMatrixClient(
                     RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
                     RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
                 },
-                preset = when (createRoomParams.preset) {
-                    RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
-                    RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
-                    RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                preset = when (createRoomParams.visibility) {
+                    RoomVisibility.PRIVATE -> {
+                        if (createRoomParams.isDirect) {
+                            RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                        } else {
+                            RustRoomPreset.PRIVATE_CHAT
+                        }
+                    }
+                    RoomVisibility.PUBLIC -> {
+                        RustRoomPreset.PUBLIC_CHAT
+                    }
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
-                powerLevelContentOverride = defaultRoomCreationPowerLevels,
+                powerLevelContentOverride = defaultRoomCreationPowerLevels.copy(
+                    invite = if (createRoomParams.joinRuleOverride == JoinRuleOverride.Knock) {
+                        // override the invite power level so it's the same as kick.
+                        RoomMember.Role.MODERATOR.powerLevel.toInt()
+                    } else {
+                        null
+                    }
+                ),
+                joinRuleOverride = when (createRoomParams.joinRuleOverride) {
+                    JoinRuleOverride.Knock -> RustJoinRule.Knock
+                    JoinRuleOverride.None -> null
+                },
+                canonicalAlias = createRoomParams.canonicalAlias.getOrNull(),
             )
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
@@ -420,13 +443,15 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = withContext(sessionDispatcher) {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>> = withContext(sessionDispatcher) {
         runCatching {
-            val result = client.resolveRoomAlias(roomAlias.value)
-            ResolvedRoomAlias(
-                roomId = RoomId(result.roomId),
-                servers = result.servers,
-            )
+            val result = client.resolveRoomAlias(roomAlias.value)?.let {
+                ResolvedRoomAlias(
+                    roomId = RoomId(it.roomId),
+                    servers = it.servers,
+                )
+            }
+            Optional.ofNullable(result)
         }
     }
 

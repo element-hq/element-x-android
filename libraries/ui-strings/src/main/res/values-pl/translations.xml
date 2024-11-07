@@ -292,14 +292,6 @@ Powód: %1$s."</string>
   <string name="invite_friends_text">"Hej, porozmawiajmy na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Wstrząśnij gniewnie, aby zgłosić błąd"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Każdy może dołączyć do tego pokoju"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Wszyscy"</string>
-  <string name="screen_create_room_access_section_header">"Dostęp do pokoju"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Każdy może poprosić o dołączenie do pokoju, ale administrator lub moderator będzie musiał zatwierdzić prośbę"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Poproś o dołączenie"</string>
-  <string name="screen_create_room_room_address_section_footer">"Aby ten pokój był widoczny w katalogu pomieszczeń publicznych, będziesz potrzebował adres pokoju."</string>
-  <string name="screen_create_room_room_address_section_title">"Adres pokoju"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Widoczność pomieszczenia"</string>
   <string name="screen_media_picker_error_failed_selection">"Nie udało się wybrać multimediów. Spróbuj ponownie."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Przesyłanie multimediów nie powiodło się, spróbuj ponownie."</string>

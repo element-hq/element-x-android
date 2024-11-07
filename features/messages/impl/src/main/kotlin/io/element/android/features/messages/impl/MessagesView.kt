@@ -52,7 +52,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -69,7 +68,7 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
-import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
+import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
@@ -81,6 +80,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -93,8 +93,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -190,7 +188,7 @@ fun MessagesView(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
-                    callState = state.callState,
+                    roomCallState = state.roomCallState,
                     onBackClick = {
                         // Since the textfield is now based on an Android view, this is no longer done automatically.
                         // We need to hide the keyboard when navigating out of this screen.
@@ -479,7 +477,7 @@ private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
     heroes: ImmutableList<AvatarData>,
-    callState: RoomCallState,
+    roomCallState: RoomCallState,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -509,32 +507,13 @@ private fun MessagesViewTopBar(
         },
         actions = {
             CallMenuItem(
-                isCallOngoing = callState == RoomCallState.ONGOING,
-                onClick = onJoinCallClick,
-                enabled = callState != RoomCallState.DISABLED
+                roomCallState = roomCallState,
+                onJoinCallClick = onJoinCallClick,
             )
             Spacer(Modifier.width(8.dp))
         },
         windowInsets = WindowInsets(0.dp)
     )
-}
-
-@Composable
-private fun CallMenuItem(
-    isCallOngoing: Boolean,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    if (isCallOngoing) {
-        JoinCallMenuItem(onJoinCallClick = onClick)
-    } else {
-        IconButton(onClick = onClick, enabled = enabled) {
-            Icon(
-                imageVector = CompoundIcons.VideoCallSolid(),
-                contentDescription = stringResource(CommonStrings.a11y_start_call),
-            )
-        }
-    }
 }
 
 @Composable

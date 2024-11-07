@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.jvm.optionals.getOrElse
 
 class RoomAliasResolverPresenter @AssistedInject constructor(
     @Assisted private val roomAlias: RoomAlias,
@@ -57,7 +58,9 @@ class RoomAliasResolverPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.resolveAlias(resolveState: MutableState<AsyncData<ResolvedRoomAlias>>) = launch {
         suspend {
-            matrixClient.resolveRoomAlias(roomAlias).getOrThrow()
+            matrixClient.resolveRoomAlias(roomAlias)
+                .getOrThrow()
+                .getOrElse { error("Failed to resolve room alias $roomAlias") }
         }.runCatchingUpdatingState(resolveState)
     }
 }

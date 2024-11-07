@@ -287,14 +287,6 @@ Alasan: %1$s."</string>
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Siapa pun dapat bergabung dengan ruangan ini"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Siapa pun"</string>
-  <string name="screen_create_room_access_section_header">"Akses Ruangan"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Minta untuk bergabung"</string>
-  <string name="screen_create_room_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
-  <string name="screen_create_room_room_address_section_title">"Alamat ruangan"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Keterlihatan ruangan"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>

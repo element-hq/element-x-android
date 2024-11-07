@@ -11,9 +11,11 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +23,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,18 +36,22 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.createroom.impl.components.RoomPrivacyOption
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
@@ -72,11 +79,11 @@ fun ConfigureRoomView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
-                isNextActionEnabled = state.isCreateButtonEnabled,
+                isNextActionEnabled = state.config.isValid,
                 onBackClick = onBackClick,
                 onNextClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
+                    state.eventSink(ConfigureRoomEvents.CreateRoom)
                 },
             )
         }
@@ -103,23 +110,42 @@ fun ConfigureRoomView(
             )
             if (state.config.invites.isNotEmpty()) {
                 SelectedUsersRowList(
-                    modifier = Modifier.padding(bottom = 16.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     selectedUsers = state.config.invites,
                     onUserRemove = {
                         focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                        state.eventSink(ConfigureRoomEvents.RemoveUserFromSelection(it))
                     },
                 )
             }
-            RoomPrivacyOptions(
-                modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.config.privacy,
+            RoomVisibilityOptions(
+                selected = when (state.config.roomVisibility) {
+                    is RoomVisibilityState.Private -> RoomVisibilityItem.Private
+                    is RoomVisibilityState.Public -> RoomVisibilityItem.Public
+                },
                 onOptionClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                    state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
                 },
             )
+            if (state.config.roomVisibility is RoomVisibilityState.Public && state.isKnockFeatureEnabled) {
+                RoomAccessOptions(
+                    selected = when (state.config.roomVisibility.roomAccess) {
+                        RoomAccess.Anyone -> RoomAccessItem.Anyone
+                        RoomAccess.Knocking -> RoomAccessItem.AskToJoin
+                    },
+                    onOptionClick = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RoomAccessChanged(it))
+                    },
+                )
+                RoomAddressField(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    address = state.config.roomVisibility.roomAddress,
+                    homeserverName = state.homeserverName,
+                    onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
+                )
+            }
         }
     }
 
@@ -139,7 +165,7 @@ fun ConfigureRoomView(
         },
         onSuccess = { onCreateRoomSuccess(it) },
         errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
-        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
+        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
     )
 
@@ -221,20 +247,120 @@ private fun RoomTopic(
 }
 
 @Composable
-private fun RoomPrivacyOptions(
-    selected: RoomPrivacy?,
-    onOptionClick: (RoomPrivacyItem) -> Unit,
+private fun ConfigureRoomOptions(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = modifier.selectableGroup()
+    ) {
+        Text(
+            text = title,
+            style = ElementTheme.typography.fontBodyLgMedium,
+            color = ElementTheme.colors.textPrimary,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+        content()
+    }
+}
+
+@Composable
+private fun RoomVisibilityOptions(
+    selected: RoomVisibilityItem,
+    onOptionClick: (RoomVisibilityItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val items = roomPrivacyItems()
-    Column(modifier = modifier.selectableGroup()) {
-        items.forEach { item ->
-            RoomPrivacyOption(
-                roomPrivacyItem = item,
-                isSelected = selected == item.privacy,
-                onOptionClick = onOptionClick,
+    ConfigureRoomOptions(
+        title = stringResource(R.string.screen_create_room_room_visibility_section_title),
+        modifier = modifier,
+    ) {
+        RoomVisibilityItem.entries.forEach { item ->
+            val isSelected = item == selected
+            ListItem(
+                leadingContent = ListItemContent.Custom {
+                    RoundedIconAtom(
+                        size = RoundedIconAtomSize.Big,
+                        resourceId = item.icon,
+                        tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
+                    )
+                },
+                headlineContent = { Text(text = stringResource(item.title)) },
+                supportingContent = { Text(text = stringResource(item.description)) },
+                trailingContent = ListItemContent.RadioButton(selected = isSelected),
+                onClick = { onOptionClick(item) },
             )
         }
+    }
+}
+
+@Composable
+private fun RoomAccessOptions(
+    selected: RoomAccessItem,
+    onOptionClick: (RoomAccessItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ConfigureRoomOptions(
+        title = stringResource(R.string.screen_create_room_room_access_section_header),
+        modifier = modifier,
+    ) {
+        RoomAccessItem.entries.forEach { item ->
+            ListItem(
+                headlineContent = { Text(text = stringResource(item.title)) },
+                supportingContent = { Text(text = stringResource(item.description)) },
+                trailingContent = ListItemContent.RadioButton(selected = item == selected),
+                onClick = { onOptionClick(item) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun RoomAddressField(
+    address: RoomAddress,
+    homeserverName: String,
+    onAddressChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.primary,
+            text = stringResource(R.string.screen_create_room_room_address_section_title),
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = address.value,
+            leadingIcon = {
+                Text(
+                    text = "#",
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = homeserverName,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textSecondary,
+                    modifier = Modifier.padding(end = 16.dp)
+                )
+            },
+            supportingText = {
+                Text(
+                    text = stringResource(R.string.screen_create_room_room_address_section_footer),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            onValueChange = onAddressChange,
+            singleLine = true,
+        )
     }
 }
 

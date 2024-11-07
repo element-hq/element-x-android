@@ -70,14 +70,14 @@ fun TimelineItemVideoView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(CommonStrings.common_image)
+    val description = stringResource(CommonStrings.common_video)
     Column(
         modifier = modifier.semantics { contentDescription = description }
     ) {
         val containerModifier = if (content.showCaption) {
             Modifier
-                    .padding(top = 6.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                .padding(top = 6.dp)
+                .clip(RoundedCornerShape(6.dp))
         } else {
             Modifier
         }
@@ -93,8 +93,8 @@ fun TimelineItemVideoView(
                 var isLoaded by remember { mutableStateOf(false) }
                 AsyncImage(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                        .fillMaxWidth()
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
                         kind = MediaRequestData.Kind.File(

@@ -36,6 +36,7 @@ sealed interface TextEditorState {
         is Rich -> richTextEditorState.hasFocus
     }
 
+    // Note: for test only
     suspend fun setHtml(html: String) {
         when (this) {
             is Markdown -> Unit
@@ -43,6 +44,7 @@ sealed interface TextEditorState {
         }
     }
 
+    // Note: for test only
     suspend fun setMarkdown(text: String) {
         when (this) {
             is Markdown -> state.text.update(text, true)

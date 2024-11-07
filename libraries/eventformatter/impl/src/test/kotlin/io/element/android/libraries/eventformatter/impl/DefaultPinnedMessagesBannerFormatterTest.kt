@@ -159,11 +159,11 @@ class DefaultPinnedMessagesBannerFormatterTest {
             val expectedResult = when (type) {
                 is VideoMessageType,
                 is AudioMessageType,
-                is VoiceMessageType,
                 is ImageMessageType,
                 is StickerMessageType,
                 is FileMessageType,
                 is LocationMessageType -> AnnotatedString::class.java
+                is VoiceMessageType,
                 is EmoteMessageType,
                 is TextMessageType,
                 is NoticeMessageType,
@@ -176,7 +176,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
             val expectedResult = when (type) {
                 is VideoMessageType -> "Video: Shared body"
                 is AudioMessageType -> "Audio: Shared body"
-                is VoiceMessageType -> "Voice message: Shared body"
+                is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
                 is FileMessageType -> "File: Shared body"

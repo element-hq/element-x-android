@@ -50,6 +50,7 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -75,7 +76,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -98,6 +98,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
+    private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -133,6 +134,7 @@ class MessagesPresenter @AssistedInject constructor(
         val reactionSummaryState = reactionSummaryPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
+        val roomCallState = roomCallStatePresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
@@ -151,8 +153,6 @@ class MessagesPresenter @AssistedInject constructor(
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
-
-        val canJoinCall by room.canCall(updateKey = syncUpdateFlow.value)
 
         LaunchedEffect(Unit) {
             // Remove the unread flag on entering but don't send read receipts
@@ -204,12 +204,6 @@ class MessagesPresenter @AssistedInject constructor(
             }
         }
 
-        val callState = when {
-            !canJoinCall -> RoomCallState.DISABLED
-            roomInfo?.hasRoomCall == true -> RoomCallState.ONGOING
-            else -> RoomCallState.ENABLED
-        }
-
         return MessagesState(
             roomId = room.roomId,
             roomName = roomName,
@@ -232,7 +226,7 @@ class MessagesPresenter @AssistedInject constructor(
             enableTextFormatting = MessageComposerConfig.ENABLE_RICH_TEXT_EDITING,
             enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
-            callState = callState,
+            roomCallState = roomCallState,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             eventSink = { handleEvents(it) }
         )

@@ -285,11 +285,6 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτό το δωμάτιο"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Οποιοσδήποτε"</string>
-  <string name="screen_create_room_access_section_header">"Πρόσβαση Δωματίου"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>

@@ -590,6 +590,7 @@ class DefaultNotifiableEventResolverTest {
                 senderDisambiguatedDisplayName = A_USER_NAME_2,
                 body = "Call in progress (unsupported)",
                 imageUriString = null,
+                imageMimeType = null,
                 threadId = null,
                 roomName = A_ROOM_NAME,
                 roomAvatarPath = null,
@@ -669,6 +670,7 @@ class DefaultNotifiableEventResolverTest {
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
+                imageMimeType = null,
                 type = EventType.CALL_NOTIFY,
             )
         )
@@ -704,6 +706,7 @@ class DefaultNotifiableEventResolverTest {
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
+                imageMimeType = null,
                 type = EventType.CALL_NOTIFY,
             )
         )

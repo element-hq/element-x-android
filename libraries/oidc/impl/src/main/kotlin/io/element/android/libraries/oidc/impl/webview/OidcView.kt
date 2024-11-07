@@ -86,6 +86,7 @@ fun OidcView(
                             javaScriptEnabled = true
                             allowContentAccess = true
                             allowFileAccess = true
+                            @Suppress("DEPRECATION")
                             databaseEnabled = true
                             domStorageEnabled = true
                         }
