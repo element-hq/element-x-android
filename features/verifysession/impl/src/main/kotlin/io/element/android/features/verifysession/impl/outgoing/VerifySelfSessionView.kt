@@ -174,7 +174,7 @@ private fun VerifySelfSessionHeader(step: Step) {
         is Step.Initial -> R.string.screen_identity_confirmation_title
         Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_title
         Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_title
-        Step.Canceled -> CommonStrings.common_verification_cancelled
+        Step.Canceled -> CommonStrings.common_verification_failed
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
         Step.Completed -> R.string.screen_identity_confirmed_title
         is Step.Verifying -> when (step.data) {
@@ -188,7 +188,7 @@ private fun VerifySelfSessionHeader(step: Step) {
         is Step.Initial -> R.string.screen_identity_confirmation_subtitle
         Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_subtitle
         Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_subtitle
-        Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
+        Step.Canceled -> R.string.screen_session_verification_failed_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
         Step.Completed -> R.string.screen_identity_confirmed_subtitle
         is Step.Verifying -> when (step.data) {
