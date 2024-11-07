@@ -66,9 +66,6 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 }
             }
             inState<State.Canceled> {
-                on { _: Event.RequestVerification, state ->
-                    state.override { State.RequestingVerification.andLogStateChange() }
-                }
                 on { _: Event.Reset, state ->
                     state.override { State.Initial.andLogStateChange() }
                 }

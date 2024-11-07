@@ -290,14 +290,11 @@ private fun VerifySelfSessionBottomMenu(
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_positive_button_canceled),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.action_cancel),
+                    text = stringResource(CommonStrings.action_done),
                     onClick = onCancelClick,
                 )
+                // Placeholder so the 1st button keeps its vertical position
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
         is Step.Ready -> {

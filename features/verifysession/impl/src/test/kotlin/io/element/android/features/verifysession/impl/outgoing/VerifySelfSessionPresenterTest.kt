@@ -187,24 +187,6 @@ class VerifySelfSessionPresenterTest {
     }
 
     @Test
-    fun `present - Restart after cancellation returns to requesting verification`() = runTest {
-        val service = unverifiedSessionService(
-            requestVerificationLambda = { },
-            startVerificationLambda = { },
-        )
-        val presenter = createVerifySelfSessionPresenter(service)
-        presenter.test {
-            val state = requestVerificationAndAwaitVerifyingState(service)
-            service.emitVerificationFlowState(VerificationFlowState.DidCancel)
-            assertThat(awaitItem().step).isEqualTo(Step.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
-            // Went back to requesting verification
-            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `present - Go back after cancellation returns to initial state`() = runTest {
         val service = unverifiedSessionService(
             requestVerificationLambda = { },
