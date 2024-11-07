@@ -12,10 +12,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -44,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -282,8 +281,7 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(CommonStrings.action_start_verification),
                     onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(40.dp))
+                InvisibleButton()
             }
         }
         is Step.Canceled -> {
@@ -293,8 +291,7 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(CommonStrings.action_done),
                     onClick = onCancelClick,
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(40.dp))
+                InvisibleButton()
             }
         }
         is Step.Ready -> {
@@ -320,8 +317,7 @@ private fun VerifySelfSessionBottomMenu(
                     showProgress = true,
                     enabled = false,
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(40.dp))
+                InvisibleButton()
             }
         }
         is Step.Verifying -> {
@@ -343,8 +339,7 @@ private fun VerifySelfSessionBottomMenu(
                     },
                 )
                 if (isVerifying) {
-                    // Placeholder so the 1st button keeps its vertical position
-                    Spacer(modifier = Modifier.height(40.dp))
+                    InvisibleButton()
                 } else {
                     TextButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -361,8 +356,7 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(CommonStrings.action_continue),
                     onClick = onContinueClick,
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(48.dp))
+                InvisibleButton()
             }
         }
         is Step.Skipped -> return

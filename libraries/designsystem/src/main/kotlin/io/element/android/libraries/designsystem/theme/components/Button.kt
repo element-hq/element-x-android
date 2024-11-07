@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -119,6 +120,14 @@ fun TextButton(
 )
 
 @Composable
+fun InvisibleButton(
+    modifier: Modifier = Modifier,
+    size: ButtonSize = ButtonSize.Large,
+) {
+    Spacer(modifier = modifier.height(size.toMinHeight()))
+}
+
+@Composable
 private fun ButtonInternal(
     text: String,
     onClick: () -> Unit,
@@ -131,14 +140,7 @@ private fun ButtonInternal(
     showProgress: Boolean = false,
     leadingIcon: IconSource? = null,
 ) {
-    val minHeight = when (size) {
-        ButtonSize.Small -> 32.dp
-        ButtonSize.Medium,
-        ButtonSize.MediumLowPadding -> 40.dp
-        ButtonSize.Large,
-        ButtonSize.LargeLowPadding -> 48.dp
-    }
-
+    val minHeight = size.toMinHeight()
     val hasStartDrawable = showProgress || leadingIcon != null
 
     val contentPadding = when (size) {
@@ -251,6 +253,14 @@ private fun ButtonInternal(
             overflow = TextOverflow.Ellipsis,
         )
     }
+}
+
+private fun ButtonSize.toMinHeight() = when (this) {
+    ButtonSize.Small -> 32.dp
+    ButtonSize.Medium,
+    ButtonSize.MediumLowPadding -> 40.dp
+    ButtonSize.Large,
+    ButtonSize.LargeLowPadding -> 48.dp
 }
 
 @Immutable
