@@ -14,7 +14,6 @@ import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.auth.ClientAuthenticationObserver
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -52,7 +51,6 @@ import org.matrix.rustcomponents.sdk.QrCodeData
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.OidcAuthorizationData
 import javax.inject.Inject
@@ -67,7 +65,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val passphraseGenerator: PassphraseGenerator,
     private val oidcConfigurationProvider: OidcConfigurationProvider,
     private val appPreferencesStore: AppPreferencesStore,
-    private val authenticationObserver: ClientAuthenticationObserver,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
@@ -78,6 +75,11 @@ class RustMatrixAuthenticationService @Inject constructor(
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
+
+    private var newMatrixClientObserver: ((MatrixClient) -> Unit)? = null
+    override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
+        newMatrixClientObserver = lambda
+    }
 
     private fun rotateSessionPath(): SessionPaths {
         sessionPaths?.deleteRecursively()
@@ -157,8 +159,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         sessionPaths = currentSessionPaths,
                     )
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
-                authenticationObserver.onClientAuthenticationSucceeded(rustMatrixClientFactory.create(client))
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
@@ -230,8 +232,8 @@ class RustMatrixAuthenticationService @Inject constructor(
                 )
                 pendingOidcAuthorizationData?.close()
                 pendingOidcAuthorizationData = null
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
-                authenticationObserver.onClientAuthenticationSucceeded(rustMatrixClientFactory.create(client))
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
@@ -258,15 +260,14 @@ class RustMatrixAuthenticationService @Inject constructor(
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
-                val sessionData = client.use { rustClient ->
-                    rustClient.session()
-                        .toSessionData(
-                            isTokenValid = true,
-                            loginType = LoginType.QR,
-                            passphrase = pendingPassphrase,
-                            sessionPaths = emptySessionPaths,
-                        )
-                }
+                val sessionData = client.session()
+                    .toSessionData(
+                        isTokenValid = true,
+                        loginType = LoginType.QR,
+                        passphrase = pendingPassphrase,
+                        sessionPaths = emptySessionPaths,
+                    )
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure {

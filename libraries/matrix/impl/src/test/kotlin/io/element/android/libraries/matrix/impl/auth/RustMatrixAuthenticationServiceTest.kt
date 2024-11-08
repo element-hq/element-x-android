@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.auth.ClientAuthenticationObserver
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
@@ -36,7 +35,6 @@ class RustMatrixAuthenticationServiceTest {
 
     private fun TestScope.createRustMatrixAuthenticationService(
         sessionStore: SessionStore = InMemorySessionStore(),
-        clientAuthenticationObserver: ClientAuthenticationObserver = ClientAuthenticationObserver { _ -> },
     ): RustMatrixAuthenticationService {
         val baseDirectory = File("/base")
         val cacheDirectory = File("/cache")
@@ -53,7 +51,6 @@ class RustMatrixAuthenticationServiceTest {
             passphraseGenerator = FakePassphraseGenerator(),
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
             appPreferencesStore = InMemoryAppPreferencesStore(),
-            authenticationObserver = clientAuthenticationObserver,
         )
     }
 }
