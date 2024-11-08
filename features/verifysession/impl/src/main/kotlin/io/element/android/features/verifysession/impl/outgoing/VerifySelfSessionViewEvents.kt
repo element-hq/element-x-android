@@ -8,6 +8,7 @@
 package io.element.android.features.verifysession.impl.outgoing
 
 sealed interface VerifySelfSessionViewEvents {
+    data object UseAnotherDevice : VerifySelfSessionViewEvents
     data object RequestVerification : VerifySelfSessionViewEvents
     data object StartSasVerification : VerifySelfSessionViewEvents
     data object ConfirmVerification : VerifySelfSessionViewEvents

@@ -12,10 +12,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -44,6 +42,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -66,7 +65,9 @@ fun VerifySelfSessionView(
     fun cancelOrResetFlow() {
         when (step) {
             is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
-            is Step.AwaitingOtherDeviceResponse, Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            is Step.AwaitingOtherDeviceResponse,
+            Step.UseAnotherDevice,
+            Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
                     state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
@@ -159,7 +160,9 @@ fun VerifySelfSessionView(
 private fun VerifySelfSessionHeader(step: Step) {
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
+        is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
+        Step.UseAnotherDevice -> BigIcon.Style.Default(CompoundIcons.Devices())
+        Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.Devices())
         Step.Canceled -> BigIcon.Style.AlertSolid
         Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
         Step.Completed -> BigIcon.Style.SuccessSolid
@@ -167,8 +170,10 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val titleTextId = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
-        Step.Canceled -> CommonStrings.common_verification_cancelled
+        is Step.Initial -> R.string.screen_identity_confirmation_title
+        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_title
+        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_title
+        Step.Canceled -> CommonStrings.common_verification_failed
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
         Step.Completed -> R.string.screen_identity_confirmed_title
         is Step.Verifying -> when (step.data) {
@@ -179,8 +184,10 @@ private fun VerifySelfSessionHeader(step: Step) {
     }
     val subtitleTextId = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial, Step.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
-        Step.Canceled -> R.string.screen_session_verification_cancelled_subtitle
+        is Step.Initial -> R.string.screen_identity_confirmation_subtitle
+        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_subtitle
+        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_subtitle
+        Step.Canceled -> R.string.screen_session_verification_failed_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
         Step.Completed -> R.string.screen_identity_confirmed_subtitle
         is Step.Verifying -> when (step.data) {
@@ -252,7 +259,7 @@ private fun VerifySelfSessionBottomMenu(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                        onClick = { eventSink(VerifySelfSessionViewEvents.UseAnotherDevice) },
                     )
                 }
                 Button(
@@ -267,18 +274,24 @@ private fun VerifySelfSessionBottomMenu(
                 )
             }
         }
+        is Step.UseAnotherDevice -> {
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_start_verification),
+                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                )
+                InvisibleButton()
+            }
+        }
         is Step.Canceled -> {
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_positive_button_canceled),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.action_cancel),
+                    text = stringResource(CommonStrings.action_done),
                     onClick = onCancelClick,
                 )
+                InvisibleButton()
             }
         }
         is Step.Ready -> {
@@ -302,9 +315,9 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(R.string.screen_identity_waiting_on_other_device),
                     onClick = {},
                     showProgress = true,
+                    enabled = false,
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(40.dp))
+                InvisibleButton()
             }
         }
         is Step.Verifying -> {
@@ -318,17 +331,22 @@ private fun VerifySelfSessionBottomMenu(
                     modifier = Modifier.fillMaxWidth(),
                     text = positiveButtonTitle,
                     showProgress = isVerifying,
+                    enabled = !isVerifying,
                     onClick = {
                         if (!isVerifying) {
                             eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
                         }
                     },
                 )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_they_dont_match),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
-                )
+                if (isVerifying) {
+                    InvisibleButton()
+                } else {
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_they_dont_match),
+                        onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
+                    )
+                }
             }
         }
         is Step.Completed -> {
@@ -338,8 +356,7 @@ private fun VerifySelfSessionBottomMenu(
                     text = stringResource(CommonStrings.action_continue),
                     onClick = onContinueClick,
                 )
-                // Placeholder so the 1st button keeps its vertical position
-                Spacer(modifier = Modifier.height(48.dp))
+                InvisibleButton()
             }
         }
         is Step.Skipped -> return

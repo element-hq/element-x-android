@@ -39,7 +39,7 @@ class MediaSender @Inject constructor(
             .process(
                 uri = uri,
                 mimeType = mimeType,
-                deleteOriginal = true,
+                deleteOriginal = false,
                 compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->

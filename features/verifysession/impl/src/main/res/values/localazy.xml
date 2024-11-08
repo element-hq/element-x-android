@@ -35,6 +35,10 @@
   <string name="screen_session_verification_request_title">"Verification requested"</string>
   <string name="screen_session_verification_they_dont_match">"They don’t match"</string>
   <string name="screen_session_verification_they_match">"They match"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Make sure you have the app open in the other device before starting verification from here."</string>
+  <string name="screen_session_verification_use_another_device_title">"Open the app on another verified device"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"You should see a popup on the other device. Start the verification from there now."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Start verification on the other device"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accept the request to start the verification process in your other session to continue."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Waiting to accept request"</string>
   <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>

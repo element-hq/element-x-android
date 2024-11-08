@@ -104,6 +104,7 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
         fun handleEvents(event: VerifySelfSessionViewEvents) {
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
+                VerifySelfSessionViewEvents.UseAnotherDevice -> stateAndDispatch.dispatchAction(StateMachineEvent.UseAnotherDevice)
                 VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification)
                 VerifySelfSessionViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
                 VerifySelfSessionViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
@@ -133,6 +134,9 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
                     canEnterRecoveryKey = canEnterRecoveryKey,
                     isLastDevice = encryptionService.isLastDevice.value
                 )
+            }
+            VerifySelfSessionStateMachine.State.UseAnotherDevice -> {
+                VerifySelfSessionState.Step.UseAnotherDevice
             }
             StateMachineState.RequestingVerification,
             StateMachineState.StartingSasVerification,
