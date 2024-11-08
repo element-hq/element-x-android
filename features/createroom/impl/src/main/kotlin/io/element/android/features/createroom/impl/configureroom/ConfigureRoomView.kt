@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -216,7 +216,7 @@ private fun RoomNameWithAvatar(
             modifier = Modifier.clickable(onClick = onAvatarClick),
         )
 
-        TextField2(
+        TextField(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
@@ -232,7 +232,7 @@ private fun RoomTopic(
     onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TextField2(
+    TextField(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
@@ -322,7 +322,7 @@ private fun RoomAddressField(
     modifier: Modifier = Modifier,
 ) {
 
-    TextField2(
+    TextField(
         modifier = modifier.fillMaxWidth(),
         value = address.value,
         label = stringResource(R.string.screen_create_room_room_address_section_title),

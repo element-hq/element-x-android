@@ -64,7 +64,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -268,7 +268,7 @@ private fun Content(
                 // Ensure password is hidden when user submits the form
                 passwordVisible = false
             }
-            TextField2(
+            TextField(
                 value = passwordFieldState,
                 label = stringResource(CommonStrings.action_confirm_password),
                 readOnly = isLoading,

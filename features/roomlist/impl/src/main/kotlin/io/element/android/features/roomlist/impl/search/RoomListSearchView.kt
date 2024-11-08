@@ -53,7 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.FilledTextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -130,7 +130,7 @@ private fun RoomListSearchContent(
                 title = {
                     val filter = state.query
                     val focusRequester = FocusRequester()
-                    TextField(
+                    FilledTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .focusRequester(focusRequester),

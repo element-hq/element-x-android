@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -158,7 +158,7 @@ private fun RecoveryKeyFormContent(
         // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
         if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
     }
-    TextField2(
+    TextField(
         modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.recoveryKey)

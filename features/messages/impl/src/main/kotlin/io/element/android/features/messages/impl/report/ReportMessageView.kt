@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -88,7 +88,7 @@ fun ReportMessageView(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
-            TextField2(
+            TextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvents.UpdateReason(it)) },
                 placeholder = stringResource(R.string.screen_report_content_hint),

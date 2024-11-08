@@ -60,7 +60,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -169,7 +169,7 @@ private fun LoginForm(
     val eventSink = state.eventSink
 
     Column {
-        TextField2(
+        TextField(
             label = stringResource(R.string.screen_login_form_header),
             value = loginFieldState,
             enabled = !isLoading,
@@ -221,7 +221,7 @@ private fun LoginForm(
             passwordVisible = false
         }
         Spacer(Modifier.height(20.dp))
-        TextField2(
+        TextField(
             value = passwordFieldState,
             enabled = !isLoading,
             modifier = Modifier

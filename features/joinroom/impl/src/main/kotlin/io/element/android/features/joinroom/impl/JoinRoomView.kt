@@ -61,7 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.RoomType
@@ -390,7 +390,7 @@ private fun DefaultLoadedContent(
                     )
                 } else if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))
-                    TextField2(
+                    TextField(
                         value = knockMessage,
                         onValueChange = onKnockMessageUpdate,
                         maxLines = 3,

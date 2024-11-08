@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -80,7 +80,7 @@ fun ResetIdentityPasswordView(
 @Composable
 private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Boolean) {
     var showPassword by remember { mutableStateOf(false) }
-    TextField2(
+    TextField(
         modifier = Modifier
             .fillMaxWidth()
             .onTabOrEnterKeyFocusNext(LocalFocusManager.current),

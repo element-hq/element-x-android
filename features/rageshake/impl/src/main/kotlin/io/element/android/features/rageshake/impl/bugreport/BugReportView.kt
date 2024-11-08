@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -69,7 +69,7 @@ fun BugReportView(
             )
             Spacer(modifier = Modifier.height(16.dp))
             PreferenceRow {
-                TextField2(
+                TextField(
                     value = descriptionFieldState,
                     modifier = Modifier
                             .fillMaxWidth()

@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
@@ -112,7 +112,7 @@ fun EditUserProfileView(
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(40.dp))
-            TextField2(
+            TextField(
                 label = stringResource(R.string.screen_edit_profile_display_name),
                 value = state.displayName,
                 placeholder = stringResource(CommonStrings.common_room_name_placeholder),

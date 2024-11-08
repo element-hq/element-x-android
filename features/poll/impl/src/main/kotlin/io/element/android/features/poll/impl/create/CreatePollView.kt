@@ -50,7 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TextField2
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -110,7 +110,7 @@ fun CreatePollView(
                 Column {
                     ListItem(
                         headlineContent = {
-                            TextField2(
+                            TextField(
                                 label = stringResource(id = R.string.screen_create_poll_question_desc),
                                 value = state.question,
                                 onValueChange = {
@@ -130,7 +130,7 @@ fun CreatePollView(
                 val isLastItem = index == state.answers.size - 1
                 ListItem(
                     headlineContent = {
-                        TextField2(
+                        TextField(
                             value = answer.text,
                             onValueChange = {
                                 state.eventSink(CreatePollEvents.SetAnswer(index, it))
