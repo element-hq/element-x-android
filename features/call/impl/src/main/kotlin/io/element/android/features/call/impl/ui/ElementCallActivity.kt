@@ -45,12 +45,13 @@ import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val loggerTag = "ElementCallActivity"
+private val loggerTag = LoggerTag("ElementCallActivity")
 
 class ElementCallActivity :
     AppCompatActivity(),
@@ -135,7 +136,7 @@ class ElementCallActivity :
         DisposableEffect(Unit) {
             val listener = Runnable {
                 if (requestPermissionCallback != null) {
-                    Timber.tag(loggerTag).w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
+                    Timber.tag(loggerTag.value).w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
                 } else {
                     pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
                 }
@@ -149,7 +150,7 @@ class ElementCallActivity :
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
                 pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                    Timber.tag(loggerTag).d("Exiting PiP mode: Hangup the call")
+                    Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
                     eventSink?.invoke(CallScreenEvents.Hangup)
                 }
             }
@@ -193,18 +194,18 @@ class ElementCallActivity :
         }
         val currentCallType = webViewTarget.value
         if (currentCallType == null && callType == null) {
-            Timber.tag(loggerTag).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
+            Timber.tag(loggerTag.value).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
             finish()
         } else if (currentCallType == null) {
-            Timber.tag(loggerTag).d("Set the call type and create the presenter")
+            Timber.tag(loggerTag.value).d("Set the call type and create the presenter")
             webViewTarget.value = callType
             presenter = presenterFactory.create(callType!!, this)
         } else if (callType != currentCallType) {
-            Timber.tag(loggerTag).d("User starts another call, restart the Activity")
+            Timber.tag(loggerTag.value).d("User starts another call, restart the Activity")
             setIntent(intent)
             recreate()
         } else {
-            Timber.tag(loggerTag).d("Coming back from notification, do nothing")
+            Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
         }
     }
 
