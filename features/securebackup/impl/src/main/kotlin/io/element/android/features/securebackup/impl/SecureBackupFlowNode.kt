@@ -22,7 +22,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
-import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
 import io.element.android.features.securebackup.impl.reset.ResetIdentityFlowNode
 import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
@@ -64,9 +63,6 @@ class SecureBackupFlowNode @AssistedInject constructor(
         data object Disable : NavTarget
 
         @Parcelize
-        data object Enable : NavTarget
-
-        @Parcelize
         data object EnterRecoveryKey : NavTarget
 
         @Parcelize
@@ -91,10 +87,6 @@ class SecureBackupFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.Disable)
                     }
 
-                    override fun onEnableClick() {
-                        backstack.push(NavTarget.Enable)
-                    }
-
                     override fun onConfirmRecoveryKeyClick() {
                         backstack.push(NavTarget.EnterRecoveryKey)
                     }
@@ -115,9 +107,6 @@ class SecureBackupFlowNode @AssistedInject constructor(
             }
             NavTarget.Disable -> {
                 createNode<SecureBackupDisableNode>(buildContext)
-            }
-            NavTarget.Enable -> {
-                createNode<SecureBackupEnableNode>(buildContext)
             }
             NavTarget.EnterRecoveryKey -> {
                 val callback = object : SecureBackupEnterRecoveryKeyNode.Callback {

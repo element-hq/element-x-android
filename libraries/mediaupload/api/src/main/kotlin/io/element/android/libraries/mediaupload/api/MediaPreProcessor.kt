@@ -18,8 +18,8 @@ interface MediaPreProcessor {
     suspend fun process(
         uri: Uri,
         mimeType: String,
-        deleteOriginal: Boolean = false,
-        compressIfPossible: Boolean
+        deleteOriginal: Boolean,
+        compressIfPossible: Boolean,
     ): Result<MediaUploadInfo>
 
     data class Failure(override val cause: Throwable?) : Exception(cause)

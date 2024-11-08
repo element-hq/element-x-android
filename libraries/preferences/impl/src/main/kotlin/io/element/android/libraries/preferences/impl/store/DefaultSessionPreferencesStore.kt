@@ -83,7 +83,7 @@ class DefaultSessionPreferencesStore(
     override fun isSessionVerificationSkipped(): Flow<Boolean> = get(skipSessionVerification) { false }
 
     override suspend fun setCompressMedia(compress: Boolean) = update(compressMedia, compress)
-    override fun doesCompressMedia(): Flow<Boolean> = get(compressMedia) { false }
+    override fun doesCompressMedia(): Flow<Boolean> = get(compressMedia) { true }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

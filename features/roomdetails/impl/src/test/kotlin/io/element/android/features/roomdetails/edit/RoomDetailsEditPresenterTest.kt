@@ -8,15 +8,14 @@
 package io.element.android.features.roomdetails.edit
 
 import android.net.Uri
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -30,9 +29,11 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -45,6 +46,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
+@Suppress("LargeClass")
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
     @get:Rule
@@ -76,12 +78,14 @@ class RoomDetailsEditPresenterTest {
     private fun createRoomDetailsEditPresenter(
         room: MatrixRoom,
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+        temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
     ): RoomDetailsEditPresenter {
         return RoomDetailsEditPresenter(
             room = room,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+            temporaryUriDeleter = temporaryUriDeleter,
         )
     }
 
@@ -94,10 +98,12 @@ class RoomDetailsEditPresenterTest {
             emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomRawName).isEqualTo(A_ROOM_RAW_NAME)
@@ -126,10 +132,12 @@ class RoomDetailsEditPresenterTest {
                 }
             },
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             // Initially false
             val initialState = awaitItem()
             assertThat(initialState.canChangeName).isFalse()
@@ -140,6 +148,7 @@ class RoomDetailsEditPresenterTest {
             assertThat(settledState.canChangeName).isTrue()
             assertThat(settledState.canChangeAvatar).isFalse()
             assertThat(settledState.canChangeTopic).isFalse()
+            deleteCallback.assertions().isCalledOnce().with(value(null))
         }
     }
 
@@ -156,10 +165,12 @@ class RoomDetailsEditPresenterTest {
                 }
             }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             // Initially false
             val initialState = awaitItem()
             assertThat(initialState.canChangeName).isFalse()
@@ -186,10 +197,12 @@ class RoomDetailsEditPresenterTest {
                 }
             }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             // Initially false
             val initialState = awaitItem()
             assertThat(initialState.canChangeName).isFalse()
@@ -212,10 +225,12 @@ class RoomDetailsEditPresenterTest {
             emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.roomTopic).isEqualTo("My topic")
             assertThat(initialState.roomRawName).isEqualTo("Name")
@@ -257,10 +272,12 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
@@ -281,13 +298,13 @@ class RoomDetailsEditPresenterTest {
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
         val fakePermissionsPresenter = FakePermissionsPresenter()
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
         val presenter = createRoomDetailsEditPresenter(
             room = room,
             permissionsPresenter = fakePermissionsPresenter,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             assertThat(initialState.cameraPermissionState.permissionGranted).isFalse()
@@ -304,6 +321,12 @@ class RoomDetailsEditPresenterTest {
             stateWithNewAvatar.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             val stateWithNewAvatar2 = awaitItem()
             assertThat(stateWithNewAvatar2.roomAvatarUrl).isEqualTo(roomAvatarUri)
+            deleteCallback.assertions().isCalledExactly(4).withSequence(
+                listOf(value(null)),
+                listOf(value(null)),
+                listOf(value(roomAvatarUri)),
+                listOf(value(anotherAvatarUri)),
+            )
         }
     }
 
@@ -317,10 +340,12 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(roomAvatarUri)
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
@@ -366,10 +391,12 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(roomAvatarUri)
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
@@ -420,10 +447,12 @@ class RoomDetailsEditPresenterTest {
             removeAvatarResult = removeAvatarResult,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("New name"))
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("New topic"))
@@ -444,10 +473,12 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("   Name   "))
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("  My topic  "))
@@ -464,14 +495,17 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(""))
             initialState.eventSink(RoomDetailsEditEvents.Save)
             cancelAndIgnoreRemainingEvents()
+            deleteCallback.assertions().isCalledOnce().with(value(null))
         }
     }
 
@@ -483,14 +517,17 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName(""))
             initialState.eventSink(RoomDetailsEditEvents.Save)
             cancelAndIgnoreRemainingEvents()
+            deleteCallback.assertions().isCalledOnce().with(value(null))
         }
     }
 
@@ -505,15 +542,21 @@ class RoomDetailsEditPresenterTest {
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         givenPickerReturnsFile()
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(4)
-            updateAvatarResult.assertions().isCalledOnce().with(value("image/jpeg"), value(fakeFileContents))
+            updateAvatarResult.assertions().isCalledOnce().with(value(MimeTypes.Jpeg), value(fakeFileContents))
+            deleteCallback.assertions().isCalledExactly(2).withSequence(
+                listOf(value(null)),
+                listOf(value(null)),
+            )
         }
     }
 
@@ -527,10 +570,12 @@ class RoomDetailsEditPresenterTest {
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(RoomDetailsEditEvents.Save)
@@ -575,7 +620,7 @@ class RoomDetailsEditPresenterTest {
             removeAvatarResult = { Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove), deleteCallbackNumberOfInvocation = 3)
     }
 
     @Test
@@ -589,7 +634,7 @@ class RoomDetailsEditPresenterTest {
             updateAvatarResult = { _, _ -> Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 3)
     }
 
     @Test
@@ -602,10 +647,12 @@ class RoomDetailsEditPresenterTest {
             setTopicResult = { Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("foo"))
             initialState.eventSink(RoomDetailsEditEvents.Save)
@@ -616,17 +663,24 @@ class RoomDetailsEditPresenterTest {
         }
     }
 
-    private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditEvents) {
-        val presenter = createRoomDetailsEditPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+    private suspend fun saveAndAssertFailure(
+        room: MatrixRoom,
+        event: RoomDetailsEditEvents,
+        deleteCallbackNumberOfInvocation: Int = 2,
+    ) {
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val presenter = createRoomDetailsEditPresenter(
+            room = room,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(event)
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
+            deleteCallback.assertions().isCalledExactly(deleteCallbackNumberOfInvocation)
         }
     }
 

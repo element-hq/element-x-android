@@ -108,7 +108,14 @@ interface MatrixClient : Closeable {
 
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
-    suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias>
+
+    /**
+     * Resolves the given room alias to a roomID (and a list of servers), if possible.
+     * @param roomAlias the room alias to resolve
+     * @return the resolved room alias if any, an empty result if not found,or an error if the resolution failed.
+     *
+     */
+    suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>>
 
     /**
      * Enables or disables the sending queue, according to the given parameter.

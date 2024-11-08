@@ -31,7 +31,8 @@ data class NotifiableMessageEvent(
     val body: String?,
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage
-    val imageUriString: String?,
+    private val imageUriString: String?,
+    val imageMimeType: String?,
     val threadId: ThreadId?,
     val roomName: String?,
     val roomIsDm: Boolean = false,

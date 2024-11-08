@@ -15,7 +15,7 @@ import java.io.File
 
 fun CommonExtension<*, *, *, *, *, *>.androidConfig(project: Project) {
     defaultConfig {
-        compileSdk = Versions.compileSdk
+        compileSdk = Versions.COMPILE_SDK
         minSdk = Versions.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

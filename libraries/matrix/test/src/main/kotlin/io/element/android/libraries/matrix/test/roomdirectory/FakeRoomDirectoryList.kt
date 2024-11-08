@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.emptyFlow
 
 class FakeRoomDirectoryList(
     override val state: Flow<RoomDirectoryList.State> = emptyFlow(),
-    val filterLambda: (String?, Int) -> Result<Unit> = { _, _ -> Result.success(Unit) },
+    val filterLambda: (String?, Int, String?) -> Result<Unit> = { _, _, _ -> Result.success(Unit) },
     val loadMoreLambda: () -> Result<Unit> = { Result.success(Unit) }
 ) : RoomDirectoryList {
-    override suspend fun filter(filter: String?, batchSize: Int) = filterLambda(filter, batchSize)
+    override suspend fun filter(filter: String?, batchSize: Int, viaServerName: String?): Result<Unit> = filterLambda(filter, batchSize, viaServerName)
 
     override suspend fun loadMore(): Result<Unit> = loadMoreLambda()
 }

@@ -15,6 +15,7 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -23,21 +24,17 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.timeout
-import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(SessionScope::class)
+@SingleIn(SessionScope::class)
 class DefaultFtueService @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
@@ -48,6 +45,14 @@ class DefaultFtueService @Inject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : FtueService {
     override val state = MutableStateFlow<FtueState>(FtueState.Unknown)
+
+    /**
+     * This flow emits true when the FTUE flow is ready to be displayed.
+     * In this case, the FTUE flow is ready when the session verification status is known.
+     */
+    val isVerificationStatusKnown = sessionVerificationService.sessionVerifiedStatus
+        .map { it != SessionVerifiedStatus.Unknown }
+        .distinctUntilChanged()
 
     override suspend fun reset() {
         analyticsService.reset()
@@ -69,7 +74,12 @@ class DefaultFtueService @Inject constructor(
 
     suspend fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (isSessionNotVerified()) {
+            null -> if (!isSessionVerificationStateReady()) {
+                FtueStep.WaitingForInitialState
+            } else {
+                getNextStep(FtueStep.WaitingForInitialState)
+            }
+            FtueStep.WaitingForInitialState -> if (isSessionNotVerified()) {
                 FtueStep.SessionVerification
             } else {
                 getNextStep(FtueStep.SessionVerification)
@@ -89,34 +99,18 @@ class DefaultFtueService @Inject constructor(
             } else {
                 getNextStep(FtueStep.AnalyticsOptIn)
             }
-            FtueStep.AnalyticsOptIn -> {
-                updateState()
-                null
-            }
+            FtueStep.AnalyticsOptIn -> null
         }
 
-    private suspend fun isAnyStepIncomplete(): Boolean {
-        return listOf<suspend () -> Boolean>(
-            { isSessionNotVerified() },
-            { shouldAskNotificationPermissions() },
-            { needsAnalyticsOptIn() },
-            { shouldDisplayLockscreenSetup() },
-        ).any { it() }
+    private fun isSessionVerificationStateReady(): Boolean {
+        return sessionVerificationService.sessionVerifiedStatus.value != SessionVerifiedStatus.Unknown
     }
 
-    @OptIn(FlowPreview::class)
     private suspend fun isSessionNotVerified(): Boolean {
-        // Wait for the first known (or ready) verification status
-        val readyVerifiedSessionStatus = sessionVerificationService.sessionVerifiedStatus
-            .filter { it != SessionVerifiedStatus.Unknown }
-            // This is not ideal, but there are some very rare cases when reading the flow seems to get stuck
-            .timeout(5.seconds)
-            .catch {
-                Timber.e(it, "Failed to get session verification status, assume it's not verified")
-                emit(SessionVerifiedStatus.NotVerified)
-            }
-            .first()
-        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !canSkipVerification()
+        // Wait until the session verification status is known
+        isVerificationStatusKnown.filter { it }.first()
+
+        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified && !canSkipVerification()
     }
 
     private suspend fun canSkipVerification(): Boolean {
@@ -130,7 +124,7 @@ class DefaultFtueService @Inject constructor(
     private suspend fun shouldAskNotificationPermissions(): Boolean {
         return if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             val permission = Manifest.permission.POST_NOTIFICATIONS
-            val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
+            val isPermissionDenied = permissionStateProvider.isPermissionDenied(permission).first()
             val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)
             !isPermissionGranted && !isPermissionDenied
         } else {
@@ -144,14 +138,17 @@ class DefaultFtueService @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal suspend fun updateState() {
+        val nextStep = getNextStep()
         state.value = when {
-            isAnyStepIncomplete() -> FtueState.Incomplete
-            else -> FtueState.Complete
+            // Final state, there aren't any more next steps
+            nextStep == null -> FtueState.Complete
+            else -> FtueState.Incomplete
         }
     }
 }
 
 sealed interface FtueStep {
+    data object WaitingForInitialState : FtueStep
     data object SessionVerification : FtueStep
     data object NotificationsOptIn : FtueStep
     data object AnalyticsOptIn : FtueStep

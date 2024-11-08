@@ -25,6 +25,7 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
+    private val firebaseTokenRotator: FirebaseTokenRotator,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
     override val name = FirebaseConfig.NAME
@@ -69,6 +70,12 @@ class FirebasePushProvider @Inject constructor(
                 pushKey = fcmToken
             )
         }
+    }
+
+    override fun canRotateToken(): Boolean = true
+
+    override suspend fun rotateToken(): Result<Unit> {
+        return firebaseTokenRotator.rotate()
     }
 
     companion object {

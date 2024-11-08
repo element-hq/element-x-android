@@ -57,6 +57,8 @@ import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -70,14 +72,14 @@ fun TimelineItemVideoView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(CommonStrings.common_image)
+    val description = stringResource(CommonStrings.common_video)
     Column(
         modifier = modifier.semantics { contentDescription = description }
     ) {
         val containerModifier = if (content.showCaption) {
             Modifier
-                    .padding(top = 6.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                .padding(top = 6.dp)
+                .clip(RoundedCornerShape(6.dp))
         } else {
             Modifier
         }
@@ -93,13 +95,13 @@ fun TimelineItemVideoView(
                 var isLoaded by remember { mutableStateOf(false) }
                 AsyncImage(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                        .fillMaxWidth()
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
-                        kind = MediaRequestData.Kind.File(
-                            fileName = content.filename,
-                            mimeType = content.mimeType
+                        kind = MediaRequestData.Kind.Thumbnail(
+                            width = content.thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
+                            height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
                         )
                     ),
                     contentScale = ContentScale.Fit,
@@ -137,6 +139,7 @@ fun TimelineItemVideoView(
                 val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
+                        .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),

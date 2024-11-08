@@ -57,7 +57,6 @@ import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
-import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -65,12 +64,15 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
+import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
@@ -124,62 +126,74 @@ fun TextComposer(
 
     val composerOptionsButton: @Composable () -> Unit = remember {
         @Composable {
-            ComposerOptionsButton(
-                modifier = Modifier
-                    .size(48.dp),
-                onClick = onAddAttachment
-            )
+            if (composerMode is MessageComposerMode.Attachment) {
+                Spacer(modifier = Modifier.width(9.dp))
+            } else {
+                ComposerOptionsButton(
+                    modifier = Modifier
+                        .size(48.dp),
+                    onClick = onAddAttachment
+                )
+            }
         }
     }
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
+    } else if (composerMode is MessageComposerMode.Attachment) {
+        stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
-    val textInput: @Composable () -> Unit = when (state) {
-        is TextEditorState.Rich -> {
-            remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
-                @Composable {
-                    TextInput(
-                        state = state.richTextEditorState,
-                        subcomposing = subcomposing,
-                        placeholder = placeholder,
-                        composerMode = composerMode,
-                        onResetComposerMode = onResetComposerMode,
-                        resolveMentionDisplay = resolveMentionDisplay,
-                        resolveRoomMentionDisplay = { resolveMentionDisplay("@room", "#") },
-                        onError = onError,
-                        onTyping = onTyping,
-                        onSelectRichContent = onSelectRichContent,
-                    )
+    val textInput: @Composable () -> Unit = if ((composerMode as? MessageComposerMode.Attachment)?.allowCaption == false) {
+        {
+            // No text input when in attachment mode and caption not allowed.
+        }
+    } else {
+        when (state) {
+            is TextEditorState.Rich -> {
+                remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
+                    @Composable {
+                        TextInput(
+                            state = state.richTextEditorState,
+                            subcomposing = subcomposing,
+                            placeholder = placeholder,
+                            composerMode = composerMode,
+                            onResetComposerMode = onResetComposerMode,
+                            resolveMentionDisplay = resolveMentionDisplay,
+                            resolveRoomMentionDisplay = { resolveMentionDisplay("@room", "#") },
+                            onError = onError,
+                            onTyping = onTyping,
+                            onSelectRichContent = onSelectRichContent,
+                        )
+                    }
                 }
             }
-        }
-        is TextEditorState.Markdown -> {
-            @Composable {
-                val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
-                TextInputBox(
-                    composerMode = composerMode,
-                    onResetComposerMode = onResetComposerMode,
-                    placeholder = placeholder,
-                    showPlaceholder = { state.state.text.value().isEmpty() },
-                    subcomposing = subcomposing,
-                ) {
-                    MarkdownTextInput(
-                        state = state.state,
+            is TextEditorState.Markdown -> {
+                @Composable {
+                    val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
+                    TextInputBox(
+                        composerMode = composerMode,
+                        onResetComposerMode = onResetComposerMode,
+                        placeholder = placeholder,
+                        showPlaceholder = { state.state.text.value().isEmpty() },
                         subcomposing = subcomposing,
-                        onTyping = onTyping,
-                        onReceiveSuggestion = onReceiveSuggestion,
-                        richTextEditorStyle = style,
-                        onSelectRichContent = onSelectRichContent,
-                    )
+                    ) {
+                        MarkdownTextInput(
+                            state = state.state,
+                            subcomposing = subcomposing,
+                            onTyping = onTyping,
+                            onReceiveSuggestion = onReceiveSuggestion,
+                            richTextEditorStyle = style,
+                            onSelectRichContent = onSelectRichContent,
+                        )
+                    }
                 }
             }
         }
     }
 
-    val canSendMessage = markdown.isNotBlank()
+    val canSendMessage = markdown.isNotBlank() || composerMode is MessageComposerMode.Attachment
     val sendButton = @Composable {
         SendButton(
             canSendMessage = canSendMessage,
@@ -493,185 +507,172 @@ private fun TextInput(
     }
 }
 
+private fun aTextEditorStateMarkdownList() = persistentListOf(
+    aTextEditorStateMarkdown(initialText = "", initialFocus = true),
+    aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
+    aTextEditorStateMarkdown(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+        initialFocus = true,
+    ),
+    aTextEditorStateMarkdown(initialText = "A message without focus", initialFocus = false),
+)
+
+private fun aTextEditorStateRichList() = persistentListOf(
+    aTextEditorStateRich(initialFocus = true),
+    aTextEditorStateRich(initialText = "A message", initialFocus = true),
+    aTextEditorStateRich(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+        initialFocus = true
+    ),
+    aTextEditorStateRich(initialText = "A message without focus", initialFocus = false),
+)
+
 @PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
     PreviewColumn(
-        items = persistentListOf(
-            {
-                ATextComposer(
-                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "", initialFocus = true)),
-                    voiceMessageState = VoiceMessageState.Idle,
-                    composerMode = MessageComposerMode.Normal,
-                    enableVoiceMessages = true,
-                )
-            },
-            {
-                ATextComposer(
-                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
-                    voiceMessageState = VoiceMessageState.Idle,
-                    composerMode = MessageComposerMode.Normal,
-                    enableVoiceMessages = true,
-                )
-            },
-            {
-                ATextComposer(
-                    TextEditorState.Markdown(
-                        aMarkdownTextEditorState(
-                            initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                            initialFocus = true
-                        )
-                    ),
-                    voiceMessageState = VoiceMessageState.Idle,
-                    composerMode = MessageComposerMode.Normal,
-                    enableVoiceMessages = true,
-                )
-            },
-            {
-                ATextComposer(
-                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message without focus", initialFocus = false)),
-                    voiceMessageState = VoiceMessageState.Idle,
-                    composerMode = MessageComposerMode.Normal,
-                    enableVoiceMessages = true,
-                )
-            }
+        items = aTextEditorStateMarkdownList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Normal,
+            enableVoiceMessages = true,
         )
-    )
+    }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
-    PreviewColumn(items = persistentListOf({
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
         ATextComposer(
-            TextEditorState.Rich(aRichTextEditorState()),
+            state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableVoiceMessages = true,
         )
-    }, {
-        ATextComposer(
-            TextEditorState.Rich(aRichTextEditorState(initialText = "A message")),
-            voiceMessageState = VoiceMessageState.Idle,
-            showTextFormatting = true,
-            composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
-        )
-    }, {
-        ATextComposer(
-            TextEditorState.Rich(
-                aRichTextEditorState(
-                    initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                )
-            ),
-            voiceMessageState = VoiceMessageState.Idle,
-            showTextFormatting = true,
-            composerMode = MessageComposerMode.Normal,
-            enableVoiceMessages = true,
-        )
-    }))
+    }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
-    PreviewColumn(items = persistentListOf({
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
         ATextComposer(
-            TextEditorState.Rich(aRichTextEditorState(initialText = "A message", initialFocus = true)),
+            state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
             enableVoiceMessages = true,
         )
-    }))
+    }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun MarkdownTextComposerEditPreview() = ElementPreview {
-    PreviewColumn(items = persistentListOf({
+    PreviewColumn(
+        items = aTextEditorStateMarkdownList()
+    ) { _, textEditorState ->
         ATextComposer(
-            TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
+            state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
             enableVoiceMessages = true,
         )
-    }))
+    }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
-    ATextComposer(
-        state = TextEditorState.Rich(aRichTextEditorState()),
-        voiceMessageState = VoiceMessageState.Idle,
-        composerMode = aMessageComposerModeReply(
-            replyToDetails = inReplyToDetails,
-        ),
-        enableVoiceMessages = true,
-    )
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeReply(
+                replyToDetails = inReplyToDetails,
+            ),
+            enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerCaptionPreview() = ElementPreview {
+    val list = aTextEditorStateMarkdownList()
+    PreviewColumn(
+        items = (list + aTextEditorStateMarkdown(initialText = "NO_CAPTION", initialFocus = true)).toPersistentList()
+    ) { index, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Attachment(allowCaption = index < list.size),
+            enableVoiceMessages = false,
+        )
+    }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TextComposerVoicePreview() = ElementPreview {
-    @Composable
-    fun VoicePreview(
-        voiceMessageState: VoiceMessageState
-    ) = ATextComposer(
-        TextEditorState.Rich(aRichTextEditorState(initialFocus = true)),
-        voiceMessageState = voiceMessageState,
-        composerMode = MessageComposerMode.Normal,
-        enableVoiceMessages = true,
-    )
-    PreviewColumn(items = persistentListOf({
-        VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))
-    }, {
-        VoicePreview(
-            voiceMessageState = VoiceMessageState.Preview(
+    PreviewColumn(
+        items = persistentListOf(
+            VoiceMessageState.Recording(61.seconds, createFakeWaveform()),
+            VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
                 showCursor = false,
                 waveform = createFakeWaveform(),
                 time = 0.seconds,
                 playbackProgress = 0.0f
-            )
-        )
-    }, {
-        VoicePreview(
-            voiceMessageState = VoiceMessageState.Preview(
+            ),
+            VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = true,
                 showCursor = true,
                 waveform = createFakeWaveform(),
                 time = 3.seconds,
                 playbackProgress = 0.2f
-            )
-        )
-    }, {
-        VoicePreview(
-            voiceMessageState = VoiceMessageState.Preview(
+            ),
+            VoiceMessageState.Preview(
                 isSending = true,
                 isPlaying = false,
                 showCursor = false,
                 waveform = createFakeWaveform(),
                 time = 61.seconds,
                 playbackProgress = 0.0f
-            )
+            ),
         )
-    }))
+    ) { _, voiceMessageState ->
+        ATextComposer(
+            state = aTextEditorStateRich(initialFocus = true),
+            voiceMessageState = voiceMessageState,
+            composerMode = MessageComposerMode.Normal,
+            enableVoiceMessages = true,
+        )
+    }
 }
 
 @Composable
-private fun PreviewColumn(
-    items: ImmutableList<@Composable () -> Unit>,
+private fun <T> PreviewColumn(
+    items: ImmutableList<T>,
+    view: @Composable (Int, T) -> Unit,
 ) {
     Column {
-        items.forEach { item ->
+        items.forEachIndexed { index, item ->
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)
             ) {
-                item()
+                view(index, item)
             }
         }
     }
@@ -707,17 +708,6 @@ private fun ATextComposer(
         onSelectRichContent = null,
     )
 }
-
-fun aRichTextEditorState(
-    initialText: String = "",
-    initialHtml: String = initialText,
-    initialMarkdown: String = initialText,
-    initialFocus: Boolean = false,
-) = RichTextEditorState(
-    initialHtml = initialHtml,
-    initialMarkdown = initialMarkdown,
-    initialFocus = initialFocus,
-)
 
 fun aMessageComposerModeEdit(
     eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),

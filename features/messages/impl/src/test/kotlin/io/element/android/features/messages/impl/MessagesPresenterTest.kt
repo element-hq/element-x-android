@@ -37,6 +37,7 @@ import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvi
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -69,9 +70,9 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
@@ -136,27 +137,6 @@ class MessagesPresenterTest {
             runCurrent()
             assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
-        val room = FakeMatrixRoom(
-            canUserJoinCallResult = { Result.success(false) },
-            canUserSendMessageResult = { _, _ -> Result.success(true) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            typingNoticeResult = { Result.success(Unit) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ).apply {
-            givenRoomInfo(aRoomInfo(hasRoomCall = true))
-        }
-        val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = consumeItemsUntilTimeout().last()
-            assertThat(initialState.callState).isEqualTo(RoomCallState.DISABLED)
         }
     }
 
@@ -344,6 +324,8 @@ class MessagesPresenterTest {
                     blurhash = null,
                     width = 20,
                     height = 20,
+                    thumbnailWidth = null,
+                    thumbnailHeight = null,
                     aspectRatio = 1.0f,
                     fileExtension = "jpg",
                     formattedFileSize = "4MB"
@@ -384,6 +366,8 @@ class MessagesPresenterTest {
                     blurHash = null,
                     width = 20,
                     height = 20,
+                    thumbnailWidth = 20,
+                    thumbnailHeight = 20,
                     aspectRatio = 1.0f,
                     fileExtension = "mp4",
                     formattedFileSize = "50MB"
@@ -1005,7 +989,7 @@ class MessagesPresenterTest {
         messageComposerPresenter: Presenter<MessageComposerState> = Presenter {
             aMessageComposerState(
                 // Use TextEditorState.Markdown, so that we can request focus manually.
-                textEditorState = TextEditorState.Markdown(MarkdownTextEditorState(initialText = "", initialFocus = false))
+                textEditorState = aTextEditorStateMarkdown(initialText = "", initialFocus = false)
             )
         },
         actionListEventSink: (ActionListEvents) -> Unit = {},
@@ -1030,6 +1014,7 @@ class MessagesPresenterTest {
             readReceiptBottomSheetPresenter = { aReadReceiptBottomSheetState() },
             identityChangeStatePresenter = { anIdentityChangeState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
+            roomCallStatePresenter = { aStandByCallState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,

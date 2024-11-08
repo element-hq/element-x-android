@@ -60,6 +60,7 @@ Spróbuj zalogować się ręcznie lub zeskanuj kod QR na innym urządzeniu."</st
   <string name="screen_qr_code_login_initial_state_item_3">"Wybierz %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Powiąż nowe urządzenie”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Zeskanuj kod QR za pomocą tego urządzenia"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Dostępne tylko wtedy, gdy Twój dostawca konta obsługuje tę funkcję."</string>
   <string name="screen_qr_code_login_initial_state_title">"Otwórz %1$s na innym urządzeniu, aby uzyskać kod QR"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Użyj kodu QR widocznego na drugim urządzeniu."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Spróbuj ponownie"</string>

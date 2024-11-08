@@ -145,6 +145,7 @@
   <string name="common_edited_suffix">"(szerkesztve)"</string>
   <string name="common_editing">"Szerkesztés"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption">"Titkosítás"</string>
   <string name="common_encryption_enabled">"Titkosítás engedélyezve"</string>
   <string name="common_enter_your_pin">"Adja meg a PIN-kódját"</string>
   <string name="common_error">"Hiba"</string>
@@ -158,6 +159,7 @@ Ok: %1$s."</string>
   <string name="common_file">"Fájl"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
+  <string name="common_frequently_used">"Gyakran használt"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Kép"</string>
   <string name="common_in_reply_to">"Válasz erre: %1$s"</string>
@@ -238,7 +240,9 @@ Ok: %1$s."</string>
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"Miről szól ez a szoba?"</string>
   <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Nem biztonságos eszközről küldve"</string>
   <string name="common_unable_to_decrypt_no_access">"Nincs hozzáférése ehhez az üzenethez"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"A feladó ellenőrzött személyazonossága megváltozott"</string>
   <string name="common_unable_to_invite_message">"Nem sikerült meghívót küldeni egy vagy több felhasználónak."</string>
   <string name="common_unable_to_invite_title">"Nem sikerült elküldeni a meghívót (meghívókat)"</string>
   <string name="common_unlock">"Feloldás"</string>
@@ -250,6 +254,7 @@ Ok: %1$s."</string>
   <string name="common_verification_failed">"Az ellenőrzés sikertelen"</string>
   <string name="common_verified">"Ellenőrizve"</string>
   <string name="common_verify_device">"Eszköz ellenőrzése"</string>
+  <string name="common_verify_identity">"Személyazonosság ellenőrzése"</string>
   <string name="common_video">"Videó"</string>
   <string name="common_voice_message">"Hangüzenet"</string>
   <string name="common_waiting">"Várakozás…"</string>
@@ -286,11 +291,6 @@ Ok: %1$s."</string>
   <string name="invite_friends_text">"Beszélgessünk itt: %1$s, %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Bárki csatlakozhat ehhez a szobához"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Bárki"</string>
-  <string name="screen_create_room_access_section_header">"Szobahozzáférés"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Csatlakozás kérése"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
@@ -319,6 +319,7 @@ Ok: %1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
   <string name="screen_room_title">"Csevegés"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Csatlakozási kérés elküldve"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>
   <string name="screen_share_open_apple_maps">"Megnyitás az Apple Mapsben"</string>

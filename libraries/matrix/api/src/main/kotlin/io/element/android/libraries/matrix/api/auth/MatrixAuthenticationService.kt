@@ -56,4 +56,7 @@ interface MatrixAuthenticationService {
     suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
 
     suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
+
+    /** Listen to new Matrix clients being created on authentication. */
+    fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit)
 }

@@ -34,7 +34,6 @@ class SecureBackupRootNode @AssistedInject constructor(
         fun onSetupClick()
         fun onChangeClick()
         fun onDisableClick()
-        fun onEnableClick()
         fun onConfirmRecoveryKeyClick()
     }
 
@@ -48,10 +47,6 @@ class SecureBackupRootNode @AssistedInject constructor(
 
     private fun onDisableClick() {
         plugins<Callback>().forEach { it.onDisableClick() }
-    }
-
-    private fun onEnableClick() {
-        plugins<Callback>().forEach { it.onEnableClick() }
     }
 
     private fun onConfirmRecoveryKeyClick() {
@@ -71,7 +66,6 @@ class SecureBackupRootNode @AssistedInject constructor(
             onBackClick = ::navigateUp,
             onSetupClick = ::onSetupClick,
             onChangeClick = ::onChangeClick,
-            onEnableClick = ::onEnableClick,
             onDisableClick = ::onDisableClick,
             onConfirmRecoveryKeyClick = ::onConfirmRecoveryKeyClick,
             onLearnMoreClick = { onLearnMoreClick(uriHandler) },

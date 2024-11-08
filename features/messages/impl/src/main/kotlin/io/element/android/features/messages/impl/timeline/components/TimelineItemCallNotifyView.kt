@@ -31,6 +31,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
+import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -41,7 +43,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun TimelineItemCallNotifyView(
     event: TimelineItem.Event,
-    isCallOngoing: Boolean,
+    roomCallState: RoomCallState,
     onLongClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -82,8 +84,11 @@ internal fun TimelineItemCallNotifyView(
                 )
             }
         }
-        if (isCallOngoing) {
-            JoinCallMenuItem(onJoinCallClick)
+        if (roomCallState is RoomCallState.OnGoing) {
+            CallMenuItem(
+                roomCallState = roomCallState,
+                onJoinCallClick = onJoinCallClick,
+            )
         } else {
             Text(
                 text = event.sentTime,
@@ -101,18 +106,14 @@ internal fun TimelineItemCallNotifyView(
 internal fun TimelineItemCallNotifyViewPreview() {
     ElementPreview {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            TimelineItemCallNotifyView(
-                event = aTimelineItemEvent(content = TimelineItemCallNotifyContent()),
-                isCallOngoing = true,
-                onLongClick = {},
-                onJoinCallClick = {},
-            )
-            TimelineItemCallNotifyView(
-                event = aTimelineItemEvent(content = TimelineItemCallNotifyContent()),
-                isCallOngoing = false,
-                onLongClick = {},
-                onJoinCallClick = {},
-            )
+            RoomCallStateProvider().values.forEach { roomCallState ->
+                TimelineItemCallNotifyView(
+                    event = aTimelineItemEvent(content = TimelineItemCallNotifyContent()),
+                    roomCallState = roomCallState,
+                    onLongClick = {},
+                    onJoinCallClick = {},
+                )
+            }
         }
     }
 }

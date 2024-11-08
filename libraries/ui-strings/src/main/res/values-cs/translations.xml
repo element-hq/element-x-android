@@ -161,6 +161,7 @@ Důvod: %1$s."</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
   <string name="common_forward_message">"Přeposlat zprávu"</string>
+  <string name="common_frequently_used">"Často používané"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázek"</string>
   <string name="common_in_reply_to">"V odpovědi na %1$s"</string>
@@ -257,6 +258,7 @@ Důvod: %1$s."</string>
   <string name="common_verification_failed">"Ověření se nezdařilo"</string>
   <string name="common_verified">"Ověřeno"</string>
   <string name="common_verify_device">"Ověřit zařízení"</string>
+  <string name="common_verify_identity">"Ověření totožnosti"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
@@ -293,14 +295,6 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Do této místnosti může vstoupit kdokoli"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Kdokoliv"</string>
-  <string name="screen_create_room_access_section_header">"Přístup do místnosti"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Požádat o připojení"</string>
-  <string name="screen_create_room_room_address_section_footer">"Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti."</string>
-  <string name="screen_create_room_room_address_section_title">"Adresa místnosti"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Viditelnost místnosti"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>

@@ -100,6 +100,7 @@ fun aNotifiableMessageEvent(
     canBeReplaced = false,
     isRedacted = isRedacted,
     imageUriString = null,
+    imageMimeType = null,
     roomAvatarPath = null,
     senderAvatarPath = null,
     soundName = null,

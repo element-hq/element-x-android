@@ -39,7 +39,7 @@ class MediaSender @Inject constructor(
             .process(
                 uri = uri,
                 mimeType = mimeType,
-                deleteOriginal = true,
+                deleteOriginal = false,
                 compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->
@@ -106,8 +106,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     imageInfo = uploadInfo.imageInfo,
-                    body = caption,
-                    formattedBody = formattedCaption,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -116,8 +116,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     videoInfo = uploadInfo.videoInfo,
-                    body = caption,
-                    formattedBody = formattedCaption,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }

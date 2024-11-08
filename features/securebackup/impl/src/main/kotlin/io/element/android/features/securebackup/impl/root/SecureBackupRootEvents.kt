@@ -9,4 +9,7 @@ package io.element.android.features.securebackup.impl.root
 
 sealed interface SecureBackupRootEvents {
     data object RetryKeyBackupState : SecureBackupRootEvents
+    data object EnableKeyStorage : SecureBackupRootEvents
+    data object DisplayKeyStorageDisabledError : SecureBackupRootEvents
+    data object DismissDialog : SecureBackupRootEvents
 }

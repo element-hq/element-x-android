@@ -18,6 +18,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
@@ -580,7 +581,7 @@ fun anImageInfo(): ImageInfo {
     return ImageInfo(
         height = 100,
         width = 100,
-        mimetype = "image/jpeg",
+        mimetype = MimeTypes.Jpeg,
         size = 1000,
         thumbnailInfo = null,
         thumbnailSource = aMediaSource(),

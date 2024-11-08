@@ -42,6 +42,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
+import io.element.android.features.roomcall.api.hasPermissionToJoin
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
@@ -299,7 +300,8 @@ private fun MainActionsSection(
                 )
             }
         }
-        if (state.canCall) {
+        if (state.roomCallState.hasPermissionToJoin()) {
+            // TODO Improve the view depending on all the cases here?
             MainActionButton(
                 title = stringResource(CommonStrings.action_call),
                 imageVector = CompoundIcons.VideoCall(),

@@ -32,9 +32,10 @@ class KonsistComposableTest {
             .withoutReceiverType()
             .withoutName(
                 // Add some exceptions...
+                "InvisibleButton",
                 "OutlinedButton",
-                "TextButton",
                 "SimpleAlertDialogContent",
+                "TextButton",
             )
             .assertTrue(
                 additionalMessage =

@@ -246,6 +246,8 @@ class TimelineItemContentMessageFactoryTest {
             width = null,
             mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
+            thumbnailWidth = null,
+            thumbnailHeight = null,
             fileExtension = "",
         )
         assertThat(result).isEqualTo(expected)
@@ -294,6 +296,8 @@ class TimelineItemContentMessageFactoryTest {
             width = 300,
             mimeType = MimeTypes.Mp4,
             formattedFileSize = "555 Bytes",
+            thumbnailWidth = 5,
+            thumbnailHeight = 10,
             fileExtension = "mp4",
         )
         assertThat(result).isEqualTo(expected)
@@ -458,6 +462,8 @@ class TimelineItemContentMessageFactoryTest {
             blurhash = null,
             width = null,
             height = null,
+            thumbnailWidth = null,
+            thumbnailHeight = null,
             aspectRatio = null
         )
         assertThat(result).isEqualTo(expected)
@@ -531,6 +537,8 @@ class TimelineItemContentMessageFactoryTest {
             blurhash = A_BLUR_HASH,
             width = 5,
             height = 10,
+            thumbnailWidth = 5,
+            thumbnailHeight = 10,
             aspectRatio = 0.5f,
         )
         assertThat(result).isEqualTo(expected)

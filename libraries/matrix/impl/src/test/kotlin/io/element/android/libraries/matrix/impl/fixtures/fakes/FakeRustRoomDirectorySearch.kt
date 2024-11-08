@@ -21,7 +21,7 @@ class FakeRustRoomDirectorySearch(
         return isAtLastPage
     }
 
-    override suspend fun search(filter: String?, batchSize: UInt) = simulateLongTask { }
+    override suspend fun search(filter: String?, batchSize: UInt, viaServerName: String?) = simulateLongTask { }
     override suspend fun nextPage() = simulateLongTask { }
 
     private var listener: RoomDirectorySearchEntriesListener? = null

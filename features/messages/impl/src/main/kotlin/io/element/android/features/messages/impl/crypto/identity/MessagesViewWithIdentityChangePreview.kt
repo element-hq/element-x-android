@@ -14,8 +14,7 @@ import io.element.android.features.messages.impl.aMessagesState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
-import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 
 @PreviewsDayNight
 @Composable
@@ -25,11 +24,9 @@ internal fun MessagesViewWithIdentityChangePreview(
     MessagesView(
         state = aMessagesState(
             composerState = aMessageComposerState(
-                textEditorState = TextEditorState.Markdown(
-                    state = MarkdownTextEditorState(
-                        initialText = "",
-                        initialFocus = false,
-                    )
+                textEditorState = aTextEditorStateMarkdown(
+                    initialText = "",
+                    initialFocus = false,
                 )
             ),
             identityChangeState = identityChangeState,

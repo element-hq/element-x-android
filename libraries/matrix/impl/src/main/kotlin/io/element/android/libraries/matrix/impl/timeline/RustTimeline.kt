@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -85,6 +87,7 @@ class RustTimeline(
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
+    private val featureFlagsService: FeatureFlagService,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
@@ -326,20 +329,21 @@ class RustTimeline(
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 url = file.path,
                 thumbnailUrl = thumbnailFile?.path,
                 imageInfo = imageInfo.map(),
-                caption = body,
-                formattedCaption = formattedBody?.let {
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
-                storeInCache = true,
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
@@ -349,26 +353,28 @@ class RustTimeline(
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 url = file.path,
                 thumbnailUrl = thumbnailFile?.path,
                 videoInfo = videoInfo.map(),
-                caption = body,
-                formattedCaption = formattedBody?.let {
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
-                storeInCache = true,
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
     override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 url = file.path,
@@ -376,15 +382,21 @@ class RustTimeline(
                 // Maybe allow a caption in the future?
                 caption = null,
                 formattedCaption = null,
-                storeInCache = true,
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
-            inner.sendFile(file.path, fileInfo.map(), false, progressCallback?.toProgressWatcher())
+            inner.sendFile(
+                url = file.path,
+                fileInfo = fileInfo.map(),
+                useSendQueue = useSendQueue,
+                progressWatcher = progressCallback?.toProgressWatcher(),
+            )
         }
     }
 
@@ -491,17 +503,20 @@ class RustTimeline(
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
-        inner.sendVoiceMessage(
-            url = file.path,
-            audioInfo = audioInfo.map(),
-            waveform = waveform.toMSC3246range(),
-            // Maybe allow a caption in the future?
-            caption = null,
-            formattedCaption = null,
-            storeInCache = true,
-            progressWatcher = progressCallback?.toProgressWatcher(),
-        )
+    ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
+        return sendAttachment(listOf(file)) {
+            inner.sendVoiceMessage(
+                url = file.path,
+                audioInfo = audioInfo.map(),
+                waveform = waveform.toMSC3246range(),
+                // Maybe allow a caption in the future?
+                caption = null,
+                formattedCaption = null,
+                useSendQueue = useSendQueue,
+                progressWatcher = progressCallback?.toProgressWatcher(),
+            )
+        }
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

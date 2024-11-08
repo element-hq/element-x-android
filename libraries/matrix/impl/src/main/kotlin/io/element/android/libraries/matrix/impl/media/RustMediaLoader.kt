@@ -37,7 +37,7 @@ class RustMediaLoader(
         withContext(mediaDispatcher) {
             runCatching {
                 source.toRustMediaSource().use { source ->
-                    innerClient.getMediaContent(source).toUByteArray().toByteArray()
+                    innerClient.getMediaContent(source)
                 }
             }
         }
@@ -55,7 +55,7 @@ class RustMediaLoader(
                         mediaSource = mediaSource,
                         width = width.toULong(),
                         height = height.toULong()
-                    ).toUByteArray().toByteArray()
+                    )
                 }
             }
         }

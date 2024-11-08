@@ -24,6 +24,8 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -38,6 +40,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class ConfigureRoomPresenter @Inject constructor(
@@ -47,6 +50,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     private val analyticsService: AnalyticsService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<ConfigureRoomState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -54,7 +58,9 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
+        val createRoomConfig = dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
+        val homeserverName = remember { matrixClient.userIdServerName() }
+        val isKnockFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(initial = false)
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -92,9 +98,11 @@ class ConfigureRoomPresenter @Inject constructor(
             when (event) {
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
-                is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
-                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
-                is ConfigureRoomEvents.CreateRoom -> createRoom(event.config)
+                is ConfigureRoomEvents.RoomVisibilityChanged -> dataStore.setRoomVisibility(event.visibilityItem)
+                is ConfigureRoomEvents.RemoveUserFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
+                is ConfigureRoomEvents.RoomAccessChanged -> dataStore.setRoomAccess(event.roomAccess)
+                is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
+                is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig.value)
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
@@ -113,10 +121,12 @@ class ConfigureRoomPresenter @Inject constructor(
         }
 
         return ConfigureRoomState(
+            isKnockFeatureEnabled = isKnockFeatureEnabled,
             config = createRoomConfig.value,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             cameraPermissionState = cameraPermissionState,
+            homeserverName = homeserverName,
             eventSink = ::handleEvents,
         )
     }
@@ -127,26 +137,50 @@ class ConfigureRoomPresenter @Inject constructor(
     ) = launch {
         suspend {
             val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }
-            val params = CreateRoomParameters(
-                name = config.roomName,
-                topic = config.topic,
-                isEncrypted = config.privacy == RoomPrivacy.Private,
-                isDirect = false,
-                visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
-                preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
-                invite = config.invites.map { it.userId },
-                avatar = avatarUrl,
-            )
-            matrixClient.createRoom(params).getOrThrow()
-                .also {
+            val params = if (config.roomVisibility is RoomVisibilityState.Public) {
+                CreateRoomParameters(
+                    name = config.roomName,
+                    topic = config.topic,
+                    isEncrypted = false,
+                    isDirect = false,
+                    visibility = RoomVisibility.PUBLIC,
+                    joinRuleOverride = config.roomVisibility.roomAccess.toJoinRule(),
+                    preset = RoomPreset.PUBLIC_CHAT,
+                    invite = config.invites.map { it.userId },
+                    avatar = avatarUrl,
+                    canonicalAlias = config.roomVisibility.roomAddress()
+                )
+            } else {
+                CreateRoomParameters(
+                    name = config.roomName,
+                    topic = config.topic,
+                    isEncrypted = config.roomVisibility is RoomVisibilityState.Private,
+                    isDirect = false,
+                    visibility = RoomVisibility.PRIVATE,
+                    preset = RoomPreset.PRIVATE_CHAT,
+                    invite = config.invites.map { it.userId },
+                    avatar = avatarUrl,
+                )
+            }
+            matrixClient.createRoom(params)
+                .onFailure { failure ->
+                    Timber.e(failure, "Failed to create room")
+                }
+                .onSuccess {
                     dataStore.clearCachedData()
                     analyticsService.capture(CreatedRoom(isDM = false))
                 }
+                .getOrThrow()
         }.runCatchingUpdatingState(createRoomAction)
     }
 
     private suspend fun uploadAvatar(avatarUri: Uri): String {
-        val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+        val preprocessed = mediaPreProcessor.process(
+            uri = avatarUri,
+            mimeType = MimeTypes.Jpeg,
+            deleteOriginal = false,
+            compressIfPossible = false,
+        ).getOrThrow()
         val byteArray = preprocessed.file.readBytes()
         return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray, null).getOrThrow()
     }

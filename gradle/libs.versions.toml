@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.7.1"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 kotlinpoet = "2.0.0"
-ksp = "2.0.20-1.0.25"
+ksp = "2.0.21-1.0.26"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -17,19 +17,19 @@ core = "1.13.1"
 # due to the DefaultMigrationStore not behaving as expected.
 # Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
 datastore = "1.0.0"
-constraintlayout = "2.1.4"
-constraintlayout_compose = "1.0.1"
+constraintlayout = "2.2.0"
+constraintlayout_compose = "1.1.0"
 lifecycle = "2.8.6"
 activity = "1.9.3"
 media3 = "1.4.1"
-camera = "1.3.4"
+camera = "1.4.0"
 
 # Compose
-compose_bom = "2024.10.00"
+compose_bom = "2024.10.01"
 composecompiler = "1.5.15"
 
 # Coroutines
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 
 # Accompanist
 accompanist = "0.36.0"
@@ -37,16 +37,20 @@ accompanist = "0.36.0"
 # Test
 test_core = "1.6.1"
 
+# Jetbrain
+datetime = "0.6.1"
+serialization_json = "1.7.3"
+
 #other
 coil = "2.7.0"
-datetime = "0.6.0"
-dependencyAnalysis = "2.3.0"
-serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 wysiwyg = "2.37.13"
 telephoto = "0.13.0"
+
+# Dependency analysis
+dependencyAnalysis = "2.4.2"
 
 # DI
 dagger = "2.52"
@@ -81,7 +85,7 @@ ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.9.0"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.9.1"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
@@ -162,14 +166,14 @@ coil_test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 compound = { module = "io.element.android:compound-android", version = "0.1.1" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.58"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.60"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -178,19 +182,19 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.4.0"
-otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.1"
+otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
 maplibre = "org.maplibre.gl:android-sdk:11.5.2"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
-maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.1"
+maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.8.2"
+posthog = "com.posthog:posthog-android:3.9.0"
 sentry = "io.sentry:sentry-android:7.16.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
@@ -233,7 +237,7 @@ ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:10.0.4"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
-paparazzi = "app.cash.paparazzi:1.3.4"
+paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }

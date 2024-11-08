@@ -32,6 +32,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -684,7 +685,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick file from storage`() = runTest {
-        val sendMediaResult = lambdaRecorder { _: ProgressCallback? ->
+        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -693,7 +694,7 @@ class MessageComposerPresenterTest {
                 Pair(5, 10),
                 Pair(10, 10)
             ),
-            sendMediaResult = sendMediaResult,
+            sendFileResult = sendFileResult,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
@@ -710,7 +711,7 @@ class MessageComposerPresenterTest {
             assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(1f))
             val sentState = awaitItem()
             assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
-            sendMediaResult.assertions().isCalledOnce()
+            sendFileResult.assertions().isCalledOnce()
         }
     }
 
@@ -852,8 +853,11 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Uploading media failure can be recovered from`() = runTest {
+        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+            Result.failure(Exception())
+        }
         val room = FakeMatrixRoom(
-            sendMediaResult = { Result.failure(Exception()) },
+            sendFileResult = sendFileResult,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)

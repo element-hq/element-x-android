@@ -254,6 +254,7 @@ Reason: %1$s."</string>
   <string name="common_verification_failed">"Verification failed"</string>
   <string name="common_verified">"Verified"</string>
   <string name="common_verify_device">"Verify device"</string>
+  <string name="common_verify_identity">"Verify identity"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
@@ -290,14 +291,6 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_create_room_access_section_anyone_option_description">"Anyone can join this room"</string>
-  <string name="screen_create_room_access_section_anyone_option_title">"Anyone"</string>
-  <string name="screen_create_room_access_section_header">"Room Access"</string>
-  <string name="screen_create_room_access_section_knocking_option_description">"Anyone can ask to join the room but an administrator or a moderator will have to accept the request"</string>
-  <string name="screen_create_room_access_section_knocking_option_title">"Ask to join"</string>
-  <string name="screen_create_room_room_address_section_footer">"In order for this room to be visible in the public room directory, you will need a room address."</string>
-  <string name="screen_create_room_room_address_section_title">"Room address"</string>
-  <string name="screen_create_room_room_visibility_section_title">"Room visibility"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

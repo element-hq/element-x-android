@@ -32,8 +32,8 @@ import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -73,6 +73,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
+    private val roomCallStatePresenter: Presenter<RoomCallState>,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
@@ -229,14 +230,15 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         val typingNotificationState = typingNotificationPresenter.present()
-        val timelineRoomInfo by remember(typingNotificationState) {
+        val roomCallState = roomCallStatePresenter.present()
+        val timelineRoomInfo by remember(typingNotificationState, roomCallState) {
             derivedStateOf {
                 TimelineRoomInfo(
                     name = room.displayName,
                     isDm = room.isDm,
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
-                    isCallOngoing = roomInfo?.hasRoomCall.orFalse(),
+                    roomCallState = roomCallState,
                     pinnedEventIds = roomInfo?.pinnedEventIds.orEmpty(),
                     typingNotificationState = typingNotificationState,
                 )

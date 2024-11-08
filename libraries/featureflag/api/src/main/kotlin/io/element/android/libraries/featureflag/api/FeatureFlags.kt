@@ -126,17 +126,18 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    IdentityPinningViolationNotifications(
-        key = "feature.identityPinningViolationNotifications",
-        title = "Identity pinning violation notifications",
-        description = null,
-        defaultValue = { buildMeta ->
-            when (buildMeta.buildType) {
-                // Do not enable this feature in release builds
-                BuildType.RELEASE -> false
-                else -> true
-            }
-        },
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    MediaUploadOnSendQueue(
+        key = "feature.media_upload_through_send_queue",
+        title = "Media upload through send queue",
+        description = "Experimental support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
 }

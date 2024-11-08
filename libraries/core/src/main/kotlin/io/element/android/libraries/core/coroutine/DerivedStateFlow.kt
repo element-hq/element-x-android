@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.core.coroutine
 
+import kotlinx.coroutines.ExperimentalForInheritanceCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.stateIn
  * A [StateFlow] that derives its value from a [Flow].
  * Useful when you want to apply transformations to a [Flow] and expose it as a [StateFlow].
  */
+@OptIn(ExperimentalForInheritanceCoroutinesApi::class)
 class DerivedStateFlow<T>(
     private val getValue: () -> T,
     private val flow: Flow<T>

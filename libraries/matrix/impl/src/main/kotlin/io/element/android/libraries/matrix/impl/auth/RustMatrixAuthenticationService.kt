@@ -51,7 +51,6 @@ import org.matrix.rustcomponents.sdk.QrCodeData
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.OidcAuthorizationData
 import javax.inject.Inject
@@ -76,6 +75,11 @@ class RustMatrixAuthenticationService @Inject constructor(
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
+
+    private var newMatrixClientObserver: ((MatrixClient) -> Unit)? = null
+    override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
+        newMatrixClientObserver = lambda
+    }
 
     private fun rotateSessionPath(): SessionPaths {
         sessionPaths?.deleteRecursively()
@@ -155,7 +159,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         sessionPaths = currentSessionPaths,
                     )
-                clear()
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -226,9 +230,9 @@ class RustMatrixAuthenticationService @Inject constructor(
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
-                clear()
                 pendingOidcAuthorizationData?.close()
                 pendingOidcAuthorizationData = null
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -256,15 +260,14 @@ class RustMatrixAuthenticationService @Inject constructor(
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
-                val sessionData = client.use { rustClient ->
-                    rustClient.session()
-                        .toSessionData(
-                            isTokenValid = true,
-                            loginType = LoginType.QR,
-                            passphrase = pendingPassphrase,
-                            sessionPaths = emptySessionPaths,
-                        )
-                }
+                val sessionData = client.session()
+                    .toSessionData(
+                        isTokenValid = true,
+                        loginType = LoginType.QR,
+                        passphrase = pendingPassphrase,
+                        sessionPaths = emptySessionPaths,
+                    )
+                newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
             }.mapFailure {

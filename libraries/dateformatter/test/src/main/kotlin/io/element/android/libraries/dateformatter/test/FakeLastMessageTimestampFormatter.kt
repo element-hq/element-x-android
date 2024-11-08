@@ -11,8 +11,9 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 
 const val A_FORMATTED_DATE = "formatted_date"
 
-class FakeLastMessageTimestampFormatter : LastMessageTimestampFormatter {
-    private var format = ""
+class FakeLastMessageTimestampFormatter(
+    var format: String = "",
+) : LastMessageTimestampFormatter {
     fun givenFormat(format: String) {
         this.format = format
     }
