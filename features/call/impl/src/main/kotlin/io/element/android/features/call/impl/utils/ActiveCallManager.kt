@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.utils
 
 import android.annotation.SuppressLint
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
@@ -55,11 +56,6 @@ interface ActiveCallManager {
      * @param notificationData The data for the incoming call notification.
      */
     fun registerIncomingCall(notificationData: CallNotificationData)
-
-    /**
-     * Called when the incoming call timed out. It will remove the active call and remove any associated UI, adding a 'missed call' notification.
-     */
-    fun incomingCallTimedOut()
 
     /**
      * Called when the active call has been hung up. It will remove any existing UI and the active call.
@@ -117,7 +113,11 @@ class DefaultActiveCallManager @Inject constructor(
         }
     }
 
-    override fun incomingCallTimedOut() {
+    /**
+     * Called when the incoming call timed out. It will remove the active call and remove any associated UI, adding a 'missed call' notification.
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun incomingCallTimedOut() {
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
         activeCall.value = null

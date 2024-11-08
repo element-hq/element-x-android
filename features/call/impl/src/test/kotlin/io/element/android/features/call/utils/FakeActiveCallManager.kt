@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeActiveCallManager(
     var registerIncomingCallResult: (CallNotificationData) -> Unit = {},
-    var incomingCallTimedOutResult: () -> Unit = {},
     var hungUpCallResult: (CallType) -> Unit = {},
     var joinedCallResult: (CallType) -> Unit = {},
 ) : ActiveCallManager {
@@ -23,10 +22,6 @@ class FakeActiveCallManager(
 
     override fun registerIncomingCall(notificationData: CallNotificationData) {
         registerIncomingCallResult(notificationData)
-    }
-
-    override fun incomingCallTimedOut() {
-        incomingCallTimedOutResult()
     }
 
     override fun hungUpCall(callType: CallType) {
