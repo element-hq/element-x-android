@@ -209,27 +209,3 @@ private fun TextFieldValueContentToPreview() {
         }
     }
 }
-
-@Suppress("ModifierComposed")
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.autofill(autofillTypes: List<AutofillType>, onFill: (String) -> Unit) = composed {
-    val autofillNode = AutofillNode(autofillTypes, onFill = onFill)
-    LocalAutofillTree.current += autofillNode
-
-    val autofill = LocalAutofill.current
-
-    this
-        .onGloballyPositioned {
-            // Inform autofill framework of where our composable is so it can show the popup in the right place
-            autofillNode.boundingBox = it.boundsInWindow()
-        }
-        .onFocusChanged {
-            autofill?.run {
-                if (it.isFocused) {
-                    requestAutofillForNode(autofillNode)
-                } else {
-                    cancelAutofillForNode(autofillNode)
-                }
-            }
-        }
-}

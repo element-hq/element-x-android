@@ -37,7 +37,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
-import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
