@@ -13,6 +13,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.safeRenameTo
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
@@ -49,6 +51,7 @@ class AndroidMediaPreProcessor @Inject constructor(
     private val imageCompressor: ImageCompressor,
     private val videoCompressor: VideoCompressor,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val temporaryUriDeleter: TemporaryUriDeleter,
 ) : MediaPreProcessor {
     companion object {
         /**
@@ -82,8 +85,11 @@ class AndroidMediaPreProcessor @Inject constructor(
             }
             if (deleteOriginal) {
                 tryOrNull {
+                    Timber.w("Deleting original uri $uri")
                     contentResolver.delete(uri, null, null)
                 }
+            } else {
+                temporaryUriDeleter.delete(uri)
             }
             result.postProcess(uri)
         }

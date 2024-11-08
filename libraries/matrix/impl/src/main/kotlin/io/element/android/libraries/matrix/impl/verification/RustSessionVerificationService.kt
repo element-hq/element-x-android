@@ -18,15 +18,13 @@ import io.element.android.libraries.matrix.api.verification.VerificationFlowStat
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -61,11 +59,13 @@ class RustSessionVerificationService(
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
+    private val recoveryState = MutableStateFlow(RecoveryState.UNKNOWN)
+
     // Listen for changes in verification status and update accordingly
     private val verificationStateListenerTaskHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
         override fun onUpdate(status: VerificationState) {
             Timber.d("New verification state: $status")
-            sessionCoroutineScope.launch { updateVerificationStatus() }
+            _sessionVerifiedStatus.value = status.map()
         }
     })
 
@@ -74,7 +74,7 @@ class RustSessionVerificationService(
         override fun onUpdate(status: RecoveryState) {
             Timber.d("New recovery state: $status")
             // We could check the `RecoveryState`, but it's easier to just use the verification state directly
-            sessionCoroutineScope.launch { updateVerificationStatus() }
+            recoveryState.value = status
         }
     })
 
@@ -88,22 +88,7 @@ class RustSessionVerificationService(
         verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
-    init {
-        // Update initial state in case sliding sync isn't ready
-        sessionCoroutineScope.launch { updateVerificationStatus() }
-
-        isReady.onEach { isReady ->
-            if (isReady) {
-                Timber.d("Starting verification service")
-                // Immediate status update
-                updateVerificationStatus()
-            } else {
-                Timber.d("Stopping verification service")
-                updateVerificationStatus()
-            }
-        }
-            .launchIn(sessionCoroutineScope)
-    }
+    private var isOwnVerification = true
 
     override fun didReceiveVerificationRequest(details: RustSessionVerificationRequestDetails) {
         listener?.onIncomingSessionRequest(details.map())
@@ -135,6 +120,8 @@ class RustSessionVerificationService(
     }
 
     override suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) = tryOrFail {
+        isOwnVerification = false
+        initVerificationControllerIfNeeded()
         verificationController.acknowledgeVerificationRequest(
             senderId = details.senderId.value,
             flowId = details.flowId.value,
@@ -179,14 +166,22 @@ class RustSessionVerificationService(
             // Ideally this should be `verificationController?.isVerified().orFalse()` but for some reason it returns false if run immediately
             // It also sometimes unexpectedly fails to report the session as verified, so we have to handle that possibility and fail if needed
             runCatching {
-                withTimeout(30.seconds) {
-                    while (encryptionService.verificationState() != VerificationState.VERIFIED) {
-                        delay(100)
-                    }
+                withTimeout(20.seconds) {
+                    // Wait until the SDK reports the state as verified
+                    sessionVerifiedStatus.first { it == SessionVerifiedStatus.Verified }
                 }
             }
                 .onSuccess {
-                    // Order here is important, first set the flow state as finished, then update the verification status
+                    if (isOwnVerification) {
+                        // Try waiting for the final recovery state for better UX, but don't block the verification state on it
+                        tryOrNull {
+                            withTimeout(10.seconds) {
+                                // Wait until the recovery state is either fully loaded or we check it's explicitly disabled
+                                recoveryState.first { it == RecoveryState.ENABLED || it == RecoveryState.DISABLED }
+                            }
+                        }
+                    }
+
                     _verificationFlowState.value = VerificationFlowState.DidFinish
                     updateVerificationStatus()
                 }
@@ -209,6 +204,7 @@ class RustSessionVerificationService(
     // end-region
 
     override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
+        isOwnVerification = true
         if (isReady.value && cancelAnyPendingVerificationAttempt) {
             // Cancel any pending verification attempt
             tryOrNull { verificationController.cancelVerification() }
@@ -237,35 +233,18 @@ class RustSessionVerificationService(
         }
     }
 
-    private suspend fun updateVerificationStatus() {
-        if (verificationFlowState.value == VerificationFlowState.DidFinish) {
-            // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network
-            // So we need to check that *only* if we know there is network connection, which is the case when the verification flow just finished
-            Timber.d("Updating verification status: flow just finished")
-            runCatching {
-                encryptionService.waitForE2eeInitializationTasks()
-            }.onSuccess {
-                _sessionVerifiedStatus.value = when (encryptionService.verificationState()) {
-                    VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
-                    VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
-                    VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
-                }
-                Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
-            }
-        } else {
-            // Otherwise, just check the current verification status from the session verification controller instead
-            Timber.d("Updating verification status: flow is pending or was finished some time ago")
-            runCatching {
-                initVerificationControllerIfNeeded()
-                _sessionVerifiedStatus.value = if (encryptionService.verificationState() == VerificationState.VERIFIED) {
-                    SessionVerifiedStatus.Verified
-                } else {
-                    SessionVerifiedStatus.NotVerified
-                }
-                Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
-            }
+    private fun updateVerificationStatus() {
+        runCatching {
+            _sessionVerifiedStatus.value = encryptionService.verificationState().map()
+            Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
         }
     }
+}
+
+private fun VerificationState.map() = when (this) {
+    VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
+    VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
+    VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
 }
 
 private fun RustSessionVerificationData.map(): SessionVerificationData {

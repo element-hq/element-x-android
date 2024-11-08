@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.components.blurhash.blurHashBac
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
@@ -86,13 +85,7 @@ fun TimelineItemImageView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                    model = MediaRequestData(
-                        source = content.preferredMediaSource,
-                        kind = MediaRequestData.Kind.File(
-                            fileName = content.filename,
-                            mimeType = content.mimeType,
-                        ),
-                    ),
+                    model = content.thumbnailMediaRequestData,
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                     contentDescription = description,

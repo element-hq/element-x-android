@@ -35,8 +35,10 @@ fun aTimelineItemVideoContent(
     aspectRatio = aspectRatio,
     duration = 100.milliseconds,
     videoSource = MediaSource(""),
-    height = 300,
     width = 150,
+    height = 300,
+    thumbnailWidth = 150,
+    thumbnailHeight = 300,
     mimeType = MimeTypes.Mp4,
     formattedFileSize = "14MB",
     fileExtension = "mp4"

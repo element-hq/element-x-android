@@ -31,7 +31,14 @@ class AttachmentsPreviewNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
 
-    private val presenter = presenterFactory.create(inputs.attachment)
+    private val onDoneListener = OnDoneListener {
+        navigateUp()
+    }
+
+    private val presenter = presenterFactory.create(
+        attachment = inputs.attachment,
+        onDoneListener = onDoneListener,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -39,7 +46,6 @@ class AttachmentsPreviewNode @AssistedInject constructor(
             val state = presenter.present()
             AttachmentsPreviewView(
                 state = state,
-                onDismiss = this::navigateUp,
                 modifier = modifier
             )
         }
