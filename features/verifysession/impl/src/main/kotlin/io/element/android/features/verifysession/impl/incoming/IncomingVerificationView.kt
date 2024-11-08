@@ -10,9 +10,7 @@ package io.element.android.features.verifysession.impl.incoming
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -35,6 +33,7 @@ import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -166,8 +165,7 @@ private fun IncomingVerificationBottomMenu(
                         enabled = false,
                         showProgress = true,
                     )
-                    // Placeholder so the 1st button keeps its vertical position
-                    Spacer(modifier = Modifier.height(40.dp))
+                    InvisibleButton()
                 }
             } else {
                 VerificationBottomMenu {
@@ -194,8 +192,7 @@ private fun IncomingVerificationBottomMenu(
                         enabled = false,
                         showProgress = true,
                     )
-                    // Placeholder so the 1st button keeps its vertical position
-                    Spacer(modifier = Modifier.height(40.dp))
+                    InvisibleButton()
                 }
             } else {
                 VerificationBottomMenu {
