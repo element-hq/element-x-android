@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -45,6 +46,7 @@ class RoomDetailsEditPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
+    private val temporaryUriDeleter: TemporaryUriDeleter,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<RoomDetailsEditState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
@@ -59,6 +61,7 @@ class RoomDetailsEditPresenter @Inject constructor(
         var roomAvatarUriEdited by rememberSaveable { mutableStateOf<Uri?>(null) }
         LaunchedEffect(roomAvatarUri) {
             // Every time the roomAvatar change (from sync), we can set the new avatar.
+            temporaryUriDeleter.delete(roomAvatarUriEdited)
             roomAvatarUriEdited = roomAvatarUri
         }
 
@@ -98,10 +101,20 @@ class RoomDetailsEditPresenter @Inject constructor(
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri -> if (uri != null) roomAvatarUriEdited = uri }
+            onResult = { uri ->
+                if (uri != null) {
+                    temporaryUriDeleter.delete(roomAvatarUriEdited)
+                    roomAvatarUriEdited = uri
+                }
+            }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri -> if (uri != null) roomAvatarUriEdited = uri }
+            onResult = { uri ->
+                if (uri != null) {
+                    temporaryUriDeleter.delete(roomAvatarUriEdited)
+                    roomAvatarUriEdited = uri
+                }
+            }
         )
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
@@ -143,7 +156,10 @@ class RoomDetailsEditPresenter @Inject constructor(
                             pendingPermissionRequest = true
                             cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                         }
-                        AvatarAction.Remove -> roomAvatarUriEdited = null
+                        AvatarAction.Remove -> {
+                            temporaryUriDeleter.delete(roomAvatarUriEdited)
+                            roomAvatarUriEdited = null
+                        }
                     }
                 }
 
@@ -202,7 +218,12 @@ class RoomDetailsEditPresenter @Inject constructor(
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
         return runCatching {
             if (avatarUri != null) {
-                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+                val preprocessed = mediaPreProcessor.process(
+                    uri = avatarUri,
+                    mimeType = MimeTypes.Jpeg,
+                    deleteOriginal = false,
+                    compressIfPossible = false,
+                ).getOrThrow()
                 room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {
                 room.removeAvatar().getOrThrow()

@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -17,9 +18,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,22 +48,22 @@ import me.saket.telephoto.zoomable.rememberZoomableState
 @Composable
 fun AttachmentsPreviewView(
     state: AttachmentsPreviewState,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun postSendAttachment() {
         state.eventSink(AttachmentsPreviewEvents.SendAttachment)
     }
 
+    fun postCancel() {
+        state.eventSink(AttachmentsPreviewEvents.Cancel)
+    }
+
     fun postClearSendState() {
         state.eventSink(AttachmentsPreviewEvents.ClearSendState)
     }
 
-    if (state.sendActionState is SendActionState.Done) {
-        val latestOnDismiss by rememberUpdatedState(onDismiss)
-        LaunchedEffect(state.sendActionState) {
-            latestOnDismiss()
-        }
+    BackHandler(enabled = state.sendActionState !is SendActionState.Sending) {
+        postCancel()
     }
 
     Scaffold(
@@ -75,7 +73,7 @@ fun AttachmentsPreviewView(
                 navigationIcon = {
                     BackButton(
                         imageVector = CompoundIcons.Close(),
-                        onClick = onDismiss,
+                        onClick = ::postCancel,
                     )
                 },
                 title = {},
@@ -202,6 +200,5 @@ private fun AttachmentsPreviewBottomActions(
 internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) = ElementPreviewDark {
     AttachmentsPreviewView(
         state = state,
-        onDismiss = {},
     )
 }

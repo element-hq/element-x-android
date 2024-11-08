@@ -8,10 +8,12 @@
 package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -21,6 +23,8 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -42,7 +46,12 @@ class AndroidMediaPreProcessorTest {
         deleteOriginal: Boolean = false,
     ): MediaUploadInfo {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context, sdkIntVersion)
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val sut = createAndroidMediaPreProcessor(
+            context = context,
+            sdkIntVersion = sdkIntVersion,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
         val file = getFileFromAssets(context, asset.filename)
         val result = sut.process(
             uri = file.toUri(),
@@ -52,6 +61,7 @@ class AndroidMediaPreProcessorTest {
         )
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith(asset.filename)
+        deleteCallback.assertions().isCalledExactly(if (deleteOriginal) 0 else 1)
         return data
     }
 
@@ -356,13 +366,15 @@ class AndroidMediaPreProcessorTest {
 
     private fun TestScope.createAndroidMediaPreProcessor(
         context: Context,
-        sdkIntVersion: Int = Build.VERSION_CODES.P
+        sdkIntVersion: Int = Build.VERSION_CODES.P,
+        temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
     ) = AndroidMediaPreProcessor(
         context = context,
         thumbnailFactory = ThumbnailFactory(context, FakeBuildVersionSdkIntProvider(sdkIntVersion)),
         imageCompressor = ImageCompressor(context, testCoroutineDispatchers()),
         videoCompressor = VideoCompressor(context),
         coroutineDispatchers = testCoroutineDispatchers(),
+        temporaryUriDeleter = temporaryUriDeleter,
     )
 
     @Throws(IOException::class)
