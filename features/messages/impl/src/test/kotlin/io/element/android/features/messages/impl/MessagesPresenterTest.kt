@@ -324,6 +324,8 @@ class MessagesPresenterTest {
                     blurhash = null,
                     width = 20,
                     height = 20,
+                    thumbnailWidth = null,
+                    thumbnailHeight = null,
                     aspectRatio = 1.0f,
                     fileExtension = "jpg",
                     formattedFileSize = "4MB"
@@ -364,6 +366,8 @@ class MessagesPresenterTest {
                     blurHash = null,
                     width = 20,
                     height = 20,
+                    thumbnailWidth = 20,
+                    thumbnailHeight = 20,
                     aspectRatio = 1.0f,
                     fileExtension = "mp4",
                     formattedFileSize = "50MB"

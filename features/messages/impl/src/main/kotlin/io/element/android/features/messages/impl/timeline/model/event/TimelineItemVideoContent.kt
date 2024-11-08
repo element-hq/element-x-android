@@ -22,6 +22,8 @@ data class TimelineItemVideoContent(
     val blurHash: String?,
     val height: Int?,
     val width: Int?,
+    val thumbnailWidth: Int?,
+    val thumbnailHeight: Int?,
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
