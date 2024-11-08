@@ -83,7 +83,7 @@ class MatrixClientsHolderTest {
     }
 
     @Test
-    fun `test ClientAuthenticationObserver emits a value and we save it`() = runTest {
+    fun `test AuthenticationService listenToNewMatrixClients emits a Client value and we save it`() = runTest {
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()

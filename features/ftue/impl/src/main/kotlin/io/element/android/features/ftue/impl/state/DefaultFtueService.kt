@@ -24,7 +24,6 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -51,7 +50,6 @@ class DefaultFtueService @Inject constructor(
      * This flow emits true when the FTUE flow is ready to be displayed.
      * In this case, the FTUE flow is ready when the session verification status is known.
      */
-    @OptIn(FlowPreview::class)
     val isVerificationStatusKnown = sessionVerificationService.sessionVerifiedStatus
         .map { it != SessionVerifiedStatus.Unknown }
         .distinctUntilChanged()
@@ -108,7 +106,6 @@ class DefaultFtueService @Inject constructor(
         return sessionVerificationService.sessionVerifiedStatus.value != SessionVerifiedStatus.Unknown
     }
 
-    @OptIn(FlowPreview::class)
     private suspend fun isSessionNotVerified(): Boolean {
         // Wait until the session verification status is known
         isVerificationStatusKnown.filter { it }.first()
