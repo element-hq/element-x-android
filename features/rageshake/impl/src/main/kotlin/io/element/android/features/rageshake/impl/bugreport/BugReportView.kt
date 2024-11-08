@@ -75,7 +75,7 @@ fun BugReportView(
                             .fillMaxWidth()
                             .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
                     enabled = isFormEnabled,
-                    label = stringResource(id = R.string.screen_bug_report_editor_placeholder),
+                    placeholder = stringResource(id = R.string.screen_bug_report_editor_placeholder),
                     supportingText = stringResource(id = R.string.screen_bug_report_editor_description),
                     onValueChange = {
                         descriptionFieldState = it

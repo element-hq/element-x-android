@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -42,9 +43,9 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -89,10 +90,10 @@ fun ConfigureRoomView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .imePadding()
-                    .verticalScroll(rememberScrollState())
-                    .consumeWindowInsets(padding),
+                .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoomNameWithAvatar(
@@ -345,10 +346,19 @@ private fun RoomAddressField(
     )
 }
 
-@PreviewsDayNight
 @PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
+internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@ExcludeFromCoverage
+@Composable
+private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(
         state = state,
         onBackClick = {},

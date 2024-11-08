@@ -197,14 +197,12 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                         }
                     ),
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(start = 16.dp),
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             } else {
                 Text(
                     text = stringResource(id = R.string.screen_recovery_key_save_key_description),
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(start = 16.dp),
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
@@ -213,7 +211,6 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
             Text(
                 text = stringResource(id = R.string.screen_recovery_key_confirm_key_description),
                 color = ElementTheme.colors.textSecondary,
-                modifier = Modifier.padding(start = 16.dp),
                 style = ElementTheme.typography.fontBodySmRegular,
             )
         }
