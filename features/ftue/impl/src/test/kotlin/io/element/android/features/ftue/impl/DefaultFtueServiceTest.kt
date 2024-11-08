@@ -23,6 +23,7 @@ import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -66,6 +67,27 @@ class DefaultFtueServiceTest {
 
         sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         analyticsService.setDidAskUserConsent()
+        permissionStateProvider.setPermissionGranted()
+        lockScreenService.setIsPinSetup(true)
+        service.updateState()
+
+        assertThat(service.state.value).isEqualTo(FtueState.Complete)
+    }
+
+    @Test
+    fun `given all checks being true with no analytics, FtueState is Complete`() = runTest {
+        val analyticsService = NoopAnalyticsService()
+        val sessionVerificationService = FakeSessionVerificationService()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
+        val lockScreenService = FakeLockScreenService()
+        val service = createDefaultFtueService(
+            sessionVerificationService = sessionVerificationService,
+            analyticsService = analyticsService,
+            permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
+        )
+
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
         service.updateState()

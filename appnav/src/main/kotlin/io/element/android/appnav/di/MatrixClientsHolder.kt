@@ -27,9 +27,17 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) : MatrixClientProvider {
+class MatrixClientsHolder @Inject constructor(
+    private val authenticationService: MatrixAuthenticationService,
+) : MatrixClientProvider {
     private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
     private val restoreMutex = Mutex()
+
+    init {
+        authenticationService.listenToNewMatrixClients { matrixClient ->
+            sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
+        }
+    }
 
     fun removeAll() {
         sessionIdsToMatrixClient.clear()

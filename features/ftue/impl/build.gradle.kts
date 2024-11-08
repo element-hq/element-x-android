@@ -45,6 +45,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.analytics.noop)
     testImplementation(projects.libraries.permissions.impl)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
