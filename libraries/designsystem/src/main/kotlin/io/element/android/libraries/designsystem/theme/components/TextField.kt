@@ -52,6 +52,7 @@ import io.element.android.libraries.designsystem.utils.asInt
 fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     label: String? = null,
     supportingText: String? = null,
     placeholder: String? = null,
@@ -68,7 +69,6 @@ fun TextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onTextLayout: (TextLayoutResult) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
@@ -108,6 +108,7 @@ fun TextField(
 fun TextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
     label: String? = null,
     supportingText: String? = null,
     placeholder: String? = null,
@@ -124,7 +125,6 @@ fun TextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onTextLayout: (TextLayoutResult) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
@@ -159,7 +159,6 @@ fun TextField(
         )
     }
 }
-
 
 @Composable
 private fun DecorationBox(
