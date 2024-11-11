@@ -13,6 +13,8 @@ To můžete kdykoli změnit v nastavení místnosti."</string>
   <string name="screen_create_room_room_access_section_header">"Přístup do místnosti"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Požádat o připojení"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti"</string>
   <string name="screen_create_room_room_address_section_footer">"Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti."</string>
   <string name="screen_create_room_room_address_section_title">"Adresa místnosti"</string>
   <string name="screen_create_room_room_name_label">"Název místnosti"</string>

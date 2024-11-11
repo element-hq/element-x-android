@@ -259,7 +259,7 @@ Razão: %1$s."</string>
   <string name="common_voice_message">"Mensagem de voz"</string>
   <string name="common_waiting">"A aguardar…"</string>
   <string name="common_waiting_for_decryption_key">"À espera desta mensagem"</string>
-  <string name="common_you">"Você"</string>
+  <string name="common_you">"Tu"</string>
   <string name="crypto_identity_change_pin_violation">"A identidade de %1$s parece ter mudado. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s (username: %2$s ) aparenta ter mudado. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -301,15 +301,15 @@ Razão: %1$s."</string>
     <item quantity="other">"%1$d Mensagens afixadas"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Mensagens afixadas"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Está prestes a aceder à sua conta %1$s para repor a sua identidade. Depois, você será levado de volta ao aplicativo."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Estás prestes a aceder à tua conta %1$s para redefinir a tua identidade. Depois disso, serás levado de volta à aplicação."</string>
   <string name="screen_reset_identity_confirmation_title">"Não consegue confirmar? Aceda à sua conta para repor a sua identidade."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Retirar verificação e enviar"</string>
-  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Você pode retirar sua verificação e enviar esta mensagem de qualquer maneira, ou você pode cancelar por enquanto e tentar novamente mais tarde depois de verificar novamente %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Podes retirar a tua verificação e enviar esta mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde depois de reverificares %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"A sua mensagem não foi enviada porque a identidade verificada de %1$s foi alterada"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Enviar mensagem mesmo assim"</string>
-  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s está usando um ou mais dispositivos não verificados. Você pode enviar a mensagem de qualquer maneira, ou você pode cancelar por enquanto e tentar novamente mais tarde depois que %2$s tiver verificado todos os seus dispositivos."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s está a utilizar um ou mais dispositivos não verificados. Podes enviar a mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde, depois de %2$s ter verificado todos os seus dispositivos."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"A sua mensagem não foi enviada porque %1$s não verificou todos os dispositivos"</string>
-  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Um ou mais dos seus dispositivos não são verificados. Você pode enviar a mensagem de qualquer maneira, ou você pode cancelar por enquanto e tentar novamente mais tarde depois de ter verificado todos os seus dispositivos."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Um ou mais dos teus dispositivos não foram verificados. Podes enviar a mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde, depois de teres verificado todos os teus dispositivos."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"A sua mensagem não foi enviada porque não verificou um ou mais dos seus dispositivos"</string>
   <string name="screen_room_details_pinned_events_row_title">"Mensagens afixadas"</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>

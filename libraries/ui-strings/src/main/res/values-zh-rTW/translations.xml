@@ -119,7 +119,7 @@
   <string name="common_chat_backup">"聊天室備份"</string>
   <string name="common_copyright">"著作權"</string>
   <string name="common_creating_room">"正在建立聊天室…"</string>
-  <string name="common_current_user_left_room">"離開聊天室"</string>
+  <string name="common_current_user_left_room">"已離開聊天室"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密錯誤"</string>
   <string name="common_developer_options">"開發者選項"</string>

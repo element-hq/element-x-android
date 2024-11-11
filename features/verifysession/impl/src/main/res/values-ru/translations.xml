@@ -35,6 +35,10 @@
   <string name="screen_session_verification_request_title">"Запрошено подтверждение"</string>
   <string name="screen_session_verification_they_dont_match">"Они не совпадают"</string>
   <string name="screen_session_verification_they_match">"Они совпадают"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Прежде чем начать проверку, убедитесь, что приложение открыто на другом устройстве."</string>
+  <string name="screen_session_verification_use_another_device_title">"Откройте приложение на другом проверенном устройстве"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"Вы должны увидеть всплывающее окно на другом устройстве. Начните проверку оттуда прямо сейчас."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Начать проверку на другом устройстве"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ожидание принятия запроса"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
