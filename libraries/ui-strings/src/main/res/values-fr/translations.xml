@@ -254,6 +254,7 @@ Raison: %1$s."</string>
   <string name="common_verification_failed">"Échec de la vérification"</string>
   <string name="common_verified">"Vérifié(e)"</string>
   <string name="common_verify_device">"Vérifier la session"</string>
+  <string name="common_verify_identity">"Vérifier l’identité"</string>
   <string name="common_video">"Vidéo"</string>
   <string name="common_voice_message">"Message vocal"</string>
   <string name="common_waiting">"En attente…"</string>

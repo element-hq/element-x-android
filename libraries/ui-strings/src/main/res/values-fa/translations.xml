@@ -154,6 +154,10 @@
   <string name="common_light">"روشن"</string>
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d عضو"</item>
+    <item quantity="other">"%1$d عضو"</item>
+  </plurals>
   <string name="common_message">"پیام"</string>
   <string name="common_message_actions">"کنش‌های پیام"</string>
   <string name="common_message_layout">"جینش پیام"</string>

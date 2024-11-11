@@ -13,6 +13,8 @@ Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string
   <string name="screen_create_room_room_access_section_header">"Accès au salon"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d’adresse de salon ou de modifier le nom du salon"</string>
   <string name="screen_create_room_room_address_section_footer">"Pour que ce salon soit visible dans le répertoire des salons publics, vous aurez besoin d’une adresse de salon."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse du salon"</string>
   <string name="screen_create_room_room_name_label">"Nom du salon"</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"您確定要離開對話嗎？此對話不是公開的，如果沒有收到邀請，您無法重新加入。"</string>
   <string name="leave_room_alert_empty_subtitle">"您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。"</string>
   <string name="leave_room_alert_private_subtitle">"您確定要離開聊天室嗎？此聊天室不是公開的，如果沒有收到邀請，您無法重新加入。"</string>
   <string name="leave_room_alert_subtitle">"您確定要離開聊天室嗎？"</string>

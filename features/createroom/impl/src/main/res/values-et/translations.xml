@@ -13,6 +13,8 @@ Sa võid seda jututoa seadistustest alati muuta."</string>
   <string name="screen_create_room_room_access_section_header">"Ligipääs jututoale"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
   <string name="screen_create_room_room_address_section_footer">"Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi."</string>
   <string name="screen_create_room_room_address_section_title">"Jututoa aadress"</string>
   <string name="screen_create_room_room_name_label">"Jututoa nimi"</string>

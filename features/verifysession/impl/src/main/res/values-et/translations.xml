@@ -35,6 +35,10 @@
   <string name="screen_session_verification_request_title">"Verifitseerimispäring"</string>
   <string name="screen_session_verification_they_dont_match">"Nad ei klapi omavahel"</string>
   <string name="screen_session_verification_they_match">"Nad klapivad omavahel"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Enne kui alustad siin verifitseerimist, palun ava rakendus teises seadmes."</string>
+  <string name="screen_session_verification_use_another_device_title">"Ava rakendus teises verifitseeritud seadmes"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"Sa peaksid teises seadmes nägema hüpikakent. Palun alusta sealt verifitseerimist."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Alusta verifitseerimist teises seadmes"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ootame nõustumist verifitseerimispäringuga"</string>
   <string name="screen_signout_in_progress_dialog_content">"Logime välja…"</string>
