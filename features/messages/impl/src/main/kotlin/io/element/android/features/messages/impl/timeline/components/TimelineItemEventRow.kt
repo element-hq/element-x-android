@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -117,7 +118,8 @@ fun TimelineItemEventRow(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (String) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserAvatarClick: (UserId) -> Unit,
+    onUserNameClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
@@ -141,8 +143,11 @@ fun TimelineItemEventRow(
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
 
-    fun onUserDataClick() {
-        onUserDataClick(event.senderId)
+    fun onUserAvatarClick() {
+        onUserAvatarClick(event.senderId)
+    }
+    fun onUserNameClick() {
+        onUserNameClick(event.senderId)
     }
 
     fun inReplyToClick() {
@@ -176,7 +181,8 @@ fun TimelineItemEventRow(
                         onClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = ::inReplyToClick,
-                        onUserDataClick = ::onUserDataClick,
+                        onUserAvatarClick = ::onUserAvatarClick,
+                        onUserNameClick = ::onUserNameClick,
                         onReactionClick = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClick = { onMoreReactionsClick(event) },
@@ -210,7 +216,8 @@ fun TimelineItemEventRow(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 inReplyToClick = ::inReplyToClick,
-                onUserDataClick = ::onUserDataClick,
+                onUserAvatarClick = ::onUserAvatarClick,
+                onUserNameClick = ::onUserNameClick,
                 onReactionClick = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
@@ -266,7 +273,8 @@ private fun TimelineItemEventRowContent(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
-    onUserDataClick: () -> Unit,
+    onUserAvatarClick: () -> Unit,
+    onUserNameClick: () -> Unit,
     onReactionClick: (emoji: String) -> Unit,
     onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: (event: TimelineItem.Event) -> Unit,
@@ -298,6 +306,8 @@ private fun TimelineItemEventRowContent(
                 event.senderId,
                 event.senderProfile,
                 event.senderAvatar,
+                onUserAvatarClick,
+                onUserNameClick,
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
@@ -306,7 +316,6 @@ private fun TimelineItemEventRowContent(
                     }
                     .padding(horizontal = 16.dp)
                     .zIndex(1f)
-                    .clickable(onClick = onUserDataClick)
                     // This is redundant when using talkback
                     .clearAndSetSemantics {
                         invisibleToUser()
@@ -409,16 +418,26 @@ private fun MessageSenderInformation(
     senderId: UserId,
     senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
+    onUserAvatarClick: () -> Unit,
+    onUserNameClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(modifier = modifier) {
-        Avatar(senderAvatar)
-        Spacer(modifier = Modifier.width(4.dp))
+        Avatar(
+            avatarData = senderAvatar,
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable(onClick = onUserAvatarClick)
+        )
         SenderName(
             senderId = senderId,
             senderProfile = senderProfile,
             senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
+            modifier = Modifier
+                .clip(RoundedCornerShape(4.dp))
+                .clickable(onClick = onUserNameClick)
+                .padding(horizontal = 4.dp),
         )
     }
 }

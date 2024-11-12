@@ -52,6 +52,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -70,6 +71,7 @@ import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
@@ -386,6 +388,28 @@ class MessageComposerPresenter @Inject constructor(
                                 permalinkBuilder = permalinkBuilder,
                             )
                             suggestionSearchTrigger.value = null
+                        }
+                    }
+                }
+                is MessageComposerEvents.InsertMention -> {
+                    localCoroutineScope.launch {
+                        room.membersStateFlow.collect {
+                            val member = it.joinedRoomMembers().find { it.userId == event.userId } ?: return@collect
+                            if (showTextFormatting) {
+                                val text = member.userId.value
+                                val link = permalinkBuilder.permalinkForUser(member.userId).getOrNull() ?: return@collect
+                                // FIXME: This should use the un-exported `insertMention()`, probably. Currently it fails because there's no active `suggestion`
+                                richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                            } else {
+                                val end = markdownTextEditorState.selection.last
+                                // Create a suggestion at the current selection (or end) so insertSuggestion() knows where to add the pill
+                                markdownTextEditorState.currentSuggestion = Suggestion(end, end, SuggestionType.Mention, "")
+                                markdownTextEditorState.insertSuggestion(
+                                    resolvedSuggestion = ResolvedSuggestion.Member(member),
+                                    mentionSpanProvider = mentionSpanProvider,
+                                    permalinkBuilder = permalinkBuilder,
+                                )
+                            }
                         }
                     }
                 }

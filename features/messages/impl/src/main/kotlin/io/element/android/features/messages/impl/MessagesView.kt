@@ -102,6 +102,10 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMember.Role
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -141,6 +145,10 @@ fun MessagesView(
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
+
+    fun onUserNameClick(userId: UserId) {
+        state.composerState.eventSink(MessageComposerEvents.InsertMention(userId))
+    }
 
     fun onMessageClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
@@ -208,7 +216,8 @@ fun MessagesView(
                     .consumeWindowInsets(padding),
                 onMessageClick = ::onMessageClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = onUserDataClick,
+                onUserAvatarClick = onUserDataClick,
+                onUserNameClick = ::onUserNameClick,
                 onLinkClick = onLinkClick,
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,
@@ -307,7 +316,8 @@ private fun AttachmentStateView(
 private fun MessagesViewContent(
     state: MessagesState,
     onMessageClick: (TimelineItem.Event) -> Unit,
-    onUserDataClick: (UserId) -> Unit,
+    onUserAvatarClick: (UserId) -> Unit,
+    onUserNameClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
@@ -380,7 +390,8 @@ private fun MessagesViewContent(
                     TimelineView(
                         state = state.timelineState,
                         timelineProtectionState = state.timelineProtectionState,
-                        onUserDataClick = onUserDataClick,
+                        onUserAvatarClick = onUserAvatarClick,
+                        onUserNameClick = onUserNameClick,
                         onLinkClick = onLinkClick,
                         onMessageClick = onMessageClick,
                         onMessageLongClick = onMessageLongClick,
