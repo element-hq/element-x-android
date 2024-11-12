@@ -10,7 +10,7 @@ ksp = "2.0.21-1.0.27"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
-core = "1.13.1"
+core = "1.15.0"
 # Warning: there is an issue with 1.1.0 and 1.1.1, that I cannot repro on unit test.
 # To repro with the application:
 # Clear the storage of the application and run the app. Nearly each time, there is an infinite loading
