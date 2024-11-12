@@ -52,13 +52,11 @@ class DefaultTimelineEventFormatter @Inject constructor(
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline)
             }
-            is LegacyCallInviteContent -> {
-                sp.getString(CommonStrings.common_call_invite)
-            }
             is CallNotifyContent -> {
                 sp.getString(CommonStrings.common_call_started)
             }
             RedactedContent,
+            is LegacyCallInviteContent,
             is StickerContent,
             is PollContent,
             is UnableToDecryptContent,

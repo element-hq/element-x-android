@@ -247,6 +247,7 @@ Reason: %1$s."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
   <string name="common_unlock">"Unlock"</string>
   <string name="common_unmute">"Unmute"</string>
+  <string name="common_unsupported_call">"Unsupported call"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
   <string name="common_username">"Username"</string>
   <string name="common_verification_cancelled">"Verification cancelled"</string>

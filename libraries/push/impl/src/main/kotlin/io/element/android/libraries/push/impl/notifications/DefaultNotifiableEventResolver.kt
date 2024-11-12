@@ -151,7 +151,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
-                    body = stringProvider.getString(CommonStrings.common_call_invite),
+                    body = stringProvider.getString(CommonStrings.common_unsupported_call),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,

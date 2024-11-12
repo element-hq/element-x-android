@@ -91,7 +91,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 val message = sp.getString(CommonStrings.common_unsupported_event)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
-            is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
+            is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
             is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
         }?.take(MAX_SAFE_LENGTH)
     }
