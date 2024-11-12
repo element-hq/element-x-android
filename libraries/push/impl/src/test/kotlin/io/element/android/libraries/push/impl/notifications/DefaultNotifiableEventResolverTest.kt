@@ -588,7 +588,7 @@ class DefaultNotifiableEventResolverTest {
                 noisy = false,
                 timestamp = A_TIMESTAMP,
                 senderDisambiguatedDisplayName = A_USER_NAME_2,
-                body = "Call in progress (unsupported)",
+                body = "Unsupported call",
                 imageUriString = null,
                 imageMimeType = null,
                 threadId = null,
