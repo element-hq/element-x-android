@@ -23,7 +23,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +35,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
-import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -217,7 +217,7 @@ private fun RoomNameWithAvatar(
             modifier = Modifier.clickable(onClick = onAvatarClick),
         )
 
-        LabelledTextField(
+        TextField(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
@@ -233,7 +233,7 @@ private fun RoomTopic(
     onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LabelledTextField(
+    TextField(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
@@ -322,51 +322,43 @@ private fun RoomAddressField(
     onAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.primary,
-            text = stringResource(R.string.screen_create_room_room_address_section_title),
-        )
-
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = address.value,
-            leadingIcon = {
-                Text(
-                    text = "#",
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            },
-            trailingIcon = {
-                Text(
-                    text = homeserverName,
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(end = 16.dp)
-                )
-            },
-            supportingText = {
-                Text(
-                    text = stringResource(R.string.screen_create_room_room_address_section_footer),
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            },
-            onValueChange = onAddressChange,
-            singleLine = true,
-        )
-    }
+    TextField(
+        modifier = modifier.fillMaxWidth(),
+        value = address.value,
+        label = stringResource(R.string.screen_create_room_room_address_section_title),
+        leadingIcon = {
+            Text(
+                text = "#",
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        trailingIcon = {
+            Text(
+                text = homeserverName,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
+        onValueChange = onAddressChange,
+        singleLine = true,
+    )
 }
 
-@PreviewsDayNight
+@PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
+internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@ExcludeFromCoverage
+@Composable
+private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(
         state = state,
         onBackClick = {},

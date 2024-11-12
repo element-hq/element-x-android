@@ -39,13 +39,12 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -70,17 +69,14 @@ fun BugReportView(
             )
             Spacer(modifier = Modifier.height(16.dp))
             PreferenceRow {
-                OutlinedTextField(
+                TextField(
                     value = descriptionFieldState,
-                    modifier = Modifier.fillMaxWidth()
-                        .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
                     enabled = isFormEnabled,
-                    label = {
-                        Text(text = stringResource(id = R.string.screen_bug_report_editor_placeholder))
-                    },
-                    supportingText = {
-                        Text(text = stringResource(id = R.string.screen_bug_report_editor_description))
-                    },
+                    placeholder = stringResource(id = R.string.screen_bug_report_editor_placeholder),
+                    supportingText = stringResource(id = R.string.screen_bug_report_editor_description),
                     onValueChange = {
                         descriptionFieldState = it
                         eventSink(BugReportEvents.SetDescription(it))
@@ -152,8 +148,8 @@ fun BugReportView(
                     enabled = state.submitEnabled,
                     showProgress = state.sending.isLoading(),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp, bottom = 16.dp)
+                            .fillMaxWidth()
+                            .padding(top = 24.dp, bottom = 16.dp)
                 )
             }
         }

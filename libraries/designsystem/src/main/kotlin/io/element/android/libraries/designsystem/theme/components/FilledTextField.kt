@@ -15,25 +15,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -42,7 +36,7 @@ import io.element.android.libraries.designsystem.utils.allBooleans
 import io.element.android.libraries.designsystem.utils.asInt
 
 @Composable
-fun OutlinedTextField(
+fun FilledTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -60,12 +54,16 @@ fun OutlinedTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
-    minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    shape: Shape = TextFieldDefaults.shape,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        unfocusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        focusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        disabledContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        errorContainerColor = ElementTheme.colors.bgSubtleSecondary,
+    )
 ) {
-    androidx.compose.material3.OutlinedTextField(
+    androidx.compose.material3.TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
@@ -83,7 +81,6 @@ fun OutlinedTextField(
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         maxLines = maxLines,
-        minLines = minLines,
         interactionSource = interactionSource,
         shape = shape,
         colors = colors,
@@ -91,7 +88,7 @@ fun OutlinedTextField(
 }
 
 @Composable
-fun OutlinedTextField(
+fun FilledTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
@@ -108,12 +105,12 @@ fun OutlinedTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
-    maxLines: Int = Int.MAX_VALUE,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    shape: Shape = TextFieldDefaults.shape,
+    colors: TextFieldColors = TextFieldDefaults.colors()
 ) {
-    androidx.compose.material3.OutlinedTextField(
+    androidx.compose.material3.TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
@@ -137,37 +134,62 @@ fun OutlinedTextField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = onPreviewKeyEvent { event ->
-    if (event.key == Key.Tab || event.key == Key.Enter) {
-        if (event.type == KeyEventType.KeyUp) {
-            focusManager.moveFocus(FocusDirection.Down)
-        }
-        true
-    } else {
-        false
-    }
-}
+@Preview(group = PreviewGroup.TextFields)
+@Composable
+internal fun FilledTextFieldLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
 @Preview(group = PreviewGroup.TextFields)
 @Composable
-internal fun OutlinedTextFieldsPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun FilledTextFieldDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
 
-@Preview(group = PreviewGroup.TextFields)
-@Composable
-internal fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
 @ExcludeFromCoverage
+@Composable
 private fun ContentToPreview() {
     Column(modifier = Modifier.padding(4.dp)) {
         allBooleans.forEach { isError ->
             allBooleans.forEach { enabled ->
                 allBooleans.forEach { readonly ->
-                    OutlinedTextField(
+                    FilledTextField(
+                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
                         onValueChange = {},
                         label = { Text(text = "label") },
-                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                        isError = isError,
+                        enabled = enabled,
+                        readOnly = readonly,
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+            }
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.TextFields)
+@Composable
+internal fun FilledTextFieldValueLightPreview() =
+    ElementPreviewLight { FilledTextFieldValueContentToPreview() }
+
+@Preview(group = PreviewGroup.TextFields)
+@Composable
+internal fun FilledTextFieldValueTextFieldDarkPreview() =
+    ElementPreviewDark { FilledTextFieldValueContentToPreview() }
+
+@ExcludeFromCoverage
+@Composable
+private fun FilledTextFieldValueContentToPreview() {
+    Column(modifier = Modifier.padding(4.dp)) {
+        allBooleans.forEach { isError ->
+            allBooleans.forEach { enabled ->
+                allBooleans.forEach { readonly ->
+                    FilledTextField(
+                        value = TextFieldValue(
+                            text = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                            selection = TextRange(0, "Hello".length),
+                        ),
+                        onValueChange = {},
+                        label = { Text(text = "label") },
                         isError = isError,
                         enabled = enabled,
                         readOnly = readonly,
