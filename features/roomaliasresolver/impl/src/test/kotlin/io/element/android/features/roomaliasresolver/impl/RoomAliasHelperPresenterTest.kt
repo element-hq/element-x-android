@@ -26,7 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.util.Optional
 
-class RoomAliasResolverPresenterTest {
+class RoomAliasHelperPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
