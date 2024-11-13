@@ -212,7 +212,7 @@ class MessagesNode @AssistedInject constructor(
                 state = state,
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = this::onRoomDetailsClick,
-                onEventClick = this::onEventClick,
+                onEventContentClick = this::onEventClick,
                 onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },

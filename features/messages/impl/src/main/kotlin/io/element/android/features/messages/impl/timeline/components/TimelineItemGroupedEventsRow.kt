@@ -57,10 +57,11 @@ fun TimelineItemGroupedEventsRow(
             TimelineItemEventContentView(
                 content = event.content,
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
-                onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
+                onContentClick = {},
                 onContentLayoutChange = onContentLayoutChange
             )
         },
@@ -121,10 +122,11 @@ private fun TimelineItemGroupedEventsRowContent(
             TimelineItemEventContentView(
                 content = event.content,
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
-                onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
+                onContentClick = {},
                 onContentLayoutChange = onContentLayoutChange
             )
         },
@@ -152,7 +154,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         focusedEventId = focusedEventId,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
-                        onClick = onClick,
+                        onContentClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
                         onReactionClick = onReactionClick,

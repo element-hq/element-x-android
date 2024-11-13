@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import android.text.SpannedString
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,6 @@ import io.element.android.libraries.designsystem.components.blurhash.blurHashBac
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
@@ -68,7 +68,7 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
     hideMediaContent: Boolean,
-    onShowClick: () -> Unit,
+    onContentClick: () -> Unit,
     onShowContentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
@@ -98,7 +98,8 @@ fun TimelineItemVideoView(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .clickable(onClick = onContentClick),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
                         kind = MediaRequestData.Kind.Thumbnail(

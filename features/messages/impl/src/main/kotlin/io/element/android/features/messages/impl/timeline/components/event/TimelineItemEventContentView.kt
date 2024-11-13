@@ -36,7 +36,7 @@ import io.element.android.libraries.architecture.Presenter
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     hideMediaContent: Boolean,
-    onShowClick: () -> Unit,
+    onContentClick: () -> Unit,
     onShowContentClick: () -> Unit,
     onLinkClick: (url: String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
@@ -68,12 +68,13 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemLocationContent -> TimelineItemLocationView(
             content = content,
+            onContentClick = onContentClick,
             modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
             hideMediaContent = hideMediaContent,
-            onShowClick = onShowClick,
+            onContentClick = onContentClick,
             onShowContentClick = onShowContentClick,
             onLinkClick = onLinkClick,
             onContentLayoutChange = onContentLayoutChange,
@@ -82,7 +83,7 @@ fun TimelineItemEventContentView(
         is TimelineItemStickerContent -> TimelineItemStickerView(
             content = content,
             hideMediaContent = hideMediaContent,
-            onShowClick = onShowClick,
+            onContentClick = onContentClick,
             onShowClick = onShowContentClick,
             modifier = modifier,
         )

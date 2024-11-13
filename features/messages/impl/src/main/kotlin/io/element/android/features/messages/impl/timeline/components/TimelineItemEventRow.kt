@@ -114,7 +114,7 @@ fun TimelineItemEventRow(
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
-    onClick: () -> Unit,
+    onContentClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onUserDataClick: (UserId) -> Unit,
@@ -130,7 +130,7 @@ fun TimelineItemEventRow(
         TimelineItemEventContentView(
             content = event.content,
             hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
-            onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+            onContentClick = onContentClick,
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = eventSink,
@@ -149,6 +149,12 @@ fun TimelineItemEventRow(
     fun inReplyToClick() {
         val inReplyToEventId = event.inReplyTo?.eventId() ?: return
         inReplyToClick(inReplyToEventId)
+    }
+
+    val onWholeItemClick = if (event.isWholeContentClickable) {
+        onContentClick
+    } else {
+        {}
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -174,7 +180,7 @@ fun TimelineItemEventRow(
                         isHighlighted = isHighlighted,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
-                        onClick = onClick,
+                        onContentClick = onWholeItemClick,
                         onLongClick = onLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onUserDataClick = ::onUserDataClick,
@@ -208,7 +214,7 @@ fun TimelineItemEventRow(
                 isHighlighted = isHighlighted,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
-                onClick = onClick,
+                onContentClick = onWholeItemClick,
                 onLongClick = onLongClick,
                 inReplyToClick = ::inReplyToClick,
                 onUserDataClick = ::onUserDataClick,
@@ -264,7 +270,7 @@ private fun TimelineItemEventRowContent(
     isHighlighted: Boolean,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
-    onClick: () -> Unit,
+    onContentClick: () -> Unit,
     onLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onUserDataClick: () -> Unit,
@@ -341,7 +347,7 @@ private fun TimelineItemEventRowContent(
                 },
             state = bubbleState,
             interactionSource = interactionSource,
-            onClick = onClick,
+            onClick = onContentClick,
             onLongClick = onLongClick,
         ) {
             MessageEventBubbleContent(

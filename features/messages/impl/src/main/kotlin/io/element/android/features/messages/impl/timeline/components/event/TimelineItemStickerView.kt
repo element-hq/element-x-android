@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ private const val STICKER_SIZE_IN_DP = 128
 fun TimelineItemStickerView(
     content: TimelineItemStickerContent,
     hideMediaContent: Boolean,
+    onContentClick: () -> Unit,
     onShowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -61,7 +63,8 @@ fun TimelineItemStickerView(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .clickable(onClick = onContentClick),
                     model = MediaRequestData(
                         source = content.preferredMediaSource,
                         kind = MediaRequestData.Kind.File(
@@ -85,6 +88,7 @@ internal fun TimelineItemStickerViewPreview(@PreviewParameter(TimelineItemSticke
     TimelineItemStickerView(
         content = content,
         hideMediaContent = false,
+        onContentClick = {},
         onShowClick = {},
     )
 }
