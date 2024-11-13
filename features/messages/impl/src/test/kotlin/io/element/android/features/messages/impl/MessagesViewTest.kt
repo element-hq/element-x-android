@@ -529,7 +529,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 state = state,
                 onBackClick = onBackClick,
                 onRoomDetailsClick = onRoomDetailsClick,
-                onEventClick = onEventClick,
+                onEventContentClick = onEventClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onPreviewAttachments = onPreviewAttachments,

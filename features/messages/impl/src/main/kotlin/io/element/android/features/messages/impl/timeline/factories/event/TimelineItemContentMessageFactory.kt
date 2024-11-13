@@ -86,7 +86,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemImageContent(
                     filename = messageType.filename,
                     caption = messageType.caption?.trimEnd(),
-                    formattedCaption = messageType.formattedCaption,
+                    formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -105,7 +105,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemStickerContent(
                     filename = messageType.filename,
                     caption = messageType.caption?.trimEnd(),
-                    formattedCaption = messageType.formattedCaption,
+                    formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -142,7 +142,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemVideoContent(
                     filename = messageType.filename,
                     caption = messageType.caption?.trimEnd(),
-                    formattedCaption = messageType.formattedCaption,
+                    formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -161,7 +161,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemAudioContent(
                     filename = messageType.filename,
                     caption = messageType.caption?.trimEnd(),
-                    formattedCaption = messageType.formattedCaption,
+                    formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -176,7 +176,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                             eventId = eventId,
                             filename = messageType.filename,
                             caption = messageType.caption?.trimEnd(),
-                            formattedCaption = messageType.formattedCaption,
+                            formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -187,7 +187,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                         TimelineItemAudioContent(
                             filename = messageType.filename,
                             caption = messageType.caption?.trimEnd(),
-                            formattedCaption = messageType.formattedCaption,
+                            formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -202,7 +202,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemFileContent(
                     filename = messageType.filename,
                     caption = messageType.caption?.trimEnd(),
-                    formattedCaption = messageType.formattedCaption,
+                    formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     fileSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.fromFileExtension(fileExtension),
