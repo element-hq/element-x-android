@@ -69,6 +69,8 @@ fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
     hideMediaContent: Boolean,
     onShowClick: () -> Unit,
+    onShowContentClick: () -> Unit,
+    onLinkClick: (String) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -90,7 +92,7 @@ fun TimelineItemVideoView(
         ) {
             ProtectedView(
                 hideContent = hideMediaContent,
-                onShowClick = onShowClick,
+                onShowClick = onShowContentClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
                 AsyncImage(
@@ -128,9 +130,7 @@ fun TimelineItemVideoView(
             val caption = if (LocalInspectionMode.current) {
                 SpannedString(content.caption)
             } else {
-                content.formattedCaption?.body
-                    ?.takeIf { content.formattedCaption.format == MessageFormat.HTML }
-                    ?: SpannedString(content.caption)
+                content.formattedCaption ?: SpannedString(content.caption)
             }
             CompositionLocalProvider(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
@@ -142,6 +142,7 @@ fun TimelineItemVideoView(
                         .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
+                    onLinkClickedListener = onLinkClick,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
                     onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
@@ -157,7 +158,9 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
     TimelineItemVideoView(
         content = content,
         hideMediaContent = false,
-        onShowClick = {},
+        onShowContentClick = {},
+        onContentClick = {},
+        onLinkClick = {},
         onContentLayoutChange = {},
     )
 }
@@ -168,7 +171,9 @@ internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
     TimelineItemVideoView(
         content = aTimelineItemVideoContent(),
         hideMediaContent = true,
-        onShowClick = {},
+        onShowContentClick = {},
+        onContentClick = {},
+        onLinkClick = {},
         onContentLayoutChange = {},
     )
 }

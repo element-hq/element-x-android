@@ -131,6 +131,7 @@ fun TimelineItemEventRow(
             content = event.content,
             hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = eventSink,
             modifier = contentModifier,

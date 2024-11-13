@@ -37,6 +37,7 @@ fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     hideMediaContent: Boolean,
     onShowClick: () -> Unit,
+    onShowContentClick: () -> Unit,
     onLinkClick: (url: String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -73,6 +74,8 @@ fun TimelineItemEventContentView(
             content = content,
             hideMediaContent = hideMediaContent,
             onShowClick = onShowClick,
+            onShowContentClick = onShowContentClick,
+            onLinkClick = onLinkClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier,
         )
@@ -80,12 +83,15 @@ fun TimelineItemEventContentView(
             content = content,
             hideMediaContent = hideMediaContent,
             onShowClick = onShowClick,
+            onShowClick = onShowContentClick,
             modifier = modifier,
         )
         is TimelineItemVideoContent -> TimelineItemVideoView(
             content = content,
             hideMediaContent = hideMediaContent,
-            onShowClick = onShowClick,
+            onContentClick = onContentClick,
+            onShowContentClick = onShowContentClick,
+            onLinkClick = onLinkClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
