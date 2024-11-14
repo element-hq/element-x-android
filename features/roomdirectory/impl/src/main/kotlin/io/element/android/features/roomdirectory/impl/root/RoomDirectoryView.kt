@@ -145,7 +145,7 @@ private fun RoomDirectoryRoomList(
                 Text(
                     text = stringResource(id = CommonStrings.common_no_results),
                     style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textPlaceholder,
+                    color = ElementTheme.colors.textSecondary,
                     modifier = Modifier.padding(16.dp)
                 )
             }
@@ -185,8 +185,8 @@ private fun SearchTextField(
     colors: TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
-        unfocusedPlaceholderColor = ElementTheme.colors.textPlaceholder,
-        focusedPlaceholderColor = ElementTheme.colors.textPlaceholder,
+        unfocusedPlaceholderColor = ElementTheme.colors.textSecondary,
+        focusedPlaceholderColor = ElementTheme.colors.textSecondary,
         focusedTextColor = ElementTheme.colors.textPrimary,
         unfocusedTextColor = ElementTheme.colors.textPrimary,
         focusedIndicatorColor = ElementTheme.colors.borderInteractiveSecondary,
