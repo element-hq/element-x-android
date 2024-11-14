@@ -18,5 +18,4 @@ set -e
 ./gradlew runQualityChecks
 
 # Build, test and check the project, with warning as errors
-# It also check that the minimal app is compiling.
 ./gradlew check -PallWarningsAsErrors=true

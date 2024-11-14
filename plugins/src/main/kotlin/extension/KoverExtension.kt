@@ -32,10 +32,8 @@ val localAarProjects = listOf(
 
 val excludedKoverSubProjects = listOf(
     ":app",
-    ":samples",
     ":anvilannotations",
     ":anvilcodegen",
-    ":samples:minimal",
     ":tests:testutils",
     // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix
     // SDK api, so it is not really relevant to unit test it: there is no logic to test.

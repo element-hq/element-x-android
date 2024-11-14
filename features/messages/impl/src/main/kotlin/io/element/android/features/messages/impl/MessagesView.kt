@@ -114,7 +114,7 @@ fun MessagesView(
     state: MessagesState,
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
-    onEventClick: (event: TimelineItem.Event) -> Boolean,
+    onEventContentClick: (event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
@@ -142,9 +142,9 @@ fun MessagesView(
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
 
-    fun onMessageClick(event: TimelineItem.Event) {
+    fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
-        val hideKeyboard = onEventClick(event)
+        val hideKeyboard = onEventContentClick(event)
         if (hideKeyboard) {
             localView.hideKeyboard()
         }
@@ -206,7 +206,7 @@ fun MessagesView(
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
-                onMessageClick = ::onMessageClick,
+                onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
@@ -306,7 +306,7 @@ private fun AttachmentStateView(
 @Composable
 private fun MessagesViewContent(
     state: MessagesState,
-    onMessageClick: (TimelineItem.Event) -> Unit,
+    onContentClick: (TimelineItem.Event) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -382,7 +382,7 @@ private fun MessagesViewContent(
                         timelineProtectionState = state.timelineProtectionState,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
-                        onMessageClick = onMessageClick,
+                        onContentClick = onContentClick,
                         onMessageLongClick = onMessageLongClick,
                         onSwipeToReply = onSwipeToReply,
                         onReactionClick = onReactionClick,
@@ -568,7 +568,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         state = state,
         onBackClick = {},
         onRoomDetailsClick = {},
-        onEventClick = { false },
+        onEventContentClick = { false },
         onUserDataClick = {},
         onLinkClick = {},
         onPreviewAttachments = {},

@@ -286,7 +286,7 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemVideoContent(
             filename = "body.mp4",
             caption = "body.mp4 caption",
-            formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
+            formattedCaption = SpannedString("formatted"),
             duration = 1.minutes,
             videoSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
@@ -527,7 +527,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemImageContent(
             filename = "body.jpg",
-            formattedCaption = FormattedBody(MessageFormat.HTML, "formatted"),
+            formattedCaption = SpannedString("formatted"),
             caption = "body.jpg caption",
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
