@@ -70,8 +70,6 @@ include(":tests:testutils")
 include(":anvilannotations")
 include(":anvilcodegen")
 
-include(":samples:minimal")
-
 fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
     directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
         if (file.isDirectory) {

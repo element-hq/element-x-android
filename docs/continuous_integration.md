@@ -40,7 +40,7 @@ We want:
 
 The CI checks that:
 
-1. The code is compiling, without any warnings, for all the app build types and variants and for the minimal app
+1. The code is compiling, without any warnings, for all the app build types and variants
 2. The tests are passing
 3. The code quality is good (detekt, ktlint, lint)
 4. The code is running and smoke tests are passing (maestro)
