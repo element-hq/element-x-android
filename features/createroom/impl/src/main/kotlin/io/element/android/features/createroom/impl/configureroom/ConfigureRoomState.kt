@@ -20,6 +20,10 @@ data class ConfigureRoomState(
     val avatarActions: ImmutableList<AvatarAction>,
     val createRoomAction: AsyncAction<RoomId>,
     val cameraPermissionState: PermissionsState,
+    val roomAddressValidity: RoomAddressValidity,
     val homeserverName: String,
     val eventSink: (ConfigureRoomEvents) -> Unit
-)
+) {
+    val isValid: Boolean = config.roomName?.isNotEmpty() == true &&
+        (config.roomVisibility is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid)
+}

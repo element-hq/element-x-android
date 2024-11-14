@@ -168,3 +168,13 @@ fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<Ma
         .map { roomSummary -> roomSummary.map { it.info } }
         .distinctUntilChanged()
 }
+
+/**
+ * Returns a room alias from a room alias name.
+ * @param name the room alias name ie. the local part of the room alias.
+ */
+fun MatrixClient.roomAliasFromName(name: String): Result<RoomAlias> {
+    return runCatching {
+        RoomAlias("#$name:${userIdServerName()}")
+    }
+}
