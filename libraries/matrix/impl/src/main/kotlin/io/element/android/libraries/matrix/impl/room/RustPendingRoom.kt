@@ -10,14 +10,13 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.PendingRoom
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomPreview
 
 class RustPendingRoom(
     override val sessionId: SessionId,
-    private val inner: Room,
+    override val roomId: RoomId,
+    private val inner: RoomPreview,
 ) : PendingRoom {
-    override val roomId = RoomId(inner.id())
-
     override suspend fun leave(): Result<Unit> = runCatching {
         inner.leave()
     }
