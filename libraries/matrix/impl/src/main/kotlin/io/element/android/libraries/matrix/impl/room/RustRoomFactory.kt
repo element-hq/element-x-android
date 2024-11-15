@@ -139,14 +139,14 @@ class RustRoomFactory(
             return@withContext null
         }
         val innerRoom = try {
-            // TODO use new method when available, for now it'll fail for knocked rooms
-            roomListItem.invitedRoom()
+            roomListItem.previewRoom(via = emptyList())
         } catch (e: RoomListException) {
             Timber.e(e, "Failed to get pending room for $roomId")
             return@withContext null
         }
         RustPendingRoom(
             sessionId = sessionId,
+            roomId = roomId,
             inner = innerRoom,
         )
     }
