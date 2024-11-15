@@ -224,6 +224,27 @@ class UnifiedPushProviderTest {
         assertThat(result).isEqualTo(currentUserPushConfig)
     }
 
+    @Test
+    fun `canRotateToken should return false`() = runTest {
+        val unifiedPushProvider = createUnifiedPushProvider()
+        assertThat(unifiedPushProvider.canRotateToken()).isFalse()
+    }
+
+    @Test
+    fun `onSessionDeleted should do the cleanup`() = runTest {
+        val cleanupLambda = lambdaRecorder<String, Unit> { }
+        val unifiedPushProvider = createUnifiedPushProvider(
+            pushClientSecret = FakePushClientSecret(
+                getSecretForUserResult = { A_SECRET }
+            ),
+            unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
+                cleanupLambda = cleanupLambda,
+            ),
+        )
+        unifiedPushProvider.onSessionDeleted(A_SESSION_ID)
+        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET))
+    }
+
     private fun createUnifiedPushProvider(
         unifiedPushDistributorProvider: UnifiedPushDistributorProvider = FakeUnifiedPushDistributorProvider(),
         registerUnifiedPushUseCase: RegisterUnifiedPushUseCase = FakeRegisterUnifiedPushUseCase(),
