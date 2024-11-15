@@ -41,7 +41,7 @@ class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
             .onSuccess {
                 unifiedPushStore.storeUpEndpoint(clientSecret, null)
                 unifiedPushStore.storePushGateway(clientSecret, null)
-                UnifiedPush.unregisterApp(context)
+                UnifiedPush.unregisterApp(context, clientSecret)
             }
     }
 }
