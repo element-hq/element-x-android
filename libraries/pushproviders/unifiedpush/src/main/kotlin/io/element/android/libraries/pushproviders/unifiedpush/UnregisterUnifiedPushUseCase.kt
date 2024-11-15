@@ -33,15 +33,18 @@ class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
         if (endpoint == null || gateway == null) {
             Timber.w("No endpoint or gateway found for client secret")
             // Ensure we don't have any remaining data, but ignore this error
-            unifiedPushStore.storeUpEndpoint(clientSecret, null)
-            unifiedPushStore.storePushGateway(clientSecret, null)
+            cleanup(clientSecret)
             return Result.success(Unit)
         }
         return pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
             .onSuccess {
-                unifiedPushStore.storeUpEndpoint(clientSecret, null)
-                unifiedPushStore.storePushGateway(clientSecret, null)
-                UnifiedPush.unregisterApp(context, clientSecret)
+                cleanup(clientSecret)
             }
+    }
+
+    private fun cleanup(clientSecret: String) {
+        unifiedPushStore.storeUpEndpoint(clientSecret, null)
+        unifiedPushStore.storePushGateway(clientSecret, null)
+        UnifiedPush.unregisterApp(context, clientSecret)
     }
 }
