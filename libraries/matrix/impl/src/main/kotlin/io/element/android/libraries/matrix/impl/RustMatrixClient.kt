@@ -37,7 +37,7 @@ import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -57,7 +57,7 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
-import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
+import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -455,12 +455,14 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo> = withContext(sessionDispatcher) {
         runCatching {
             when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> client.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
                 is RoomIdOrAlias.Id -> client.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
-            }.let(RoomPreviewMapper::map)
+            }.use { roomPreview ->
+                RoomPreviewInfoMapper.map(roomPreview.info())
+            }
         }
     }
 
