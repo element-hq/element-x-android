@@ -18,7 +18,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface UnregisterUnifiedPushUseCase {
-    suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit>
+    /**
+     * Unregister the app from the homeserver, then from UnifiedPush.
+     */
+    suspend fun unregister(matrixClient: MatrixClient, clientSecret: String): Result<Unit>
+
+    /**
+     * Cleanup any remaining data for the given client secret and unregister the app from UnifiedPush.
+     */
+    fun cleanup(clientSecret: String)
 }
 
 @ContributesBinding(AppScope::class)
@@ -27,21 +35,24 @@ class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,
 ) : UnregisterUnifiedPushUseCase {
-    override suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
+    override suspend fun unregister(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
         val endpoint = unifiedPushStore.getEndpoint(clientSecret)
         val gateway = unifiedPushStore.getPushGateway(clientSecret)
         if (endpoint == null || gateway == null) {
             Timber.w("No endpoint or gateway found for client secret")
             // Ensure we don't have any remaining data, but ignore this error
-            unifiedPushStore.storeUpEndpoint(clientSecret, null)
-            unifiedPushStore.storePushGateway(clientSecret, null)
+            cleanup(clientSecret)
             return Result.success(Unit)
         }
         return pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
             .onSuccess {
-                unifiedPushStore.storeUpEndpoint(clientSecret, null)
-                unifiedPushStore.storePushGateway(clientSecret, null)
-                UnifiedPush.unregisterApp(context)
+                cleanup(clientSecret)
             }
+    }
+
+    override fun cleanup(clientSecret: String) {
+        unifiedPushStore.storeUpEndpoint(clientSecret, null)
+        unifiedPushStore.storePushGateway(clientSecret, null)
+        UnifiedPush.unregisterApp(context, clientSecret)
     }
 }

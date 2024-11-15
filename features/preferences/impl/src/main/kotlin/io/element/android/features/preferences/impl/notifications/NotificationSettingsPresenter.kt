@@ -93,7 +93,7 @@ class NotificationSettingsPresenter @Inject constructor(
 
         LaunchedEffect(refreshPushProvider) {
             val p = pushService.getCurrentPushProvider()
-            val name = p?.getCurrentDistributor(matrixClient)?.name
+            val name = p?.getCurrentDistributor(matrixClient.sessionId)?.name
             currentDistributorName = if (name != null) {
                 AsyncData.Success(name)
             } else {

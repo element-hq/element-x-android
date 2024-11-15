@@ -40,7 +40,7 @@ interface PushService {
      * To be used when there is no distributor available.
      */
     suspend fun selectPushProvider(
-        matrixClient: MatrixClient,
+        sessionId: SessionId,
         pushProvider: PushProvider,
     )
 
