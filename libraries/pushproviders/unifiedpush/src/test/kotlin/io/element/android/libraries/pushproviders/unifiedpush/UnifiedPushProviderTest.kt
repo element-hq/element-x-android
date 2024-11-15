@@ -117,13 +117,13 @@ class UnifiedPushProviderTest {
     fun `unregister ok`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
             ),
             unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
-                result = executeLambda,
+                unregisterLambda = unregisterLambda,
             ),
         )
         val result = unifiedPushProvider.unregister(matrixClient)
@@ -131,7 +131,7 @@ class UnifiedPushProviderTest {
         getSecretForUserResultLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID))
-        executeLambda.assertions()
+        unregisterLambda.assertions()
             .isCalledOnce()
             .with(value(matrixClient), value(A_SECRET))
     }
@@ -140,13 +140,13 @@ class UnifiedPushProviderTest {
     fun `unregister ko`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
             ),
             unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
-                result = executeLambda,
+                unregisterLambda = unregisterLambda,
             ),
         )
         val result = unifiedPushProvider.unregister(matrixClient)
@@ -154,7 +154,7 @@ class UnifiedPushProviderTest {
         getSecretForUserResultLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID))
-        executeLambda.assertions()
+        unregisterLambda.assertions()
             .isCalledOnce()
             .with(value(matrixClient), value(A_SECRET))
     }

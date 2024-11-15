@@ -28,7 +28,6 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushstore.api)
-    implementation(projects.libraries.sessionStorage.api)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
 
@@ -41,7 +40,6 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.libraries.pushstore.test)
-    testImplementation(projects.libraries.sessionStorage.test)
 
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.test.core)

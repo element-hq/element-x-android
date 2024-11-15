@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -62,6 +63,11 @@ class FirebasePushProvider @Inject constructor(
             pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
         }
     }
+
+    /**
+     * Nothing to clean up here.
+     */
+    override suspend fun onSessionDeleted(sessionId: SessionId) = Unit
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return firebaseStore.getFcmToken()?.let { fcmToken ->

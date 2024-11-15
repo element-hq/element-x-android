@@ -22,8 +22,12 @@ import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
+import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.InMemoryPushClientSecretStore
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.flow.first
@@ -215,12 +219,16 @@ class DefaultPushServiceTest {
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
         pushProviders: Set<@JvmSuppressWildcards PushProvider> = emptySet(),
         getCurrentPushProvider: GetCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = null),
+        sessionObserver: SessionObserver = NoOpSessionObserver(),
+        pushClientSecretStore: PushClientSecretStore = InMemoryPushClientSecretStore(),
     ): DefaultPushService {
         return DefaultPushService(
             testPush = testPush,
             userPushStoreFactory = userPushStoreFactory,
             pushProviders = pushProviders,
             getCurrentPushProvider = getCurrentPushProvider,
+            sessionObserver = sessionObserver,
+            pushClientSecretStore = pushClientSecretStore,
         )
     }
 }

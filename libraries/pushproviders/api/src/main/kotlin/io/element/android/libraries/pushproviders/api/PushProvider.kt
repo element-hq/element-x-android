@@ -8,6 +8,7 @@
 package io.element.android.libraries.pushproviders.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
  * This is the main API for this module.
@@ -42,6 +43,11 @@ interface PushProvider {
      * Unregister the pusher.
      */
     suspend fun unregister(matrixClient: MatrixClient): Result<Unit>
+
+    /**
+     * To invoke when the session is deleted.
+     */
+    suspend fun onSessionDeleted(sessionId: SessionId)
 
     suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
 

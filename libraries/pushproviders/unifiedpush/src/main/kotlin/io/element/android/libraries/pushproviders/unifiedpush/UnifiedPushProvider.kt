@@ -10,6 +10,7 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -47,7 +48,12 @@ class UnifiedPushProvider @Inject constructor(
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
         val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        return unRegisterUnifiedPushUseCase.execute(matrixClient, clientSecret)
+        return unRegisterUnifiedPushUseCase.unregister(matrixClient, clientSecret)
+    }
+
+    override suspend fun onSessionDeleted(sessionId: SessionId) {
+        val clientSecret = pushClientSecret.getSecretForUser(sessionId)
+        unRegisterUnifiedPushUseCase.cleanup(clientSecret)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
