@@ -58,7 +58,7 @@ class DefaultPushService @Inject constructor(
         val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
         val currentPushProvider = pushProviders.find { it.name == currentPushProviderName }
-        val currentDistributorValue = currentPushProvider?.getCurrentDistributor(matrixClient)?.value
+        val currentDistributorValue = currentPushProvider?.getCurrentDistributor(matrixClient.sessionId)?.value
         if (currentPushProviderName != pushProvider.name || currentDistributorValue != distributor.value) {
             // Unregister previous one if any
             currentPushProvider

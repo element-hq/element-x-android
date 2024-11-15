@@ -32,7 +32,7 @@ class FakePushProvider(
         return registerWithResult(matrixClient, distributor)
     }
 
-    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
+    override suspend fun getCurrentDistributor(sessionId: SessionId): Distributor? {
         return currentDistributor()
     }
 

@@ -162,7 +162,6 @@ class UnifiedPushProviderTest {
     @Test
     fun `getCurrentDistributor ok`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { distributor.value }
@@ -174,14 +173,13 @@ class UnifiedPushProviderTest {
                 )
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isEqualTo(distributor)
     }
 
     @Test
     fun `getCurrentDistributor not know`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { "unknown" }
@@ -192,14 +190,13 @@ class UnifiedPushProviderTest {
                 )
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isNull()
     }
 
     @Test
     fun `getCurrentDistributor not found`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { distributor.value }
@@ -208,7 +205,7 @@ class UnifiedPushProviderTest {
                 getDistributorsResult = emptyList()
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isNull()
     }
 

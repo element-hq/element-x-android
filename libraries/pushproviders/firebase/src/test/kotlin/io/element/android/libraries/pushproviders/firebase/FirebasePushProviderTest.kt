@@ -48,9 +48,9 @@ class FirebasePushProviderTest {
     }
 
     @Test
-    fun `getCurrentDistributor always return the unique distributor`() = runTest {
+    fun `getCurrentDistributor always returns the unique distributor`() = runTest {
         val firebasePushProvider = createFirebasePushProvider()
-        val result = firebasePushProvider.getCurrentDistributor(FakeMatrixClient())
+        val result = firebasePushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isEqualTo(Distributor("Firebase", "Firebase"))
     }
 

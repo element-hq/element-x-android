@@ -41,8 +41,8 @@ class UnifiedPushProvider @Inject constructor(
             }
     }
 
-    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
-        val distributorValue = unifiedPushStore.getDistributorValue(matrixClient.sessionId)
+    override suspend fun getCurrentDistributor(sessionId: SessionId): Distributor? {
+        val distributorValue = unifiedPushStore.getDistributorValue(sessionId)
         return getDistributors().find { it.value == distributorValue }
     }
 

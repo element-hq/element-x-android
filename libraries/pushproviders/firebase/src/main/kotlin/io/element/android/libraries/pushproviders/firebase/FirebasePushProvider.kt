@@ -52,7 +52,7 @@ class FirebasePushProvider @Inject constructor(
         )
     }
 
-    override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor
+    override suspend fun getCurrentDistributor(sessionId: SessionId) = firebaseDistributor
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
         val pushKey = firebaseStore.getFcmToken()

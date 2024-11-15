@@ -37,7 +37,7 @@ interface PushProvider {
     /**
      * Return the current distributor, or null if none.
      */
-    suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor?
+    suspend fun getCurrentDistributor(sessionId: SessionId): Distributor?
 
     /**
      * Unregister the pusher.
