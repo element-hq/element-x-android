@@ -41,7 +41,7 @@ fun NumberedListMolecule(
 private fun ItemNumber(
     index: Int,
 ) {
-    val color = ElementTheme.colors.textPlaceholder
+    val color = ElementTheme.colors.textSecondary
     Box(
         modifier = Modifier
             .border(1.dp, color, CircleShape)

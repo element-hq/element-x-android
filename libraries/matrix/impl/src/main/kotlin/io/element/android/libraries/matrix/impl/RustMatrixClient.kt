@@ -334,7 +334,7 @@ class RustMatrixClient(
                     JoinRuleOverride.Knock -> RustJoinRule.Knock
                     JoinRuleOverride.None -> null
                 },
-                canonicalAlias = createRoomParams.canonicalAlias.getOrNull(),
+                canonicalAlias = createRoomParams.roomAliasName.getOrNull(),
             )
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.

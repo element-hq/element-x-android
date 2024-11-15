@@ -158,7 +158,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
             timelineProtectionState = timelineProtectionState,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
-            onMessageClick = onMessageClick,
+            onContentClick = onMessageClick,
             onMessageLongClick = onMessageLongClick,
             onSwipeToReply = onSwipeToReply,
             onReactionClick = onReactionClick,

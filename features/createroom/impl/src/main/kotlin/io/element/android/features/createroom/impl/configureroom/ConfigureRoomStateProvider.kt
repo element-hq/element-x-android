@@ -28,9 +28,8 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aMatrixUserList().toImmutableList(),
                     roomVisibility = RoomVisibilityState.Public(
-                        roomAddress = RoomAddress.AutoFilled("Room 101"),
+                        roomAddress = RoomAddress.AutoFilled("Room-101"),
                         roomAccess = RoomAccess.Knocking,
-                        roomAddressErrorState = RoomAddressErrorState.None,
                     ),
                 ),
             ),
@@ -40,11 +39,43 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aMatrixUserList().toImmutableList(),
                     roomVisibility = RoomVisibilityState.Public(
-                        roomAddress = RoomAddress.AutoFilled("Room 101"),
+                        roomAddress = RoomAddress.AutoFilled("Room-101"),
                         roomAccess = RoomAccess.Knocking,
-                        roomAddressErrorState = RoomAddressErrorState.None,
                     ),
                 ),
+            ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    roomName = "Room 101",
+                    topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    roomVisibility = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Room-101"),
+                        roomAccess = RoomAccess.Knocking,
+                    ),
+                ),
+                roomAddressValidity = RoomAddressValidity.NotAvailable,
+            ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    roomName = "Room 101",
+                    topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    roomVisibility = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Room-101"),
+                        roomAccess = RoomAccess.Knocking,
+                    ),
+                ),
+                roomAddressValidity = RoomAddressValidity.InvalidSymbols,
+            ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    roomName = "Room 101",
+                    topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    roomVisibility = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Room-101"),
+                        roomAccess = RoomAccess.Knocking,
+                    ),
+                ),
+                roomAddressValidity = RoomAddressValidity.Valid,
             ),
         )
 }
@@ -56,6 +87,7 @@ fun aConfigureRoomState(
     createRoomAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
     homeserverName: String = "matrix.org",
+    roomAddressValidity: RoomAddressValidity = RoomAddressValidity.Valid,
     eventSink: (ConfigureRoomEvents) -> Unit = { },
 ) = ConfigureRoomState(
     config = config,
@@ -64,5 +96,6 @@ fun aConfigureRoomState(
     createRoomAction = createRoomAction,
     cameraPermissionState = cameraPermissionState,
     homeserverName = homeserverName,
+    roomAddressValidity = roomAddressValidity,
     eventSink = eventSink,
 )
