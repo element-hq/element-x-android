@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -153,8 +154,6 @@ interface MatrixRoom : Closeable {
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
-
-    suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit>
 
     suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
 
@@ -356,20 +355,20 @@ interface MatrixRoom : Closeable {
      * Ignore the local trust for the given devices and resend messages that failed to send because said devices are unverified.
      *
      * @param devices The map of users identifiers to device identifiers received in the error
-     * @param transactionId The send queue transaction identifier of the local echo the send error applies to.
+     * @param sendHandle The send queue handle of the local echo the send error applies to. It can be used to retry the upload.
      *
      */
-    suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit>
+    suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle): Result<Unit>
 
     /**
      * Remove verification requirements for the given users and
      * resend messages that failed to send because their identities were no longer verified.
      *
      * @param userIds The list of users identifiers received in the error.
-     * @param transactionId The send queue transaction identifier of the local echo the send error applies to.
+     * @param sendHandle The send queue handle of the local echo the send error applies to. It can be used to retry the upload.
      *
      */
-    suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit>
+    suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit>
 
     override fun close() = destroy()
 }

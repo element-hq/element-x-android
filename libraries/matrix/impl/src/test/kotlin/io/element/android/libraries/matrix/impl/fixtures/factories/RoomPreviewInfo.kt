@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomPreviewInfo
+import org.matrix.rustcomponents.sdk.RoomType
 
 internal fun aRustRoomPreviewInfo(
     canonicalAlias: String? = A_ROOM_ALIAS.value,
@@ -25,7 +26,9 @@ internal fun aRustRoomPreviewInfo(
         topic = "topic",
         avatarUrl = "avatarUrl",
         numJoinedMembers = 1u,
-        roomType = null,
+        numActiveMembers = 1u,
+        isDirect = false,
+        roomType = RoomType.Room,
         isHistoryWorldReadable = true,
         membership = membership,
         joinRule = joinRule,

@@ -11,6 +11,7 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.anEventTimeli
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.LazyTimelineItemProvider
 import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.SendHandle
 import org.matrix.rustcomponents.sdk.ShieldState
 
 class FakeRustLazyTimelineItemProvider(
@@ -19,4 +20,5 @@ class FakeRustLazyTimelineItemProvider(
 ) : LazyTimelineItemProvider(NoPointer) {
     override fun getShields(strict: Boolean) = shieldsState
     override fun debugInfo() = debugInfo
+    override fun getSendHandle(): SendHandle? = null
 }

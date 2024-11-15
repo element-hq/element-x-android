@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimeli
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -56,6 +57,7 @@ class EventTimelineItemMapper(
             origin = origin?.map(),
             timelineItemDebugInfoProvider = { lazyProvider.debugInfo().map() },
             messageShieldProvider = { strict -> lazyProvider.getShields(strict)?.map() },
+            sendHandleProvider = { lazyProvider.getSendHandle()?.let(::RustSendHandle) }
         )
     }
 }

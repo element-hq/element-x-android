@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -96,6 +97,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
                 )
             },
             messageShieldProvider = { null },
+            sendHandleProvider = { FakeSendHandle() },
         ),
     )
 )
