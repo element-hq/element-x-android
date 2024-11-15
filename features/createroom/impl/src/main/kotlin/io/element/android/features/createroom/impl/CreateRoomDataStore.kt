@@ -11,13 +11,13 @@ import android.net.Uri
 import io.element.android.features.createroom.impl.configureroom.RoomAccess
 import io.element.android.features.createroom.impl.configureroom.RoomAccessItem
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
-import io.element.android.features.createroom.impl.configureroom.RoomAddressErrorState
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityItem
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.features.createroom.impl.di.CreateRoomScope
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +29,7 @@ import javax.inject.Inject
 @SingleIn(CreateRoomScope::class)
 class CreateRoomDataStore @Inject constructor(
     val selectedUserListDataStore: UserListDataStore,
+    private val roomAliasHelper: RoomAliasHelper,
 ) {
     private val createRoomConfigFlow: MutableStateFlow<CreateRoomConfig> = MutableStateFlow(CreateRoomConfig())
     private var cachedAvatarUri: Uri? = null
@@ -46,13 +47,13 @@ class CreateRoomDataStore @Inject constructor(
 
     fun setRoomName(roomName: String) {
         createRoomConfigFlow.getAndUpdate { config ->
-            /*
             val newVisibility = when (config.roomVisibility) {
                 is RoomVisibilityState.Public -> {
                     val roomAddress = config.roomVisibility.roomAddress
                     if (roomAddress is RoomAddress.AutoFilled || roomName.isEmpty()) {
+                        val roomAliasName = roomAliasHelper.roomAliasNameFromRoomDisplayName(roomName)
                         config.roomVisibility.copy(
-                            roomAddress = RoomAddress.AutoFilled(roomName),
+                            roomAddress = RoomAddress.AutoFilled(roomAliasName),
                         )
                     } else {
                         config.roomVisibility
@@ -60,9 +61,9 @@ class CreateRoomDataStore @Inject constructor(
                 }
                 else -> config.roomVisibility
             }
-             */
             config.copy(
                 roomName = roomName.takeIf { it.isNotEmpty() },
+                roomVisibility = newVisibility,
             )
         }
     }
@@ -85,11 +86,13 @@ class CreateRoomDataStore @Inject constructor(
             config.copy(
                 roomVisibility = when (visibility) {
                     RoomVisibilityItem.Private -> RoomVisibilityState.Private
-                    RoomVisibilityItem.Public -> RoomVisibilityState.Public(
-                        roomAddress = RoomAddress.AutoFilled(config.roomName.orEmpty()),
-                        roomAddressErrorState = RoomAddressErrorState.None,
-                        roomAccess = RoomAccess.Anyone,
-                    )
+                    RoomVisibilityItem.Public -> {
+                        val roomAliasName = roomAliasHelper.roomAliasNameFromRoomDisplayName(config.roomName.orEmpty())
+                        RoomVisibilityState.Public(
+                            roomAddress = RoomAddress.AutoFilled(roomAliasName),
+                            roomAccess = RoomAccess.Anyone,
+                        )
+                    }
                 }
             )
         }

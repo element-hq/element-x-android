@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
@@ -31,6 +32,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
+import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
+import io.element.android.libraries.matrix.api.roomAliasFromName
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -39,9 +42,12 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Optional
 import javax.inject.Inject
+import kotlin.jvm.optionals.getOrNull
 
 class ConfigureRoomPresenter @Inject constructor(
     private val dataStore: CreateRoomDataStore,
@@ -51,6 +57,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val featureFlagService: FeatureFlagService,
+    private val roomAliasHelper: RoomAliasHelper,
 ) : Presenter<ConfigureRoomState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
@@ -58,9 +65,12 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig = dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
+        val createRoomConfig by dataStore.createRoomConfigWithInvites.collectAsState(CreateRoomConfig())
         val homeserverName = remember { matrixClient.userIdServerName() }
         val isKnockFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(initial = false)
+        val roomAddressValidity = remember {
+            mutableStateOf<RoomAddressValidity>(RoomAddressValidity.Unknown)
+        }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -69,12 +79,12 @@ class ConfigureRoomPresenter @Inject constructor(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri) }
         )
 
-        val avatarActions by remember(createRoomConfig.value.avatarUri) {
+        val avatarActions by remember(createRoomConfig.avatarUri) {
             derivedStateOf {
                 listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                    AvatarAction.Remove.takeIf { createRoomConfig.value.avatarUri != null },
+                    AvatarAction.Remove.takeIf { createRoomConfig.avatarUri != null },
                 ).toImmutableList()
             }
         }
@@ -84,6 +94,10 @@ class ConfigureRoomPresenter @Inject constructor(
                 pendingPermissionRequest = false
                 cameraPhotoPicker.launch()
             }
+        }
+
+        RoomAddressValidityEffect(createRoomConfig.roomVisibility.roomAddress()) { newRoomAddressValidity ->
+            roomAddressValidity.value = newRoomAddressValidity
         }
 
         val localCoroutineScope = rememberCoroutineScope()
@@ -102,7 +116,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.RemoveUserFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 is ConfigureRoomEvents.RoomAccessChanged -> dataStore.setRoomAccess(event.roomAccess)
                 is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
-                is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig.value)
+                is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig)
                 is ConfigureRoomEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
@@ -122,13 +136,47 @@ class ConfigureRoomPresenter @Inject constructor(
 
         return ConfigureRoomState(
             isKnockFeatureEnabled = isKnockFeatureEnabled,
-            config = createRoomConfig.value,
+            config = createRoomConfig,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             cameraPermissionState = cameraPermissionState,
             homeserverName = homeserverName,
+            roomAddressValidity = roomAddressValidity.value,
             eventSink = ::handleEvents,
         )
+    }
+
+    @Composable
+    private fun RoomAddressValidityEffect(
+        roomAddress: Optional<String>,
+        onRoomAddressValidityChange: (RoomAddressValidity) -> Unit,
+    ) {
+        val onChange by rememberUpdatedState(onRoomAddressValidityChange)
+        LaunchedEffect(roomAddress) {
+            val roomAliasName = roomAddress.getOrNull().orEmpty()
+            if (roomAliasName.isEmpty()) {
+                onChange(RoomAddressValidity.Unknown)
+                return@LaunchedEffect
+            }
+            // debounce the room address validation
+            delay(300)
+            val roomAlias = matrixClient.roomAliasFromName(roomAliasName).getOrNull()
+            if (roomAlias == null || !roomAliasHelper.isRoomAliasValid(roomAlias)) {
+                onChange(RoomAddressValidity.InvalidSymbols)
+            } else {
+                matrixClient.resolveRoomAlias(roomAlias)
+                    .onSuccess { resolved ->
+                        if (resolved.isPresent) {
+                            onChange(RoomAddressValidity.NotAvailable)
+                        } else {
+                            onChange(RoomAddressValidity.Valid)
+                        }
+                    }
+                    .onFailure {
+                        onChange(RoomAddressValidity.Valid)
+                    }
+            }
+        }
     }
 
     private fun CoroutineScope.createRoom(
@@ -148,7 +196,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     preset = RoomPreset.PUBLIC_CHAT,
                     invite = config.invites.map { it.userId },
                     avatar = avatarUrl,
-                    canonicalAlias = config.roomVisibility.roomAddress()
+                    roomAliasName = config.roomVisibility.roomAddress()
                 )
             } else {
                 CreateRoomParameters(

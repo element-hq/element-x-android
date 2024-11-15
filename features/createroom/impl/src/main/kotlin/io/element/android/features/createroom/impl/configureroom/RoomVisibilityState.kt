@@ -14,7 +14,6 @@ sealed interface RoomVisibilityState {
 
     data class Public(
         val roomAddress: RoomAddress,
-        val roomAddressErrorState: RoomAddressErrorState,
         val roomAccess: RoomAccess,
     ) : RoomVisibilityState
 
@@ -22,13 +21,6 @@ sealed interface RoomVisibilityState {
         return when (this) {
             is Private -> Optional.empty()
             is Public -> Optional.of(roomAddress.value)
-        }
-    }
-
-    fun isValid(): Boolean {
-        return when (this) {
-            is Private -> true
-            is Public -> roomAddressErrorState is RoomAddressErrorState.None && roomAddress.value.isNotEmpty()
         }
     }
 }

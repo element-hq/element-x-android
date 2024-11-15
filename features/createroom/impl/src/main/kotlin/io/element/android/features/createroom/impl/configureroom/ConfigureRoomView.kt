@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -79,7 +80,7 @@ fun ConfigureRoomView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
-                isNextActionEnabled = state.config.isValid,
+                isNextActionEnabled = state.isValid,
                 onBackClick = onBackClick,
                 onNextClick = {
                     focusManager.clearFocus()
@@ -143,8 +144,10 @@ fun ConfigureRoomView(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     address = state.config.roomVisibility.roomAddress,
                     homeserverName = state.homeserverName,
+                    addressValidity = state.roomAddressValidity,
                     onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
                 )
+                Spacer(Modifier)
             }
         }
     }
@@ -319,6 +322,7 @@ private fun RoomAccessOptions(
 private fun RoomAddressField(
     address: RoomAddress,
     homeserverName: String,
+    addressValidity: RoomAddressValidity,
     onAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -340,7 +344,16 @@ private fun RoomAddressField(
                 color = ElementTheme.colors.textSecondary,
             )
         },
-        supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
+        supportingText = when (addressValidity) {
+            RoomAddressValidity.InvalidSymbols -> {
+                stringResource(R.string.screen_create_room_room_address_invalid_symbols_error_description)
+            }
+            RoomAddressValidity.NotAvailable -> {
+                stringResource(R.string.screen_create_room_room_address_not_available_error_description)
+            }
+            else -> stringResource(R.string.screen_create_room_room_address_section_footer)
+        },
+        isError = addressValidity.isError(),
         onValueChange = onAddressChange,
         singleLine = true,
     )
