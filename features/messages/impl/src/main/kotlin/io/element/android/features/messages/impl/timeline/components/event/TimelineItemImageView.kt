@@ -8,8 +8,9 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,11 +56,13 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
     hideMediaContent: Boolean,
-    onContentClick: () -> Unit,
+    onContentClick: (() -> Unit)?,
+    onLongClick: (() -> Unit)?,
     onLinkClick: (String) -> Unit,
     onShowContentClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
@@ -87,7 +90,7 @@ fun TimelineItemImageView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .clickable(onClick = onContentClick),
+                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
                     model = content.thumbnailMediaRequestData,
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
@@ -132,6 +135,7 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
         hideMediaContent = false,
         onShowContentClick = {},
         onContentClick = {},
+        onLongClick = {},
         onLinkClick = {},
         onContentLayoutChange = {},
     )
@@ -145,6 +149,7 @@ internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
         hideMediaContent = true,
         onShowContentClick = {},
         onContentClick = {},
+        onLongClick = {},
         onLinkClick = {},
         onContentLayoutChange = {},
     )
