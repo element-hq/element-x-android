@@ -24,7 +24,7 @@ class FakePushService(
         Result.success(Unit)
     },
     private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
-    private val selectPushProviderLambda: suspend (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },
+    private val selectPushProviderLambda: suspend (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
     private val setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
@@ -50,8 +50,8 @@ class FakePushService(
             }
     }
 
-    override suspend fun selectPushProvider(matrixClient: MatrixClient, pushProvider: PushProvider) {
-        selectPushProviderLambda(matrixClient, pushProvider)
+    override suspend fun selectPushProvider(sessionId: SessionId, pushProvider: PushProvider) {
+        selectPushProviderLambda(sessionId, pushProvider)
     }
 
     private val ignoreRegistrationError = MutableStateFlow(false)

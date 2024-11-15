@@ -76,11 +76,11 @@ class DefaultPushService @Inject constructor(
     }
 
     override suspend fun selectPushProvider(
-        matrixClient: MatrixClient,
+        sessionId: SessionId,
         pushProvider: PushProvider,
     ) {
         Timber.d("Select ${pushProvider.name}")
-        val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
+        val userPushStore = userPushStoreFactory.getOrCreate(sessionId)
         userPushStore.setPushProviderName(pushProvider.name)
     }
 

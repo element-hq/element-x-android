@@ -265,6 +265,22 @@ class DefaultPushServiceTest {
         assertThat(pushClientSecretStore.getSecret(A_SESSION_ID)).isNull()
     }
 
+    @Test
+    fun `selectPushProvider should store the data in the store`() = runTest {
+        val userPushStore = FakeUserPushStore()
+        val defaultPushService = createDefaultPushService(
+            userPushStoreFactory = FakeUserPushStoreFactory(
+                userPushStore = { userPushStore },
+            ),
+        )
+        val aPushProvider = FakePushProvider(
+            name = "aCurrentPushProvider",
+        )
+        assertThat(userPushStore.getPushProviderName()).isNull()
+        defaultPushService.selectPushProvider(A_SESSION_ID, aPushProvider)
+        assertThat(userPushStore.getPushProviderName()).isEqualTo(aPushProvider.name)
+    }
+
     private fun createDefaultPushService(
         testPush: TestPush = FakeTestPush(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
