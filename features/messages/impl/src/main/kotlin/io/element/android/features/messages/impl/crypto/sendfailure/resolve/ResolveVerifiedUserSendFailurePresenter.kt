@@ -51,10 +51,12 @@ class ResolveVerifiedUserSendFailurePresenter @Inject constructor(
                 is ResolveVerifiedUserSendFailureEvents.ComputeForMessage -> {
                     val sendState = event.messageEvent.localSendState as? LocalEventSendState.Failed.VerifiedUser
                     val transactionId = event.messageEvent.transactionId
-                    resolver = if (sendState != null && transactionId != null) {
+                    val sendHandle = event.messageEvent.sendhandle
+                    resolver = if (sendState != null && transactionId != null && sendHandle != null) {
                         VerifiedUserSendFailureResolver(
                             room = room,
                             transactionId = transactionId,
+                            sendHandle = sendHandle,
                             iterator = VerifiedUserSendFailureIterator.from(sendState)
                         )
                     } else {

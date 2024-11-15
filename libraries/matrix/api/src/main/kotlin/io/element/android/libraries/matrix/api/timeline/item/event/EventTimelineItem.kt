@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -30,6 +31,7 @@ data class EventTimelineItem(
     val origin: TimelineItemEventOrigin?,
     val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
     val messageShieldProvider: MessageShieldProvider,
+    val sendHandleProvider: SendHandleProvider,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
@@ -51,4 +53,8 @@ fun interface TimelineItemDebugInfoProvider {
 
 fun interface MessageShieldProvider {
     operator fun invoke(strict: Boolean): MessageShield?
+}
+
+fun interface SendHandleProvider {
+    operator fun invoke(): SendHandle?
 }

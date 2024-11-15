@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSen
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
@@ -82,6 +84,7 @@ sealed interface TimelineItem {
         val origin: TimelineItemEventOrigin?,
         val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
         val messageShieldProvider: MessageShieldProvider,
+        val sendHandleProvider: SendHandleProvider,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
@@ -114,6 +117,8 @@ sealed interface TimelineItem {
 
         val debugInfo: TimelineItemDebugInfo
             get() = timelineItemDebugInfoProvider()
+
+        val sendhandle: SendHandle? get() = sendHandleProvider()
     }
 
     @Immutable

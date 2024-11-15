@@ -8,11 +8,12 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.room.RoomType
+import org.matrix.rustcomponents.sdk.RoomType as RustRoomType
 
-fun String?.toRoomType(): RoomType {
+fun RustRoomType.map(): RoomType {
     return when (this) {
-        null -> RoomType.Room
-        "m.space" -> RoomType.Space
-        else -> RoomType.Other(this)
+        RustRoomType.Room -> RoomType.Room
+        RustRoomType.Space -> RoomType.Space
+        is RustRoomType.Custom -> RoomType.Other(this.value)
     }
 }

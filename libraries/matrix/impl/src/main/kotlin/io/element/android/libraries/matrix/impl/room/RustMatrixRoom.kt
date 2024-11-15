@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -45,6 +46,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
@@ -481,10 +483,6 @@ class RustMatrixRoom(
         return liveTimeline.forwardEvent(eventId, roomIds)
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = runCatching {
-        innerRoom.tryResend(transactionId.value)
-    }
-
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return liveTimeline.cancelSend(transactionId)
     }
@@ -671,19 +669,19 @@ class RustMatrixRoom(
         innerRoom.clearComposerDraft()
     }
 
-    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId) = runCatching {
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle) = runCatching {
         innerRoom.ignoreDeviceTrustAndResend(
             devices = devices.entries.associate { entry ->
                 entry.key.value to entry.value.map { it.value }
             },
-            transactionId = transactionId.value
+            sendHandle = (sendHandle as RustSendHandle).inner,
         )
     }
 
-    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId) = runCatching {
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle) = runCatching {
         innerRoom.withdrawVerificationAndResend(
             userIds = userIds.map { it.value },
-            transactionId = transactionId.value
+            sendHandle = (sendHandle as RustSendHandle).inner,
         )
     }
 

@@ -21,17 +21,20 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
@@ -51,8 +54,9 @@ fun anEventTimelineItem(
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
-    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
-    messageShield: MessageShield? = null,
+    debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
+    messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },
+    sendHandleProvider: SendHandleProvider = SendHandleProvider { FakeSendHandle() }
 ) = EventTimelineItem(
     eventId = eventId,
     transactionId = transactionId,
@@ -68,8 +72,9 @@ fun anEventTimelineItem(
     timestamp = timestamp,
     content = content,
     origin = null,
-    timelineItemDebugInfoProvider = { debugInfo },
-    messageShieldProvider = { messageShield },
+    timelineItemDebugInfoProvider = debugInfoProvider,
+    messageShieldProvider = messageShieldProvider,
+    sendHandleProvider = sendHandleProvider,
 )
 
 fun aProfileTimelineDetails(
