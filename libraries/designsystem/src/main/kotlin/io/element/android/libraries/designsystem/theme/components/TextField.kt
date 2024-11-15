@@ -200,7 +200,7 @@ private fun DecorationBox(
                     if (placeholder != null && isTextEmpty) {
                         Text(
                             text = placeholder,
-                            color = ElementTheme.colors.textPlaceholder,
+                            color = ElementTheme.colors.textSecondary,
                             style = ElementTheme.typography.fontBodyLgRegular,
                         )
                     }
