@@ -10,6 +10,7 @@ package io.element.android.libraries.pushproviders.firebase
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
@@ -174,6 +175,18 @@ class FirebasePushProviderTest {
         )
         firebasePushProvider.rotateToken()
         lambda.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `canRotateToken should return true`() = runTest {
+        val firebasePushProvider = createFirebasePushProvider()
+        assertThat(firebasePushProvider.canRotateToken()).isTrue()
+    }
+
+    @Test
+    fun `onSessionDeleted should be noop`() = runTest {
+        val firebasePushProvider = createFirebasePushProvider()
+        firebasePushProvider.onSessionDeleted(A_SESSION_ID)
     }
 
     private fun createFirebasePushProvider(
