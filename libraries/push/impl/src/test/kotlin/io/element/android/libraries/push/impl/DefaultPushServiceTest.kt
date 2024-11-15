@@ -9,6 +9,7 @@ package io.element.android.libraries.push.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -212,6 +213,56 @@ class DefaultPushServiceTest {
         assertThat(defaultPushService.ignoreRegistrationError(A_SESSION_ID).first()).isFalse()
         defaultPushService.setIgnoreRegistrationError(A_SESSION_ID, true)
         assertThat(defaultPushService.ignoreRegistrationError(A_SESSION_ID).first()).isTrue()
+    }
+
+    @Test
+    fun `onSessionCreated is noop`() = runTest {
+        val defaultPushService = createDefaultPushService()
+        defaultPushService.onSessionCreated(A_SESSION_ID.value)
+    }
+
+    @Test
+    fun `onSessionDeleted should transmit the info to the current push provider and cleanup the stores`() = runTest {
+        val onSessionDeletedLambda = lambdaRecorder<SessionId, Unit> { }
+        val aCurrentPushProvider = FakePushProvider(
+            name = "aCurrentPushProvider",
+            onSessionDeletedLambda = onSessionDeletedLambda,
+        )
+        val userPushStore = FakeUserPushStore(
+            pushProviderName = aCurrentPushProvider.name,
+        )
+        val pushClientSecretStore = InMemoryPushClientSecretStore()
+        val defaultPushService = createDefaultPushService(
+            pushProviders = setOf(aCurrentPushProvider),
+            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aCurrentPushProvider.name),
+            userPushStoreFactory = FakeUserPushStoreFactory(
+                userPushStore = { userPushStore },
+            ),
+            pushClientSecretStore = pushClientSecretStore,
+        )
+        defaultPushService.onSessionDeleted(A_SESSION_ID.value)
+        assertThat(userPushStore.getPushProviderName()).isNull()
+        assertThat(pushClientSecretStore.getSecret(A_SESSION_ID)).isNull()
+        onSessionDeletedLambda.assertions().isCalledOnce().with(value(A_SESSION_ID))
+    }
+
+    @Test
+    fun `onSessionDeleted when there is no push provider should just cleanup the stores`() = runTest {
+        val userPushStore = FakeUserPushStore(
+            pushProviderName = null,
+        )
+        val pushClientSecretStore = InMemoryPushClientSecretStore()
+        val defaultPushService = createDefaultPushService(
+            pushProviders = emptySet(),
+            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = null),
+            userPushStoreFactory = FakeUserPushStoreFactory(
+                userPushStore = { userPushStore },
+            ),
+            pushClientSecretStore = pushClientSecretStore,
+        )
+        defaultPushService.onSessionDeleted(A_SESSION_ID.value)
+        assertThat(userPushStore.getPushProviderName()).isNull()
+        assertThat(pushClientSecretStore.getSecret(A_SESSION_ID)).isNull()
     }
 
     private fun createDefaultPushService(
