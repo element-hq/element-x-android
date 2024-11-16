@@ -255,9 +255,7 @@ fun MessagesView(
 
                 MessagesViewContent(
                     state = state,
-                    modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    modifier = messagesModifier,
                     onContentClick = ::onContentClick,
                     onMessageLongClick = ::onMessageLongClick,
                     onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
