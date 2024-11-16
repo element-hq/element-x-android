@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -75,6 +76,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
+import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -89,6 +91,7 @@ import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
+import org.matrix.rustcomponents.sdk.LiveLocationShare as RustLiveLocationShare
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -151,6 +154,28 @@ class RustMatrixRoom(
                         )
                     }
                 )
+            }
+        })
+    }
+
+    override val liveLocationShareFlow: Flow<List<LiveLocationShare>> = mxCallbackFlow {
+        val initial = emptyList<LiveLocationShare>()
+        channel.trySend(initial)
+        innerRoom.subscribeToLiveLocationShares(object : LiveLocationShareListener {
+            override fun call(liveLocationShares: List<RustLiveLocationShare>) {
+                println(liveLocationShares)
+                try {
+                    channel.trySend(
+                        liveLocationShares.map {
+                            LiveLocationShare(
+                                userId = UserId(it.userId),
+                                isLive = it.isLive,
+                            )
+                        }
+                    )
+                } catch (e: Exception) {
+                    throw e
+                }
             }
         })
     }

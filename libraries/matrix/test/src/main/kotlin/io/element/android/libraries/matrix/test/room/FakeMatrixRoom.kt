@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -160,6 +161,13 @@ class FakeMatrixRoom(
 
     fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
         _identityStateChangesFlow.tryEmit(identityStateChanges)
+    }
+
+    private val _liveLocationShareFlow: MutableSharedFlow<List<LiveLocationShare>> = MutableSharedFlow(replay = 1)
+    override val liveLocationShareFlow: Flow<List<LiveLocationShare>> = _liveLocationShareFlow
+
+    fun givenLiveLocationShares(liveLocationShares: List<LiveLocationShare>) {
+        _liveLocationShareFlow.tryEmit(liveLocationShares)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
