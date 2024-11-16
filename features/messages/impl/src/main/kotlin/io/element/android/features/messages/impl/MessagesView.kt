@@ -57,7 +57,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.maprealtime.impl.MapRealtimePresenterState
 import io.element.android.features.maprealtime.impl.MapRealtimeView
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
@@ -97,6 +96,8 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -221,7 +222,7 @@ fun MessagesView(
                         state = mapRealtimeState,
                         onBackPressed = onBackClick,
                         onJoinCallClick = onJoinCallClick,
-                        isCallOngoing = state.callState == RoomCallState.ONGOING,
+                        isCallOngoing = false,
                         onMessagesPressed = {
                             state.eventSink(MessagesEvents.ShowMapClicked)
                         })
@@ -558,24 +559,6 @@ private fun MapRealtimeMenuItem(
     // Create a button with a map icon
     IconButton(onClick = { onShowMapClick() }) {
         Icon(Icons.Outlined.Public, contentDescription = "Map description")
-    }
-}
-
-@Composable
-private fun CallMenuItem(
-    isCallOngoing: Boolean,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    if (isCallOngoing) {
-        JoinCallMenuItem(onJoinCallClick = onClick)
-    } else {
-        IconButton(onClick = onClick, enabled = enabled) {
-            Icon(
-                imageVector = CompoundIcons.VideoCallSolid(),
-                contentDescription = stringResource(CommonStrings.a11y_start_call),
-            )
-        }
     }
 }
 
