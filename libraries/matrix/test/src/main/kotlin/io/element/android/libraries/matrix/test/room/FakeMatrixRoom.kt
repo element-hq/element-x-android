@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -167,11 +168,19 @@ class FakeMatrixRoom(
         _identityStateChangesFlow.tryEmit(identityStateChanges)
     }
 
+<<<<<<< HEAD
     private val _knockRequestsFlow: MutableSharedFlow<List<KnockRequest>> = MutableSharedFlow(replay = 1)
     override val knockRequestsFlow: Flow<List<KnockRequest>> = _knockRequestsFlow
 
     fun emitKnockRequests(knockRequests: List<KnockRequest>) {
         _knockRequestsFlow.tryEmit(knockRequests)
+=======
+    private val _liveLocationShareFlow: MutableSharedFlow<List<LiveLocationShare>> = MutableSharedFlow(replay = 1)
+    override val liveLocationShareFlow: Flow<List<LiveLocationShare>> = _liveLocationShareFlow
+
+    fun givenLiveLocationShares(liveLocationShares: List<LiveLocationShare>) {
+        _liveLocationShareFlow.tryEmit(liveLocationShares)
+>>>>>>> c5e4f96dff (subscriber)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
