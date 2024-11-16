@@ -255,7 +255,7 @@ fun MessagesView(
                 MessagesViewContent(
                     state = state,
                     modifier = messagesModifier,
-                    onMessageClick = ::onMessageClick,
+                    onContentClick = ::onContentClick,
                     onMessageLongClick = ::onMessageLongClick,
                     onUserDataClick = onUserDataClick,
                     onLinkClick = onLinkClick,
