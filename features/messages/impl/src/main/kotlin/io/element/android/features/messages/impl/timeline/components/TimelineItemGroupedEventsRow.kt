@@ -61,7 +61,8 @@ fun TimelineItemGroupedEventsRow(
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
-                onContentClick = {},
+                onContentClick = null,
+                onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
         },
@@ -126,7 +127,8 @@ private fun TimelineItemGroupedEventsRowContent(
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
-                onContentClick = {},
+                onContentClick = null,
+                onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
         },
