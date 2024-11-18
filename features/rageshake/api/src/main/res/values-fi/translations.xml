@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?"</string>
+  <string name="rageshake_detection_dialog_content">"Näytät ravistelevan puhelinta turhautuneena. Haluatko avata vikailmoitusnäytön?"</string>
+  <string name="settings_rageshake">"Raivostunut ravistaminen"</string>
+  <string name="settings_rageshake_detection_threshold">"Havaitsemiskynnys"</string>
+</resources>

@@ -127,7 +127,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Utenti bloccati"</string>
   <string name="common_bubbles">"Fumetti"</string>
-  <string name="common_call_invite">"Chiamata in corso (non supportata)"</string>
   <string name="common_call_started">"Chiamata avviata"</string>
   <string name="common_chat_backup">"Backup della chat"</string>
   <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>

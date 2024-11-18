@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Suorita testit"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Suorita testit uudelleen"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Osa testeistä epäonnistui. Tarkista tiedot."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Suorita testit havaitaksesi konfiguraatiossasi olevat ongelmat, joiden vuoksi ilmoitukset eivät ehkä toimi odotetulla tavalla."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Yritä korjata"</string>
+  <string name="troubleshoot_notifications_screen_success">"Kaikki testit läpäistiin onnistuneesti."</string>
+  <string name="troubleshoot_notifications_screen_title">"Ilmoitusten vianmääritys"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Jotkin testit vaativat huomiotasi. Tarkista tiedot."</string>
+</resources>

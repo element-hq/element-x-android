@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Haluatko varmasti poistua keskustelusta? Tämä keskustelu ei ole julkinen ja et voi liittyä takaisin ilman kutsua."</string>
+  <string name="leave_room_alert_empty_subtitle">"Haluatko varmasti poistua huoneesta? Olet huoneen ainoa jäsen. Jos poistut, kukaan ei voi liittyä takaisin, et edes sinä."</string>
+  <string name="leave_room_alert_private_subtitle">"Haluatko varmasti poistua huoneesta? Tämä huone ei ole julkinen ja et voi liittyä takaisin ilman kutsua."</string>
+  <string name="leave_room_alert_subtitle">"Haluatko varmasti poistua huoneesta?"</string>
+</resources>

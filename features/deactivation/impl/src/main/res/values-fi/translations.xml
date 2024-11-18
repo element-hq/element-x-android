@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Vahvista, että haluat deaktivoida tilisi. Tätä ei voi perua."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Poista kaikki viestini"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Varoitus: Tulevaisuudessa muut voivat nähdä puutteellisia keskusteluja."</string>
+  <string name="screen_deactivate_account_description">"Tilisi deaktivointia %1$s. Jos teet sen:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"ei voi peruuttaa"</string>
+  <string name="screen_deactivate_account_list_item_1">"Tilisi %1$s (et voi kirjautua takaisin sisään, eikä tunnustasi voi käyttää uudelleen)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"poistetaan käytöstä pysyvästi"</string>
+  <string name="screen_deactivate_account_list_item_2">"Sinut poistetaan kaikista keskusteluhuoneista."</string>
+  <string name="screen_deactivate_account_list_item_3">"Tilitietosi poistetaan identiteettipalvelimeltamme."</string>
+  <string name="screen_deactivate_account_list_item_4">"Viestisi näkyvät edelleen rekisteröityneille käyttäjille, mutta ne eivät ole uusien tai rekisteröimättömien käyttäjien saatavilla, jos päätät poistaa ne."</string>
+  <string name="screen_deactivate_account_title">"Deaktivoi tili"</string>
+</resources>

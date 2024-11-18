@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"Käynnissä oleva puhelu"</string>
+  <string name="call_foreground_service_message_android">"Palaa puheluun napauttamalla"</string>
+  <string name="call_foreground_service_title_android">"☎️ Puhelu käynnissä"</string>
+  <string name="screen_incoming_call_subtitle_android">"Saapuva Element Call -puhelu"</string>
+</resources>

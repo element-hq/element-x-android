@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktiviteetit"</string>
+  <string name="emoji_picker_category_flags">"Liput"</string>
+  <string name="emoji_picker_category_foods">"Ruoka ja juoma"</string>
+  <string name="emoji_picker_category_nature">"Eläimet ja luonto"</string>
+  <string name="emoji_picker_category_objects">"Esineet"</string>
+  <string name="emoji_picker_category_people">"Hymiöt ja ihmiset"</string>
+  <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
+  <string name="emoji_picker_category_symbols">"Symbolit"</string>
+  <string name="screen_report_content_block_user">"Estä käyttäjä"</string>
+  <string name="screen_report_content_block_user_hint">"Valitse tämä, jos haluat piilottaa kaikki nykyiset ja tulevat viestit tältä käyttäjältä"</string>
+  <string name="screen_report_content_explanation">"Tämä viesti ilmoitetaan kotipalvelimesi ylläpitäjälle. Ylläpitäjä ei pysty lukemaan salattuja viestejä."</string>
+  <string name="screen_report_content_hint">"Syy tämän sisällön ilmoittamiseen"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Ota kuva"</string>
+  <string name="screen_room_attachment_source_camera_video">"Nauhoita video"</string>
+  <string name="screen_room_attachment_source_files">"Liite"</string>
+  <string name="screen_room_attachment_source_gallery">"Kuva- ja videokirjasto"</string>
+  <string name="screen_room_attachment_source_location">"Sijainti"</string>
+  <string name="screen_room_attachment_source_poll">"Kysely"</string>
+  <string name="screen_room_attachment_text_formatting">"Tekstin muotoilu"</string>
+  <string name="screen_room_encrypted_history_banner">"Viestihistoria ei ole tällä hetkellä saatavilla"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Viestihistoria ei ole käytettävissä tässä huoneessa. Vahvista tämä laite nähdäksesi viestihistoriasi."</string>
+  <string name="screen_room_invite_again_alert_message">"Haluatko kutsua heidät takaisin?"</string>
+  <string name="screen_room_invite_again_alert_title">"Olet yksin tässä keskustelussa"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Ilmoita koko huoneelle"</string>
+  <string name="screen_room_mentions_at_room_title">"Kaikki"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Lähetä uudelleen"</string>
+  <string name="screen_room_retry_send_menu_title">"Viestisi lähettäminen epäonnistui"</string>
+  <string name="screen_room_timeline_add_reaction">"Lisää emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Tämä on huoneen %1$s alku."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Tämä on tämän keskustelun alku."</string>
+  <string name="screen_room_timeline_less_reactions">"Näytä vähemmän"</string>
+  <string name="screen_room_timeline_message_copied">"Viesti kopioitu"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Sinulla ei ole oikeutta kirjoittaa tässä huoneessa"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Näytä vähemmän"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Näytä lisää"</string>
+  <string name="screen_room_timeline_read_marker_title">"Uusi"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d muutos huoneeseen"</item>
+    <item quantity="other">"%1$d muutosta huoneeseen"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s ja %3$d muu"</item>
+    <item quantity="other">"%1$s, %2$s ja %3$d muuta"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s kirjoittaa"</item>
+    <item quantity="other">"%1$s kirjoittavat"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s ja %2$s"</string>
+</resources>

@@ -131,7 +131,6 @@
   <string name="common_audio">"Zvuk"</string>
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
-  <string name="common_call_invite">"Probíhá hovor (nepodporováno)"</string>
   <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
@@ -251,6 +250,7 @@ Důvod: %1$s."</string>
   <string name="common_unable_to_invite_title">"Nelze odeslat pozvánky"</string>
   <string name="common_unlock">"Odemknout"</string>
   <string name="common_unmute">"Zrušit ztlumení"</string>
+  <string name="common_unsupported_call">"Nepodporované volání"</string>
   <string name="common_unsupported_event">"Nepodporovaná událost"</string>
   <string name="common_username">"Uživatelské jméno"</string>
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
@@ -295,6 +295,7 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmítnout a vykázat"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
@@ -317,12 +318,22 @@ Důvod: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
   <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
+  <string name="screen_room_details_requests_to_join_title">"Žádosti o vstup"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d další chce vstoupit do této místnosti"</item>
+    <item quantity="few">"%1$s +%2$d další chtějí vstoupit do této místnosti"</item>
+    <item quantity="other">"%1$s +%2$d dalších chce vstoupit do této místnosti"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Přijmout"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s chce vstoupit do této místnosti"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Zobrazit"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="call_foreground_service_channel_title_android">"Поточний дзвінок"</string>
-  <string name="call_foreground_service_message_android">"Натисніть, щоб повернутися до виклику"</string>
-  <string name="call_foreground_service_title_android">"☎️ Триває дзвінок"</string>
+  <string name="call_foreground_service_channel_title_android">"Поточний виклик"</string>
+  <string name="call_foreground_service_message_android">"Торкніться, щоб повернутися до виклику"</string>
+  <string name="call_foreground_service_title_android">"☎️ Триває виклик"</string>
+  <string name="screen_incoming_call_subtitle_android">"Вхідний виклик Element"</string>
 </resources>

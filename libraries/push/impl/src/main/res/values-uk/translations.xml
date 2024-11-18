@@ -3,7 +3,7 @@
   <string name="notification_channel_call">"Виклик"</string>
   <string name="notification_channel_listening_for_events">"Прослуховування подій"</string>
   <string name="notification_channel_noisy">"Гучні сповіщення"</string>
-  <string name="notification_channel_ringing_calls">"Дзвінки"</string>
+  <string name="notification_channel_ringing_calls">"Виклики"</string>
   <string name="notification_channel_silent">"Тихі сповіщення"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d повідомлення"</item>
@@ -16,8 +16,8 @@
     <item quantity="many">"%d сповіщень"</item>
   </plurals>
   <string name="notification_fallback_content">"Сповіщення"</string>
-  <string name="notification_incoming_call">"Вхідний дзвінок"</string>
-  <string name="notification_inline_reply_failed">"** Не вдалося надіслати - будь ласка, відкрийте кімнату"</string>
+  <string name="notification_incoming_call">"Вхідний виклик"</string>
+  <string name="notification_inline_reply_failed">"** Не вдалося надіслати - відкрийте кімнату"</string>
   <string name="notification_invitation_action_join">"Доєднатися"</string>
   <string name="notification_invitation_action_reject">"Відхилити"</string>
   <plurals name="notification_invitations">
@@ -25,25 +25,28 @@
     <item quantity="few">"%d запрошення"</item>
     <item quantity="many">"%d запрошень"</item>
   </plurals>
-  <string name="notification_invite_body">"Запросив (-ла) Вас до чату"</string>
-  <string name="notification_mentioned_you_body">"Згадав(-ла) вас: %1$s"</string>
+  <string name="notification_invite_body">"Запрошує вас до бесіди"</string>
+  <string name="notification_invite_body_with_sender">"%1$s запросив вас до чату"</string>
+  <string name="notification_mentioned_you_body">"Вас згадує: %1$s"</string>
   <string name="notification_new_messages">"Нові повідомлення"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d нове повідомлення"</item>
-    <item quantity="few">"%d нових повідомлень"</item>
+    <item quantity="few">"%d нові повідомлення"</item>
     <item quantity="many">"%d нових повідомлень"</item>
   </plurals>
-  <string name="notification_reaction_body">"Відреагував (-ла) з %1$s"</string>
+  <string name="notification_reaction_body">"Реагує з %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Позначити прочитаним"</string>
   <string name="notification_room_action_quick_reply">"Швидка відповідь"</string>
-  <string name="notification_room_invite_body">"Запросив (-ла) Вас приєднатися до кімнати"</string>
+  <string name="notification_room_invite_body">"Запрошує вас приєднатися до кімнати"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s запросив вас приєднатися до кімнати"</string>
   <string name="notification_sender_me">"Я"</string>
+  <string name="notification_sender_mention_reply">"%1$s згадували або відповідали"</string>
   <string name="notification_test_push_notification_content">"Ви переглядаєте сповіщення! Натисніть тут!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d непрочитане сповіщення"</item>
-    <item quantity="few">"%d непрочитаних сповіщень"</item>
+    <item quantity="few">"%d непрочитані сповіщення"</item>
     <item quantity="many">"%d непрочитаних сповіщень"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s та %2$s"</string>
@@ -58,26 +61,28 @@
   <string name="push_distributor_firebase_android">"Сервіси Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не знайдено дійсних сервісів Google Play. Сповіщення можуть не працювати належним чином."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Отримує назву поточного постачальника."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Постачальників push-сповіщень не обрано."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Постачальників push-сповіщень не вибрано."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Поточний постачальник: %1$s."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_title">"Поточний провайдер push"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Переконайтеся, що програма має принаймні один push провайдер."</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Не знайдено постачальників push-повідомлень."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Поточний постачальник push-сповіщень"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Переконайтеся, що застосунок має принаймні одного постачальника push-сповіщень."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Не знайдено постачальників push-сповіщень."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="one">"Виявлено %1$d постачальника: %2$s"</item>
-    <item quantity="few">"Виявлено %1$d постачальників: %2$s"</item>
+    <item quantity="few">"Виявлено %1$d постачальники: %2$s"</item>
     <item quantity="many">"Виявлено %1$d постачальників: %2$s"</item>
   </plurals>
-  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Виявлення push-провайдерів"</string>
-  <string name="troubleshoot_notifications_test_display_notification_description">"Перевірте, чи може програма відображати сповіщення."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Виявлення постачальників push-сповіщень"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Перевірте, чи може застосунок показувати сповіщення."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Ви не натиснули на сповіщення."</string>
-  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не вдається відобразити сповіщення."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не вдається показати сповіщення."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Ви натиснули на сповіщення!"</string>
-  <string name="troubleshoot_notifications_test_display_notification_title">"Відображення сповіщення"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Будь ласка, натисніть на сповіщення, щоб продовжити тест."</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Показ сповіщення"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Натисніть на сповіщення, щоб продовжити тест."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Переконується, що застосунок отримує push-сповіщення."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Помилка: постачальник push-сповіщень відхилив запит."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Помилка: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Помилка, неможливо перевірити push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Помилка, час очікування вийшов на push-повідомлення."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Зворотнє відправлення push-повідомлення, зайняло %1$d мс."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Перевірка зворотного надсилання"</string>
 </resources>

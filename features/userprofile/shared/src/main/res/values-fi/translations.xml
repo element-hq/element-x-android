@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Estä"</string>
+  <string name="screen_dm_details_block_alert_description">"Estetyt käyttäjät eivät voi lähettää sinulle viestejä ja kaikki heidän viestit piilotetaan. Voit poistaa eston milloin tahansa."</string>
+  <string name="screen_dm_details_block_user">"Estä käyttäjä"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Poista esto"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Näet jälleen kaikki heidän lähettämänsä viestit."</string>
+  <string name="screen_dm_details_unblock_user">"Poista käyttäjän esto"</string>
+  <string name="screen_room_member_details_block_alert_action">"Estä"</string>
+  <string name="screen_room_member_details_block_alert_description">"Estetyt käyttäjät eivät voi lähettää sinulle viestejä ja kaikki heidän viestit piilotetaan. Voit poistaa eston milloin tahansa."</string>
+  <string name="screen_room_member_details_block_user">"Estä käyttäjä"</string>
+  <string name="screen_room_member_details_title">"Profiili"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Poista esto"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Näet jälleen kaikki heidän lähettämänsä viestit."</string>
+  <string name="screen_room_member_details_unblock_user">"Poista käyttäjän esto"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Vahvista tämä käyttäjä verkkosovelluksen avulla."</string>
+  <string name="screen_room_member_details_verify_button_title">"Vahvista %1$s"</string>
+  <string name="screen_start_chat_error_starting_chat">"Keskustelun aloituksessa tapahtui virhe"</string>
+</resources>
