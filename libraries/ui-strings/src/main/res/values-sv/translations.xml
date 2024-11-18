@@ -123,7 +123,6 @@
   <string name="common_audio">"Ljud"</string>
   <string name="common_blocked_users">"Blockerade användare"</string>
   <string name="common_bubbles">"Bubblor"</string>
-  <string name="common_call_invite">"Samtal pågår (stöds inte)"</string>
   <string name="common_call_started">"Samtal startat"</string>
   <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copyright">"Upphovsrätt"</string>

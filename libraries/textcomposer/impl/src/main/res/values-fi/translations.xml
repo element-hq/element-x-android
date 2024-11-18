@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Lisää liite"</string>
+  <string name="rich_text_editor_bullet_list">"Numeroimaton luettelo päälle/pois"</string>
+  <string name="rich_text_editor_close_formatting_options">"Sulje muotoiluasetukset"</string>
+  <string name="rich_text_editor_code_block">"Koodilohko päälle/pois"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Valinnainen kuvateksti…"</string>
+  <string name="rich_text_editor_composer_placeholder">"Viesti…"</string>
+  <string name="rich_text_editor_create_link">"Luo linkki"</string>
+  <string name="rich_text_editor_edit_link">"Muokkaa linkkiä"</string>
+  <string name="rich_text_editor_format_bold">"Käytä lihavoitua muotoa"</string>
+  <string name="rich_text_editor_format_italic">"Käytä kursiivimuotoa"</string>
+  <string name="rich_text_editor_format_strikethrough">"Käytä yliviivausmuotoa"</string>
+  <string name="rich_text_editor_format_underline">"Käytä alleviivausmuotoa"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Koko näytön tila päälle/pois"</string>
+  <string name="rich_text_editor_indent">"Sisennä"</string>
+  <string name="rich_text_editor_inline_code">"Käytä rivinsisäistä koodimuotoa"</string>
+  <string name="rich_text_editor_link">"Aseta linkki"</string>
+  <string name="rich_text_editor_numbered_list">"Numeroitu luettelo päälle/pois"</string>
+  <string name="rich_text_editor_open_compose_options">"Avaa kirjoitusvaihtoehdot"</string>
+  <string name="rich_text_editor_quote">"Lainaus päälle/pois"</string>
+  <string name="rich_text_editor_remove_link">"Poista linkki"</string>
+  <string name="rich_text_editor_unindent">"Poista sisennys"</string>
+  <string name="rich_text_editor_url_placeholder">"Linkki"</string>
+  <string name="screen_room_voice_message_tooltip">"Pidä pohjassa nauhoittaaksesi"</string>
+</resources>

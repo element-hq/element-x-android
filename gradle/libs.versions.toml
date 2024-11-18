@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.7.2"
 kotlin = "2.0.21"
 kotlinpoet = "2.0.0"
-ksp = "2.0.21-1.0.27"
+ksp = "2.0.21-1.0.28"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -77,7 +77,7 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.5.1"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.6.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -154,7 +154,7 @@ test_konsist = "com.lemonappdev:konsist:0.16.1"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
-test_robolectric = "org.robolectric:robolectric:4.13"
+test_robolectric = "org.robolectric:robolectric:4.14"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2"
 

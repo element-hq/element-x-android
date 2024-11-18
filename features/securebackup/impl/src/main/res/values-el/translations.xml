@@ -6,7 +6,7 @@
   <string name="screen_chat_backup_key_backup_title">"Χώρος αποθήκευσης κλειδιού"</string>
   <string name="screen_chat_backup_recovery_action_change">"Αλλαγή κλειδιού ανάκτησης"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Εισαγωγή κλειδιού ανάκτησης"</string>
-  <string name="screen_chat_backup_recovery_action_confirm_description">"Το αντίγραφο ασφαλείας της συνομιλίας σου δεν είναι συγχρονισμένο αυτήν τη στιγμή."</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Ο αποθηκευτικός χώρος κλειδιών σου δεν είναι συγχρονισμένος αυτήν τη στιγμή."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ρύθμιση ανάκτησης"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Απόκτησε πρόσβαση στα κρυπτογραφημένα σου μηνύματα εάν χάσεις όλες τις συσκευές σου ή έχεις αποσυνδεθεί από το %1$s παντού."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Άνοιγμα %1$s σε συσκευή υπολογιστή"</string>
@@ -36,7 +36,7 @@
   <string name="screen_recovery_key_change_title">"Αλλαγή κλειδιού ανάκτησης;"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
   <string name="screen_recovery_key_confirm_description">"Βεβαιώσου ότι κανείς δεν μπορεί να δει αυτήν την οθόνη!"</string>
-  <string name="screen_recovery_key_confirm_error_content">"Προσπάθησε ξανά για να επιβεβαιώσεις την πρόσβαση στο αντίγραφο ασφαλείας της συνομιλίας σου."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Προσπάθησε ξανά για να επιβεβαιώσεις την πρόσβαση στον αποθηκευτικό χώρο κλειδιών σου."</string>
   <string name="screen_recovery_key_confirm_error_title">"Λανθασμένο κλειδί ανάκτησης"</string>
   <string name="screen_recovery_key_confirm_key_description">"Εάν έχεις ένα κλειδί ασφαλείας ή μια φράση ασφαλείας, θα λειτουργήσει επίσης."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Εισαγωγή…"</string>

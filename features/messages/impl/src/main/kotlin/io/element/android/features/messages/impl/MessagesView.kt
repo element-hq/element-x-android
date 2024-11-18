@@ -142,6 +142,11 @@ fun MessagesView(
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
 
+    fun hidingKeyboard(block: () -> Unit) {
+        localView.hideKeyboard()
+        block()
+    }
+
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
         val hideKeyboard = onEventContentClick(event)
@@ -152,13 +157,14 @@ fun MessagesView(
 
     fun onMessageLongClick(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
-        localView.hideKeyboard()
-        state.actionListState.eventSink(
-            ActionListEvents.ComputeForMessage(
-                event = event,
-                userEventPermissions = state.userEventPermissions,
+        hidingKeyboard {
+            state.actionListState.eventSink(
+                ActionListEvents.ComputeForMessage(
+                    event = event,
+                    userEventPermissions = state.userEventPermissions,
+                )
             )
-        )
+        }
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -189,13 +195,8 @@ fun MessagesView(
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
-                    onBackClick = {
-                        // Since the textfield is now based on an Android view, this is no longer done automatically.
-                        // We need to hide the keyboard when navigating out of this screen.
-                        localView.hideKeyboard()
-                        onBackClick()
-                    },
-                    onRoomDetailsClick = onRoomDetailsClick,
+                    onBackClick = { hidingKeyboard { onBackClick() } },
+                    onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
                 )
             }
@@ -208,7 +209,7 @@ fun MessagesView(
                     .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
-                onUserDataClick = onUserDataClick,
+                onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
                 onLinkClick = onLinkClick,
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,

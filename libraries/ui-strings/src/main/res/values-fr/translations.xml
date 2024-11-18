@@ -129,7 +129,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
-  <string name="common_call_invite">"Appel en cours (non supporté)"</string>
   <string name="common_call_started">"Appel démarré"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
