@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.7.2"
 kotlin = "2.0.21"
 kotlinpoet = "2.0.0"
-ksp = "2.0.21-1.0.27"
+ksp = "2.0.21-1.0.28"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
