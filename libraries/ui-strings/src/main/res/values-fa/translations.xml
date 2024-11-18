@@ -120,7 +120,6 @@
   <string name="common_audio">"صدا"</string>
   <string name="common_blocked_users">"کاربران مسدود"</string>
   <string name="common_bubbles">"حباب‌ها"</string>
-  <string name="common_call_invite">"تماس در جریان (پشتیبانی نشده)"</string>
   <string name="common_call_started">"تماس آغاز شد"</string>
   <string name="common_chat_backup">"پشتیبان گپ"</string>
   <string name="common_copied_to_clipboard">"در تخته‌گیره رونوشت شد"</string>

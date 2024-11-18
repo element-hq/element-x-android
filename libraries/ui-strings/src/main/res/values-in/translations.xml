@@ -127,7 +127,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Pengguna yang diblokir"</string>
   <string name="common_bubbles">"Gelembung"</string>
-  <string name="common_call_invite">"Panggilan sedang berjalan (tidak didukung)"</string>
   <string name="common_call_started">"Panggilan dimulai"</string>
   <string name="common_chat_backup">"Pencadangan percakapan"</string>
   <string name="common_copied_to_clipboard">"Disalin ke papan klip"</string>

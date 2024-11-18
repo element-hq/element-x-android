@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Перемкнути маркований список"</string>
   <string name="rich_text_editor_close_formatting_options">"Закрити параметри форматування"</string>
   <string name="rich_text_editor_code_block">"Перемкнути блок коду"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Необов\'язковий підпис…"</string>
   <string name="rich_text_editor_composer_placeholder">"Повідомлення…"</string>
   <string name="rich_text_editor_create_link">"Створити посилання"</string>
   <string name="rich_text_editor_edit_link">"Редагувати посилання"</string>
@@ -21,5 +22,5 @@
   <string name="rich_text_editor_remove_link">"Видалити посилання"</string>
   <string name="rich_text_editor_unindent">"Без відступу"</string>
   <string name="rich_text_editor_url_placeholder">"Посилання"</string>
-  <string name="screen_room_voice_message_tooltip">"Тримати, щоб записати"</string>
+  <string name="screen_room_voice_message_tooltip">"Затисніть, щоб записати"</string>
 </resources>

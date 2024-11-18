@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Olet vaihtanut salasanasi toisessa istunnossa"</string>
+  <string name="screen_signed_out_reason_2">"Olet poistanut istunnon toisesta istunnosta"</string>
+  <string name="screen_signed_out_reason_3">"Palvelimesi ylläpitäjä on mitätöinyt käyttöoikeutesi"</string>
+  <string name="screen_signed_out_subtitle">"Sinut on saatettu kirjata ulos jostakin alla luetellusta syystä. Kirjaudu uudelleen sisään jatkaaksesi %s -sovelluksen käyttöä."</string>
+  <string name="screen_signed_out_title">"Sinut on kirjattu ulos"</string>
+</resources>

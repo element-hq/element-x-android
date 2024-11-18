@@ -124,7 +124,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Blockierte Nutzer"</string>
   <string name="common_bubbles">"Sprechblasen"</string>
-  <string name="common_call_invite">"Aktiver Anruf (nicht unterstützt)"</string>
   <string name="common_call_started">"Aufruf gestartet"</string>
   <string name="common_chat_backup">"Chat-Backup"</string>
   <string name="common_copyright">"Copyright"</string>

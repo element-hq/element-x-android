@@ -116,7 +116,6 @@
   <string name="common_audio">"Sonido"</string>
   <string name="common_blocked_users">"Usuarios bloqueados"</string>
   <string name="common_bubbles">"Burbujas"</string>
-  <string name="common_call_invite">"Llamada en curso (no admitida)"</string>
   <string name="common_chat_backup">"Copia de seguridad del chat"</string>
   <string name="common_copyright">"Derechos de autor"</string>
   <string name="common_creating_room">"Creando sala…"</string>

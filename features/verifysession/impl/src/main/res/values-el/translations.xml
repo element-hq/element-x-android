@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Σύγκριση αριθμών"</string>
   <string name="screen_session_verification_complete_subtitle">"Η νέα σου συνεδρία έχει πλέον επαληθευτεί. Έχει πρόσβαση στα κρυπτογραφημένα μηνύματά σας και άλλοι χρήστες θα το βλέπουν ως αξιόπιστο."</string>
   <string name="screen_session_verification_enter_recovery_key">"Εισαγωγή κλειδιού ανάκτησης"</string>
+  <string name="screen_session_verification_failed_subtitle">"Είτε το αίτημα έληξε είτε απορρίφθηκε είτε υπήρξε αναντιστοιχία επαλήθευσης."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Απέδειξε ότι είσαι εσύ για να αποκτήσεις πρόσβαση στο κρυπτογραφημένο ιστορικό μηνυμάτων σου."</string>
   <string name="screen_session_verification_open_existing_session_title">"Άνοιξε μια υπάρχουσα συνεδρία"</string>
   <string name="screen_session_verification_positive_button_canceled">"Επανάληψη επαλήθευσης"</string>
@@ -24,6 +25,10 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Αναμονή για αντιστοίχιση"</string>
   <string name="screen_session_verification_ready_subtitle">"Σύγκρινε ένα μοναδικό σύνολο emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Σύγκρινε τα μοναδικά emoji και σιγουρέψου ότι εμφανίζονται με την ίδια σειρά."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Έχεις συνδεθεί"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"Είτε το αίτημα έληξε είτε απορρίφθηκε είτε υπήρξε αναντιστοιχία επαλήθευσης."</string>
+  <string name="screen_session_verification_request_footer">"Συνέχισε μόνο εάν ξεκίνησες εσύ αυτήν την επαλήθευση."</string>
+  <string name="screen_session_verification_request_subtitle">"Επαλήθευσε την άλλη συσκευή για να διατηρήσεις το ιστορικό μηνυμάτων σου ασφαλές."</string>
   <string name="screen_session_verification_request_title">"Ζητήθηκε επαλήθευση"</string>
   <string name="screen_session_verification_they_dont_match">"Δεν ταιριάζουν"</string>
   <string name="screen_session_verification_they_match">"Ταιριάζουν"</string>

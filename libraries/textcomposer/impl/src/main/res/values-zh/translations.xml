@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"切换符号列表"</string>
   <string name="rich_text_editor_close_formatting_options">"关闭格式化选项"</string>
   <string name="rich_text_editor_code_block">"切换代码块"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"可选的标题……"</string>
   <string name="rich_text_editor_composer_placeholder">"消息…"</string>
   <string name="rich_text_editor_create_link">"创建链接"</string>
   <string name="rich_text_editor_edit_link">"编辑链接"</string>
