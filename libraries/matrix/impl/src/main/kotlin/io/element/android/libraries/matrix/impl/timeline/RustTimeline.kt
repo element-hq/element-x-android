@@ -373,29 +373,44 @@ class RustTimeline(
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
         val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 url = file.path,
                 audioInfo = audioInfo.map(),
-                // Maybe allow a caption in the future?
-                caption = null,
-                formattedCaption = null,
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
                 useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
         val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 url = file.path,
                 fileInfo = fileInfo.map(),
-                caption = null,
-                formattedCaption = null,
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
                 useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher(),
             )

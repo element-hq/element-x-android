@@ -173,36 +173,48 @@ class FakeTimeline(
     var sendAudioLambda: (
         file: File,
         audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _ ->
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
     override suspend fun sendAudio(
         file: File,
         audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> = sendAudioLambda(
         file,
         audioInfo,
+        caption,
+        formattedCaption,
         progressCallback
     )
 
     var sendFileLambda: (
         file: File,
         fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _ ->
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
     override suspend fun sendFile(
         file: File,
         fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> = sendFileLambda(
         file,
         fileInfo,
+        caption,
+        formattedCaption,
         progressCallback
     )
 

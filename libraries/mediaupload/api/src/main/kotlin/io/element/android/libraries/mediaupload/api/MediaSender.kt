@@ -125,6 +125,8 @@ class MediaSender @Inject constructor(
                 sendAudio(
                     file = uploadInfo.file,
                     audioInfo = uploadInfo.audioInfo,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -140,6 +142,8 @@ class MediaSender @Inject constructor(
                 sendFile(
                     file = uploadInfo.file,
                     fileInfo = uploadInfo.fileInfo,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }

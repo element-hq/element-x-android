@@ -147,9 +147,21 @@ interface MatrixRoom : Closeable {
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler>
 
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
 

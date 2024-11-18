@@ -467,12 +467,36 @@ class RustMatrixRoom(
         return liveTimeline.sendVideo(file, thumbnailFile, videoInfo, caption, formattedCaption, progressCallback)
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
-        return liveTimeline.sendAudio(file, audioInfo, progressCallback)
+    override suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return liveTimeline.sendAudio(
+            file = file,
+            audioInfo = audioInfo,
+            caption = caption,
+            formattedCaption = formattedCaption,
+            progressCallback = progressCallback,
+        )
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
-        return liveTimeline.sendFile(file, fileInfo, progressCallback)
+    override suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return liveTimeline.sendFile(
+            file,
+            fileInfo,
+            caption,
+            formattedCaption,
+            progressCallback,
+        )
     }
 
     override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> {

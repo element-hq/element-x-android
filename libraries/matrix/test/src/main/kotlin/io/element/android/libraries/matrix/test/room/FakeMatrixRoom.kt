@@ -92,10 +92,10 @@ class FakeMatrixRoom(
         { _, _, _, _, _, _ -> lambdaError() },
     private val sendVideoResult: (File, File?, VideoInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
         { _, _, _, _, _, _ -> lambdaError() },
-    private val sendFileResult: (File, FileInfo, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _ -> lambdaError() },
-    private val sendAudioResult: (File, AudioInfo, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _ -> lambdaError() },
+    private val sendFileResult: (File, FileInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
+        { _, _, _, _, _ -> lambdaError() },
+    private val sendAudioResult: (File, AudioInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
+        { _, _, _, _, _ -> lambdaError() },
     private val sendVoiceMessageResult: (File, AudioInfo, List<Float>, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
         { _, _, _, _ -> lambdaError() },
     private val setNameResult: (String) -> Result<Unit> = { lambdaError() },
@@ -354,12 +354,16 @@ class FakeMatrixRoom(
     override suspend fun sendAudio(
         file: File,
         audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendAudioResult(
             file,
             audioInfo,
+            caption,
+            formattedCaption,
             progressCallback,
         )
     }
@@ -367,12 +371,16 @@ class FakeMatrixRoom(
     override suspend fun sendFile(
         file: File,
         fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendFileResult(
             file,
             fileInfo,
+            caption,
+            formattedCaption,
             progressCallback,
         )
     }
