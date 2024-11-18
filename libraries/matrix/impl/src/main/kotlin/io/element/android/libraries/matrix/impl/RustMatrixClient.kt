@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -616,9 +617,13 @@ class RustMatrixClient(
             .distinctUntilChanged()
     }
 
-    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
-        Timber.i("setAllSendQueuesEnabled($enabled)")
-        client.enableAllSendQueues(enabled)
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) {
+        withContext(sessionDispatcher) {
+            Timber.i("setAllSendQueuesEnabled($enabled)")
+            tryOrNull {
+                client.enableAllSendQueues(enabled)
+            }
+        }
     }
 
     override fun sendQueueDisabledFlow(): Flow<RoomId> = mxCallbackFlow {
