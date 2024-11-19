@@ -121,19 +121,25 @@ fun TextComposer(
     }
 
     val layoutModifier = modifier
-        .fillMaxSize()
-        .height(IntrinsicSize.Min)
+            .fillMaxSize()
+            .height(IntrinsicSize.Min)
 
-    val composerOptionsButton: @Composable () -> Unit = remember {
+    val composerOptionsButton: @Composable () -> Unit = remember(composerMode) {
         @Composable {
-            if (composerMode is MessageComposerMode.Attachment) {
-                Spacer(modifier = Modifier.width(9.dp))
-            } else {
-                ComposerOptionsButton(
-                    modifier = Modifier
-                        .size(48.dp),
-                    onClick = onAddAttachment
-                )
+            when (composerMode) {
+                is MessageComposerMode.Attachment -> {
+                    Spacer(modifier = Modifier.width(9.dp))
+                }
+                is MessageComposerMode.EditCaption -> {
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+                else -> {
+                    ComposerOptionsButton(
+                        modifier = Modifier
+                            .size(48.dp),
+                        onClick = onAddAttachment
+                    )
+                }
             }
         }
     }
@@ -331,8 +337,8 @@ private fun StandardLayout(
             if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                        .size(48.dp),
+                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                            .size(48.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     voiceDeleteButton()
@@ -342,8 +348,8 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                    .padding(bottom = 8.dp, top = 8.dp)
-                    .weight(1f)
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
             ) {
                 voiceRecording()
             }
@@ -356,16 +362,16 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                    .padding(bottom = 8.dp, top = 8.dp)
-                    .weight(1f)
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
             ) {
                 textInput()
             }
         }
         Box(
-            Modifier
-                .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                .size(48.dp),
+                Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                        .size(48.dp),
             contentAlignment = Alignment.Center,
         ) {
             endButton()
@@ -387,8 +393,8 @@ private fun TextFormattingLayout(
     ) {
         Box(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp)
+                    .weight(1f)
+                    .padding(horizontal = 12.dp)
         ) {
             textInput()
         }
@@ -432,11 +438,11 @@ private fun TextInputBox(
 
     Column(
         modifier = Modifier
-            .clip(roundedCorners)
-            .border(0.5.dp, borderColor, roundedCorners)
-            .background(color = bgColor)
-            .requiredHeightIn(min = 42.dp)
-            .fillMaxSize(),
+                .clip(roundedCorners)
+                .border(0.5.dp, borderColor, roundedCorners)
+                .background(color = bgColor)
+                .requiredHeightIn(min = 42.dp)
+                .fillMaxSize(),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -447,9 +453,9 @@ private fun TextInputBox(
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                    // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
+                    .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
@@ -495,8 +501,8 @@ private fun TextInput(
             // This prevents it gaining focus and mutating the state.
             registerStateUpdates = !subcomposing,
             modifier = Modifier
-                .padding(top = 6.dp, bottom = 6.dp)
-                .fillMaxWidth(),
+                    .padding(top = 6.dp, bottom = 6.dp)
+                    .fillMaxWidth(),
             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveRoomMentionDisplay = resolveRoomMentionDisplay,
@@ -569,6 +575,40 @@ internal fun TextComposerEditPreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEdit(),
             enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerEditCaptionPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeEditCaption(
+                content = "A caption",
+            ),
+            enableVoiceMessages = false,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerAddCaptionPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeEditCaption(
+                content = "",
+            ),
+            enableVoiceMessages = false,
         )
     }
 }
@@ -713,6 +753,14 @@ fun aMessageComposerModeEdit(
     eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
     content: String = "Some text",
 ) = MessageComposerMode.Edit(
+    eventOrTransactionId = eventOrTransactionId,
+    content = content
+)
+
+fun aMessageComposerModeEditCaption(
+    eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
+    content: String = "Some caption",
+) = MessageComposerMode.EditCaption(
     eventOrTransactionId = eventOrTransactionId,
     content = content
 )

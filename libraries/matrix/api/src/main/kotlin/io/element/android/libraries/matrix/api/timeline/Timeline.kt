@@ -59,8 +59,15 @@ interface Timeline : AutoCloseable {
 
     suspend fun editMessage(
         eventOrTransactionId: EventOrTransactionId,
-        body: String, htmlBody: String?,
+        body: String,
+        htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
+
+    suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
     ): Result<Unit>
 
     suspend fun replyMessage(

@@ -254,7 +254,7 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                    if (messageComposerContext.composerMode.isEditing) {
                         localCoroutineScope.launch {
                             resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = true)
                         }
@@ -431,7 +431,15 @@ class MessageComposerPresenter @Inject constructor(
                         }
                 }
             }
-
+            is MessageComposerMode.EditCaption -> {
+                timelineController.invokeOnCurrentTimeline {
+                    editCaption(
+                        capturedMode.eventOrTransactionId,
+                        caption = message.markdown,
+                        formattedCaption = message.html
+                    )
+                }
+            }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
                     replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
@@ -570,6 +578,10 @@ class MessageComposerPresenter @Inject constructor(
                 mode.eventOrTransactionId.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
             }
             is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+            is MessageComposerMode.EditCaption -> {
+                // TODO Need a new type to save caption in the SDK
+                null
+            }
         }
         return if (draftType == null || message.markdown.isBlank()) {
             null
@@ -644,7 +656,14 @@ class MessageComposerPresenter @Inject constructor(
         val currentComposerMode = messageComposerContext.composerMode
         when (newComposerMode) {
             is MessageComposerMode.Edit -> {
-                if (currentComposerMode !is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing.not()) {
+                    val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
+                    updateDraft(draft, isVolatile = true).join()
+                }
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+            }
+            is MessageComposerMode.EditCaption -> {
+                if (currentComposerMode.isEditing.not()) {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     updateDraft(draft, isVolatile = true).join()
                 }
@@ -652,7 +671,7 @@ class MessageComposerPresenter @Inject constructor(
             }
             else -> {
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
-                if (currentComposerMode is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)
                 }
             }

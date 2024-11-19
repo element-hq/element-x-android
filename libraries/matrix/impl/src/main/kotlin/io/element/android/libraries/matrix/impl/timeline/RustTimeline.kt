@@ -295,22 +295,40 @@ class RustTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching<Unit> {
-                val editedContent = EditedContent.RoomMessage(
-                    content = MessageEventContent.from(
-                        body = body,
-                        htmlBody = htmlBody,
-                        intentionalMentions = intentionalMentions
-                    ),
-                )
-                inner.edit(
-                    newContent = editedContent,
-                    eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
-                )
-            }
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.RoomMessage(
+                content = MessageEventContent.from(
+                    body = body,
+                    htmlBody = htmlBody,
+                    intentionalMentions = intentionalMentions
+                ),
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
         }
+    }
+
+    override suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.MediaCaption(
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
+        }
+    }
 
     override suspend fun replyMessage(
         eventId: EventId,

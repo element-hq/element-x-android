@@ -47,6 +47,16 @@ internal fun ComposerModeView(
     when (composerMode) {
         is MessageComposerMode.Edit -> {
             EditingModeView(
+                text = stringResource(CommonStrings.common_editing),
+                modifier = modifier,
+                onResetComposerMode = onResetComposerMode,
+            )
+        }
+        is MessageComposerMode.EditCaption -> {
+            EditingModeView(
+                text = stringResource(
+                    if (composerMode.content.isEmpty()) CommonStrings.common_adding_caption else CommonStrings.common_editing_caption
+                ),
                 modifier = modifier,
                 onResetComposerMode = onResetComposerMode,
             )
@@ -65,6 +75,7 @@ internal fun ComposerModeView(
 @Composable
 private fun EditingModeView(
     onResetComposerMode: () -> Unit,
+    text: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -76,14 +87,14 @@ private fun EditingModeView(
     ) {
         Icon(
             imageVector = CompoundIcons.Edit(),
-            contentDescription = stringResource(CommonStrings.common_editing),
+            contentDescription = null,
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .size(16.dp),
         )
         Text(
-            stringResource(CommonStrings.common_editing),
+            text = text,
             style = ElementTheme.typography.fontBodySmRegular,
             textAlign = TextAlign.Start,
             color = ElementTheme.materialColors.secondary,

@@ -92,6 +92,24 @@ class FakeTimeline(
         intentionalMentions
     )
 
+    var editCaptionLambda: (
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
+    ) -> Result<Unit> = { _, _, _ ->
+        lambdaError()
+    }
+
+    override suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
+    ): Result<Unit> = editCaptionLambda(
+        eventOrTransactionId,
+        caption,
+        formattedCaption,
+    )
+
     var replyMessageLambda: (
         eventId: EventId,
         body: String,
