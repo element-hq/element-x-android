@@ -21,6 +21,7 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
             aRoomsContentState(summaries = persistentListOf()),
             aSkeletonContentState(),
             anEmptyContentState(),
+            anEmptyContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
             aRoomsContentState(securityBannerState = SecurityBannerState.NeedsNativeSlidingSyncMigration),
         )
 }
@@ -37,4 +38,8 @@ internal fun aRoomsContentState(
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)
 
-internal fun anEmptyContentState() = RoomListContentState.Empty
+internal fun anEmptyContentState(
+    securityBannerState: SecurityBannerState = SecurityBannerState.None,
+) = RoomListContentState.Empty(
+    securityBannerState = securityBannerState,
+)
