@@ -30,9 +30,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -58,7 +56,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -684,17 +681,8 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - Pick file from storage`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+    fun `present - Pick file from storage will open the preview`() = runTest {
         val room = FakeMatrixRoom(
-            progressCallbackValues = listOf(
-                Pair(0, 10),
-                Pair(5, 10),
-                Pair(10, 10)
-            ),
-            sendFileResult = sendFileResult,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
@@ -705,13 +693,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()
             assertThat(sendingState.showAttachmentSourcePicker).isFalse()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0f))
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0.5f))
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(1f))
-            val sentState = awaitItem()
-            assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
-            sendFileResult.assertions().isCalledOnce()
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
         }
     }
 
@@ -848,48 +830,6 @@ class MessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - Uploading media failure can be recovered from`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
-            Result.failure(Exception())
-        }
-        val room = FakeMatrixRoom(
-            sendFileResult = sendFileResult,
-            typingNoticeResult = { Result.success(Unit) }
-        )
-        val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            val sendingState = awaitItem()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
-            val finalState = awaitItem()
-            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
-            snackbarDispatcher.snackbarMessage.test {
-                // Assert error message received
-                assertThat(awaitItem()).isNotNull()
-            }
-        }
-    }
-
-    @Test
-    fun `present - CancelSendAttachment stops media upload`() = runTest {
-        val presenter = createPresenter(this)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            val sendingState = awaitItem()
-            assertThat(sendingState.showAttachmentSourcePicker).isFalse()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
-            sendingState.eventSink(MessageComposerEvents.CancelSendAttachment)
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.None)
         }
     }
 
