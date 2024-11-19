@@ -87,7 +87,7 @@ class MainActivity : NodeActivity() {
 
     @Composable
     private fun MainNodeHost() {
-        NodeHost(integrationPoint = appyxIntegrationPoint) {
+        NodeHost(integrationPoint = appyxV1IntegrationPoint) {
             MainNode(
                 it,
                 plugins = listOf(
