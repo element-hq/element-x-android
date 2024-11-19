@@ -99,8 +99,11 @@ class RustSessionVerificationService(
     init {
         // Instantiate the verification controller when possible, this is needed to get incoming verification requests
         sessionCoroutineScope.launch {
-            encryptionService.waitForE2eeInitializationTasks()
-            initVerificationControllerIfNeeded()
+            // Needed to avoid crashes on unit tests due to the Rust SDK not being available
+            tryOrNull {
+                encryptionService.waitForE2eeInitializationTasks()
+                initVerificationControllerIfNeeded()
+            }
         }
     }
 
