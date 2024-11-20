@@ -13,25 +13,23 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.mediapickers.api.ComposePickerLauncher
 import io.element.android.libraries.mediapickers.api.NoOpPickerLauncher
 import io.element.android.libraries.mediapickers.api.PickerLauncher
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
-    @Inject
-    constructor() : this(false)
-
+class DefaultPickerProvider @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : PickerProvider {
     /**
      * Remembers and returns a [PickerLauncher] for a certain media/file [type].
      */
@@ -40,7 +38,7 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
         type: PickerType<Input, Output>,
         onResult: (Output) -> Unit,
     ): PickerLauncher<Input, Output> {
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { }
         } else {
             val contract = type.getContract()
@@ -56,7 +54,7 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
     @Composable
     override fun registerGalleryImagePicker(onResult: (Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
         // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { onResult(null) }
         } else {
             rememberPickerLauncher(type = PickerType.Image) { uri -> onResult(uri) }
@@ -72,10 +70,9 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
         onResult: (uri: Uri?, mimeType: String?) -> Unit
     ): PickerLauncher<PickVisualMediaRequest, Uri?> {
         // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { onResult(null, null) }
         } else {
-            val context = LocalContext.current
             rememberPickerLauncher(type = PickerType.ImageAndVideo) { uri ->
                 val mimeType = uri?.let { context.contentResolver.getType(it) }
                 onResult(uri, mimeType)
@@ -93,7 +90,7 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
         onResult: (Uri?) -> Unit,
     ): PickerLauncher<String, Uri?> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { onResult(null) }
         } else {
             rememberPickerLauncher(type = PickerType.File(mimeType)) { uri -> onResult(uri) }
@@ -107,12 +104,11 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
     @Composable
     override fun registerCameraPhotoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { onResult(null) }
         } else {
-            val context = LocalContext.current
-            val tmpFile = remember { getTemporaryFile(context) }
-            val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
+            val tmpFile = remember { getTemporaryFile("photo.jpg") }
+            val tmpFileUri = remember(tmpFile) { getTemporaryUri(tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Photo(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
@@ -127,12 +123,11 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
     @Composable
     override fun registerCameraVideoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
-        return if (LocalInspectionMode.current || isInTest) {
+        return if (LocalInspectionMode.current) {
             NoOpPickerLauncher { onResult(null) }
         } else {
-            val context = LocalContext.current
-            val tmpFile = remember { getTemporaryFile(context) }
-            val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
+            val tmpFile = remember { getTemporaryFile("video.mp4") }
+            val tmpFileUri = remember(tmpFile) { getTemporaryUri(tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Video(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
@@ -141,15 +136,12 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
     }
 
     private fun getTemporaryFile(
-        context: Context,
-        baseFolder: File = context.cacheDir,
-        filename: String = UUID.randomUUID().toString(),
+        filename: String,
     ): File {
-        return File(baseFolder, filename)
+        return File(context.cacheDir, filename)
     }
 
     private fun getTemporaryUri(
-        context: Context,
         file: File,
     ): Uri {
         val authority = "${context.packageName}.fileprovider"
