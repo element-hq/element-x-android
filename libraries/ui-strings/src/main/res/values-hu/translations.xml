@@ -129,7 +129,6 @@
   <string name="common_audio">"Hang"</string>
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
   <string name="common_bubbles">"Buborékok"</string>
-  <string name="common_call_invite">"Folyamatban lévő hívás (nem támogatott)"</string>
   <string name="common_call_started">"A hívás elindult"</string>
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
   <string name="common_copied_to_clipboard">"A vágólapra másolva"</string>

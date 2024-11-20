@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Prepnúť zoznam odrážok"</string>
   <string name="rich_text_editor_close_formatting_options">"Zatvoriť možnosti formátovania"</string>
   <string name="rich_text_editor_code_block">"Prepnúť blok kódu"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Voliteľný titulok…"</string>
   <string name="rich_text_editor_composer_placeholder">"Správa…"</string>
   <string name="rich_text_editor_create_link">"Vytvoriť odkaz"</string>
   <string name="rich_text_editor_edit_link">"Upraviť odkaz"</string>

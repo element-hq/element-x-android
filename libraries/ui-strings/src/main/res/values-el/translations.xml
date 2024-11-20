@@ -129,7 +129,6 @@
   <string name="common_audio">"Ήχος"</string>
   <string name="common_blocked_users">"Αποκλεισμένοι χρήστες"</string>
   <string name="common_bubbles">"Φυσαλίδες"</string>
-  <string name="common_call_invite">"Κλήση σε εξέλιξη (δεν υποστηρίζεται)"</string>
   <string name="common_call_started">"Η κλήση ξεκίνησε"</string>
   <string name="common_chat_backup">"Αντίγραφο ασφαλείας συνομιλίας"</string>
   <string name="common_copied_to_clipboard">"Αντιγράφηκε στο πρόχειρο"</string>
@@ -238,6 +237,7 @@
   <string name="common_topic">"Θέμα"</string>
   <string name="common_topic_placeholder">"Τί αφορά το δωμάτιο;"</string>
   <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Στάλθηκε από μια μη ασφαλής συσκευή"</string>
   <string name="common_unable_to_decrypt_no_access">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
   <string name="common_unable_to_invite_message">"Δεν ήταν δυνατή η αποστολή προσκλήσεων σε έναν ή περισσότερους χρήστες."</string>
   <string name="common_unable_to_invite_title">"Δεν είναι δυνατή η αποστολή προσκλήσεων"</string>
@@ -247,6 +247,7 @@
   <string name="common_username">"Όνομα χρήστη"</string>
   <string name="common_verification_cancelled">"Η επαλήθευση ακυρώθηκε"</string>
   <string name="common_verification_complete">"Η επαλήθευση ολοκληρώθηκε"</string>
+  <string name="common_verification_failed">"Αποτυχία επαλήθευσης"</string>
   <string name="common_verified">"Επαληθεύτηκε"</string>
   <string name="common_verify_device">"Επαλήθευση συσκευής"</string>
   <string name="common_video">"Βίντεο"</string>
@@ -313,6 +314,7 @@
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_share_my_location_action">"Κοινή χρήση της τοποθεσίας μου"</string>
   <string name="screen_share_open_apple_maps">"Άνοιγμα στο Apple Maps"</string>

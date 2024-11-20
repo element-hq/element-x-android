@@ -9,11 +9,14 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -23,6 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSen
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
@@ -80,6 +84,7 @@ sealed interface TimelineItem {
         val origin: TimelineItemEventOrigin?,
         val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
         val messageShieldProvider: MessageShieldProvider,
+        val sendHandleProvider: SendHandleProvider,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
@@ -93,6 +98,17 @@ sealed interface TimelineItem {
 
         val isRemote = eventId != null
 
+        /** Whether a click on any part of the event bubble should trigger the 'onContentClick' callback.
+         *
+         *  This is `true` for all events except for visual media events with a caption or formatted caption.
+         */
+        val isWholeContentClickable = when (content) {
+            is TimelineItemStickerContent -> content.formattedCaption == null && content.caption == null
+            is TimelineItemImageContent -> content.formattedCaption == null && content.caption == null
+            is TimelineItemVideoContent -> content.formattedCaption == null && content.caption == null
+            else -> true
+        }
+
         val eventOrTransactionId: EventOrTransactionId
             get() = EventOrTransactionId.from(eventId = eventId, transactionId = transactionId)
 
@@ -101,6 +117,8 @@ sealed interface TimelineItem {
 
         val debugInfo: TimelineItemDebugInfo
             get() = timelineItemDebugInfoProvider()
+
+        val sendhandle: SendHandle? get() = sendHandleProvider()
     }
 
     @Immutable

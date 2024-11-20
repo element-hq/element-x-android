@@ -8,7 +8,9 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,16 +52,19 @@ import io.element.android.features.messages.impl.timeline.protection.ProtectedVi
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
     hideMediaContent: Boolean,
-    onShowClick: () -> Unit,
+    onContentClick: (() -> Unit)?,
+    onLongClick: (() -> Unit)?,
+    onLinkClick: (String) -> Unit,
+    onShowContentClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -78,13 +83,14 @@ fun TimelineItemImageView(
         ) {
             ProtectedView(
                 hideContent = hideMediaContent,
-                onShowClick = onShowClick,
+                onShowClick = onShowContentClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
                     model = content.thumbnailMediaRequestData,
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
@@ -99,9 +105,7 @@ fun TimelineItemImageView(
             val caption = if (LocalInspectionMode.current) {
                 SpannedString(content.caption)
             } else {
-                content.formattedCaption?.body
-                    ?.takeIf { content.formattedCaption.format == MessageFormat.HTML }
-                    ?: SpannedString(content.caption)
+                content.formattedCaption ?: SpannedString(content.caption)
             }
             CompositionLocalProvider(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
@@ -114,6 +118,7 @@ fun TimelineItemImageView(
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
+                    onLinkClickedListener = onLinkClick,
                     releaseOnDetach = false,
                     onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 )
@@ -128,7 +133,10 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
     TimelineItemImageView(
         content = content,
         hideMediaContent = false,
-        onShowClick = {},
+        onShowContentClick = {},
+        onContentClick = {},
+        onLongClick = {},
+        onLinkClick = {},
         onContentLayoutChange = {},
     )
 }
@@ -139,7 +147,10 @@ internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
     TimelineItemImageView(
         content = aTimelineItemImageContent(),
         hideMediaContent = true,
-        onShowClick = {},
+        onShowContentClick = {},
+        onContentClick = {},
+        onLongClick = {},
+        onLinkClick = {},
         onContentLayoutChange = {},
     )
 }

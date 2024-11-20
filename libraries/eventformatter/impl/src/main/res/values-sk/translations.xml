@@ -28,8 +28,8 @@
   <string name="state_event_room_invite_you">"%1$s vás pozval/a"</string>
   <string name="state_event_room_join">"%1$s sa pripojil/a do miestnosti"</string>
   <string name="state_event_room_join_by_you">"Vstúpili ste do miestnosti"</string>
-  <string name="state_event_room_knock">"%1$s požiadal o pripojenie"</string>
-  <string name="state_event_room_knock_accepted">"%1$s umožnil/a používateľovi %2$s pripojiť sa"</string>
+  <string name="state_event_room_knock">"%1$s žiada o vstup"</string>
+  <string name="state_event_room_knock_accepted">"%1$s umožnil/a vstup používateľovi %2$s"</string>
   <string name="state_event_room_knock_accepted_by_you">"Povolili ste používateľovi %1$s, aby sa pripojil"</string>
   <string name="state_event_room_knock_by_you">"Požiadali ste o pripojenie"</string>
   <string name="state_event_room_knock_denied">"%1$s odmietol/a žiadosť používateľa %2$s o vstup"</string>

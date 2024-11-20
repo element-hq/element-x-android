@@ -3,14 +3,14 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.7.1"
+android_gradle_plugin = "8.7.2"
 kotlin = "2.0.21"
 kotlinpoet = "2.0.0"
-ksp = "2.0.21-1.0.26"
+ksp = "2.0.21-1.0.28"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
-core = "1.13.1"
+core = "1.15.0"
 # Warning: there is an issue with 1.1.0 and 1.1.1, that I cannot repro on unit test.
 # To repro with the application:
 # Clear the storage of the application and run the app. Nearly each time, there is an infinite loading
@@ -19,13 +19,13 @@ core = "1.13.1"
 datastore = "1.0.0"
 constraintlayout = "2.2.0"
 constraintlayout_compose = "1.1.0"
-lifecycle = "2.8.6"
+lifecycle = "2.8.7"
 activity = "1.9.3"
 media3 = "1.4.1"
 camera = "1.4.0"
 
 # Compose
-compose_bom = "2024.10.01"
+compose_bom = "2024.11.00"
 composecompiler = "1.5.15"
 
 # Coroutines
@@ -44,17 +44,17 @@ serialization_json = "1.7.3"
 #other
 coil = "2.7.0"
 showkase = "1.0.3"
-appyx = "1.4.0"
+appyx = "1.5.1"
 sqldelight = "2.0.2"
 wysiwyg = "2.37.13"
-telephoto = "0.13.0"
+telephoto = "0.14.0"
 
 # Dependency analysis
 dependencyAnalysis = "2.4.2"
 
 # DI
 dagger = "2.52"
-anvil = "0.3.3"
+anvil = "0.4.0"
 
 # Auto service
 autoservice = "1.1.1"
@@ -68,7 +68,7 @@ kover = "0.8.3"
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-android_desugar = "com.android.tools:desugar_jdk_libs:2.1.2"
+android_desugar = "com.android.tools:desugar_jdk_libs:2.1.3"
 anvil_gradle_plugin = { module = "dev.zacsweers.anvil:gradle-plugin", version.ref = "anvil" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
@@ -77,7 +77,7 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.5.1"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.6.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -154,7 +154,7 @@ test_konsist = "com.lemonappdev:konsist:0.16.1"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
-test_robolectric = "org.robolectric:robolectric:4.13"
+test_robolectric = "org.robolectric:robolectric:4.14"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2"
 
@@ -173,7 +173,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.60"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.63"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -187,15 +187,15 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.5.2"
+maplibre = "org.maplibre.gl:android-sdk:11.6.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.9.0"
-sentry = "io.sentry:sentry-android:7.16.0"
+posthog = "com.posthog:posthog-android:3.9.2"
+sentry = "io.sentry:sentry-android:7.17.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
@@ -235,7 +235,7 @@ anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.7"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:10.0.4"
+dependencycheck = "org.owasp.dependencycheck:11.1.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

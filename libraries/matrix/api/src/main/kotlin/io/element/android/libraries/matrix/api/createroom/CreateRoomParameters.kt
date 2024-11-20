@@ -20,5 +20,5 @@ data class CreateRoomParameters(
     val invite: List<UserId>? = null,
     val avatar: String? = null,
     val joinRuleOverride: JoinRuleOverride = JoinRuleOverride.None,
-    val canonicalAlias: Optional<String> = Optional.empty(),
+    val roomAliasName: Optional<String> = Optional.empty(),
 )

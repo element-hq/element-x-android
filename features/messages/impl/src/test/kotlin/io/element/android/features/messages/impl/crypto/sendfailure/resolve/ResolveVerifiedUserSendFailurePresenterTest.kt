@@ -111,9 +111,6 @@ class ResolveVerifiedUserSendFailurePresenterTest {
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
-            retrySendMessageResult = {
-                Result.success(Unit)
-            },
         )
         val presenter = createResolveVerifiedUserSendFailurePresenter(room)
         presenter.test {
@@ -218,9 +215,6 @@ class ResolveVerifiedUserSendFailurePresenterTest {
         val room = FakeMatrixRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
-            },
-            retrySendMessageResult = {
-                Result.success(Unit)
             },
         )
         val presenter = createResolveVerifiedUserSendFailurePresenter(room)

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Jotta sovellus voisi käyttää kameraa, anna lupa järjestelmän asetuksista."</string>
+  <string name="dialog_permission_generic">"Anna lupa järjestelmän asetuksista."</string>
+  <string name="dialog_permission_microphone">"Jotta sovellus voisi käyttää mikrofonia, anna lupa järjestelmän asetuksista."</string>
+  <string name="dialog_permission_notification">"Jotta sovellus voisi näyttää ilmoituksia, anna lupa järjestelmän asetuksista."</string>
+</resources>

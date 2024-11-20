@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"更改账户提供者"</string>
+  <string name="screen_account_provider_change">"更改账户提供方"</string>
   <string name="screen_account_provider_form_hint">"服务器地址"</string>
   <string name="screen_account_provider_form_notice">"输入搜索词或域名地址。"</string>
   <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私人服务器。"</string>
-  <string name="screen_account_provider_form_title">"查找账户提供者"</string>
-  <string name="screen_account_provider_signin_subtitle">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
-  <string name="screen_account_provider_signin_title">"您即将登录%s"</string>
-  <string name="screen_account_provider_signup_subtitle">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
+  <string name="screen_account_provider_form_title">"寻找账户提供方"</string>
+  <string name="screen_account_provider_signin_subtitle">"这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。"</string>
+  <string name="screen_account_provider_signin_title">"您即将登录 %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。"</string>
   <string name="screen_account_provider_signup_title">"您即将在 %s 上创建一个帐户"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金会运营，是用于安全、去中心化的通信的公共 Matrix 网络上的大型免费服务器。"</string>
   <string name="screen_change_account_provider_other">"其他"</string>
-  <string name="screen_change_account_provider_subtitle">"使用其他帐户提供者，例如您自己的私人服务器或工作帐户。"</string>
-  <string name="screen_change_account_provider_title">"更改账户提供者"</string>
+  <string name="screen_change_account_provider_subtitle">"使用其他账户提供商，例如您自己的私人服务器或工作账户。"</string>
+  <string name="screen_change_account_provider_title">"更改账户提供方"</string>
   <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 Well Known 文件中的问题，Sliding Sync 不可用：
 %1$s"</string>
@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"您只能连接到支持 Sliding Sync 的现有服务器。您的服务器管理员需要对其进行配置。%1$s"</string>
   <string name="screen_change_server_subtitle">"您的服务器地址是什么？"</string>
   <string name="screen_change_server_title">"选择服务器"</string>
+  <string name="screen_create_account_title">"创建账户"</string>
   <string name="screen_login_error_deactivated_account">"该账户已被停用。"</string>
   <string name="screen_login_error_invalid_credentials">"错误的用户名和/或密码"</string>
   <string name="screen_login_error_invalid_user_id">"这不是合法的用户 ID。期望格式：‘@user:homeserver.org’。"</string>
@@ -51,7 +52,7 @@
 
 尝试手动或使用另一个设备扫描二维码."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"不支持二维码"</string>
-  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"账户提供者不支持 %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"账户提供方不支持 %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"不支持 %1$s."</string>
   <string name="screen_qr_code_login_initial_state_button_title">"准备进行扫描"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"在桌面设备上打开 %1$s"</string>
@@ -59,6 +60,7 @@
   <string name="screen_qr_code_login_initial_state_item_3">"选择 %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"「连接新设备」"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"使用此设备扫描二维码"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"仅在您的账户提供方支持时才可用。"</string>
   <string name="screen_qr_code_login_initial_state_title">"在另一台设备上打开 %1$s 以获取二维码"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"使用其他设备上显示的二维码。"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"再试一次"</string>
@@ -70,12 +72,12 @@
   <string name="screen_qr_code_login_start_over_button">"重新开始"</string>
   <string name="screen_qr_code_login_unknown_error_description">"发生了意外错误。请再试一次。"</string>
   <string name="screen_qr_code_login_verify_code_loading">"等着您的其他设备"</string>
-  <string name="screen_qr_code_login_verify_code_subtitle">"您的账户提供商可能会要求您提供以下代码来验证登录。"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"您的账户提供方可能会要求您提供以下代码来验证登录。"</string>
   <string name="screen_qr_code_login_verify_code_title">"您的验证码"</string>
-  <string name="screen_server_confirmation_change_server">"更改账户提供者"</string>
+  <string name="screen_server_confirmation_change_server">"更改账户提供方"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
-  <string name="screen_server_confirmation_message_register">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
+  <string name="screen_server_confirmation_message_register">"这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。"</string>
   <string name="screen_server_confirmation_title_login">"即将登录 %1$s"</string>
   <string name="screen_server_confirmation_title_register">"即将在 %1$s 上创建一个账户"</string>
 </resources>

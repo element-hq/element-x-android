@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Pridať emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Toto je začiatok %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Toto je začiatok tejto konverzácie."</string>
+  <string name="screen_room_timeline_legacy_call">"Nepodporovaný hovor. Opýtajte sa, či volajúci môže použiť novú aplikáciu Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Zobraziť menej"</string>
   <string name="screen_room_timeline_message_copied">"Správa skopírovaná"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Nemáte povolenie uverejňovať príspevky v tejto miestnosti"</string>

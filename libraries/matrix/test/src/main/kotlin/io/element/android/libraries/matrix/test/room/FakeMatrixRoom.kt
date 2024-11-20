@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -105,7 +106,6 @@ class FakeMatrixRoom(
     private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, EventOrTransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
@@ -138,8 +138,8 @@ class FakeMatrixRoom(
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
-    private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val withdrawVerificationAndResendResult: (List<UserId>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, SendHandle) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val withdrawVerificationAndResendResult: (List<UserId>, SendHandle) -> Result<Unit> = { _, _ -> lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -247,10 +247,6 @@ class FakeMatrixRoom(
 
     override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> {
         return toggleReactionResult(emoji, eventOrTransactionId)
-    }
-
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = simulateLongTask {
-        return retrySendMessageResult(transactionId)
     }
 
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
@@ -554,12 +550,12 @@ class FakeMatrixRoom(
         return getWidgetDriverResult(widgetSettings)
     }
 
-    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
-        return ignoreDeviceTrustAndResendResult(devices, transactionId)
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle): Result<Unit> = simulateLongTask {
+        return ignoreDeviceTrustAndResendResult(devices, sendHandle)
     }
 
-    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
-        return withdrawVerificationAndResendResult(userIds, transactionId)
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit> = simulateLongTask {
+        return withdrawVerificationAndResendResult(userIds, sendHandle)
     }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {

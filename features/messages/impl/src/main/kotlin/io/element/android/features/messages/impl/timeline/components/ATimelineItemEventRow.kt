@@ -30,7 +30,7 @@ internal fun ATimelineItemEventRow(
     timelineProtectionState = timelineProtectionState,
     isLastOutgoingMessage = isLastOutgoingMessage,
     isHighlighted = isHighlighted,
-    onClick = {},
+    onEventClick = {},
     onLongClick = {},
     onLinkClick = {},
     onUserDataClick = {},

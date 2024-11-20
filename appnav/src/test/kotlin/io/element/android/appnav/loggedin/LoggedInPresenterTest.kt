@@ -378,7 +378,7 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val selectPushProviderLambda = lambdaRecorder<MatrixClient, PushProvider, Unit> { _, _ -> }
+        val selectPushProviderLambda = lambdaRecorder<SessionId, PushProvider, Unit> { _, _ -> }
         val sessionVerificationService = FakeSessionVerificationService(
             initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
         )
@@ -408,8 +408,8 @@ class LoggedInPresenterTest {
             selectPushProviderLambda.assertions()
                 .isCalledOnce()
                 .with(
-                    // MatrixClient
-                    any(),
+                    // SessionId
+                    value(A_SESSION_ID),
                     // PushProvider
                     value(pushProvider),
                 )
@@ -481,7 +481,7 @@ class LoggedInPresenterTest {
         registerWithLambda: (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
-        selectPushProviderLambda: (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },
+        selectPushProviderLambda: (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
         currentPushProvider: () -> PushProvider? = { null },
         setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
     ): PushService {

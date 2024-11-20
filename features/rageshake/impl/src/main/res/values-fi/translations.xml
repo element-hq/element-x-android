@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Liitä kuvakaappaus"</string>
+  <string name="screen_bug_report_contact_me">"Voitte ottaa minuun yhteyttä, jos teillä on lisäkysymyksiä."</string>
+  <string name="screen_bug_report_contact_me_title">"Ota minuun yhteyttä"</string>
+  <string name="screen_bug_report_edit_screenshot">"Muokkaa kuvakaappausta"</string>
+  <string name="screen_bug_report_editor_description">"Kuvaile ongelmaasi. Mitä teit? Mitä odotit tapahtuvan? Mitä oikeasti tapahtui? Kerro niin paljon kuin mahdollista."</string>
+  <string name="screen_bug_report_editor_placeholder">"Kuvaile ongelmaasi…"</string>
+  <string name="screen_bug_report_editor_supporting">"Jos mahdollista, kirjoita englanniksi."</string>
+  <string name="screen_bug_report_error_description_too_short">"Kuvaus on liian lyhyt. Kerro tarkemmin mitä tapahtui, kiitos!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Lähetä kaatumislokit"</string>
+  <string name="screen_bug_report_include_logs">"Lähetä lokitiedostot"</string>
+  <string name="screen_bug_report_include_screenshot">"Lähetä kuvakaappaus"</string>
+  <string name="screen_bug_report_logs_description">"Lähetä lokitiedostot viestisi kanssa, jotta voimme varmistaa, että kaikki toimii oikein. Jos haluat lähettää viestisi ilman lokeja, jätä tämä asetus valitsematta."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?"</string>
+  <string name="screen_bug_report_view_logs">"Näytä lokitiedostot"</string>
+</resources>

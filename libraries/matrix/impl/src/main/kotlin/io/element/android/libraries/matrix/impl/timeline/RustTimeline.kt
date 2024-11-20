@@ -394,6 +394,8 @@ class RustTimeline(
             inner.sendFile(
                 url = file.path,
                 fileInfo = fileInfo.map(),
+                caption = null,
+                formattedCaption = null,
                 useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher(),
             )

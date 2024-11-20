@@ -35,6 +35,10 @@
   <string name="screen_session_verification_request_title">"Vérification demandée"</string>
   <string name="screen_session_verification_they_dont_match">"Ils ne correspondent pas"</string>
   <string name="screen_session_verification_they_match">"Ils correspondent"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Assurez-vous que l’application est ouverte sur un autre appareil avant de commencer la vérification."</string>
+  <string name="screen_session_verification_use_another_device_title">"Ouvrez l’application sur un autre appareil vérifié"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"Vous devriez voir une alerte sur l’autre appareil. Démarrez la vérification à partir de là dès maintenant."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Démarrer la vérification sur l’autre appareil"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Pour continuer, acceptez la demande de lancement de la procédure de vérification dans votre autre session."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"En attente d’acceptation de la demande"</string>
   <string name="screen_signout_in_progress_dialog_content">"Déconnexion…"</string>

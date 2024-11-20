@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
-import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -408,9 +408,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getRoomPreviewInfoResult = { _, _ ->
                 Result.success(
-                    RoomPreview(
+                    RoomPreviewInfo(
                         roomId = A_ROOM_ID,
                         canonicalAlias = RoomAlias("#alias:matrix.org"),
                         name = "Room name",
@@ -453,7 +453,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getRoomPreviewInfoResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -491,7 +491,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error 403`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
+            getRoomPreviewInfoResult = { _, _ ->
                 Result.failure(Exception("403"))
             }
         )

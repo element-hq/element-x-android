@@ -19,11 +19,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.alias.FakeRoomAliasHelper
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -44,6 +48,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -52,6 +58,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
+import java.util.Optional
 
 private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
 private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
@@ -95,21 +102,21 @@ class ConfigureRoomPresenterTest {
         presenter.test {
             val initialState = initialState()
             var config = initialState.config
-            assertThat(initialState.config.isValid).isFalse()
+            assertThat(initialState.isValid).isFalse()
 
             // Room name not empty
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             var newState: ConfigureRoomState = awaitItem()
             config = config.copy(roomName = A_ROOM_NAME)
             assertThat(newState.config).isEqualTo(config)
-            assertThat(newState.config.isValid).isTrue()
+            assertThat(newState.isValid).isTrue()
 
             // Clear room name
             newState.eventSink(ConfigureRoomEvents.RoomNameChanged(""))
             newState = awaitItem()
             config = config.copy(roomName = null)
             assertThat(newState.config).isEqualTo(config)
-            assertThat(newState.config.isValid).isFalse()
+            assertThat(newState.isValid).isFalse()
         }
     }
 
@@ -118,8 +125,9 @@ class ConfigureRoomPresenterTest {
         val userListDataStore = UserListDataStore()
         val pickerProvider = FakePickerProvider()
         val permissionsPresenter = FakePermissionsPresenter()
+        val roomAliasHelper = FakeRoomAliasHelper()
         val presenter = createConfigureRoomPresenter(
-            createRoomDataStore = CreateRoomDataStore(userListDataStore),
+            createRoomDataStore = CreateRoomDataStore(userListDataStore, roomAliasHelper),
             pickerProvider = pickerProvider,
             permissionsPresenter = permissionsPresenter,
         )
@@ -191,8 +199,7 @@ class ConfigureRoomPresenterTest {
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(
                 roomVisibility = RoomVisibilityState.Public(
-                    roomAddress = RoomAddress.AutoFilled(expectedConfig.roomName ?: ""),
-                    roomAddressErrorState = RoomAddressErrorState.None,
+                    roomAddress = RoomAddress.AutoFilled(roomAliasHelper.roomAliasNameFromRoomDisplayName(expectedConfig.roomName ?: "")),
                     roomAccess = RoomAccess.Anyone,
                 )
             )
@@ -254,7 +261,7 @@ class ConfigureRoomPresenterTest {
         val matrixClient = createMatrixClient()
         val analyticsService = FakeAnalyticsService()
         val mediaPreProcessor = FakeMediaPreProcessor()
-        val createRoomDataStore = CreateRoomDataStore(UserListDataStore())
+        val createRoomDataStore = CreateRoomDataStore(UserListDataStore(), FakeRoomAliasHelper())
         val presenter = createConfigureRoomPresenter(
             createRoomDataStore = createRoomDataStore,
             mediaPreProcessor = mediaPreProcessor,
@@ -315,17 +322,88 @@ class ConfigureRoomPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - address is invalid when format is invalid`() = runTest {
+        val aliasHelper = FakeRoomAliasHelper(
+            isRoomAliasValidLambda = { false }
+        )
+        val presenter = createConfigureRoomPresenter(
+            roomAliasHelper = aliasHelper
+        )
+        presenter.test {
+            val initialState = initialState()
+            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            skipItems(1)
+            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("invalid address"))
+            skipItems(1)
+            advanceUntilIdle()
+            awaitItem().also { state ->
+                assertThat(state.roomAddressValidity).isEqualTo(RoomAddressValidity.InvalidSymbols)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - address is not available when alias is not available`() = runTest {
+        val fakeMatrixClient = createMatrixClient(isAliasAvailable = false)
+        val presenter = createConfigureRoomPresenter(
+            matrixClient = fakeMatrixClient,
+        )
+        presenter.test {
+            val initialState = initialState()
+            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            skipItems(1)
+            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
+            skipItems(1)
+            advanceUntilIdle()
+            awaitItem().also { state ->
+                assertThat(state.roomAddressValidity).isEqualTo(RoomAddressValidity.NotAvailable)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - address is valid when alias is available and format is valid`() = runTest {
+        val fakeMatrixClient = createMatrixClient(isAliasAvailable = true)
+        val presenter = createConfigureRoomPresenter(
+            matrixClient = fakeMatrixClient,
+        )
+        presenter.test {
+            val initialState = initialState()
+            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            skipItems(1)
+            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
+            skipItems(1)
+            advanceUntilIdle()
+            awaitItem().also { state ->
+                assertThat(state.roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
+            }
+        }
+    }
+
     private suspend fun TurbineTestContext<ConfigureRoomState>.initialState(): ConfigureRoomState {
         skipItems(1)
         return awaitItem()
     }
 
-    private fun createMatrixClient() = FakeMatrixClient(
+    private fun createMatrixClient(isAliasAvailable: Boolean = true) = FakeMatrixClient(
         userIdServerNameLambda = { "matrix.org" },
+        resolveRoomAliasResult = {
+            val resolvedRoomAlias = if (isAliasAvailable) {
+                Optional.empty()
+            } else {
+                Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
+            }
+            Result.success(resolvedRoomAlias)
+        }
     )
 
     private fun createConfigureRoomPresenter(
-        createRoomDataStore: CreateRoomDataStore = CreateRoomDataStore(UserListDataStore()),
+        roomAliasHelper: RoomAliasHelper = FakeRoomAliasHelper(),
+        createRoomDataStore: CreateRoomDataStore = CreateRoomDataStore(UserListDataStore(), roomAliasHelper),
         matrixClient: MatrixClient = createMatrixClient(),
         pickerProvider: PickerProvider = FakePickerProvider(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
@@ -339,6 +417,7 @@ class ConfigureRoomPresenterTest {
         mediaPreProcessor = mediaPreProcessor,
         analyticsService = analyticsService,
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+        roomAliasHelper = roomAliasHelper,
         featureFlagService = FakeFeatureFlagService(
             mapOf(FeatureFlags.Knock.key to isKnockFeatureEnabled)
         )

@@ -128,7 +128,6 @@
   <string name="common_audio">"Geluid"</string>
   <string name="common_blocked_users">"Geblokkeerde gebruikers"</string>
   <string name="common_bubbles">"Bubbels"</string>
-  <string name="common_call_invite">"Gesprek bezig (niet ondersteund)"</string>
   <string name="common_call_started">"Oproep gestart"</string>
   <string name="common_chat_backup">"Chat back-up"</string>
   <string name="common_copied_to_clipboard">"Gekopieerd naar klembord"</string>

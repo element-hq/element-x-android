@@ -5,6 +5,6 @@
   <string name="screen_analytics_prompt_read_terms">"Ви можете прочитати всі наші умови %1$s."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"тут"</string>
   <string name="screen_analytics_prompt_settings">"Ви можете вимкнути цю функцію в будь-який час"</string>
-  <string name="screen_analytics_prompt_third_party_sharing">"Ми не передаватимемо Ваші дані третім особам"</string>
-  <string name="screen_analytics_prompt_title">"Допоможіть покращити %1$s"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Ми не передаватимемо ваші дані третім особам"</string>
+  <string name="screen_analytics_prompt_title">"Допоможіть вдосконалити %1$s"</string>
 </resources>

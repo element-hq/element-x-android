@@ -131,7 +131,6 @@
   <string name="common_audio">"Dźwięk"</string>
   <string name="common_blocked_users">"Zablokowani użytkownicy"</string>
   <string name="common_bubbles">"Bąbelki"</string>
-  <string name="common_call_invite">"Rozmowa w trakcie (niewspierane)"</string>
   <string name="common_call_started">"Rozpoczęto rozmowę"</string>
   <string name="common_chat_backup">"Backup czatu"</string>
   <string name="common_copied_to_clipboard">"Skopiowano do schowka"</string>

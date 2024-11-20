@@ -13,6 +13,8 @@ Pode alterar esta opção nas definições da sala."</string>
   <string name="screen_create_room_room_access_section_header">"Acesso à sala"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou um moderador terá de aceitar o pedido"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Pedir para participar"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Alguns caracteres não são permitidos. Apenas letras, dígitos e os seguintes símbolos são suportados! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Este endereço de sala já existe, tente editar o campo de endereço da sala ou altere o nome da sala"</string>
   <string name="screen_create_room_room_address_section_footer">"Para que esta sala seja visível no diretório público de salas, precisas de um endereço de sala."</string>
   <string name="screen_create_room_room_address_section_title">"Endereço da sala"</string>
   <string name="screen_create_room_room_name_label">"Nome da sala"</string>

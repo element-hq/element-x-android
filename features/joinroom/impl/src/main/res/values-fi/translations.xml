@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Peruuta pyyntö"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Kyllä, peruuta"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Haluatko varmasti peruuttaa pyyntösi liittyä tähän huoneeseen?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Peruuta liittymispyyntö"</string>
+  <string name="screen_join_room_join_action">"Liity huoneeseen"</string>
+  <string name="screen_join_room_knock_action">"Lähetä liittymispyyntö"</string>
+  <string name="screen_join_room_knock_message_description">"Viesti (valinnainen)"</string>
+  <string name="screen_join_room_knock_sent_description">"Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään."</string>
+  <string name="screen_join_room_knock_sent_title">"Liittymispyyntö lähetetty"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ei tue vielä tiloja. Voit käyttää tiloja selainversiolla."</string>
+  <string name="screen_join_room_space_not_supported_title">"Tiloja ei vielä tueta"</string>
+  <string name="screen_join_room_subtitle_knock">"Paina alla olevaa nappia ja huoneen ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Sinun on oltava tämän huoneen jäsen, jotta voit nähdä viestihistorian."</string>
+  <string name="screen_join_room_title_knock">"Haluatko liittyä tähän huoneeseen?"</string>
+  <string name="screen_join_room_title_no_preview">"Esikatselu ei ole saatavilla"</string>
+</resources>

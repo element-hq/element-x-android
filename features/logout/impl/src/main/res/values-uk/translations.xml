@@ -6,9 +6,9 @@
   <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Ви збираєтеся вийти зі свого останнього сеансу. Якщо ви вийдете зараз, ви втратите доступ до своїх зашифрованих повідомлень."</string>
   <string name="screen_signout_key_backup_disabled_title">"Ви вимкнули резервне копіювання"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Коли ви вийшли з мережі, резервна копія ваших ключів все ще створювалася. Повторно підключіться, щоб зберегти резервну копію ключів перед виходом з системи."</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Коли ви вийшли з мережі, резервна копія ваших ключів все ще створювалася. Повторно під\'єднайтеся, щоб зберегти резервну копію ключів перед виходом."</string>
   <string name="screen_signout_key_backup_offline_title">"Резервне копіювання ваших ключів ще триває"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Зачекайте, поки це завершиться, перш ніж вийти."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Дочекайтеся завершення процесу, перш ніж вийти."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Резервне копіювання ваших ключів ще триває"</string>
   <string name="screen_signout_preference_item">"Вийти"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Ви збираєтеся вийти зі свого останнього сеансу. Якщо ви вийдете зараз, ви втратите доступ до своїх зашифрованих повідомлень."</string>

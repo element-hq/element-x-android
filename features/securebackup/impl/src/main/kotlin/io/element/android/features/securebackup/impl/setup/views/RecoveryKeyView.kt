@@ -36,14 +36,14 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
+import io.element.android.libraries.designsystem.modifiers.autofill
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.autofill
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -62,7 +62,6 @@ internal fun RecoveryKeyView(
     ) {
         Text(
             text = stringResource(id = CommonStrings.common_recovery_key),
-            modifier = Modifier.padding(start = 16.dp),
             style = ElementTheme.typography.fontBodyMdRegular,
         )
         RecoveryKeyContent(state, onClick, onChange, onSubmit)
@@ -159,7 +158,7 @@ private fun RecoveryKeyFormContent(
         // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
         if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
     }
-    OutlinedTextField(
+    TextField(
         modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.recoveryKey)
@@ -179,7 +178,7 @@ private fun RecoveryKeyFormContent(
         keyboardActions = KeyboardActions(
             onDone = { onSubmit() }
         ),
-        label = { Text(text = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder)) }
+        placeholder = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder),
     )
 }
 
@@ -198,14 +197,12 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                         }
                     ),
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(start = 16.dp),
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             } else {
                 Text(
                     text = stringResource(id = R.string.screen_recovery_key_save_key_description),
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(start = 16.dp),
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
@@ -214,7 +211,6 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
             Text(
                 text = stringResource(id = R.string.screen_recovery_key_confirm_key_description),
                 color = ElementTheme.colors.textSecondary,
-                modifier = Modifier.padding(start = 16.dp),
                 style = ElementTheme.typography.fontBodySmRegular,
             )
         }

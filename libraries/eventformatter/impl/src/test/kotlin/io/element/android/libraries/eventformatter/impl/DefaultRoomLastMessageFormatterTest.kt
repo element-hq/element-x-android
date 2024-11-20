@@ -460,7 +460,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneKnockedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneKnocked = formatter.format(someoneKnockedEvent, false)
-        assertThat(someoneKnocked).isEqualTo("$otherName requested to join")
+        assertThat(someoneKnocked).isEqualTo("$otherName is requesting to join")
     }
 
     @Test
@@ -476,7 +476,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneAcceptedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneAcceptedKnock = formatter.format(someoneAcceptedKnockEvent, false)
-        assertThat(someoneAcceptedKnock).isEqualTo("$otherName allowed $third to join")
+        assertThat(someoneAcceptedKnock).isEqualTo("$otherName granted access to $third")
     }
 
     @Test

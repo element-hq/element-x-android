@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_cancel_knock_action">"Ακύρωση αιτήματος"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ναι, ακύρωση"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Σίγουρα θες να ακυρώσεις το αίτημά σου για συμμετοχή σε αυτό το δωμάτιο;"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Ακύρωση αίτησης συμμετοχής"</string>
   <string name="screen_join_room_join_action">"Συμμετοχή στο δωμάτιο"</string>
   <string name="screen_join_room_knock_action">"Χτύπα για συμμετοχή"</string>
   <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>

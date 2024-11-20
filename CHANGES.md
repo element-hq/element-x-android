@@ -1,3 +1,65 @@
+Changes in Element X v0.7.3 (2024-11-08)
+========================================
+
+## What's Changed
+### ✨ Features
+* Incoming session verification by @bmarty in https://github.com/element-hq/element-x-android/pull/3733
+* Remove all GPS metadata from images uploaded as media by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3781
+* Send caption with image and video by @bmarty in https://github.com/element-hq/element-x-android/pull/3803
+### 🙌 Improvements
+* UI iteration on the encryption settings by @bmarty in https://github.com/element-hq/element-x-android/pull/3750
+* Rotate firebase token in case of error by @bmarty in https://github.com/element-hq/element-x-android/pull/3755
+* Optimize media upload by @bmarty in https://github.com/element-hq/element-x-android/pull/3779
+* Iteration on caption by @bmarty in https://github.com/element-hq/element-x-android/pull/3816
+* Hide join call button when the user is already in the call by @bmarty in https://github.com/element-hq/element-x-android/pull/3815
+* Disable button during the "verifying" step. by @bmarty in https://github.com/element-hq/element-x-android/pull/3832
+### 🐛 Bugfixes
+* Fix oversize padding on captioned images/videos by @frebib in https://github.com/element-hq/element-x-android/pull/3732
+* Fix the onboarding flow getting stuck in some cases by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3778
+* bugfix: do not remove logs after sending them by @ganfra in https://github.com/element-hq/element-x-android/pull/3780
+* Use in-memory thumbnail APIs when possible by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3817
+* ElementCall: allow user to switch to another call. by @bmarty in https://github.com/element-hq/element-x-android/pull/3833
+* Do not delete the original file if it's not a temporary file when sending it to a room. by @bmarty in https://github.com/element-hq/element-x-android/pull/3819
+* Fix verification failed issue, simplify verification logic by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3830
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3798
+### 🧱 Build
+* Target api 35 by @bmarty in https://github.com/element-hq/element-x-android/pull/3776
+### 🚧 In development 🚧
+* Knocking : update create room flow  by @ganfra in https://github.com/element-hq/element-x-android/pull/3804
+### Dependency upgrades
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.17 by @renovate in https://github.com/element-hq/element-x-android/pull/3746
+* Update dependency com.posthog:posthog-android to v3.8.3 - autoclosed by @renovate in https://github.com/element-hq/element-x-android/pull/3742
+* Update dependency org.maplibre.gl:android-plugin-annotation-v9 to v3.0.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3702
+* Update dependency com.posthog:posthog-android to v3.9.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3754
+* Update kotlin by @renovate in https://github.com/element-hq/element-x-android/pull/3283
+* Update camera to v1.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3765
+* Update dependencyAnalysis to v2.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3773
+* Update kotlin to v2.0.21-1.0.26 by @renovate in https://github.com/element-hq/element-x-android/pull/3774
+* Update dependency androidx.annotation:annotation-jvm to v1.9.1 - autoclosed by @renovate in https://github.com/element-hq/element-x-android/pull/3762
+* chore(deps): update dependencyanalysis to v2.4.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3791
+* fix(deps): update dependency androidx.compose:compose-bom to v2024.10.01 by @renovate in https://github.com/element-hq/element-x-android/pull/3782
+* Update dependency androidx.constraintlayout:constraintlayout-compose to v1.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3770
+* fix(deps): update dependency androidx.constraintlayout:constraintlayout to v2.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3784
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v0.2.59 by @renovate in https://github.com/element-hq/element-x-android/pull/3809
+* Update mobile-dev-inc/action-maestro-cloud action to v1.9.4 by @renovate in https://github.com/element-hq/element-x-android/pull/3820
+* Update dependency com.otaliastudios:transcoder to v0.11.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3805
+* Update plugin paparazzi to v1.3.5 by @renovate in https://github.com/element-hq/element-x-android/pull/3826
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.60 by @renovate in https://github.com/element-hq/element-x-android/pull/3827
+### Others
+* Change wording to "Verify identity" by @bmarty in https://github.com/element-hq/element-x-android/pull/3751
+* Improve FakeMatrixRoom to be able to check all the parameters. by @bmarty in https://github.com/element-hq/element-x-android/pull/3761
+* Editor state fixture and preview improvement by @bmarty in https://github.com/element-hq/element-x-android/pull/3758
+* Enable identity pinning violation notifications unconditionally by @andybalaam in https://github.com/element-hq/element-x-android/pull/3745
+* Enable predictive back gesture by @frebib in https://github.com/element-hq/element-x-android/pull/3797
+* Update project status by @mxandreas in https://github.com/element-hq/element-x-android/pull/3806
+* Remove code duplication - no behavior change. by @bmarty in https://github.com/element-hq/element-x-android/pull/3823
+* Verification UI / UX iteration by @bmarty in https://github.com/element-hq/element-x-android/pull/3829
+
+## New Contributors
+* @andybalaam made their first contribution in https://github.com/element-hq/element-x-android/pull/3745
+* @mxandreas made their first contribution in https://github.com/element-hq/element-x-android/pull/3806
+
 Changes in Element X v0.7.2 (2024-10-29)
 ========================================
 

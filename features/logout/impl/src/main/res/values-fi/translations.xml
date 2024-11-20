@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Haluatko varmasti kirjautua ulos?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Kirjaudu ulos"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Kirjaudu ulos"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Kirjaudutaan ulos…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Olet kirjautumassa ulos viimeisestä istunnostasi. Jos kirjaudut ulos nyt, menetät pääsyn salattuihin viesteihisi."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Olet poistanut varmuuskopioinnin käytöstä"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Avaimiasi varmuuskopioitiin vielä, kun menit offline-tilaan. Muodosta yhteys uudelleen, jotta avaimesi voidaan varmuuskopioida ennen uloskirjautumista."</string>
+  <string name="screen_signout_key_backup_offline_title">"Avaimiasi varmuuskopioidaan vielä"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Odota, että tämä on valmis ennen uloskirjautumista."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Avaimiasi varmuuskopioidaan vielä"</string>
+  <string name="screen_signout_preference_item">"Kirjaudu ulos"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Olet kirjautumassa ulos viimeisestä istunnostasi. Jos kirjaudut ulos nyt, menetät pääsyn salattuihin viesteihisi."</string>
+  <string name="screen_signout_recovery_disabled_title">"Palautus ei ole käytössä"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Olet kirjautumassa ulos viimeisestä istunnostasi. Jos kirjaudut ulos nyt, saatat menettää pääsyn salattuihin viesteihisi."</string>
+  <string name="screen_signout_save_recovery_key_title">"Oletko tallentanut palautusavaimesi?"</string>
+</resources>

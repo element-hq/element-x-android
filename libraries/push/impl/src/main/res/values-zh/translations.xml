@@ -13,13 +13,14 @@
   </plurals>
   <string name="notification_fallback_content">"通知"</string>
   <string name="notification_incoming_call">"来电"</string>
-  <string name="notification_inline_reply_failed">"** 无法发送——请打开房间"</string>
+  <string name="notification_inline_reply_failed">"** 无法发送——请打开聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒绝"</string>
   <plurals name="notification_invitations">
     <item quantity="other">"%d 个邀请"</item>
   </plurals>
   <string name="notification_invite_body">"邀请您聊天"</string>
+  <string name="notification_invite_body_with_sender">"%1$s 邀您聊天"</string>
   <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
   <string name="notification_new_messages">"新消息"</string>
   <plurals name="notification_new_messages_for_room">
@@ -28,7 +29,8 @@
   <string name="notification_reaction_body">"使用 %1$s 回应"</string>
   <string name="notification_room_action_mark_as_read">"标记为已读"</string>
   <string name="notification_room_action_quick_reply">"快速回复"</string>
-  <string name="notification_room_invite_body">"邀请你加入房间"</string>
+  <string name="notification_room_invite_body">"邀请你加入聊天室"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s 邀请您加入房间"</string>
   <string name="notification_sender_me">"我"</string>
   <string name="notification_sender_mention_reply">"%1$s提及或回复"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！点击我！"</string>
@@ -41,7 +43,7 @@
   <string name="notification_unread_notified_messages_in_room">"%2$s 中的 %1$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"在 %2$s 和 %3$s 中的 %1$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="other">"%d 个房间"</item>
+    <item quantity="other">"%d 个聊天室"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"后台同步"</string>
   <string name="push_distributor_firebase_android">"谷歌服务"</string>

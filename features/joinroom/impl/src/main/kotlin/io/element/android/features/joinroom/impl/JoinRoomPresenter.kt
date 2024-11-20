@@ -42,7 +42,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
-import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -96,10 +96,10 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
-                    val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
+                    val result = matrixClient.getRoomPreviewInfo(roomIdOrAlias, serverNames)
                     value = result.fold(
-                        onSuccess = { roomPreview ->
-                            roomPreview.toContentState()
+                        onSuccess = { previewInfo ->
+                            previewInfo.toContentState()
                         },
                         onFailure = { throwable ->
                             if (throwable.message?.contains("403") == true) {
@@ -184,7 +184,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     }
 }
 
-private fun RoomPreview.toContentState(): ContentState {
+private fun RoomPreviewInfo.toContentState(): ContentState {
     return ContentState.Loaded(
         roomId = roomId,
         name = name,

@@ -119,7 +119,7 @@ class DefaultActiveCallManagerTest {
                 onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
             )
 
-            manager.incomingCallTimedOut()
+            manager.incomingCallTimedOut(displayMissedCallNotification = true)
 
             addMissedCallNotificationLambda.assertions().isNeverCalled()
         }
@@ -139,7 +139,7 @@ class DefaultActiveCallManagerTest {
             manager.registerIncomingCall(aCallNotificationData())
             assertThat(manager.activeCall.value).isNotNull()
 
-            manager.incomingCallTimedOut()
+            manager.incomingCallTimedOut(displayMissedCallNotification = true)
             advanceTimeBy(1)
 
             assertThat(manager.activeCall.value).isNull()
