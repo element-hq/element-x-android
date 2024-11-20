@@ -29,6 +29,7 @@ fun aTimelineItemStickerContent(
     filename = "a sticker.gif",
     caption = "a body",
     formattedCaption = null,
+    isEdited = false,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,

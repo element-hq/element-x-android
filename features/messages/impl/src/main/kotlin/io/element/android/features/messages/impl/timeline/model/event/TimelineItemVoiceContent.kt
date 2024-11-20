@@ -17,6 +17,7 @@ data class TimelineItemVoiceContent(
     override val filename: String,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val isEdited: Boolean,
     val duration: Duration,
     val mediaSource: MediaSource,
     val mimeType: String,

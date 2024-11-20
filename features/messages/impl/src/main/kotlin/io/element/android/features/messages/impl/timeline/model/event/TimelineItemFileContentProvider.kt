@@ -26,6 +26,7 @@ fun aTimelineItemFileContent(
     filename = fileName,
     caption = null,
     formattedCaption = null,
+    isEdited = false,
     thumbnailSource = null,
     fileSource = MediaSource(url = ""),
     mimeType = MimeTypes.Pdf,

@@ -25,6 +25,7 @@ fun aTimelineItemAudioContent(fileName: String = "A sound.mp3") = TimelineItemAu
     filename = fileName,
     caption = null,
     formattedCaption = null,
+    isEdited = false,
     mimeType = MimeTypes.Mp3,
     formattedFileSize = "100kB",
     fileExtension = "mp3",
