@@ -24,7 +24,6 @@ import io.element.android.libraries.mediapickers.api.PickerLauncher
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -111,7 +110,7 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
             NoOpPickerLauncher { onResult(null) }
         } else {
             val context = LocalContext.current
-            val tmpFile = remember { getTemporaryFile(context) }
+            val tmpFile = remember { getTemporaryFile(context, "photo.jpg") }
             val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Photo(tmpFileUri)) { success ->
                 // Execute callback
@@ -131,7 +130,7 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
             NoOpPickerLauncher { onResult(null) }
         } else {
             val context = LocalContext.current
-            val tmpFile = remember { getTemporaryFile(context) }
+            val tmpFile = remember { getTemporaryFile(context, "video.mp4") }
             val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Video(tmpFileUri)) { success ->
                 // Execute callback
@@ -142,8 +141,8 @@ class DefaultPickerProvider(private val isInTest: Boolean) : PickerProvider {
 
     private fun getTemporaryFile(
         context: Context,
+        filename: String,
         baseFolder: File = context.cacheDir,
-        filename: String = UUID.randomUUID().toString(),
     ): File {
         return File(baseFolder, filename)
     }
