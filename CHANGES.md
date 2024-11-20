@@ -1,3 +1,53 @@
+Changes in Element X v0.7.4 (2024-11-20)
+========================================
+
+## What's Changed
+### 🙌 Improvements
+* Update the strings for unsupported calls by @bmarty in https://github.com/element-hq/element-x-android/pull/3857
+### 🐛 Bugfixes
+* Stop incoming call ringing if answered on another device. by @bmarty in https://github.com/element-hq/element-x-android/pull/3842
+* Use formatted captions for images and video by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3864
+* Fix unified push unregister by @bmarty in https://github.com/element-hq/element-x-android/pull/3877
+* Hide the keyboard when navigating from the chat room screen by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3878
+* Fix long click not working for media timeline items by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3879
+* Instantiate the verification controller ASAP by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3893
+* fix : display security banner for room list empty state by @ganfra in https://github.com/element-hq/element-x-android/pull/3892
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3852
+* Sync Strings - add translations to Finnish by @ElementBot in https://github.com/element-hq/element-x-android/pull/3883
+### 🚧 In development 🚧
+* Create room : improve handling of room address by @ganfra in https://github.com/element-hq/element-x-android/pull/3868
+### Dependency upgrades
+* Update anvil to v0.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3792
+* Update kotlin to v2.0.21-1.0.27 by @renovate in https://github.com/element-hq/element-x-android/pull/3836
+* Update dependency org.maplibre.gl:android-sdk to v11.6.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3793
+* Update android.gradle.plugin to v8.7.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3785
+* Update lifecycle to v2.8.7 by @renovate in https://github.com/element-hq/element-x-android/pull/3763
+* Update plugin dependencycheck to v11 by @renovate in https://github.com/element-hq/element-x-android/pull/3723
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.61 by @renovate in https://github.com/element-hq/element-x-android/pull/3841
+* Update mobile-dev-inc/action-maestro-cloud action to v1.9.6 by @renovate in https://github.com/element-hq/element-x-android/pull/3846
+* Update dependency com.posthog:posthog-android to v3.9.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3856
+* Update core to v1.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3766
+* Update dependency com.android.tools:desugar_jdk_libs to v2.1.3 by @renovate in https://github.com/element-hq/element-x-android/pull/3825
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.18 by @renovate in https://github.com/element-hq/element-x-android/pull/3860
+* Update dependency com.posthog:posthog-android to v3.9.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3861
+* Update dependency io.sentry:sentry-android to v7.17.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3862
+* Update dependency androidx.compose:compose-bom to v2024.11.00 by @renovate in https://github.com/element-hq/element-x-android/pull/3869
+* Update telephoto to v0.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3870
+* Update SDK bindings version to `0.2.62` and fix `SendHandle` usages by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3876
+* Update codecov/codecov-action action to v5 by @renovate in https://github.com/element-hq/element-x-android/pull/3874
+* Update dependency com.google.firebase:firebase-bom to v33.6.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3880
+* Update kotlin to v2.0.21-1.0.28 by @renovate in https://github.com/element-hq/element-x-android/pull/3881
+* Update dependency org.robolectric:robolectric to v4.14 by @renovate in https://github.com/element-hq/element-x-android/pull/3882
+* Update appyx to v1.5.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3889
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.19 by @renovate in https://github.com/element-hq/element-x-android/pull/3900
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.63 by @renovate in https://github.com/element-hq/element-x-android/pull/3898
+### Others
+* Design system : implement new TextField by @ganfra in https://github.com/element-hq/element-x-android/pull/3834
+* Remove :samples:minimal module by @bmarty in https://github.com/element-hq/element-x-android/pull/3871
+* Replace `textPlaceholder` color usages with `textSecondary` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3873
+* Room Preview API changes by @ganfra in https://github.com/element-hq/element-x-android/pull/3875
+
 Changes in Element X v0.7.3 (2024-11-08)
 ========================================
 
