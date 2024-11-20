@@ -14,6 +14,7 @@ data class TimelineItemVideoContent(
     override val filename: String,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val isEdited: Boolean,
     val duration: Duration,
     val videoSource: MediaSource,
     val thumbnailSource: MediaSource?,

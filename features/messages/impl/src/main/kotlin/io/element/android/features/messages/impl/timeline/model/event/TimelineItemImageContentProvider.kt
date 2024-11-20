@@ -31,6 +31,7 @@ fun aTimelineItemImageContent(
     filename = filename,
     caption = caption,
     formattedCaption = null,
+    isEdited = false,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,

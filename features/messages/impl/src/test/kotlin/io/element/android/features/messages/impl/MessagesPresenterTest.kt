@@ -318,6 +318,7 @@ class MessagesPresenterTest {
                     filename = "image.jpg",
                     caption = null,
                     formattedCaption = null,
+                    isEdited = false,
                     mediaSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = null,
                     mimeType = MimeTypes.Jpeg,
@@ -359,6 +360,7 @@ class MessagesPresenterTest {
                     filename = "video.mp4",
                     caption = null,
                     formattedCaption = null,
+                    isEdited = false,
                     duration = 10.milliseconds,
                     videoSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
@@ -400,6 +402,7 @@ class MessagesPresenterTest {
                 content = TimelineItemFileContent(
                     filename = "file.pdf",
                     caption = null,
+                    isEdited = false,
                     formattedCaption = null,
                     fileSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
