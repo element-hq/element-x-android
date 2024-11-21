@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -87,6 +88,7 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
@@ -205,6 +207,91 @@ class MessageComposerPresenterTest {
             assert(updateDraftLambda)
                 .isCalledOnce()
                 .with(value(A_ROOM_ID), any(), value(true))
+        }
+    }
+
+    @Test
+    fun `present - change mode to edit caption`() = runTest {
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+            ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
+        }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val draftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+            this.saveDraftLambda = updateDraftLambda
+        }
+        val presenter = createPresenter(
+            coroutineScope = this,
+            draftService = draftService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.textEditorState.messageHtml()) { state }
+        }.test {
+            var state = awaitFirstItem()
+            val mode = anEditCaptionMode(caption = A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_CAPTION)
+            state = backToNormalMode(state)
+            // The caption that was being edited is cleared and volatile draft is loaded
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+
+            assert(loadDraftLambda)
+                .isCalledExactly(2)
+                .withSequence(
+                    // Automatic load of draft
+                    listOf(value(A_ROOM_ID), value(false)),
+                    // Load of volatile draft when closing edit mode
+                    listOf(value(A_ROOM_ID), value(true))
+                )
+            assert(updateDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), any(), value(true))
+        }
+    }
+
+    @Test
+    fun `present - change mode to edit caption and send the caption`() = runTest {
+        val editCaptionLambda = lambdaRecorder { _: EventOrTransactionId, _: String?, _: String? ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editCaptionLambda = editCaptionLambda
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        )
+        val presenter = createPresenter(
+            coroutineScope = this,
+            room = fakeMatrixRoom,
+            isRichTextEditorEnabled = false,
+        )
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
+        presenter.test {
+            var state = awaitFirstItem()
+            val mode = anEditCaptionMode(caption = A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SendMessage)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo("")
+            waitForPredicate { analyticsService.capturedEvents.size == 1 }
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+            assert(editCaptionLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID.toEventOrTransactionId()), value(A_CAPTION), value(null))
         }
     }
 
@@ -1464,6 +1551,11 @@ fun anEditMode(
     eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
     message: String = A_MESSAGE,
 ) = MessageComposerMode.Edit(eventOrTransactionId, message)
+
+fun anEditCaptionMode(
+    eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+    caption: String = A_CAPTION,
+) = MessageComposerMode.EditCaption(eventOrTransactionId, caption)
 
 fun aReplyMode() = MessageComposerMode.Reply(
     replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),
