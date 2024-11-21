@@ -23,8 +23,6 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -45,7 +43,6 @@ import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-@SingleIn(RoomScope::class)
 class VoiceMessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val voiceRecorder: VoiceRecorder,
