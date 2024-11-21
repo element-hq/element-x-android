@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
@@ -59,6 +60,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
@@ -82,6 +84,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -969,6 +972,103 @@ class MessagesPresenterTest {
                 PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.Timeline),
                 PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.Timeline)
             )
+        }
+    }
+
+    @Test
+    fun `present - handle action edit caption`() = runTest {
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemImageContent(
+                caption = A_CAPTION,
+            )
+        )
+        val composerRecorder = EventsRecorder<MessageComposerEvents>()
+        val presenter = createMessagesPresenter(
+            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+            awaitItem()
+            composerRecorder.assertSingle(
+                MessageComposerEvents.SetMode(
+                    composerMode = MessageComposerMode.EditCaption(
+                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+                        content = A_CAPTION,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - handle action add caption`() = runTest {
+        val composerRecorder = EventsRecorder<MessageComposerEvents>()
+        val presenter = createMessagesPresenter(
+            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
+        )
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemImageContent(
+                caption = null,
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
+            awaitItem()
+            composerRecorder.assertSingle(
+                MessageComposerEvents.SetMode(
+                    composerMode = MessageComposerMode.EditCaption(
+                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+                        content = "",
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - handle action remove caption`() = runTest {
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemImageContent(
+                caption = A_CAPTION,
+            )
+        )
+        val editCaptionLambda = lambdaRecorder { _: EventOrTransactionId, _: String?, _: String? -> Result.success(Unit) }
+        val timeline = FakeTimeline().apply {
+            this.editCaptionLambda = editCaptionLambda
+        }
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            canRedactOwnResult = { Result.success(true) },
+            canRedactOtherResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
+        )
+        val presenter = createMessagesPresenter(
+            matrixRoom = room,
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
+            editCaptionLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID.toEventOrTransactionId()), value(null), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action view in timeline, it should have no effect`() = runTest {
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemTextContent()
+        )
+        val presenter = createMessagesPresenter()
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewInTimeline, messageEvent))
+            // No op!
         }
     }
 
