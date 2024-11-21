@@ -81,7 +81,7 @@ fun ProtectedView(
 @PreviewsDayNight
 @Composable
 internal fun ProtectedViewPreview(
-    @PreviewParameter(AspectRatioPreviewProvider::class) aspectRatio: Float?,
+    @PreviewParameter(AspectRatioProvider::class) aspectRatio: Float?,
 ) = ElementPreview {
     TimelineItemAspectRatioBox(
         modifier = Modifier.blurHashBackground(A_BLUR_HASH, alpha = 0.9f),

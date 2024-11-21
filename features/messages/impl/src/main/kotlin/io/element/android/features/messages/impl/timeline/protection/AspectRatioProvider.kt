@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.timeline.protection
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-class AspectRatioPreviewProvider : PreviewParameterProvider<Float?> {
+class AspectRatioProvider : PreviewParameterProvider<Float?> {
     override val values: Sequence<Float?> = sequenceOf(
         null,
         0.05f,
