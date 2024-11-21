@@ -35,14 +35,14 @@ class RustMatrixClientTest {
     private fun TestScope.createRustMatrixClient(
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = RustMatrixClient(
-        client = FakeRustClient(),
+        innerClient = FakeRustClient(),
         baseDirectory = File(""),
         sessionStore = sessionStore,
         appCoroutineScope = this,
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
         ),
-        syncService = FakeRustSyncService(),
+        innerSyncService = FakeRustSyncService(),
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),
