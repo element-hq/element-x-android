@@ -20,6 +20,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
@@ -93,6 +94,7 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -686,7 +688,10 @@ class MessageComposerPresenterTest {
         val room = FakeMatrixRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -715,7 +720,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 
@@ -724,7 +729,10 @@ class MessageComposerPresenterTest {
         val room = FakeMatrixRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -754,7 +762,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 
@@ -779,7 +787,10 @@ class MessageComposerPresenterTest {
         val room = FakeMatrixRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -790,7 +801,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 
@@ -838,7 +849,10 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -850,7 +864,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 
@@ -860,7 +874,10 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -873,7 +890,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
             permissionPresenter.setPermissionGranted()
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -884,7 +901,10 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -896,7 +916,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 
@@ -906,7 +926,10 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
-        val navigator = FakeMessagesNavigator()
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
         val presenter = createPresenter(
             coroutineScope = this,
             room = room,
@@ -922,7 +945,7 @@ class MessageComposerPresenterTest {
             assertThat(permissionState.showAttachmentSourcePicker).isFalse()
             permissionPresenter.setPermissionGranted()
             skipItems(1)
-            assertThat(navigator.onPreviewAttachmentCount).isEqualTo(1)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
         }
     }
 

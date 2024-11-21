@@ -431,7 +431,10 @@ import kotlin.time.Duration.Companion.seconds
 
     @Test
     fun `present - PollEditClicked event navigates`() = runTest {
-        val navigator = FakeMessagesNavigator()
+        val onEditPollClickLambda = lambdaRecorder { _: EventId -> }
+        val navigator = FakeMessagesNavigator(
+            onEditPollClickLambda = onEditPollClickLambda
+        )
         val presenter = createTimelinePresenter(
             messagesNavigator = navigator,
         )
@@ -439,7 +442,7 @@ import kotlin.time.Duration.Companion.seconds
             presenter.present()
         }.test {
             awaitFirstItem().eventSink(TimelineEvents.EditPoll(AN_EVENT_ID))
-            assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+            onEditPollClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 
