@@ -53,16 +53,16 @@ internal fun SendButton(
         onClick = onClick,
         enabled = canSendMessage,
     ) {
-        val iconVector = when (composerMode) {
-            is MessageComposerMode.Edit -> CompoundIcons.Check()
+        val iconVector = when {
+            composerMode.isEditing -> CompoundIcons.Check()
             else -> CompoundIcons.SendSolid()
         }
-        val iconStartPadding = when (composerMode) {
-            is MessageComposerMode.Edit -> 0.dp
+        val iconStartPadding = when {
+            composerMode.isEditing -> 0.dp
             else -> 2.dp
         }
-        val contentDescription = when (composerMode) {
-            is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
+        val contentDescription = when {
+            composerMode.isEditing -> stringResource(CommonStrings.action_edit)
             else -> stringResource(CommonStrings.action_send)
         }
         Box(

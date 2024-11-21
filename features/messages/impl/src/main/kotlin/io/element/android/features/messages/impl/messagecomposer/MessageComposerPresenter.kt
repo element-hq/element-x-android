@@ -42,7 +42,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -81,7 +80,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -89,11 +87,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
@@ -180,25 +176,11 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
-
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
         val roomAliasSuggestions by roomAliasSuggestionsDataSource.getAllRoomAliasSuggestions().collectAsState(initial = emptyList())
-
-        LaunchedEffect(attachmentsState.value) {
-            when (val attachmentStateValue = attachmentsState.value) {
-                is AttachmentsState.Sending.Processing -> {
-                    ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
-                        attachmentStateValue.attachments.first(),
-                        attachmentsState,
-                    )
-                }
-                else -> Unit
-            }
-        }
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -272,7 +254,7 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                    if (messageComposerContext.composerMode.isEditing) {
                         localCoroutineScope.launch {
                             resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = true)
                         }
@@ -337,12 +319,6 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.PickAttachmentSource.Poll -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the create poll screen is done at the view layer
-                }
-                is MessageComposerEvents.CancelSendAttachment -> {
-                    ongoingSendAttachmentJob.value?.let {
-                        it.cancel()
-                        ongoingSendAttachmentJob.value == null
-                    }
                 }
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
@@ -455,7 +431,15 @@ class MessageComposerPresenter @Inject constructor(
                         }
                 }
             }
-
+            is MessageComposerMode.EditCaption -> {
+                timelineController.invokeOnCurrentTimeline {
+                    editCaption(
+                        capturedMode.eventOrTransactionId,
+                        caption = message.markdown,
+                        formattedCaption = message.html
+                    )
+                }
+            }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
                     replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
@@ -505,17 +489,7 @@ class MessageComposerPresenter @Inject constructor(
             formattedFileSize = null
         )
         val mediaAttachment = Attachment.Media(localMedia)
-        val isPreviewable = when {
-            MimeTypes.isImage(localMedia.info.mimeType) -> true
-            MimeTypes.isVideo(localMedia.info.mimeType) -> true
-            MimeTypes.isAudio(localMedia.info.mimeType) -> true
-            else -> false
-        }
-        attachmentsState.value = if (isPreviewable) {
-            AttachmentsState.Previewing(persistentListOf(mediaAttachment))
-        } else {
-            AttachmentsState.Sending.Processing(persistentListOf(mediaAttachment))
-        }
+        attachmentsState.value = AttachmentsState.Previewing(persistentListOf(mediaAttachment))
     }
 
     private suspend fun sendMedia(
@@ -523,18 +497,10 @@ class MessageComposerPresenter @Inject constructor(
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
     ) = runCatching {
-        val context = coroutineContext
-        val progressCallback = object : ProgressCallback {
-            override fun onProgress(current: Long, total: Long) {
-                if (context.isActive) {
-                    attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
-                }
-            }
-        }
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            progressCallback = progressCallback
+            progressCallback = null,
         ).getOrThrow()
     }
         .onSuccess {
@@ -612,6 +578,10 @@ class MessageComposerPresenter @Inject constructor(
                 mode.eventOrTransactionId.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
             }
             is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+            is MessageComposerMode.EditCaption -> {
+                // TODO Need a new type to save caption in the SDK
+                null
+            }
         }
         return if (draftType == null || message.markdown.isBlank()) {
             null
@@ -686,7 +656,14 @@ class MessageComposerPresenter @Inject constructor(
         val currentComposerMode = messageComposerContext.composerMode
         when (newComposerMode) {
             is MessageComposerMode.Edit -> {
-                if (currentComposerMode !is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing.not()) {
+                    val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
+                    updateDraft(draft, isVolatile = true).join()
+                }
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+            }
+            is MessageComposerMode.EditCaption -> {
+                if (currentComposerMode.isEditing.not()) {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     updateDraft(draft, isVolatile = true).join()
                 }
@@ -694,7 +671,7 @@ class MessageComposerPresenter @Inject constructor(
             }
             else -> {
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
-                if (currentComposerMode is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)
                 }
             }

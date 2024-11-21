@@ -30,9 +30,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -49,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -58,7 +57,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -90,6 +88,7 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
@@ -208,6 +207,91 @@ class MessageComposerPresenterTest {
             assert(updateDraftLambda)
                 .isCalledOnce()
                 .with(value(A_ROOM_ID), any(), value(true))
+        }
+    }
+
+    @Test
+    fun `present - change mode to edit caption`() = runTest {
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+            ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
+        }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val draftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+            this.saveDraftLambda = updateDraftLambda
+        }
+        val presenter = createPresenter(
+            coroutineScope = this,
+            draftService = draftService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.textEditorState.messageHtml()) { state }
+        }.test {
+            var state = awaitFirstItem()
+            val mode = anEditCaptionMode(caption = A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_CAPTION)
+            state = backToNormalMode(state)
+            // The caption that was being edited is cleared and volatile draft is loaded
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+
+            assert(loadDraftLambda)
+                .isCalledExactly(2)
+                .withSequence(
+                    // Automatic load of draft
+                    listOf(value(A_ROOM_ID), value(false)),
+                    // Load of volatile draft when closing edit mode
+                    listOf(value(A_ROOM_ID), value(true))
+                )
+            assert(updateDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), any(), value(true))
+        }
+    }
+
+    @Test
+    fun `present - change mode to edit caption and send the caption`() = runTest {
+        val editCaptionLambda = lambdaRecorder { _: EventOrTransactionId, _: String?, _: String? ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editCaptionLambda = editCaptionLambda
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        )
+        val presenter = createPresenter(
+            coroutineScope = this,
+            room = fakeMatrixRoom,
+            isRichTextEditorEnabled = false,
+        )
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
+        presenter.test {
+            var state = awaitFirstItem()
+            val mode = anEditCaptionMode(caption = A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_CAPTION)
+            state.eventSink.invoke(MessageComposerEvents.SendMessage)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo("")
+            waitForPredicate { analyticsService.capturedEvents.size == 1 }
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+            assert(editCaptionLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID.toEventOrTransactionId()), value(A_CAPTION), value(null))
         }
     }
 
@@ -684,17 +768,8 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - Pick file from storage`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+    fun `present - Pick file from storage will open the preview`() = runTest {
         val room = FakeMatrixRoom(
-            progressCallbackValues = listOf(
-                Pair(0, 10),
-                Pair(5, 10),
-                Pair(10, 10)
-            ),
-            sendFileResult = sendFileResult,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
@@ -705,13 +780,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()
             assertThat(sendingState.showAttachmentSourcePicker).isFalse()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0f))
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(0.5f))
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(1f))
-            val sentState = awaitItem()
-            assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
-            sendFileResult.assertions().isCalledOnce()
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
         }
     }
 
@@ -848,48 +917,6 @@ class MessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - Uploading media failure can be recovered from`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
-            Result.failure(Exception())
-        }
-        val room = FakeMatrixRoom(
-            sendFileResult = sendFileResult,
-            typingNoticeResult = { Result.success(Unit) }
-        )
-        val presenter = createPresenter(this, room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            val sendingState = awaitItem()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
-            val finalState = awaitItem()
-            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
-            snackbarDispatcher.snackbarMessage.test {
-                // Assert error message received
-                assertThat(awaitItem()).isNotNull()
-            }
-        }
-    }
-
-    @Test
-    fun `present - CancelSendAttachment stops media upload`() = runTest {
-        val presenter = createPresenter(this)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            val sendingState = awaitItem()
-            assertThat(sendingState.showAttachmentSourcePicker).isFalse()
-            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending.Processing::class.java)
-            sendingState.eventSink(MessageComposerEvents.CancelSendAttachment)
-            assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.None)
         }
     }
 
@@ -1487,17 +1514,17 @@ class MessageComposerPresenterTest {
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
-        coroutineScope,
-        room,
-        pickerProvider,
-        featureFlagService,
-        sessionPreferencesStore,
-        localMediaFactory,
-        MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
-        snackbarDispatcher,
-        analyticsService,
-        DefaultMessageComposerContext(),
-        TestRichTextEditorStateFactory(),
+        appCoroutineScope = coroutineScope,
+        room = room,
+        mediaPickerProvider = pickerProvider,
+        featureFlagService = featureFlagService,
+        sessionPreferencesStore = sessionPreferencesStore,
+        localMediaFactory = localMediaFactory,
+        mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
+        snackbarDispatcher = snackbarDispatcher,
+        analyticsService = analyticsService,
+        messageComposerContext = DefaultMessageComposerContext(),
+        richTextEditorStateFactory = TestRichTextEditorStateFactory(),
         roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
@@ -1524,6 +1551,11 @@ fun anEditMode(
     eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
     message: String = A_MESSAGE,
 ) = MessageComposerMode.Edit(eventOrTransactionId, message)
+
+fun anEditCaptionMode(
+    eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+    caption: String = A_CAPTION,
+) = MessageComposerMode.EditCaption(eventOrTransactionId, caption)
 
 fun aReplyMode() = MessageComposerMode.Reply(
     replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),

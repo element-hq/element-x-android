@@ -59,8 +59,15 @@ interface Timeline : AutoCloseable {
 
     suspend fun editMessage(
         eventOrTransactionId: EventOrTransactionId,
-        body: String, htmlBody: String?,
+        body: String,
+        htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
+
+    suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
     ): Result<Unit>
 
     suspend fun replyMessage(
@@ -91,9 +98,21 @@ interface Timeline : AutoCloseable {
 
     suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+        ): Result<MediaUploadHandler>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler>
 
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
 

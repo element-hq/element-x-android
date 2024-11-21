@@ -12,7 +12,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
-import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -61,16 +60,6 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(
                 enableVoiceMessages = true,
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
-            ),
-            aMessagesState(
-                composerState = aMessageComposerState(
-                    attachmentsState = AttachmentsState.Sending.Processing(persistentListOf())
-                ),
-            ),
-            aMessagesState(
-                composerState = aMessageComposerState(
-                    attachmentsState = AttachmentsState.Sending.Uploading(0.33f)
-                ),
             ),
             aMessagesState(
                 roomCallState = anOngoingCallState(),

@@ -116,7 +116,7 @@ class SharePresenterTest {
 
     @Test
     fun `present - send media ok`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val matrixRoom = FakeMatrixRoom(

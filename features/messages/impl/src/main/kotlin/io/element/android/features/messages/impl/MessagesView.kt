@@ -83,8 +83,6 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
-import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
@@ -134,7 +132,6 @@ fun MessagesView(
     AttachmentStateView(
         state = state.composerState.attachmentsState,
         onPreviewAttachments = onPreviewAttachments,
-        onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
     )
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -280,7 +277,6 @@ private fun ReinviteDialog(state: MessagesState) {
 private fun AttachmentStateView(
     state: AttachmentsState,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-    onCancel: () -> Unit,
 ) {
     when (state) {
         AttachmentsState.None -> Unit
@@ -289,17 +285,6 @@ private fun AttachmentStateView(
             LaunchedEffect(state) {
                 latestOnPreviewAttachments(state.attachments)
             }
-        }
-        is AttachmentsState.Sending -> {
-            ProgressDialog(
-                type = when (state) {
-                    is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
-                    is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
-                },
-                text = stringResource(id = CommonStrings.common_sending),
-                showCancelButton = true,
-                onDismissRequest = onCancel,
-            )
         }
     }
 }

@@ -17,13 +17,18 @@ open class TimelineItemAudioContentProvider : PreviewParameterProvider<TimelineI
         get() = sequenceOf(
             aTimelineItemAudioContent("A sound.mp3"),
             aTimelineItemAudioContent("A bigger name sound.mp3"),
-            aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
+            aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit.mp3"),
+            aTimelineItemAudioContent(caption = "A caption"),
+            aTimelineItemAudioContent(caption = "An even bigger bigger bigger bigger bigger bigger bigger caption"),
         )
 }
 
-fun aTimelineItemAudioContent(fileName: String = "A sound.mp3") = TimelineItemAudioContent(
+fun aTimelineItemAudioContent(
+    fileName: String = "A sound.mp3",
+    caption: String? = null,
+) = TimelineItemAudioContent(
     filename = fileName,
-    caption = null,
+    caption = caption,
     formattedCaption = null,
     isEdited = false,
     mimeType = MimeTypes.Mp3,

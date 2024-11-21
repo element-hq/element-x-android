@@ -295,22 +295,40 @@ class RustTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching<Unit> {
-                val editedContent = EditedContent.RoomMessage(
-                    content = MessageEventContent.from(
-                        body = body,
-                        htmlBody = htmlBody,
-                        intentionalMentions = intentionalMentions
-                    ),
-                )
-                inner.edit(
-                    newContent = editedContent,
-                    eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
-                )
-            }
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.RoomMessage(
+                content = MessageEventContent.from(
+                    body = body,
+                    htmlBody = htmlBody,
+                    intentionalMentions = intentionalMentions
+                ),
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
         }
+    }
+
+    override suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.MediaCaption(
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
+        }
+    }
 
     override suspend fun replyMessage(
         eventId: EventId,
@@ -373,29 +391,44 @@ class RustTimeline(
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
         val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 url = file.path,
                 audioInfo = audioInfo.map(),
-                // Maybe allow a caption in the future?
-                caption = null,
-                formattedCaption = null,
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
                 useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
         val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 url = file.path,
                 fileInfo = fileInfo.map(),
-                caption = null,
-                formattedCaption = null,
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
                 useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher(),
             )
