@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -145,14 +146,15 @@ interface MatrixClient : Closeable {
     suspend fun getUrl(url: String): Result<String>
     suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo>
 
-    /** Returns `true` if the home server supports native sliding sync. */
-    suspend fun isNativeSlidingSyncSupported(): Boolean
+    /**
+     * Returns the currently used sliding sync version.
+     */
+    suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion>
 
-    /** Returns `true` if the home server supports sliding sync using a proxy. */
-    suspend fun isSlidingSyncProxySupported(): Boolean
-
-    /** Returns `true` if the current session is using native sliding sync, `false` if it's using a proxy. */
-    fun isUsingNativeSlidingSync(): Boolean
+    /**
+     * Returns the available sliding sync versions for the current user.
+     */
+    suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>>
 
     fun canDeactivateAccount(): Boolean
     suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>

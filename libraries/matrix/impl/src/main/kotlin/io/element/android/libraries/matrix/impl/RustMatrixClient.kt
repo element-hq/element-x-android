@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -63,6 +64,7 @@ import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryS
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
@@ -101,7 +103,6 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
-import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -634,16 +635,16 @@ class RustMatrixClient(
         })
     }.buffer(Channel.UNLIMITED)
 
-    override suspend fun isNativeSlidingSyncSupported(): Boolean {
-        return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> = withContext(sessionDispatcher) {
+        runCatching {
+            client.availableSlidingSyncVersions().map { it.map() }
+        }
     }
 
-    override suspend fun isSlidingSyncProxySupported(): Boolean {
-        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
-    }
-
-    override fun isUsingNativeSlidingSync(): Boolean {
-        return client.session().slidingSyncVersion == SlidingSyncVersion.Native
+    override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
+        runCatching {
+            client.session().slidingSyncVersion.map()
+        }
     }
 
     private suspend fun File.getCacheSize(
