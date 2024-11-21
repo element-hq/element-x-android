@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -62,6 +63,7 @@ class MessagesNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
     messageComposerPresenterFactory: MessageComposerPresenter.Factory,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     presenterFactory: MessagesPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
@@ -70,6 +72,7 @@ class MessagesNode @AssistedInject constructor(
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(this),
+        timelinePresenter = timelinePresenterFactory.create(this),
     )
     private val callbacks = plugins<Callback>()
 

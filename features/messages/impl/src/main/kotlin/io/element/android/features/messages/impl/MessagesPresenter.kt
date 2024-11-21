@@ -37,7 +37,6 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
-import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
@@ -91,7 +90,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
-    timelinePresenterFactory: TimelinePresenter.Factory,
+    @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
     actionListPresenterFactory: ActionListPresenter.Factory,
@@ -111,7 +110,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
-    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
     private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
 
     @AssistedFactory
@@ -119,6 +117,7 @@ class MessagesPresenter @AssistedInject constructor(
         fun create(
             navigator: MessagesNavigator,
             composerPresenter: Presenter<MessageComposerState>,
+            timelinePresenter: Presenter<TimelineState>,
         ): MessagesPresenter
     }
 

@@ -23,8 +23,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
-import io.element.android.features.messages.impl.timeline.TimelinePresenter
-import io.element.android.features.messages.impl.timeline.createTimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -36,8 +36,6 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
-import io.element.android.features.poll.api.actions.EndPollAction
-import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -220,7 +218,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action forward`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<EventId, Unit> {  }
+        val onForwardEventClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMessagesNavigator(
             onForwardEventClickLambda = onForwardEventClickLambda,
         )
@@ -458,7 +456,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action edit poll`() = runTest {
-        val onEditPollClickLambda = lambdaRecorder<EventId, Unit> {  }
+        val onEditPollClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMessagesNavigator(
             onEditPollClickLambda = onEditPollClickLambda
         )
@@ -475,16 +473,15 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action end poll`() = runTest {
-        val endPollAction = FakeEndPollAction()
-        val presenter = createMessagesPresenter(endPollAction = endPollAction)
+        val timelineEventSink = EventsRecorder<TimelineEvents>()
+        val presenter = createMessagesPresenter(timelineEventSink = timelineEventSink)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            endPollAction.verifyExecutionCount(0)
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent(content = aTimelineItemPollContent())))
             delay(1)
-            endPollAction.verifyExecutionCount(1)
+            timelineEventSink.assertSingle(TimelineEvents.EndPoll(AN_EVENT_ID))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -525,7 +522,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action report content`() = runTest {
-        val onReportContentClickLambda = lambdaRecorder { _: EventId, _: UserId ->  }
+        val onReportContentClickLambda = lambdaRecorder { _: EventId, _: UserId -> }
         val navigator = FakeMessagesNavigator(
             onReportContentClickLambda = onReportContentClickLambda
         )
@@ -554,7 +551,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action show developer info`() = runTest {
-        val onShowEventDebugInfoClickLambda = lambdaRecorder { _: EventId?, _: TimelineItemDebugInfo ->  }
+        val onShowEventDebugInfoClickLambda = lambdaRecorder { _: EventId?, _: TimelineItemDebugInfo -> }
         val navigator = FakeMessagesNavigator(
             onShowEventDebugInfoClickLambda = onShowEventDebugInfoClickLambda
         )
@@ -1102,7 +1099,7 @@ class MessagesPresenterTest {
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-        endPollAction: EndPollAction = FakeEndPollAction(),
+        timelineEventSink: (TimelineEvents) -> Unit = {},
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         messageComposerPresenter: Presenter<MessageComposerState> = Presenter {
             aMessageComposerState(
@@ -1112,19 +1109,12 @@ class MessagesPresenterTest {
         },
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
-        val timelinePresenterFactory = object : TimelinePresenter.Factory {
-            override fun create(navigator: MessagesNavigator): TimelinePresenter {
-                return createTimelinePresenter(
-                    endPollAction = endPollAction,
-                )
-            }
-        }
         val featureFlagService = FakeFeatureFlagService()
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = { aVoiceMessageComposerState() },
-            timelinePresenterFactory = timelinePresenterFactory,
+            timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
             timelineProtectionPresenter = { aTimelineProtectionState() },
             actionListPresenterFactory = FakeActionListPresenter.Factory(actionListEventSink),
             customReactionPresenter = { aCustomReactionState() },
