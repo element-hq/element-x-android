@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
+import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -90,7 +91,7 @@ fun TimelineItemVideoView(
         }
         TimelineItemAspectRatioBox(
             modifier = containerModifier.blurHashBackground(content.blurHash, alpha = 0.9f),
-            aspectRatio = content.aspectRatio,
+            aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
             contentAlignment = Alignment.Center,
         ) {
             ProtectedView(
