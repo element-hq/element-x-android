@@ -589,7 +589,8 @@ internal fun TextComposerEditCaptionPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEditCaption(
-                content = "A caption",
+                // Set an existing caption so that the UI will be in edit caption mode
+                content = "An existing caption",
             ),
             enableVoiceMessages = false,
         )
@@ -606,6 +607,7 @@ internal fun TextComposerAddCaptionPreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEditCaption(
+                // No caption so that the UI will be in add caption mode
                 content = "",
             ),
             enableVoiceMessages = false,
@@ -759,7 +761,7 @@ fun aMessageComposerModeEdit(
 
 fun aMessageComposerModeEditCaption(
     eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
-    content: String = "Some caption",
+    content: String,
 ) = MessageComposerMode.EditCaption(
     eventOrTransactionId = eventOrTransactionId,
     content = content
