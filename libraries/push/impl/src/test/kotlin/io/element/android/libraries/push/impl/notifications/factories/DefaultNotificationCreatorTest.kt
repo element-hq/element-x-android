@@ -271,6 +271,11 @@ class DefaultNotificationCreatorTest {
     }
 }
 
+const val markAsReadActionTitle = "MarkAsReadAction"
+const val quickReplyActionTitle = "QuickReplyAction"
+const val acceptInvitationActionTitle = "AcceptInvitationAction"
+const val rejectInvitationActionTitle = "RejectInvitationAction"
+
 fun createNotificationCreator(
     context: Context = RuntimeEnvironment.getApplication(),
     buildMeta: BuildMeta = aBuildMeta(),
@@ -291,26 +296,26 @@ fun createNotificationCreator(
         markAsReadActionFactory = MarkAsReadActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("MarkAsReadActionFactory"),
+            stringProvider = FakeStringProvider(markAsReadActionTitle),
             clock = FakeSystemClock(),
         ),
         quickReplyActionFactory = QuickReplyActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("QuickReplyActionFactory"),
+            stringProvider = FakeStringProvider(quickReplyActionTitle),
             clock = FakeSystemClock(),
         ),
         bitmapLoader = bitmapLoader,
         acceptInvitationActionFactory = AcceptInvitationActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("AcceptInvitationActionFactory"),
+            stringProvider = FakeStringProvider(acceptInvitationActionTitle),
             clock = FakeSystemClock(),
         ),
         rejectInvitationActionFactory = RejectInvitationActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("RejectInvitationActionFactory"),
+            stringProvider = FakeStringProvider(rejectInvitationActionTitle),
             clock = FakeSystemClock(),
         ),
     )
