@@ -32,7 +32,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
@@ -155,18 +154,16 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 add(TimelineItemAction.Forward)
             }
             if (timelineItem.isEditable) {
-                add(TimelineItemAction.Edit)
-            } else {
-                // Caption
-                if (timelineItem.isMine &&
-                    timelineItem.content is TimelineItemEventContentWithAttachment &&
-                    timelineItem.content !is TimelineItemVoiceContent) {
+                if (timelineItem.content is TimelineItemEventContentWithAttachment) {
+                    // Caption
                     if (timelineItem.content.caption == null) {
                         add(TimelineItemAction.AddCaption)
                     } else {
                         add(TimelineItemAction.EditCaption)
                         add(TimelineItemAction.RemoveCaption)
                     }
+                } else {
+                    add(TimelineItemAction.Edit)
                 }
             }
             if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
