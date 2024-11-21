@@ -32,10 +32,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,10 +53,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
-import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
@@ -115,7 +111,6 @@ fun MessagesView(
     onEventContentClick: (event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -128,11 +123,6 @@ fun MessagesView(
     }
 
     KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
-
-    AttachmentStateView(
-        state = state.composerState.attachmentsState,
-        onPreviewAttachments = onPreviewAttachments,
-    )
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -270,22 +260,6 @@ private fun ReinviteDialog(state: MessagesState) {
             onSubmitClick = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite)) },
             onDismiss = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel)) }
         )
-    }
-}
-
-@Composable
-private fun AttachmentStateView(
-    state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-) {
-    when (state) {
-        AttachmentsState.None -> Unit
-        is AttachmentsState.Previewing -> {
-            val latestOnPreviewAttachments by rememberUpdatedState(onPreviewAttachments)
-            LaunchedEffect(state) {
-                latestOnPreviewAttachments(state.attachments)
-            }
-        }
     }
 }
 
@@ -557,7 +531,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onEventContentClick = { false },
         onUserDataClick = {},
         onLinkClick = {},
-        onPreviewAttachments = {},
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},

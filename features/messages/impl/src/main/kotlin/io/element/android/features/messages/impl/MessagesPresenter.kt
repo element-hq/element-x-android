@@ -89,12 +89,12 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
-    private val composerPresenter: Presenter<MessageComposerState>,
+    @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
     timelinePresenterFactory: TimelinePresenter.Factory,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
-    private val actionListPresenterFactory: ActionListPresenter.Factory,
+    actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
@@ -116,7 +116,10 @@ class MessagesPresenter @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessagesPresenter
+        fun create(
+            navigator: MessagesNavigator,
+            composerPresenter: Presenter<MessageComposerState>,
+        ): MessagesPresenter
     }
 
     @Composable

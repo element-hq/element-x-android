@@ -7,9 +7,11 @@
 
 package io.element.android.features.messages.impl
 
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import kotlinx.collections.immutable.ImmutableList
 
 class FakeMessagesNavigator : MessagesNavigator {
     var onShowEventDebugInfoClickedCount = 0
@@ -22,6 +24,9 @@ class FakeMessagesNavigator : MessagesNavigator {
         private set
 
     var onEditPollClickedCount = 0
+        private set
+
+    var onPreviewAttachmentCount = 0
         private set
 
     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
@@ -38,5 +43,9 @@ class FakeMessagesNavigator : MessagesNavigator {
 
     override fun onEditPollClick(eventId: EventId) {
         onEditPollClickedCount++
+    }
+
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
+        onPreviewAttachmentCount++
     }
 }

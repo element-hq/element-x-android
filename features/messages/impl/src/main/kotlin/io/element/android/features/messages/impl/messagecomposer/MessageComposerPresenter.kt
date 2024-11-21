@@ -14,7 +14,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -26,8 +25,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
@@ -38,8 +41,6 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
@@ -89,12 +90,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
-@SingleIn(RoomScope::class)
-class MessageComposerPresenter @Inject constructor(
+class MessageComposerPresenter @AssistedInject constructor(
+    @Assisted private val navigator: MessagesNavigator,
     private val appCoroutineScope: CoroutineScope,
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -117,6 +117,11 @@ class MessageComposerPresenter @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): MessageComposerPresenter
+    }
+
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
@@ -147,9 +152,6 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val attachmentsState = remember {
-            mutableStateOf<AttachmentsState>(AttachmentsState.None)
-        }
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -162,16 +164,16 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
-            handlePickedMedia(attachmentsState, uri, mimeType)
+            handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(attachmentsState, uri)
+            handlePickedMedia(uri)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(attachmentsState, uri, MimeTypes.IMAGE_JPEG)
+            handlePickedMedia(uri, MimeTypes.IMAGE_JPEG)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(attachmentsState, uri, MimeTypes.VIDEO_MP4)
+            handlePickedMedia(uri, MimeTypes.VIDEO_MP4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -277,7 +279,6 @@ class MessageComposerPresenter @Inject constructor(
                             formattedFileSize = null
                         ),
                     ),
-                    attachmentState = attachmentsState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
@@ -396,7 +397,6 @@ class MessageComposerPresenter @Inject constructor(
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
-            attachmentsState = attachmentsState.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
@@ -459,14 +459,12 @@ class MessageComposerPresenter @Inject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
-        attachmentState: MutableState<AttachmentsState>,
     ) = when (attachment) {
         is Attachment.Media -> {
             launch {
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState,
                 )
             }
         }
@@ -474,14 +472,10 @@ class MessageComposerPresenter @Inject constructor(
 
     @UnstableApi
     private fun handlePickedMedia(
-        attachmentsState: MutableState<AttachmentsState>,
         uri: Uri?,
         mimeType: String? = null,
     ) {
-        if (uri == null) {
-            attachmentsState.value = AttachmentsState.None
-            return
-        }
+        uri ?: return
         val localMedia = localMediaFactory.createFromUri(
             uri = uri,
             mimeType = mimeType,
@@ -489,13 +483,12 @@ class MessageComposerPresenter @Inject constructor(
             formattedFileSize = null
         )
         val mediaAttachment = Attachment.Media(localMedia)
-        attachmentsState.value = AttachmentsState.Previewing(persistentListOf(mediaAttachment))
+        navigator.onPreviewAttachment(persistentListOf(mediaAttachment))
     }
 
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-        attachmentState: MutableState<AttachmentsState>,
     ) = runCatching {
         mediaSender.sendMedia(
             uri = uri,
@@ -503,12 +496,8 @@ class MessageComposerPresenter @Inject constructor(
             progressCallback = null,
         ).getOrThrow()
     }
-        .onSuccess {
-            attachmentState.value = AttachmentsState.None
-        }
         .onFailure { cause ->
             Timber.e(cause, "Failed to send attachment")
-            attachmentState.value = AttachmentsState.None
             if (cause is CancellationException) {
                 throw cause
             } else {
