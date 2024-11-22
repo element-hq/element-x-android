@@ -44,6 +44,7 @@ import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -62,7 +63,7 @@ class ElementCallActivity :
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
 
-    private lateinit var presenter: CallScreenPresenter
+    private lateinit var presenter: Presenter<CallScreenState>
 
     private lateinit var audioManager: AudioManager
 
@@ -92,6 +93,10 @@ class ElementCallActivity :
         )
 
         setCallType(intent)
+        // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
+        if (!::presenter.isInitialized) {
+            return
+        }
 
         if (savedInstanceState == null) {
             updateUiMode(resources.configuration)
@@ -193,19 +198,26 @@ class ElementCallActivity :
                 ?: intent.dataString?.let(::parseUrl)?.let(::ExternalUrl)
         }
         val currentCallType = webViewTarget.value
-        if (currentCallType == null && callType == null) {
-            Timber.tag(loggerTag.value).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
-            finish()
-        } else if (currentCallType == null) {
-            Timber.tag(loggerTag.value).d("Set the call type and create the presenter")
-            webViewTarget.value = callType
-            presenter = presenterFactory.create(callType!!, this)
-        } else if (callType != currentCallType) {
-            Timber.tag(loggerTag.value).d("User starts another call, restart the Activity")
-            setIntent(intent)
-            recreate()
+        if (currentCallType == null) {
+            if (callType == null) {
+                Timber.tag(loggerTag.value).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
+                finish()
+            } else {
+                Timber.tag(loggerTag.value).d("Set the call type and create the presenter")
+                webViewTarget.value = callType
+                presenter = presenterFactory.create(callType, this)
+            }
         } else {
-            Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
+            if (callType == null) {
+                Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
+            } else if (callType != currentCallType) {
+                Timber.tag(loggerTag.value).d("User starts another call, restart the Activity")
+                setIntent(intent)
+                recreate()
+            } else {
+                // Starting the same call again, should not happen, the UI is preventing this. But maybe when using external links.
+                Timber.tag(loggerTag.value).d("Starting the same call again, do nothing")
+            }
         }
     }
 
