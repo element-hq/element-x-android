@@ -7,7 +7,7 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
-import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockError
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.architecture.AsyncAction
@@ -21,7 +21,7 @@ data class PinUnlockState(
     val signOutAction: AsyncAction<String?>,
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
-    val biometricUnlockResult: BiometricUnlock.AuthenticationResult?,
+    val biometricUnlockResult: BiometricAuthenticator.AuthenticationResult?,
     val eventSink: (PinUnlockEvents) -> Unit
 ) {
     val isSignOutPromptCancellable = when (remainingAttempts) {
@@ -30,7 +30,7 @@ data class PinUnlockState(
     }
 
     val biometricUnlockErrorMessage = when {
-        biometricUnlockResult is BiometricUnlock.AuthenticationResult.Failure &&
+        biometricUnlockResult is BiometricAuthenticator.AuthenticationResult.Failure &&
             biometricUnlockResult.error is BiometricUnlockError &&
             biometricUnlockResult.error.isAuthDisabledError -> {
             biometricUnlockResult.error.message
