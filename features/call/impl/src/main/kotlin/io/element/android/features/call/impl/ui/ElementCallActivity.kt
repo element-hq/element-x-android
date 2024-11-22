@@ -200,12 +200,14 @@ class ElementCallActivity :
             Timber.tag(loggerTag.value).d("Set the call type and create the presenter")
             webViewTarget.value = callType
             presenter = presenterFactory.create(callType!!, this)
+        } else if (callType == null) {
+            Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
         } else if (callType != currentCallType) {
             Timber.tag(loggerTag.value).d("User starts another call, restart the Activity")
             setIntent(intent)
             recreate()
         } else {
-            Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
+            Timber.tag(loggerTag.value).d("Other case, do nothing")
         }
     }
 
