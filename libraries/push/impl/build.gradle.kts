@@ -7,7 +7,7 @@ import extension.setupAnvil
  * Please see LICENSE in the repository root for full details.
  */
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
     alias(libs.plugins.kotlin.serialization)
 }
 
