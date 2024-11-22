@@ -96,6 +96,17 @@ class RustSessionVerificationService(
 
     private var listener: SessionVerificationServiceListener? = null
 
+    init {
+        // Instantiate the verification controller when possible, this is needed to get incoming verification requests
+        sessionCoroutineScope.launch {
+            // Needed to avoid crashes on unit tests due to the Rust SDK not being available
+            tryOrNull {
+                encryptionService.waitForE2eeInitializationTasks()
+                initVerificationControllerIfNeeded()
+            }
+        }
+    }
+
     override fun setListener(listener: SessionVerificationServiceListener?) {
         this.listener = listener
     }

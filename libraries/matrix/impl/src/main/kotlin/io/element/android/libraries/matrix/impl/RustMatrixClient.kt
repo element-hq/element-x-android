@@ -180,6 +180,7 @@ class RustMatrixClient(
         sessionCoroutineScope = sessionCoroutineScope,
     )
 
+    private val roomMembershipObserver = RoomMembershipObserver()
     private val roomFactory = RustRoomFactory(
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
@@ -193,6 +194,7 @@ class RustMatrixClient(
         roomSyncSubscriber = roomSyncSubscriber,
         timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
         featureFlagService = featureFlagService,
+        roomMembershipObserver = roomMembershipObserver,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -200,8 +202,6 @@ class RustMatrixClient(
         dispatchers = dispatchers,
         innerClient = innerClient,
     )
-
-    private val roomMembershipObserver = RoomMembershipObserver()
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
 

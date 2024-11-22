@@ -233,11 +233,11 @@ class RoomListPresenter @Inject constructor(
         val needsSlidingSyncMigration by produceState(false) {
             value = client.needsSlidingSyncMigration().getOrDefault(false)
         }
+        val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
         return when {
-            showEmpty -> RoomListContentState.Empty
+            showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),

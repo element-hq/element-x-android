@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.attachments.preview.SendActionS
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -41,6 +42,7 @@ import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -60,7 +62,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media success scenario`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -190,9 +192,45 @@ class AttachmentsPreviewPresenterTest {
     }
 
     @Test
+    fun `present - send audio with caption success scenario`() = runTest {
+        val sendAudioResult =
+            lambdaRecorder<File, AudioInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
+        val mediaPreProcessor = FakeMediaPreProcessor().apply {
+            givenAudioResult()
+        }
+        val room = FakeMatrixRoom(
+            sendAudioResult = sendAudioResult,
+        )
+        val onDoneListener = lambdaRecorder<Unit> { }
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            mediaPreProcessor = mediaPreProcessor,
+            onDoneListener = { onDoneListener() },
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.textEditorState.setMarkdown(A_CAPTION)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            advanceUntilIdle()
+            sendAudioResult.assertions().isCalledOnce().with(
+                any(),
+                any(),
+                value(A_CAPTION),
+                any(),
+                any(),
+            )
+            onDoneListener.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
     fun `present - send media failure scenario`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.failure(failure)
         }
         val room = FakeMatrixRoom(

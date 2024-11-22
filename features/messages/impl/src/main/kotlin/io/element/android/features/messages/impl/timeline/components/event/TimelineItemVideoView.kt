@@ -8,9 +8,10 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
+import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -64,11 +66,13 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
     hideMediaContent: Boolean,
-    onContentClick: () -> Unit,
+    onContentClick: (() -> Unit)?,
+    onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
@@ -87,7 +91,7 @@ fun TimelineItemVideoView(
         }
         TimelineItemAspectRatioBox(
             modifier = containerModifier.blurHashBackground(content.blurHash, alpha = 0.9f),
-            aspectRatio = content.aspectRatio,
+            aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
             contentAlignment = Alignment.Center,
         ) {
             ProtectedView(
@@ -99,7 +103,7 @@ fun TimelineItemVideoView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .clickable(onClick = onContentClick),
+                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
                         kind = MediaRequestData.Kind.Thumbnail(
@@ -161,6 +165,7 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
         hideMediaContent = false,
         onShowContentClick = {},
         onContentClick = {},
+        onLongClick = {},
         onLinkClick = {},
         onContentLayoutChange = {},
     )
@@ -174,6 +179,7 @@ internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
         hideMediaContent = true,
         onShowContentClick = {},
         onContentClick = {},
+        onLongClick = {},
         onLinkClick = {},
         onContentLayoutChange = {},
     )

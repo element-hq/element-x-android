@@ -431,7 +431,10 @@ import kotlin.time.Duration.Companion.seconds
 
     @Test
     fun `present - PollEditClicked event navigates`() = runTest {
-        val navigator = FakeMessagesNavigator()
+        val onEditPollClickLambda = lambdaRecorder { _: EventId -> }
+        val navigator = FakeMessagesNavigator(
+            onEditPollClickLambda = onEditPollClickLambda
+        )
         val presenter = createTimelinePresenter(
             messagesNavigator = navigator,
         )
@@ -439,7 +442,7 @@ import kotlin.time.Duration.Companion.seconds
             presenter.present()
         }.test {
             awaitFirstItem().eventSink(TimelineEvents.EditPoll(AN_EVENT_ID))
-            assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+            onEditPollClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 
@@ -657,35 +660,35 @@ import kotlin.time.Duration.Companion.seconds
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }
-}
 
-internal fun TestScope.createTimelinePresenter(
-    timeline: Timeline = FakeTimeline(),
-    room: FakeMatrixRoom = FakeMatrixRoom(
-        liveTimeline = timeline,
-        canUserSendMessageResult = { _, _ -> Result.success(true) }
-    ),
-    redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
-    messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
-    endPollAction: EndPollAction = FakeEndPollAction(),
-    sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
-    sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
-    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-): TimelinePresenter {
-    return TimelinePresenter(
-        timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
-        room = room,
-        dispatchers = testCoroutineDispatchers(),
-        appScope = this,
-        navigator = messagesNavigator,
-        redactedVoiceMessageManager = redactedVoiceMessageManager,
-        endPollAction = endPollAction,
-        sendPollResponseAction = sendPollResponseAction,
-        sessionPreferencesStore = sessionPreferencesStore,
-        timelineItemIndexer = timelineItemIndexer,
-        timelineController = TimelineController(room),
-        resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
-        typingNotificationPresenter = { aTypingNotificationState() },
-        roomCallStatePresenter = { aStandByCallState() },
-    )
+    private fun TestScope.createTimelinePresenter(
+        timeline: Timeline = FakeTimeline(),
+        room: FakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) }
+        ),
+        redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+        messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
+        endPollAction: EndPollAction = FakeEndPollAction(),
+        sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
+    ): TimelinePresenter {
+        return TimelinePresenter(
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
+            room = room,
+            dispatchers = testCoroutineDispatchers(),
+            appScope = this,
+            navigator = messagesNavigator,
+            redactedVoiceMessageManager = redactedVoiceMessageManager,
+            endPollAction = endPollAction,
+            sendPollResponseAction = sendPollResponseAction,
+            sessionPreferencesStore = sessionPreferencesStore,
+            timelineItemIndexer = timelineItemIndexer,
+            timelineController = TimelineController(room),
+            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+            typingNotificationPresenter = { aTypingNotificationState() },
+            roomCallStatePresenter = { aStandByCallState() },
+        )
+    }
 }

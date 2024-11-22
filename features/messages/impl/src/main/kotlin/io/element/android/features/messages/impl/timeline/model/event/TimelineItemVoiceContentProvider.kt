@@ -48,6 +48,7 @@ fun aTimelineItemVoiceContent(
     filename = filename,
     caption = caption,
     formattedCaption = null,
+    isEdited = false,
     duration = duration,
     mediaSource = mediaSource,
     mimeType = mimeType,

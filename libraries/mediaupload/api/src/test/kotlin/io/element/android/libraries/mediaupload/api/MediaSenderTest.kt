@@ -91,7 +91,7 @@ class MediaSenderTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
-        val sendFileResult = lambdaRecorder<File, FileInfo, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _ ->
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(

@@ -30,6 +30,7 @@ fun aTimelineItemVideoContent(
     filename = "Video.mp4",
     caption = null,
     formattedCaption = null,
+    isEdited = false,
     thumbnailSource = null,
     blurHash = blurhash,
     aspectRatio = aspectRatio,

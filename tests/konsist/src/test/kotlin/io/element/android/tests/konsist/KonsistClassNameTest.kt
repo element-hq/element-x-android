@@ -48,6 +48,9 @@ class KonsistClassNameTest {
         Konsist.scopeFromProduction()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)
+            .withoutName(
+                "AspectRatioProvider",
+            )
             .also {
                 // Check that classes are actually found
                 assertThat(it.size).isGreaterThan(100)

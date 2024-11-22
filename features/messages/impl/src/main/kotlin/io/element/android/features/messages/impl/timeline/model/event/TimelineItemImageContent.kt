@@ -17,6 +17,7 @@ data class TimelineItemImageContent(
     override val filename: String,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val isEdited: Boolean,
     val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val formattedFileSize: String,

@@ -72,6 +72,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -114,7 +115,7 @@ fun TimelineItemEventRow(
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
-    onContentClick: () -> Unit,
+    onEventClick: () -> Unit,
     onLongClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onUserDataClick: (UserId) -> Unit,
@@ -127,10 +128,14 @@ fun TimelineItemEventRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
+        // Only pass down a custom clickable lambda if the content can be clicked separately
+        val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
+
         TimelineItemEventContentView(
             content = event.content,
             hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onContentClick = onContentClick,
+            onLongClick = onLongClick,
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = eventSink,
@@ -142,6 +147,13 @@ fun TimelineItemEventRow(
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
 
+    val onContentClick = if (event.mustBeProtected()) {
+        // In this case, let the content handle the click
+        {}
+    } else {
+        onEventClick
+    }
+
     fun onUserDataClick() {
         onUserDataClick(event.senderId)
     }
@@ -149,12 +161,6 @@ fun TimelineItemEventRow(
     fun inReplyToClick() {
         val inReplyToEventId = event.inReplyTo?.eventId() ?: return
         inReplyToClick(inReplyToEventId)
-    }
-
-    val onWholeItemClick = if (event.isWholeContentClickable) {
-        onContentClick
-    } else {
-        {}
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -180,7 +186,7 @@ fun TimelineItemEventRow(
                         isHighlighted = isHighlighted,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
-                        onContentClick = onWholeItemClick,
+                        onContentClick = onContentClick,
                         onLongClick = onLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onUserDataClick = ::onUserDataClick,
@@ -214,7 +220,7 @@ fun TimelineItemEventRow(
                 isHighlighted = isHighlighted,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
-                onContentClick = onWholeItemClick,
+                onContentClick = onContentClick,
                 onLongClick = onLongClick,
                 inReplyToClick = ::inReplyToClick,
                 onUserDataClick = ::onUserDataClick,

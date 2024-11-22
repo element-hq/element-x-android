@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -26,10 +25,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun TimelineItemLocationView(
     content: TimelineItemLocationContent,
-    onContentClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.clickable(onClick = onContentClick).fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         content.description?.let {
             Text(
                 text = it,
@@ -55,6 +53,5 @@ internal fun TimelineItemLocationViewPreview(@PreviewParameter(TimelineItemLocat
     ElementPreview {
         TimelineItemLocationView(
             content = content,
-            onContentClick = {},
         )
     }

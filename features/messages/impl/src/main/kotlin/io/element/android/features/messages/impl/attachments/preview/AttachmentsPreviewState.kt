@@ -9,9 +9,6 @@ package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
-import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.textcomposer.model.TextEditorState
 
 data class AttachmentsPreviewState(
@@ -20,9 +17,8 @@ data class AttachmentsPreviewState(
     val textEditorState: TextEditorState,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 ) {
-    val allowCaption: Boolean = (attachment as? Attachment.Media)?.localMedia?.info?.mimeType?.let {
-        it.isMimeTypeImage() || it.isMimeTypeVideo()
-    }.orFalse()
+    // Keep the val to eventually set to false for some mimetypes.
+    val allowCaption: Boolean = true
 }
 
 @Immutable

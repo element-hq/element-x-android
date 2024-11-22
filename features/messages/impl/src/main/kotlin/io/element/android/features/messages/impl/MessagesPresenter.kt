@@ -37,12 +37,12 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
-import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -88,12 +88,12 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
-    private val composerPresenter: Presenter<MessageComposerState>,
+    @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
-    timelinePresenterFactory: TimelinePresenter.Factory,
+    @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
-    private val actionListPresenterFactory: ActionListPresenter.Factory,
+    actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
@@ -110,12 +110,15 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
-    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
     private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
 
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessagesPresenter
+        fun create(
+            navigator: MessagesNavigator,
+            composerPresenter: Presenter<MessageComposerState>,
+            timelinePresenter: Presenter<TimelineState>,
+        ): MessagesPresenter
     }
 
     @Composable
@@ -273,6 +276,9 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
+            TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
+            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
+            TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply,
             TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
@@ -282,6 +288,16 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+        }
+    }
+
+    private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
+        timelineController.invokeOnCurrentTimeline {
+            editCaption(
+                eventOrTransactionId = targetEvent.eventOrTransactionId,
+                caption = null,
+                formattedCaption = null,
+            )
         }
     }
 
@@ -385,6 +401,32 @@ class MessagesPresenter @AssistedInject constructor(
                 )
             }
         }
+    }
+
+    private fun handleActionAddCaption(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+    ) {
+        val composerMode = MessageComposerMode.EditCaption(
+            eventOrTransactionId = targetEvent.eventOrTransactionId,
+            content = "",
+        )
+        composerState.eventSink(
+            MessageComposerEvents.SetMode(composerMode)
+        )
+    }
+
+    private fun handleActionEditCaption(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+    ) {
+        val composerMode = MessageComposerMode.EditCaption(
+            eventOrTransactionId = targetEvent.eventOrTransactionId,
+            content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+        )
+        composerState.eventSink(
+            MessageComposerEvents.SetMode(composerMode)
+        )
     }
 
     private suspend fun handleActionReply(

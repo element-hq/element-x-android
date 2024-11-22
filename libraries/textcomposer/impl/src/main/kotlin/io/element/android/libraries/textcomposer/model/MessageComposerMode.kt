@@ -27,6 +27,11 @@ sealed interface MessageComposerMode {
         val content: String
     ) : Special
 
+    data class EditCaption(
+        val eventOrTransactionId: EventOrTransactionId,
+        val content: String
+    ) : Special
+
     data class Reply(
         val replyToDetails: InReplyToDetails,
         val hideImage: Boolean,
@@ -34,16 +39,8 @@ sealed interface MessageComposerMode {
         val eventId: EventId = replyToDetails.eventId()
     }
 
-    val relatedEventId: EventId?
-        get() = when (this) {
-            is Normal,
-            is Attachment -> null
-            is Edit -> eventOrTransactionId.eventId
-            is Reply -> eventId
-        }
-
     val isEditing: Boolean
-        get() = this is Edit
+        get() = this is Edit || this is EditCaption
 
     val isReply: Boolean
         get() = this is Reply
