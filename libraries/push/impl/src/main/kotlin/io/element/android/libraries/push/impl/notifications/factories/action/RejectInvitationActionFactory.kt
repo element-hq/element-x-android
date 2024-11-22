@@ -17,6 +17,7 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import javax.inject.Inject
@@ -41,10 +42,9 @@ class RejectInvitationActionFactory @Inject constructor(
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
         return NotificationCompat.Action.Builder(
             R.drawable.vector_notification_reject_invitation,
-            stringProvider.getString(R.string.notification_invitation_action_reject),
+            stringProvider.getString(CommonStrings.action_reject),
             pendingIntent
         ).build()
     }

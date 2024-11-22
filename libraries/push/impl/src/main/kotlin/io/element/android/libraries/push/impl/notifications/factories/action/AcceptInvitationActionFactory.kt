@@ -17,6 +17,7 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import javax.inject.Inject
@@ -27,7 +28,6 @@ class AcceptInvitationActionFactory @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
 ) {
-    // offer to type a quick accept button
     fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action {
         val sessionId = inviteNotifiableEvent.sessionId.value
         val roomId = inviteNotifiableEvent.roomId.value
@@ -44,7 +44,7 @@ class AcceptInvitationActionFactory @Inject constructor(
         )
         return NotificationCompat.Action.Builder(
             R.drawable.vector_notification_accept_invitation,
-            stringProvider.getString(R.string.notification_invitation_action_join),
+            stringProvider.getString(CommonStrings.action_accept),
             pendingIntent
         ).build()
     }
