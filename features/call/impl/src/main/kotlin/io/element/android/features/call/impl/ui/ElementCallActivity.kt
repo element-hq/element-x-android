@@ -44,6 +44,7 @@ import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -62,7 +63,7 @@ class ElementCallActivity :
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
 
-    private lateinit var presenter: CallScreenPresenter
+    private lateinit var presenter: Presenter<CallScreenState>
 
     private lateinit var audioManager: AudioManager
 
@@ -92,6 +93,10 @@ class ElementCallActivity :
         )
 
         setCallType(intent)
+        // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
+        if (!::presenter.isInitialized) {
+            return
+        }
 
         if (savedInstanceState == null) {
             updateUiMode(resources.configuration)
