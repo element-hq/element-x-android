@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -150,6 +151,13 @@ class DefaultNotificationCreatorTest {
         )
         result.commonAssertions(
             expectedCategory = null,
+        )
+        val actionTitles = result.actions?.map { it.title }
+        assertThat(actionTitles).isEqualTo(
+            listOfNotNull(
+                rejectInvitationActionTitle.takeIf { NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS },
+                acceptInvitationActionTitle.takeIf { NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS },
+            )
         )
     }
 
