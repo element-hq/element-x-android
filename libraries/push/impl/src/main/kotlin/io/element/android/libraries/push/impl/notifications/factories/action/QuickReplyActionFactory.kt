@@ -34,7 +34,7 @@ class QuickReplyActionFactory @Inject constructor(
     private val clock: SystemClock,
 ) {
     fun create(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): NotificationCompat.Action? {
-        if (!NotificationConfig.SUPPORT_QUICK_REPLY_ACTION) return null
+        if (!NotificationConfig.SHOW_QUICK_REPLY_ACTION) return null
         val sessionId = roomInfo.sessionId
         val roomId = roomInfo.roomId
         val replyPendingIntent = buildQuickReplyIntent(sessionId, roomId, threadId)

@@ -230,7 +230,7 @@ class DefaultNotificationCreator @Inject constructor(
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
             .apply {
-                if (NotificationConfig.SUPPORT_JOIN_DECLINE_INVITE) {
+                if (NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS) {
                     addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
                     addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
                 }

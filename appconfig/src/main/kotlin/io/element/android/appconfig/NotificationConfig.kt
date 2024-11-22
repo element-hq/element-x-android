@@ -14,17 +14,17 @@ object NotificationConfig {
     /**
      * If set to true, the notification will have a "Mark as read" action.
      */
-    const val SUPPORT_MARK_AS_READ_ACTION = true
+    const val SHOW_MARK_AS_READ_ACTION = true
 
     /**
      * If set to true, the notification for invitation will have two actions to accept or decline the invite.
      */
-    const val SUPPORT_JOIN_DECLINE_INVITE = true
+    const val SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS = true
 
     /**
      * If set to true, the notification will have a "Quick reply" action, allow to compose and send a message to the room.
      */
-    const val SUPPORT_QUICK_REPLY_ACTION = true
+    const val SHOW_QUICK_REPLY_ACTION = true
 
     @ColorInt
     val NOTIFICATION_ACCENT_COLOR: Int = Color.parseColor("#FF0DBD8B")

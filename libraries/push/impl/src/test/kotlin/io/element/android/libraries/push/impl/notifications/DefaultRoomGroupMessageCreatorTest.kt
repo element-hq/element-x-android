@@ -162,8 +162,8 @@ class DefaultRoomGroupMessageCreatorTest {
         val actionTitles = result.actions?.map { it.title }
         assertThat(actionTitles).isEqualTo(
             listOfNotNull(
-                markAsReadActionTitle.takeIf { NotificationConfig.SUPPORT_MARK_AS_READ_ACTION },
-                quickReplyActionTitle.takeIf { NotificationConfig.SUPPORT_QUICK_REPLY_ACTION },
+                markAsReadActionTitle.takeIf { NotificationConfig.SHOW_MARK_AS_READ_ACTION },
+                quickReplyActionTitle.takeIf { NotificationConfig.SHOW_QUICK_REPLY_ACTION },
             )
         )
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
@@ -188,7 +188,7 @@ class DefaultRoomGroupMessageCreatorTest {
         val actionTitles = result.actions?.map { it.title }
         assertThat(actionTitles).isEqualTo(
             listOfNotNull(
-                markAsReadActionTitle.takeIf { NotificationConfig.SUPPORT_MARK_AS_READ_ACTION }
+                markAsReadActionTitle.takeIf { NotificationConfig.SHOW_MARK_AS_READ_ACTION }
             )
         )
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
