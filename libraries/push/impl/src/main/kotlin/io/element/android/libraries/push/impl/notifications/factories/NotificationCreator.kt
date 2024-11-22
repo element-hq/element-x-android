@@ -230,10 +230,8 @@ class DefaultNotificationCreator @Inject constructor(
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
             .apply {
-                if (NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS) {
-                    addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
-                    addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
-                }
+                addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
+                addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
                 // Build the pending intent for when the notification is clicked
                 setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId))
 

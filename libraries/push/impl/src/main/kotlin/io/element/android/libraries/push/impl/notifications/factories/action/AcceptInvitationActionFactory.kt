@@ -11,6 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.push.impl.R
@@ -28,7 +29,8 @@ class AcceptInvitationActionFactory @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
 ) {
-    fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action {
+    fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action? {
+        if (!NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS) return null
         val sessionId = inviteNotifiableEvent.sessionId.value
         val roomId = inviteNotifiableEvent.roomId.value
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
