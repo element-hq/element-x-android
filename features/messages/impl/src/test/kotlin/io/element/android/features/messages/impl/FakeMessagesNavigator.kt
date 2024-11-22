@@ -7,36 +7,37 @@
 
 package io.element.android.features.messages.impl
 
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.tests.testutils.lambda.lambdaError
+import kotlinx.collections.immutable.ImmutableList
 
-class FakeMessagesNavigator : MessagesNavigator {
-    var onShowEventDebugInfoClickedCount = 0
-        private set
-
-    var onForwardEventClickedCount = 0
-        private set
-
-    var onReportContentClickedCount = 0
-        private set
-
-    var onEditPollClickedCount = 0
-        private set
-
+class FakeMessagesNavigator(
+    private val onShowEventDebugInfoClickLambda: (eventId: EventId?, debugInfo: TimelineItemDebugInfo) -> Unit = { _, _ -> lambdaError() },
+    private val onForwardEventClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
+    private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
+    private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
+    private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>) -> Unit = { _ -> lambdaError() },
+) : MessagesNavigator {
     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
-        onShowEventDebugInfoClickedCount++
+        onShowEventDebugInfoClickLambda(eventId, debugInfo)
     }
 
     override fun onForwardEventClick(eventId: EventId) {
-        onForwardEventClickedCount++
+        onForwardEventClickLambda(eventId)
     }
 
     override fun onReportContentClick(eventId: EventId, senderId: UserId) {
-        onReportContentClickedCount++
+        onReportContentClickLambda(eventId, senderId)
     }
 
     override fun onEditPollClick(eventId: EventId) {
-        onEditPollClickedCount++
+        onEditPollClickLambda(eventId)
+    }
+
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
+        onPreviewAttachmentLambda(attachments)
     }
 }
