@@ -229,7 +229,6 @@ class RustSessionVerificationService(
         recoveryStateListenerTaskHandle.cancelAndDestroy()
         if (this::verificationController.isInitialized) {
             verificationController.setDelegate(null)
-            verificationController.destroy()
         }
     }
 

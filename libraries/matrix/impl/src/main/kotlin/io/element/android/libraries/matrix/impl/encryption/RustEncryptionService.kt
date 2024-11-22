@@ -94,10 +94,6 @@ internal class RustEncryptionService(
     }
         .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
-    fun destroy() {
-        service.destroy()
-    }
-
     override suspend fun enableBackups(): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             service.enableBackups()
