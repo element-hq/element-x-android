@@ -32,6 +32,7 @@
   <string name="a11y_voice_message_record">"Salvesta häälsõnum"</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
   <string name="action_accept">"Nõustu"</string>
+  <string name="action_add_caption">"Lisa selgitus"</string>
   <string name="action_add_to_timeline">"Lisa ajajoonele"</string>
   <string name="action_back">"Tagasi"</string>
   <string name="action_call">"Helista"</string>
@@ -57,6 +58,7 @@
   <string name="action_discard">"Loobu"</string>
   <string name="action_done">"Valmis"</string>
   <string name="action_edit">"Muuda"</string>
+  <string name="action_edit_caption">"Muuda selgitust"</string>
   <string name="action_edit_poll">"Muuda küsitlust"</string>
   <string name="action_enable">"Võta kasutusele"</string>
   <string name="action_end_poll">"Lõpeta küsitlus"</string>
@@ -91,6 +93,7 @@
   <string name="action_react">"Reageeri"</string>
   <string name="action_reject">"Keeldu"</string>
   <string name="action_remove">"Eemalda"</string>
+  <string name="action_remove_caption">"Eemalda selgitus"</string>
   <string name="action_reply">"Vasta"</string>
   <string name="action_reply_in_thread">"Vasta jutulõngas"</string>
   <string name="action_report_bug">"Teata veast"</string>
@@ -123,6 +126,7 @@
   <string name="action_yes">"Jah"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
+  <string name="common_adding_caption">"Lisame selgitust"</string>
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
   <string name="common_analytics">"Analüütika"</string>
   <string name="common_appearance">"Välimus"</string>
@@ -143,6 +147,7 @@
   <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
   <string name="common_editing">"Muutmine"</string>
+  <string name="common_editing_caption">"Muudame selgitust"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Krüptimine"</string>
   <string name="common_encryption_enabled">"Krüptimine on kasutusel"</string>
@@ -291,7 +296,11 @@ Põhjus: %1$s."</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Nõustu kõigiga"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Keeldu ja määra suhtluskeeld"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Pole ühtegi liitumispalvet"</string>
+  <string name="screen_knock_requests_list_title">"Liitumispalved"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti."</string>
