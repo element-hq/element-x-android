@@ -33,4 +33,5 @@ sealed interface SendActionState {
     }
 
     data class Failure(val error: Throwable) : SendActionState
+    data object Done : SendActionState
 }

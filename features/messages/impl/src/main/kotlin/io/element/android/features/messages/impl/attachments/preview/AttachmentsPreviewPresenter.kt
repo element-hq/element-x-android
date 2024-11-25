@@ -131,6 +131,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                         attachment,
                         prePropressingJob,
                         mediaUploadInfoStateFlow.value,
+                        sendActionState,
                     )
                 }
                 AttachmentsPreviewEvents.ClearSendState -> {
@@ -192,6 +193,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         attachment: Attachment,
         preProcessingJob: Job?,
         mediaUploadInfo: AsyncData<MediaUploadInfo>,
+        sendActionState: MutableState<SendActionState>,
     ) = launch {
         // Delete the temporary file
         when (attachment) {
@@ -203,6 +205,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 }
             }
         }
+        // Reset the sendActionState to ensure that dialog is closed before the screen
+        sendActionState.value = SendActionState.Done
         onDoneListener()
     }
 
@@ -236,6 +240,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     }.fold(
         onSuccess = {
             cleanUp(mediaUploadInfo)
+            // Reset the sendActionState to ensure that dialog is closed before the screen
+            sendActionState.value = SendActionState.Done
             onDoneListener()
         },
         onFailure = { error ->

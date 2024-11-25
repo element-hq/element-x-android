@@ -92,7 +92,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f))
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
         }
@@ -125,7 +125,7 @@ class AttachmentsPreviewPresenterTest {
             advanceUntilIdle()
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.InstantSending)
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
         }
@@ -157,7 +157,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             // Pre-processing finishes
             processLatch.complete(Unit)
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
         }
@@ -227,6 +227,7 @@ class AttachmentsPreviewPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.Cancel)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             deleteCallback.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
         }
@@ -258,7 +259,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendImageResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
@@ -297,7 +298,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendVideoResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
@@ -334,7 +335,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendAudioResult.assertions().isCalledOnce().with(
                 any(),
                 any(),
