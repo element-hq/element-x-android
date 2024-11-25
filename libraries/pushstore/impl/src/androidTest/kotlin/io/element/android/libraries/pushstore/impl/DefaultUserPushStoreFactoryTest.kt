@@ -10,7 +10,6 @@ package io.element.android.libraries.pushstore.impl
 import androidx.test.platform.app.InstrumentationRegistry
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
-import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
