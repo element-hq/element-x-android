@@ -7,6 +7,8 @@
 
 package io.element.android.features.maprealtime.impl
 
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
+
 // TODO add your ui models. Remove the eventSink if you don't have events.
 // TODO (tb): This all could live on the MessagesState as we are only using the View aspect and not the Presenter aspect.
 // Refactor this to be a part of the MessagesState in the future.
@@ -20,7 +22,7 @@ data class MapRealtimePresenterState(
     val eventSink: (MapRealtimeEvents) -> Unit,
     val isSharingLocation: Boolean,
     val mapType: MapType,
-    val vehicleLocations: List<MapRealtimeLocationDot>
+    val liveLocationShares: List<LiveLocationShare>,
 ) {
     sealed interface Dialog {
         data object None : Dialog
