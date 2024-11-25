@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canBan
+import io.element.android.libraries.matrix.api.room.powerlevels.canHandleKnockRequests
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canKick
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
@@ -83,6 +84,13 @@ fun MatrixRoom.canKickAsState(updateKey: Long): State<Boolean> {
 fun MatrixRoom.canBanAsState(updateKey: Long): State<Boolean> {
     return produceState(initialValue = false, key1 = updateKey) {
         value = canBan().getOrElse { false }
+    }
+}
+
+@Composable
+fun MatrixRoom.canHandleKnockRequestsAsState(updateKey: Long): State<Boolean> {
+    return produceState(initialValue = false, key1 = updateKey) {
+        value = canHandleKnockRequests().getOrElse { false }
     }
 }
 

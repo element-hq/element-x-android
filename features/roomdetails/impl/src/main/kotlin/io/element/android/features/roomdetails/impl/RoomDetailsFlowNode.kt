@@ -141,6 +141,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.PinnedMessagesList)
                     }
 
+                    override fun openKnockRequestsList() {
+                        // TODO open the knock requests list screen
+                    }
+
                     override fun onJoinCall() {
                         val inputs = CallType.RoomCall(
                             sessionId = room.sessionId,

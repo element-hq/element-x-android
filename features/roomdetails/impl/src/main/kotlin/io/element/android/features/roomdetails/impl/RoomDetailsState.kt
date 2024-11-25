@@ -41,6 +41,8 @@ data class RoomDetailsState(
     val heroes: ImmutableList<MatrixUser>,
     val canShowPinnedMessages: Boolean,
     val pinnedMessagesCount: Int?,
+    val canShowKnockRequests: Boolean,
+    val knockRequestsCount: Int?,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
