@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import fr.gouv.tchap.android.libraries.matrix.api.core.toDisplayName
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -43,16 +42,16 @@ fun SenderName(
             is ProfileTimelineDetails.Error,
             ProfileTimelineDetails.Pending,
             ProfileTimelineDetails.Unavailable -> {
-                MainText(text = senderId.toDisplayName(), mode = senderNameMode) // TCHAP hide the Matrix Id
+                MainText(text = senderId.extractedDisplayName, mode = senderNameMode) // TCHAP hide the Matrix Id
             }
             is ProfileTimelineDetails.Ready -> {
                 val displayName = senderProfile.displayName
                 if (displayName.isNullOrEmpty()) {
-                    MainText(text = senderId.toDisplayName(), mode = senderNameMode) // TCHAP hide the Matrix Id
+                    MainText(text = senderId.extractedDisplayName, mode = senderNameMode) // TCHAP hide the Matrix Id
                 } else {
                     MainText(text = displayName, mode = senderNameMode)
                     if (senderProfile.displayNameAmbiguous) {
-                        SecondaryText(text = senderId.toDisplayName(), mode = senderNameMode) // TCHAP hide the Matrix Id
+                        SecondaryText(text = senderId.extractedDisplayName, mode = senderNameMode) // TCHAP hide the Matrix Id
                     }
                 }
             }

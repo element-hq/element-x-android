@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.ui.model
 
-import fr.gouv.tchap.android.libraries.matrix.api.core.toDisplayName
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -20,5 +19,5 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
 )
 
 fun MatrixUser.getBestName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.toDisplayName() // TCHAP hide the Matrix Id
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.extractedDisplayName // TCHAP hide the Matrix Id
 }

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 import io.element.android.libraries.androidutils.metadata.isInDebug
 import java.io.Serializable
 
@@ -26,7 +27,5 @@ value class UserId(val value: String) : Serializable {
     override fun toString(): String = value
 
     val extractedDisplayName: String
-        get() = value
-            .removePrefix("@")
-            .substringBefore(":")
+        get() = value.toUserDisplayName() // TCHAP hide the Matrix Id
 }
