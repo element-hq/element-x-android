@@ -69,7 +69,7 @@ class PinnedMessagesListViewTest {
                 state = state,
                 onEventClick = callback
             )
-            rule.onAllNodesWithText(content.body).onFirst().performClick()
+            rule.onAllNodesWithText(content.filename).onFirst().performClick()
         }
     }
 
@@ -85,7 +85,7 @@ class PinnedMessagesListViewTest {
         rule.setPinnedMessagesListView(
             state = state,
         )
-        rule.onAllNodesWithText(content.body).onFirst()
+        rule.onAllNodesWithText(content.filename).onFirst()
             .performTouchInput {
                 longClick()
             }

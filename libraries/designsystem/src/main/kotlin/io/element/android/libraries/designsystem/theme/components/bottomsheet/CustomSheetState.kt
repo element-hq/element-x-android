@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
-import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -296,13 +295,9 @@ internal object AnchoredDraggableDefaults {
     /**
      * The default animation used by [AnchoredDraggableState].
      */
-    @get:ExperimentalMaterial3Api
-    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
     val SnapAnimationSpec = SpringSpec<Float>()
 
-    @get:ExperimentalMaterial3Api
-    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
     val DecayAnimationSpec = exponentialDecay<Float>()
 }

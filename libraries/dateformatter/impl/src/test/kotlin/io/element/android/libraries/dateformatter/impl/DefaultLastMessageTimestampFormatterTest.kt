@@ -93,7 +93,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1979-04-06T18:35:24.00Z"
         val clock = FakeClock().apply { givenInstant(Instant.parse(now)) }
-        val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
+        val dateFormatters = DateFormatters(Locale.US, clock) { TimeZone.UTC }
         assertThat(dateFormatters.formatDateWithFullFormat(Instant.parse(dat).toLocalDateTime(TimeZone.UTC))).isEqualTo("Friday, April 6, 1979")
     }
 
@@ -102,8 +102,8 @@ class DefaultLastMessageTimestampFormatterTest {
      */
     private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): LastMessageTimestampFormatter {
         val clock = FakeClock().apply { givenInstant(Instant.parse(currentDate)) }
-        val localDateTimeProvider = LocalDateTimeProvider(clock, TimeZone.UTC)
-        val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
+        val localDateTimeProvider = LocalDateTimeProvider(clock) { TimeZone.UTC }
+        val dateFormatters = DateFormatters(Locale.US, clock) { TimeZone.UTC }
         return DefaultLastMessageTimestampFormatter(localDateTimeProvider, dateFormatters)
     }
 }

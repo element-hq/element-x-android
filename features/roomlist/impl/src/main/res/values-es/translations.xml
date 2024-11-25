@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"Configurar la recuperación"</string>
   <string name="confirm_recovery_key_banner_message">"La copia de seguridad del chat no está sincronizada en este momento. Debes confirmar tu clave de recuperación para mantener el acceso a la copia de seguridad del chat."</string>
   <string name="confirm_recovery_key_banner_title">"Confirma tu clave de recuperación"</string>
   <string name="screen_invites_decline_chat_message">"¿Estás seguro de que quieres rechazar la invitación a unirte a %1$s?"</string>

@@ -10,9 +10,12 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
-import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -33,7 +36,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isEncrypted = false),
             aRoomDetailsState(roomAlias = null),
             aDmRoomDetailsState(),
-            aDmRoomDetailsState(isDmMemberIgnored = true),
+            aDmRoomDetailsState(isDmMemberIgnored = true, roomName = "Daniel (ignored and clear)", isEncrypted = false),
             aRoomDetailsState(canInvite = true),
             aRoomDetailsState(isFavorite = true),
             aRoomDetailsState(
@@ -41,7 +44,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
                 roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
-            aRoomDetailsState(canCall = false, canInvite = false),
+            aRoomDetailsState(roomCallState = aStandByCallState(false), canInvite = false),
             aRoomDetailsState(isPublic = false),
             aRoomDetailsState(heroes = aMatrixUserList()),
             aRoomDetailsState(pinnedMessagesCount = 3),
@@ -88,7 +91,7 @@ fun aRoomDetailsState(
     canInvite: Boolean = false,
     canEdit: Boolean = false,
     canShowNotificationSettings: Boolean = true,
-    canCall: Boolean = true,
+    roomCallState: RoomCallState = aStandByCallState(),
     roomType: RoomDetailsType = RoomDetailsType.Room,
     roomMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -112,7 +115,7 @@ fun aRoomDetailsState(
     canInvite = canInvite,
     canEdit = canEdit,
     canShowNotificationSettings = canShowNotificationSettings,
-    canCall = canCall,
+    roomCallState = roomCallState,
     roomType = roomType,
     roomMemberDetailsState = roomMemberDetailsState,
     leaveRoomState = leaveRoomState,
@@ -137,12 +140,16 @@ fun aRoomNotificationSettings(
 fun aDmRoomDetailsState(
     isDmMemberIgnored: Boolean = false,
     roomName: String = "Daniel",
+    isEncrypted: Boolean = true,
 ) = aRoomDetailsState(
     roomName = roomName,
     isPublic = false,
+    isEncrypted = isEncrypted,
     roomType = RoomDetailsType.Dm(
-        aRoomMember(),
-        aDmRoomMember(isIgnored = isDmMemberIgnored),
+        me = aRoomMember(),
+        otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
     ),
-    roomMemberDetailsState = aUserProfileState()
+    roomMemberDetailsState = aUserProfileState(
+        isBlocked = AsyncData.Success(isDmMemberIgnored),
+    )
 )

@@ -20,6 +20,7 @@
     <item quantity="other">"%d undangan"</item>
   </plurals>
   <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
+  <string name="notification_invite_body_with_sender">"%1$s mengundang Anda untuk mengobrol"</string>
   <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
   <string name="notification_new_messages">"Pesan Baru"</string>
   <plurals name="notification_new_messages_for_room">
@@ -29,7 +30,9 @@
   <string name="notification_room_action_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="notification_room_action_quick_reply">"Balas cepat"</string>
   <string name="notification_room_invite_body">"Mengundang Anda untuk bergabung ke ruangan"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s mengundang Anda untuk bergabung dengan ruangan"</string>
   <string name="notification_sender_me">"Saya"</string>
+  <string name="notification_sender_mention_reply">"%1$s disebut atau dibalas"</string>
   <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

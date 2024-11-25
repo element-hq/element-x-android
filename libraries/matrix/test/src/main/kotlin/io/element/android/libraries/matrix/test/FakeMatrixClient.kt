@@ -22,15 +22,15 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -74,16 +74,19 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
-    private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
+        Result.success(
+        Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
+    )
+    },
+    private val getRoomPreviewInfoResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreviewInfo> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
-    var isNativeSlidingSyncSupportedLambda: suspend () -> Boolean = { true },
-    var isSlidingSyncProxySupportedLambda: suspend () -> Boolean = { true },
-    var isUsingNativeSlidingSyncLambda: () -> Boolean = { true },
+    private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
+    private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() }
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -102,7 +105,7 @@ class FakeMatrixClient(
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
-    val getInvitedRoomResults = mutableMapOf<RoomId, InvitedRoom>()
+    val getPendingRoomResults = mutableMapOf<RoomId, PendingRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -115,11 +118,11 @@ class FakeMatrixClient(
     var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomSummary?> = { _, _ ->
         Result.success(null)
     }
-    var knockRoomLambda: (RoomId) -> Result<Unit> = {
-        Result.success(Unit)
+    var knockRoomLambda: (RoomIdOrAlias, String, List<String>) -> Result<RoomSummary?> = { _, _, _ ->
+        Result.success(null)
     }
-    var getRoomInfoFlowLambda = { _: RoomId ->
-        flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
+    var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
+        flowOf<Optional<RoomSummary>>(Optional.empty())
     }
     var logoutLambda: (Boolean, Boolean) -> String? = { _, _ ->
         null
@@ -129,8 +132,8 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
-        return getInvitedRoomResults[roomId]
+    override suspend fun getPendingRoom(roomId: RoomId): PendingRoom? {
+        return getPendingRoomResults[roomId]
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -224,7 +227,9 @@ class FakeMatrixClient(
         return joinRoomByIdOrAliasLambda(roomIdOrAlias, serverNames)
     }
 
-    override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
+    override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> {
+        return knockRoomLambda(roomIdOrAlias, message, serverNames)
+    }
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
@@ -304,19 +309,19 @@ class FakeMatrixClient(
         return Result.success(Unit)
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = simulateLongTask {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<Optional<ResolvedRoomAlias>> = simulateLongTask {
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = simulateLongTask {
-        getRoomPreviewResult(roomIdOrAlias, serverNames)
+    override suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo> = simulateLongTask {
+        getRoomPreviewInfoResult(roomIdOrAlias, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
         return Result.success(visitedRoomsId)
     }
 
-    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+    override fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias) = getRoomSummaryFlowLambda(roomIdOrAlias)
 
     var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
         // no-op
@@ -335,15 +340,11 @@ class FakeMatrixClient(
         return getUrlLambda(url)
     }
 
-    override suspend fun isNativeSlidingSyncSupported(): Boolean {
-        return isNativeSlidingSyncSupportedLambda()
+    override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> {
+        return currentSlidingSyncVersionLambda()
     }
 
-    override suspend fun isSlidingSyncProxySupported(): Boolean {
-        return isSlidingSyncProxySupportedLambda()
-    }
-
-    override fun isUsingNativeSlidingSync(): Boolean {
-        return isUsingNativeSlidingSyncLambda()
+    override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> {
+        return availableSlidingSyncVersionsLambda()
     }
 }

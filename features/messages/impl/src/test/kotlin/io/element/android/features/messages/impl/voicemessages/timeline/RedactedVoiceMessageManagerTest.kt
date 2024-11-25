@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -78,7 +79,6 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             transactionId = null,
             isEditable = false,
             canBeRepliedTo = false,
-            isLocal = false,
             isOwn = false,
             isRemote = false,
             localSendState = null,
@@ -88,15 +88,16 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,
             content = RedactedContent,
-            debugInfoProvider = {
+            origin = null,
+            timelineItemDebugInfoProvider = {
                 TimelineItemDebugInfo(
                     model = "enim",
                     originalJson = null,
-                    latestEditedJson = null
+                    latestEditedJson = null,
                 )
             },
-            origin = null,
             messageShieldProvider = { null },
+            sendHandleProvider = { FakeSendHandle() },
         ),
     )
 )

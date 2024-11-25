@@ -22,6 +22,7 @@ import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -45,6 +46,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
+    private val temporaryUriDeleter: TemporaryUriDeleter,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<EditUserProfileState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
@@ -61,10 +63,20 @@ class EditUserProfilePresenter @AssistedInject constructor(
         var userAvatarUri by rememberSaveable { mutableStateOf(matrixUser.avatarUrl?.let { Uri.parse(it) }) }
         var userDisplayName by rememberSaveable { mutableStateOf(matrixUser.displayName) }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri -> if (uri != null) userAvatarUri = uri }
+            onResult = { uri ->
+                if (uri != null) {
+                    temporaryUriDeleter.delete(userAvatarUri)
+                    userAvatarUri = uri
+                }
+            }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri -> if (uri != null) userAvatarUri = uri }
+            onResult = { uri ->
+                if (uri != null) {
+                    temporaryUriDeleter.delete(userAvatarUri)
+                    userAvatarUri = uri
+                }
+            }
         )
 
         val avatarActions by remember(userAvatarUri) {
@@ -98,7 +110,10 @@ class EditUserProfilePresenter @AssistedInject constructor(
                             pendingPermissionRequest = true
                             cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                         }
-                        AvatarAction.Remove -> userAvatarUri = null
+                        AvatarAction.Remove -> {
+                            temporaryUriDeleter.delete(userAvatarUri)
+                            userAvatarUri = null
+                        }
                     }
                 }
 
@@ -158,7 +173,12 @@ class EditUserProfilePresenter @AssistedInject constructor(
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
         return runCatching {
             if (avatarUri != null) {
-                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+                val preprocessed = mediaPreProcessor.process(
+                    uri = avatarUri,
+                    mimeType = MimeTypes.Jpeg,
+                    deleteOriginal = false,
+                    compressIfPossible = false,
+                ).getOrThrow()
                 matrixClient.uploadAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {
                 matrixClient.removeAvatar().getOrThrow()

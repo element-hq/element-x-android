@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -25,6 +26,7 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
+    private val firebaseTokenRotator: FirebaseTokenRotator,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
     override val name = FirebaseConfig.NAME
@@ -50,7 +52,7 @@ class FirebasePushProvider @Inject constructor(
         )
     }
 
-    override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor
+    override suspend fun getCurrentDistributor(sessionId: SessionId) = firebaseDistributor
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
         val pushKey = firebaseStore.getFcmToken()
@@ -62,6 +64,11 @@ class FirebasePushProvider @Inject constructor(
         }
     }
 
+    /**
+     * Nothing to clean up here.
+     */
+    override suspend fun onSessionDeleted(sessionId: SessionId) = Unit
+
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return firebaseStore.getFcmToken()?.let { fcmToken ->
             CurrentUserPushConfig(
@@ -69,6 +76,12 @@ class FirebasePushProvider @Inject constructor(
                 pushKey = fcmToken
             )
         }
+    }
+
+    override fun canRotateToken(): Boolean = true
+
+    override suspend fun rotateToken(): Result<Unit> {
+        return firebaseTokenRotator.rotate()
     }
 
     companion object {

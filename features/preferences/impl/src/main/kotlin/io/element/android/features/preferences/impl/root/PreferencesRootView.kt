@@ -139,8 +139,8 @@ private fun ColumnScope.ManageAppSection(
     }
     if (state.showSecureBackup) {
         ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
+            headlineContent = { Text(stringResource(id = CommonStrings.common_encryption)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Key())),
             trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
             onClick = onSecureBackupClick,
         )

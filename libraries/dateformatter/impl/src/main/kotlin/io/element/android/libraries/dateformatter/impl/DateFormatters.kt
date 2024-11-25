@@ -11,7 +11,6 @@ import android.text.format.DateFormat
 import android.text.format.DateUtils
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
@@ -25,7 +24,7 @@ import kotlin.math.absoluteValue
 class DateFormatters @Inject constructor(
     private val locale: Locale,
     private val clock: Clock,
-    private val timeZone: TimeZone,
+    private val timeZoneProvider: TimezoneProvider,
 ) {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
@@ -70,7 +69,7 @@ class DateFormatters @Inject constructor(
         return if (period.years.absoluteValue >= 1) {
             formatDateWithYear(dateToFormat)
         } else if (useRelative && period.days.absoluteValue < 2 && period.months.absoluteValue < 1) {
-            getRelativeDay(dateToFormat.toInstant(timeZone).toEpochMilliseconds())
+            getRelativeDay(dateToFormat.toInstant(timeZoneProvider.provide()).toEpochMilliseconds())
         } else {
             formatDateWithMonth(dateToFormat)
         }

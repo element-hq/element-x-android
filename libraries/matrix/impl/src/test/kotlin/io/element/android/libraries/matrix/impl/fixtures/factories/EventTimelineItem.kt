@@ -7,8 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustEventShieldsProvider
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustEventTimelineItemDebugInfoProvider
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustLazyTimelineItemProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.matrix.rustcomponents.sdk.EventOrTransactionId
@@ -23,7 +22,6 @@ import org.matrix.rustcomponents.sdk.TimelineItemContent
 import uniffi.matrix_sdk_ui.EventItemOrigin
 
 fun aRustEventTimelineItem(
-    isLocal: Boolean = false,
     isRemote: Boolean = true,
     eventOrTransactionId: EventOrTransactionId = EventOrTransactionId.EventId(AN_EVENT_ID.value),
     sender: String = A_USER_ID.value,
@@ -40,7 +38,6 @@ fun aRustEventTimelineItem(
     canBeRepliedTo: Boolean = true,
     shieldsState: ShieldState? = null,
 ) = EventTimelineItem(
-    isLocal = isLocal,
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
     sender = sender,
@@ -50,10 +47,12 @@ fun aRustEventTimelineItem(
     isEditable = isEditable,
     canBeRepliedTo = canBeRepliedTo,
     content = content,
-    debugInfoProvider = FakeRustEventTimelineItemDebugInfoProvider(debugInfo),
-    shieldsProvider = FakeRustEventShieldsProvider(shieldsState),
     localSendState = localSendState,
     reactions = reactions,
     readReceipts = readReceipts,
     origin = origin,
+    lazyProvider = FakeRustLazyTimelineItemProvider(
+        debugInfo = debugInfo,
+        shieldsState = shieldsState,
+    )
 )

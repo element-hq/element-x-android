@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_message">"Cadangan percakapan Anda saat ini tidak tersinkron. Anda perlu mengonfirmasi kunci pemulihan Anda untuk tetap memiliki akses ke cadangan percakapan Anda."</string>
-  <string name="confirm_recovery_key_banner_title">"Konfirmasi kunci pemulihan Anda"</string>
+  <string name="banner_migrate_to_native_sliding_sync_action">"Keluar &amp; Tingkatkan"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Homeserver Anda tidak lagi mendukung protokol lama. Silakan keluar dan masuk kembali untuk terus menggunakan aplikasi."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
+  <string name="banner_set_up_recovery_content">"Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda."</string>
+  <string name="banner_set_up_recovery_submit">"Siapkan pemulihan"</string>
+  <string name="banner_set_up_recovery_title">"Siapkan pemulihan"</string>
+  <string name="confirm_recovery_key_banner_message">"Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Masukkan kunci pemulihan Anda"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Lupa kunci pemulihan Anda?"</string>
+  <string name="confirm_recovery_key_banner_title">"Penyimpanan kunci Anda tidak sinkron"</string>
   <string name="full_screen_intent_banner_message">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
   <string name="full_screen_intent_banner_title">"Tingkatkan pengalaman panggilan Anda"</string>
   <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
@@ -10,6 +19,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Tolak obrolan"</string>
   <string name="screen_invites_empty_list">"Tidak ada undangan"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
+  <string name="screen_join_room_knock_sent_title">"Permintaan untuk bergabung dikirim"</string>
   <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
   <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>

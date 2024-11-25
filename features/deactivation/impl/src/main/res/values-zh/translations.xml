@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"请确认您要停用您的账户。此操作无法撤消。"</string>
+  <string name="screen_deactivate_account_delete_all_messages">"删除我的所有消息"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"警告：未来的用户可能会看到不完整的对话。"</string>
+  <string name="screen_deactivate_account_description">"停用您的帐户是%1$s，它将："</string>
+  <string name="screen_deactivate_account_description_bold_part">"不可逆转的"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s您的账户（您无法登录回来，并且您的ID无法重复使用）。"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"永久禁用"</string>
+  <string name="screen_deactivate_account_list_item_2">"将您从所有聊天房间中移除。"</string>
+  <string name="screen_deactivate_account_list_item_3">"从我们的身份服务器中删除您的账户信息。"</string>
+  <string name="screen_deactivate_account_list_item_4">"注册用户仍可看到您的消息，但如果您选择删除它们，新用户或未注册用户将无法看到您的消息。"</string>
+  <string name="screen_deactivate_account_title">"停用账户"</string>
+</resources>

@@ -9,13 +9,15 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 data class RoomDetailsState(
     val isDebugBuild: Boolean,
@@ -31,7 +33,7 @@ data class RoomDetailsState(
     val canEdit: Boolean,
     val canInvite: Boolean,
     val canShowNotificationSettings: Boolean,
-    val canCall: Boolean,
+    val roomCallState: RoomCallState,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val isFavorite: Boolean,
@@ -41,7 +43,20 @@ data class RoomDetailsState(
     val canShowPinnedMessages: Boolean,
     val pinnedMessagesCount: Int?,
     val eventSink: (RoomDetailsEvent) -> Unit
-)
+) {
+    val roomBadges = buildList {
+        if (isEncrypted || isPublic) {
+            if (isEncrypted) {
+                add(RoomBadge.ENCRYPTED)
+            } else {
+                add(RoomBadge.NOT_ENCRYPTED)
+            }
+        }
+        if (isPublic) {
+            add(RoomBadge.PUBLIC)
+        }
+    }.toPersistentList()
+}
 
 @Immutable
 sealed interface RoomDetailsType {
@@ -57,4 +72,10 @@ sealed interface RoomTopicState {
     data object Hidden : RoomTopicState
     data object CanAddTopic : RoomTopicState
     data class ExistingTopic(val topic: String) : RoomTopicState
+}
+
+enum class RoomBadge {
+    ENCRYPTED,
+    NOT_ENCRYPTED,
+    PUBLIC,
 }

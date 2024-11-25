@@ -7,7 +7,7 @@
   <string name="screen_chat_backup_recovery_action_change">"Cambiar la clave de recuperación"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Introduzca la clave de recuperación"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"La copia de seguridad de tus chats no está sincronizada ahora mismo."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Configurar la clave de recuperación"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Configurar la recuperación"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Accede a tus mensajes cifrados si pierdes todos tus dispositivos o cierras sesión de %1$s en cualquier lugar."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Desactivar"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Perderás tus mensajes cifrados si cierras sesión en todos los dispositivos."</string>
@@ -18,7 +18,7 @@
   <string name="screen_key_backup_disable_title">"¿Estás seguro de que quieres desactivar la copia de seguridad?"</string>
   <string name="screen_recovery_key_change_description">"Obtén una nueva clave de recuperación si has perdido la que tenías. Después de cambiar la clave de recuperación, la anterior dejará de funcionar."</string>
   <string name="screen_recovery_key_change_generate_key">"Generar una nueva clave de recuperación"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Asegúrate de poder guardar su clave de recuperación en un lugar seguro"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Asegúrate de que puedes guardar tu clave de recuperación en algún lugar seguro"</string>
   <string name="screen_recovery_key_change_success">"Clave de recuperación cambiada"</string>
   <string name="screen_recovery_key_change_title">"¿Cambiar la clave de recuperación?"</string>
   <string name="screen_recovery_key_confirm_description">"Introduce tu clave de recuperación para confirmar el acceso a la copia de seguridad de tú chat."</string>
@@ -27,7 +27,6 @@
   <string name="screen_recovery_key_confirm_key_description">"Introduce el código de 48 caracteres."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ingresar…"</string>
   <string name="screen_recovery_key_confirm_success">"Clave de recuperación confirmada"</string>
-  <string name="screen_recovery_key_confirm_title">"Confirma tu clave de recuperación"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Clave de recuperación copiada"</string>
   <string name="screen_recovery_key_generating_key">"Generando…"</string>
   <string name="screen_recovery_key_save_action">"Guardar clave de recuperación"</string>

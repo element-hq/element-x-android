@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="state_event_avatar_changed_too">"(изображение тоже было изменено)"</string>
-  <string name="state_event_avatar_url_changed">"%1$s сменили свое изображение"</string>
+  <string name="state_event_avatar_url_changed">"%1$s сменил своё изображение"</string>
   <string name="state_event_avatar_url_changed_by_you">"Вы сменили изображение профиля"</string>
-  <string name="state_event_demoted_to_member">"%1$s был понижен в должности до участника"</string>
-  <string name="state_event_demoted_to_moderator">"%1$s был понижен в должности до модератора"</string>
+  <string name="state_event_demoted_to_member">"%1$s был понижен до участника"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s был понижен до модератора"</string>
   <string name="state_event_display_name_changed_from">"%1$s изменил свое отображаемое имя с %2$s на %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Вы изменили свое отображаемое имя с %1$s на %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s удалил свое отображаемое имя (оно было %2$s)"</string>
@@ -38,7 +38,7 @@
   <string name="state_event_room_knock_retracted">"%1$s больше не заинтересован в присоединении"</string>
   <string name="state_event_room_knock_retracted_by_you">"Вы отменили запрос на присоединение"</string>
   <string name="state_event_room_leave">"%1$s покинул комнату"</string>
-  <string name="state_event_room_leave_by_you">"Вы вышли из комнаты"</string>
+  <string name="state_event_room_leave_by_you">"Вы покинули комнату"</string>
   <string name="state_event_room_name_changed">"%1$s изменил название комнаты на: %2$s"</string>
   <string name="state_event_room_name_changed_by_you">"Вы изменили название комнаты на: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s удалил название комнаты"</string>

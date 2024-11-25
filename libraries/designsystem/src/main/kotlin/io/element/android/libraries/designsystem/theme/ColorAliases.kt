@@ -133,10 +133,6 @@ val SemanticColors.mentionPillBackground
     }
 
 @OptIn(CoreColorToken::class)
-val SemanticColors.bigIconDefaultBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
-
-@OptIn(CoreColorToken::class)
 val SemanticColors.bigCheckmarkBorderColor
     get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
 
@@ -195,7 +191,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
             "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
-            "bigIconBackgroundColor" to ElementTheme.colors.bigIconDefaultBackgroundColor,
             "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
             "highlightedMessageBackgroundColor" to ElementTheme.colors.highlightedMessageBackgroundColor,
         )

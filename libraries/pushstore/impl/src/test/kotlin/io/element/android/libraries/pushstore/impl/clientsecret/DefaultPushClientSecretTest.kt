@@ -10,7 +10,6 @@ package io.element.android.libraries.pushstore.impl.clientsecret
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.InMemoryPushClientSecretStore
-import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -24,11 +23,10 @@ internal class DefaultPushClientSecretTest {
     fun test() = runTest {
         val factory = FakePushClientSecretFactory()
         val store = InMemoryPushClientSecretStore()
-        val sut = DefaultPushClientSecret(factory, store, NoOpSessionObserver())
+        val sut = DefaultPushClientSecret(factory, store)
 
         val secret0 = factory.getSecretForUser(0)
         val secret1 = factory.getSecretForUser(1)
-        val secret2 = factory.getSecretForUser(2)
 
         assertThat(store.getSecrets()).isEmpty()
         assertThat(sut.getUserIdFromSecret(secret0)).isNull()
@@ -48,16 +46,10 @@ internal class DefaultPushClientSecretTest {
         // Unknown secret
         assertThat(sut.getUserIdFromSecret(A_UNKNOWN_SECRET)).isNull()
 
-        // User signs out
-        sut.onSessionDeleted(A_USER_ID_0.value)
-        assertThat(store.getSecrets()).hasSize(1)
-        // Create a new secret after reset
-        assertThat(sut.getSecretForUser(A_USER_ID_0)).isEqualTo(secret2)
-
         // Check the store content
         assertThat(store.getSecrets()).isEqualTo(
             mapOf(
-                A_USER_ID_0 to secret2,
+                A_USER_ID_0 to secret0,
                 A_USER_ID_1 to secret1,
             )
         )

@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_join_action">"Toetreden tot de kamer"</string>
   <string name="screen_join_room_knock_action">"Klop om deel te nemen"</string>
+  <string name="screen_join_room_knock_message_description">"Bericht (optioneel)"</string>
+  <string name="screen_join_room_knock_sent_title">"Verzoek om toe te treden verzonden"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s ondersteunt nog geen spaces. Je kunt spaces benaderen via de webbrowser."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces worden nog niet ondersteund"</string>
   <string name="screen_join_room_subtitle_knock">"Klik op de knop hieronder en een kamerbeheerder wordt op de hoogte gebracht. Na goedkeuring kun je deelnemen aan het gesprek."</string>

@@ -12,9 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.EventDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.EventShieldsProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -22,17 +20,16 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimeli
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.EventOrTransactionId
-import org.matrix.rustcomponents.sdk.EventSendState
-import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfoProvider
+import org.matrix.rustcomponents.sdk.QueueWedgeError
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
-import org.matrix.rustcomponents.sdk.EventShieldsProvider as RustEventShieldsProvider
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
@@ -48,7 +45,6 @@ class EventTimelineItemMapper(
             transactionId = eventOrTransactionId.transactionId(),
             isEditable = isEditable,
             canBeRepliedTo = canBeRepliedTo,
-            isLocal = isLocal,
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
@@ -58,9 +54,10 @@ class EventTimelineItemMapper(
             senderProfile = senderProfile.map(),
             timestamp = timestamp.toLong(),
             content = contentMapper.map(content),
-            debugInfoProvider = RustEventDebugInfoProvider(debugInfoProvider),
             origin = origin?.map(),
-            messageShieldProvider = RustEventShieldsProvider(shieldsProvider)
+            timelineItemDebugInfoProvider = { lazyProvider.debugInfo().map() },
+            messageShieldProvider = { strict -> lazyProvider.getShields(strict)?.map() },
+            sendHandleProvider = { lazyProvider.getSendHandle()?.let(::RustSendHandle) }
         )
     }
 }
@@ -83,25 +80,37 @@ fun RustEventSendState?.map(): LocalEventSendState? {
         null -> null
         RustEventSendState.NotSentYet -> LocalEventSendState.Sending
         is RustEventSendState.SendingFailed -> {
-            if (isRecoverable) {
-                LocalEventSendState.Sending
-            } else {
-                LocalEventSendState.Failed.Unknown(error)
+            when (val queueWedgeError = error) {
+                QueueWedgeError.CrossVerificationRequired -> {
+                    // The current device is not cross-signed (or cross signing is not setup)
+                    LocalEventSendState.Failed.SendingFromUnverifiedDevice
+                }
+                is QueueWedgeError.IdentityViolations -> {
+                    LocalEventSendState.Failed.VerifiedUserChangedIdentity(queueWedgeError.users.map { UserId(it) })
+                }
+                is QueueWedgeError.InsecureDevices -> {
+                    LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
+                        devices = queueWedgeError.userDeviceMap.entries.associate { entry ->
+                            UserId(entry.key) to entry.value.map { DeviceId(it) }
+                        }
+                    )
+                }
+                is QueueWedgeError.GenericApiError -> {
+                    if (isRecoverable) {
+                        LocalEventSendState.Sending
+                    } else {
+                        LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
+                    }
+                }
+                is QueueWedgeError.InvalidMimeType -> {
+                    LocalEventSendState.Failed.InvalidMimeType(queueWedgeError.mimeType)
+                }
+                is QueueWedgeError.MissingMediaContent -> {
+                    LocalEventSendState.Failed.MissingMediaContent
+                }
             }
         }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
-        is RustEventSendState.VerifiedUserChangedIdentity -> {
-            LocalEventSendState.Failed.VerifiedUserChangedIdentity(users.map { UserId(it) })
-        }
-        is RustEventSendState.VerifiedUserHasUnsignedDevice -> {
-            LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
-                devices = devices.entries.associate { entry ->
-                    UserId(entry.key) to entry.value.map { DeviceId(it) }
-                }
-            )
-        }
-        EventSendState.CrossSigningNotSetup -> LocalEventSendState.Failed.CrossSigningNotSetup
-        EventSendState.SendingFromUnverifiedDevice -> LocalEventSendState.Failed.SendingFromUnverifiedDevice
     }
 }
 
@@ -165,18 +174,6 @@ private fun ShieldState?.map(): MessageShield? {
         ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
         ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
         ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
-    }
-}
-
-class RustEventDebugInfoProvider(private val debugInfoProvider: EventTimelineItemDebugInfoProvider) : EventDebugInfoProvider {
-    override fun get(): TimelineItemDebugInfo {
-        return debugInfoProvider.get().map()
-    }
-}
-
-class RustEventShieldsProvider(private val shieldsProvider: RustEventShieldsProvider) : EventShieldsProvider {
-    override fun getShield(strict: Boolean): MessageShield? {
-        return shieldsProvider.getShields(strict)?.map()
     }
 }
 

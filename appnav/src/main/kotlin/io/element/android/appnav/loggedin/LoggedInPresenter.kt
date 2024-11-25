@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
@@ -102,10 +103,7 @@ class LoggedInPresenter @Inject constructor(
                     }
                 }
                 LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
-                    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
-                    forceNativeSlidingSyncMigration = !matrixClient.isUsingNativeSlidingSync() &&
-                        matrixClient.isNativeSlidingSyncSupported() &&
-                        !matrixClient.isSlidingSyncProxySupported()
+                    forceNativeSlidingSyncMigration = matrixClient.forceNativeSlidingSyncMigration().getOrDefault(false)
                 }
                 LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
                     // Enable native sliding sync if it wasn't already the case
@@ -125,6 +123,18 @@ class LoggedInPresenter @Inject constructor(
         )
     }
 
+    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
+    private suspend fun MatrixClient.forceNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
+        val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
+        if (currentSlidingSyncVersion == SlidingSyncVersion.Proxy) {
+            val availableSlidingSyncVersions = availableSlidingSyncVersions().getOrThrow()
+            availableSlidingSyncVersions.contains(SlidingSyncVersion.Native) &&
+                !availableSlidingSyncVersions.contains(SlidingSyncVersion.Proxy)
+        } else {
+            false
+        }
+    }
+
     private suspend fun ensurePusherIsRegistered(pusherRegistrationState: MutableState<AsyncData<Unit>>) {
         Timber.tag(pusherTag.value).d("Ensure pusher is registered")
         val currentPushProvider = pushService.getCurrentPushProvider()
@@ -142,12 +152,12 @@ class LoggedInPresenter @Inject constructor(
                     .also { Timber.tag(pusherTag.value).w("No distributors available") }
                     .also {
                         // In this case, consider the push provider is chosen.
-                        pushService.selectPushProvider(matrixClient, pushProvider)
+                        pushService.selectPushProvider(matrixClient.sessionId, pushProvider)
                     }
                     .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
             pushService.registerWith(matrixClient, pushProvider, distributor)
         } else {
-            val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
+            val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient.sessionId)
             if (currentPushDistributor == null) {
                 Timber.tag(pusherTag.value).d("Register with the first available distributor")
                 val distributor = currentPushProvider.getDistributors().firstOrNull()

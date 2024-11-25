@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Zrušit žádost"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ano, zrušit"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Opravdu chcete zrušit svou žádost o vstup do této místnosti?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Zrušit žádost o vstup"</string>
   <string name="screen_join_room_join_action">"Připojit se do místnosti"</string>
   <string name="screen_join_room_knock_action">"Zaklepejte a připojte se"</string>
+  <string name="screen_join_room_knock_message_description">"Zpráva (nepovinné)"</string>
+  <string name="screen_join_room_knock_sent_description">"Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti."</string>
+  <string name="screen_join_room_knock_sent_title">"Žádost o vstup odeslána"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s zatím nepodporuje prostory. Prostory můžete používat na webu."</string>
   <string name="screen_join_room_space_not_supported_title">"Prostory zatím nejsou podporovány"</string>
   <string name="screen_join_room_subtitle_knock">"Klikněte na tlačítko níže a správce místnosti bude informován. Po schválení se budete moci připojit ke konverzaci."</string>

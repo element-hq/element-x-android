@@ -46,7 +46,7 @@ class DefaultShareService @Inject constructor(
                 PackageManager.GET_ACTIVITIES or PackageManager.MATCH_DISABLED_COMPONENTS
             )
             .activities
-            .firstOrNull { it.name.endsWith(".ShareActivity") }
+            ?.firstOrNull { it.name.endsWith(".ShareActivity") }
             ?.let { shareActivityInfo ->
                 ComponentName(
                     shareActivityInfo.packageName,

@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.typing
 
-import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -17,7 +16,7 @@ data class TypingNotificationState(
     /** Whether to render the typing notifications based on the user's preferences. */
     val renderTypingNotifications: Boolean,
     /** The room members currently typing. */
-    val typingMembers: ImmutableList<RoomMember>,
+    val typingMembers: ImmutableList<TypingRoomMember>,
     /** Whether to reserve space for the typing notifications at the bottom of the timeline. */
     val reserveSpace: Boolean,
 )

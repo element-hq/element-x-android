@@ -8,10 +8,12 @@
 package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -21,6 +23,8 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -35,113 +39,200 @@ import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidMediaPreProcessorTest {
-    @Test
-    fun `test processing image`() = runTest {
+    private suspend fun TestScope.process(
+        asset: Asset,
+        compressIfPossible: Boolean,
+        sdkIntVersion: Int = Build.VERSION_CODES.P,
+        deleteOriginal: Boolean = false,
+    ): MediaUploadInfo {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "image.png")
+        val deleteCallback = lambdaRecorder<Uri?, Unit> {}
+        val sut = createAndroidMediaPreProcessor(
+            context = context,
+            sdkIntVersion = sdkIntVersion,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
+        )
+        val file = getFileFromAssets(context, asset.filename)
         val result = sut.process(
             uri = file.toUri(),
-            mimeType = MimeTypes.Png,
-            deleteOriginal = false,
-            compressIfPossible = true,
+            mimeType = asset.mimeType,
+            deleteOriginal = deleteOriginal,
+            compressIfPossible = compressIfPossible,
         )
         val data = result.getOrThrow()
-        assertThat(data.file.path).endsWith("image.png")
-        val info = data as MediaUploadInfo.Image
-        assertThat(info.thumbnailFile).isNotNull()
-        assertThat(info.imageInfo).isEqualTo(
-            ImageInfo(
-                height = 1_178,
-                width = 1_818,
-                mimetype = MimeTypes.Png,
-                size = 114_867,
-                ThumbnailInfo(height = 294, width = 454, mimetype = "image/jpeg", size = 4567),
-                thumbnailSource = null,
-                blurhash = "K13]7q%zWC00R4of%\$baad"
-            )
-        )
-        assertThat(file.exists()).isTrue()
+        assertThat(data.file.path).endsWith(asset.filename)
+        deleteCallback.assertions().isCalledExactly(if (deleteOriginal) 0 else 1)
+        return data
     }
 
     @Test
-    fun `test processing image api Q`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context, sdkIntVersion = Build.VERSION_CODES.Q)
-        val file = getFileFromAssets(context, "image.png")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Png,
-            deleteOriginal = false,
+    fun `test processing png`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImagePng,
             compressIfPossible = true,
         )
-        val data = result.getOrThrow()
-        assertThat(data.file.path).endsWith("image.png")
-        val info = data as MediaUploadInfo.Image
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.thumbnailFile).isNotNull()
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                height = assetImagePng.height,
+                width = assetImagePng.width,
+                mimetype = assetImagePng.mimeType,
+                size = 2_026_433,
+                ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Png, size = 91),
+                thumbnailSource = null,
+                blurhash = "K00000fQfQfQfQfQfQfQfQ"
+            )
+        )
+    }
+
+    @Test
+    fun `test processing png api Q`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImagePng,
+            compressIfPossible = true,
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 1_178,
-                width = 1_818,
-                mimetype = MimeTypes.Png,
-                size = 114_867,
+                height = assetImagePng.height,
+                width = assetImagePng.width,
+                mimetype = assetImagePng.mimeType,
+                size = 2_026_433,
                 thumbnailInfo = null,
                 thumbnailSource = null,
                 blurhash = null,
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Test
-    fun `test processing image no compression`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "image.png")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Png,
-            deleteOriginal = false,
+    fun `test processing png no compression`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImagePng,
             compressIfPossible = false,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("image.png")
-        val info = result as MediaUploadInfo.Image
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 1_178,
-                width = 1_818,
-                mimetype = MimeTypes.Png,
-                size = 1_856_786,
-                thumbnailInfo = ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Jpeg, size = 643),
+                height = assetImagePng.height,
+                width = assetImagePng.width,
+                mimetype = assetImagePng.mimeType,
+                size = assetImagePng.size,
+                thumbnailInfo = ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Png, size = 91),
                 thumbnailSource = null,
                 blurhash = "K00000fQfQfQfQfQfQfQfQ",
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Test
-    fun `test processing image and delete`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "image.png")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Png,
-            deleteOriginal = true,
+    fun `test processing png and delete`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImagePng,
             compressIfPossible = false,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("image.png")
-        val info = result as MediaUploadInfo.Image
+            deleteOriginal = true,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 1_178,
-                width = 1_818,
-                mimetype = MimeTypes.Png,
-                size = 1_856_786,
-                thumbnailInfo = ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Jpeg, size = 643),
+                height = assetImagePng.height,
+                width = assetImagePng.width,
+                mimetype = assetImagePng.mimeType,
+                size = assetImagePng.size,
+                thumbnailInfo = ThumbnailInfo(height = 25, width = 25, mimetype = MimeTypes.Png, size = 91),
+                thumbnailSource = null,
+                blurhash = "K00000fQfQfQfQfQfQfQfQ",
+            )
+        )
+        // Does not work
+        // assertThat(file.exists()).isFalse()
+    }
+
+    @Test
+    fun `test processing jpeg`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageJpeg,
+            compressIfPossible = true,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.thumbnailFile).isNotNull()
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                height = 979,
+                width = 3006,
+                mimetype = MimeTypes.Jpeg,
+                size = 84_845,
+                ThumbnailInfo(height = 244, width = 751, mimetype = MimeTypes.Jpeg, size = 7_178),
+                thumbnailSource = null,
+                blurhash = "K07gBzX=j_D4xZjoaSe,s:"
+            )
+        )
+    }
+
+    @Test
+    fun `test processing jpeg api Q`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageJpeg,
+            compressIfPossible = true,
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.thumbnailFile).isNull()
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                height = 979,
+                width = 3_006,
+                mimetype = MimeTypes.Jpeg,
+                size = 84_845,
+                thumbnailInfo = null,
+                thumbnailSource = null,
+                blurhash = null,
+            )
+        )
+    }
+
+    @Test
+    fun `test processing jpeg no compression`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageJpeg,
+            compressIfPossible = false,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.thumbnailFile).isNotNull()
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                height = assetImageJpeg.height,
+                width = assetImageJpeg.width,
+                mimetype = assetImageJpeg.mimeType,
+                size = assetImageJpeg.size,
+                thumbnailInfo = ThumbnailInfo(height = 6, width = 6, mimetype = MimeTypes.Jpeg, size = 631),
+                thumbnailSource = null,
+                blurhash = "K00000fQfQfQfQfQfQfQfQ",
+            )
+        )
+    }
+
+    @Test
+    fun `test processing jpeg and delete`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageJpeg,
+            compressIfPossible = false,
+            deleteOriginal = true,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.thumbnailFile).isNotNull()
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                height = assetImageJpeg.height,
+                width = assetImageJpeg.width,
+                mimetype = assetImageJpeg.mimeType,
+                size = assetImageJpeg.size,
+                thumbnailInfo = ThumbnailInfo(height = 6, width = 6, mimetype = MimeTypes.Jpeg, size = 631),
                 thumbnailSource = null,
                 blurhash = "K00000fQfQfQfQfQfQfQfQ",
             )
@@ -152,70 +243,50 @@ class AndroidMediaPreProcessorTest {
 
     @Test
     fun `test processing gif`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "animated_gif.gif")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Gif,
-            deleteOriginal = false,
+        val mediaUploadInfo = process(
+            asset = assetAnimatedGif,
             compressIfPossible = true,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("animated_gif.gif")
-        val info = result as MediaUploadInfo.Image
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 600,
-                width = 800,
-                mimetype = MimeTypes.Gif,
-                size = 687_979,
+                height = assetAnimatedGif.height,
+                width = assetAnimatedGif.width,
+                mimetype = assetAnimatedGif.mimeType,
+                size = assetAnimatedGif.size,
                 thumbnailInfo = ThumbnailInfo(height = 50, width = 50, mimetype = MimeTypes.Jpeg, size = 691),
                 thumbnailSource = null,
                 blurhash = "K00000fQfQfQfQfQfQfQfQ",
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Test
     fun `test processing file`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "text.txt")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.PlainText,
-            deleteOriginal = false,
+        val mediaUploadInfo = process(
+            asset = assetText,
             compressIfPossible = true,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("text.txt")
-        val info = result as MediaUploadInfo.AnyFile
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.AnyFile
         assertThat(info.fileInfo).isEqualTo(
             FileInfo(
-                mimetype = MimeTypes.PlainText,
-                size = 13,
+                mimetype = assetText.mimeType,
+                size = assetText.size,
                 thumbnailInfo = null,
                 thumbnailSource = null,
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Ignore("Compressing video is not working with Robolectric")
     @Test
     fun `test processing video`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "video.mp4")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Mp4,
-            deleteOriginal = false,
+        val mediaUploadInfo = process(
+            asset = assetVideo,
             compressIfPossible = true,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("video.mp4")
-        val info = result as MediaUploadInfo.Video
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Video
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
@@ -230,22 +301,16 @@ class AndroidMediaPreProcessorTest {
                 blurhash = null,
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
+    @Ignore("Compressing video is not working with Robolectric")
     @Test
     fun `test processing video no compression`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "video.mp4")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Mp4,
-            deleteOriginal = false,
+        val mediaUploadInfo = process(
+            asset = assetVideo,
             compressIfPossible = false,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("video.mp4")
-        val info = result as MediaUploadInfo.Video
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Video
         // Computing thumbnailFile is failing with Robolectric
         assertThat(info.thumbnailFile).isNull()
         assertThat(info.videoInfo).isEqualTo(
@@ -263,22 +328,15 @@ class AndroidMediaPreProcessorTest {
                 blurhash = null,
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Test
     fun `test processing audio`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val sut = createAndroidMediaPreProcessor(context)
-        val file = getFileFromAssets(context, "sample3s.mp3")
-        val result = sut.process(
-            uri = file.toUri(),
-            mimeType = MimeTypes.Mp3,
-            deleteOriginal = false,
+        val mediaUploadInfo = process(
+            asset = assetAudio,
             compressIfPossible = true,
-        ).getOrThrow()
-        assertThat(result.file.path).endsWith("sample3s.mp3")
-        val info = result as MediaUploadInfo.Audio
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Audio
         assertThat(info.audioInfo).isEqualTo(
             AudioInfo(
                 // Not available with Robolectric?
@@ -287,7 +345,6 @@ class AndroidMediaPreProcessorTest {
                 mimetype = MimeTypes.Mp3,
             )
         )
-        assertThat(file.exists()).isTrue()
     }
 
     @Test
@@ -309,13 +366,15 @@ class AndroidMediaPreProcessorTest {
 
     private fun TestScope.createAndroidMediaPreProcessor(
         context: Context,
-        sdkIntVersion: Int = Build.VERSION_CODES.P
+        sdkIntVersion: Int = Build.VERSION_CODES.P,
+        temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
     ) = AndroidMediaPreProcessor(
         context = context,
         thumbnailFactory = ThumbnailFactory(context, FakeBuildVersionSdkIntProvider(sdkIntVersion)),
         imageCompressor = ImageCompressor(context, testCoroutineDispatchers()),
         videoCompressor = VideoCompressor(context),
         coroutineDispatchers = testCoroutineDispatchers(),
+        temporaryUriDeleter = temporaryUriDeleter,
     )
 
     @Throws(IOException::class)

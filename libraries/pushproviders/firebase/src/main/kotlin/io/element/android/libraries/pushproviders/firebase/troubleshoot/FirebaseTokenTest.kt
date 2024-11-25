@@ -19,7 +19,10 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class)
@@ -41,23 +44,28 @@ class FirebaseTokenTest @Inject constructor(
         return data.currentPushProviderName == FirebaseConfig.NAME
     }
 
+    private var currentJob: Job? = null
     override suspend fun run(coroutineScope: CoroutineScope) {
+        currentJob?.cancel()
         delegate.start()
-        val token = firebaseStore.getFcmToken()
-        if (token != null) {
-            delegate.updateState(
-                description = stringProvider.getString(
-                    R.string.troubleshoot_notifications_test_firebase_token_success,
-                    "${token.take(8)}*****"
-                ),
-                status = NotificationTroubleshootTestState.Status.Success
-            )
-        } else {
-            delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(true)
-            )
-        }
+        currentJob = firebaseStore.fcmTokenFlow()
+            .onEach { token ->
+                if (token != null) {
+                    delegate.updateState(
+                        description = stringProvider.getString(
+                            R.string.troubleshoot_notifications_test_firebase_token_success,
+                            "*****${token.takeLast(8)}"
+                        ),
+                        status = NotificationTroubleshootTestState.Status.Success
+                    )
+                } else {
+                    delegate.updateState(
+                        description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_failure),
+                        status = NotificationTroubleshootTestState.Status.Failure(true)
+                    )
+                }
+            }
+            .launchIn(coroutineScope)
     }
 
     override suspend fun reset() = delegate.reset()

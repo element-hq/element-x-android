@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
@@ -65,8 +66,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
-import org.matrix.rustcomponents.sdk.EventOrTransactionId
-import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
@@ -75,6 +74,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
+import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
@@ -87,6 +87,7 @@ class RustTimeline(
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
+    private val featureFlagsService: FeatureFlagService,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
@@ -280,44 +281,54 @@ class RustTimeline(
         }
     }
 
-    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Unit> = withContext(dispatcher) {
+    override suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val eventOrTransactionId = if (eventId != null) {
-                EventOrTransactionId.EventId(eventId.value)
-            } else {
-                EventOrTransactionId.TransactionId(transactionId!!.value)
-            }
-            inner.redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
+            inner.redactEvent(
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+                reason = reason,
+            )
         }
     }
 
     override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
+        eventOrTransactionId: EventOrTransactionId,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching<Unit> {
-                val eventOrTransactionId = if (originalEventId != null) {
-                    EventOrTransactionId.EventId(originalEventId.value)
-                } else {
-                    EventOrTransactionId.TransactionId(transactionId!!.value)
-                }
-                val editedContent = EditedContent.RoomMessage(
-                    content = MessageEventContent.from(
-                        body = body,
-                        htmlBody = htmlBody,
-                        intentionalMentions = intentionalMentions
-                    ),
-                )
-                inner.edit(
-                    newContent = editedContent,
-                    eventOrTransactionId = eventOrTransactionId,
-                )
-            }
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.RoomMessage(
+                content = MessageEventContent.from(
+                    body = body,
+                    htmlBody = htmlBody,
+                    intentionalMentions = intentionalMentions
+                ),
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
         }
+    }
+
+    override suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching<Unit> {
+            val editedContent = EditedContent.MediaCaption(
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
+        }
+    }
 
     override suspend fun replyMessage(
         eventId: EventId,
@@ -336,36 +347,23 @@ class RustTimeline(
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 url = file.path,
                 thumbnailUrl = thumbnailFile?.path,
                 imageInfo = imageInfo.map(),
-                caption = body,
-                formattedCaption = formattedBody?.let {
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
-        }
-    }
-
-    @Throws
-    @Suppress("UnusedPrivateMember")
-    private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
-        return try {
-            when {
-                eventId != null -> inner.getEventTimelineItemByEventId(eventId.value)
-                transactionId != null -> inner.getEventTimelineItemByTransactionId(transactionId.value)
-                else -> error("Either eventId or transactionId must be non-null")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to get event timeline item")
-            throw TimelineException.EventNotFound
         }
     }
 
@@ -373,46 +371,76 @@ class RustTimeline(
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 url = file.path,
                 thumbnailUrl = thumbnailFile?.path,
                 videoInfo = videoInfo.map(),
-                caption = body,
-                formattedCaption = formattedBody?.let {
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
                 },
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 url = file.path,
                 audioInfo = audioInfo.map(),
-                // Maybe allow a caption in the future?
-                caption = null,
-                formattedCaption = null,
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+                useSendQueue = useSendQueue,
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+    override suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
         return sendAttachment(listOf(file)) {
-            inner.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
+            inner.sendFile(
+                url = file.path,
+                fileInfo = fileInfo.map(),
+                caption = caption,
+                formattedCaption = formattedCaption?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+                useSendQueue = useSendQueue,
+                progressWatcher = progressCallback?.toProgressWatcher(),
+            )
         }
     }
 
-    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> = withContext(dispatcher) {
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.toggleReaction(key = emoji, uniqueId = uniqueId.value)
+            inner.toggleReaction(
+                key = emoji,
+                itemId = eventOrTransactionId.toRustEventOrTransactionId(),
+            )
         }
     }
 
@@ -423,9 +451,6 @@ class RustTimeline(
             Timber.e(it)
         }
     }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
-        redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,
@@ -479,7 +504,7 @@ class RustTimeline(
             )
             inner.edit(
                 newContent = editedContent,
-                eventOrTransactionId = EventOrTransactionId.EventId(pollStartId.value),
+                eventOrTransactionId = RustEventOrTransactionId.EventId(pollStartId.value),
             )
         }.map { }
     }
@@ -513,16 +538,20 @@ class RustTimeline(
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
-        inner.sendVoiceMessage(
-            url = file.path,
-            audioInfo = audioInfo.map(),
-            waveform = waveform.toMSC3246range(),
-            // Maybe allow a caption in the future?
-            caption = null,
-            formattedCaption = null,
-            progressWatcher = progressCallback?.toProgressWatcher(),
-        )
+    ): Result<MediaUploadHandler> {
+        val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
+        return sendAttachment(listOf(file)) {
+            inner.sendVoiceMessage(
+                url = file.path,
+                audioInfo = audioInfo.map(),
+                waveform = waveform.toMSC3246range(),
+                // Maybe allow a caption in the future?
+                caption = null,
+                formattedCaption = null,
+                useSendQueue = useSendQueue,
+                progressWatcher = progressCallback?.toProgressWatcher(),
+            )
+        }
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

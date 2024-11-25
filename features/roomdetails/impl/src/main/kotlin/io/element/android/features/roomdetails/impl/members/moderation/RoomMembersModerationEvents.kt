@@ -7,12 +7,13 @@
 
 package io.element.android.features.roomdetails.impl.members.moderation
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 sealed interface RoomMembersModerationEvents {
     data class SelectRoomMember(val roomMember: RoomMember) : RoomMembersModerationEvents
     data object KickUser : RoomMembersModerationEvents
     data object BanUser : RoomMembersModerationEvents
-    data object UnbanUser : RoomMembersModerationEvents
+    data class UnbanUser(val userId: UserId) : RoomMembersModerationEvents
     data object Reset : RoomMembersModerationEvents
 }

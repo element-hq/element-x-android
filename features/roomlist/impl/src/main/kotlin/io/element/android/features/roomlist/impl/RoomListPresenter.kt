@@ -52,8 +52,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -96,7 +95,6 @@ class RoomListPresenter @Inject constructor(
     private val logoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
-    private val syncService: SyncService = client.syncService()
 
     @Composable
     override fun present(): RoomListState {
@@ -175,31 +173,46 @@ class RoomListPresenter @Inject constructor(
     }
 
     @Composable
-    private fun securityBannerState(
+    private fun rememberSecurityBannerState(
         securityBannerDismissed: Boolean,
         needsSlidingSyncMigration: Boolean,
     ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
+        val currentNeedsSlidingSyncMigration by rememberUpdatedState(needsSlidingSyncMigration)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val syncState by syncService.syncState.collectAsState()
         return remember {
             derivedStateOf {
-                when {
-                    currentSecurityBannerDismissed -> SecurityBannerState.None
-                    syncState == SyncState.Running -> {
-                        when (recoveryState) {
-                            RecoveryState.DISABLED -> SecurityBannerState.SetUpRecovery
-                            RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
-                            RecoveryState.UNKNOWN,
-                            RecoveryState.WAITING_FOR_SYNC,
-                            RecoveryState.ENABLED -> SecurityBannerState.None
-                        }
-                    }
-                    needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
-                    else -> SecurityBannerState.None
-                }
+                calculateBannerState(
+                    securityBannerDismissed = currentSecurityBannerDismissed,
+                    needsSlidingSyncMigration = currentNeedsSlidingSyncMigration,
+                    recoveryState = recoveryState,
+                )
             }
         }
+    }
+
+    private fun calculateBannerState(
+        securityBannerDismissed: Boolean,
+        needsSlidingSyncMigration: Boolean,
+        recoveryState: RecoveryState,
+    ): SecurityBannerState {
+        if (securityBannerDismissed) {
+            return SecurityBannerState.None
+        }
+
+        when (recoveryState) {
+            RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
+            RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
+            RecoveryState.UNKNOWN,
+            RecoveryState.WAITING_FOR_SYNC,
+            RecoveryState.ENABLED -> Unit
+        }
+
+        if (needsSlidingSyncMigration) {
+            return SecurityBannerState.NeedsNativeSlidingSyncMigration
+        }
+
+        return SecurityBannerState.None
     }
 
     @Composable
@@ -221,16 +234,13 @@ class RoomListPresenter @Inject constructor(
             }
         }
         val needsSlidingSyncMigration by produceState(false) {
-            value = runCatching {
-                // Note: this can fail when the session is destroyed from another client.
-                client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
-            }.getOrNull().orFalse()
+            value = client.needsSlidingSyncMigration().getOrDefault(false)
         }
+        val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
         return when {
-            showEmpty -> RoomListContentState.Empty
+            showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val securityBannerState by securityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
                 RoomListContentState.Rooms(
                     isDebugBuild = buildMeta.isDebuggable,
                     securityBannerState = securityBannerState,
@@ -303,6 +313,19 @@ class RoomListPresenter @Inject constructor(
                 .onSuccess {
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
                 }
+        }
+    }
+
+    /**
+     * Checks if the user needs to migrate to a native sliding sync version.
+     */
+    private suspend fun MatrixClient.needsSlidingSyncMigration(): Result<Boolean> = runCatching {
+        val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
+        if (currentSlidingSyncVersion != SlidingSyncVersion.Native) {
+            val availableSlidingSyncVersions = availableSlidingSyncVersions().getOrThrow()
+            availableSlidingSyncVersions.contains(SlidingSyncVersion.Native)
+        } else {
+            false
         }
     }
 

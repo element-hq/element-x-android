@@ -24,12 +24,20 @@ import javax.inject.Inject
 class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
-    fun compress(uri: Uri) = callbackFlow {
+    fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
         val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)
             .setVideoTrackStrategy(
                 DefaultVideoStrategy.Builder()
-                    .addResizer(AtMostResizer(1920, 1080))
+                    .addResizer(
+                        AtMostResizer(
+                            if (shouldBeCompressed) {
+                                720
+                            } else {
+                                1080
+                            }
+                        )
+                    )
                     .build()
             )
             .addDataSource(context, uri)

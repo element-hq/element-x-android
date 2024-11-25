@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
-import io.element.android.features.messages.impl.messagecomposer.RoomAliasSuggestion
 import io.element.android.libraries.core.data.filterUpTo
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -55,7 +54,14 @@ class SuggestionsProcessor @Inject constructor() {
             SuggestionType.Room -> {
                 roomAliasSuggestions
                     .filter { it.roomAlias.value.contains(suggestion.text, ignoreCase = true) }
-                    .map { ResolvedSuggestion.Alias(it.roomAlias, it.roomSummary) }
+                    .map {
+                        ResolvedSuggestion.Alias(
+                            roomAlias = it.roomAlias,
+                            roomId = it.roomId,
+                            roomName = it.roomName,
+                            roomAvatarUrl = it.roomAvatarUrl,
+                        )
+                    }
             }
             SuggestionType.Command,
             is SuggestionType.Custom -> {

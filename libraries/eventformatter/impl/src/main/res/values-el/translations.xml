@@ -28,8 +28,8 @@
   <string name="state_event_room_invite_you">"Ο χρήστης %1$s σέ προσκάλεσε"</string>
   <string name="state_event_room_join">"Ο χρήστης %1$s συμμετέχει στο δωμάτιο"</string>
   <string name="state_event_room_join_by_you">"Μπήκες στο δωμάτιο"</string>
-  <string name="state_event_room_knock">"Ο χρήστης %1$s ζήτησε να συμμετάσχει"</string>
-  <string name="state_event_room_knock_accepted">"Ο χρήστης %1$s επέτρεψε στον χρήστη %2$s να συμμετάσχει"</string>
+  <string name="state_event_room_knock">"Ο χρήστης %1$s ζητάει να συμμετάσχει"</string>
+  <string name="state_event_room_knock_accepted">"Ο χρήστης %1$s επέτρεψε τον χρήστη %2$s"</string>
   <string name="state_event_room_knock_accepted_by_you">"Επέστρεψες στον χρήστη%1$s να συμμετάσχει"</string>
   <string name="state_event_room_knock_by_you">"Ζήτησες να συμμετάσχεις"</string>
   <string name="state_event_room_knock_denied">"Ο χρήστης %1$s απέρριψε το αίτημα του χρήστη %2$s να συμμετάσχει"</string>

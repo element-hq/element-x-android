@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Bellen"</string>
   <string name="notification_channel_listening_for_events">"Wachten op gebeurtenissen"</string>
   <string name="notification_channel_noisy">"Luide meldingen"</string>
+  <string name="notification_channel_ringing_calls">"Overgaande oproepen"</string>
   <string name="notification_channel_silent">"Stille meldingen"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d bericht"</item>
@@ -13,13 +14,16 @@
     <item quantity="other">"%d meldingen"</item>
   </plurals>
   <string name="notification_fallback_content">"Melding"</string>
+  <string name="notification_incoming_call">"Inkomende oproep"</string>
   <string name="notification_inline_reply_failed">"** Verzenden is mislukt - open de kamer"</string>
   <string name="notification_invitation_action_join">"Deelnemen"</string>
+  <string name="notification_invitation_action_reject">"Weiger"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d uitnodiging"</item>
     <item quantity="other">"%d uitnodigingen"</item>
   </plurals>
   <string name="notification_invite_body">"Nodigde je uit om te chatten"</string>
+  <string name="notification_invite_body_with_sender">"%1$s nodigde je uit om te chatten"</string>
   <string name="notification_mentioned_you_body">"Heeft je genoemd: %1$s"</string>
   <string name="notification_new_messages">"Nieuwe berichten"</string>
   <plurals name="notification_new_messages_for_room">
@@ -30,7 +34,9 @@
   <string name="notification_room_action_mark_as_read">"Markeren als gelezen"</string>
   <string name="notification_room_action_quick_reply">"Snel antwoord"</string>
   <string name="notification_room_invite_body">"Nodigde je uit om tot de kamer toe te treden"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s nodigde je uit om tot de kamer toe te treden"</string>
   <string name="notification_sender_me">"Mij"</string>
+  <string name="notification_sender_mention_reply">"%1$s heeft vermeld of beantwoord"</string>
   <string name="notification_test_push_notification_content">"Je bekijkt de melding! Klik hier!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

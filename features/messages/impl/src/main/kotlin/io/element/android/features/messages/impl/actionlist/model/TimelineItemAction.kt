@@ -28,11 +28,12 @@ sealed class TimelineItemAction(
     data object Reply : TimelineItemAction(CommonStrings.action_reply, CompoundDrawables.ic_compound_reply)
     data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, CompoundDrawables.ic_compound_reply)
     data object Edit : TimelineItemAction(CommonStrings.action_edit, CompoundDrawables.ic_compound_edit)
+    data object EditCaption : TimelineItemAction(CommonStrings.action_edit_caption, CompoundDrawables.ic_compound_edit)
+    data object AddCaption : TimelineItemAction(CommonStrings.action_add_caption, CompoundDrawables.ic_compound_edit)
+    data object RemoveCaption : TimelineItemAction(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_delete, destructive = true)
     data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_options)
     data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CompoundDrawables.ic_compound_chat_problem, destructive = true)
     data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end)
     data object Pin : TimelineItemAction(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin)
-
-    // TODO use the Unpin compound icon when available.
-    data object Unpin : TimelineItemAction(CommonStrings.action_unpin, CompoundDrawables.ic_compound_pin)
+    data object Unpin : TimelineItemAction(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin)
 }

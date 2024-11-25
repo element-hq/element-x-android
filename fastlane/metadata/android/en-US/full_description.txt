@@ -2,7 +2,7 @@ Element X brings you both sovereign & seamless collaboration built on Matrix.
 
 The collaboration capabilities include chat & video calls with the modern set of features such as:
  • public & private channels
- • room moderation & access conUpdatetrol
+ • room moderation & access control
  • replies, reactions, polls, read receipts, pinned messages, etc.
  • simultaneous chat & calls (picture in picture)
  • decentralized & federated communication across organizations
@@ -33,3 +33,7 @@ Enjoy your right to private conversations - free from data mining, ads and all t
 
 <b>Chat across multiple devices</b>
 Stay in touch wherever you are with fully synchronized message history across all your devices, even those running Element legacy app, and on the web at https://app.element.io
+
+The application requires the android.permission.REQUEST_INSTALL_PACKAGES permission to enable the installation of applications received as attachments, ensuring seamless and convenient access to new software within the app.
+
+The application requires the USE_FULL_SCREEN_INTENT permission to ensure our users can effectively receive call notifications even when their devices are locked.

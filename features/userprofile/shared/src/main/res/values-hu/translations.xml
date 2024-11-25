@@ -6,5 +6,14 @@
   <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_member_details_block_alert_action">"Letiltás"</string>
+  <string name="screen_room_member_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
+  <string name="screen_room_member_details_block_user">"Felhasználó letiltása"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Letiltás feloldása"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
+  <string name="screen_room_member_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Használja a webes alkalmazást a felhasználó ellenőrzéséhez."</string>
+  <string name="screen_room_member_details_verify_button_title">"A(z) %1$s ellenőrzése"</string>
   <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
 </resources>

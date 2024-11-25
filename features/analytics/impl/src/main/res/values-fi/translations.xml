@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Emme tallenna tai profiloi henkilötietoja"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Jaa anonyymejä käyttötietoja auttaaksesi meitä tunnistamaan ongelmat."</string>
+  <string name="screen_analytics_prompt_read_terms">"Voit lukea kaikki ehtomme %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"täällä"</string>
+  <string name="screen_analytics_prompt_settings">"Voit poistaa tämän käytöstä milloin tahansa"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Emme jaa tietojasi kolmansien osapuolien kanssa"</string>
+  <string name="screen_analytics_prompt_title">"Auta parantamaan %1$s -sovellusta"</string>
+</resources>

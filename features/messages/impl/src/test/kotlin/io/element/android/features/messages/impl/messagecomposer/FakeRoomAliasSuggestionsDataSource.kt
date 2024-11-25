@@ -7,6 +7,8 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestion
+import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

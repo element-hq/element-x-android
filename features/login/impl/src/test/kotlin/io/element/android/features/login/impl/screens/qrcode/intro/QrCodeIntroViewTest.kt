@@ -11,7 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.features.login.impl.R
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
@@ -61,12 +61,12 @@ class QrCodeIntroViewTest {
     }
 
     @Test
-    fun `on continue button clicked - emits the Continue event`() {
+    fun `on submit button clicked - emits the Continue event`() {
         val eventRecorder = EventsRecorder<QrCodeIntroEvents>()
         rule.setQrCodeIntroView(
             state = aQrCodeIntroState(eventSink = eventRecorder),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        rule.clickOn(R.string.screen_qr_code_login_initial_state_button_title)
         eventRecorder.assertSingle(QrCodeIntroEvents.Continue)
     }
 

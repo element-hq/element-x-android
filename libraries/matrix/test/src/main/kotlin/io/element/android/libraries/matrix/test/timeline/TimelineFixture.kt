@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -19,16 +21,20 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
@@ -39,7 +45,6 @@ fun anEventTimelineItem(
     transactionId: TransactionId? = null,
     isEditable: Boolean = false,
     canBeRepliedTo: Boolean = false,
-    isLocal: Boolean = false,
     isOwn: Boolean = false,
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
@@ -49,14 +54,14 @@ fun anEventTimelineItem(
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
-    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
-    messageShield: MessageShield? = null,
+    debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
+    messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },
+    sendHandleProvider: SendHandleProvider = SendHandleProvider { FakeSendHandle() }
 ) = EventTimelineItem(
     eventId = eventId,
     transactionId = transactionId,
     isEditable = isEditable,
     canBeRepliedTo = canBeRepliedTo,
-    isLocal = isLocal,
     isOwn = isOwn,
     isRemote = isRemote,
     localSendState = localSendState,
@@ -66,9 +71,10 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
-    debugInfoProvider = { debugInfo },
     origin = null,
-    messageShieldProvider = { messageShield },
+    timelineItemDebugInfoProvider = debugInfoProvider,
+    messageShieldProvider = messageShieldProvider,
+    sendHandleProvider = sendHandleProvider,
 )
 
 fun aProfileTimelineDetails(
@@ -108,6 +114,18 @@ fun aMessageContent(
     isEdited = isEdited,
     isThreaded = isThreaded,
     type = messageType
+)
+
+fun aStickerContent(
+    filename: String = "filename",
+    info: ImageInfo,
+    mediaSource: MediaSource,
+    body: String? = null,
+) = StickerContent(
+    filename = filename,
+    body = body,
+    info = info,
+    source = mediaSource,
 )
 
 fun aTimelineItemDebugInfo(

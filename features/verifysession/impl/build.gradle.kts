@@ -23,8 +23,11 @@ android {
 setupAnvil()
 
 dependencies {
+    implementation(projects.appconfig)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
@@ -41,6 +44,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.features.logout.test)
+    testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.tests.testutils)

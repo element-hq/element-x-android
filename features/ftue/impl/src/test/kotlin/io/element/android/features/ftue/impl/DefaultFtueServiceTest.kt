@@ -23,6 +23,7 @@ import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -35,7 +36,7 @@ class DefaultFtueServiceTest {
     @Test
     fun `given any check being false and session verification state being loaded, FtueState is Incomplete`() = runTest {
         val sessionVerificationService = FakeSessionVerificationService().apply {
-            givenVerifiedStatus(SessionVerifiedStatus.Unknown)
+            emitVerifiedStatus(SessionVerifiedStatus.Unknown)
         }
         val service = createDefaultFtueService(
             sessionVerificationService = sessionVerificationService,
@@ -46,7 +47,7 @@ class DefaultFtueServiceTest {
             assertThat(awaitItem()).isEqualTo(FtueState.Unknown)
 
             // Verification state is known, we should display the flow if any check is false
-            sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
             assertThat(awaitItem()).isEqualTo(FtueState.Incomplete)
         }
     }
@@ -64,8 +65,29 @@ class DefaultFtueServiceTest {
             lockScreenService = lockScreenService,
         )
 
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         analyticsService.setDidAskUserConsent()
+        permissionStateProvider.setPermissionGranted()
+        lockScreenService.setIsPinSetup(true)
+        service.updateState()
+
+        assertThat(service.state.value).isEqualTo(FtueState.Complete)
+    }
+
+    @Test
+    fun `given all checks being true with no analytics, FtueState is Complete`() = runTest {
+        val analyticsService = NoopAnalyticsService()
+        val sessionVerificationService = FakeSessionVerificationService()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
+        val lockScreenService = FakeLockScreenService()
+        val service = createDefaultFtueService(
+            sessionVerificationService = sessionVerificationService,
+            analyticsService = analyticsService,
+            permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
+        )
+
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
         service.updateState()
@@ -76,7 +98,7 @@ class DefaultFtueServiceTest {
     @Test
     fun `traverse flow`() = runTest {
         val sessionVerificationService = FakeSessionVerificationService().apply {
-            givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
         }
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
@@ -91,7 +113,7 @@ class DefaultFtueServiceTest {
 
         // Session verification
         steps.add(service.getNextStep(steps.lastOrNull()))
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
 
         // Notifications opt in
         steps.add(service.getNextStep(steps.lastOrNull()))
@@ -132,7 +154,7 @@ class DefaultFtueServiceTest {
         )
 
         // Skip first 3 steps
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
 
@@ -155,7 +177,7 @@ class DefaultFtueServiceTest {
             lockScreenService = lockScreenService,
         )
 
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
         lockScreenService.setIsPinSetup(true)
 
         assertThat(service.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)

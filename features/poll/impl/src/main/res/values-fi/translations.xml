@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Lisää vaihtoehto"</string>
+  <string name="screen_create_poll_anonymous_desc">"Näytä tulokset vasta kyselyn päätyttyä"</string>
+  <string name="screen_create_poll_anonymous_headline">"Piilota äänet"</string>
+  <string name="screen_create_poll_answer_hint">"Vaihtoehto %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
+  <string name="screen_create_poll_question_desc">"Kysymys tai aihe"</string>
+  <string name="screen_create_poll_question_hint">"Mistä kyselyssä on kyse?"</string>
+  <string name="screen_create_poll_title">"Luo kysely"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Haluatko varmasti poistaa tämän kyselyn?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Poista kysely"</string>
+  <string name="screen_edit_poll_title">"Muokkaa kyselyä"</string>
+  <string name="screen_polls_history_empty_ongoing">"Meneillään olevia kyselyjä ei löytynyt."</string>
+  <string name="screen_polls_history_empty_past">"Aiempia kyselyjä ei löytynyt."</string>
+  <string name="screen_polls_history_filter_ongoing">"Meneillään olevat"</string>
+  <string name="screen_polls_history_filter_past">"Aiemmat"</string>
+  <string name="screen_polls_history_title">"Kyselyt"</string>
+</resources>

@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.roomselect.impl
 
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 
 sealed interface RoomSelectEvents {
-    data class SetSelectedRoom(val room: RoomSummary) : RoomSelectEvents
+    data class SetSelectedRoom(val room: SelectRoomInfo) : RoomSelectEvents
 
     // TODO remove to restore multi-selection
     data object RemoveSelectedRoom : RoomSelectEvents

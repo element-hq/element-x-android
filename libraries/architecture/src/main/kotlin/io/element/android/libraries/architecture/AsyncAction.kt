@@ -26,7 +26,9 @@ sealed interface AsyncAction<out T> {
     /**
      * Represents an operation that is currently waiting for user confirmation.
      */
-    data object Confirming : AsyncAction<Nothing>
+    interface Confirming : AsyncAction<Nothing>
+
+    data object ConfirmingNoParams : Confirming
 
     /**
      * Represents an operation that is currently ongoing.
@@ -70,7 +72,7 @@ sealed interface AsyncAction<out T> {
 
     fun isUninitialized(): Boolean = this == Uninitialized
 
-    fun isConfirming(): Boolean = this == Confirming
+    fun isConfirming(): Boolean = this is Confirming
 
     fun isLoading(): Boolean = this == Loading
 

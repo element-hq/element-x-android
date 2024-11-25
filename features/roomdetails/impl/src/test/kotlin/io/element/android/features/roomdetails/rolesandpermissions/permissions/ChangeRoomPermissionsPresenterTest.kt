@@ -267,7 +267,7 @@ class ChangeRoomPermissionsPresenterTest {
             assertThat(awaitItem().hasChanges).isTrue()
 
             state.eventSink(ChangeRoomPermissionsEvent.Exit)
-            assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.Confirming)
+            assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             state.eventSink(ChangeRoomPermissionsEvent.Exit)
             assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.Success(Unit))

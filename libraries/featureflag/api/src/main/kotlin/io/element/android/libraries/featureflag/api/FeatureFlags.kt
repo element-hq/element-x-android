@@ -93,13 +93,7 @@ enum class FeatureFlags(
         key = "feature.qrCodeLogin",
         title = "Enable login using QR code",
         description = "Allow the user to login using the QR code flow",
-        defaultValue = { buildMeta ->
-            when (buildMeta.buildType) {
-                // TODO remove once the feature is ready to publish
-                BuildType.RELEASE -> false
-                else -> OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE
-            }
-        },
+        defaultValue = { OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE },
         isFinished = false,
     ),
     IncomingShare(
@@ -130,6 +124,20 @@ enum class FeatureFlags(
             " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
+        isFinished = false,
+    ),
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    MediaUploadOnSendQueue(
+        key = "feature.media_upload_through_send_queue",
+        title = "Media upload through send queue",
+        description = "Experimental support for treating media uploads as regular events, with an improved retry and cancellation implementation.",
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
 }

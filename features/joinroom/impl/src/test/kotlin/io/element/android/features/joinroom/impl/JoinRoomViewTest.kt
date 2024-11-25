@@ -61,6 +61,7 @@ class JoinRoomViewTest {
         rule.setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
+                knockMessage = "Knock knock",
                 eventSink = eventsRecorder,
             ),
         )
@@ -79,7 +80,34 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
+    }
+
+    @Test
+    fun `clicking on cancel knock request emit the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(R.string.screen_join_room_cancel_knock_action)
+        eventsRecorder.assertSingle(JoinRoomEvents.CancelKnock(true))
+    }
+
+    @Test
+    fun `clicking on closing Cancel Knock error emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked),
+                cancelKnockAction = AsyncAction.Failure(Exception("Error")),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
     }
 
     @Test
@@ -93,7 +121,7 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
     }
 
     @Test
@@ -170,6 +198,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onJoinSuccess: () -> Unit = EnsureNeverCalled(),
     onKnockSuccess: () -> Unit = EnsureNeverCalled(),
+    onCancelKnockSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         JoinRoomView(
@@ -177,6 +206,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
             onBackClick = onBackClick,
             onJoinSuccess = onJoinSuccess,
             onKnockSuccess = onKnockSuccess,
+            onCancelKnockSuccess = onCancelKnockSuccess
         )
     }
 }

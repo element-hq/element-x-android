@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
@@ -34,17 +35,18 @@ class RustMatrixClientTest {
     private fun TestScope.createRustMatrixClient(
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = RustMatrixClient(
-        client = FakeRustClient(),
+        innerClient = FakeRustClient(),
         baseDirectory = File(""),
         sessionStore = sessionStore,
         appCoroutineScope = this,
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
         ),
-        syncService = FakeRustSyncService(),
+        innerSyncService = FakeRustSyncService(),
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),
         timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
+        featureFlagService = FakeFeatureFlagService(),
     )
 }

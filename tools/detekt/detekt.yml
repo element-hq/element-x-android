@@ -3,7 +3,7 @@
 style:
   AlsoCouldBeApply:
     active: true
-  OptionalWhenBraces:
+  BracesOnWhenStatements:
     active: false
   CascadingCallWrapping:
     active: true

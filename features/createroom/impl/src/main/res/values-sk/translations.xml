@@ -3,11 +3,22 @@
   <string name="screen_create_room_action_create_room">"Nová miestnosť"</string>
   <string name="screen_create_room_add_people_title">"Pozvať ľudí"</string>
   <string name="screen_create_room_error_creating_room">"Pri vytváraní miestnosti došlo k chybe"</string>
-  <string name="screen_create_room_private_option_description">"Správy v tejto miestnosti sú šifrované. Šifrovanie už potom nie je možné vypnúť."</string>
-  <string name="screen_create_room_private_option_title">"Súkromná miestnosť (len pre pozvaných)"</string>
-  <string name="screen_create_room_public_option_description">"Správy nie sú šifrované a môže si ich prečítať ktokoľvek. Šifrovanie môžete zapnúť neskôr."</string>
-  <string name="screen_create_room_public_option_title">"Verejná miestnosť (ktokoľvek)"</string>
+  <string name="screen_create_room_private_option_description">"Do tejto miestnosti majú prístup iba pozvaní ľudia. Všetky správy sú end-to-end šifrované."</string>
+  <string name="screen_create_room_private_option_title">"Súkromná miestnosť"</string>
+  <string name="screen_create_room_public_option_description">"Túto miestnosť môže nájsť ktokoľvek.
+Môžete to kedykoľvek zmeniť v nastaveniach miestnosti."</string>
+  <string name="screen_create_room_public_option_title">"Verejná miestnosť"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Do tejto miestnosti sa môže pripojiť ktokoľvek"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Ktokoľvek"</string>
+  <string name="screen_create_room_room_access_section_header">"Prístup do miestnosti"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Ktokoľvek môže požiadať o pripojenie sa k miestnosti, ale administrátor alebo moderátor bude musieť žiadosť schváliť"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Požiadať o pripojenie"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti"</string>
+  <string name="screen_create_room_room_address_section_footer">"Aby bola táto miestnosť viditeľná v adresári verejných miestností, budete potrebovať adresu miestnosti."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresa miestnosti"</string>
   <string name="screen_create_room_room_name_label">"Názov miestnosti"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Viditeľnosť miestnosti"</string>
   <string name="screen_create_room_title">"Vytvoriť miestnosť"</string>
   <string name="screen_create_room_topic_label">"Téma (voliteľné)"</string>
   <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>

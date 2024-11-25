@@ -8,6 +8,7 @@
 package io.element.android.libraries.pushproviders.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -21,6 +22,9 @@ class FakePushProvider(
     private val currentUserPushConfig: CurrentUserPushConfig? = null,
     private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
     private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
+    private val onSessionDeletedLambda: (SessionId) -> Unit = { lambdaError() },
+    private val canRotateTokenResult: () -> Boolean = { lambdaError() },
+    private val rotateTokenLambda: () -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
     override fun getDistributors(): List<Distributor> = distributors
 
@@ -28,7 +32,7 @@ class FakePushProvider(
         return registerWithResult(matrixClient, distributor)
     }
 
-    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
+    override suspend fun getCurrentDistributor(sessionId: SessionId): Distributor? {
         return currentDistributor()
     }
 
@@ -36,7 +40,19 @@ class FakePushProvider(
         return unregisterWithResult(matrixClient)
     }
 
+    override suspend fun onSessionDeleted(sessionId: SessionId) {
+        onSessionDeletedLambda(sessionId)
+    }
+
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return currentUserPushConfig
+    }
+
+    override fun canRotateToken(): Boolean {
+        return canRotateTokenResult()
+    }
+
+    override suspend fun rotateToken(): Result<Unit> {
+        return rotateTokenLambda()
     }
 }

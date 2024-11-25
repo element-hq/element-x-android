@@ -3,7 +3,7 @@
   <string name="screen_notification_optin_subtitle">"您可以稍后更改设置。"</string>
   <string name="screen_notification_optin_title">"允许通知，绝不错过任何消息"</string>
   <string name="screen_welcome_bullet_1">"今年晚些时候将增加通话、投票、搜索等功能。"</string>
-  <string name="screen_welcome_bullet_2">"加密房间的消息历史记录尚不可用。"</string>
+  <string name="screen_welcome_bullet_2">"加密聊天室的消息历史记录尚不可用。"</string>
   <string name="screen_welcome_bullet_3">"我们很乐意听取您的意见，请通过设置页面告诉我们您的想法。"</string>
   <string name="screen_welcome_button">"开始吧！"</string>
   <string name="screen_welcome_subtitle">"以下是您需要了解的内容："</string>

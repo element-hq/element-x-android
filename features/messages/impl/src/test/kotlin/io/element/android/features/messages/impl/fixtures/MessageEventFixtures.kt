@@ -19,13 +19,15 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShieldProvider
+import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
 import kotlinx.collections.immutable.toImmutableList
@@ -39,9 +41,10 @@ internal fun aMessageEvent(
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = null, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
-    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
-    messageShield: MessageShield? = null,
+    debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
+    messageShieldProvider: MessageShieldProvider = MessageShieldProvider { null },
+    sendHandleProvider: SendHandleProvider = SendHandleProvider { FakeSendHandle() }
 ) = TimelineItem.Event(
     id = UniqueId(eventId?.value.orEmpty()),
     eventId = eventId,
@@ -58,8 +61,9 @@ internal fun aMessageEvent(
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
-    debugInfoProvider = { debugInfo },
     isThreaded = isThreaded,
     origin = null,
-    messageShield = messageShield,
+    timelineItemDebugInfoProvider = debugInfoProvider,
+    messageShieldProvider = messageShieldProvider,
+    sendHandleProvider = sendHandleProvider,
 )

@@ -21,7 +21,8 @@
   <string name="screen_change_server_form_notice">"Je kunt alleen verbinding maken met een bestaande server die sliding sync ondersteunt. De beheerder van de homeserver moet dit configureren. %1$s"</string>
   <string name="screen_change_server_subtitle">"Wat is het adres van je server?"</string>
   <string name="screen_change_server_title">"Selecteer je server"</string>
-  <string name="screen_login_error_deactivated_account">"Dit account is gedeactiveerd."</string>
+  <string name="screen_create_account_title">"Account aanmaken"</string>
+  <string name="screen_login_error_deactivated_account">"Dit account is gesloten."</string>
   <string name="screen_login_error_invalid_credentials">"Onjuiste gebruikersnaam en/of wachtwoord"</string>
   <string name="screen_login_error_invalid_user_id">"Dit is geen geldige gebruikers-ID. Verwacht formaat: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Deze server is geconfigureerd om verversingstokens te gebruiken. Deze worden niet ondersteund bij inloggen met een wachtwoord."</string>
@@ -39,19 +40,27 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Verbinding niet veilig"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Daar word je gevraagd om de twee cijfers in te voeren die op dit apparaat worden weergegeven."</string>
   <string name="screen_qr_code_login_device_code_title">"Voer het onderstaande nummer in op je andere apparaat"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Log in op een ander apparaat en probeer opnieuw, of gebruik een ander apparaat dat al is ingelogd."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Ander apparaat is niet ingelogd"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"De aanmelding is geannuleerd op het andere apparaat."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Login verzoek geannuleerd"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"De aanmelding is geweigerd op het andere apparaat."</string>
   <string name="screen_qr_code_login_error_declined_title">"Aanmelden geweigerd"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Aanmelden is verlopen. Probeer het opnieuw."</string>
   <string name="screen_qr_code_login_error_expired_title">"De aanmelding was niet op tijd voltooid"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Jouw andere apparaat ondersteunt geen inloggen op %s met een QR code.
+
+Probeer handmatig in te loggen, of scan de QR code met een ander apparaat."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"QR-code wordt niet ondersteund"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Je accountprovider ondersteunt geen %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s wordt niet ondersteund"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Klaar om te scannen"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Open %1$s op een desktopapparaat"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Klik op je afbeelding"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Selecteer %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Nieuw apparaat koppelen”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Scan de QR-code met dit apparaat"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Alleen beschikbaar als je accountprovider dit ondersteunt."</string>
   <string name="screen_qr_code_login_initial_state_title">"Open %1$s op een ander apparaat om de QR-code te krijgen"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Gebruik de QR-code die op het andere apparaat wordt weergegeven."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Probeer het opnieuw"</string>

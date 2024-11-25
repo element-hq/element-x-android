@@ -28,7 +28,7 @@ class DefaultUserPushStoreFactoryTest {
     fun testParallelCreation() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
         val sessionId = SessionId("@alice:server.org")
-        val userPushStoreFactory = DefaultUserPushStoreFactory(context, NoOpSessionObserver())
+        val userPushStoreFactory = DefaultUserPushStoreFactory(context)
         var userPushStore1: UserPushStore? = null
         val thread1 = thread {
             userPushStore1 = userPushStoreFactory.getOrCreate(sessionId)

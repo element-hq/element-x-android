@@ -81,7 +81,7 @@ import org.junit.Test
 
     @Test
     fun `present - emit search event`() = runTest {
-        val filterLambda = lambdaRecorder { _: String?, _: Int ->
+        val filterLambda = lambdaRecorder { _: String?, _: Int, _: String? ->
             Result.success(Unit)
         }
         val roomDirectoryList = FakeRoomDirectoryList(filterLambda = filterLambda)
@@ -99,7 +99,7 @@ import org.junit.Test
         }
         assert(filterLambda)
             .isCalledOnce()
-            .with(value("test"), any())
+            .with(value("test"), any(), value(null))
     }
 
     @Test

@@ -7,6 +7,7 @@
 
 package io.element.android.features.login.impl.screens.loginpassword
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,20 +49,19 @@ import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.modifiers.autofill
+import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.theme.components.autofill
-import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -100,17 +100,17 @@ fun LoginPasswordView(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .verticalScroll(state = scrollState)
-                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
+                    .fillMaxSize()
+                    .imePadding()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .verticalScroll(state = scrollState)
+                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
         ) {
             // Title
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                iconImageVector = Icons.Filled.AccountCircle,
+                iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
                 title = stringResource(
                     id = R.string.screen_account_provider_signin_title,
                     state.accountProvider.title
@@ -139,8 +139,8 @@ fun LoginPasswordView(
                         onClick = ::submit,
                         enabled = state.submitEnabled || isLoading,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginContinue)
+                                .fillMaxWidth()
+                                .testTag(TestTags.loginContinue)
                     )
                     Spacer(modifier = Modifier.height(48.dp))
                 }
@@ -169,16 +169,10 @@ private fun LoginForm(
     val eventSink = state.eventSink
 
     Column {
-        Text(
-            text = stringResource(R.string.screen_login_form_header),
-            modifier = Modifier.padding(start = 16.dp),
-            style = ElementTheme.typography.fontBodyMdRegular,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        TextField(
+            label = stringResource(R.string.screen_login_form_header),
             value = loginFieldState,
-            readOnly = isLoading,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
@@ -191,9 +185,7 @@ private fun LoginForm(
                         eventSink(LoginPasswordEvents.SetLogin(sanitized))
                     }
                 ),
-            placeholder = {
-                Text(text = stringResource(CommonStrings.common_username))
-            },
+            placeholder = stringResource(CommonStrings.common_username),
             onValueChange = {
                 val sanitized = it.sanitize()
                 loginFieldState = sanitized
@@ -209,10 +201,14 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    IconButton(onClick = {
+                    Box(Modifier.clickable {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_clear))
+                        Icon(
+                            imageVector = CompoundIcons.Close(),
+                            contentDescription = stringResource(CommonStrings.action_clear),
+                            tint = ElementTheme.colors.iconSecondary
+                        )
                     }
                 }
             } else {
@@ -225,9 +221,9 @@ private fun LoginForm(
             passwordVisible = false
         }
         Spacer(Modifier.height(20.dp))
-        OutlinedTextField(
+        TextField(
             value = passwordFieldState,
-            readOnly = isLoading,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
@@ -245,18 +241,18 @@ private fun LoginForm(
                 passwordFieldState = sanitized
                 eventSink(LoginPasswordEvents.SetPassword(sanitized))
             },
-            placeholder = {
-                Text(text = stringResource(CommonStrings.common_password))
-            },
+            placeholder = stringResource(CommonStrings.common_password),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image =
                     if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, description)
+                Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = description,
+                    )
                 }
             },
             keyboardOptions = KeyboardOptions(

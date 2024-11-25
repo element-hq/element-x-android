@@ -15,11 +15,15 @@ import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 data class ConfigureRoomState(
+    val isKnockFeatureEnabled: Boolean,
     val config: CreateRoomConfig,
     val avatarActions: ImmutableList<AvatarAction>,
     val createRoomAction: AsyncAction<RoomId>,
     val cameraPermissionState: PermissionsState,
+    val roomAddressValidity: RoomAddressValidity,
+    val homeserverName: String,
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {
-    val isCreateButtonEnabled: Boolean = config.roomName.isNullOrEmpty().not()
+    val isValid: Boolean = config.roomName?.isNotEmpty() == true &&
+        (config.roomVisibility is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid)
 }

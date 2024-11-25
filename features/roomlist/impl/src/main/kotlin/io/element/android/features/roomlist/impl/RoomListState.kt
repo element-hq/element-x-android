@@ -61,7 +61,9 @@ enum class SecurityBannerState {
 @Immutable
 sealed interface RoomListContentState {
     data class Skeleton(val count: Int) : RoomListContentState
-    data object Empty : RoomListContentState
+    data class Empty(
+        val securityBannerState: SecurityBannerState,
+    ) : RoomListContentState
     data class Rooms(
         val isDebugBuild: Boolean,
         val securityBannerState: SecurityBannerState,

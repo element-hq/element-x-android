@@ -11,7 +11,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -20,7 +19,9 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -57,10 +58,16 @@ interface Timeline : AutoCloseable {
     ): Result<Unit>
 
     suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
-        body: String, htmlBody: String?,
+        eventOrTransactionId: EventOrTransactionId,
+        body: String,
+        htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
+
+    suspend fun editCaption(
+        eventOrTransactionId: EventOrTransactionId,
+        caption: String?,
+        formattedCaption: String?,
     ): Result<Unit>
 
     suspend fun replyMessage(
@@ -75,8 +82,8 @@ interface Timeline : AutoCloseable {
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
@@ -84,22 +91,35 @@ interface Timeline : AutoCloseable {
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
-        body: String?,
-        formattedBody: String?,
+        caption: String?,
+        formattedCaption: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
-    suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Unit>
+    suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendAudio(
+        file: File,
+        audioInfo: AudioInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+        ): Result<MediaUploadHandler>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendFile(
+        file: File,
+        fileInfo: FileInfo,
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler>
 
-    suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit>
+    suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
+    suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
+        redactEvent(transactionId.toEventOrTransactionId(), reason = null)
 
     /**
      * Share a location message in the room.

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Скасувати запит"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Так, скасувати"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Ви впевнені, що бажаєте скасувати свій запит на приєднання до цієї кімнати?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Скасувати запит на приєднання"</string>
   <string name="screen_join_room_join_action">"Приєднатися до кімнати"</string>
   <string name="screen_join_room_knock_action">"Постукати, щоб приєднатися"</string>
-  <string name="screen_join_room_space_not_supported_description">"%1$s ще не підтримує простори. Ви можете отримати доступ до них в вебверсії."</string>
+  <string name="screen_join_room_knock_message_description">"Повідомлення (необов\'язково)"</string>
+  <string name="screen_join_room_knock_sent_description">"Ви отримаєте запрошення приєднатися до кімнати, якщо ваш запит буде прийнятий."</string>
+  <string name="screen_join_room_knock_sent_title">"Запит на приєднання надіслано"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ще не підтримує простори. Ви можете отримати доступ до них у вебверсії."</string>
   <string name="screen_join_room_space_not_supported_title">"Простори поки що не підтримуються"</string>
   <string name="screen_join_room_subtitle_knock">"Натисніть кнопку нижче, і адміністратор кімнати отримає сповіщення. Ви зможете приєднатися до розмови після схвалення."</string>
   <string name="screen_join_room_subtitle_no_preview">"Ви мусите бути учасником цієї кімнати, щоб переглядати історію повідомлень."</string>

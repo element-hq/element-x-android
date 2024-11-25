@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
+import io.element.android.libraries.matrix.test.room.alias.FakeRoomAliasHelper
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -32,7 +33,7 @@ class AddPeoplePresenterTest {
         presenter = AddPeoplePresenter(
             FakeUserListPresenterFactory(),
             FakeUserRepository(),
-            CreateRoomDataStore(UserListDataStore())
+            CreateRoomDataStore(UserListDataStore(), FakeRoomAliasHelper())
         )
     }
 

@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Lisa emotikon"</string>
   <string name="screen_room_timeline_beginning_of_room">"See on %1$s jututoa algus."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"See on antud vestluse algus."</string>
+  <string name="screen_room_timeline_legacy_call">"Kõne pole nende rakenduste vahel toetatud. Palun küsi teiselt osapoolelt, kas ta oleks nõus kasutama Element X rakendust."</string>
   <string name="screen_room_timeline_less_reactions">"Näita vähem"</string>
   <string name="screen_room_timeline_message_copied">"Sõnum on kopeeritud"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Sul pole õigusi siia jututuppa kirjutada"</string>

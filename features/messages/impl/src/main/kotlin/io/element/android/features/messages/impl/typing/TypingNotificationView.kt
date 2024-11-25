@@ -41,7 +41,6 @@ import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 @Suppress("MultipleEmitters") // False positive
@@ -53,7 +52,8 @@ fun TypingNotificationView(
     val displayNotifications = state.typingMembers.isNotEmpty() && state.renderTypingNotifications
 
     @Suppress("ModifierNaming")
-    @Composable fun TypingText(text: AnnotatedString, textModifier: Modifier = Modifier) {
+    @Composable
+    fun TypingText(text: AnnotatedString, textModifier: Modifier = Modifier) {
         Text(
             modifier = textModifier,
             text = text,
@@ -66,7 +66,9 @@ fun TypingNotificationView(
 
     // Display the typing notification space when either a typing notification needs to be displayed or a previous one already was
     AnimatedVisibility(
-        modifier = modifier.fillMaxWidth().padding(vertical = 2.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
         visible = displayNotifications || state.reserveSpace,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
@@ -95,7 +97,7 @@ fun TypingNotificationView(
 }
 
 @Composable
-private fun computeTypingNotificationText(typingMembers: ImmutableList<RoomMember>): AnnotatedString {
+private fun computeTypingNotificationText(typingMembers: ImmutableList<TypingRoomMember>): AnnotatedString {
     // Remember the last value to avoid empty typing messages while animating
     var result by remember { mutableStateOf(AnnotatedString("")) }
     if (typingMembers.isNotEmpty()) {

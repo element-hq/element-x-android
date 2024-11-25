@@ -33,7 +33,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aChangedIdentitySendFailure
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
@@ -64,7 +63,6 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -355,7 +353,7 @@ class MessagesViewTest {
             state = state,
         )
         rule.onAllNodesWithText("👍️").onFirst().performClick()
-        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.id))
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction("👍️", timelineItem.eventOrTransactionId))
     }
 
     @Test
@@ -484,7 +482,7 @@ class MessagesViewTest {
         // Give time for the close animation to complete
         rule.mainClock.advanceTimeBy(milliseconds = 1_000)
         customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
-        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.id))
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventOrTransactionId))
     }
 
     @Test
@@ -514,7 +512,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onEventClick: (event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithParamAndResult(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit = EnsureNeverCalledWithParam(),
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
@@ -529,10 +526,9 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 state = state,
                 onBackClick = onBackClick,
                 onRoomDetailsClick = onRoomDetailsClick,
-                onEventClick = onEventClick,
+                onEventContentClick = onEventClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
-                onPreviewAttachments = onPreviewAttachments,
                 onSendLocationClick = onSendLocationClick,
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,

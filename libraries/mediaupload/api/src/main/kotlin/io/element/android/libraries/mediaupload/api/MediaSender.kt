@@ -12,14 +12,17 @@ import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: MatrixRoom,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) {
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
     val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
@@ -27,16 +30,16 @@ class MediaSender @Inject constructor(
     suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-        compressIfPossible: Boolean,
         caption: String? = null,
         formattedCaption: String? = null,
         progressCallback: ProgressCallback? = null
     ): Result<Unit> {
+        val compressIfPossible = sessionPreferencesStore.doesCompressMedia().first()
         return preProcessor
             .process(
                 uri = uri,
                 mimeType = mimeType,
-                deleteOriginal = true,
+                deleteOriginal = false,
                 compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->
@@ -49,6 +52,7 @@ class MediaSender @Inject constructor(
             }
             .handleSendResult()
     }
+
     suspend fun sendVoiceMessage(
         uri: Uri,
         mimeType: String,
@@ -60,7 +64,7 @@ class MediaSender @Inject constructor(
                 uri = uri,
                 mimeType = mimeType,
                 deleteOriginal = true,
-                compressIfPossible = false
+                compressIfPossible = false,
             )
             .flatMapCatching { info ->
                 val audioInfo = (info as MediaUploadInfo.Audio).audioInfo
@@ -102,8 +106,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     imageInfo = uploadInfo.imageInfo,
-                    body = caption,
-                    formattedBody = formattedCaption,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -112,8 +116,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     videoInfo = uploadInfo.videoInfo,
-                    body = caption,
-                    formattedBody = formattedCaption,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -121,6 +125,8 @@ class MediaSender @Inject constructor(
                 sendAudio(
                     file = uploadInfo.file,
                     audioInfo = uploadInfo.audioInfo,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -136,6 +142,8 @@ class MediaSender @Inject constructor(
                 sendFile(
                     file = uploadInfo.file,
                     fileInfo = uploadInfo.fileInfo,
+                    caption = caption,
+                    formattedCaption = formattedCaption,
                     progressCallback = progressCallback
                 )
             }

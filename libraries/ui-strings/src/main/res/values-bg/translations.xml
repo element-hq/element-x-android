@@ -198,10 +198,6 @@
   <string name="invite_friends_rich_title">"🔐️ Присъединете се към мен в %1$s"</string>
   <string name="invite_friends_text">"Хей, говорете с мен в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="screen_room_member_details_block_alert_action">"Блокиране"</string>
-  <string name="screen_room_member_details_block_user">"Блокиране на потребителя"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Отблокиране"</string>
-  <string name="screen_room_member_details_unblock_user">"Отблокиране на потребителя"</string>
   <string name="screen_share_location_title">"Споделяне на местоположение"</string>
   <string name="screen_share_my_location_action">"Споделяне на моето местоположение"</string>
   <string name="screen_share_open_apple_maps">"Отваряне в Apple Maps"</string>

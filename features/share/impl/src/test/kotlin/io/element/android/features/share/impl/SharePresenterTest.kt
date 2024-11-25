@@ -16,6 +16,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -23,13 +25,16 @@ import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class SharePresenterTest {
@@ -111,8 +116,11 @@ class SharePresenterTest {
 
     @Test
     fun `present - send media ok`() = runTest {
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+            Result.success(FakeMediaUploadHandler())
+        }
         val matrixRoom = FakeMatrixRoom(
-            sendMediaResult = { Result.success(FakeMediaUploadHandler()) },
+            sendFileResult = sendFileResult,
         )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, matrixRoom)
@@ -140,6 +148,7 @@ class SharePresenterTest {
             val success = awaitItem()
             assertThat(success.shareAction.isSuccess()).isTrue()
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            sendFileResult.assertions().isCalledOnce()
         }
     }
 
@@ -154,7 +163,8 @@ class SharePresenterTest {
             appCoroutineScope = this,
             shareIntentHandler = shareIntentHandler,
             matrixClient = matrixClient,
-            mediaPreProcessor = mediaPreProcessor
+            mediaPreProcessor = mediaPreProcessor,
+            InMemorySessionPreferencesStore(),
         )
     }
 }

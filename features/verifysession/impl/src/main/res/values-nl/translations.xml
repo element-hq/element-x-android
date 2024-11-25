@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Kan ik dit niet bevestigen?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Maak een nieuwe herstelsleutel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifieer dit apparaat om beveiligde berichten in te stellen."</string>
   <string name="screen_identity_confirmation_title">"Bevestig dat jij het bent"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Gebruik een ander apparaat"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Gebruik de herstelsleutel"</string>
   <string name="screen_identity_confirmed_subtitle">"Nu kun je veilig berichten lezen of verzenden, en iedereen met wie je chat kan dit apparaat ook vertrouwen."</string>
   <string name="screen_identity_confirmed_title">"Apparaat geverifieerd"</string>
+  <string name="screen_identity_use_another_device">"Gebruik een ander apparaat"</string>
   <string name="screen_identity_waiting_on_other_device">"Wachten op ander apparaat…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Er lijkt iets niet goed te gaan. Of er is een time-out opgetreden of het verzoek is geweigerd."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bevestig dat de emoji\'s hieronder overeenkomen met de emoji\'s in je andere sessie."</string>

@@ -60,7 +60,7 @@ class ResetIdentityRootViewTest {
             ResetIdentityRootState(displayConfirmationDialog = false, eventSink = eventsRecorder),
         )
 
-        rule.clickOn(CommonStrings.action_continue)
+        rule.clickOn(R.string.screen_encryption_reset_action_continue_reset)
 
         eventsRecorder.assertSingle(ResetIdentityRootEvent.Continue)
     }

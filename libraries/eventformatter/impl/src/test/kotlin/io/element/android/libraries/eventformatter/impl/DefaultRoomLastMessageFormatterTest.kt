@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
@@ -46,6 +45,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import org.junit.Before
@@ -98,7 +98,7 @@ class DefaultRoomLastMessageFormatterTest {
     fun `Sticker content`() {
         val body = "a sticker body"
         val info = ImageInfo(null, null, null, null, null, null, null)
-        val message = createRoomEvent(false, null, StickerContent(body, info, aMediaSource(url = "url")))
+        val message = createRoomEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
         val expectedBody = someoneElseId.toString() + ": Sticker (a sticker body)"
         assertThat(result.toString()).isEqualTo(expectedBody)
@@ -179,11 +179,11 @@ class DefaultRoomLastMessageFormatterTest {
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
             VideoMessageType(body, null, null, MediaSource("url"), null),
-            AudioMessageType(body, MediaSource("url"), null),
-            VoiceMessageType(body, MediaSource("url"), null, null),
+            AudioMessageType(body, null, null, MediaSource("url"), null),
+            VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
-            StickerMessageType(body, MediaSource("url"), null),
-            FileMessageType(body, MediaSource("url"), null),
+            StickerMessageType(body, null, null, MediaSource("url"), null),
+            FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
@@ -208,32 +208,51 @@ class DefaultRoomLastMessageFormatterTest {
 
         // Verify results of DM mode
         for ((type, result) in resultsInDm) {
+            val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "Video"
-                is AudioMessageType -> "Audio"
+                is VideoMessageType -> "Video: Shared body"
+                is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
-                is ImageMessageType -> "Image"
-                is StickerMessageType -> "Sticker"
-                is FileMessageType -> "File"
+                is ImageMessageType -> "Image: Shared body"
+                is StickerMessageType -> "Sticker: Shared body"
+                is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location"
                 is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType,
                 is NoticeMessageType,
                 is OtherMessageType -> body
             }
-            assertWithMessage("$type was not properly handled for DM").that(result).isEqualTo(expectedResult)
+            val shouldCreateAnnotatedString = when (type) {
+                is VideoMessageType -> true
+                is AudioMessageType -> true
+                is VoiceMessageType -> false
+                is ImageMessageType -> true
+                is StickerMessageType -> true
+                is FileMessageType -> true
+                is LocationMessageType -> false
+                is EmoteMessageType -> false
+                is TextMessageType -> false
+                is NoticeMessageType -> false
+                is OtherMessageType -> false
+            }
+            if (shouldCreateAnnotatedString) {
+                assertWithMessage("$type doesn't produce an AnnotatedString")
+                    .that(result)
+                    .isInstanceOf(AnnotatedString::class.java)
+            }
+            assertWithMessage("$type was not properly handled for DM").that(string).isEqualTo(expectedResult)
         }
 
         // Verify results of Room mode
         for ((type, result) in resultsInRoom) {
             val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "$expectedPrefix: Video"
-                is AudioMessageType -> "$expectedPrefix: Audio"
+                is VideoMessageType -> "$expectedPrefix: Video: Shared body"
+                is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
-                is ImageMessageType -> "$expectedPrefix: Image"
-                is StickerMessageType -> "$expectedPrefix: Sticker"
-                is FileMessageType -> "$expectedPrefix: File"
+                is ImageMessageType -> "$expectedPrefix: Image: Shared body"
+                is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
+                is FileMessageType -> "$expectedPrefix: File: Shared body"
                 is LocationMessageType -> "$expectedPrefix: Shared location"
                 is TextMessageType,
                 is NoticeMessageType,
@@ -249,7 +268,8 @@ class DefaultRoomLastMessageFormatterTest {
                 is FileMessageType -> true
                 is LocationMessageType -> false
                 is EmoteMessageType -> false
-                is TextMessageType, is NoticeMessageType -> true
+                is TextMessageType -> true
+                is NoticeMessageType -> true
                 is OtherMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
@@ -440,7 +460,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneKnockedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneKnocked = formatter.format(someoneKnockedEvent, false)
-        assertThat(someoneKnocked).isEqualTo("$otherName requested to join")
+        assertThat(someoneKnocked).isEqualTo("$otherName is requesting to join")
     }
 
     @Test
@@ -456,7 +476,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneAcceptedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneAcceptedKnock = formatter.format(someoneAcceptedKnockEvent, false)
-        assertThat(someoneAcceptedKnock).isEqualTo("$otherName allowed $third to join")
+        assertThat(someoneAcceptedKnock).isEqualTo("$otherName granted access to $third")
     }
 
     @Test

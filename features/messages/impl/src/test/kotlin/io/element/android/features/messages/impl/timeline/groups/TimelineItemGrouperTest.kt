@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
@@ -41,9 +42,10 @@ class TimelineItemGrouperTest {
         canBeRepliedTo = false,
         inReplyTo = null,
         isThreaded = false,
-        debugInfoProvider = { aTimelineItemDebugInfo() },
         origin = null,
-        messageShield = null,
+        timelineItemDebugInfoProvider = { aTimelineItemDebugInfo() },
+        messageShieldProvider = { null },
+        sendHandleProvider = { FakeSendHandle() },
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual(UniqueId("virtual"), aTimelineItemDaySeparatorModel("Today"))

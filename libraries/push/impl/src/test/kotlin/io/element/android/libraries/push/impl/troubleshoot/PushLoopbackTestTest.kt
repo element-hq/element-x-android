@@ -13,9 +13,11 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -64,6 +66,41 @@ class PushLoopbackTestTest {
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
             sut.reset()
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
+        }
+    }
+
+    @Test
+    fun `test PushLoopbackTest PusherRejected error with quick fix`() = runTest {
+        val diagnosticPushHandler = DiagnosticPushHandler()
+        val rotateTokenLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val sut = PushLoopbackTest(
+            pushService = FakePushService(
+                testPushBlock = {
+                    throw PushGatewayFailure.PusherRejected()
+                },
+                currentPushProvider = {
+                    FakePushProvider(
+                        canRotateTokenResult = { true },
+                        rotateTokenLambda = rotateTokenLambda,
+                    )
+                }
+            ),
+            diagnosticPushHandler = diagnosticPushHandler,
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
+        )
+        launch {
+            sut.run(this)
+        }
+        sut.state.test {
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            val lastItem = awaitItem()
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            sut.quickFix(this)
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            rotateTokenLambda.assertions().isCalledOnce()
         }
     }
 

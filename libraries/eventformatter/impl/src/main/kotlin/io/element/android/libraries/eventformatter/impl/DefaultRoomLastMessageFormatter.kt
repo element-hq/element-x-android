@@ -67,7 +67,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")"
+                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.bestDescription + ")"
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
@@ -91,7 +91,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 val message = sp.getString(CommonStrings.common_unsupported_event)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
-            is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
+            is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
             is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
         }?.take(MAX_SAFE_LENGTH)
     }
@@ -110,25 +110,27 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.toPlainText(permalinkParser)
             }
             is VideoMessageType -> {
-                sp.getString(CommonStrings.common_video)
+                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_video))
             }
             is ImageMessageType -> {
-                sp.getString(CommonStrings.common_image)
+                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_image))
             }
             is StickerMessageType -> {
-                sp.getString(CommonStrings.common_sticker)
+                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
-                sp.getString(CommonStrings.common_file)
+                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_file))
             }
             is AudioMessageType -> {
-                sp.getString(CommonStrings.common_audio)
+                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_audio))
             }
             is VoiceMessageType -> {
-                sp.getString(CommonStrings.common_voice_message)
+                // In this case, do not use bestDescription, because the filename is useless, only use the caption if available.
+                messageType.caption?.prefixWith(sp.getString(CommonStrings.common_voice_message))
+                    ?: sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body
@@ -140,7 +142,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         return message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
     }
 
-    private fun String.prefixIfNeeded(
+    private fun CharSequence.prefixIfNeeded(
         senderDisambiguatedDisplayName: String,
         isDmRoom: Boolean,
         isOutgoing: Boolean,

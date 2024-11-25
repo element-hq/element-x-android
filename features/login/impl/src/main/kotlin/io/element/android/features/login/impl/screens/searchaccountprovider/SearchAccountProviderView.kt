@@ -9,6 +9,7 @@
 
 package io.element.android.features.login.impl.screens.searchaccountprovider
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -23,7 +24,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -48,16 +48,15 @@ import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -85,16 +84,16 @@ fun SearchAccountProviderView(
     ) { padding ->
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .padding(padding)
-                .consumeWindowInsets(padding)
+                    .fillMaxSize()
+                    .imePadding()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
         ) {
             LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconImageVector = CompoundIcons.Search(),
+                        iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )
@@ -103,7 +102,7 @@ fun SearchAccountProviderView(
                     // TextInput
                     var userInputState by textFieldState(stateValue = state.userInput)
                     val focusManager = LocalFocusManager.current
-                    OutlinedTextField(
+                    TextField(
                         value = userInputState,
                         // readOnly = isLoading,
                         modifier = Modifier
@@ -125,7 +124,7 @@ fun SearchAccountProviderView(
                         singleLine = true,
                         trailingIcon = if (userInputState.isNotEmpty()) {
                             {
-                                IconButton(onClick = {
+                                Box(Modifier.clickable {
                                     userInputState = ""
                                     eventSink(SearchAccountProviderEvents.UserInput(""))
                                 }) {
@@ -138,9 +137,7 @@ fun SearchAccountProviderView(
                         } else {
                             null
                         },
-                        supportingText = {
-                            Text(text = stringResource(id = R.string.screen_account_provider_form_notice), color = MaterialTheme.colorScheme.secondary)
-                        }
+                        supportingText = stringResource(id = R.string.screen_account_provider_form_notice),
                     )
                 }
 

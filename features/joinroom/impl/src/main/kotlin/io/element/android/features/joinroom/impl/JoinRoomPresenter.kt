@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -24,6 +25,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
@@ -33,16 +35,20 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
-import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
+
+private const val MAX_KNOCK_MESSAGE_LENGTH = 500
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
@@ -53,6 +59,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val joinRoom: JoinRoom,
     private val knockRoom: KnockRoom,
+    private val cancelKnockRoom: CancelKnockRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
 ) : Presenter<JoinRoomState> {
@@ -70,9 +77,11 @@ class JoinRoomPresenter @AssistedInject constructor(
     override fun present(): JoinRoomState {
         val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
-        val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
+        val roomInfo by matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias()).collectAsState(initial = Optional.empty())
         val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val cancelKnockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        var knockMessage by rememberSaveable { mutableStateOf("") }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
             key1 = roomInfo,
@@ -87,10 +96,10 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
-                    val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
+                    val result = matrixClient.getRoomPreviewInfo(roomIdOrAlias, serverNames)
                     value = result.fold(
-                        onSuccess = { roomPreview ->
-                            roomPreview.toContentState()
+                        onSuccess = { previewInfo ->
+                            previewInfo.toContentState()
                         },
                         onFailure = { throwable ->
                             if (throwable.message?.contains("403") == true) {
@@ -108,7 +117,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
-                JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction)
+                is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
                 JoinRoomEvents.AcceptInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
@@ -121,12 +130,17 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
+                is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
                 JoinRoomEvents.RetryFetchingContent -> {
                     retryCount++
                 }
-                JoinRoomEvents.ClearError -> {
+                JoinRoomEvents.ClearActionStates -> {
                     knockAction.value = AsyncAction.Uninitialized
                     joinAction.value = AsyncAction.Uninitialized
+                    cancelKnockAction.value = AsyncAction.Uninitialized
+                }
+                is JoinRoomEvents.UpdateKnockMessage -> {
+                    knockMessage = event.message.take(MAX_KNOCK_MESSAGE_LENGTH)
                 }
             }
         }
@@ -136,7 +150,9 @@ class JoinRoomPresenter @AssistedInject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             joinAction = joinAction.value,
             knockAction = knockAction.value,
+            cancelKnockAction = cancelKnockAction.value,
             applicationName = buildMeta.applicationName,
+            knockMessage = knockMessage,
             eventSink = ::handleEvents
         )
     }
@@ -151,14 +167,24 @@ class JoinRoomPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>, message: String) = launch {
         knockAction.runUpdatingState {
-            knockRoom(roomId)
+            knockRoom(roomIdOrAlias, message, serverNames)
+        }
+    }
+
+    private fun CoroutineScope.cancelKnockRoom(requiresConfirmation: Boolean, cancelKnockAction: MutableState<AsyncAction<Unit>>) = launch {
+        if (requiresConfirmation) {
+            cancelKnockAction.value = AsyncAction.ConfirmingNoParams
+        } else {
+            cancelKnockAction.runUpdatingState {
+                cancelKnockRoom(roomId)
+            }
         }
     }
 }
 
-private fun RoomPreview.toContentState(): ContentState {
+private fun RoomPreviewInfo.toContentState(): ContentState {
     return ContentState.Loaded(
         roomId = roomId,
         name = name,
@@ -212,6 +238,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
             currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
                 inviteSender = inviter?.toInviteSender()
             )
+            currentUserMembership == CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }

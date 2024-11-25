@@ -29,7 +29,7 @@ fun LogoutActionDialog(
     when (state) {
         AsyncAction.Uninitialized ->
             Unit
-        AsyncAction.Confirming ->
+        is AsyncAction.Confirming ->
             LogoutConfirmationDialog(
                 onSubmitClick = onConfirmClick,
                 onDismiss = onDismissDialog
