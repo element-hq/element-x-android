@@ -21,11 +21,11 @@ import timber.log.Timber
 import java.security.InvalidKeyException
 import javax.crypto.Cipher
 
-interface BiometricUnlock {
+interface BiometricAuthenticator {
     interface Callback {
         fun onBiometricSetupError()
-        fun onBiometricUnlockSuccess()
-        fun onBiometricUnlockFailed(error: Exception?)
+        fun onBiometricAuthenticationSuccess()
+        fun onBiometricAuthenticationFailed(error: Exception?)
     }
 
     sealed interface AuthenticationResult {
@@ -38,23 +38,23 @@ interface BiometricUnlock {
     suspend fun authenticate(): AuthenticationResult
 }
 
-class NoopBiometricUnlock : BiometricUnlock {
+class NoopBiometricAuthentication : BiometricAuthenticator {
     override val isActive: Boolean = false
     override fun setup() = Unit
-    override suspend fun authenticate() = BiometricUnlock.AuthenticationResult.Failure()
+    override suspend fun authenticate() = BiometricAuthenticator.AuthenticationResult.Failure()
 }
 
-class DefaultBiometricUnlock(
+class DefaultBiometricAuthentication(
     private val activity: FragmentActivity,
     private val promptInfo: PromptInfo,
     private val secretKeyRepository: SecretKeyRepository,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val keyAlias: String,
-    private val callbacks: List<BiometricUnlock.Callback>
-) : BiometricUnlock {
+    private val callbacks: List<BiometricAuthenticator.Callback>
+) : BiometricAuthenticator {
     override val isActive: Boolean = true
 
-    private lateinit var cryptoObject: CryptoObject
+    private var cryptoObject: CryptoObject? = null
 
     override fun setup() {
         try {
@@ -67,11 +67,10 @@ class DefaultBiometricUnlock(
         }
     }
 
-    override suspend fun authenticate(): BiometricUnlock.AuthenticationResult {
-        if (!this::cryptoObject.isInitialized) {
-            return BiometricUnlock.AuthenticationResult.Failure()
-        }
-        val deferredAuthenticationResult = CompletableDeferred<BiometricUnlock.AuthenticationResult>()
+    override suspend fun authenticate(): BiometricAuthenticator.AuthenticationResult {
+        val cryptoObject = cryptoObject ?: return BiometricAuthenticator.AuthenticationResult.Failure()
+
+        val deferredAuthenticationResult = CompletableDeferred<BiometricAuthenticator.AuthenticationResult>()
         val executor = ContextCompat.getMainExecutor(activity.baseContext)
         val callback = AuthenticationCallback(callbacks, deferredAuthenticationResult)
         val prompt = BiometricPrompt(activity, executor, callback)
@@ -80,7 +79,7 @@ class DefaultBiometricUnlock(
             deferredAuthenticationResult.await()
         } catch (cancellation: CancellationException) {
             prompt.cancelAuthentication()
-            BiometricUnlock.AuthenticationResult.Failure(cancellation)
+            BiometricAuthenticator.AuthenticationResult.Failure(cancellation)
         }
     }
 
@@ -91,30 +90,30 @@ class DefaultBiometricUnlock(
 }
 
 private class AuthenticationCallback(
-    private val callbacks: List<BiometricUnlock.Callback>,
-    private val deferredAuthenticationResult: CompletableDeferred<BiometricUnlock.AuthenticationResult>,
+    private val callbacks: List<BiometricAuthenticator.Callback>,
+    private val deferredAuthenticationResult: CompletableDeferred<BiometricAuthenticator.AuthenticationResult>,
 ) : BiometricPrompt.AuthenticationCallback() {
     override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
         super.onAuthenticationError(errorCode, errString)
         val biometricUnlockError = BiometricUnlockError(errorCode, errString.toString())
-        callbacks.forEach { it.onBiometricUnlockFailed(biometricUnlockError) }
-        deferredAuthenticationResult.complete(BiometricUnlock.AuthenticationResult.Failure(biometricUnlockError))
+        callbacks.forEach { it.onBiometricAuthenticationFailed(biometricUnlockError) }
+        deferredAuthenticationResult.complete(BiometricAuthenticator.AuthenticationResult.Failure(biometricUnlockError))
     }
 
     override fun onAuthenticationFailed() {
         super.onAuthenticationFailed()
-        callbacks.forEach { it.onBiometricUnlockFailed(null) }
+        callbacks.forEach { it.onBiometricAuthenticationFailed(null) }
     }
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
         super.onAuthenticationSucceeded(result)
         if (result.cryptoObject?.cipher.isValid()) {
-            callbacks.forEach { it.onBiometricUnlockSuccess() }
-            deferredAuthenticationResult.complete(BiometricUnlock.AuthenticationResult.Success)
+            callbacks.forEach { it.onBiometricAuthenticationSuccess() }
+            deferredAuthenticationResult.complete(BiometricAuthenticator.AuthenticationResult.Success)
         } else {
             val error = IllegalStateException("Invalid cipher")
-            callbacks.forEach { it.onBiometricUnlockFailed(error) }
-            deferredAuthenticationResult.complete(BiometricUnlock.AuthenticationResult.Failure())
+            callbacks.forEach { it.onBiometricAuthenticationFailed(error) }
+            deferredAuthenticationResult.complete(BiometricAuthenticator.AuthenticationResult.Failure())
         }
     }
 

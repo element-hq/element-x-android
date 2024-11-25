@@ -240,6 +240,7 @@ class DefaultPushHandlerTest {
         )
         val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
             notifiableEventResult = { _, _, _ ->
@@ -249,10 +250,11 @@ class DefaultPushHandlerTest {
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
+            onNotifiableEventReceived = onNotifiableEventReceived,
         )
         defaultPushHandler.handle(aPushData)
-
         handleIncomingCallLambda.assertions().isCalledOnce()
+        onNotifiableEventReceived.assertions().isCalledOnce()
     }
 
     @Test
@@ -310,7 +312,7 @@ class DefaultPushHandlerTest {
         )
         defaultPushHandler.handle(aPushData)
         handleIncomingCallLambda.assertions().isCalledOnce()
-        onNotifiableEventReceived.assertions().isNeverCalled()
+        onNotifiableEventReceived.assertions().isCalledOnce()
     }
 
     @Test

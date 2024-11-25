@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -34,7 +35,8 @@ class SyncOnNotifiableEvent @Inject constructor(
     private var syncCounter = AtomicInteger(0)
 
     suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
-        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
+        val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
+        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush) && !isRingingCallEvent) {
             return@withContext
         }
         val client = matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull() ?: return@withContext
@@ -45,8 +47,24 @@ class SyncOnNotifiableEvent @Inject constructor(
             if (!appForegroundStateService.isInForeground.value) {
                 val syncService = client.syncService()
                 syncService.startSyncIfNeeded()
-                room.waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
+                if (isRingingCallEvent) {
+                    room.waitsUntilUserIsInTheCall(timeout = 60.seconds)
+                } else {
+                    room.waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
+                }
                 syncService.stopSyncIfNeeded()
+            }
+        }
+    }
+
+    /**
+     * User can be in the call if they answer using another session.
+     * If the user does not join the call, the timeout will be reached.
+     */
+    private suspend fun MatrixRoom.waitsUntilUserIsInTheCall(timeout: Duration) {
+        withTimeoutOrNull(timeout) {
+            roomInfoFlow.first {
+                sessionId in it.activeRoomCallParticipants
             }
         }
     }

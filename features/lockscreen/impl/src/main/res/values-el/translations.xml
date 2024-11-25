@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"βιομετρική ταυτοποίηση"</string>
   <string name="screen_app_lock_biometric_unlock">"βιομετρικό ξεκλείδωμα"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Ξεκλείδωμα με βιομετρικά"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Επιβεβαίωσε τον βιομετρικό έλεγχο ταυτότητας"</string>
   <string name="screen_app_lock_forgot_pin">"Ξέχασες το PIN;"</string>
   <string name="screen_app_lock_settings_change_pin">"Αλλαγή κωδικού PIN"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Να επιτρέπεται το βιομετρικό ξεκλείδωμα"</string>

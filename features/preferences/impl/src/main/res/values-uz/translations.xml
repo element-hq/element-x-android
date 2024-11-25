@@ -4,6 +4,7 @@
   <string name="screen_advanced_settings_developer_mode">"Dasturchi rejimi"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Ishlab chiquvchilar uchun xususiyatlar va funksiyalarga kirishni yoqing."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Maxsus element qo‘ng‘iroqlar bazasi URL manzili"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Element qo\'ng\'irog\'iga maxsus asosiy url or\'natish"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Boy matn muharriri o\'chiring Markdown bilan qo\'lda yozish uchun"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Blokdan chiqarish"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Ulardan kelgan barcha xabarlarni yana koʻrishingiz mumkin boʻladi."</string>

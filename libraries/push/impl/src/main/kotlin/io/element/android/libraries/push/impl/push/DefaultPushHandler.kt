@@ -93,13 +93,16 @@ class DefaultPushHandler @Inject constructor(
             when (resolvedPushEvent) {
                 null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
                 is ResolvedPushEvent.Event -> {
-                    when (resolvedPushEvent.notifiableEvent) {
-                        is NotifiableRingingCallEvent -> handleRingingCallEvent(resolvedPushEvent.notifiableEvent)
+                    when (val notifiableEvent = resolvedPushEvent.notifiableEvent) {
+                        is NotifiableRingingCallEvent -> {
+                            onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
+                            handleRingingCallEvent(notifiableEvent)
+                        }
                         else -> {
                             val userPushStore = userPushStoreFactory.getOrCreate(userId)
                             val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
                             if (areNotificationsEnabled) {
-                                onNotifiableEventReceived.onNotifiableEventReceived(resolvedPushEvent.notifiableEvent)
+                                onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
                             } else {
                                 Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
                             }

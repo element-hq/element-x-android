@@ -246,6 +246,7 @@ Syy: %1$s."</string>
   <string name="common_unable_to_invite_title">"Kutsujen lähettäminen ei onnistunut"</string>
   <string name="common_unlock">"Avaa"</string>
   <string name="common_unmute">"Poista mykistys"</string>
+  <string name="common_unsupported_call">"Puhelu, jota ei tueta"</string>
   <string name="common_unsupported_event">"Tapahtumaa ei tueta"</string>
   <string name="common_username">"Käyttäjänimi"</string>
   <string name="common_verification_cancelled">"Vahvistus peruttu"</string>

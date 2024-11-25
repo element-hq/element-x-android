@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomHero
 import org.matrix.rustcomponents.sdk.RoomInfo
@@ -47,6 +48,7 @@ fun aRustRoomInfo(
     numUnreadMentions: ULong = 0uL,
     pinnedEventIds: List<String> = listOf(),
     roomCreator: UserId? = null,
+    joinRule: JoinRule? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -78,4 +80,5 @@ fun aRustRoomInfo(
     numUnreadMentions = numUnreadMentions,
     pinnedEventIds = pinnedEventIds,
     creator = roomCreator?.value,
+    joinRule = joinRule,
 )
