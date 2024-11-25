@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Lisää emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Tämä on huoneen %1$s alku."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Tämä on tämän keskustelun alku."</string>
+  <string name="screen_room_timeline_legacy_call">"Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta Element X -sovellusta."</string>
   <string name="screen_room_timeline_less_reactions">"Näytä vähemmän"</string>
   <string name="screen_room_timeline_message_copied">"Viesti kopioitu"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Sinulla ei ole oikeutta kirjoittaa tässä huoneessa"</string>

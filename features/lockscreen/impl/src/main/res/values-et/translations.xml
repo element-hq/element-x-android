@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"biomeetrilist autentimist"</string>
   <string name="screen_app_lock_biometric_unlock">"biomeetrilist lukustuse eemaldamist"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Eemalda lukustus biomeetrilise tuvastuse abil"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Kinnita biomeetriline tuvastus"</string>
   <string name="screen_app_lock_forgot_pin">"Kas unustasid PIN-koodi?"</string>
   <string name="screen_app_lock_settings_change_pin">"Muuda PIN-koodi"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Kasuta lukustuse eemaldamiseks biomeetrilist tuvastust"</string>

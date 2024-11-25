@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Προσθήκη emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Αυτή είναι η αρχή του %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Αυτή είναι η αρχή τούτης της συνομιλίας."</string>
+  <string name="screen_room_timeline_legacy_call">"Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Εμφάνιση λιγότερων"</string>
   <string name="screen_room_timeline_message_copied">"Το μήνυμα αντιγράφηκε"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Δεν έχεις άδεια να δημοσιεύσεις σε αυτό το δωμάτιο"</string>
