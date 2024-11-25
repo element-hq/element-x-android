@@ -8,19 +8,22 @@
 package io.element.android.features.maprealtime.impl
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.location.api.Location
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import org.maplibre.android.geometry.LatLng
 import org.ramani.compose.CircleWithItem
 
 @Composable
-fun LocationSymbol(item: MapRealtimeLocationDot) {
-    val latLng = LatLng(item.location.lat, item.location.lon)
+fun LocationSymbol(item: LiveLocationShare) {
+    val location = Location.fromGeoUri(item.lastLocation.location.geoUri) ?: return
+    val latLng = LatLng(location.lat, location.lon)
 
     CircleWithItem(
         center = latLng,
         radius = 10.0F,
         isDraggable = false,
         color = "#F6993A",
-        text = item.userName,
+        text = item.userId.toString(),
         zIndex = 1,
         itemSize = 12F,
         borderColor = "#4A4A4A",

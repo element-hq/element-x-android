@@ -105,8 +105,7 @@ fun MapRealtimeView(
             ),
             uiSettings = uiSettings
         ) {
-            state.vehicleLocations.map { item ->
-                print(item)
+            state.liveLocationShares.map { item ->
                 LocationSymbol(item)
             }
         }
