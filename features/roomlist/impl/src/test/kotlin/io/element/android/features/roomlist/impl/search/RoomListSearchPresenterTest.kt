@@ -11,7 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
@@ -148,7 +148,7 @@ fun TestScope.createRoomListSearchPresenter(
         buildMeta = buildMeta,
         dataSource = RoomListSearchDataSource(
             roomListService = roomListService,
-            roomSummaryFactory = RoomListRoomSummaryFactory(
+            roomSummaryFactory = aRoomListRoomSummaryFactory(
                 lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
                 roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
             ),

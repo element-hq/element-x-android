@@ -35,12 +35,12 @@ interface VoiceMessageMediaRepo {
          *
          * @param mediaSource the media source of the voice message.
          * @param mimeType the mime type of the voice message.
-         * @param body the body of the voice message.
+         * @param filename the filename of the voice message.
          */
         fun create(
             mediaSource: MediaSource,
             mimeType: String?,
-            body: String?,
+            filename: String?,
         ): VoiceMessageMediaRepo
     }
 
@@ -61,7 +61,7 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
     private val matrixMediaLoader: MatrixMediaLoader,
     @Assisted private val mediaSource: MediaSource,
     @Assisted("mimeType") private val mimeType: String?,
-    @Assisted("body") private val body: String?,
+    @Assisted("filename") private val filename: String?,
 ) : VoiceMessageMediaRepo {
     @ContributesBinding(RoomScope::class)
     @AssistedFactory
@@ -69,7 +69,7 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
         override fun create(
             mediaSource: MediaSource,
             @Assisted("mimeType") mimeType: String?,
-            @Assisted("body") body: String?,
+            @Assisted("filename") filename: String?,
         ): DefaultVoiceMessageMediaRepo
     }
 
@@ -79,7 +79,7 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
         else -> matrixMediaLoader.downloadMediaFile(
             source = mediaSource,
             mimeType = mimeType,
-            body = body,
+            filename = filename,
         ).mapCatching {
             it.use { mediaFile ->
                 val dest = cachedFile.apply { parentFile?.mkdirs() }

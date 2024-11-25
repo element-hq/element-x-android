@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.getBestName
-import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import kotlinx.collections.immutable.ImmutableList
@@ -62,7 +61,7 @@ fun SuggestionsPickerView(
                 when (suggestion) {
                     is ResolvedSuggestion.AtRoom -> "@room"
                     is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
-                    is ResolvedSuggestion.Alias -> suggestion.roomSummary.roomId.value
+                    is ResolvedSuggestion.Alias -> suggestion.roomId.value
                 }
             }
         ) {
@@ -100,12 +99,12 @@ private fun SuggestionItemView(
         val avatarData = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
             is ResolvedSuggestion.Member -> suggestion.roomMember.getAvatarData(avatarSize)
-            is ResolvedSuggestion.Alias -> suggestion.roomSummary.getAvatarData(avatarSize)
+            is ResolvedSuggestion.Alias -> suggestion.getAvatarData(avatarSize)
         }
         val title = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
             is ResolvedSuggestion.Member -> suggestion.roomMember.getBestName() // TCHAP TODO should be applied in Element X
-            is ResolvedSuggestion.Alias -> suggestion.roomSummary.name
+            is ResolvedSuggestion.Alias -> suggestion.roomName
         }
         val subtitle = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> "@room"
@@ -158,11 +157,6 @@ internal fun SuggestionsPickerViewPreview() {
             role = RoomMember.Role.USER,
         )
         val anAlias = remember { RoomAlias("#room:domain.org") }
-        val roomSummaryDetails = remember {
-            aRoomSummaryDetails(
-                name = "My room",
-            )
-        }
         SuggestionsPickerView(
             isDebugBuild = false,
             roomId = RoomId("!room:matrix.org"),
@@ -173,8 +167,10 @@ internal fun SuggestionsPickerViewPreview() {
                 ResolvedSuggestion.Member(roomMember),
                 ResolvedSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
                 ResolvedSuggestion.Alias(
-                    anAlias,
-                    roomSummaryDetails,
+                    roomAlias = anAlias,
+                    roomId = RoomId("!room:matrix.org"),
+                    roomName = "My room",
+                    roomAvatarUrl = null,
                 )
             ),
             onSelectSuggestion = {}

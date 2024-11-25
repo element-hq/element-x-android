@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -26,19 +27,21 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
@@ -59,14 +62,18 @@ class MessagesNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
+    messageComposerPresenterFactory: MessageComposerPresenter.Factory,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     presenterFactory: MessagesPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
-    @ApplicationContext
-    private val context: Context,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
-    private val presenter = presenterFactory.create(this)
+    private val presenter = presenterFactory.create(
+        navigator = this,
+        composerPresenter = messageComposerPresenterFactory.create(this),
+        timelinePresenter = timelinePresenterFactory.create(this),
+    )
     private val callbacks = plugins<Callback>()
 
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
@@ -115,16 +122,13 @@ class MessagesNode @AssistedInject constructor(
             .orFalse()
     }
 
-    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callbacks.forEach { it.onPreviewAttachments(attachments) }
-    }
-
     private fun onUserDataClick(userId: UserId) {
         callbacks.forEach { it.onUserDataClick(userId) }
     }
 
     private fun onLinkClick(
-        context: Context,
+        activity: Activity,
+        darkTheme: Boolean,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
     ) {
@@ -135,16 +139,20 @@ class MessagesNode @AssistedInject constructor(
                 callbacks.forEach { it.onUserDataClick(permalink.userId) }
             }
             is PermalinkData.RoomLink -> {
-                handleRoomLinkClick(permalink, eventSink)
+                handleRoomLinkClick(activity, permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
-                context.openUrlInExternalApp(url)
+                activity.openUrlInChromeCustomTab(null, darkTheme, url)
             }
         }
     }
 
-    private fun handleRoomLinkClick(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
+    private fun handleRoomLinkClick(
+        context: Context,
+        roomLink: PermalinkData.RoomLink,
+        eventSink: (TimelineEvents) -> Unit,
+    ) {
         if (room.matches(roomLink.roomIdOrAlias)) {
             val eventId = roomLink.eventId
             if (eventId != null) {
@@ -174,6 +182,10 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onEditPollClick(eventId) }
     }
 
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
+        callbacks.forEach { it.onPreviewAttachments(attachments) }
+    }
+
     private fun onViewAllPinnedMessagesClick() {
         callbacks.forEach { it.onViewAllPinnedEvents() }
     }
@@ -192,7 +204,8 @@ class MessagesNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val context = LocalContext.current
+        val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.isLightTheme.not()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
@@ -207,10 +220,9 @@ class MessagesNode @AssistedInject constructor(
                 state = state,
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = this::onRoomDetailsClick,
-                onEventClick = this::onEventClick,
-                onPreviewAttachments = this::onPreviewAttachments,
+                onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { onLinkClick(context, it, state.timelineState.eventSink) },
+                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,

@@ -43,7 +43,7 @@ interface MatrixAuthenticationService {
     /**
      * Get the Oidc url to display to the user.
      */
-    suspend fun getOidcUrl(): Result<OidcDetails>
+    suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails>
 
     /**
      * Cancel Oidc login sequence.
@@ -56,4 +56,7 @@ interface MatrixAuthenticationService {
     suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
 
     suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
+
+    /** Listen to new Matrix clients being created on authentication. */
+    fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit)
 }

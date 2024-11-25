@@ -3,11 +3,22 @@
   <string name="screen_create_room_action_create_room">"Nová místnost"</string>
   <string name="screen_create_room_add_people_title">"Pozvat přátele"</string>
   <string name="screen_create_room_error_creating_room">"Při vytváření místnosti došlo k chybě"</string>
-  <string name="screen_create_room_private_option_description">"Zprávy v této místnosti jsou šifrované. Šifrování nelze později vypnout."</string>
-  <string name="screen_create_room_private_option_title">"Soukromá místnost (jen pro pozvané)"</string>
-  <string name="screen_create_room_public_option_description">"Zprávy nejsou šifrované a může si je přečíst kdokoli. Šifrování můžete povolit později."</string>
-  <string name="screen_create_room_public_option_title">"Veřejná místnost (kdokoli)"</string>
+  <string name="screen_create_room_private_option_description">"Do této místnosti mají přístup pouze pozvaní lidé. Všechny zprávy jsou koncově šifrovány."</string>
+  <string name="screen_create_room_private_option_title">"Soukromá místnost"</string>
+  <string name="screen_create_room_public_option_description">"Tuto místnost může najít kdokoli.
+To můžete kdykoli změnit v nastavení místnosti."</string>
+  <string name="screen_create_room_public_option_title">"Veřejná místnost"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Do této místnosti může vstoupit kdokoli"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Kdokoliv"</string>
+  <string name="screen_create_room_room_access_section_header">"Přístup do místnosti"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Požádat o připojení"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti"</string>
+  <string name="screen_create_room_room_address_section_footer">"Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresa místnosti"</string>
   <string name="screen_create_room_room_name_label">"Název místnosti"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Viditelnost místnosti"</string>
   <string name="screen_create_room_title">"Vytvořit místnost"</string>
   <string name="screen_create_room_topic_label">"Téma (nepovinné)"</string>
   <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>

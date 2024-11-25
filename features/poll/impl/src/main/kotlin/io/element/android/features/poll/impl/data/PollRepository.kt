@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -63,8 +64,7 @@ class PollRepository @Inject constructor(
         timelineProvider
             .getActiveTimeline()
             .redactEvent(
-                eventId = pollStartId,
-                transactionId = null,
+                eventOrTransactionId = pollStartId.toEventOrTransactionId(),
                 reason = null,
             )
 }

@@ -36,14 +36,14 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
+import io.element.android.libraries.designsystem.modifiers.autofill
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.autofill
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -62,7 +62,6 @@ internal fun RecoveryKeyView(
     ) {
         Text(
             text = stringResource(id = CommonStrings.common_recovery_key),
-            modifier = Modifier.padding(start = 16.dp),
             style = ElementTheme.typography.fontBodyMdRegular,
         )
         RecoveryKeyContent(state, onClick, onChange, onSubmit)
@@ -91,14 +90,14 @@ private fun RecoveryKeyStaticContent(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(
-                color = ElementTheme.colors.bgSubtleSecondary,
-                shape = RoundedCornerShape(14.dp)
-            )
-            .clickableIfNotNull(onClick)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(
+                        color = ElementTheme.colors.bgSubtleSecondary,
+                        shape = RoundedCornerShape(14.dp)
+                )
+                .clickableIfNotNull(onClick)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (state.formattedRecoveryKey != null) {
@@ -116,15 +115,15 @@ private fun RecoveryKeyStaticContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 11.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 11.dp)
             ) {
                 if (state.inProgress) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .progressSemantics()
-                            .padding(end = 8.dp)
-                            .size(16.dp),
+                                .progressSemantics()
+                                .padding(end = 8.dp)
+                                .size(16.dp),
                         color = ElementTheme.colors.textPrimary,
                         strokeWidth = 1.5.dp,
                     )
@@ -159,14 +158,14 @@ private fun RecoveryKeyFormContent(
         // Do not apply a visual transformation if the key has spaces, to let user enter passphrase
         if (keyHasSpace) VisualTransformation.None else RecoveryKeyVisualTransformation()
     }
-    OutlinedTextField(
+    TextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .testTag(TestTags.recoveryKey)
-            .autofill(
-                autofillTypes = listOf(AutofillType.Password),
-                onFill = { onChange(it) },
-            ),
+                .fillMaxWidth()
+                .testTag(TestTags.recoveryKey)
+                .autofill(
+                        autofillTypes = listOf(AutofillType.Password),
+                        onFill = { onChange(it) },
+                ),
         minLines = 2,
         value = state.formattedRecoveryKey.orEmpty(),
         onValueChange = onChange,
@@ -179,7 +178,7 @@ private fun RecoveryKeyFormContent(
         keyboardActions = KeyboardActions(
             onDone = { onSubmit() }
         ),
-        label = { Text(text = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder)) }
+        placeholder = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder),
     )
 }
 
@@ -189,35 +188,21 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
         RecoveryKeyUserStory.Setup,
         RecoveryKeyUserStory.Change -> {
             if (state.formattedRecoveryKey == null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.InfoSolid(),
-                        contentDescription = null,
-                        tint = ElementTheme.colors.iconSecondary,
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .size(20.dp),
-                    )
-                    Text(
-                        text = stringResource(
-                            id = if (state.recoveryKeyUserStory == RecoveryKeyUserStory.Change) {
-                                R.string.screen_recovery_key_change_generate_key_description
-                            } else {
-                                R.string.screen_recovery_key_setup_generate_key_description
-                            }
-                        ),
-                        color = ElementTheme.colors.textSecondary,
-                        modifier = Modifier.padding(start = 8.dp),
-                        style = ElementTheme.typography.fontBodySmRegular,
-                    )
-                }
+                Text(
+                    text = stringResource(
+                        id = if (state.recoveryKeyUserStory == RecoveryKeyUserStory.Change) {
+                            R.string.screen_recovery_key_change_generate_key_description
+                        } else {
+                            R.string.screen_recovery_key_setup_generate_key_description
+                        }
+                    ),
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
             } else {
                 Text(
                     text = stringResource(id = R.string.screen_recovery_key_save_key_description),
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(start = 16.dp),
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
@@ -226,7 +211,6 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
             Text(
                 text = stringResource(id = R.string.screen_recovery_key_confirm_key_description),
                 color = ElementTheme.colors.textSecondary,
-                modifier = Modifier.padding(start = 16.dp),
                 style = ElementTheme.typography.fontBodySmRegular,
             )
         }

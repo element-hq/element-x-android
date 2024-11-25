@@ -90,14 +90,14 @@ fun ReactionSummaryView(
             sheetState = sheetState,
             modifier = modifier
         ) {
-            SheetContent(summary = state.target)
+            ReactionSummaryViewContent(summary = state.target)
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun SheetContent(
+private fun ReactionSummaryViewContent(
     summary: ReactionSummaryState.Summary,
 ) {
     val animationScope = rememberCoroutineScope()
@@ -280,8 +280,8 @@ private fun SenderRow(
 
 @PreviewsDayNight
 @Composable
-internal fun SheetContentPreview(
+internal fun ReactionSummaryViewContentPreview(
     @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState
 ) = ElementPreview {
-    SheetContent(summary = state.target as ReactionSummaryState.Summary)
+    ReactionSummaryViewContent(summary = state.target as ReactionSummaryState.Summary)
 }

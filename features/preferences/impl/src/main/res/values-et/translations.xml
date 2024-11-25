@@ -8,6 +8,8 @@
   <string name="screen_advanced_settings_element_call_base_url">"Element Calli kohandatud teenuseaadress"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Seadista kohandatud teenuseaadress Element Calli jaoks."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige."</string>
+  <string name="screen_advanced_settings_media_compression_description">"Sellega laadid fotosid ja videoid kiiremini üles ning vähendad andmemahtu"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Optimeeri meedia kvaliteeti"</string>
   <string name="screen_advanced_settings_push_provider_android">"Tõuketeavituste pakkuja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lugemisteatised"</string>

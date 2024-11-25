@@ -117,13 +117,13 @@ class UnifiedPushProviderTest {
     fun `unregister ok`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
             ),
             unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
-                result = executeLambda,
+                unregisterLambda = unregisterLambda,
             ),
         )
         val result = unifiedPushProvider.unregister(matrixClient)
@@ -131,7 +131,7 @@ class UnifiedPushProviderTest {
         getSecretForUserResultLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID))
-        executeLambda.assertions()
+        unregisterLambda.assertions()
             .isCalledOnce()
             .with(value(matrixClient), value(A_SECRET))
     }
@@ -140,13 +140,13 @@ class UnifiedPushProviderTest {
     fun `unregister ko`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
             ),
             unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
-                result = executeLambda,
+                unregisterLambda = unregisterLambda,
             ),
         )
         val result = unifiedPushProvider.unregister(matrixClient)
@@ -154,7 +154,7 @@ class UnifiedPushProviderTest {
         getSecretForUserResultLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID))
-        executeLambda.assertions()
+        unregisterLambda.assertions()
             .isCalledOnce()
             .with(value(matrixClient), value(A_SECRET))
     }
@@ -162,7 +162,6 @@ class UnifiedPushProviderTest {
     @Test
     fun `getCurrentDistributor ok`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { distributor.value }
@@ -174,14 +173,13 @@ class UnifiedPushProviderTest {
                 )
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isEqualTo(distributor)
     }
 
     @Test
     fun `getCurrentDistributor not know`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { "unknown" }
@@ -192,14 +190,13 @@ class UnifiedPushProviderTest {
                 )
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isNull()
     }
 
     @Test
     fun `getCurrentDistributor not found`() = runTest {
         val distributor = Distributor("value", "Name")
-        val matrixClient = FakeMatrixClient()
         val unifiedPushProvider = createUnifiedPushProvider(
             unifiedPushStore = FakeUnifiedPushStore(
                 getDistributorValueResult = { distributor.value }
@@ -208,7 +205,7 @@ class UnifiedPushProviderTest {
                 getDistributorsResult = emptyList()
             )
         )
-        val result = unifiedPushProvider.getCurrentDistributor(matrixClient)
+        val result = unifiedPushProvider.getCurrentDistributor(A_SESSION_ID)
         assertThat(result).isNull()
     }
 
@@ -222,6 +219,27 @@ class UnifiedPushProviderTest {
         )
         val result = unifiedPushProvider.getCurrentUserPushConfig()
         assertThat(result).isEqualTo(currentUserPushConfig)
+    }
+
+    @Test
+    fun `canRotateToken should return false`() = runTest {
+        val unifiedPushProvider = createUnifiedPushProvider()
+        assertThat(unifiedPushProvider.canRotateToken()).isFalse()
+    }
+
+    @Test
+    fun `onSessionDeleted should do the cleanup`() = runTest {
+        val cleanupLambda = lambdaRecorder<String, Unit> { }
+        val unifiedPushProvider = createUnifiedPushProvider(
+            pushClientSecret = FakePushClientSecret(
+                getSecretForUserResult = { A_SECRET }
+            ),
+            unRegisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(
+                cleanupLambda = cleanupLambda,
+            ),
+        )
+        unifiedPushProvider.onSessionDeleted(A_SESSION_ID)
+        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET))
     }
 
     private fun createUnifiedPushProvider(

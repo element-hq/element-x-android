@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -24,6 +25,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 fun LinearProgressIndicator(
     progress: () -> Float,
     modifier: Modifier = Modifier,
+    gapSize: Dp = 0.dp,
     color: Color = ProgressIndicatorDefaults.linearColor,
     trackColor: Color = ProgressIndicatorDefaults.linearTrackColor,
     strokeCap: StrokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
@@ -31,9 +33,11 @@ fun LinearProgressIndicator(
     androidx.compose.material3.LinearProgressIndicator(
         modifier = modifier,
         progress = progress,
+        gapSize = gapSize,
         color = color,
         trackColor = trackColor,
         strokeCap = strokeCap,
+        drawStopIndicator = {},
     )
 }
 
@@ -41,6 +45,7 @@ fun LinearProgressIndicator(
 fun LinearProgressIndicator(
     modifier: Modifier = Modifier,
     color: Color = ProgressIndicatorDefaults.linearColor,
+    gapSize: Dp = 0.dp,
     trackColor: Color = ProgressIndicatorDefaults.linearTrackColor,
     strokeCap: StrokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
 ) {
@@ -49,14 +54,17 @@ fun LinearProgressIndicator(
         androidx.compose.material3.LinearProgressIndicator(
             modifier = modifier,
             progress = { 0.75F },
+            gapSize = gapSize,
             color = color,
             trackColor = trackColor,
             strokeCap = strokeCap,
+            drawStopIndicator = {},
         )
     } else {
         androidx.compose.material3.LinearProgressIndicator(
             modifier = modifier,
             color = color,
+            gapSize = gapSize,
             trackColor = trackColor,
             strokeCap = strokeCap,
         )

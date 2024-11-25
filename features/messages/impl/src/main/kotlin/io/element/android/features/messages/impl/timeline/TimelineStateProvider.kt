@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
@@ -164,10 +165,11 @@ internal fun aTimelineItemEvent(
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,
-        debugInfoProvider = { debugInfo },
         isThreaded = isThreaded,
         origin = null,
-        messageShield = messageShield,
+        timelineItemDebugInfoProvider = { debugInfo },
+        messageShieldProvider = { messageShield },
+        sendHandleProvider = { null }
     )
 }
 
@@ -249,7 +251,7 @@ internal fun aTimelineRoomInfo(
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
-    isCallOngoing = false,
+    roomCallState = aStandByCallState(),
     pinnedEventIds = pinnedEventIds,
     typingNotificationState = typingNotificationState,
 )

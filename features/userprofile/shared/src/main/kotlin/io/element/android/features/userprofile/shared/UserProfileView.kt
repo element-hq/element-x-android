@@ -22,14 +22,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import fr.gouv.tchap.android.libraries.matrix.api.core.toDisplayName
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -63,12 +70,12 @@ fun UserProfileView(
                 isDebugBuild = state.isDebugBuild,
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
-                userName = state.userName ?: state.userId.toDisplayName(),
+                userName = state.userName,
+                isUserVerified = state.isVerified,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.toDisplayName(), avatarUrl)
                 },
             )
-
             UserProfileMainActionsSection(
                 isCurrentUser = state.isCurrentUser,
                 canCall = state.canCall,
@@ -76,10 +83,9 @@ fun UserProfileView(
                 onStartDM = { state.eventSink(UserProfileEvents.StartDM) },
                 onCall = { state.dmRoomId?.let { onStartCall(it) } }
             )
-
             Spacer(modifier = Modifier.height(26.dp))
-
             if (!state.isCurrentUser) {
+                VerifyUserSection(state)
                 BlockUserSection(state)
                 BlockUserDialogs(state)
             }
@@ -96,6 +102,19 @@ fun UserProfileView(
                 onErrorDismiss = { state.eventSink(UserProfileEvents.ClearStartDMState) },
             )
         }
+    }
+}
+
+@Composable
+private fun VerifyUserSection(state: UserProfileState) {
+    if (state.isVerified.dataOrNull() == false) {
+        ListItem(
+            headlineContent = { Text(stringResource(CommonStrings.common_verify_identity)) },
+            supportingContent = { Text(stringResource(R.string.screen_room_member_details_verify_button_subtitle)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
+            enabled = false,
+            onClick = { },
+        )
     }
 }
 

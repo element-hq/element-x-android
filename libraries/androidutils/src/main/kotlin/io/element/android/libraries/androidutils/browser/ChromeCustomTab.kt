@@ -13,6 +13,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 
 /**
  * Open url in custom tab or, if not available, in the default browser.
@@ -53,6 +54,6 @@ fun Activity.openUrlInChromeCustomTab(
             }
             .launchUrl(this, Uri.parse(url))
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        // TODO context.toast(R.string.error_no_external_application_found)
+        openUrlInExternalApp(url)
     }
 }

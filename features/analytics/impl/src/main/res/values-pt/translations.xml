@@ -4,7 +4,7 @@
   <string name="screen_analytics_prompt_help_us_improve">"Partilhe dados de utilização anónimos para nos ajudar a identificar problemas."</string>
   <string name="screen_analytics_prompt_read_terms">"Podes ler todos os nossos termos %1$s."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"aqui"</string>
-  <string name="screen_analytics_prompt_settings">"Podes desligar qualquer momento"</string>
+  <string name="screen_analytics_prompt_settings">"Pode desactivar a qualquer momento"</string>
   <string name="screen_analytics_prompt_third_party_sharing">"Não partilharemos os teus dados com terceiros"</string>
   <string name="screen_analytics_prompt_title">"Ajude a melhorar a %1$s"</string>
 </resources>

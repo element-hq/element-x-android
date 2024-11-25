@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -153,7 +154,17 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 add(TimelineItemAction.Forward)
             }
             if (timelineItem.isEditable) {
-                add(TimelineItemAction.Edit)
+                if (timelineItem.content is TimelineItemEventContentWithAttachment) {
+                    // Caption
+                    if (timelineItem.content.caption == null) {
+                        add(TimelineItemAction.AddCaption)
+                    } else {
+                        add(TimelineItemAction.EditCaption)
+                        add(TimelineItemAction.RemoveCaption)
+                    }
+                } else {
+                    add(TimelineItemAction.Edit)
+                }
             }
             if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
                 add(TimelineItemAction.EndPoll)

@@ -54,5 +54,6 @@ class FakeUserPushStore(
     }
 
     override suspend fun reset() {
+        pushProviderName = null
     }
 }

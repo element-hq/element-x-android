@@ -17,7 +17,6 @@ sealed interface LocalEventSendState {
     data object Sending : LocalEventSendState
     sealed interface Failed : LocalEventSendState {
         data class Unknown(val error: String) : Failed
-        data object CrossSigningNotSetup : Failed
         data object SendingFromUnverifiedDevice : Failed
 
         sealed interface VerifiedUser : Failed
@@ -35,6 +34,10 @@ sealed interface LocalEventSendState {
              */
             val users: List<UserId>
         ) : VerifiedUser
+
+        data class InvalidMimeType(val mimeType: String) : Failed
+
+        data object MissingMediaContent : Failed
     }
 
     data class Sent(

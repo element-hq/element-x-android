@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
   <string name="screen_session_verification_complete_subtitle">"A tua nova sessão está agora verificada, pelo que tem acesso às tuas mensagens cifradas e os outros utilizadores vão vê-la como de confiança."</string>
   <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
+  <string name="screen_session_verification_failed_subtitle">"O pedido expirou, o pedido foi recusado ou houve um erro de verificação."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prova que és tu para acederes ao teu histórico de mensagens cifradas."</string>
   <string name="screen_session_verification_open_existing_session_title">"Abrir sessão existente"</string>
   <string name="screen_session_verification_positive_button_canceled">"Repetir verificação"</string>
@@ -24,6 +25,14 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"A aguardar correspondência"</string>
   <string name="screen_session_verification_ready_subtitle">"Compara um conjunto único de emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Compara os emojis únicos, certificando-te de que aparecem pela mesma ordem."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Sessão iniciada"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"O pedido expirou, o pedido foi recusado ou houve um erro de verificação."</string>
+  <string name="screen_session_verification_request_failure_title">"A verificação falhou"</string>
+  <string name="screen_session_verification_request_footer">"Continue apenas se tiver iniciado esta verificação."</string>
+  <string name="screen_session_verification_request_subtitle">"Verifique o outro dispositivo para manter o histórico de mensagens seguro."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Agora podes ler ou enviar mensagens de forma segura no teu outro dispositivo."</string>
+  <string name="screen_session_verification_request_success_title">"Dispositivo verificado"</string>
+  <string name="screen_session_verification_request_title">"Verificação solicitada"</string>
   <string name="screen_session_verification_they_dont_match">"Não correspondem"</string>
   <string name="screen_session_verification_they_match">"Correspondem"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>

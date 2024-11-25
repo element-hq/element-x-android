@@ -23,18 +23,23 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
 }
 
 fun aTimelineItemImageContent(
-    aspectRatio: Float = 0.5f,
+    aspectRatio: Float? = 0.5f,
     blurhash: String? = A_BLUR_HASH,
+    filename: String = "A picture.jpg",
+    caption: String? = null,
 ) = TimelineItemImageContent(
-    body = "a body",
-    formatted = null,
-    filename = null,
+    filename = filename,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,
     blurhash = blurhash,
     width = null,
     height = 300,
+    thumbnailWidth = null,
+    thumbnailHeight = 150,
     aspectRatio = aspectRatio,
     formattedFileSize = "4MB",
     fileExtension = "jpg"

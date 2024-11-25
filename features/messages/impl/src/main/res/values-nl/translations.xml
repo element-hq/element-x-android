@@ -34,7 +34,7 @@
   <string name="screen_room_timeline_less_reactions">"Toon minder"</string>
   <string name="screen_room_timeline_message_copied">"Bericht gekopieerd"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Je hebt geen toestemming om berichten in deze kamer te plaatsen"</string>
-  <string name="screen_room_timeline_reactions_show_less">"Minder tonen"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Toon minder"</string>
   <string name="screen_room_timeline_reactions_show_more">"Meer tonen"</string>
   <string name="screen_room_timeline_read_marker_title">"Nieuw"</string>
   <plurals name="screen_room_timeline_state_changes">

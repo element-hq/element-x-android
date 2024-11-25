@@ -60,6 +60,7 @@ Tenta iniciar a sessão manualmente ou digitaliza o código QR com outro disposi
   <string name="screen_qr_code_login_initial_state_item_3">"Seleciona %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Ligar novo dispositivo”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Lê o código QR com este dispositivo"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Disponível apenas se o seu fornecedor de conta o suportar."</string>
   <string name="screen_qr_code_login_initial_state_title">"Abre a %1$s noutro dispositivo para obteres o código QR"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Lê o código QR apresentado no outro dispositivo."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Tentar novamente"</string>

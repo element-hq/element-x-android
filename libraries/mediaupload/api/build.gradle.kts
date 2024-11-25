@@ -23,10 +23,12 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     api(projects.libraries.matrix.api)
+    api(projects.libraries.preferences.api)
     implementation(libs.inject)
     implementation(libs.coroutines.core)
 
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.test.junit)

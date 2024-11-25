@@ -129,7 +129,10 @@ class LambdaFourParamsRecorder<in T1, in T2, in T3, in T4, out R>(ensureNeverCal
     }
 }
 
-class LambdaFiveParamsRecorder<in T1, in T2, in T3, in T4, in T5, out R>(ensureNeverCalled: Boolean, val block: (T1, T2, T3, T4, T5) -> R) : LambdaRecorder(
+class LambdaFiveParamsRecorder<in T1, in T2, in T3, in T4, in T5, out R>(
+    ensureNeverCalled: Boolean,
+    val block: (T1, T2, T3, T4, T5) -> R,
+) : LambdaRecorder(
     ensureNeverCalled
 ), (T1, T2, T3, T4, T5) -> R {
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5): R {

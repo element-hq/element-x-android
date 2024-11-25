@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -23,8 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.event.TimelineItemAspectRatioBox
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -79,11 +80,12 @@ fun ProtectedView(
 
 @PreviewsDayNight
 @Composable
-internal fun ProtectedViewPreview() = ElementPreview {
-    Box(
-        modifier = Modifier
-            .size(160.dp)
-            .blurHashBackground(A_BLUR_HASH)
+internal fun ProtectedViewPreview(
+    @PreviewParameter(AspectRatioProvider::class) aspectRatio: Float?,
+) = ElementPreview {
+    TimelineItemAspectRatioBox(
+        modifier = Modifier.blurHashBackground(A_BLUR_HASH, alpha = 0.9f),
+        aspectRatio = coerceRatioWhenHidingContent(aspectRatio, true),
     ) {
         ProtectedView(
             hideContent = true,

@@ -36,6 +36,7 @@ import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import io.element.android.libraries.textcomposer.model.aMarkdownTextEditorState
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
 
@@ -184,7 +185,7 @@ internal fun MarkdownTextInputPreview() {
     ElementPreview {
         val style = ElementRichTextEditorStyle.composerStyle(hasFocus = true)
         MarkdownTextInput(
-            state = aMarkdownTextEditorState(),
+            state = aMarkdownTextEditorState(initialText = "Hello, World!"),
             subcomposing = false,
             onTyping = {},
             onReceiveSuggestion = {},
@@ -193,11 +194,3 @@ internal fun MarkdownTextInputPreview() {
         )
     }
 }
-
-internal fun aMarkdownTextEditorState(
-    initialText: String = "Hello, World!",
-    initialFocus: Boolean = true,
-) = MarkdownTextEditorState(
-    initialText = initialText,
-    initialFocus = initialFocus,
-)

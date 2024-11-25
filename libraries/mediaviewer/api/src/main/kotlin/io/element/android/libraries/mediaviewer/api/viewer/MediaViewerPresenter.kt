@@ -92,7 +92,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         mediaLoader.downloadMediaFile(
             source = inputs.mediaSource,
             mimeType = inputs.mediaInfo.mimeType,
-            body = inputs.mediaInfo.name
+            filename = inputs.mediaInfo.filename
         )
             .onSuccess {
                 mediaFile.value = it

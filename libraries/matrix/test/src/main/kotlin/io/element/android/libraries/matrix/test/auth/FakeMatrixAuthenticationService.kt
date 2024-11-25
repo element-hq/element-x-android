@@ -11,12 +11,14 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OidcPrompt
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -40,6 +42,7 @@ class FakeMatrixAuthenticationService(
     private var loginError: Throwable? = null
     private var changeServerError: Throwable? = null
     private var matrixClient: MatrixClient? = null
+    private var onAuthenticationListener: ((MatrixClient) -> Unit)? = null
 
     var getLatestSessionIdLambda: (() -> SessionId?) = { null }
 
@@ -54,6 +57,7 @@ class FakeMatrixAuthenticationService(
             return it.invoke(sessionId)
         }
         return if (matrixClient != null) {
+            onAuthenticationListener?.invoke(matrixClient!!)
             Result.success(matrixClient!!)
         } else {
             Result.failure(IllegalStateException())
@@ -73,14 +77,17 @@ class FakeMatrixAuthenticationService(
     }
 
     override suspend fun login(username: String, password: String): Result<SessionId> = simulateLongTask {
-        loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+        loginError?.let { Result.failure(it) } ?: run {
+            onAuthenticationListener?.invoke(matrixClient ?: FakeMatrixClient())
+            Result.success(A_USER_ID)
+        }
     }
 
     override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> = simulateLongTask {
         return importCreatedSessionLambda(externalSession)
     }
 
-    override suspend fun getOidcUrl(): Result<OidcDetails> = simulateLongTask {
+    override suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails> = simulateLongTask {
         oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
     }
 
@@ -89,11 +96,19 @@ class FakeMatrixAuthenticationService(
     }
 
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = simulateLongTask {
-        loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+        loginError?.let { Result.failure(it) } ?: run {
+            onAuthenticationListener?.invoke(matrixClient ?: FakeMatrixClient())
+            Result.success(A_USER_ID)
+        }
     }
 
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId> = simulateLongTask {
+        onAuthenticationListener?.invoke(matrixClient ?: FakeMatrixClient())
         loginWithQrCodeResult(qrCodeData, progress)
+    }
+
+    override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
+        onAuthenticationListener = lambda
     }
 
     fun givenOidcError(throwable: Throwable?) {

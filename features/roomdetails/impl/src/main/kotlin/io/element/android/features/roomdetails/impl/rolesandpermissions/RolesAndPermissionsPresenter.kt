@@ -64,7 +64,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
         fun handleEvent(event: RolesAndPermissionsEvents) {
             when (event) {
                 is RolesAndPermissionsEvents.ChangeOwnRole -> {
-                    changeOwnRoleAction.value = AsyncAction.Confirming
+                    changeOwnRoleAction.value = AsyncAction.ConfirmingNoParams
                 }
                 is RolesAndPermissionsEvents.CancelPendingAction -> {
                     changeOwnRoleAction.value = AsyncAction.Uninitialized
@@ -77,7 +77,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
                 is RolesAndPermissionsEvents.ResetPermissions -> if (resetPermissionsAction.value.isConfirming()) {
                     coroutineScope.resetPermissions(resetPermissionsAction)
                 } else {
-                    resetPermissionsAction.value = AsyncAction.Confirming
+                    resetPermissionsAction.value = AsyncAction.ConfirmingNoParams
                 }
             }
         }

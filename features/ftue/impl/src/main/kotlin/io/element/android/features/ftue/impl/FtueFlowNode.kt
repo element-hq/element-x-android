@@ -8,7 +8,10 @@
 package io.element.android.features.ftue.impl
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -31,12 +34,14 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -80,14 +85,17 @@ class FtueFlowNode @AssistedInject constructor(
         super.onBuilt()
 
         lifecycle.subscribe(onCreate = {
-            lifecycleScope.launch { moveToNextStep() }
+            moveToNextStepIfNeeded()
         })
 
         analyticsService.didAskUserConsent()
             .distinctUntilChanged()
-            .onEach {
-                lifecycleScope.launch { moveToNextStep() }
-            }
+            .onEach { moveToNextStepIfNeeded() }
+            .launchIn(lifecycleScope)
+
+        ftueState.isVerificationStatusKnown
+            .filter { it }
+            .onEach { moveToNextStepIfNeeded() }
             .launchIn(lifecycleScope)
     }
 
@@ -99,7 +107,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
                     override fun onDone() {
-                        lifecycleScope.launch { moveToNextStep() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 createNode<FtueSessionVerificationFlowNode>(buildContext, listOf(callback))
@@ -107,7 +115,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.NotificationsOptIn -> {
                 val callback = object : NotificationsOptInNode.Callback {
                     override fun onNotificationsOptInFinished() {
-                        lifecycleScope.launch { moveToNextStep() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 createNode<NotificationsOptInNode>(buildContext, listOf(callback))
@@ -118,7 +126,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.LockScreenSetup -> {
                 val callback = object : LockScreenEntryPoint.Callback {
                     override fun onSetupDone() {
-                        lifecycleScope.launch { moveToNextStep() }
+                        moveToNextStepIfNeeded()
                     }
                 }
                 lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Setup)
@@ -128,8 +136,11 @@ class FtueFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun moveToNextStep() = lifecycleScope.launch {
+    private fun moveToNextStepIfNeeded() = lifecycleScope.launch {
         when (ftueState.getNextStep()) {
+            FtueStep.WaitingForInitialState -> {
+                backstack.newRoot(NavTarget.Placeholder)
+            }
             FtueStep.SessionVerification -> {
                 backstack.newRoot(NavTarget.SessionVerification)
             }
@@ -155,7 +166,14 @@ class FtueFlowNode @AssistedInject constructor(
     class PlaceholderNode @AssistedInject constructor(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
-    ) : Node(buildContext, plugins = plugins)
+    ) : Node(buildContext, plugins = plugins) {
+        @Composable
+        override fun View(modifier: Modifier) {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+    }
 }
 
 private class NoOpBackstackHandlerStrategy<NavTarget : Any> : BaseBackPressHandlerStrategy<NavTarget, BackStack.State>() {

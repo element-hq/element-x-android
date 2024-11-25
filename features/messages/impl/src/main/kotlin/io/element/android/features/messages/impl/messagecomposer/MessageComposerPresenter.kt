@@ -14,7 +14,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -26,22 +25,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
+import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -52,6 +53,7 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -79,7 +81,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -87,16 +88,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
-@SingleIn(RoomScope::class)
-class MessageComposerPresenter @Inject constructor(
+class MessageComposerPresenter @AssistedInject constructor(
+    @Assisted private val navigator: MessagesNavigator,
     private val appCoroutineScope: CoroutineScope,
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -119,6 +117,11 @@ class MessageComposerPresenter @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): MessageComposerPresenter
+    }
+
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
@@ -149,9 +152,6 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val attachmentsState = remember {
-            mutableStateOf<AttachmentsState>(AttachmentsState.None)
-        }
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -164,39 +164,25 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
-            handlePickedMedia(attachmentsState, uri, mimeType)
+            handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
-            handlePickedMedia(attachmentsState, uri, compressIfPossible = false)
+            handlePickedMedia(uri)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(attachmentsState, uri, MimeTypes.IMAGE_JPEG)
+            handlePickedMedia(uri, MimeTypes.IMAGE_JPEG)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(attachmentsState, uri, MimeTypes.VIDEO_MP4)
+            handlePickedMedia(uri, MimeTypes.VIDEO_MP4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
-
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
         val roomAliasSuggestions by roomAliasSuggestionsDataSource.getAllRoomAliasSuggestions().collectAsState(initial = emptyList())
-
-        LaunchedEffect(attachmentsState.value) {
-            when (val attachmentStateValue = attachmentsState.value) {
-                is AttachmentsState.Sending.Processing -> {
-                    ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
-                        attachmentStateValue.attachments.first(),
-                        attachmentsState,
-                    )
-                }
-                else -> Unit
-            }
-        }
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -270,7 +256,7 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
-                    if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
+                    if (messageComposerContext.composerMode.isEditing) {
                         localCoroutineScope.launch {
                             resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = true)
                         }
@@ -292,9 +278,7 @@ class MessageComposerPresenter @Inject constructor(
                             name = null,
                             formattedFileSize = null
                         ),
-                        compressIfPossible = true
                     ),
-                    attachmentState = attachmentsState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
@@ -336,12 +320,6 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.PickAttachmentSource.Poll -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the create poll screen is done at the view layer
-                }
-                is MessageComposerEvents.CancelSendAttachment -> {
-                    ongoingSendAttachmentJob.value?.let {
-                        it.cancel()
-                        ongoingSendAttachmentJob.value == null
-                    }
                 }
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
@@ -419,7 +397,6 @@ class MessageComposerPresenter @Inject constructor(
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
-            attachmentsState = attachmentsState.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
@@ -435,18 +412,18 @@ class MessageComposerPresenter @Inject constructor(
         // Reset composer right away
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
+            is MessageComposerMode.Attachment,
             is MessageComposerMode.Normal -> room.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
                 intentionalMentions = message.intentionalMentions
             )
             is MessageComposerMode.Edit -> {
-                val eventId = capturedMode.eventId
-                val transactionId = capturedMode.transactionId
                 timelineController.invokeOnCurrentTimeline {
                     // First try to edit the message in the current timeline
-                    editMessage(eventId, transactionId, message.markdown, message.html, message.intentionalMentions)
+                    editMessage(capturedMode.eventOrTransactionId, message.markdown, message.html, message.intentionalMentions)
                         .onFailure { cause ->
+                            val eventId = capturedMode.eventOrTransactionId.eventId
                             if (cause is TimelineException.EventNotFound && eventId != null) {
                                 // if the event is not found in the timeline, try to edit the message directly
                                 room.editMessage(eventId, message.markdown, message.html, message.intentionalMentions)
@@ -454,7 +431,15 @@ class MessageComposerPresenter @Inject constructor(
                         }
                 }
             }
-
+            is MessageComposerMode.EditCaption -> {
+                timelineController.invokeOnCurrentTimeline {
+                    editCaption(
+                        capturedMode.eventOrTransactionId,
+                        caption = message.markdown,
+                        formattedCaption = message.html
+                    )
+                }
+            }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
                     replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
@@ -474,14 +459,12 @@ class MessageComposerPresenter @Inject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
-        attachmentState: MutableState<AttachmentsState>,
     ) = when (attachment) {
         is Attachment.Media -> {
             launch {
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState,
                 )
             }
         }
@@ -489,61 +472,32 @@ class MessageComposerPresenter @Inject constructor(
 
     @UnstableApi
     private fun handlePickedMedia(
-        attachmentsState: MutableState<AttachmentsState>,
         uri: Uri?,
         mimeType: String? = null,
-        compressIfPossible: Boolean = true,
     ) {
-        if (uri == null) {
-            attachmentsState.value = AttachmentsState.None
-            return
-        }
+        uri ?: return
         val localMedia = localMediaFactory.createFromUri(
             uri = uri,
             mimeType = mimeType,
             name = null,
             formattedFileSize = null
         )
-        val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
-        val isPreviewable = when {
-            MimeTypes.isImage(localMedia.info.mimeType) -> true
-            MimeTypes.isVideo(localMedia.info.mimeType) -> true
-            MimeTypes.isAudio(localMedia.info.mimeType) -> true
-            else -> false
-        }
-        attachmentsState.value = if (isPreviewable) {
-            AttachmentsState.Previewing(persistentListOf(mediaAttachment))
-        } else {
-            AttachmentsState.Sending.Processing(persistentListOf(mediaAttachment))
-        }
+        val mediaAttachment = Attachment.Media(localMedia)
+        navigator.onPreviewAttachment(persistentListOf(mediaAttachment))
     }
 
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-        attachmentState: MutableState<AttachmentsState>,
     ) = runCatching {
-        val context = coroutineContext
-        val progressCallback = object : ProgressCallback {
-            override fun onProgress(current: Long, total: Long) {
-                if (context.isActive) {
-                    attachmentState.value = AttachmentsState.Sending.Uploading(current.toFloat() / total.toFloat())
-                }
-            }
-        }
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            compressIfPossible = false,
-            progressCallback = progressCallback
+            progressCallback = null,
         ).getOrThrow()
     }
-        .onSuccess {
-            attachmentState.value = AttachmentsState.None
-        }
         .onFailure { cause ->
             Timber.e(cause, "Failed to send attachment")
-            attachmentState.value = AttachmentsState.None
             if (cause is CancellationException) {
                 throw cause
             } else {
@@ -580,8 +534,7 @@ class MessageComposerPresenter @Inject constructor(
         when (val draftType = draft.draftType) {
             ComposerDraftType.NewMessage -> messageComposerContext.composerMode = MessageComposerMode.Normal
             is ComposerDraftType.Edit -> messageComposerContext.composerMode = MessageComposerMode.Edit(
-                eventId = draftType.eventId,
-                transactionId = null,
+                eventOrTransactionId = draftType.eventId.toEventOrTransactionId(),
                 content = htmlText ?: markdownText
             )
             is ComposerDraftType.Reply -> {
@@ -608,11 +561,16 @@ class MessageComposerPresenter @Inject constructor(
     ): ComposerDraft? {
         val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = false)
         val draftType = when (val mode = messageComposerContext.composerMode) {
+            is MessageComposerMode.Attachment,
             is MessageComposerMode.Normal -> ComposerDraftType.NewMessage
             is MessageComposerMode.Edit -> {
-                mode.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
+                mode.eventOrTransactionId.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
             }
             is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+            is MessageComposerMode.EditCaption -> {
+                // TODO Need a new type to save caption in the SDK
+                null
+            }
         }
         return if (draftType == null || message.markdown.isBlank()) {
             null
@@ -687,7 +645,14 @@ class MessageComposerPresenter @Inject constructor(
         val currentComposerMode = messageComposerContext.composerMode
         when (newComposerMode) {
             is MessageComposerMode.Edit -> {
-                if (currentComposerMode !is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing.not()) {
+                    val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
+                    updateDraft(draft, isVolatile = true).join()
+                }
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+            }
+            is MessageComposerMode.EditCaption -> {
+                if (currentComposerMode.isEditing.not()) {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     updateDraft(draft, isVolatile = true).join()
                 }
@@ -695,7 +660,7 @@ class MessageComposerPresenter @Inject constructor(
             }
             else -> {
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
-                if (currentComposerMode is MessageComposerMode.Edit) {
+                if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)
                 }
             }

@@ -41,9 +41,9 @@ class RustRoomDirectoryList(
             .launchIn(coroutineScope)
     }
 
-    override suspend fun filter(filter: String?, batchSize: Int): Result<Unit> {
+    override suspend fun filter(filter: String?, batchSize: Int, viaServerName: String?): Result<Unit> {
         return execute {
-            inner.search(filter = filter, batchSize = batchSize.toUInt())
+            inner.search(filter = filter, batchSize = batchSize.toUInt(), viaServerName = null)
         }
     }
 

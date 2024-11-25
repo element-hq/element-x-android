@@ -8,6 +8,8 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL de base pour Element Call personnalisée"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Configurer une URL de base pour Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte."</string>
+  <string name="screen_advanced_settings_media_compression_description">"Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Optimisez la qualité des médias"</string>
   <string name="screen_advanced_settings_push_provider_android">"Fournisseur de Push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Accusés de lecture"</string>

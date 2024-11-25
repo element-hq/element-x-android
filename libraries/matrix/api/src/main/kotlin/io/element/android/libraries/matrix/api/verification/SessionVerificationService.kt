@@ -56,7 +56,27 @@ interface SessionVerificationService {
     /**
      * Returns the verification service state to the initial step.
      */
-    suspend fun reset()
+    suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean)
+
+    /**
+     * Register a listener to be notified of incoming session verification requests.
+     */
+    fun setListener(listener: SessionVerificationServiceListener?)
+
+    /**
+     * Set this particular request as the currently active one and register for
+     * events pertaining it.
+     */
+    suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails)
+
+    /**
+     * Accept the previously acknowledged verification request.
+     */
+    suspend fun acceptVerificationRequest()
+}
+
+interface SessionVerificationServiceListener {
+    fun onIncomingSessionRequest(sessionVerificationRequestDetails: SessionVerificationRequestDetails)
 }
 
 /** Verification status of the current session. */
@@ -82,20 +102,20 @@ sealed interface VerificationFlowState {
     data object Initial : VerificationFlowState
 
     /** Session verification request was accepted by another device. */
-    data object AcceptedVerificationRequest : VerificationFlowState
+    data object DidAcceptVerificationRequest : VerificationFlowState
 
     /** Short Authentication String (SAS) verification started between the 2 devices. */
-    data object StartedSasVerification : VerificationFlowState
+    data object DidStartSasVerification : VerificationFlowState
 
     /** Verification data for the SAS verification received. */
-    data class ReceivedVerificationData(val data: SessionVerificationData) : VerificationFlowState
+    data class DidReceiveVerificationData(val data: SessionVerificationData) : VerificationFlowState
 
     /** Verification completed successfully. */
-    data object Finished : VerificationFlowState
+    data object DidFinish : VerificationFlowState
 
     /** Verification was cancelled by either device. */
-    data object Canceled : VerificationFlowState
+    data object DidCancel : VerificationFlowState
 
     /** Verification failed with an error. */
-    data object Failed : VerificationFlowState
+    data object DidFail : VerificationFlowState
 }

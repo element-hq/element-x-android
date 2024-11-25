@@ -37,13 +37,13 @@ interface VoiceMessagePlayer {
          * @param eventId The eventId of the voice message event.
          * @param mediaSource The media source of the voice message.
          * @param mimeType The mime type of the voice message.
-         * @param body The body of the voice message.
+         * @param filename The filename of the voice message.
          */
         fun create(
             eventId: EventId?,
             mediaSource: MediaSource,
             mimeType: String?,
-            body: String?,
+            filename: String?,
         ): VoiceMessagePlayer
     }
 
@@ -113,7 +113,7 @@ class DefaultVoiceMessagePlayer(
     private val eventId: EventId?,
     mediaSource: MediaSource,
     mimeType: String?,
-    body: String?,
+    filename: String?,
 ) : VoiceMessagePlayer {
     @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
     class Factory @Inject constructor(
@@ -124,21 +124,21 @@ class DefaultVoiceMessagePlayer(
             eventId: EventId?,
             mediaSource: MediaSource,
             mimeType: String?,
-            body: String?,
+            filename: String?,
         ): DefaultVoiceMessagePlayer = DefaultVoiceMessagePlayer(
             mediaPlayer = mediaPlayer,
             voiceMessageMediaRepoFactory = voiceMessageMediaRepoFactory,
             eventId = eventId,
             mediaSource = mediaSource,
             mimeType = mimeType,
-            body = body,
+            filename = filename,
         )
     }
 
     private val repo = voiceMessageMediaRepoFactory.create(
         mediaSource = mediaSource,
         mimeType = mimeType,
-        body = body
+        filename = filename,
     )
 
     private var internalState = MutableStateFlow(

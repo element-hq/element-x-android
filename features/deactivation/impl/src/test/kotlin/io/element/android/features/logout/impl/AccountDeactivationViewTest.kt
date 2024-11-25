@@ -71,7 +71,7 @@ class AccountDeactivationViewTest {
                 deactivateFormState = aDeactivateFormState(
                     password = A_PASSWORD,
                 ),
-                accountDeactivationAction = AsyncAction.Confirming,
+                accountDeactivationAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder,
             ),
         )

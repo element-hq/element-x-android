@@ -24,11 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -80,9 +79,7 @@ fun ResolveVerifiedUserSendFailureView(
                     modifier = Modifier.padding(24.dp),
                     title = state.verifiedUserSendFailure.title(),
                     subTitle = state.verifiedUserSendFailure.subtitle(),
-                    iconImageVector = CompoundIcons.Error(),
-                    iconTint = ElementTheme.colors.iconCriticalPrimary,
-                    iconBackgroundTint = ElementTheme.colors.bgCriticalSubtle,
+                    iconStyle = BigIcon.Style.AlertSolid,
                 )
                 ButtonColumnMolecule(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),

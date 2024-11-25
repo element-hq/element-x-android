@@ -34,15 +34,15 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SelectedRoom(
-    roomSummary: RoomSummary,
-    onRemoveRoom: (RoomSummary) -> Unit,
+    roomInfo: SelectRoomInfo,
+    onRemoveRoom: (SelectRoomInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -53,14 +53,12 @@ fun SelectedRoom(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CompositeAvatar(
-                avatarData = roomSummary.getAvatarData(size = AvatarSize.SelectedRoom),
-                heroes = roomSummary.heroes.map { user ->
-                    user.getAvatarData(size = AvatarSize.SelectedRoom)
-                }.toImmutableList()
+                avatarData = roomInfo.getAvatarData(AvatarSize.SelectedRoom),
+                heroes = roomInfo.heroes.map { it.getAvatarData(AvatarSize.SelectedRoom) }.toImmutableList(),
             )
             Text(
                 // If name is null, we do not have space to render "No room name", so just use `#` here.
-                text = roomSummary.name ?: "#",
+                text = roomInfo.name ?: "#",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyLarge,
@@ -69,14 +67,14 @@ fun SelectedRoom(
         Surface(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .clip(CircleShape)
-                .size(20.dp)
-                .align(Alignment.TopEnd)
-                .clickable(
-                    indication = ripple(),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = { onRemoveRoom(roomSummary) }
-                ),
+                    .clip(CircleShape)
+                    .size(20.dp)
+                    .align(Alignment.TopEnd)
+                    .clickable(
+                            indication = ripple(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = { onRemoveRoom(roomInfo) }
+                    ),
         ) {
             Icon(
                 imageVector = CompoundIcons.Close(),
@@ -91,10 +89,10 @@ fun SelectedRoom(
 @PreviewsDayNight
 @Composable
 internal fun SelectedRoomPreview(
-    @PreviewParameter(RoomSummaryDetailsProvider::class) roomSummary: RoomSummary
+    @PreviewParameter(SelectRoomInfoProvider::class) roomInfo: SelectRoomInfo
 ) = ElementPreview {
     SelectedRoom(
-        roomSummary = roomSummary,
+        roomInfo = roomInfo,
         onRemoveRoom = {},
     )
 }

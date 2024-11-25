@@ -18,6 +18,7 @@ class InMemorySessionPreferencesStore(
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
+    doesCompressMedia: Boolean = true,
 ) : SessionPreferencesStore {
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
@@ -25,6 +26,7 @@ class InMemorySessionPreferencesStore(
     private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
+    private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
     var clearCallCount = 0
         private set
 
@@ -65,6 +67,10 @@ class InMemorySessionPreferencesStore(
     override fun isSessionVerificationSkipped(): Flow<Boolean> {
         return isSessionVerificationSkipped
     }
+
+    override suspend fun setCompressMedia(compress: Boolean) = doesCompressMedia.emit(compress)
+
+    override fun doesCompressMedia(): Flow<Boolean> = doesCompressMedia
 
     override suspend fun clear() {
         clearCallCount++

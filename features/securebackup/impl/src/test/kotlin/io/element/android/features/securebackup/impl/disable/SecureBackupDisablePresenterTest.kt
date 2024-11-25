@@ -39,22 +39,6 @@ class SecureBackupDisablePresenterTest {
     }
 
     @Test
-    fun `present - user delete backup and cancel`() = runTest {
-        val presenter = createSecureBackupDisablePresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
-            val state = awaitItem()
-            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
-            initialState.eventSink(SecureBackupDisableEvents.DismissDialogs)
-            val finalState = awaitItem()
-            assertThat(finalState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-        }
-    }
-
-    @Test
     fun `present - user delete backup success`() = runTest {
         val presenter = createSecureBackupDisablePresenter()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -62,9 +46,6 @@ class SecureBackupDisablePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
-            val state = awaitItem()
-            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
             initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val loadingState = awaitItem()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -86,9 +67,6 @@ class SecureBackupDisablePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
-            val state = awaitItem()
-            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
             initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val loadingState = awaitItem()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)

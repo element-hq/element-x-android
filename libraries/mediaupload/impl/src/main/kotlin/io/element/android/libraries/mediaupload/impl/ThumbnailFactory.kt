@@ -53,8 +53,11 @@ class ThumbnailFactory @Inject constructor(
     private val sdkIntProvider: BuildVersionSdkIntProvider
 ) {
     @SuppressLint("NewApi")
-    suspend fun createImageThumbnail(file: File): ThumbnailResult? {
-        return createThumbnail { cancellationSignal ->
+    suspend fun createImageThumbnail(
+        file: File,
+        mimeType: String,
+    ): ThumbnailResult? {
+        return createThumbnail(mimeType = mimeType) { cancellationSignal ->
             try {
                 // This API works correctly with GIF
                 if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
@@ -83,7 +86,7 @@ class ThumbnailFactory @Inject constructor(
     }
 
     suspend fun createVideoThumbnail(file: File): ThumbnailResult? {
-        return createThumbnail {
+        return createThumbnail(mimeType = MimeTypes.Jpeg) {
             MediaMetadataRetriever().runAndRelease {
                 setDataSource(context, file.toUri())
                 getFrameAtTime(VIDEO_THUMB_FRAME)
@@ -91,7 +94,10 @@ class ThumbnailFactory @Inject constructor(
         }
     }
 
-    private suspend fun createThumbnail(bitmapFactory: (CancellationSignal) -> Bitmap?): ThumbnailResult? = suspendCancellableCoroutine { continuation ->
+    private suspend fun createThumbnail(
+        mimeType: String,
+        bitmapFactory: (CancellationSignal) -> Bitmap?,
+    ): ThumbnailResult? = suspendCancellableCoroutine { continuation ->
         val cancellationSignal = CancellationSignal()
         continuation.invokeOnCancellation {
             cancellationSignal.cancel()
@@ -101,9 +107,11 @@ class ThumbnailFactory @Inject constructor(
             continuation.resume(null)
             return@suspendCancellableCoroutine
         }
-        val thumbnailFile = context.createTmpFile(extension = "jpeg")
+        val format = mimeTypeToCompressFormat(mimeType)
+        val extension = mimeTypeToCompressFileExtension(mimeType)
+        val thumbnailFile = context.createTmpFile(extension = extension)
         thumbnailFile.outputStream().use { outputStream ->
-            bitmapThumbnail.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            bitmapThumbnail.compress(format, 78, outputStream)
         }
         val blurhash = BlurHash.encode(bitmapThumbnail, 3, 3)
         val thumbnailResult = ThumbnailResult(
@@ -111,7 +119,7 @@ class ThumbnailFactory @Inject constructor(
             info = ThumbnailInfo(
                 height = bitmapThumbnail.height.toLong(),
                 width = bitmapThumbnail.width.toLong(),
-                mimetype = MimeTypes.Jpeg,
+                mimetype = mimeTypeToThumbnailMimeType(mimeType),
                 size = thumbnailFile.length()
             ),
             blurhash = blurhash

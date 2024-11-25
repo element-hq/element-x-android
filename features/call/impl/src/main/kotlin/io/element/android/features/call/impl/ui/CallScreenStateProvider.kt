@@ -24,6 +24,7 @@ internal fun aCallScreenState(
     urlState: AsyncData<String> = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
     webViewError: String? = null,
     userAgent: String = "",
+    isCallActive: Boolean = true,
     isInWidgetMode: Boolean = false,
     eventSink: (CallScreenEvents) -> Unit = {},
 ): CallScreenState {
@@ -31,6 +32,7 @@ internal fun aCallScreenState(
         urlState = urlState,
         webViewError = webViewError,
         userAgent = userAgent,
+        isCallActive = isCallActive,
         isInWidgetMode = isInWidgetMode,
         eventSink = eventSink,
     )

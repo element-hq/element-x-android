@@ -23,6 +23,8 @@ forbiddenTerms = {
         "screen_onboarding_welcome_title",
         # Contains "Element Call"
         "screen_incoming_call_subtitle_android",
+        # Contains "Element X"
+        "screen_room_timeline_legacy_call",
     ]
 }
 

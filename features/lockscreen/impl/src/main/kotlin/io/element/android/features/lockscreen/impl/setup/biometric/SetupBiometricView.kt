@@ -20,6 +20,7 @@ import io.element.android.features.lockscreen.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -51,7 +52,7 @@ fun SetupBiometricView(
 private fun SetupBiometricHeader() {
     val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
     IconTitleSubtitleMolecule(
-        iconImageVector = Icons.Default.Fingerprint,
+        iconStyle = BigIcon.Style.Default(Icons.Default.Fingerprint),
         title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
         subTitle = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_subtitle, biometricAuth),
     )

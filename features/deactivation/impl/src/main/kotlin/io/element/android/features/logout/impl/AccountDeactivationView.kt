@@ -9,7 +9,9 @@
 
 package io.element.android.features.logout.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -52,19 +54,18 @@ import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrgani
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
+import io.element.android.libraries.designsystem.modifiers.autofill
+import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.theme.components.autofill
-import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -257,26 +258,21 @@ private fun Content(
             )
         }
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
         ) {
-            Text(
-                text = stringResource(CommonStrings.action_confirm_password),
-                style = ElementTheme.typography.fontBodySmMedium,
-                color = ElementTheme.colors.textSecondary,
-            )
             var passwordVisible by remember { mutableStateOf(false) }
             if (isLoading) {
                 // Ensure password is hidden when user submits the form
                 passwordVisible = false
             }
-            OutlinedTextField(
+            TextField(
                 value = passwordFieldState,
+                label = stringResource(CommonStrings.action_confirm_password),
                 readOnly = isLoading,
                 modifier = Modifier
-                    .padding(top = 8.dp)
                     .fillMaxWidth()
                     .onTabOrEnterKeyFocusNext(focusManager)
                     .testTag(TestTags.loginPassword)
@@ -293,9 +289,7 @@ private fun Content(
                     passwordFieldState = sanitized
                     eventSink(AccountDeactivationEvents.SetPassword(sanitized))
                 },
-                placeholder = {
-                    Text(text = stringResource(CommonStrings.common_password))
-                },
+                placeholder = stringResource(CommonStrings.common_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     val image =
@@ -303,7 +297,7 @@ private fun Content(
                     val description =
                         if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
 
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Box(modifier = Modifier.clickable { passwordVisible = !passwordVisible }) {
                         Icon(imageVector = image, description)
                     }
                 },

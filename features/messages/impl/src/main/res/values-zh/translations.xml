@@ -24,7 +24,7 @@
   <string name="screen_room_encrypted_history_banner_unverified">"此聊天室无法查看消息历史记录。请验证此设备以查看之。"</string>
   <string name="screen_room_invite_again_alert_message">"您想邀请他们回来吗？"</string>
   <string name="screen_room_invite_again_alert_title">"聊天中只有你一个人"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"通知整个房间"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"通知整个聊天室"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"再次发送"</string>
   <string name="screen_room_retry_send_menu_title">"消息发送失败"</string>
@@ -33,12 +33,12 @@
   <string name="screen_room_timeline_beginning_of_room_no_name">"这是本对话的开始。"</string>
   <string name="screen_room_timeline_less_reactions">"折叠"</string>
   <string name="screen_room_timeline_message_copied">"消息已复制"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"您无权在此房间发言"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"您无权在此聊天室发言"</string>
   <string name="screen_room_timeline_reactions_show_less">"折叠"</string>
   <string name="screen_room_timeline_reactions_show_more">"展开"</string>
   <string name="screen_room_timeline_read_marker_title">"新消息"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="other">"%1$d 聊天室变更"</item>
+    <item quantity="other">"%1$d 个聊天室变化"</item>
   </plurals>
   <plurals name="screen_room_typing_many_members">
     <item quantity="other">"%1$s，%2$s 和其他 %3$d 个人"</item>

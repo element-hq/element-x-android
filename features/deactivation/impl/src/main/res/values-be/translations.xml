@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Калі ласка, пацвердзіце, што вы хочаце дэактываваць свой уліковы запіс. Гэта дзеянне нельга адмяніць."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Выдаліць усе мае паведамленні"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Увага: будучыя карыстальнікі могуць бачыць няпоўныя размовы."</string>
+  <string name="screen_deactivate_account_description_bold_part">"незваротны"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Назаўсёды адключыць"</string>
+  <string name="screen_deactivate_account_list_item_2">"Выдаліць вас з усіх чатаў."</string>
+  <string name="screen_deactivate_account_list_item_3">"Выдаліце інфармацыю аб сваім уліковым запісе з нашага сервера ідэнтыфікацыі."</string>
   <string name="screen_deactivate_account_title">"Дэактываваць уліковы запіс"</string>
 </resources>

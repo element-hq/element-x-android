@@ -36,7 +36,7 @@ class RustRoomDirectoryListTest {
         // Let the mxCallback be ready
         runCurrent()
         sut.state.test {
-            sut.filter("", 20)
+            sut.filter(filter = "", batchSize = 20, viaServerName = null)
             roomDirectorySearch.emitResult(
                 listOf(
                     RoomDirectorySearchEntryUpdate.Append(listOf(aRustRoomDescription()))

@@ -76,6 +76,10 @@ fun RoomListContentView(
             }
             is RoomListContentState.Empty -> {
                 EmptyView(
+                    state = contentState,
+                    eventSink = eventSink,
+                    onSetUpRecoveryClick = onSetUpRecoveryClick,
+                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                     onCreateRoomClick = onCreateRoomClick,
                 )
             }
@@ -110,21 +114,44 @@ private fun SkeletonView(count: Int, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EmptyView(
+    state: RoomListContentState.Empty,
+    eventSink: (RoomListEvents) -> Unit,
+    onSetUpRecoveryClick: () -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    EmptyScaffold(
-        title = R.string.screen_roomlist_empty_title,
-        subtitle = R.string.screen_roomlist_empty_message,
-        action = {
-            Button(
-                text = stringResource(CommonStrings.action_start_chat),
-                leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
-                onClick = onCreateRoomClick,
-            )
-        },
-        modifier = modifier.fillMaxSize(),
-    )
+    Box(modifier.fillMaxSize()) {
+        EmptyScaffold(
+            title = R.string.screen_roomlist_empty_title,
+            subtitle = R.string.screen_roomlist_empty_message,
+            action = {
+                Button(
+                    text = stringResource(CommonStrings.action_start_chat),
+                    leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
+                    onClick = onCreateRoomClick,
+                )
+            },
+            modifier = Modifier.align(Alignment.Center),
+        )
+        Box {
+            when (state.securityBannerState) {
+                SecurityBannerState.SetUpRecovery -> {
+                    SetUpRecoveryKeyBanner(
+                        onContinueClick = onSetUpRecoveryClick,
+                        onDismissClick = { eventSink(RoomListEvents.DismissBanner) }
+                    )
+                }
+                SecurityBannerState.RecoveryKeyConfirmation -> {
+                    ConfirmRecoveryKeyBanner(
+                        onContinueClick = onConfirmRecoveryKeyClick,
+                        onDismissClick = { eventSink(RoomListEvents.DismissBanner) }
+                    )
+                }
+                else -> Unit
+            }
+        }
+    }
 }
 
 @Composable

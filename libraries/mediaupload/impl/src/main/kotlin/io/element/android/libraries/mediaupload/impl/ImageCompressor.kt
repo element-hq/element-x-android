@@ -34,14 +34,16 @@ class ImageCompressor @Inject constructor(
     suspend fun compressToTmpFile(
         inputStreamProvider: () -> InputStream,
         resizeMode: ResizeMode,
-        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        mimeType: String,
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
-        desiredQuality: Int = 80,
+        desiredQuality: Int = 78,
     ): Result<ImageCompressionResult> = withContext(dispatchers.io) {
         runCatching {
+            val format = mimeTypeToCompressFormat(mimeType)
+            val extension = mimeTypeToCompressFileExtension(mimeType)
             val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()
             // Encode bitmap to the destination temporary file
-            val tmpFile = context.createTmpFile(extension = "jpeg")
+            val tmpFile = context.createTmpFile(extension = extension)
             tmpFile.outputStream().use {
                 compressedBitmap.compress(format, desiredQuality, it)
             }

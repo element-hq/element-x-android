@@ -8,9 +8,6 @@
 package io.element.android.features.messages.impl.typing
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import kotlinx.collections.immutable.toImmutableList
 
 class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificationState> {
@@ -24,39 +21,39 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice", isNameAmbiguous = true),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice (@alice:example.com)"),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice"),
-                    aTypingRoomMember(displayName = "Bob"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice"),
-                    aTypingRoomMember(displayName = "Bob"),
-                    aTypingRoomMember(displayName = "Charlie"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Charlie"),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice"),
-                    aTypingRoomMember(displayName = "Bob"),
-                    aTypingRoomMember(displayName = "Charlie"),
-                    aTypingRoomMember(displayName = "Dan"),
-                    aTypingRoomMember(displayName = "Eve"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Charlie"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Dan"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Eve"),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice with a very long display name which means that it will be truncated"),
+                    aTypingRoomMember(disambiguatedDisplayName = "Alice with a very long display name which means that it will be truncated"),
                 ),
             ),
             aTypingNotificationState(
@@ -67,7 +64,7 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
 }
 
 internal fun aTypingNotificationState(
-    typingMembers: List<RoomMember> = emptyList(),
+    typingMembers: List<TypingRoomMember> = emptyList(),
     reserveSpace: Boolean = false,
 ) = TypingNotificationState(
     renderTypingNotifications = true,
@@ -76,19 +73,7 @@ internal fun aTypingNotificationState(
 )
 
 internal fun aTypingRoomMember(
-    userId: UserId = UserId("@alice:example.com"),
-    displayName: String? = null,
-    isNameAmbiguous: Boolean = false,
-): RoomMember {
-    return RoomMember(
-        userId = userId,
-        displayName = displayName,
-        avatarUrl = null,
-        membership = RoomMembershipState.JOIN,
-        isNameAmbiguous = isNameAmbiguous,
-        powerLevel = 0,
-        normalizedPowerLevel = 0,
-        isIgnored = false,
-        role = RoomMember.Role.USER,
-    )
-}
+    disambiguatedDisplayName: String = "@alice:example.com",
+) = TypingRoomMember(
+    disambiguatedDisplayName = disambiguatedDisplayName,
+)

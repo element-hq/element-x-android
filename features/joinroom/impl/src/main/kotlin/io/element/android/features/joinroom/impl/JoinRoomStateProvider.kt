@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.RoomType
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
@@ -82,6 +81,12 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     isDm = true,
                 )
             ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = "A knocked Room",
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
+                )
+            )
         )
 }
 
@@ -125,13 +130,17 @@ fun aJoinRoomState(
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     joinAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    knockMessage: String = "",
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     joinAction = joinAction,
     knockAction = knockAction,
+    cancelKnockAction = cancelKnockAction,
     applicationName = "AppName",
+    knockMessage = knockMessage,
     eventSink = eventSink
 )
 

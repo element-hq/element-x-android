@@ -41,7 +41,7 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
                 unregisterPusherResult = lambda
             )
         )
-        val result = useCase.execute(matrixClient, A_SECRET)
+        val result = useCase.unregister(matrixClient, A_SECRET)
         assertThat(result.isSuccess).isTrue()
         lambda.assertions()
             .isCalledOnce()
@@ -67,7 +67,7 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
                 storePushGatewayResult = storePushGatewayResult,
             ),
         )
-        val result = useCase.execute(matrixClient, A_SECRET)
+        val result = useCase.unregister(matrixClient, A_SECRET)
         assertThat(result.isSuccess).isTrue()
         storeUpEndpointResult.assertions()
             .isCalledOnce()
@@ -90,7 +90,7 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
                 storePushGatewayResult = storePushGatewayResult,
             ),
         )
-        val result = useCase.execute(matrixClient, A_SECRET)
+        val result = useCase.unregister(matrixClient, A_SECRET)
         assertThat(result.isSuccess).isTrue()
         storeUpEndpointResult.assertions()
             .isCalledOnce()
@@ -112,7 +112,7 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
                 unregisterPusherResult = { _, _, _ -> Result.failure(AN_EXCEPTION) }
             )
         )
-        val result = useCase.execute(matrixClient, A_SECRET)
+        val result = useCase.unregister(matrixClient, A_SECRET)
         assertThat(result.isFailure).isTrue()
     }
 

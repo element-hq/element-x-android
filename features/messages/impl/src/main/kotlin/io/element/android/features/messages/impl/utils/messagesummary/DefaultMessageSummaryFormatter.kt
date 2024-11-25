@@ -56,7 +56,7 @@ class DefaultMessageSummaryFormatter @Inject constructor(
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
-            is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_call_invite)
+            is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
             is TimelineItemCallNotifyContent -> context.getString(CommonStrings.common_call_started)
         }.take(MAX_SAFE_LENGTH)
     }

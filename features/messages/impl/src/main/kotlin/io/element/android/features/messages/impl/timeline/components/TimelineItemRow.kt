@@ -28,7 +28,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,7 +43,7 @@ internal fun TimelineItemRow(
     focusedEventId: EventId?,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
-    onClick: (TimelineItem.Event) -> Unit,
+    onContentClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -60,7 +59,9 @@ internal fun TimelineItemRow(
             TimelineItemEventContentView(
                 content = event.content,
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
-                onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                onContentClick = { onContentClick(event) },
+                onLongClick = { onLongClick(event) },
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
@@ -95,7 +96,7 @@ internal fun TimelineItemRow(
                             renderReadReceipts = renderReadReceipts,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             isHighlighted = timelineItem.isEvent(focusedEventId),
-                            onClick = { onClick(timelineItem) },
+                            onClick = { onContentClick(timelineItem) },
                             onReadReceiptsClick = onReadReceiptClick,
                             onLongClick = { onLongClick(timelineItem) },
                             eventSink = eventSink,
@@ -105,7 +106,7 @@ internal fun TimelineItemRow(
                         TimelineItemCallNotifyView(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
                             event = timelineItem,
-                            isCallOngoing = timelineRoomInfo.isCallOngoing,
+                            roomCallState = timelineRoomInfo.roomCallState,
                             onLongClick = onLongClick,
                             onJoinCallClick = onJoinCallClick,
                         )
@@ -118,11 +119,7 @@ internal fun TimelineItemRow(
                             timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             isHighlighted = timelineItem.isEvent(focusedEventId),
-                            onClick = if (timelineProtectionState.hideMediaContent(timelineItem.eventId) && timelineItem.mustBeProtected()) {
-                                {}
-                            } else {
-                                { onClick(timelineItem) }
-                            },
+                            onEventClick = { onContentClick(timelineItem) },
                             onLongClick = { onLongClick(timelineItem) },
                             onLinkClick = onLinkClick,
                             onUserDataClick = onUserDataClick,
@@ -148,7 +145,7 @@ internal fun TimelineItemRow(
                     renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
-                    onClick = onClick,
+                    onClick = onContentClick,
                     onLongClick = onLongClick,
                     inReplyToClick = inReplyToClick,
                     onUserDataClick = onUserDataClick,

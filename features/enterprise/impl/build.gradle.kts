@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -6,12 +8,13 @@
  */
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.features.enterprise.impl"
 }
+
+setupAnvil()
 
 dependencies {
     implementation(projects.anvilannotations)

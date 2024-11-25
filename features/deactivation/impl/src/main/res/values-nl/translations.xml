@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Bevestig dat je je account wilt sluiten. Deze actie kan niet ongedaan worden gemaakt."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Verwijder al mijn berichten"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Waarschuwing: Toekomstige gebruikers kunnen onvolledige gesprekken te zien krijgen."</string>
+  <string name="screen_deactivate_account_description">"Je account sluiten is %1$s, het zal:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"onomkeerbaar"</string>
+  <string name="screen_deactivate_account_list_item_1">"Je account %1$s (je kunt niet opnieuw inloggen en je ID kan niet opnieuw worden gebruikt)"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"permanent uitschakelen"</string>
+  <string name="screen_deactivate_account_list_item_2">"Je verwijderen uit alle chatrooms."</string>
+  <string name="screen_deactivate_account_list_item_3">"Je accountgegevens verwijderen van onze identiteitsserver."</string>
+  <string name="screen_deactivate_account_list_item_4">"Je berichten zijn nog steeds zichtbaar voor geregistreerde gebruikers, maar niet beschikbaar voor nieuwe of niet-geregistreerde gebruikers als je ervoor kiest ze te verwijderen."</string>
+  <string name="screen_deactivate_account_title">"Account sluiten"</string>
+</resources>

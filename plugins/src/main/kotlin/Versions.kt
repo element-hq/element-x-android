@@ -42,7 +42,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 // Note: 2 digits max for each value
 private const val versionMajor = 0
-private const val versionMinor = 6
+private const val versionMinor = 7
 
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
@@ -50,10 +50,10 @@ private const val versionMinor = 6
 private const val versionPatch = 5
 
 object Versions {
-    val versionCode = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
-    val versionName = "$versionMajor.$versionMinor.$versionPatch"
-    const val compileSdk = 34
-    const val targetSdk = 34
+    const val VERSION_CODE = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
+    const val VERSION_NAME = "$versionMajor.$versionMinor.$versionPatch"
+    const val COMPILE_SDK = 35
+    const val TARGET_SDK = 35
 
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     val minSdk = if (isEnterpriseBuild) 26 else 24

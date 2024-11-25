@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Uitloggen &amp; Upgraden"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Je server ondersteunt nu een nieuw, sneller protocol. Log uit en log opnieuw in om nu te upgraden. Als je dit nu doet, voorkom je dat je geforceerd uitlogt wordt wanneer het oude protocol later wordt verwijderd."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Je homeserver ondersteunt het oude protocol niet meer. Log uit en log opnieuw in om de app te blijven gebruiken."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade beschikbaar"</string>
+  <string name="banner_set_up_recovery_submit">"Herstelmogelijkheid instellen"</string>
   <string name="confirm_recovery_key_banner_message">"Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up."</string>
   <string name="confirm_recovery_key_banner_title">"Voer je herstelsleutel in"</string>
+  <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
   <string name="screen_invites_decline_chat_message">"Weet je zeker dat je de uitnodiging om toe te treden tot %1$s wilt weigeren?"</string>
   <string name="screen_invites_decline_chat_title">"Uitnodiging weigeren"</string>
   <string name="screen_invites_decline_direct_chat_message">"Weet je zeker dat je deze privéchat met %1$s wilt weigeren?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Chat weigeren"</string>
   <string name="screen_invites_empty_list">"Geen uitnodigingen"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) heeft je uitgenodigd"</string>
+  <string name="screen_join_room_knock_sent_title">"Verzoek om toe te treden verzonden"</string>
   <string name="screen_migration_message">"Dit is een eenmalig proces, bedankt voor het wachten."</string>
   <string name="screen_migration_title">"Je account instellen."</string>
   <string name="screen_roomlist_a11y_create_message">"Begin een nieuw gesprek of maak een nieuwe kamer"</string>

@@ -3,11 +3,22 @@
   <string name="screen_create_room_action_create_room">"Nouveau salon"</string>
   <string name="screen_create_room_add_people_title">"Inviter des amis"</string>
   <string name="screen_create_room_error_creating_room">"Une erreur s’est produite lors de la création du salon"</string>
-  <string name="screen_create_room_private_option_description">"Les messages dans ce salon sont chiffrés. Le chiffrement ne pourra pas être désactivé par la suite."</string>
-  <string name="screen_create_room_private_option_title">"Salon privé (sur invitation seulement)"</string>
-  <string name="screen_create_room_public_option_description">"Les messages ne sont pas chiffrés et n’importe qui peut les lire. Vous pouvez activer le chiffrement ultérieurement."</string>
-  <string name="screen_create_room_public_option_title">"Salon public (tout le monde)"</string>
+  <string name="screen_create_room_private_option_description">"Seules les personnes invitées peuvent accéder à ce salon. Tous les messages sont chiffrés de bout en bout."</string>
+  <string name="screen_create_room_private_option_title">"Salon privé"</string>
+  <string name="screen_create_room_public_option_description">"N’importe qui peut trouver ce salon.
+Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string>
+  <string name="screen_create_room_public_option_title">"Salon public"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Tout le monde peut rejoindre ce salon"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Tout le monde"</string>
+  <string name="screen_create_room_room_access_section_header">"Accès au salon"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d’adresse de salon ou de modifier le nom du salon"</string>
+  <string name="screen_create_room_room_address_section_footer">"Pour que ce salon soit visible dans le répertoire des salons publics, vous aurez besoin d’une adresse de salon."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresse du salon"</string>
   <string name="screen_create_room_room_name_label">"Nom du salon"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
   <string name="screen_create_room_title">"Créer un salon"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>

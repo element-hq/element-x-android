@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
@@ -30,6 +31,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.aPermissionsState
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -45,6 +47,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -56,12 +59,15 @@ class VoiceMessageComposerPresenterTest {
         recordingDuration = RECORDING_DURATION
     )
     private val analyticsService = FakeAnalyticsService()
-    private val sendMediaResult = lambdaRecorder<ProgressCallback?, Result<FakeMediaUploadHandler>> { Result.success(FakeMediaUploadHandler()) }
+    private val sendVoiceMessageResult =
+        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
+            Result.success(FakeMediaUploadHandler())
+        }
     private val matrixRoom = FakeMatrixRoom(
-        sendMediaResult = sendMediaResult
+        sendVoiceMessageResult = sendVoiceMessageResult
     )
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
-    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom)
+    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom, InMemorySessionPreferencesStore())
     private val messageComposerContext = FakeMessageComposerContext()
 
     companion object {
@@ -291,7 +297,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            sendMediaResult.assertions().isCalledOnce()
+            sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
@@ -342,7 +348,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            sendMediaResult.assertions().isCalledOnce()
+            sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
@@ -365,7 +371,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            sendMediaResult.assertions().isCalledOnce()
+            sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
@@ -389,7 +395,7 @@ class VoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState(isSending = true))
-            sendMediaResult.assertions().isNeverCalled()
+            sendVoiceMessageResult.assertions().isNeverCalled()
             assertThat(analyticsService.trackedErrors).hasSize(0)
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
@@ -414,13 +420,13 @@ class VoiceMessageComposerPresenterTest {
 
             ensureAllEventsConsumed()
             assertThat(previewState.voiceMessageState).isEqualTo(aPreviewState())
-            sendMediaResult.assertions().isNeverCalled()
+            sendVoiceMessageResult.assertions().isNeverCalled()
 
             mediaPreProcessor.givenAudioResult()
             previewState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            sendMediaResult.assertions().isCalledOnce()
+            sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
@@ -457,7 +463,7 @@ class VoiceMessageComposerPresenterTest {
                 assertThat(showSendFailureDialog).isFalse()
             }
 
-            sendMediaResult.assertions().isNeverCalled()
+            sendVoiceMessageResult.assertions().isNeverCalled()
             testPauseAndDestroy(finalState)
         }
     }
@@ -473,7 +479,7 @@ class VoiceMessageComposerPresenterTest {
             initialState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
 
             assertThat(initialState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            sendMediaResult.assertions().isNeverCalled()
+            sendVoiceMessageResult.assertions().isNeverCalled()
             assertThat(analyticsService.trackedErrors).hasSize(1)
             voiceRecorder.assertCalls(started = 0)
 
@@ -492,7 +498,7 @@ class VoiceMessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(VoiceMessageComposerEvents.RecorderEvent(VoiceMessageRecorderEvent.Start))
 
-            sendMediaResult.assertions().isNeverCalled()
+            sendVoiceMessageResult.assertions().isNeverCalled()
             assertThat(analyticsService.trackedErrors).containsExactly(
                 VoiceMessageException.PermissionMissing(message = "Expected permission to record but none", cause = exception)
             )

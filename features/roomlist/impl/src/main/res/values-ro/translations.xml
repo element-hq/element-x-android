@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"Configurați recuperarea"</string>
   <string name="confirm_recovery_key_banner_message">"Backup-ul pentru chat nu este sincronizat în prezent. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup."</string>
   <string name="confirm_recovery_key_banner_title">"Confirmați cheia de recuperare"</string>
   <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, vă rugăm să modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>

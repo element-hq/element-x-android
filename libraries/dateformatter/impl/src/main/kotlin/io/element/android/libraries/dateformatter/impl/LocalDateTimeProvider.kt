@@ -10,21 +10,20 @@ package io.element.android.libraries.dateformatter.impl
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 class LocalDateTimeProvider @Inject constructor(
     private val clock: Clock,
-    private val timezone: TimeZone,
+    private val timezoneProvider: TimezoneProvider,
 ) {
     fun providesNow(): LocalDateTime {
         val now: Instant = clock.now()
-        return now.toLocalDateTime(timezone)
+        return now.toLocalDateTime(timezoneProvider.provide())
     }
 
     fun providesFromTimestamp(timestamp: Long): LocalDateTime {
         val tsInstant = Instant.fromEpochMilliseconds(timestamp)
-        return tsInstant.toLocalDateTime(timezone)
+        return tsInstant.toLocalDateTime(timezoneProvider.provide())
     }
 }

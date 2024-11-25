@@ -9,6 +9,8 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.messagecomposer.suggestions.DefaultRoomAliasSuggestionsDataSource
+import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestion
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -38,7 +40,9 @@ class DefaultRoomAliasSuggestionsDataSourceTest {
                 listOf(
                     RoomAliasSuggestion(
                         roomAlias = A_ROOM_ALIAS,
-                        roomSummary = aRoomSummaryWithAnAlias
+                        roomId = aRoomSummaryWithAnAlias.roomId,
+                        roomName = aRoomSummaryWithAnAlias.info.name,
+                        roomAvatarUrl = aRoomSummaryWithAnAlias.info.avatarUrl
                     )
                 )
             )

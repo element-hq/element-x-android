@@ -22,13 +22,13 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
-import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import io.element.android.libraries.textcomposer.model.aMarkdownTextEditorState
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import kotlinx.coroutines.test.runTest

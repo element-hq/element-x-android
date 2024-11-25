@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.usersearch.impl)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
+    implementation(projects.libraries.featureflag.api)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
@@ -56,6 +57,7 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.features.createroom.test)
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

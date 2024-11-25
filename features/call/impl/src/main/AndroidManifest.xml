@@ -21,8 +21,8 @@
 
     <!-- Permissions for call foreground services -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
-    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application>
@@ -80,7 +80,7 @@
             android:name=".services.CallForegroundService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="phoneCall" />
+            android:foregroundServiceType="microphone" />
 
         <receiver
             android:name=".receivers.DeclineCallBroadcastReceiver"

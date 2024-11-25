@@ -33,9 +33,11 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemTextContent(),
         aTimelineItemUnknownContent(),
         aTimelineItemTextContent().copy(isEdited = true),
-        aTimelineItemTextContent(body = "😁")
+        aTimelineItemTextContent(body = AN_EMOJI_ONLY_TEXT)
     )
 }
+
+const val AN_EMOJI_ONLY_TEXT = "😁"
 
 class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
     private fun buildSpanned(text: String) = buildSpannedString {

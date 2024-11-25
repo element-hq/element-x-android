@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -39,9 +38,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -89,21 +88,16 @@ fun ReportMessageView(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
-            OutlinedTextField(
+            TextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvents.UpdateReason(it)) },
-                placeholder = { Text(stringResource(R.string.screen_report_content_hint)) },
+                placeholder = stringResource(R.string.screen_report_content_hint),
+                minLines = 3,
                 enabled = !isSending,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 90.dp)
-            )
-            Text(
-                text = stringResource(R.string.screen_report_content_explanation),
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(top = 4.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
+                    .heightIn(min = 90.dp),
+                supportingText = stringResource(R.string.screen_report_content_explanation),
             )
 
             Row(

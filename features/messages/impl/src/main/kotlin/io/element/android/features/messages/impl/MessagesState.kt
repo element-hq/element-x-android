@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -17,6 +18,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -35,6 +37,7 @@ data class MessagesState(
     val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,
     val timelineProtectionState: TimelineProtectionState,
+    val identityChangeState: IdentityChangeState,
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,
     val reactionSummaryState: ReactionSummaryState,
@@ -45,14 +48,8 @@ data class MessagesState(
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
     val enableVoiceMessages: Boolean,
-    val callState: RoomCallState,
+    val roomCallState: RoomCallState,
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
     val eventSink: (MessagesEvents) -> Unit
 )
-
-enum class RoomCallState {
-    ENABLED,
-    ONGOING,
-    DISABLED
-}

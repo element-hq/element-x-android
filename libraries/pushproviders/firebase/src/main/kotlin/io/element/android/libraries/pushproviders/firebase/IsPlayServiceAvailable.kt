@@ -20,6 +20,12 @@ interface IsPlayServiceAvailable {
     fun isAvailable(): Boolean
 }
 
+fun IsPlayServiceAvailable.checkAvailableOrThrow() {
+    if (!isAvailable()) {
+        throw Exception("No valid Google Play Services found. Cannot use FCM.").also(Timber::e)
+    }
+}
+
 @ContributesBinding(AppScope::class)
 class DefaultIsPlayServiceAvailable @Inject constructor(
     @ApplicationContext private val context: Context,

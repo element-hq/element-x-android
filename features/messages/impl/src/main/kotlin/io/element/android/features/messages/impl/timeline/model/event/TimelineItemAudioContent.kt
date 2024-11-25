@@ -12,13 +12,16 @@ import io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAn
 import kotlin.time.Duration
 
 data class TimelineItemAudioContent(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: CharSequence?,
+    override val isEdited: Boolean,
     val duration: Duration,
     val mediaSource: MediaSource,
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
-) : TimelineItemEventContent {
+) : TimelineItemEventContentWithAttachment {
     val fileExtensionAndSize =
         formatFileExtensionAndSize(
             fileExtension,

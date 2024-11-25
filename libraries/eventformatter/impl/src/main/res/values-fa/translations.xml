@@ -28,8 +28,8 @@
   <string name="state_event_room_invite_you">"%1$s دعوتتان کرد"</string>
   <string name="state_event_room_join">"%1$s به اتاق پیوست"</string>
   <string name="state_event_room_join_by_you">"به اتاق پیوستید"</string>
-  <string name="state_event_room_knock">"%1$s درخواست پیوستن کرد"</string>
-  <string name="state_event_room_knock_accepted">"%1$s گذاشت %2$s بپیوندد"</string>
+  <string name="state_event_room_knock">"%1$s درخواست پیوستن دارد"</string>
+  <string name="state_event_room_knock_accepted">"%1$s به %2$s دسترسی داد"</string>
   <string name="state_event_room_knock_accepted_by_you">"گذاشتید %1$s بپیوندد"</string>
   <string name="state_event_room_knock_by_you">"درخواست پیوستن کردید"</string>
   <string name="state_event_room_knock_denied">"درخواست پیوستن %2$s به دست %1$s لغو شد"</string>

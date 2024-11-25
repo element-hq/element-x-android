@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_description">"Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Uppgradering tillgänglig"</string>
   <string name="banner_set_up_recovery_content">"Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter."</string>
+  <string name="banner_set_up_recovery_submit">"Ställ in återställning"</string>
   <string name="banner_set_up_recovery_title">"Ställ in återställning"</string>
   <string name="confirm_recovery_key_banner_message">"Din chattsäkerhetskopia är för närvarande inte synkroniserad. Du måste ange din återställningsnyckel för att behålla åtkomsten till din chattsäkerhetskopia."</string>
   <string name="confirm_recovery_key_banner_title">"Ange din återställningsnyckel"</string>

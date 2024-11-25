@@ -12,6 +12,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.typing.TypingNotificationState
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -73,7 +74,7 @@ data class TimelineRoomInfo(
     val name: String?,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
-    val isCallOngoing: Boolean,
+    val roomCallState: RoomCallState,
     val pinnedEventIds: List<EventId>,
     val typingNotificationState: TypingNotificationState,
 )

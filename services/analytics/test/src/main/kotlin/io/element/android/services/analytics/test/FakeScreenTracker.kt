@@ -8,6 +8,7 @@
 package io.element.android.services.analytics.test
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -17,6 +18,8 @@ class FakeScreenTracker(
 ) : ScreenTracker {
     @Composable
     override fun TrackScreen(screen: MobileScreen.ScreenName) {
-        trackScreenLambda(screen)
+        LaunchedEffect(Unit) {
+            trackScreenLambda(screen)
+        }
     }
 }

@@ -10,12 +10,14 @@ package io.element.android.libraries.matrix.impl.sync
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.SyncServiceState
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -49,12 +51,11 @@ class RustSyncService(
         Timber.d("Stop sync failed: $it")
     }
 
-    suspend fun destroy() {
+    suspend fun destroy() = withContext(NonCancellable) {
         // If the service was still running, stop it
         stopSync()
         Timber.d("Destroying sync service")
         isServiceReady.set(false)
-        innerSyncService.destroy()
     }
 
     override val syncState: StateFlow<SyncState> =

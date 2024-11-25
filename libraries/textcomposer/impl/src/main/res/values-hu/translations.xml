@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Felsorolás be/ki"</string>
   <string name="rich_text_editor_close_formatting_options">"Formázási beállítások bezárása"</string>
   <string name="rich_text_editor_code_block">"Kódblokk be/ki"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Nem kötelező felirat…"</string>
   <string name="rich_text_editor_composer_placeholder">"Üzenet…"</string>
   <string name="rich_text_editor_create_link">"Hivatkozás létrehozása"</string>
   <string name="rich_text_editor_edit_link">"Hivatkozás szerkesztése"</string>

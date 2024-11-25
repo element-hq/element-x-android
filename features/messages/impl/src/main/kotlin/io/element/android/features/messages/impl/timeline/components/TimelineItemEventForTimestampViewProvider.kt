@@ -27,10 +27,10 @@ class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<Timel
                 localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
             ),
-            aTimelineItemEvent().copy(
+            aTimelineItemEvent(
                 messageShield = MessageShield.AuthenticityNotGuaranteed(isCritical = false),
             ),
-            aTimelineItemEvent().copy(
+            aTimelineItemEvent(
                 messageShield = MessageShield.UnknownDevice(isCritical = true),
             ),
         )

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Cancelar pedido"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Sim, cancelar"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Tens a certeza de que queres cancelar o teu pedido de entrada nesta sala?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Cancela o pedido de adesão"</string>
   <string name="screen_join_room_join_action">"Entrar na sala"</string>
   <string name="screen_join_room_knock_action">"Bater à porta"</string>
+  <string name="screen_join_room_knock_message_description">"Mensagem (opcional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Irá receber um convite para participar na sala se seu pedido for aceite."</string>
+  <string name="screen_join_room_knock_sent_title">"Pedido de adesão enviado"</string>
   <string name="screen_join_room_space_not_supported_description">"A %1$s ainda não funciona com espaços. Podes usá-los na aplicação web."</string>
   <string name="screen_join_room_space_not_supported_title">"Os espaços ainda não estão implementados"</string>
   <string name="screen_join_room_subtitle_knock">"Carrega no botão abaixo para notificar um administrador da sala. Poderás entrar quando te aprovarem."</string>

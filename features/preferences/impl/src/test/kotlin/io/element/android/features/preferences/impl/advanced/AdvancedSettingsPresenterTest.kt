@@ -34,6 +34,7 @@ class AdvancedSettingsPresenterTest {
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.showChangeThemeDialog).isFalse()
             assertThat(initialState.isSharePresenceEnabled).isTrue()
+            assertThat(initialState.doesCompressMedia).isTrue()
             assertThat(initialState.theme).isEqualTo(Theme.System)
         }
     }
@@ -65,6 +66,21 @@ class AdvancedSettingsPresenterTest {
             assertThat(awaitItem().isSharePresenceEnabled).isFalse()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetSharePresenceEnabled(true))
             assertThat(awaitItem().isSharePresenceEnabled).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - compress media off on`() = runTest {
+        val presenter = createAdvancedSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.doesCompressMedia).isTrue()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetCompressMedia(false))
+            assertThat(awaitItem().doesCompressMedia).isFalse()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetCompressMedia(true))
+            assertThat(awaitItem().doesCompressMedia).isTrue()
         }
     }
 

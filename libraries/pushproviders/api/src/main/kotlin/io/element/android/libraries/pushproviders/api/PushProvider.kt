@@ -8,6 +8,7 @@
 package io.element.android.libraries.pushproviders.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
  * This is the main API for this module.
@@ -36,12 +37,23 @@ interface PushProvider {
     /**
      * Return the current distributor, or null if none.
      */
-    suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor?
+    suspend fun getCurrentDistributor(sessionId: SessionId): Distributor?
 
     /**
      * Unregister the pusher.
      */
     suspend fun unregister(matrixClient: MatrixClient): Result<Unit>
 
+    /**
+     * To invoke when the session is deleted.
+     */
+    suspend fun onSessionDeleted(sessionId: SessionId)
+
     suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
+
+    fun canRotateToken(): Boolean
+
+    suspend fun rotateToken(): Result<Unit> {
+        error("rotateToken() not implemented, you need to override this method in your implementation")
+    }
 }

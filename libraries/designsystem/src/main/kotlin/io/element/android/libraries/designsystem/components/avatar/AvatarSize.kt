@@ -33,6 +33,8 @@ enum class AvatarSize(val dp: Dp) {
     TimelineSender(32.dp),
     TimelineReadReceipt(16.dp),
 
+    ComposerAlert(32.dp),
+
     ReadReceiptList(32.dp),
 
     MessageActionSender(32.dp),

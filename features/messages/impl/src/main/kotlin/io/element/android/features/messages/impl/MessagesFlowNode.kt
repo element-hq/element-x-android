@@ -50,7 +50,6 @@ import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.RoomScope
@@ -324,7 +323,8 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.filename ?: event.content.body,
+                        filename = event.content.filename,
+                        caption = event.content.caption,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
@@ -341,7 +341,8 @@ class MessagesFlowNode @AssistedInject constructor(
                 if (event.content.preferredMediaSource != null) {
                     val navTarget = NavTarget.MediaViewer(
                         mediaInfo = MediaInfo(
-                            name = event.content.body,
+                            filename = event.content.filename,
+                            caption = event.content.caption,
                             mimeType = event.content.mimeType,
                             formattedFileSize = event.content.formattedFileSize,
                             fileExtension = event.content.fileExtension
@@ -358,7 +359,8 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.filename ?: event.content.body,
+                        filename = event.content.filename,
+                        caption = event.content.caption,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
@@ -372,7 +374,8 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemFileContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        filename = event.content.filename,
+                        caption = event.content.caption,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
@@ -386,7 +389,8 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemAudioContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        filename = event.content.filename,
+                        caption = event.content.caption,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension

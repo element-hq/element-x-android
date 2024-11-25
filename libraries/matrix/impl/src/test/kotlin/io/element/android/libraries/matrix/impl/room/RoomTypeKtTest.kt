@@ -8,12 +8,13 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.room.RoomType
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.RoomType as RustRoomType
 
 class RoomTypeKtTest {
     @Test
     fun toRoomType() {
-        assert(null.toRoomType() == RoomType.Room)
-        assert("m.space".toRoomType() == RoomType.Space)
-        assert("m.other".toRoomType() == RoomType.Other("m.other"))
+        assert(RustRoomType.Room.map() == RoomType.Room)
+        assert(RustRoomType.Space.map() == RoomType.Space)
+        assert(RustRoomType.Custom("m.other").map() == RoomType.Other("m.other"))
     }
 }

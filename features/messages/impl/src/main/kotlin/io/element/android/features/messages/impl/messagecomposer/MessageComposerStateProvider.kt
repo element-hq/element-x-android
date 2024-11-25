@@ -8,10 +8,10 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -24,14 +24,13 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    textEditorState: TextEditorState = TextEditorState.Rich(aRichTextEditorState()),
+    textEditorState: TextEditorState = aTextEditorStateRich(),
     isFullScreen: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
-    attachmentsState: AttachmentsState = AttachmentsState.None,
     suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
     eventSink: (MessageComposerEvents) -> Unit = {},
 ) = MessageComposerState(
@@ -42,7 +41,6 @@ fun aMessageComposerState(
     showAttachmentSourcePicker = showAttachmentSourcePicker,
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
-    attachmentsState = attachmentsState,
     suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     eventSink = eventSink,

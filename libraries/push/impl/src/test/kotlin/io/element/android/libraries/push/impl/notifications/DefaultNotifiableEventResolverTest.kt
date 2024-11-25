@@ -187,7 +187,7 @@ class DefaultNotifiableEventResolverTest {
                 aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = AudioMessageType(body = "Audio", MediaSource("url"), null)
+                        messageType = AudioMessageType("Audio", null, null, MediaSource("url"), null)
                     ),
                 )
             )
@@ -206,7 +206,7 @@ class DefaultNotifiableEventResolverTest {
                 aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = VideoMessageType(body = "Video", null, null, MediaSource("url"), null)
+                        messageType = VideoMessageType("Video", null, null, MediaSource("url"), null)
                     ),
                 )
             )
@@ -225,7 +225,7 @@ class DefaultNotifiableEventResolverTest {
                 aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = VoiceMessageType(body = "Voice", MediaSource("url"), null, null)
+                        messageType = VoiceMessageType("Voice", null, null, MediaSource("url"), null, null)
                     ),
                 )
             )
@@ -263,7 +263,7 @@ class DefaultNotifiableEventResolverTest {
                 aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = StickerMessageType("Sticker", MediaSource("url"), null),
+                        messageType = StickerMessageType("Sticker", null, null, MediaSource("url"), null),
                     ),
                 )
             )
@@ -282,7 +282,7 @@ class DefaultNotifiableEventResolverTest {
                 aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = FileMessageType("File", MediaSource("url"), null),
+                        messageType = FileMessageType("File", null, null, MediaSource("url"), null),
                     ),
                 )
             )
@@ -588,8 +588,9 @@ class DefaultNotifiableEventResolverTest {
                 noisy = false,
                 timestamp = A_TIMESTAMP,
                 senderDisambiguatedDisplayName = A_USER_NAME_2,
-                body = "Call in progress (unsupported)",
+                body = "Unsupported call",
                 imageUriString = null,
+                imageMimeType = null,
                 threadId = null,
                 roomName = A_ROOM_NAME,
                 roomAvatarPath = null,
@@ -669,6 +670,7 @@ class DefaultNotifiableEventResolverTest {
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
+                imageMimeType = null,
                 type = EventType.CALL_NOTIFY,
             )
         )
@@ -704,6 +706,7 @@ class DefaultNotifiableEventResolverTest {
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
+                imageMimeType = null,
                 type = EventType.CALL_NOTIFY,
             )
         )

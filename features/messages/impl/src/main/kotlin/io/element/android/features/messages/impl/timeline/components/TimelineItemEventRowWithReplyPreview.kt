@@ -49,8 +49,10 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                 event = aTimelineItemEvent(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
-                    content = aTimelineItemImageContent().copy(
-                        aspectRatio = 2.5f
+                    content = aTimelineItemImageContent(
+                        aspectRatio = 2.5f,
+                        filename = "image.jpg",
+                        caption = "A reply with an image.",
                     ),
                     inReplyTo = inReplyToDetails,
                     displayNameAmbiguous = displayNameAmbiguous,

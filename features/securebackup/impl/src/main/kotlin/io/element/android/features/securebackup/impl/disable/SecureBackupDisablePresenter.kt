@@ -37,11 +37,7 @@ class SecureBackupDisablePresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: SecureBackupDisableEvents) {
             when (event) {
-                is SecureBackupDisableEvents.DisableBackup -> if (disableAction.value.isConfirming()) {
-                    coroutineScope.disableBackup(disableAction)
-                } else {
-                    disableAction.value = AsyncAction.Confirming
-                }
+                is SecureBackupDisableEvents.DisableBackup -> coroutineScope.disableBackup(disableAction)
                 SecureBackupDisableEvents.DismissDialogs -> {
                     disableAction.value = AsyncAction.Uninitialized
                 }

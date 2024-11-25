@@ -9,9 +9,9 @@ package io.element.android.features.roomdetails.edit
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.assertHasNoClickAction
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isEditable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -78,7 +78,6 @@ class RoomDetailsEditViewTest {
                 roomRawName = "Marketing",
             ),
         )
-        rule.onNodeWithText("Marketing").assertHasClickAction()
         rule.onNodeWithText("Marketing").performTextInput("A")
         eventsRecorder.assertSingle(RoomDetailsEditEvents.UpdateRoomName("AMarketing"))
     }
@@ -93,7 +92,7 @@ class RoomDetailsEditViewTest {
                 canChangeName = false,
             ),
         )
-        rule.onNodeWithText("Marketing").assertHasNoClickAction()
+        rule.onNodeWithText("Marketing").assert(!isEditable())
     }
 
     @Test
@@ -105,7 +104,6 @@ class RoomDetailsEditViewTest {
                 roomTopic = "My Topic",
             ),
         )
-        rule.onNodeWithText("My Topic").assertHasClickAction()
         rule.onNodeWithText("My Topic").performTextInput("A")
         eventsRecorder.assertSingle(RoomDetailsEditEvents.UpdateRoomTopic("AMy Topic"))
     }
@@ -120,7 +118,7 @@ class RoomDetailsEditViewTest {
                 canChangeTopic = false,
             ),
         )
-        rule.onNodeWithText("My Topic").assertHasNoClickAction()
+        rule.onNodeWithText("My Topic").assert(!isEditable())
     }
 
     @Ignore("This test is failing because the bottom sheet does not open")

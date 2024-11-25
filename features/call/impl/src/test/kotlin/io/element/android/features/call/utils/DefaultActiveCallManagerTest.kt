@@ -15,6 +15,7 @@ import io.element.android.features.call.impl.notifications.RingingCallNotificati
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
+import io.element.android.features.call.impl.utils.DefaultCurrentCallService
 import io.element.android.features.call.test.aCallNotificationData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -118,7 +119,7 @@ class DefaultActiveCallManagerTest {
                 onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
             )
 
-            manager.incomingCallTimedOut()
+            manager.incomingCallTimedOut(displayMissedCallNotification = true)
 
             addMissedCallNotificationLambda.assertions().isNeverCalled()
         }
@@ -138,7 +139,7 @@ class DefaultActiveCallManagerTest {
             manager.registerIncomingCall(aCallNotificationData())
             assertThat(manager.activeCall.value).isNotNull()
 
-            manager.incomingCallTimedOut()
+            manager.incomingCallTimedOut(displayMissedCallNotification = true)
             advanceTimeBy(1)
 
             assertThat(manager.activeCall.value).isNull()
@@ -299,5 +300,6 @@ class DefaultActiveCallManagerTest {
         ),
         notificationManagerCompat = notificationManagerCompat,
         matrixClientProvider = matrixClientProvider,
+        defaultCurrentCallService = DefaultCurrentCallService(),
     )
 }

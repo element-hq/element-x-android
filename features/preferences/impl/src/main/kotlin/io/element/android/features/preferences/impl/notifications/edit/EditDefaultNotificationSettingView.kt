@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
@@ -27,9 +26,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.toPersistentList
 
 /**
  * A view that allows a user to edit the default notification setting for rooms. This can be set separately
@@ -80,7 +77,7 @@ fun EditDefaultNotificationSettingView(
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
             PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
-                    val subtitle = when (summary.userDefinedNotificationMode) {
+                    val subtitle = when (summary.notificationMode) {
                         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
                         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
                             stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
@@ -101,10 +98,8 @@ fun EditDefaultNotificationSettingView(
                         },
                         leadingContent = ListItemContent.Custom {
                             CompositeAvatar(
-                                avatarData = summary.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
-                                heroes = summary.heroes.map { user ->
-                                    user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
-                                }.toPersistentList()
+                                avatarData = summary.avatarData,
+                                heroes = summary.heroesAvatar,
                             )
                         },
                         onClick = {
