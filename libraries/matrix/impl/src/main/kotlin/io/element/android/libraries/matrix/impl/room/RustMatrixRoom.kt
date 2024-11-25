@@ -21,7 +21,9 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.location.LastLocation
 import io.element.android.libraries.matrix.api.location.LiveLocationShare
+import io.element.android.libraries.matrix.api.location.Location
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -163,13 +165,20 @@ class RustMatrixRoom(
         channel.trySend(initial)
         innerRoom.subscribeToLiveLocationShares(object : LiveLocationShareListener {
             override fun call(liveLocationShares: List<RustLiveLocationShare>) {
-                println(liveLocationShares)
                 try {
                     channel.trySend(
                         liveLocationShares.map {
                             LiveLocationShare(
                                 userId = UserId(it.userId),
-                                isLive = it.isLive,
+                                lastLocation = LastLocation(
+                                    location = Location(
+                                        body = it.lastLocation.location.body,
+                                        geoUri = it.lastLocation.location.geoUri,
+                                        description = it.lastLocation.location.description,
+                                        zoomLevel = 0,
+                                    ),
+                                    ts = it.lastLocation.ts,
+                                ),
                             )
                         }
                     )
