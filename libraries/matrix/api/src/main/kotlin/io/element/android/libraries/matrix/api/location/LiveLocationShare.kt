@@ -9,7 +9,19 @@ package io.element.android.libraries.matrix.api.location
 
 import io.element.android.libraries.matrix.api.core.UserId
 
+data class Location(
+    val body: String?,
+    val geoUri: String,
+    val description: String?,
+    val zoomLevel: Int?,
+)
+
+data class LastLocation(
+    val location: Location,
+    val ts: ULong,
+)
+
 data class LiveLocationShare(
     val userId: UserId,
-    val isLive: Boolean,
+    val lastLocation: LastLocation,
 )

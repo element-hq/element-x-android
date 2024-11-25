@@ -41,7 +41,6 @@ class TypingNotificationPresenter @Inject constructor(
         val typingMembersState by produceState(initialValue = persistentListOf(), key1 = renderTypingNotifications) {
             if (renderTypingNotifications) {
                 observeRoomTypingMembers()
-                observeLocationShares()
             } else {
                 value = persistentListOf<TypingRoomMember>()
             }
@@ -79,16 +78,16 @@ class TypingNotificationPresenter @Inject constructor(
             .launchIn(this)
     }
 
-    private fun ProduceStateScope<ImmutableList<TypingRoomMember>>.observeLocationShares() {
-        room.liveLocationShareFlow
-            .onEach { locationShares ->
-                locationShares
-                    .map { location ->
-                        println("LOCATION SHARE:" + location)
-                    }
-            }
-            .launchIn(this)
-    }
+//    private fun ProduceStateScope<ImmutableList<TypingRoomMember>>.observeLocationShares() {
+//        room.liveLocationShareFlow
+//            .onEach { locationShares ->
+//                locationShares
+//                    .map { location ->
+//                        println("LOCATION SHARE:" + location)
+//                    }
+//            }
+//            .launchIn(this)
+//    }
 }
 
 private fun RoomMember.toTypingRoomMember(): TypingRoomMember {
