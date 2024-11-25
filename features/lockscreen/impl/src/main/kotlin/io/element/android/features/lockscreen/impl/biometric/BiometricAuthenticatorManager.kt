@@ -9,7 +9,7 @@ package io.element.android.features.lockscreen.impl.biometric
 
 import androidx.compose.runtime.Composable
 
-interface BiometricUnlockManager {
+interface BiometricAuthenticatorManager {
     /**
      * If the device is secured for example with a pin, pattern or password.
      */
@@ -20,9 +20,18 @@ interface BiometricUnlockManager {
      */
     val hasAvailableAuthenticator: Boolean
 
-    fun addCallback(callback: BiometricUnlock.Callback)
-    fun removeCallback(callback: BiometricUnlock.Callback)
+    fun addCallback(callback: BiometricAuthenticator.Callback)
+    fun removeCallback(callback: BiometricAuthenticator.Callback)
 
+    /**
+     * Remember a biometric authenticator ready for unlocking the app.
+     */
     @Composable
-    fun rememberBiometricUnlock(): BiometricUnlock
+    fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator
+
+    /**
+     * Remember a biometric authenticator ready for confirmation.
+     */
+    @Composable
+    fun rememberConfirmBiometricAuthenticator(): BiometricAuthenticator
 }

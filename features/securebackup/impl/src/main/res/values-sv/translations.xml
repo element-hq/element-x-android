@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Stäng av säkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Slå på säkerhetskopiering"</string>
-  <string name="screen_chat_backup_key_backup_description">"Säkerhetskopior ser till att du inte blir av med din meddelandehistorik. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_description">"Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Nyckellagring"</string>
   <string name="screen_chat_backup_recovery_action_change">"Byt återställningsnyckel"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Ange återställningsnyckel"</string>
-  <string name="screen_chat_backup_recovery_action_confirm_description">"Din chattsäkerhetskopia är för närvarande osynkroniserad."</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Din nyckellagring är för närvarande osynkroniserad."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ställ in återställning"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$s överallt."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Öppna %1$s på en skrivbordsenhet"</string>
@@ -31,7 +31,7 @@
   <string name="screen_key_backup_disable_title">"Är du säker på att du vill stänga av säkerhetskopiering?"</string>
   <string name="screen_recovery_key_change_description">"Få en ny återställningsnyckel om du har tappat bort din befintliga. När du har bytt din återställningsnyckel fungerar din gamla inte längre."</string>
   <string name="screen_recovery_key_change_generate_key">"Generera en ny återställningsnyckel"</string>
-  <string name="screen_recovery_key_change_generate_key_description">"Se till att du kan lagra din återställningsnyckel någonstans säkert"</string>
+  <string name="screen_recovery_key_change_generate_key_description">"Dela inte detta med någon!"</string>
   <string name="screen_recovery_key_change_success">"Återställningsnyckel ändrad"</string>
   <string name="screen_recovery_key_change_title">"Byt återställningsnyckel?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Skapa ny återställningsnyckel"</string>
@@ -52,7 +52,7 @@
   <string name="screen_recovery_key_setup_confirmation_title">"Har du sparat din återställningsnyckel?"</string>
   <string name="screen_recovery_key_setup_description">"Din chattsäkerhetskopia skyddas av en återställningsnyckel. Om du behöver en ny återställningsnyckel efter installationen kan du återskapa genom att välja ”Byt återställningsnyckel”."</string>
   <string name="screen_recovery_key_setup_generate_key">"Generera din återställningsnyckel"</string>
-  <string name="screen_recovery_key_setup_generate_key_description">"Se till att du kan lagra din återställningsnyckel någonstans säkert"</string>
+  <string name="screen_recovery_key_setup_generate_key_description">"Dela inte detta med någon!"</string>
   <string name="screen_recovery_key_setup_success">"Konfiguration av återställning lyckades"</string>
   <string name="screen_recovery_key_setup_title">"Ställ in återställning"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ja, återställ nu"</string>

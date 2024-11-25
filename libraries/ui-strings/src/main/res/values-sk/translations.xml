@@ -34,6 +34,7 @@
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
   <string name="action_accept">"Prijať"</string>
+  <string name="action_add_caption">"Pridať titulok"</string>
   <string name="action_add_to_timeline">"Pridať na časovú os"</string>
   <string name="action_back">"Späť"</string>
   <string name="action_call">"Zavolať"</string>
@@ -59,6 +60,7 @@
   <string name="action_discard">"Zahodiť"</string>
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upraviť"</string>
+  <string name="action_edit_caption">"Upraviť titulok"</string>
   <string name="action_edit_poll">"Upraviť anketu"</string>
   <string name="action_enable">"Povoliť"</string>
   <string name="action_end_poll">"Ukončiť anketu"</string>
@@ -93,6 +95,7 @@
   <string name="action_react">"Reagovať"</string>
   <string name="action_reject">"Odmietnuť"</string>
   <string name="action_remove">"Odstrániť"</string>
+  <string name="action_remove_caption">"Odstrániť titulok"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
@@ -125,6 +128,7 @@
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
+  <string name="common_adding_caption">"Pridáva sa titulok"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
   <string name="common_analytics">"Analytika"</string>
   <string name="common_appearance">"Vzhľad"</string>
@@ -145,6 +149,7 @@
   <string name="common_do_not_show_this_again">"Nezobrazovať toto znova"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
+  <string name="common_editing_caption">"Úprava titulku"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Šifrovanie"</string>
   <string name="common_encryption_enabled">"Šifrovanie zapnuté"</string>
@@ -295,7 +300,11 @@ Dôvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Prijať všetky"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmietnuť a zakázať"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Žiadna čakajúca žiadosť o pripojenie"</string>
+  <string name="screen_knock_requests_list_title">"Žiadosti o pripojenie"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>

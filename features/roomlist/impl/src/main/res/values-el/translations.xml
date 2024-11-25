@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_submit">"Ρύθμιση ανάκτησης"</string>
   <string name="banner_set_up_recovery_title">"Ρύθμιση ανάκτησης"</string>
   <string name="confirm_recovery_key_banner_message">"Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Εισήγαγε το κλειδί ανάκτησης"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Ξέχασες το κλειδί ανάκτησης;"</string>
   <string name="confirm_recovery_key_banner_title">"Ο χώρος αποθήκευσης κλειδιών σου δεν είναι συγχρονισμένος"</string>
   <string name="full_screen_intent_banner_message">"Για να διασφαλίσεις ότι δεν θα χάσεις ποτέ μια σημαντική κλήση, άλλαξε τις ρυθμίσεις σου για να επιτρέψεις τις ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σου είναι κλειδωμένο."</string>
   <string name="full_screen_intent_banner_title">"Βελτίωσε την εμπειρία κλήσεων"</string>

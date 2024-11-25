@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,9 @@ class DefaultOnNotifiableEventReceived @Inject constructor(
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         coroutineScope.launch {
             launch { syncOnNotifiableEvent(notifiableEvent) }
-            defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+            if (notifiableEvent !is NotifiableRingingCallEvent) {
+                defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+            }
         }
     }
 }

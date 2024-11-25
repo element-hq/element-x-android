@@ -32,6 +32,7 @@
   <string name="a11y_voice_message_record">"Εγγραφή φωνητικού μηνύματος."</string>
   <string name="a11y_voice_message_stop_recording">"Διακοπή καταγραφής"</string>
   <string name="action_accept">"Αποδοχή"</string>
+  <string name="action_add_caption">"Προσθήκη λεζάντας"</string>
   <string name="action_add_to_timeline">"Προσθήκη στο χρονοδιάγραμμα"</string>
   <string name="action_back">"Πίσω"</string>
   <string name="action_call">"Κάλεσε"</string>
@@ -57,6 +58,7 @@
   <string name="action_discard">"Απόρριψη"</string>
   <string name="action_done">"Έγινε"</string>
   <string name="action_edit">"Επεξεργασία"</string>
+  <string name="action_edit_caption">"Επεξεργασία λεζάντας"</string>
   <string name="action_edit_poll">"Επεξεργασία δημοσκόπησης"</string>
   <string name="action_enable">"Ενεργοποίηση"</string>
   <string name="action_end_poll">"Λήξη δημοσκόπησης"</string>
@@ -91,6 +93,7 @@
   <string name="action_react">"Αντέδρασε"</string>
   <string name="action_reject">"Απόρριψη"</string>
   <string name="action_remove">"Αφαίρεση"</string>
+  <string name="action_remove_caption">"Αφαίρεση λεζάντας"</string>
   <string name="action_reply">"Απάντηση"</string>
   <string name="action_reply_in_thread">"Απάντηση στο θέμα"</string>
   <string name="action_report_bug">"Αναφορά σφάλματος"</string>
@@ -123,6 +126,7 @@
   <string name="action_yes">"Ναι"</string>
   <string name="common_about">"Σχετικά"</string>
   <string name="common_acceptable_use_policy">"Πολιτική αποδεκτής χρήσης"</string>
+  <string name="common_adding_caption">"Η λεζάντα προστίθεται"</string>
   <string name="common_advanced_settings">"Ρυθμίσεις για προχωρημένους"</string>
   <string name="common_analytics">"Στατιστικά στοιχεία"</string>
   <string name="common_appearance">"Εμφάνιση"</string>
@@ -143,7 +147,9 @@
   <string name="common_do_not_show_this_again">"Να μην εμφανιστεί ξανά"</string>
   <string name="common_edited_suffix">"(επεξεργάστηκε)"</string>
   <string name="common_editing">"Επεξεργάζεται"</string>
+  <string name="common_editing_caption">"Η λεζάντα επεξεργάζεται"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption">"Κρυπτογράφηση"</string>
   <string name="common_encryption_enabled">"Η κρυπτογράφηση ενεργοποιήθηκε"</string>
   <string name="common_enter_your_pin">"Εισήγαγε το PIN σου"</string>
   <string name="common_error">"Σφάλμα"</string>
@@ -157,6 +163,7 @@
   <string name="common_file">"Αρχείο"</string>
   <string name="common_file_saved_on_disk_android">"Αρχείο αποθηκευμένο σε Λήψεις"</string>
   <string name="common_forward_message">"Προώθηση μηνύματος"</string>
+  <string name="common_frequently_used">"Χρησιμοποιείται συχνά"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Εικόνα"</string>
   <string name="common_in_reply_to">"Σε απάντηση στον χρήστη %1$s"</string>
@@ -239,10 +246,12 @@
   <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Στάλθηκε από μια μη ασφαλής συσκευή"</string>
   <string name="common_unable_to_decrypt_no_access">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Η επαληθευμένη ταυτότητα του αποστολέα έχει αλλάξει"</string>
   <string name="common_unable_to_invite_message">"Δεν ήταν δυνατή η αποστολή προσκλήσεων σε έναν ή περισσότερους χρήστες."</string>
   <string name="common_unable_to_invite_title">"Δεν είναι δυνατή η αποστολή προσκλήσεων"</string>
   <string name="common_unlock">"Ξεκλείδωμα"</string>
   <string name="common_unmute">"Άρση σίγασης"</string>
+  <string name="common_unsupported_call">"Μη υποστηριζόμενη κλήση"</string>
   <string name="common_unsupported_event">"Μη υποστηριζόμενο συμβάν"</string>
   <string name="common_username">"Όνομα χρήστη"</string>
   <string name="common_verification_cancelled">"Η επαλήθευση ακυρώθηκε"</string>
@@ -250,6 +259,7 @@
   <string name="common_verification_failed">"Αποτυχία επαλήθευσης"</string>
   <string name="common_verified">"Επαληθεύτηκε"</string>
   <string name="common_verify_device">"Επαλήθευση συσκευής"</string>
+  <string name="common_verify_identity">"Επαλήθευση ταυτότητας"</string>
   <string name="common_video">"Βίντεο"</string>
   <string name="common_voice_message">"Φωνητικό μήνυμα"</string>
   <string name="common_waiting">"Αναμονή…"</string>
@@ -286,6 +296,11 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Αποδοχή όλων"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Απόρριψη και αποκλεισμός"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Όταν κάποιος θα ζητήσει να συμμετάσχει στο δωμάτιο, θα μπορείς να δεις το αίτημά του εδώ."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Δεν υπάρχει εκκρεμές αίτημα συμμετοχής"</string>
+  <string name="screen_knock_requests_list_title">"Αιτήματα συμμετοχής"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>
@@ -307,12 +322,21 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Μία ή περισσότερες από τις συσκευές σου δεν έχουν επαληθευτεί. Μπορείς να στείλεις το μήνυμα ούτως ή άλλως, ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα αφού επαληθεύσεις όλες τις συσκευές σου."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου"</string>
   <string name="screen_room_details_pinned_events_row_title">"Καρφιτσωμένα μηνύματα"</string>
+  <string name="screen_room_details_requests_to_join_title">"Αιτήματα συμμετοχής"</string>
   <string name="screen_room_error_failed_processing_media">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Δεν ήταν δυνατή η ανάκτηση στοιχείων χρήστη"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+    <item quantity="other">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Προβολή όλων"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Αποδοχή"</string>
+  <string name="screen_room_single_knock_request_title">"Ο χρήστης %1$s θέλει να μπει σε αυτό το δωμάτιο"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Προβολή"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Το αίτημα συμμετοχής στάλθηκε"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>

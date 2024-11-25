@@ -3,7 +3,7 @@
   <string name="screen_chat_backup_key_backup_action_disable">"Desativar o backup"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Ativar o backup"</string>
   <string name="screen_chat_backup_key_backup_description">"O backup garante que você não perca seu histórico de mensagens. %1$s."</string>
-  <string name="screen_chat_backup_key_backup_title">"Backup"</string>
+  <string name="screen_chat_backup_key_backup_title">"Armazenamento de chaves"</string>
   <string name="screen_chat_backup_recovery_action_change">"Alterar chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Insira a chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Seu backup das conversas está atualmente fora de sincronia."</string>

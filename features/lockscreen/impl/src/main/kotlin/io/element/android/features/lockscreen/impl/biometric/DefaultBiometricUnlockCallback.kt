@@ -7,8 +7,8 @@
 
 package io.element.android.features.lockscreen.impl.biometric
 
-open class DefaultBiometricUnlockCallback : BiometricUnlock.Callback {
+open class DefaultBiometricUnlockCallback : BiometricAuthenticator.Callback {
     override fun onBiometricSetupError() = Unit
-    override fun onBiometricUnlockSuccess() = Unit
-    override fun onBiometricUnlockFailed(error: Exception?) = Unit
+    override fun onBiometricAuthenticationSuccess() = Unit
+    override fun onBiometricAuthenticationFailed(error: Exception?) = Unit
 }

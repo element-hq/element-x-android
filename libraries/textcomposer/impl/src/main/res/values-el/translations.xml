@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Διακόπτης λίστας κουκκίδων"</string>
   <string name="rich_text_editor_close_formatting_options">"Κλείσε τις επιλογές μορφοποίησης"</string>
   <string name="rich_text_editor_code_block">"Διακόπτης μπλοκ κώδικα"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Προαιρετική λεζάντα…"</string>
   <string name="rich_text_editor_composer_placeholder">"Μήνυμα…"</string>
   <string name="rich_text_editor_create_link">"Δημιούργησε έναν σύνδεσμο"</string>
   <string name="rich_text_editor_edit_link">"Επεξεργασία συνδέσμου"</string>

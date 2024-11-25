@@ -31,6 +31,7 @@ import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
@@ -40,15 +41,15 @@ private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_BIOMETRIC"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class DefaultBiometricUnlockManager @Inject constructor(
+class DefaultBiometricAuthenticatorManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val lockScreenStore: LockScreenStore,
     private val lockScreenConfig: LockScreenConfig,
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val secretKeyRepository: SecretKeyRepository,
     private val coroutineScope: CoroutineScope,
-) : BiometricUnlockManager {
-    private val callbacks = CopyOnWriteArrayList<BiometricUnlock.Callback>()
+) : BiometricAuthenticatorManager {
+    private val callbacks = CopyOnWriteArrayList<BiometricAuthenticator.Callback>()
     private val biometricManager = BiometricManager.from(context)
     private val keyguardManager: KeyguardManager = context.getSystemService()!!
 
@@ -85,16 +86,42 @@ class DefaultBiometricUnlockManager @Inject constructor(
     }
 
     @Composable
-    override fun rememberBiometricUnlock(): BiometricUnlock {
+    override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
         val isBiometricAllowed by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
         val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
         val isAvailable by remember(lifecycleState) {
-            derivedStateOf {
-                isBiometricAllowed && hasAvailableAuthenticator
-            }
+            derivedStateOf { isBiometricAllowed && hasAvailableAuthenticator }
         }
         val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)
         val promptNegative = stringResource(id = R.string.screen_app_lock_use_pin_android)
+        return rememberBiometricAuthenticator(
+            isAvailable = isAvailable,
+            promptTitle = promptTitle,
+            promptNegative = promptNegative,
+        )
+    }
+
+    @Composable
+    override fun rememberConfirmBiometricAuthenticator(): BiometricAuthenticator {
+        val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
+        val isAvailable by remember(lifecycleState) {
+            derivedStateOf { hasAvailableAuthenticator }
+        }
+        val promptTitle = stringResource(id = R.string.screen_app_lock_confirm_biometric_authentication_android)
+        val promptNegative = stringResource(id = CommonStrings.action_cancel)
+        return rememberBiometricAuthenticator(
+            isAvailable = isAvailable,
+            promptTitle = promptTitle,
+            promptNegative = promptNegative,
+        )
+    }
+
+    @Composable
+    private fun rememberBiometricAuthenticator(
+        isAvailable: Boolean,
+        promptTitle: String,
+        promptNegative: String,
+    ): BiometricAuthenticator {
         val activity = LocalContext.current.findFragmentActivity()
         return remember(isAvailable) {
             if (isAvailable && activity != null) {
@@ -108,7 +135,7 @@ class DefaultBiometricUnlockManager @Inject constructor(
                     setNegativeButtonText(promptNegative)
                     setAllowedAuthenticators(authenticators)
                 }.build()
-                DefaultBiometricUnlock(
+                DefaultBiometricAuthentication(
                     activity = activity,
                     promptInfo = promptInfo,
                     secretKeyRepository = secretKeyRepository,
@@ -117,16 +144,16 @@ class DefaultBiometricUnlockManager @Inject constructor(
                     callbacks = callbacks + internalCallback
                 )
             } else {
-                NoopBiometricUnlock()
+                NoopBiometricAuthentication()
             }
         }
     }
 
-    override fun addCallback(callback: BiometricUnlock.Callback) {
+    override fun addCallback(callback: BiometricAuthenticator.Callback) {
         callbacks.add(callback)
     }
 
-    override fun removeCallback(callback: BiometricUnlock.Callback) {
+    override fun removeCallback(callback: BiometricAuthenticator.Callback) {
         callbacks.remove(callback)
     }
 

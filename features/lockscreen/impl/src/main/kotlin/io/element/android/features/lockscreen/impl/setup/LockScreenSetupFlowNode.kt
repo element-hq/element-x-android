@@ -20,6 +20,7 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.biometric.SetupBiometricNode
@@ -35,6 +36,7 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,
+    val biometricAuthenticatorManager: BiometricAuthenticatorManager,
 ) : BaseFlowNode<LockScreenSetupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Pin,
@@ -61,7 +63,11 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
 
     private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
         override fun onPinCodeCreated() {
-            backstack.newRoot(NavTarget.Biometric)
+            if (biometricAuthenticatorManager.hasAvailableAuthenticator) {
+                backstack.newRoot(NavTarget.Biometric)
+            } else {
+                onSetupDone()
+            }
         }
     }
 
