@@ -13,10 +13,12 @@ import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -38,13 +40,20 @@ import io.element.android.features.maprealtime.impl.common.permissions.Permissio
 import io.element.android.features.maprealtime.impl.common.permissions.PermissionsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.net.URL
 import javax.inject.Inject
@@ -67,6 +76,10 @@ class MapRealtimePresenterPresenter @Inject constructor(
     @Composable
     override fun present(): MapRealtimePresenterState {
 
+        val liveLocationShares by produceState(initialValue = persistentListOf()) {
+            observeLocationShares()
+        }
+
         // create a list of map tile providers to choose from
         val mapTypes = listOf(
             MapType("OSM", "openstreetmap"), MapType("Satellite", "satellite"),
@@ -84,11 +97,10 @@ class MapRealtimePresenterPresenter @Inject constructor(
             mutableStateOf(MapRealtimePresenterState.Dialog.None)
         }
 
-        val locations by vehicleLocations.collectAsState()
-
         val scope = rememberCoroutineScope()
 
         val mapTile by mapTypeStore.mapTileProviderFlow.collectAsState(initial = "")
+
 //
 //        LaunchedEffect(permissionsState.permissions) {
 //            if (permissionsState.isAnyGranted) {
@@ -145,8 +157,32 @@ class MapRealtimePresenterPresenter @Inject constructor(
             roomName = roomName,
             isSharingLocation = false,
             mapType = mapTypes.find { it.mapKey == mapTile } ?: mapTypes[2],
-            vehicleLocations = locations,
+            vehicleLocations = liveLocationShares.map {
+                MapRealtimeLocationDot(
+                    userName = it.userId.toString(),
+                    location = Location.fromGeoUri(it.lastLocation.location.geoUri)!!
+                )
+            },
         )
+    }
+
+    private fun ProduceStateScope<ImmutableList<LiveLocationShare>>.observeLocationShares() {
+        val accumulatedShares = mutableListOf<LiveLocationShare>()
+
+        room.liveLocationShareFlow
+            .distinctUntilChanged()
+            .onEach { locationShares ->
+                // Location share is only ever an array of 1 element
+                val newShare = locationShares.firstOrNull()
+
+                if (newShare != null) {
+                    if (newShare !in accumulatedShares) {
+                        accumulatedShares.add(newShare)
+                        value = accumulatedShares.toImmutableList()
+                    }
+                }
+            }
+            .launchIn(this)
     }
 
     private suspend fun startFetchingRealtimeLocations() {
