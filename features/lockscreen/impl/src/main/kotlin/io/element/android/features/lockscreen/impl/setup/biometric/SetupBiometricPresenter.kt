@@ -13,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ import javax.inject.Inject
 
 class SetupBiometricPresenter @Inject constructor(
     private val lockScreenStore: LockScreenStore,
+    private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
 ) : Presenter<SetupBiometricState> {
     @Composable
     override fun present(): SetupBiometricState {
@@ -28,12 +31,16 @@ class SetupBiometricPresenter @Inject constructor(
         }
 
         val coroutineScope = rememberCoroutineScope()
+        val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
         fun handleEvents(event: SetupBiometricEvents) {
             when (event) {
                 SetupBiometricEvents.AllowBiometric -> coroutineScope.launch {
-                    lockScreenStore.setIsBiometricUnlockAllowed(true)
-                    isBiometricSetupDone = true
+                    biometricUnlock.setup()
+                    if (biometricUnlock.authenticate() == BiometricAuthenticator.AuthenticationResult.Success) {
+                        lockScreenStore.setIsBiometricUnlockAllowed(true)
+                        isBiometricSetupDone = true
+                    }
                 }
                 SetupBiometricEvents.UsePin -> coroutineScope.launch {
                     lockScreenStore.setIsBiometricUnlockAllowed(false)

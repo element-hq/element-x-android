@@ -11,8 +11,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
-import io.element.android.features.lockscreen.impl.biometric.FakeBiometricUnlockManager
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
+import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
@@ -137,7 +137,7 @@ class PinUnlockPresenterTest {
 
     private suspend fun createPinUnlockPresenter(
         scope: CoroutineScope,
-        biometricUnlockManager: BiometricUnlockManager = FakeBiometricUnlockManager(),
+        biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
         logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" }),
     ): PinUnlockPresenter {
@@ -147,10 +147,10 @@ class PinUnlockPresenterTest {
         }
         return PinUnlockPresenter(
             pinCodeManager = pinCodeManager,
-            biometricUnlockManager = biometricUnlockManager,
+            biometricAuthenticatorManager = biometricAuthenticatorManager,
             logoutUseCase = logoutUseCase,
             coroutineScope = scope,
-            pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
+            pinUnlockHelper = PinUnlockHelper(biometricAuthenticatorManager, pinCodeManager),
         )
     }
 }
