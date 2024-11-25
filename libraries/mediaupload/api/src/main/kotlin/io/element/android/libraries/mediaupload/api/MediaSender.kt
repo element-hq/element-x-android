@@ -27,6 +27,35 @@ class MediaSender @Inject constructor(
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
     val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
 
+    suspend fun preProcessMedia(
+        uri: Uri,
+        mimeType: String,
+    ): Result<MediaUploadInfo> {
+        val compressIfPossible = sessionPreferencesStore.doesCompressMedia().first()
+        return preProcessor
+            .process(
+                uri = uri,
+                mimeType = mimeType,
+                deleteOriginal = false,
+                compressIfPossible = compressIfPossible,
+            )
+    }
+
+    suspend fun sendPreProcessedMedia(
+        mediaUploadInfo: MediaUploadInfo,
+        caption: String? = null,
+        formattedCaption: String? = null,
+        progressCallback: ProgressCallback? = null
+    ): Result<Unit> {
+        return room.sendMedia(
+            uploadInfo = mediaUploadInfo,
+            progressCallback = progressCallback,
+            caption = caption,
+            formattedCaption = formattedCaption
+        )
+            .handleSendResult()
+    }
+
     suspend fun sendMedia(
         uri: Uri,
         mimeType: String,

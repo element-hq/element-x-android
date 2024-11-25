@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,26 +20,39 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
+import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.api.allFiles
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.coroutineContext
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
     private val mediaSender: MediaSender,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
+    private val featureFlagsService: FeatureFlagService,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -63,19 +77,61 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
+        val userSentAttachment = remember {
+            MutableStateFlow(false)
+        }
+
+        val mediaUploadInfoStateFlow = remember { MutableStateFlow<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
+        var prePropressingJob: Job? = null
+        LaunchedEffect(Unit) {
+            prePropressingJob = preProcessAttachment(
+                attachment,
+                mediaUploadInfoStateFlow,
+            )
+        }
+
+        LaunchedEffect(Unit) {
+            userSentAttachment.filter { it }
+                .flatMapConcat {
+                    mediaUploadInfoStateFlow.filter { it.isReady() }
+                }
+                .distinctUntilChanged()
+                .collect { mediaUploadInfo ->
+                    if (mediaUploadInfo is AsyncData.Success) {
+                        val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                            .takeIf { it.isNotEmpty() }
+                        ongoingSendAttachmentJob.value = coroutineScope.launch {
+                            sendPreProcessedMedia(
+                                mediaUploadInfo = mediaUploadInfo.data,
+                                caption = caption,
+                                sendActionState = sendActionState,
+                            )
+                        }
+                    } else if (mediaUploadInfo is AsyncData.Failure) {
+                        sendActionState.value = SendActionState.Failure(mediaUploadInfo.error)
+                    }
+                    // else: cannot happen since we filtered with isReady()
+                }
+        }
+
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
-                is AttachmentsPreviewEvents.SendAttachment -> {
-                    val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                        .takeIf { it.isNotEmpty() }
-                    ongoingSendAttachmentJob.value = coroutineScope.sendAttachment(
-                        attachment = attachment,
-                        caption = caption,
-                        sendActionState = sendActionState,
-                    )
+                is AttachmentsPreviewEvents.SendAttachment -> coroutineScope.launch {
+                    val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
+                    userSentAttachment.value = true
+                    val instantSending = mediaUploadInfoStateFlow.value.isReady() && useSendQueue
+                    sendActionState.value = if (instantSending) {
+                        SendActionState.Sending.InstantSending
+                    } else {
+                        SendActionState.Sending.Processing
+                    }
                 }
                 AttachmentsPreviewEvents.Cancel -> {
-                    coroutineScope.cancel(attachment)
+                    coroutineScope.cancel(
+                        attachment,
+                        prePropressingJob,
+                        mediaUploadInfoStateFlow.value,
+                    )
                 }
                 AttachmentsPreviewEvents.ClearSendState -> {
                     ongoingSendAttachmentJob.value?.let {
@@ -95,56 +151,91 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.sendAttachment(
+    private fun CoroutineScope.preProcessAttachment(
         attachment: Attachment,
-        caption: String?,
-        sendActionState: MutableState<SendActionState>,
+        mediaUploadInfoState: MutableStateFlow<AsyncData<MediaUploadInfo>>,
     ) = launch {
         when (attachment) {
             is Attachment.Media -> {
-                sendMedia(
+                preProcessMedia(
                     mediaAttachment = attachment,
-                    caption = caption,
-                    sendActionState = sendActionState,
+                    mediaUploadInfoState = mediaUploadInfoState,
                 )
             }
         }
     }
 
+    private suspend fun preProcessMedia(
+        mediaAttachment: Attachment.Media,
+        mediaUploadInfoState: MutableStateFlow<AsyncData<MediaUploadInfo>>,
+    ) {
+        mediaUploadInfoState.emit(AsyncData.Loading())
+        mediaSender.preProcessMedia(
+            uri = mediaAttachment.localMedia.uri,
+            mimeType = mediaAttachment.localMedia.info.mimeType,
+        ).fold(
+            onSuccess = { mediaUploadInfo ->
+                mediaUploadInfoState.emit(AsyncData.Success(mediaUploadInfo))
+            },
+            onFailure = {
+                Timber.e(it, "Failed to pre-process media")
+                if (it is CancellationException) {
+                    throw it
+                } else {
+                    mediaUploadInfoState.emit(AsyncData.Failure(it))
+                }
+            }
+        )
+    }
+
     private fun CoroutineScope.cancel(
         attachment: Attachment,
+        preProcessingJob: Job?,
+        mediaUploadInfo: AsyncData<MediaUploadInfo>,
     ) = launch {
         // Delete the temporary file
         when (attachment) {
             is Attachment.Media -> {
                 temporaryUriDeleter.delete(attachment.localMedia.uri)
+                preProcessingJob?.cancel()
+                mediaUploadInfo.dataOrNull()?.let { data ->
+                    cleanUp(data)
+                }
             }
         }
         onDoneListener()
     }
 
-    private suspend fun sendMedia(
-        mediaAttachment: Attachment.Media,
+    private fun cleanUp(
+        mediaUploadInfo: MediaUploadInfo,
+    ) {
+        mediaUploadInfo.allFiles().forEach { file ->
+            file.safeDelete()
+        }
+    }
+
+    private suspend fun sendPreProcessedMedia(
+        mediaUploadInfo: MediaUploadInfo,
         caption: String?,
         sendActionState: MutableState<SendActionState>,
     ) = runCatching {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
             override fun onProgress(current: Long, total: Long) {
+                // Note will not happen if useSendQueue is true
                 if (context.isActive) {
                     sendActionState.value = SendActionState.Sending.Uploading(current.toFloat() / total.toFloat())
                 }
             }
         }
-        sendActionState.value = SendActionState.Sending.Processing
-        mediaSender.sendMedia(
-            uri = mediaAttachment.localMedia.uri,
-            mimeType = mediaAttachment.localMedia.info.mimeType,
+        mediaSender.sendPreProcessedMedia(
+            mediaUploadInfo = mediaUploadInfo,
             caption = caption,
             progressCallback = progressCallback
         ).getOrThrow()
     }.fold(
         onSuccess = {
+            cleanUp(mediaUploadInfo)
             onDoneListener()
         },
         onFailure = { error ->

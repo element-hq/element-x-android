@@ -27,6 +27,7 @@ sealed interface SendActionState {
 
     @Immutable
     sealed interface Sending : SendActionState {
+        data object InstantSending : Sending
         data object Processing : Sending
         data class Uploading(val progress: Float) : Sending
     }

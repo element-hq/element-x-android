@@ -99,12 +99,17 @@ private fun AttachmentSendStateView(
     onRetryClick: () -> Unit
 ) {
     when (sendActionState) {
-        is SendActionState.Sending -> {
+        is SendActionState.Sending.Processing -> {
             ProgressDialog(
-                type = when (sendActionState) {
-                    is SendActionState.Sending.Uploading -> ProgressDialogType.Determinate(sendActionState.progress)
-                    SendActionState.Sending.Processing -> ProgressDialogType.Indeterminate
-                },
+                type = ProgressDialogType.Indeterminate,
+                text = stringResource(id = CommonStrings.common_sending),
+                showCancelButton = true,
+                onDismissRequest = onDismissClick,
+            )
+        }
+        is SendActionState.Sending.Uploading -> {
+            ProgressDialog(
+                type = ProgressDialogType.Determinate(sendActionState.progress),
                 text = stringResource(id = CommonStrings.common_sending),
                 showCancelButton = true,
                 onDismissRequest = onDismissClick,
