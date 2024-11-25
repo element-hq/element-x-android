@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -55,7 +56,7 @@ fun UnresolvedUserRow(
         ) {
             // ID
             Text(
-                text = id,
+                text = id.toUserDisplayName(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
