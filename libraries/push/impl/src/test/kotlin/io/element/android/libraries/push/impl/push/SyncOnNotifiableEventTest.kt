@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
@@ -60,6 +61,7 @@ class SyncOnNotifiableEventTest {
     }
 
     private val notifiableEvent = aNotifiableMessageEvent()
+    private val incomingCallNotifiableEvent = aNotifiableCallEvent()
 
     @Test
     fun `when feature flag is disabled, nothing happens`() = runTest {
@@ -73,14 +75,37 @@ class SyncOnNotifiableEventTest {
     }
 
     @Test
+    fun `when feature flag is enabled, a ringing call starts and stops the sync`() = runTest {
+        val sut = createSyncOnNotifiableEvent(client = client, isAppInForeground = false, isSyncOnPushEnabled = true)
+
+        sut(incomingCallNotifiableEvent)
+
+        assert(startSyncLambda).isCalledOnce()
+        assert(stopSyncLambda).isCalledOnce()
+        assert(subscribeToSyncLambda).isCalledOnce()
+    }
+
+    @Test
+    fun `when feature flag is disabled, a ringing call starts and stops the sync`() = runTest {
+        val sut = createSyncOnNotifiableEvent(client = client, isAppInForeground = false, isSyncOnPushEnabled = false)
+
+        sut(incomingCallNotifiableEvent)
+
+        assert(startSyncLambda).isCalledOnce()
+        assert(stopSyncLambda).isCalledOnce()
+        assert(subscribeToSyncLambda).isCalledOnce()
+    }
+
+    @Test
     fun `when feature flag is enabled and app is in foreground, sync is not started`() = runTest {
         val sut = createSyncOnNotifiableEvent(client = client, isAppInForeground = true, isSyncOnPushEnabled = true)
 
         sut(notifiableEvent)
+        sut(incomingCallNotifiableEvent)
 
         assert(startSyncLambda).isNeverCalled()
         assert(stopSyncLambda).isNeverCalled()
-        assert(subscribeToSyncLambda).isCalledOnce()
+        assert(subscribeToSyncLambda).isCalledExactly(2)
     }
 
     @Test
