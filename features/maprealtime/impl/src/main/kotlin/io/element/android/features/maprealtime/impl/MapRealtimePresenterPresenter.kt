@@ -157,12 +157,7 @@ class MapRealtimePresenterPresenter @Inject constructor(
             roomName = roomName,
             isSharingLocation = false,
             mapType = mapTypes.find { it.mapKey == mapTile } ?: mapTypes[2],
-            vehicleLocations = liveLocationShares.map {
-                MapRealtimeLocationDot(
-                    userName = it.userId.toString(),
-                    location = Location.fromGeoUri(it.lastLocation.location.geoUri)!!
-                )
-            },
+            liveLocationShares = liveLocationShares
         )
     }
 
@@ -176,10 +171,13 @@ class MapRealtimePresenterPresenter @Inject constructor(
                 val newShare = locationShares.firstOrNull()
 
                 if (newShare != null) {
-                    if (newShare !in accumulatedShares) {
+                    val existingShareIndex = accumulatedShares.indexOfFirst { it.userId == newShare.userId }
+                    if (existingShareIndex == -1) {
                         accumulatedShares.add(newShare)
-                        value = accumulatedShares.toImmutableList()
+                    } else {
+                        accumulatedShares[existingShareIndex] = newShare
                     }
+                    value = accumulatedShares.toImmutableList()
                 }
             }
             .launchIn(this)
