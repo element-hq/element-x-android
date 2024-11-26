@@ -73,6 +73,11 @@ class KonsistClassNameTest {
 
     @Test
     fun `Fake classes must be named using Fake and the interface it fakes`() {
+        var failingCases = 0
+        val failingCasesList = listOf(
+            "FakeWrongClassName",
+            "FakeWrongClassSubInterfaceName",
+        )
         Konsist.scopeFromProject()
             .classes()
             .withNameContaining("Fake")
@@ -84,7 +89,7 @@ class KonsistClassNameTest {
                 val interfaceName = it.name
                     .replace("FakeRust", "")
                     .replace("Fake", "")
-                (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
+                val result = (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
                     it.parents().any { parent ->
                         // Workaround to get the parent name. For instance:
                         // parent.name used to return `UserListPresenter.Factory` but is now returning `Factory`.
@@ -93,7 +98,14 @@ class KonsistClassNameTest {
                         val parentName = parent.fullyQualifiedName!!.substringAfter("$packageName.").replace(".", "")
                         parentName == interfaceName
                     }
+                if (!result && it.name in failingCasesList) {
+                    failingCases++
+                    true
+                } else {
+                    result
+                }
             }
+        assertThat(failingCases).isEqualTo(failingCasesList.size)
     }
 
     @Test
