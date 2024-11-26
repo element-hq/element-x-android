@@ -22,6 +22,7 @@ import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutParents
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class KonsistArchitectureTest {
@@ -66,18 +67,18 @@ class KonsistArchitectureTest {
 
     @Test
     fun `Sealed interface used in Composable MUST be Immutable or Stable`() {
+        var failingTestFound = false
         // List all sealed interface without Immutable nor Stable annotation in the project
         val forbiddenInterfacesForComposableParameter = Konsist.scopeFromProject()
             .interfaces()
             .withSealedModifier()
             .withoutAnnotationOf(Immutable::class, Stable::class)
             .map { it.fullyQualifiedName }
-
         Konsist.scopeFromProject()
             .functions()
             .withAnnotationOf(Composable::class)
             .assertTrue(additionalMessage = "Consider adding the @Immutable or @Stable annotation to the sealed interface") {
-                it.parameters.all { param ->
+                val result = it.parameters.all { param ->
                     val type = param.type.text
                     return@all if (type.startsWith("@") || type.startsWith("(") || type.startsWith("suspend")) {
                         true
@@ -94,6 +95,13 @@ class KonsistArchitectureTest {
                         fullyQualifiedName !in forbiddenInterfacesForComposableParameter
                     }
                 }
+                if (!result && !failingTestFound && it.name == "FailingComposableWithNonImmutableSealedInterface") {
+                    failingTestFound = true
+                    true
+                } else {
+                    result
+                }
             }
+        assertTrue("FailingComposableWithNonImmutableSealedInterface should make this test fail.", failingTestFound)
     }
 }
