@@ -235,6 +235,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         mediaSender.sendPreProcessedMedia(
             mediaUploadInfo = mediaUploadInfo,
             caption = caption,
+            formattedCaption = null,
             progressCallback = progressCallback
         ).getOrThrow()
     }.fold(

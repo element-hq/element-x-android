@@ -43,9 +43,9 @@ class MediaSender @Inject constructor(
 
     suspend fun sendPreProcessedMedia(
         mediaUploadInfo: MediaUploadInfo,
-        caption: String? = null,
-        formattedCaption: String? = null,
-        progressCallback: ProgressCallback? = null
+        caption: String?,
+        formattedCaption: String?,
+        progressCallback: ProgressCallback?,
     ): Result<Unit> {
         return room.sendMedia(
             uploadInfo = mediaUploadInfo,
