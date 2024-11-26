@@ -26,6 +26,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             anAttachmentsPreviewState(mediaInfo = aVideoMediaInfo()),
             anAttachmentsPreviewState(mediaInfo = anAudioMediaInfo()),
             anAttachmentsPreviewState(mediaInfo = anApkMediaInfo()),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f)),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"))),
         )
