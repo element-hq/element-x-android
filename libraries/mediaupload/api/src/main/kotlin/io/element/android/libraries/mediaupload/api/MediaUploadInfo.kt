@@ -30,4 +30,3 @@ fun MediaUploadInfo.allFiles(): List<File> {
         (this@allFiles as? MediaUploadInfo.Video)?.thumbnailFile,
     )
 }
-
