@@ -98,6 +98,8 @@ fun Project.setupKover() {
                         "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                         // Test presenters
                         "io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter",
+                        // Konsist code to make test fails
+                        "io.element.android.tests.konsist.failures",
                     )
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",
