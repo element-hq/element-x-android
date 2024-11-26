@@ -80,19 +80,22 @@ class KonsistArchitectureTest {
             .assertTrue(additionalMessage = "Consider adding the @Immutable or @Stable annotation to the sealed interface") {
                 val result = it.parameters.all { param ->
                     val type = param.type.text
-                    return@all if (type.startsWith("@") || type.startsWith("(") || type.startsWith("suspend")) {
+                    return@all if (type.startsWith("@") || type.contains("->") || type.startsWith("suspend")) {
                         true
                     } else {
-                        var typePackage = param.type.declaration.packagee?.name
-                        if (typePackage == type) {
-                            // Workaround, now that packagee.fullyQualifiedName is not available anymore
-                            // It seems that when the type in in the same package as the function,
-                            // the package is equal to the type (which is wrong).
-                            // So in this case, use the package of the function
-                            typePackage = it.packagee?.name
+                        val typePackage = param.type.sourceDeclaration?.let { declaration ->
+                            declaration.asTypeParameterDeclaration()?.packagee
+                                ?: declaration.asExternalDeclaration()?.packagee
+                                ?: declaration.asClassOrInterfaceDeclaration()?.packagee
+                                ?: declaration.asKotlinTypeDeclaration()?.packagee
+                                ?: declaration.asObjectDeclaration()?.packagee
+                        }?.name
+                        if (typePackage == null) {
+                            false
+                        } else {
+                            val fullyQualifiedName = "$typePackage.$type"
+                            fullyQualifiedName !in forbiddenInterfacesForComposableParameter
                         }
-                        val fullyQualifiedName = "$typePackage.$type"
-                        fullyQualifiedName !in forbiddenInterfacesForComposableParameter
                     }
                 }
                 if (!result && !failingTestFound && it.name == "FailingComposableWithNonImmutableSealedInterface") {
