@@ -30,6 +30,7 @@ class KnockRequestsListNode @AssistedInject constructor(
         val state = presenter.present()
         KnockRequestsListView(
             state = state,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

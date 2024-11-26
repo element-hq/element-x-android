@@ -7,8 +7,20 @@
 
 package io.element.android.features.knockrequests.impl.list
 
-// TODO add your ui models. Remove the eventSink if you don't have events.
-// Do not use default value, so no member get forgotten in the presenters.
+import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
+import kotlinx.collections.immutable.ImmutableList
+
 data class KnockRequestsListState(
-    val eventSink: (KnockRequestsListEvents) -> Unit
+    val knockRequests: AsyncData<ImmutableList<KnockRequest>>,
+    val currentAction: KnockRequestsCurrentAction,
+    val eventSink: (KnockRequestsListEvents) -> Unit,
 )
+
+sealed interface KnockRequestsCurrentAction {
+    data object None : KnockRequestsCurrentAction
+    data class Accept(val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
+    data class Decline(val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
+    data class AcceptAll(val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
+}
