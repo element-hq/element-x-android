@@ -74,9 +74,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         val userSentAttachment = remember { mutableStateOf(false) }
 
         val mediaUploadInfoState = remember { mutableStateOf<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
-        var prePropressingJob: Job? = null
         LaunchedEffect(Unit) {
-            prePropressingJob = preProcessAttachment(
+            preProcessAttachment(
                 attachment,
                 mediaUploadInfoState,
             )
@@ -116,7 +115,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 AttachmentsPreviewEvents.Cancel -> {
                     coroutineScope.cancel(
                         attachment,
-                        prePropressingJob,
                         mediaUploadInfoState.value,
                         sendActionState,
                     )
@@ -178,7 +176,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.cancel(
         attachment: Attachment,
-        preProcessingJob: Job?,
         mediaUploadInfo: AsyncData<MediaUploadInfo>,
         sendActionState: MutableState<SendActionState>,
     ) = launch {
@@ -186,7 +183,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         when (attachment) {
             is Attachment.Media -> {
                 temporaryUriDeleter.delete(attachment.localMedia.uri)
-                preProcessingJob?.cancel()
                 mediaUploadInfo.dataOrNull()?.let { data ->
                     cleanUp(data)
                 }
