@@ -7,12 +7,14 @@
 
 package io.element.android.features.knockrequests.impl.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -88,12 +92,12 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
         state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
     }
 
-    Box(modifier, contentAlignment = Alignment.Center) {
+    Box(modifier.fillMaxSize()) {
         when (state.knockRequests) {
             is AsyncData.Success -> {
                 val knockRequests = state.knockRequests.data
                 if (knockRequests.isEmpty()) {
-                    KnockRequestsListEmpty()
+                    KnockRequestsEmptyList()
                 } else {
                     KnockRequestsList(
                         knockRequests = knockRequests,
@@ -107,10 +111,17 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
         KnockRequestsActionsView(
             actions = state.currentAction,
             onDismiss = {
-                state.eventSink(KnockRequestsListEvents.AcceptAll)
+                state.eventSink(KnockRequestsListEvents.DismissCurrentAction)
             },
-            modifier = Modifier.align(Alignment.BottomCenter),
         )
+        if (state.canAcceptAll) {
+            KnockRequestsAcceptAll(
+                onClick = {
+                    state.eventSink(KnockRequestsListEvents.AcceptAll)
+                },
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
+        }
     }
 }
 
@@ -247,7 +258,25 @@ private fun KnockRequestItem(
 }
 
 @Composable
-private fun KnockRequestsListEmpty(
+private fun KnockRequestsAcceptAll(onClick: () -> Unit, modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .shadow(elevation = 24.dp, spotColor = Color.Transparent)
+            .background(color = ElementTheme.colors.bgCanvasDefault)
+            .padding(vertical = 12.dp, horizontal = 16.dp)
+    )
+    {
+        OutlinedButton(
+            text = ("Accept all"),
+            onClick = onClick,
+            size = ButtonSize.Medium,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+private fun KnockRequestsEmptyList(
     modifier: Modifier = Modifier,
 ) {
     Box(

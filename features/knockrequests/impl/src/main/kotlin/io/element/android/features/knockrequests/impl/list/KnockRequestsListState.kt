@@ -16,7 +16,9 @@ data class KnockRequestsListState(
     val knockRequests: AsyncData<ImmutableList<KnockRequest>>,
     val currentAction: KnockRequestsCurrentAction,
     val eventSink: (KnockRequestsListEvents) -> Unit,
-)
+) {
+    val canAcceptAll = knockRequests is AsyncData.Success && knockRequests.data.size > 1
+}
 
 sealed interface KnockRequestsCurrentAction {
     data object None : KnockRequestsCurrentAction
