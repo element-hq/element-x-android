@@ -34,18 +34,12 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.coroutineContext
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
@@ -77,41 +71,34 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        val userSentAttachment = remember {
-            MutableStateFlow(false)
-        }
+        val userSentAttachment = remember { mutableStateOf(false) }
 
-        val mediaUploadInfoStateFlow = remember { MutableStateFlow<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
+        val mediaUploadInfoState = remember { mutableStateOf<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
         var prePropressingJob: Job? = null
         LaunchedEffect(Unit) {
             prePropressingJob = preProcessAttachment(
                 attachment,
-                mediaUploadInfoStateFlow,
+                mediaUploadInfoState,
             )
         }
 
-        LaunchedEffect(Unit) {
-            userSentAttachment.filter { it }
-                .flatMapConcat {
-                    mediaUploadInfoStateFlow.filter { it.isReady() }
-                }
-                .distinctUntilChanged()
-                .collect { mediaUploadInfo ->
-                    if (mediaUploadInfo is AsyncData.Success) {
-                        val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                            .takeIf { it.isNotEmpty() }
-                        ongoingSendAttachmentJob.value = coroutineScope.launch {
-                            sendPreProcessedMedia(
-                                mediaUploadInfo = mediaUploadInfo.data,
-                                caption = caption,
-                                sendActionState = sendActionState,
-                            )
-                        }
-                    } else if (mediaUploadInfo is AsyncData.Failure) {
-                        sendActionState.value = SendActionState.Failure(mediaUploadInfo.error)
+        LaunchedEffect(userSentAttachment.value, mediaUploadInfoState.value) {
+            val mediaUploadInfo = mediaUploadInfoState.value
+            if (userSentAttachment.value && mediaUploadInfo.isReady())
+                if (mediaUploadInfo is AsyncData.Success) {
+                    val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                        .takeIf { it.isNotEmpty() }
+                    ongoingSendAttachmentJob.value = coroutineScope.launch {
+                        sendPreProcessedMedia(
+                            mediaUploadInfo = mediaUploadInfo.data,
+                            caption = caption,
+                            sendActionState = sendActionState,
+                        )
                     }
-                    // else: cannot happen since we filtered with isReady()
+                } else if (mediaUploadInfo is AsyncData.Failure) {
+                    sendActionState.value = SendActionState.Failure(mediaUploadInfo.error)
                 }
+            // else: cannot happen since we filtered with isReady()
         }
 
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
@@ -119,7 +106,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 is AttachmentsPreviewEvents.SendAttachment -> coroutineScope.launch {
                     val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
                     userSentAttachment.value = true
-                    val instantSending = mediaUploadInfoStateFlow.value.isReady() && useSendQueue
+                    val instantSending = mediaUploadInfoState.value.isReady() && useSendQueue
                     sendActionState.value = if (instantSending) {
                         SendActionState.Sending.InstantSending
                     } else {
@@ -130,7 +117,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                     coroutineScope.cancel(
                         attachment,
                         prePropressingJob,
-                        mediaUploadInfoStateFlow.value,
+                        mediaUploadInfoState.value,
                         sendActionState,
                     )
                 }
@@ -154,7 +141,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.preProcessAttachment(
         attachment: Attachment,
-        mediaUploadInfoState: MutableStateFlow<AsyncData<MediaUploadInfo>>,
+        mediaUploadInfoState: MutableState<AsyncData<MediaUploadInfo>>,
     ) = launch {
         when (attachment) {
             is Attachment.Media -> {
@@ -168,22 +155,22 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     private suspend fun preProcessMedia(
         mediaAttachment: Attachment.Media,
-        mediaUploadInfoState: MutableStateFlow<AsyncData<MediaUploadInfo>>,
+        mediaUploadInfoState: MutableState<AsyncData<MediaUploadInfo>>,
     ) {
-        mediaUploadInfoState.emit(AsyncData.Loading())
+        mediaUploadInfoState.value = AsyncData.Loading()
         mediaSender.preProcessMedia(
             uri = mediaAttachment.localMedia.uri,
             mimeType = mediaAttachment.localMedia.info.mimeType,
         ).fold(
             onSuccess = { mediaUploadInfo ->
-                mediaUploadInfoState.emit(AsyncData.Success(mediaUploadInfo))
+                mediaUploadInfoState.value = AsyncData.Success(mediaUploadInfo)
             },
             onFailure = {
                 Timber.e(it, "Failed to pre-process media")
                 if (it is CancellationException) {
                     throw it
                 } else {
-                    mediaUploadInfoState.emit(AsyncData.Failure(it))
+                    mediaUploadInfoState.value = AsyncData.Failure(it)
                 }
             }
         )
