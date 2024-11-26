@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -151,6 +152,13 @@ class DefaultNotificationCreatorTest {
         result.commonAssertions(
             expectedCategory = null,
         )
+        val actionTitles = result.actions?.map { it.title }
+        assertThat(actionTitles).isEqualTo(
+            listOfNotNull(
+                REJECT_INVITATION_ACTION_TITLE.takeIf { NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS },
+                ACCEPT_INVITATION_ACTION_TITLE.takeIf { NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS },
+            )
+        )
     }
 
     @Test
@@ -271,6 +279,11 @@ class DefaultNotificationCreatorTest {
     }
 }
 
+const val MARK_AS_READ_ACTION_TITLE = "MarkAsReadAction"
+const val QUICK_REPLY_ACTION_TITLE = "QuickReplyAction"
+const val ACCEPT_INVITATION_ACTION_TITLE = "AcceptInvitationAction"
+const val REJECT_INVITATION_ACTION_TITLE = "RejectInvitationAction"
+
 fun createNotificationCreator(
     context: Context = RuntimeEnvironment.getApplication(),
     buildMeta: BuildMeta = aBuildMeta(),
@@ -291,26 +304,26 @@ fun createNotificationCreator(
         markAsReadActionFactory = MarkAsReadActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("MarkAsReadActionFactory"),
+            stringProvider = FakeStringProvider(MARK_AS_READ_ACTION_TITLE),
             clock = FakeSystemClock(),
         ),
         quickReplyActionFactory = QuickReplyActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("QuickReplyActionFactory"),
+            stringProvider = FakeStringProvider(QUICK_REPLY_ACTION_TITLE),
             clock = FakeSystemClock(),
         ),
         bitmapLoader = bitmapLoader,
         acceptInvitationActionFactory = AcceptInvitationActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("AcceptInvitationActionFactory"),
+            stringProvider = FakeStringProvider(ACCEPT_INVITATION_ACTION_TITLE),
             clock = FakeSystemClock(),
         ),
         rejectInvitationActionFactory = RejectInvitationActionFactory(
             context = context,
             actionIds = NotificationActionIds(buildMeta),
-            stringProvider = FakeStringProvider("RejectInvitationActionFactory"),
+            stringProvider = FakeStringProvider(REJECT_INVITATION_ACTION_TITLE),
             clock = FakeSystemClock(),
         ),
     )

@@ -11,12 +11,15 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.push.impl.notifications.factories.MARK_AS_READ_ACTION_TITLE
+import io.element.android.libraries.push.impl.notifications.factories.QUICK_REPLY_ACTION_TITLE
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.test.notifications.FakeImageLoader
@@ -156,6 +159,13 @@ class DefaultRoomGroupMessageCreatorTest {
         )
         assertThat(result.number).isEqualTo(2)
         assertThat(result.`when`).isEqualTo(A_TIMESTAMP + 10)
+        val actionTitles = result.actions?.map { it.title }
+        assertThat(actionTitles).isEqualTo(
+            listOfNotNull(
+                MARK_AS_READ_ACTION_TITLE.takeIf { NotificationConfig.SHOW_MARK_AS_READ_ACTION },
+                QUICK_REPLY_ACTION_TITLE.takeIf { NotificationConfig.SHOW_QUICK_REPLY_ACTION },
+            )
+        )
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -175,7 +185,12 @@ class DefaultRoomGroupMessageCreatorTest {
             imageLoader = fakeImageLoader.getImageLoader(),
             existingNotification = null,
         )
-        assertThat(result.actions).isNull()
+        val actionTitles = result.actions?.map { it.title }
+        assertThat(actionTitles).isEqualTo(
+            listOfNotNull(
+                MARK_AS_READ_ACTION_TITLE.takeIf { NotificationConfig.SHOW_MARK_AS_READ_ACTION }
+            )
+        )
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
