@@ -22,6 +22,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
@@ -59,6 +60,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
     private val messagesEntryPoint: MessagesEntryPoint,
+    private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -103,6 +105,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object PinnedMessagesList : NavTarget
+
+        @Parcelize
+        data object KnockRequestsList : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -142,7 +147,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun openKnockRequestsList() {
-                        // TODO open the knock requests list screen
+                        backstack.push(NavTarget.KnockRequestsList)
                     }
 
                     override fun onJoinCall() {
@@ -252,6 +257,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     .params(params)
                     .callback(callback)
                     .build()
+            }
+            NavTarget.KnockRequestsList -> {
+                knockRequestsListEntryPoint.createNode(this, buildContext)
             }
         }
     }
