@@ -82,22 +82,31 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(userSentAttachment.value, mediaUploadInfoState.value) {
-            val mediaUploadInfo = mediaUploadInfoState.value
-            if (userSentAttachment.value && mediaUploadInfo.isReady())
-                if (mediaUploadInfo is AsyncData.Success) {
-                    val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                        .takeIf { it.isNotEmpty() }
-                    ongoingSendAttachmentJob.value = coroutineScope.launch {
-                        sendPreProcessedMedia(
-                            mediaUploadInfo = mediaUploadInfo.data,
-                            caption = caption,
-                            sendActionState = sendActionState,
-                        )
+            if (userSentAttachment.value) {
+                // User confirmed sending the attachment
+                when (val mediaUploadInfo = mediaUploadInfoState.value) {
+                    is AsyncData.Success -> {
+                        // Pre-processing is done, send the attachment
+                        val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                            .takeIf { it.isNotEmpty() }
+                        ongoingSendAttachmentJob.value = coroutineScope.launch {
+                            sendPreProcessedMedia(
+                                mediaUploadInfo = mediaUploadInfo.data,
+                                caption = caption,
+                                sendActionState = sendActionState,
+                            )
+                        }
                     }
-                } else if (mediaUploadInfo is AsyncData.Failure) {
-                    sendActionState.value = SendActionState.Failure(mediaUploadInfo.error)
+                    is AsyncData.Failure -> {
+                        // Pre-processing has failed, show the error
+                        sendActionState.value = SendActionState.Failure(mediaUploadInfo.error)
+                    }
+                    AsyncData.Uninitialized,
+                    is AsyncData.Loading -> {
+                        // Pre-processing is still in progress, do nothing
+                    }
                 }
-            // else: cannot happen since we filtered with isReady()
+            }
         }
 
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
