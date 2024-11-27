@@ -30,7 +30,7 @@ import java.util.Locale
 fun Long.toHumanReadableDuration(): String {
     val inSeconds = this / 1_000
     val hours = inSeconds / 3_600
-    val minutes = (inSeconds % 3_600) / 60
+    val minutes = inSeconds % 3_600 / 60
     val seconds = inSeconds % 60
     return if (hours > 0) {
         String.format(Locale.US, "%d:%02d:%02d", hours, minutes, seconds)

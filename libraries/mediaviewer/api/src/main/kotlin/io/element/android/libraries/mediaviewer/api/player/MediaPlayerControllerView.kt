@@ -139,7 +139,7 @@ fun MediaPlayerControllerView(
 
 @PreviewsDayNight
 @Composable
-private fun MediaPlayerControlBarPreview(
+internal fun MediaPlayerControllerViewPreview(
     @PreviewParameter(MediaPlayerControllerStateProvider::class) state: MediaPlayerControllerState
 ) = ElementPreview {
     MediaPlayerControllerView(
