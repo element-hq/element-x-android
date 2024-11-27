@@ -111,10 +111,15 @@ class SecureBackupFlowNode @AssistedInject constructor(
             NavTarget.EnterRecoveryKey -> {
                 val callback = object : SecureBackupEnterRecoveryKeyNode.Callback {
                     override fun onEnterRecoveryKeySuccess() {
-                        if (callbacks.isNotEmpty()) {
-                            callbacks.forEach { it.onDone() }
-                        } else {
-                            backstack.pop()
+                        when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
+                            SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> {
+                                callbacks.forEach { it.onDone() }
+                            }
+                            SecureBackupEntryPoint.InitialTarget.ResetIdentity,
+                            SecureBackupEntryPoint.InitialTarget.Root,
+                            SecureBackupEntryPoint.InitialTarget.SetUpRecovery -> {
+                                backstack.pop()
+                            }
                         }
                     }
                 }
