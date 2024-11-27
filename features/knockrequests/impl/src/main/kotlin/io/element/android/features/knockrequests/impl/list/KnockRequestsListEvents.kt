@@ -12,6 +12,7 @@ import io.element.android.features.knockrequests.impl.KnockRequest
 sealed interface KnockRequestsListEvents {
     data class Accept(val knockRequest: KnockRequest) : KnockRequestsListEvents
     data class Decline(val knockRequest: KnockRequest) : KnockRequestsListEvents
+    data class DeclineAndBan(val knockRequest: KnockRequest) : KnockRequestsListEvents
     data object AcceptAll : KnockRequestsListEvents
     data object DismissCurrentAction : KnockRequestsListEvents
 }

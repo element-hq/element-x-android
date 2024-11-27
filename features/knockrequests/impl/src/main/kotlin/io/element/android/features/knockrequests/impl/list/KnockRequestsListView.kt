@@ -101,6 +101,9 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
                 } else {
                     KnockRequestsList(
                         knockRequests = knockRequests,
+                        canAccept = state.canAccept,
+                        canDecline = state.canDecline,
+                        canBan = state.canBan,
                         onAcceptClick = ::onAcceptClick,
                         onDeclineClick = ::onDeclineClick,
                     )
@@ -154,6 +157,13 @@ private fun KnockRequestsActionsView(
                     onErrorDismiss = onDismiss,
                 )
             }
+            is KnockRequestsCurrentAction.DeclineAndBan -> {
+                AsyncActionView(
+                    async = actions.async,
+                    onSuccess = {},
+                    onErrorDismiss = onDismiss,
+                )
+            }
             KnockRequestsCurrentAction.None -> Unit
         }
     }
@@ -162,6 +172,9 @@ private fun KnockRequestsActionsView(
 @Composable
 private fun KnockRequestsList(
     knockRequests: ImmutableList<KnockRequest>,
+    canAccept: Boolean,
+    canDecline: Boolean,
+    canBan: Boolean,
     onAcceptClick: (KnockRequest) -> Unit,
     onDeclineClick: (KnockRequest) -> Unit,
     modifier: Modifier = Modifier,
@@ -171,6 +184,9 @@ private fun KnockRequestsList(
             KnockRequestItem(
                 knockRequest = knockRequest,
                 onAcceptClick = onAcceptClick,
+                canBan = canBan,
+                canDecline = canDecline,
+                canAccept = canAccept,
                 onDeclineClick = onDeclineClick,
             )
             if (index != knockRequests.size - 1) {
@@ -183,6 +199,9 @@ private fun KnockRequestsList(
 @Composable
 private fun KnockRequestItem(
     knockRequest: KnockRequest,
+    canAccept: Boolean,
+    canDecline: Boolean,
+    canBan: Boolean,
     onAcceptClick: (KnockRequest) -> Unit,
     onDeclineClick: (KnockRequest) -> Unit,
     modifier: Modifier = Modifier,
@@ -194,7 +213,7 @@ private fun KnockRequestItem(
     ) {
         Avatar(knockRequest.getAvatarData(AvatarSize.KnockRequestItem))
         Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier) {
+        Column {
             // Name
             Text(
                 modifier = Modifier.clipToBounds(),
@@ -222,36 +241,42 @@ private fun KnockRequestItem(
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
             }
+            // Actions
             Spacer(modifier = Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                OutlinedButton(
-                    text = stringResource(CommonStrings.action_decline),
-                    onClick = {
-                        onDeclineClick(knockRequest)
-                    },
-                    size = ButtonSize.MediumLowPadding,
-                    modifier = Modifier.weight(1f),
-                )
-                Button(
-                    text = stringResource(CommonStrings.action_accept),
+                if (canDecline) {
+                    OutlinedButton(
+                        text = stringResource(CommonStrings.action_decline),
+                        onClick = {
+                            onDeclineClick(knockRequest)
+                        },
+                        size = ButtonSize.MediumLowPadding,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (canAccept) {
+                    Button(
+                        text = stringResource(CommonStrings.action_accept),
+                        onClick = {
+                            onAcceptClick(knockRequest)
+                        },
+                        size = ButtonSize.MediumLowPadding,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+            if (canBan) {
+                Spacer(modifier = Modifier.height(12.dp))
+                TextButton(
+                    text = stringResource(CommonStrings.screen_knock_requests_list_decline_and_ban_action_title),
                     onClick = {
                         onAcceptClick(knockRequest)
                     },
-                    size = ButtonSize.MediumLowPadding,
-                    modifier = Modifier.weight(1f),
+                    destructive = true,
+                    size = ButtonSize.Small,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            TextButton(
-                text = stringResource(CommonStrings.screen_knock_requests_list_decline_and_ban_action_title),
-                onClick = {
-                    onAcceptClick(knockRequest)
-                },
-                destructive = true,
-                size = ButtonSize.Small,
-                modifier = Modifier.fillMaxWidth(),
-            )
 
         }
     }

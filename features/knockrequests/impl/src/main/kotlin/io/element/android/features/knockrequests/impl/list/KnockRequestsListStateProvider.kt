@@ -52,7 +52,40 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                actions = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Loading),
+                currentAction = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Loading),
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequest()
+                    )
+                ),
+                canAccept = false,
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequest()
+                    )
+                ),
+                canDecline = false,
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequest()
+                    )
+                ),
+                canAccept = false,
+                canDecline = false,
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequest()
+                    )
+                ),
+                canBan = false,
             ),
         )
 }
@@ -71,10 +104,16 @@ fun aKnockRequest(
 
 fun aKnockRequestsListState(
     knockRequests: AsyncData<ImmutableList<KnockRequest>> = AsyncData.Success(persistentListOf()),
-    actions: KnockRequestsCurrentAction = KnockRequestsCurrentAction.None,
+    currentAction: KnockRequestsCurrentAction = KnockRequestsCurrentAction.None,
+    canAccept: Boolean = true,
+    canDecline: Boolean = true,
+    canBan: Boolean = true,
     eventSink: (KnockRequestsListEvents) -> Unit = {},
 ) = KnockRequestsListState(
     knockRequests = knockRequests,
-    currentAction = actions,
+    currentAction = currentAction,
+    canAccept = canAccept,
+    canDecline = canDecline,
+    canBan = canBan,
     eventSink = eventSink,
 )
