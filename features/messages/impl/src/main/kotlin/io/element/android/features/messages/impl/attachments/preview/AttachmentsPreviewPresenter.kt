@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +47,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private val mediaSender: MediaSender,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
-    private val featureFlagsService: FeatureFlagService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -72,6 +73,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         val userSentAttachment = remember { mutableStateOf(false) }
+        val allowCaption by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation).collectAsState(initial = false)
 
         val mediaUploadInfoState = remember { mutableStateOf<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
@@ -112,7 +114,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
             when (attachmentsPreviewEvents) {
                 is AttachmentsPreviewEvents.SendAttachment -> coroutineScope.launch {
-                    val useSendQueue = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
+                    val useSendQueue = featureFlagService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
                     userSentAttachment.value = true
                     val instantSending = mediaUploadInfoState.value.isReady() && useSendQueue
                     sendActionState.value = if (instantSending) {
@@ -142,6 +144,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             attachment = attachment,
             sendActionState = sendActionState.value,
             textEditorState = textEditorState,
+            allowCaption = allowCaption,
             eventSink = ::handleEvents
         )
     }

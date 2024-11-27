@@ -15,11 +15,9 @@ data class AttachmentsPreviewState(
     val attachment: Attachment,
     val sendActionState: SendActionState,
     val textEditorState: TextEditorState,
+    val allowCaption: Boolean,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
-) {
-    // Keep the val to eventually set to false for some mimetypes.
-    val allowCaption: Boolean = true
-}
+)
 
 @Immutable
 sealed interface SendActionState {
