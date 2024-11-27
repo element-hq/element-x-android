@@ -30,7 +30,10 @@ sealed interface PlayableState {
     data object NotPlayable : PlayableState
     data class Playable(
         val isPlaying: Boolean,
-        val isShowingControls: Boolean
+        val progressInMillis: Long,
+        val durationInMillis: Long,
+        val isShowingControls: Boolean,
+        val isMuted: Boolean,
     ) : PlayableState
 }
 

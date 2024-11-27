@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
