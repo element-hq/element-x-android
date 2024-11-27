@@ -140,4 +140,11 @@ enum class FeatureFlags(
         defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
+    MediaCaptionCreation(
+        key = "feature.media_caption_creation",
+        title = "Allow creation of media captions",
+        description = null,
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
+        isFinished = false,
+    ),
 }

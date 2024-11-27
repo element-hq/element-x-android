@@ -37,6 +37,8 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeForwa
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -60,6 +62,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: MatrixRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -134,7 +137,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         }
     }
 
-    private fun buildActions(
+    private suspend fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
@@ -157,7 +160,9 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 if (timelineItem.content is TimelineItemEventContentWithAttachment) {
                     // Caption
                     if (timelineItem.content.caption == null) {
-                        add(TimelineItemAction.AddCaption)
+                        if (featureFlagService.isFeatureEnabled(FeatureFlags.MediaCaptionCreation)) {
+                            add(TimelineItemAction.AddCaption)
+                        }
                     } else {
                         add(TimelineItemAction.EditCaption)
                         add(TimelineItemAction.RemoveCaption)

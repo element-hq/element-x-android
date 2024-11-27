@@ -65,6 +65,28 @@ class AttachmentsPreviewPresenterTest {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 
     @Test
+    fun `present - initial state`() = runTest {
+        createAttachmentsPreviewPresenter().test {
+           skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(initialState.allowCaption).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - initial state - caption not allowed`() = runTest {
+        createAttachmentsPreviewPresenter(
+            allowCaption = false,
+        ).test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(initialState.allowCaption).isFalse()
+        }
+    }
+
+    @Test
     fun `present - send media success scenario`() = runTest {
         val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
@@ -420,6 +442,7 @@ class AttachmentsPreviewPresenterTest {
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
         onDoneListener: OnDoneListener = OnDoneListener { lambdaError() },
         mediaUploadOnSendQueueEnabled: Boolean = true,
+        allowCaption: Boolean = true,
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
@@ -427,8 +450,11 @@ class AttachmentsPreviewPresenterTest {
             mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
-            featureFlagsService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.MediaUploadOnSendQueue.key to mediaUploadOnSendQueueEnabled),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(
+                    FeatureFlags.MediaUploadOnSendQueue.key to mediaUploadOnSendQueueEnabled,
+                    FeatureFlags.MediaCaptionCreation.key to allowCaption,
+                ),
             )
         )
     }
