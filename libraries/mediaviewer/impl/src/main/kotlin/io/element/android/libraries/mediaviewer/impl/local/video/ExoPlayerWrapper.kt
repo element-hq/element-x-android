@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.local.exoplayer
+package io.element.android.libraries.mediaviewer.impl.local.video
 
 import android.content.Context
 import androidx.media3.common.Player
