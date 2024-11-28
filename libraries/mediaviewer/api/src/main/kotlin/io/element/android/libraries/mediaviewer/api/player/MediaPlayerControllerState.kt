@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.mediaviewer.api.player
 
-import io.element.android.libraries.mediaviewer.api.local.PlayableState
-
 data class MediaPlayerControllerState(
     val isVisible: Boolean,
-    val playableState: PlayableState.Playable,
+    val isPlaying: Boolean,
+    val progressInMillis: Long,
+    val durationInMillis: Long,
+    val isMuted: Boolean,
 )

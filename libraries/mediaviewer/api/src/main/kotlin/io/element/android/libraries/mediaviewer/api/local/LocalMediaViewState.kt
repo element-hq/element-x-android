@@ -29,11 +29,7 @@ class LocalMediaViewState internal constructor(
 sealed interface PlayableState {
     data object NotPlayable : PlayableState
     data class Playable(
-        val isPlaying: Boolean,
-        val progressInMillis: Long,
-        val durationInMillis: Long,
         val isShowingControls: Boolean,
-        val isMuted: Boolean,
     ) : PlayableState
 }
 

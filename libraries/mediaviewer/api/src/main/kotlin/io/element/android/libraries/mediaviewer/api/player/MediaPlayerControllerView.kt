@@ -66,7 +66,7 @@ fun MediaPlayerControllerView(
                 IconButton(
                     onClick = onTogglePlay,
                 ) {
-                    if (state.playableState.isPlaying) {
+                    if (state.isPlaying) {
                         Icon(
                             imageVector = CompoundIcons.PauseSolid(),
                             tint = ElementTheme.colors.iconPrimary,
@@ -84,7 +84,7 @@ fun MediaPlayerControllerView(
                     modifier = Modifier
                         .widthIn(min = 48.dp)
                         .padding(horizontal = 8.dp),
-                    text = state.playableState.progressInMillis.toHumanReadableDuration(),
+                    text = state.progressInMillis.toHumanReadableDuration(),
                     textAlign = TextAlign.Center,
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
@@ -92,8 +92,8 @@ fun MediaPlayerControllerView(
                 var lastSelectedValue by remember { mutableFloatStateOf(-1f) }
                 Slider(
                     modifier = Modifier.weight(1f),
-                    valueRange = 0f..state.playableState.durationInMillis.toFloat(),
-                    value = lastSelectedValue.takeIf { it >= 0 } ?: state.playableState.progressInMillis.toFloat(),
+                    valueRange = 0f..state.durationInMillis.toFloat(),
+                    value = lastSelectedValue.takeIf { it >= 0 } ?: state.progressInMillis.toFloat(),
                     onValueChange = {
                         lastSelectedValue = it
                     },
@@ -103,8 +103,8 @@ fun MediaPlayerControllerView(
                     },
                     useCustomLayout = true,
                 )
-                val formattedDuration = remember(state.playableState.durationInMillis) {
-                    state.playableState.durationInMillis.toHumanReadableDuration()
+                val formattedDuration = remember(state.durationInMillis) {
+                    state.durationInMillis.toHumanReadableDuration()
                 }
                 Text(
                     modifier = Modifier
@@ -118,7 +118,7 @@ fun MediaPlayerControllerView(
                 IconButton(
                     onClick = onToggleMute,
                 ) {
-                    if (state.playableState.isMuted) {
+                    if (state.isMuted) {
                         Icon(
                             imageVector = CompoundIcons.VolumeOffSolid(),
                             tint = ElementTheme.colors.iconPrimary,

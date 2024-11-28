@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -172,17 +173,26 @@ private fun ExoPlayerMediaVideoView(
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
-    var playableState: PlayableState.Playable by remember {
+    var mediaPlayerControllerState: MediaPlayerControllerState by remember {
         mutableStateOf(
-            PlayableState.Playable(
+            MediaPlayerControllerState(
+                isVisible = false,
                 isPlaying = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
-                isShowingControls = false,
                 isMuted = false,
             )
         )
     }
+
+    val playableState: PlayableState.Playable by remember {
+        derivedStateOf {
+            PlayableState.Playable(
+                isShowingControls = mediaPlayerControllerState.isVisible,
+            )
+        }
+    }
+
     localMediaViewState.playableState = playableState
 
     val context = LocalContext.current
@@ -195,16 +205,20 @@ private fun ExoPlayerMediaVideoView(
         }
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
-            playableState = playableState.copy(isPlaying = isPlaying)
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isPlaying = isPlaying,
+            )
         }
 
         override fun onVolumeChanged(volume: Float) {
-            playableState = playableState.copy(isMuted = volume == 0f)
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isMuted = volume == 0f,
+            )
         }
 
         override fun onTimelineChanged(timeline: Timeline, reason: Int) {
             if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                playableState = playableState.copy(
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     durationInMillis = exoPlayer.duration,
                 )
             }
@@ -221,21 +235,23 @@ private fun ExoPlayerMediaVideoView(
     LaunchedEffect(autoHideController) {
         delay(5.seconds)
         if (exoPlayer.isPlaying) {
-            playableState = playableState.copy(isShowingControls = false)
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isVisible = false,
+            )
         }
     }
 
     LaunchedEffect(exoPlayer.isPlaying) {
         if (exoPlayer.isPlaying) {
             while (true) {
-                playableState = playableState.copy(
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     progressInMillis = exoPlayer.currentPosition,
                 )
                 delay(200)
             }
         } else {
             // Ensure we render the final state
-            playableState = playableState.copy(
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
                 progressInMillis = exoPlayer.currentPosition,
             )
         }
@@ -248,7 +264,7 @@ private fun ExoPlayerMediaVideoView(
     } else {
         exoPlayer.setMediaItems(emptyList())
     }
-    KeepScreenOn(playableState.isPlaying)
+    KeepScreenOn(mediaPlayerControllerState.isPlaying)
     Box(
         modifier = modifier
             .background(ElementTheme.colors.bgSubtlePrimary)
@@ -263,7 +279,9 @@ private fun ExoPlayerMediaVideoView(
                     layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     setOnClickListener {
                         autoHideController++
-                        playableState = playableState.copy(isShowingControls = !playableState.isShowingControls)
+                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                            isVisible = !mediaPlayerControllerState.isVisible,
+                        )
                     }
                     useController = false
                 }
@@ -275,10 +293,7 @@ private fun ExoPlayerMediaVideoView(
             },
         )
         MediaPlayerControllerView(
-            state = MediaPlayerControllerState(
-                isVisible = playableState.isShowingControls,
-                playableState = playableState,
-            ),
+            state = mediaPlayerControllerState,
             onTogglePlay = {
                 autoHideController++
                 if (exoPlayer.isPlaying) {
