@@ -21,6 +21,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionComparator
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
@@ -69,6 +70,8 @@ class DefaultActionListPresenter @AssistedInject constructor(
     interface Factory : ActionListPresenter.Factory {
         override fun create(postProcessor: TimelineItemActionPostProcessor): DefaultActionListPresenter
     }
+
+    private val comparator = TimelineItemActionComparator()
 
     @Composable
     override fun present(): ActionListState {
@@ -137,7 +140,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
         }
     }
 
-    // See order in https://www.figma.com/design/ux3tYoZV9WghC7hHT9Fhk0/Compound-iOS-Components?node-id=2946-2392
     private suspend fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
@@ -146,7 +148,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         isEventPinned: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
-        return buildList {
+        return buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
                 if (timelineItem.isThreaded) {
                     add(TimelineItemAction.ReplyInThread)
@@ -202,6 +204,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
             }
         }
             .postFilter(timelineItem.content)
+            .sortedWith(comparator)
             .let(postProcessor::process)
     }
 }
@@ -209,7 +212,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
 /**
  * Post filter the actions based on the content of the event.
  */
-private fun List<TimelineItemAction>.postFilter(content: TimelineItemEventContent): List<TimelineItemAction> {
+private fun Iterable<TimelineItemAction>.postFilter(content: TimelineItemEventContent): Iterable<TimelineItemAction> {
     return filter { action ->
         when (content) {
             is TimelineItemCallNotifyContent,

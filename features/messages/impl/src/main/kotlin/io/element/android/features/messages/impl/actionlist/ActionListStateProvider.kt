@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionComparator
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.anUnsignedDeviceSendFailure
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -22,7 +23,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
@@ -175,7 +175,7 @@ fun anActionListState(
 fun aTimelineItemActionList(
     copyAction: TimelineItemAction? = TimelineItemAction.CopyText
 ): ImmutableList<TimelineItemAction> {
-    return listOfNotNull(
+    return setOfNotNull(
         TimelineItemAction.Reply,
         TimelineItemAction.Forward,
         copyAction,
@@ -184,17 +184,19 @@ fun aTimelineItemActionList(
         TimelineItemAction.Redact,
         TimelineItemAction.ReportContent,
         TimelineItemAction.ViewSource,
-    ).toPersistentList()
+    )
+        .sortedWith(TimelineItemActionComparator())
+        .toPersistentList()
 }
 
 fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
-    return persistentListOf(
+    return setOf(
         TimelineItemAction.EndPoll,
         TimelineItemAction.Reply,
-        TimelineItemAction.CopyText,
+        TimelineItemAction.Pin,
         TimelineItemAction.CopyLink,
-        TimelineItemAction.ViewSource,
-        TimelineItemAction.ReportContent,
         TimelineItemAction.Redact,
     )
+        .sortedWith(TimelineItemActionComparator())
+        .toPersistentList()
 }
