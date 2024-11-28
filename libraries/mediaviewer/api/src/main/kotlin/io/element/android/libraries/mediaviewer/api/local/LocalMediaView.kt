@@ -9,7 +9,6 @@ package io.element.android.libraries.mediaviewer.api.local
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.Image
@@ -19,6 +18,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,7 +30,9 @@ import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,6 +52,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Timeline
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
@@ -67,9 +71,13 @@ import io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAn
 import io.element.android.libraries.mediaviewer.api.local.exoplayer.ExoPlayerWrapper
 import io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewer
 import io.element.android.libraries.mediaviewer.api.local.pdf.rememberPdfViewerState
+import io.element.android.libraries.mediaviewer.api.player.MediaPlayerControllerState
+import io.element.android.libraries.mediaviewer.api.player.MediaPlayerControllerView
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun LocalMediaView(
@@ -91,7 +99,6 @@ fun LocalMediaView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
             modifier = modifier,
-            onClick = onClick,
         )
         mimeType == MimeTypes.Pdf -> MediaPDFView(
             localMediaViewState = localMediaViewState,
@@ -141,7 +148,6 @@ private fun MediaImageView(
 private fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) {
@@ -155,7 +161,6 @@ private fun MediaVideoView(
         ExoPlayerMediaVideoView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
-            onClick = onClick,
             modifier = modifier,
         )
     }
@@ -166,30 +171,90 @@ private fun MediaVideoView(
 private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var playableState: PlayableState.Playable by remember {
-        mutableStateOf(PlayableState.Playable(isPlaying = false, isShowingControls = false))
+    var mediaPlayerControllerState: MediaPlayerControllerState by remember {
+        mutableStateOf(
+            MediaPlayerControllerState(
+                isVisible = false,
+                isPlaying = false,
+                progressInMillis = 0,
+                durationInMillis = 0,
+                isMuted = false,
+            )
+        )
     }
+
+    val playableState: PlayableState.Playable by remember {
+        derivedStateOf {
+            PlayableState.Playable(
+                isShowingControls = mediaPlayerControllerState.isVisible,
+            )
+        }
+    }
+
     localMediaViewState.playableState = playableState
 
     val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayerWrapper.create(context)
+    }
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
             localMediaViewState.isReady = true
         }
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
-            playableState = playableState.copy(isPlaying = isPlaying)
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isPlaying = isPlaying,
+            )
+        }
+
+        override fun onVolumeChanged(volume: Float) {
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isMuted = volume == 0f,
+            )
+        }
+
+        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+            if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    durationInMillis = exoPlayer.duration,
+                )
+            }
         }
     }
-    val exoPlayer = remember {
-        ExoPlayerWrapper.create(context)
-            .apply {
-                addListener(playerListener)
-                this.prepare()
+
+    LaunchedEffect(Unit) {
+        exoPlayer.addListener(playerListener)
+        exoPlayer.prepare()
+    }
+
+    var autoHideController by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(autoHideController) {
+        delay(5.seconds)
+        if (exoPlayer.isPlaying) {
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                isVisible = false,
+            )
+        }
+    }
+
+    LaunchedEffect(exoPlayer.isPlaying) {
+        if (exoPlayer.isPlaying) {
+            while (true) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    progressInMillis = exoPlayer.currentPosition,
+                )
+                delay(200)
             }
+        } else {
+            // Ensure we render the final state
+            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                progressInMillis = exoPlayer.currentPosition,
+            )
+        }
     }
     if (localMedia?.uri != null) {
         LaunchedEffect(localMedia.uri) {
@@ -199,35 +264,64 @@ private fun ExoPlayerMediaVideoView(
     } else {
         exoPlayer.setMediaItems(emptyList())
     }
-    KeepScreenOn(playableState.isPlaying)
-    AndroidView(
-        factory = {
-            PlayerView(context).apply {
-                player = exoPlayer
-                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                setOnClickListener {
-                    onClick()
-                }
-                setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
-                    val isShowingControls = visibility == View.VISIBLE
-                    playableState = playableState.copy(isShowingControls = isShowingControls)
-                })
-                controllerShowTimeoutMs = 1500
-                setShowPreviousButton(false)
-                setShowFastForwardButton(false)
-                setShowRewindButton(false)
-                setShowNextButton(false)
-                showController()
-            }
-        },
-        onRelease = { playerView ->
-            playerView.setOnClickListener(null)
-            playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
-            playerView.player = null
-        },
+    KeepScreenOn(mediaPlayerControllerState.isPlaying)
+    Box(
         modifier = modifier
-    )
+            .background(ElementTheme.colors.bgSubtlePrimary)
+            .wrapContentSize(),
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = {
+                PlayerView(context).apply {
+                    player = exoPlayer
+                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    setOnClickListener {
+                        autoHideController++
+                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                            isVisible = !mediaPlayerControllerState.isVisible,
+                        )
+                    }
+                    useController = false
+                }
+            },
+            onRelease = { playerView ->
+                playerView.setOnClickListener(null)
+                playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
+                playerView.player = null
+            },
+        )
+        MediaPlayerControllerView(
+            state = mediaPlayerControllerState,
+            onTogglePlay = {
+                autoHideController++
+                if (exoPlayer.isPlaying) {
+                    exoPlayer.pause()
+                } else {
+                    if (exoPlayer.playbackState == Player.STATE_ENDED) {
+                        exoPlayer.seekTo(0)
+                    } else {
+                        exoPlayer.play()
+                    }
+                }
+            },
+            onSeekChange = {
+                autoHideController++
+                if (exoPlayer.isPlaying.not()) {
+                    exoPlayer.play()
+                }
+                exoPlayer.seekTo(it.toLong())
+            },
+            onToggleMute = {
+                autoHideController++
+                exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+        )
+    }
 
     OnLifecycleEvent { _, event ->
         when (event) {
