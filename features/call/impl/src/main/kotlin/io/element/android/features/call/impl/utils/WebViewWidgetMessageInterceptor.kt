@@ -66,19 +66,34 @@ class WebViewWidgetMessageInterceptor(
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                 // No network for instance, transmit the error
                 Timber.e("onReceivedError error: ${error?.errorCode} ${error?.description}")
-                onError(error?.description?.toString())
+
+                // Only propagate the error if it happens while loading the current page
+                if (view?.url == request?.url.toString()) {
+                    onError(error?.description.toString())
+                }
+
                 super.onReceivedError(view, request, error)
             }
 
             override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
                 Timber.e("onReceivedHttpError error: ${errorResponse?.statusCode} ${errorResponse?.reasonPhrase}")
-                onError(errorResponse?.statusCode.toString())
+
+                // Only propagate the error if it happens while loading the current page
+                if (view?.url == request?.url.toString()) {
+                    onError(errorResponse?.statusCode.toString())
+                }
+
                 super.onReceivedHttpError(view, request, errorResponse)
             }
 
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
                 Timber.e("onReceivedSslError error: ${error?.primaryError}")
-                onError(error?.primaryError?.toString())
+
+                // Only propagate the error if it happens while loading the current page
+                if (view?.url == error?.url.toString()) {
+                    onError(error?.toString())
+                }
+
                 super.onReceivedSslError(view, handler, error)
             }
         }
