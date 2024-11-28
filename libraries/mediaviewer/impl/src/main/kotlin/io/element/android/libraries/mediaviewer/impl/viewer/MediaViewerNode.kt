@@ -5,51 +5,46 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.attachments.preview
+package io.element.android.libraries.mediaviewer.impl.viewer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ForcedDarkElementTheme
-import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 
 @ContributesNode(RoomScope::class)
-class AttachmentsPreviewNode @AssistedInject constructor(
+open class MediaViewerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: AttachmentsPreviewPresenter.Factory,
-    private val localMediaRenderer: LocalMediaRenderer,
+    presenterFactory: MediaViewerPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-    data class Inputs(val attachment: Attachment) : NodeInputs
+    private val inputs = inputs<MediaViewerEntryPoint.Params>()
 
-    private val inputs: Inputs = inputs()
-
-    private val onDoneListener = OnDoneListener {
-        navigateUp()
+    private fun onDone() {
+        plugins<MediaViewerEntryPoint.Callback>().forEach {
+            it.onDone()
+        }
     }
 
-    private val presenter = presenterFactory.create(
-        attachment = inputs.attachment,
-        onDoneListener = onDoneListener,
-    )
+    private val presenter = presenterFactory.create(inputs)
 
     @Composable
     override fun View(modifier: Modifier) {
         ForcedDarkElementTheme {
             val state = presenter.present()
-            AttachmentsPreviewView(
+            MediaViewerView(
                 state = state,
-                localMediaRenderer = localMediaRenderer,
-                modifier = modifier
+                modifier = modifier,
+                onBackClick = ::onDone
             )
         }
     }

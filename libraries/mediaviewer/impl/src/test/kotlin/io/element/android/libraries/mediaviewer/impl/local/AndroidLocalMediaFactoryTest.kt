@@ -12,9 +12,9 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.test.media.FakeMediaFile
-import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
-import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
+import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
+import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

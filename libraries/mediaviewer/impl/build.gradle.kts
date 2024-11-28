@@ -13,6 +13,11 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.mediaviewer.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -20,6 +25,23 @@ setupAnvil()
 dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.dagger)
+
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.telephoto.zoomableimage)
+    implementation(libs.vanniktech.blurhash)
+    implementation(libs.telephoto.flick)
+
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.di)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.uiStrings)
 
     api(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.androidutils)
@@ -39,4 +61,6 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

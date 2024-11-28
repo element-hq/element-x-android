@@ -19,6 +19,7 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -66,8 +67,8 @@ import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
-import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.services.analytics.api.AnalyticsService
@@ -86,6 +87,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
+    private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
@@ -228,14 +230,22 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
-                val inputs = MediaViewerNode.Inputs(
+                val params = MediaViewerEntryPoint.Params(
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
                     canDownload = true,
                     canShare = true,
                 )
-                createNode<MediaViewerNode>(buildContext, listOf(inputs))
+                val callback = object : MediaViewerEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                mediaViewerEntryPoint.nodeBuilder(this, buildContext)
+                    .params(params)
+                    .callback(callback)
+                    .build()
             }
             is NavTarget.AttachmentPreview -> {
                 val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)

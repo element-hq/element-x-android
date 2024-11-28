@@ -64,7 +64,7 @@ import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
-import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
+import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest

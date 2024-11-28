@@ -9,7 +9,7 @@ package io.element.android.libraries.mediaviewer.test
 
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.api.local.LocalMediaActions
+import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeLocalMediaActions : LocalMediaActions {
