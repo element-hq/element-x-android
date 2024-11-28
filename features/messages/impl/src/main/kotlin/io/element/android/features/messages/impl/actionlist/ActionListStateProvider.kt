@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
     override val values: Sequence<ActionListState>
@@ -50,7 +51,9 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemActionList(
+                            copyAction = TimelineItemAction.CopyCaption,
+                        ),
                     )
                 ),
                 anActionListState(
@@ -61,7 +64,9 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemActionList(
+                            copyAction = TimelineItemAction.CopyCaption,
+                        ),
                     )
                 ),
                 anActionListState(
@@ -72,7 +77,9 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemActionList(
+                            copyAction = null,
+                        ),
                     )
                 ),
                 anActionListState(
@@ -83,18 +90,22 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemActionList(
+                            copyAction = TimelineItemAction.CopyCaption,
+                        ),
                     )
                 ),
                 anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(
-                            content = aTimelineItemVoiceContent(),
+                            content = aTimelineItemVoiceContent(caption = null),
                             timelineItemReactions = reactionsState
                         ),
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
-                        actions = aTimelineItemActionList(),
+                        actions = aTimelineItemActionList(
+                            copyAction = null,
+                        ),
                     )
                 ),
                 anActionListState(
@@ -161,17 +172,19 @@ fun anActionListState(
     eventSink = eventSink
 )
 
-fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
-    return persistentListOf(
+fun aTimelineItemActionList(
+    copyAction: TimelineItemAction? = TimelineItemAction.CopyText
+): ImmutableList<TimelineItemAction> {
+    return listOfNotNull(
         TimelineItemAction.Reply,
         TimelineItemAction.Forward,
-        TimelineItemAction.CopyText,
+        copyAction,
         TimelineItemAction.CopyLink,
         TimelineItemAction.Edit,
         TimelineItemAction.Redact,
         TimelineItemAction.ReportContent,
         TimelineItemAction.ViewSource,
-    )
+    ).toPersistentList()
 }
 
 fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
