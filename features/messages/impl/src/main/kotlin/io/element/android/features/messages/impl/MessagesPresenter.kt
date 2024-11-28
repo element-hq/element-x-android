@@ -272,7 +272,7 @@ class MessagesPresenter @AssistedInject constructor(
         timelineState: TimelineState,
     ) = launch {
         when (action) {
-            TimelineItemAction.Copy -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)

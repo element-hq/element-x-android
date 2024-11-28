@@ -165,7 +165,7 @@ fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {
     return persistentListOf(
         TimelineItemAction.Reply,
         TimelineItemAction.Forward,
-        TimelineItemAction.Copy,
+        TimelineItemAction.CopyText,
         TimelineItemAction.CopyLink,
         TimelineItemAction.Edit,
         TimelineItemAction.Redact,
@@ -178,7 +178,7 @@ fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
     return persistentListOf(
         TimelineItemAction.EndPoll,
         TimelineItemAction.Reply,
-        TimelineItemAction.Copy,
+        TimelineItemAction.CopyText,
         TimelineItemAction.CopyLink,
         TimelineItemAction.ViewSource,
         TimelineItemAction.ReportContent,

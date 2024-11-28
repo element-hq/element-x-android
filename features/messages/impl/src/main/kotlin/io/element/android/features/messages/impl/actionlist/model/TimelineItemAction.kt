@@ -22,7 +22,7 @@ sealed class TimelineItemAction(
 ) {
     data object ViewInTimeline : TimelineItemAction(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on)
     data object Forward : TimelineItemAction(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward)
-    data object Copy : TimelineItemAction(CommonStrings.action_copy, CompoundDrawables.ic_compound_copy)
+    data object CopyText : TimelineItemAction(CommonStrings.action_copy_text, CompoundDrawables.ic_compound_copy)
     data object CopyLink : TimelineItemAction(CommonStrings.action_copy_link_to_message, CompoundDrawables.ic_compound_link)
     data object Redact : TimelineItemAction(CommonStrings.action_remove, CompoundDrawables.ic_compound_delete, destructive = true)
     data object Reply : TimelineItemAction(CommonStrings.action_reply, CompoundDrawables.ic_compound_reply)

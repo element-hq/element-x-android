@@ -183,7 +183,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 }
             }
             if (timelineItem.content.canBeCopied()) {
-                add(TimelineItemAction.Copy)
+                add(TimelineItemAction.CopyText)
             }
             if (timelineItem.isRemote) {
                 add(TimelineItemAction.CopyLink)

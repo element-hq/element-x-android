@@ -242,7 +242,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Copy, event))
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyText, event))
             skipItems(2)
             assertThat(clipboardHelper.clipboardContents).isEqualTo((event.content as TimelineItemTextContent).body)
         }

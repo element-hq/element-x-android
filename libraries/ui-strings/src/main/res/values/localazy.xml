@@ -46,8 +46,10 @@
   <string name="action_confirm_password">"Confirm password"</string>
   <string name="action_continue">"Continue"</string>
   <string name="action_copy">"Copy"</string>
+  <string name="action_copy_caption">"Copy caption"</string>
   <string name="action_copy_link">"Copy link"</string>
   <string name="action_copy_link_to_message">"Copy link to message"</string>
+  <string name="action_copy_text">"Copy text"</string>
   <string name="action_create">"Create"</string>
   <string name="action_create_a_room">"Create a room"</string>
   <string name="action_deactivate">"Deactivate"</string>
