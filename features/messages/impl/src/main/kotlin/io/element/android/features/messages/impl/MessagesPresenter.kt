@@ -28,9 +28,8 @@ import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -93,7 +92,7 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
-    actionListPresenterFactory: ActionListPresenter.Factory,
+    @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
@@ -110,14 +109,13 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
-    private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
-
     @AssistedFactory
     interface Factory {
         fun create(
             navigator: MessagesNavigator,
             composerPresenter: Presenter<MessageComposerState>,
             timelinePresenter: Presenter<TimelineState>,
+            actionListPresenter: Presenter<ActionListState>,
         ): MessagesPresenter
     }
 
