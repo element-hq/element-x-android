@@ -273,6 +273,7 @@ class MessagesPresenter @AssistedInject constructor(
     ) = launch {
         when (action) {
             TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
@@ -488,11 +489,17 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-
         clipboardHelper.copyPlainText(content)
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
+        }
+    }
+
+    private suspend fun handleCopyCaption(event: TimelineItem.Event) {
+        val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
+        clipboardHelper.copyPlainText(content)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }
 }

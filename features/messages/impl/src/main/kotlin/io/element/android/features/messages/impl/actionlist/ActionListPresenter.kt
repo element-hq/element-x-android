@@ -137,6 +137,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         }
     }
 
+    // See order in https://www.figma.com/design/ux3tYoZV9WghC7hHT9Fhk0/Compound-iOS-Components?node-id=2946-2392
     private suspend fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
@@ -184,6 +185,8 @@ class DefaultActionListPresenter @AssistedInject constructor(
             }
             if (timelineItem.content.canBeCopied()) {
                 add(TimelineItemAction.CopyText)
+            } else if ((timelineItem.content as? TimelineItemEventContentWithAttachment)?.caption.isNullOrBlank().not()) {
+                add(TimelineItemAction.CopyCaption)
             }
             if (timelineItem.isRemote) {
                 add(TimelineItemAction.CopyLink)
