@@ -13,7 +13,7 @@ open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPl
     override val values: Sequence<MediaPlayerControllerState> = sequenceOf(
         aMediaPlayerControllerState(),
         aMediaPlayerControllerState(
-            isPlaying = false,
+            isPlaying = true,
             progressInMillis = 59_000,
             durationInMillis = 83_000,
             isMuted = true,
@@ -23,7 +23,7 @@ open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPl
 
 private fun aMediaPlayerControllerState(
     isVisible: Boolean = true,
-    isPlaying: Boolean = true,
+    isPlaying: Boolean = false,
     progressInMillis: Long = 0,
     // Default to 1 minute and 23 seconds
     durationInMillis: Long = 83_000,
