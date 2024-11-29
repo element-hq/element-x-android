@@ -400,6 +400,11 @@ class LoggedInFlowNode @AssistedInject constructor(
             is NavTarget.SecureBackup -> {
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement))
+                    .callback(object : SecureBackupEntryPoint.Callback {
+                        override fun onDone() {
+                            backstack.pop()
+                        }
+                    })
                     .build()
             }
             NavTarget.Ftue -> {
