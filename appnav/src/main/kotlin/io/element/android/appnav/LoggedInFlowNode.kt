@@ -472,9 +472,9 @@ class LoggedInFlowNode @AssistedInject constructor(
             navTarget is NavTarget.RoomList
         }
 
-        val isRoomAlreadyDisplayed = backstack.elements.value.any {
-            it.key.navTarget is NavTarget.Room && (it.key.navTarget as NavTarget.Room).roomIdOrAlias == roomIdOrAlias
-        }
+        val isRoomAlreadyDisplayed = backstack.active?.key?.navTarget?.let { target ->
+            target is NavTarget.Room && target.roomIdOrAlias == roomIdOrAlias
+        } == true
 
         if (!isRoomAlreadyDisplayed) {
             attachChild<RoomFlowNode> {
