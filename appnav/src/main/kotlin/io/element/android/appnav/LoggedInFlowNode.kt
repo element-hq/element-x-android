@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumble.appyx.Appyx
 import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -25,6 +26,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.active
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
@@ -135,8 +137,13 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
+    private val navigateBackToRoomObserverPlugin = NavigateBackToRoomObserverPlugin()
+
     override fun onBuilt() {
         super.onBuilt()
+
+        Appyx.globalPlugins = listOf(navigateBackToRoomObserverPlugin)
+
         lifecycle.subscribe(
             onCreate = {
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
@@ -476,7 +483,10 @@ class LoggedInFlowNode @AssistedInject constructor(
             target is NavTarget.Room && target.roomIdOrAlias == roomIdOrAlias
         } == true
 
-        if (!isRoomAlreadyDisplayed) {
+        if (isRoomAlreadyDisplayed) {
+            // Ask the active backstack to navigate back to the room, if needed
+            navigateBackToRoomObserverPlugin.navigateBackToRoom(roomIdOrAlias)
+        } else {
             attachChild<RoomFlowNode> {
                 // Remove existing path from the room list target
                 backstack.singleTop(NavTarget.RoomList)

@@ -17,11 +17,14 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.NavigateBackToRoomObserverPlugin
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -35,6 +38,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -79,7 +83,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val callbacks = plugins.filterIsInstance<Callback>()
+    private val callbacks = plugins<Callback>()
+    private val navigateBackToRoomObserverPlugin = plugins<NavigateBackToRoomObserverPlugin>().firstOrNull()
     override val daggerComponent = roomComponentFactory.create(inputs.room)
 
     init {
@@ -89,6 +94,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
                 trackVisitedRoom()
+                navigateBackToRoomObserverPlugin?.addListener(::navigateBackToRoomListener)
             },
             onResume = {
                 appCoroutineScope.launch {
@@ -98,8 +104,20 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             onDestroy = {
                 Timber.v("OnDestroy")
                 appNavigationStateService.onLeavingRoom(id)
+                navigateBackToRoomObserverPlugin?.removeListener(::navigateBackToRoomListener)
             }
         )
+    }
+
+    private fun navigateBackToRoomListener(roomIdOrAlias: RoomIdOrAlias) {
+        if (roomIdOrAlias is RoomIdOrAlias.Id && inputs.room.roomId == roomIdOrAlias.roomId) {
+            val joinedRoomTarget = backstack.elements.value.find {
+                it.key.navTarget is NavTarget.Messages
+            }
+            if (joinedRoomTarget != null) {
+                backstack.singleTop(joinedRoomTarget.key.navTarget)
+            }
+        }
     }
 
     private fun trackVisitedRoom() = lifecycleScope.launch {
