@@ -80,11 +80,10 @@ private fun ExoPlayerMediaVideoView(
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
-    val isControllerVisibleByDefault = LocalInspectionMode.current
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
         mutableStateOf(
             MediaPlayerControllerState(
-                isVisible = isControllerVisibleByDefault,
+                isVisible = true,
                 isPlaying = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
@@ -122,16 +121,14 @@ private fun ExoPlayerMediaVideoView(
 
         override fun onTimelineChanged(timeline: Timeline, reason: Int) {
             if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    durationInMillis = exoPlayer.duration,
-                )
+                exoPlayer.duration.takeIf { it >= 0 }
+                    ?.let {
+                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                            durationInMillis = it,
+                        )
+                    }
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        exoPlayer.addListener(playerListener)
-        exoPlayer.prepare()
     }
 
     var autoHideController by remember { mutableIntStateOf(0) }
@@ -238,7 +235,8 @@ private fun ExoPlayerMediaVideoView(
 
     OnLifecycleEvent { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> exoPlayer.play()
+            Lifecycle.Event.ON_CREATE -> exoPlayer.addListener(playerListener)
+            Lifecycle.Event.ON_RESUME -> exoPlayer.prepare()
             Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
             Lifecycle.Event.ON_DESTROY -> {
                 exoPlayer.release()
