@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -247,6 +248,13 @@ fun MessagesView(
         onUserDataClick = onUserDataClick,
     )
     ReinviteDialog(state = state)
+
+    // Make sure we hide the keyboard when the view is disposed
+    DisposableEffect(Unit) {
+        onDispose {
+            localView.hideKeyboard()
+        }
+    }
 }
 
 @Composable
