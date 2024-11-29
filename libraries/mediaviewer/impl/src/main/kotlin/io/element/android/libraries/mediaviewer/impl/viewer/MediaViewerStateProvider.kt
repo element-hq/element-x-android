@@ -24,52 +24,72 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(),
             aMediaViewerState(AsyncData.Loading()),
             aMediaViewerState(AsyncData.Failure(IllegalStateException("error"))),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
-                ),
-                anImageMediaInfo(),
-            ),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, aVideoMediaInfo())
-                ),
-                aVideoMediaInfo(),
-            ),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, aPdfMediaInfo())
-                ),
-                aPdfMediaInfo(),
-            ),
+            anImageMediaInfo(
+                senderName = "Sally Sanderson",
+                dateSent = "21 NOV, 2024",
+                caption = "A caption",
+            ).let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                )
+            },
+            aVideoMediaInfo(
+                senderName = "Sally Sanderson",
+                dateSent = "21 NOV, 2024",
+                caption = "A caption",
+            ).let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                )
+            },
+            aPdfMediaInfo().let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                )
+            },
             aMediaViewerState(
                 AsyncData.Loading(),
                 anApkMediaInfo(),
             ),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anApkMediaInfo())
-                ),
-                anApkMediaInfo(),
-            ),
+            anApkMediaInfo().let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                )
+            },
             aMediaViewerState(
                 AsyncData.Loading(),
                 anAudioMediaInfo(),
             ),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anAudioMediaInfo())
-                ),
-                anAudioMediaInfo(),
-            ),
-            aMediaViewerState(
-                AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
-                ),
-                anImageMediaInfo(),
-                canDownload = false,
-                canShare = false,
-            ),
+            anAudioMediaInfo().let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                )
+            },
+            anImageMediaInfo().let {
+                aMediaViewerState(
+                    AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    it,
+                    canDownload = false,
+                    canShare = false,
+                )
+            },
         )
 }
 

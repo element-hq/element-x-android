@@ -14,6 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -37,6 +38,7 @@ import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
@@ -51,6 +53,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
+    bottomPaddingInPixels: Int,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
@@ -66,6 +69,7 @@ fun MediaVideoView(
     }
     ExoPlayerMediaVideoView(
         localMediaViewState = localMediaViewState,
+        bottomPaddingInPixels = bottomPaddingInPixels,
         exoPlayer = exoPlayer,
         localMedia = localMedia,
         modifier = modifier,
@@ -76,6 +80,7 @@ fun MediaVideoView(
 @Composable
 private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
+    bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
@@ -232,7 +237,8 @@ private fun ExoPlayerMediaVideoView(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter),
+                .align(Alignment.BottomCenter)
+                .padding(bottom = bottomPaddingInPixels.toDp()),
         )
     }
 
@@ -254,6 +260,7 @@ private fun ExoPlayerMediaVideoView(
 internal fun MediaVideoViewPreview() = ElementPreview {
     MediaVideoView(
         modifier = Modifier.fillMaxSize(),
+        bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),
         localMedia = null,
     )

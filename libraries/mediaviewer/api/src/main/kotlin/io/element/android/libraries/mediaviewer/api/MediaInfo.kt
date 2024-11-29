@@ -18,44 +18,73 @@ data class MediaInfo(
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
+    val senderName: String?,
+    val dateSent: String?,
 ) : Parcelable
 
-fun anImageMediaInfo(): MediaInfo = MediaInfo(
+fun anImageMediaInfo(
+    caption: String? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+): MediaInfo = MediaInfo(
     filename = "an image file.jpg",
-    caption = null,
+    caption = caption,
     mimeType = MimeTypes.Jpeg,
     formattedFileSize = "4MB",
     fileExtension = "jpg",
+    senderName = senderName,
+    dateSent = dateSent,
 )
 
-fun aVideoMediaInfo(): MediaInfo = MediaInfo(
+fun aVideoMediaInfo(
+    caption: String? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+): MediaInfo = MediaInfo(
     filename = "a video file.mp4",
-    caption = null,
+    caption = caption,
     mimeType = MimeTypes.Mp4,
     formattedFileSize = "14MB",
     fileExtension = "mp4",
+    senderName = senderName,
+    dateSent = dateSent,
 )
 
-fun aPdfMediaInfo(): MediaInfo = MediaInfo(
+fun aPdfMediaInfo(
+    senderName: String? = null,
+    dateSent: String? = null,
+): MediaInfo = MediaInfo(
     filename = "a pdf file.pdf",
     caption = null,
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "23MB",
     fileExtension = "pdf",
+    senderName = senderName,
+    dateSent = dateSent,
 )
 
-fun anApkMediaInfo(): MediaInfo = MediaInfo(
+fun anApkMediaInfo(
+    senderName: String? = null,
+    dateSent: String? = null,
+): MediaInfo = MediaInfo(
     filename = "an apk file.apk",
     caption = null,
     mimeType = MimeTypes.Apk,
     formattedFileSize = "50MB",
     fileExtension = "apk",
+    senderName = senderName,
+    dateSent = dateSent,
 )
 
-fun anAudioMediaInfo(): MediaInfo = MediaInfo(
+fun anAudioMediaInfo(
+    senderName: String? = null,
+    dateSent: String? = null,
+): MediaInfo = MediaInfo(
     filename = "an audio file.mp3",
     caption = null,
     mimeType = MimeTypes.Mp3,
     formattedFileSize = "7MB",
     fileExtension = "mp3",
+    senderName = senderName,
+    dateSent = dateSent,
 )

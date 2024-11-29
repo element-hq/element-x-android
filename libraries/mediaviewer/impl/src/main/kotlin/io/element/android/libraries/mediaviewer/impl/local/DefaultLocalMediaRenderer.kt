@@ -29,6 +29,7 @@ class DefaultLocalMediaRenderer @Inject constructor() : LocalMediaRenderer {
         )
         LocalMediaView(
             modifier = Modifier.fillMaxSize(),
+            bottomPaddingInPixels = 0,
             localMedia = localMedia,
             localMediaViewState = localMediaViewState,
             onClick = {}

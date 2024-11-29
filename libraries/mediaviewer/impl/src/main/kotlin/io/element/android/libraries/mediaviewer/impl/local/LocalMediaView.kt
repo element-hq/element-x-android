@@ -22,6 +22,7 @@ import io.element.android.libraries.mediaviewer.impl.local.video.MediaVideoView
 @Composable
 fun LocalMediaView(
     localMedia: LocalMedia?,
+    bottomPaddingInPixels: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
@@ -37,6 +38,7 @@ fun LocalMediaView(
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
             localMediaViewState = localMediaViewState,
+            bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
             modifier = modifier,
         )
