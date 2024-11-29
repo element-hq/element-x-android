@@ -28,6 +28,7 @@ import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
 import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
@@ -111,15 +112,10 @@ class SecureBackupFlowNode @AssistedInject constructor(
             NavTarget.EnterRecoveryKey -> {
                 val callback = object : SecureBackupEnterRecoveryKeyNode.Callback {
                     override fun onEnterRecoveryKeySuccess() {
-                        when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
-                            SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> {
-                                callbacks.forEach { it.onDone() }
-                            }
-                            SecureBackupEntryPoint.InitialTarget.ResetIdentity,
-                            SecureBackupEntryPoint.InitialTarget.Root,
-                            SecureBackupEntryPoint.InitialTarget.SetUpRecovery -> {
-                                backstack.pop()
-                            }
+                        if (backstack.canPop()) {
+                            backstack.pop()
+                        } else {
+                            callbacks.forEach { it.onDone() }
                         }
                     }
                 }
