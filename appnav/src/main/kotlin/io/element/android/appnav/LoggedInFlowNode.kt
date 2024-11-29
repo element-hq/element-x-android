@@ -471,17 +471,28 @@ class LoggedInFlowNode @AssistedInject constructor(
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.RoomList
         }
-        attachChild<RoomFlowNode> {
-            backstack.push(
-                NavTarget.Room(
-                    roomIdOrAlias = roomIdOrAlias,
-                    serverNames = serverNames,
-                    trigger = trigger,
-                    initialElement = RoomNavigationTarget.Messages(
-                        focusedEventId = eventId
+
+        val isRoomAlreadyDisplayed = backstack.elements.value.any {
+            it.key.navTarget is NavTarget.Room && (it.key.navTarget as NavTarget.Room).roomIdOrAlias == roomIdOrAlias
+        }
+
+        if (!isRoomAlreadyDisplayed) {
+            attachChild<RoomFlowNode> {
+                // Remove existing path from the room list target
+                backstack.singleTop(NavTarget.RoomList)
+
+                // Then push the new room target
+                backstack.push(
+                    NavTarget.Room(
+                        roomIdOrAlias = roomIdOrAlias,
+                        serverNames = serverNames,
+                        trigger = trigger,
+                        initialElement = RoomNavigationTarget.Messages(
+                            focusedEventId = eventId
+                        )
                     )
                 )
-            )
+            }
         }
     }
 
