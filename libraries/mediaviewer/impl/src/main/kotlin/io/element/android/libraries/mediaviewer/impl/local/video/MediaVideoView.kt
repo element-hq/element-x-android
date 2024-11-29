@@ -32,51 +32,60 @@ import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
+import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
+@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
-    if (LocalInspectionMode.current) {
-        Text(
-            modifier = modifier
-                .background(ElementTheme.colors.bgSubtlePrimary)
-                .wrapContentSize(),
-            text = "A Video Player will render here",
-        )
+    val exoPlayer = if (LocalInspectionMode.current) {
+        remember {
+            ExoPlayerForPreview()
+        }
     } else {
-        ExoPlayerMediaVideoView(
-            localMediaViewState = localMediaViewState,
-            localMedia = localMedia,
-            modifier = modifier,
-        )
+        val context = LocalContext.current
+        remember {
+            ExoPlayerWrapper.create(context)
+        }
     }
+    ExoPlayerMediaVideoView(
+        localMediaViewState = localMediaViewState,
+        exoPlayer = exoPlayer,
+        localMedia = localMedia,
+        modifier = modifier,
+    )
 }
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
+    exoPlayer: ExoPlayer,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
+    val isControllerVisibleByDefault = LocalInspectionMode.current
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
         mutableStateOf(
             MediaPlayerControllerState(
-                isVisible = false,
+                isVisible = isControllerVisibleByDefault,
                 isPlaying = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
@@ -95,10 +104,6 @@ private fun ExoPlayerMediaVideoView(
 
     localMediaViewState.playableState = playableState
 
-    val context = LocalContext.current
-    val exoPlayer = remember {
-        ExoPlayerWrapper.create(context)
-    }
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
             localMediaViewState.isReady = true
@@ -167,31 +172,40 @@ private fun ExoPlayerMediaVideoView(
     KeepScreenOn(mediaPlayerControllerState.isPlaying)
     Box(
         modifier = modifier
-            .background(ElementTheme.colors.bgSubtlePrimary)
-            .wrapContentSize(),
+            .background(ElementTheme.colors.bgSubtlePrimary),
     ) {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = {
-                PlayerView(context).apply {
-                    player = exoPlayer
-                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    setOnClickListener {
-                        autoHideController++
-                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                            isVisible = !mediaPlayerControllerState.isVisible,
-                        )
+        val context = LocalContext.current
+        if (LocalInspectionMode.current) {
+            Text(
+                modifier = Modifier
+                    .background(ElementTheme.colors.bgSubtlePrimary)
+                    .wrapContentSize(),
+                text = "A Video Player will render here",
+            )
+        } else {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = {
+                    PlayerView(context).apply {
+                        player = exoPlayer
+                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                        setOnClickListener {
+                            autoHideController++
+                            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                                isVisible = !mediaPlayerControllerState.isVisible,
+                            )
+                        }
+                        useController = false
                     }
-                    useController = false
-                }
-            },
-            onRelease = { playerView ->
-                playerView.setOnClickListener(null)
-                playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
-                playerView.player = null
-            },
-        )
+                },
+                onRelease = { playerView ->
+                    playerView.setOnClickListener(null)
+                    playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
+                    playerView.player = null
+                },
+            )
+        }
         MediaPlayerControllerView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
@@ -234,4 +248,14 @@ private fun ExoPlayerMediaVideoView(
             else -> Unit
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MediaVideoViewPreview() = ElementPreview {
+    MediaVideoView(
+        modifier = Modifier.fillMaxSize(),
+        localMediaViewState = rememberLocalMediaViewState(),
+        localMedia = null,
+    )
 }

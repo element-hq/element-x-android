@@ -14,9 +14,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
+import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.ui.strings.CommonStrings
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
@@ -46,4 +49,14 @@ fun MediaImageView(
             onClick = { onClick() }
         )
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MediaImageViewPreview() = ElementPreview {
+    MediaImageView(
+        localMediaViewState = rememberLocalMediaViewState(),
+        localMedia = null,
+        onClick = {},
+    )
 }
