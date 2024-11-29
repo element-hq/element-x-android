@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.image
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -55,6 +56,7 @@ fun MediaImageView(
 @Composable
 internal fun MediaImageViewPreview() = ElementPreview {
     MediaImageView(
+        modifier = Modifier.fillMaxSize(),
         localMediaViewState = rememberLocalMediaViewState(),
         localMedia = null,
         onClick = {},

@@ -14,7 +14,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -179,7 +178,7 @@ private fun ExoPlayerMediaVideoView(
             Text(
                 modifier = Modifier
                     .background(ElementTheme.colors.bgSubtlePrimary)
-                    .wrapContentSize(),
+                    .align(Alignment.Center),
                 text = "A Video Player will render here",
             )
         } else {
