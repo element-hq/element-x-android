@@ -48,8 +48,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
 
-private const val MAX_KNOCK_MESSAGE_LENGTH = 500
-
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
