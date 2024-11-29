@@ -52,6 +52,7 @@ import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
+import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -239,7 +240,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
-                        backstack.pop()
+                        overlay.hide()
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
