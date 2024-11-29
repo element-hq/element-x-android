@@ -12,8 +12,11 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumble.appyx.core.children.ChildEntry
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
@@ -50,6 +53,7 @@ abstract class BaseFlowNode<NavTarget : Any>(
         super.onBuilt()
         lifecycle.logLifecycle(this::class.java.simpleName)
         whenChildAttached<Node> { _, child ->
+
             // BackstackNode will be logged by their parent.
             if (child !is BaseFlowNode<*>) {
                 child.lifecycle.logLifecycle(child::class.java.simpleName)
@@ -65,6 +69,13 @@ inline fun <reified NavTarget : Any> BaseFlowNode<NavTarget>.BackstackView(
         transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
     ),
 ) {
+    val backstackState = backstack.elements.collectAsStateWithLifecycle()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(backstackState.value.lastOrNull()) {
+        keyboardController?.hide()
+    }
+
     Children(
         modifier = modifier,
         navModel = backstack,
