@@ -390,13 +390,18 @@ private fun DefaultLoadedContent(
                     )
                 } else if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))
+                    val supportingText = if (knockMessage.isNotEmpty()) {
+                        "${knockMessage.length}/$MAX_KNOCK_MESSAGE_LENGTH"
+                    } else {
+                        stringResource(R.string.screen_join_room_knock_message_description)
+                    }
                     TextField(
                         value = knockMessage,
                         onValueChange = onKnockMessageUpdate,
                         maxLines = 3,
                         minLines = 3,
                         modifier = Modifier.fillMaxWidth(),
-                        supportingText = stringResource(R.string.screen_join_room_knock_message_description)
+                        supportingText = supportingText
                     )
                 }
             }
