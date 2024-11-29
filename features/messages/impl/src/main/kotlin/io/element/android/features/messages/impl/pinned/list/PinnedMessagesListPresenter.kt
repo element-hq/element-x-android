@@ -23,7 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
@@ -64,13 +64,16 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val snackbarDispatcher: SnackbarDispatcher,
-    actionListPresenterFactory: ActionListPresenter.Factory,
+    @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val appCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
-        fun create(navigator: PinnedMessagesListNavigator): PinnedMessagesListPresenter
+        fun create(
+            navigator: PinnedMessagesListNavigator,
+            actionListPresenter: Presenter<ActionListState>,
+        ): PinnedMessagesListPresenter
     }
 
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
@@ -79,7 +82,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             computeReactions = false,
         )
     )
-    private val actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
 
     @Composable
     override fun present(): PinnedMessagesListState {

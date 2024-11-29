@@ -176,8 +176,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -221,8 +221,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -268,8 +268,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -314,8 +314,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -361,8 +361,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -408,10 +408,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -453,10 +453,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -501,10 +501,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -547,9 +547,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.AddCaption,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.AddCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -646,12 +646,61 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.EditCaption,
-                        TimelineItemAction.RemoveCaption,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.EditCaption,
+                        TimelineItemAction.CopyCaption,
+                        TimelineItemAction.RemoveCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for a media with caption item - other user event`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                content = aTimelineItemImageContent(
+                    caption = A_CAPTION,
+                ),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    ),
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyCaption,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.ReportContent,
                     )
                 )
             )
@@ -764,10 +813,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -811,9 +860,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -865,10 +914,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Unpin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -961,7 +1010,7 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
-                        TimelineItemAction.Copy,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -1000,11 +1049,11 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -1043,8 +1092,8 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
@@ -1105,7 +1154,9 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 isMine = true,
                 isEditable = false,
-                content = aTimelineItemVoiceContent(),
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
             )
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(

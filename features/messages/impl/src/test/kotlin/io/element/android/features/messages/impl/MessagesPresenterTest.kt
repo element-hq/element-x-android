@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
-import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
+import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
@@ -242,7 +242,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Copy, event))
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyText, event))
             skipItems(2)
             assertThat(clipboardHelper.clipboardContents).isEqualTo((event.content as TimelineItemTextContent).body)
         }
@@ -1116,7 +1116,7 @@ class MessagesPresenterTest {
             voiceMessageComposerPresenter = { aVoiceMessageComposerState() },
             timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
             timelineProtectionPresenter = { aTimelineProtectionState() },
-            actionListPresenterFactory = FakeActionListPresenter.Factory(actionListEventSink),
+            actionListPresenter = { anActionListState(eventSink = actionListEventSink) },
             customReactionPresenter = { aCustomReactionState() },
             reactionSummaryPresenter = { aReactionSummaryState() },
             readReceiptBottomSheetPresenter = { aReadReceiptBottomSheetState() },

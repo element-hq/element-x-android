@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.pinned.list
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
-import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
+import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
@@ -312,7 +312,7 @@ class PinnedMessagesListPresenterTest {
             timelineProvider = timelineProvider,
             timelineProtectionPresenter = { aTimelineProtectionState() },
             snackbarDispatcher = SnackbarDispatcher(),
-            actionListPresenterFactory = FakeActionListPresenter.Factory(),
+            actionListPresenter = { anActionListState() },
             analyticsService = analyticsService,
             appCoroutineScope = this,
         )
