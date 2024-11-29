@@ -8,13 +8,12 @@
 package io.element.android.libraries.mediaviewer.impl.util
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FileExtensionExtractorTest {
+class FileExtensionExtractorWithValidationTest {
     @Test
     fun `test FileExtensionExtractor with validation OK`() {
         val sut = FileExtensionExtractorWithValidation()
@@ -27,12 +26,5 @@ class FileExtensionExtractorTest {
     fun `test FileExtensionExtractor with validation ERROR`() {
         val sut = FileExtensionExtractorWithValidation()
         assertThat(sut.extractFromName("test.bla")).isEqualTo("bin")
-    }
-
-    @Test
-    fun `test FileExtensionExtractor no validation`() {
-        val sut = FileExtensionExtractorWithoutValidation()
-        assertThat(sut.extractFromName("test.png")).isEqualTo("png")
-        assertThat(sut.extractFromName("test.bla")).isEqualTo("bla")
     }
 }
