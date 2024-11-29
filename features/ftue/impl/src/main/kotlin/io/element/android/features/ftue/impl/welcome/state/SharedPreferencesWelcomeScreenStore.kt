@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class SharedPreferencesWelcomeScreenState @Inject constructor(
+class SharedPreferencesWelcomeScreenStore @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) : WelcomeScreenStore {
     companion object {
