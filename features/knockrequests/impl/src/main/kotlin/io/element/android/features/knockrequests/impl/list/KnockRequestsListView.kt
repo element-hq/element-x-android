@@ -242,7 +242,9 @@ private fun KnockRequestItem(
                 )
             }
             // Actions
-            Spacer(modifier = Modifier.height(12.dp))
+            if (canDecline || canAccept) {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 if (canDecline) {
                     OutlinedButton(
