@@ -365,4 +365,7 @@ Reason: %1$s."</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because your device is unverified or because the sender needs to verify your identity."</string>
 </resources>
