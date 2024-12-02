@@ -89,7 +89,8 @@ fun MediaViewerView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
 
-    var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
+    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
+    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     BackHandler { onBackClick() }
     Scaffold(
         modifier,
