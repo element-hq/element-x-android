@@ -350,7 +350,7 @@ private fun MediaViewerBottomBar(
             )
         }
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
