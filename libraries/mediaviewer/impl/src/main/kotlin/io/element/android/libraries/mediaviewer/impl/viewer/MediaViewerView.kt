@@ -56,6 +56,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -336,6 +337,7 @@ private fun MediaViewerBottomBar(
                 onHeightChanged(it.height)
             },
     ) {
+        HorizontalDivider()
         if (caption != null) {
             Text(
                 modifier = Modifier
