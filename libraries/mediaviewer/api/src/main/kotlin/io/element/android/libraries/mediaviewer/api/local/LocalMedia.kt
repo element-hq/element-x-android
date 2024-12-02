@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.api.local
 import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.mediaviewer.api.MediaInfo
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
