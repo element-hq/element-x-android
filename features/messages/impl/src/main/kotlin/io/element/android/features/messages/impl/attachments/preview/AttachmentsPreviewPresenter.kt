@@ -74,6 +74,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val userSentAttachment = remember { mutableStateOf(false) }
         val allowCaption by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation).collectAsState(initial = false)
+        val showCaptionCompatibilityWarning by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning).collectAsState(initial = false)
 
         val mediaUploadInfoState = remember { mutableStateOf<AsyncData<MediaUploadInfo>>(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
@@ -145,6 +146,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             sendActionState = sendActionState.value,
             textEditorState = textEditorState,
             allowCaption = allowCaption,
+            showCaptionCompatibilityWarning = showCaptionCompatibilityWarning,
             eventSink = ::handleEvents
         )
     }
