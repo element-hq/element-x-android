@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Aufzählungsliste umschalten"</string>
   <string name="rich_text_editor_close_formatting_options">"Formatierungsoptionen schließen"</string>
   <string name="rich_text_editor_code_block">"Codeblock umschalten"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Optionale Bildunterschrift…"</string>
   <string name="rich_text_editor_composer_placeholder">"Nachricht…"</string>
   <string name="rich_text_editor_create_link">"Einen Link erstellen"</string>
   <string name="rich_text_editor_edit_link">"Link bearbeiten"</string>

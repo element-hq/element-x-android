@@ -60,6 +60,7 @@ Versuche, dich manuell anzumelden, oder scanne den QR-Code mit einem anderen Ger
   <string name="screen_qr_code_login_initial_state_item_3">"Wähle %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"\"Neues Gerät verknüpfen\""</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Scanne den QR-Code mit diesem Gerät"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Nur verfügbar für den Fall dass Ihr Kontoanbieter dies unterstützt."</string>
   <string name="screen_qr_code_login_initial_state_title">"Öffne %1$s auf einem anderen Gerät, um den QR-Code zu erhalten"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Verwende den QR-Code, der auf dem anderen Gerät angezeigt wird."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Erneut versuchen"</string>

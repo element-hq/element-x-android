@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Ajouter un émoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ceci est le début de cette conversation."</string>
+  <string name="screen_room_timeline_legacy_call">"Appel non pris en charge. Demandez à l’appelant s’il peut utiliser la nouvelle application Element X pour vous appeler."</string>
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
   <string name="screen_room_timeline_message_copied">"Message copié"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Vous n’êtes pas autorisé à publier dans ce salon"</string>
