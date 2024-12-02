@@ -7,7 +7,9 @@
 
 package io.element.android.features.knockrequests.impl.list
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +20,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -51,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -236,10 +244,36 @@ private fun KnockRequestItem(
             // Reason
             if (!knockRequest.reason.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = knockRequest.reason,
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
+                var isExpanded by rememberSaveable(knockRequest.userId) { mutableStateOf(false) }
+                var isExpandable by rememberSaveable(knockRequest.userId) { mutableStateOf(false) }
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier
+                        .animateContentSize()
+                        .clickable(enabled = isExpandable) { isExpanded = !isExpanded }
+                ) {
+                    Text(
+                        text = knockRequest.reason,
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 3,
+                        onTextLayout = { result ->
+                            if (!isExpanded && result.hasVisualOverflow) {
+                                isExpandable = true
+                            }
+                        },
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Box(modifier = Modifier.size(24.dp)) {
+                        if (isExpandable) {
+                            Icon(
+                                imageVector = if (isExpanded) CompoundIcons.ChevronUp() else CompoundIcons.ChevronDown(),
+                                contentDescription = null,
+                                tint = ElementTheme.colors.iconTertiary,
+                            )
+                        }
+                    }
+                }
             }
             // Actions
             if (canDecline || canAccept) {

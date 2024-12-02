@@ -36,6 +36,17 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
+                        aKnockRequest(
+                            reason = "A very long reason that should probably be truncated, " +
+                                "but could be also expanded so you can see it over the lines, wow," +
+                                "very amazing reason, I know, right, I'm so good at writing reasons."
+                        )
+                    )
+                ),
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
                         aKnockRequest(),
                         aKnockRequest(
                             userId = UserId("@user:example.com"),
