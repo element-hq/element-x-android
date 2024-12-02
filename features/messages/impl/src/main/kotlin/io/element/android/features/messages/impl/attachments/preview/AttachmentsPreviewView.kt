@@ -11,12 +11,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,8 +83,9 @@ fun AttachmentsPreviewView(
                 title = {},
             )
         }
-    ) {
+    ) { paddingValues ->
         AttachmentPreviewContent(
+            modifier = Modifier.padding(paddingValues),
             state = state,
             localMediaRenderer = localMediaRenderer,
             onSendClick = ::postSendAttachment,
@@ -134,14 +137,16 @@ private fun AttachmentPreviewContent(
     state: AttachmentsPreviewState,
     localMediaRenderer: LocalMediaRenderer,
     onSendClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = Modifier
+    Column(
+        modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding(),
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .weight(1f),
             contentAlignment = Alignment.Center
         ) {
             when (val attachment = state.attachment) {
@@ -157,7 +162,6 @@ private fun AttachmentPreviewContent(
                 .fillMaxWidth()
                 .background(ElementTheme.colors.bgCanvasDefault)
                 .height(IntrinsicSize.Min)
-                .align(Alignment.BottomCenter)
                 .imePadding(),
         )
     }
