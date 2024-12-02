@@ -53,8 +53,10 @@ import androidx.media3.exoplayer.trackselection.TrackSelectionArray
 import androidx.media3.exoplayer.trackselection.TrackSelector
 import androidx.media3.exoplayer.video.VideoFrameMetadataListener
 import androidx.media3.exoplayer.video.spherical.CameraMotionListener
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 
 @SuppressLint("UnsafeOptInUsageError")
+@ExcludeFromCoverage
 class ExoPlayerForPreview(
     private val isPlaying: Boolean = false,
 ) : ExoPlayer {
