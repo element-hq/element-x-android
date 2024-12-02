@@ -16,6 +16,7 @@ data class AttachmentsPreviewState(
     val sendActionState: SendActionState,
     val textEditorState: TextEditorState,
     val allowCaption: Boolean,
+    val showCaptionCompatibilityWarning: Boolean,
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 )
 

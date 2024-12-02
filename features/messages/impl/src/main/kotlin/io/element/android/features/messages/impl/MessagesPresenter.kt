@@ -402,26 +402,28 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionAddCaption(
+    private suspend fun handleActionAddCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
             content = "",
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
     }
 
-    private fun handleActionEditCaption(
+    private suspend fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
             content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)

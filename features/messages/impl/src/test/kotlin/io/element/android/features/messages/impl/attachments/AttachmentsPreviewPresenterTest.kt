@@ -67,10 +67,22 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         createAttachmentsPreviewPresenter().test {
-           skipItems(1)
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(initialState.allowCaption).isTrue()
+            assertThat(initialState.showCaptionCompatibilityWarning).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - initial state no caption warning`() = runTest {
+        createAttachmentsPreviewPresenter(
+            showCaptionCompatibilityWarning = false,
+        ).test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.showCaptionCompatibilityWarning).isFalse()
         }
     }
 
@@ -443,6 +455,7 @@ class AttachmentsPreviewPresenterTest {
         onDoneListener: OnDoneListener = OnDoneListener { lambdaError() },
         mediaUploadOnSendQueueEnabled: Boolean = true,
         allowCaption: Boolean = true,
+        showCaptionCompatibilityWarning: Boolean = true,
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
@@ -454,6 +467,7 @@ class AttachmentsPreviewPresenterTest {
                 initialState = mapOf(
                     FeatureFlags.MediaUploadOnSendQueue.key to mediaUploadOnSendQueueEnabled,
                     FeatureFlags.MediaCaptionCreation.key to allowCaption,
+                    FeatureFlags.MediaCaptionWarning.key to showCaptionCompatibilityWarning,
                 ),
             )
         )
