@@ -20,11 +20,20 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.NavElements
+import com.bumble.appyx.core.navigation.NavKey
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.BackStack.State.ACTIVE
+import com.bumble.appyx.navmodel.backstack.BackStack.State.CREATED
+import com.bumble.appyx.navmodel.backstack.BackStack.State.STASHED
+import com.bumble.appyx.navmodel.backstack.BackStackElement
+import com.bumble.appyx.navmodel.backstack.BackStackElements
+import com.bumble.appyx.navmodel.backstack.operation.BackStackOperation
+import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
@@ -312,7 +321,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
+                        coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false) }
                     }
 
                     override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
@@ -472,21 +481,21 @@ class LoggedInFlowNode @AssistedInject constructor(
         serverNames: List<String> = emptyList(),
         trigger: JoinedRoom.Trigger? = null,
         eventId: EventId? = null,
+        clearBackstack: Boolean,
     ) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.RoomList
         }
         attachChild<RoomFlowNode> {
-            backstack.push(
-                NavTarget.Room(
-                    roomIdOrAlias = roomIdOrAlias,
-                    serverNames = serverNames,
-                    trigger = trigger,
-                    initialElement = RoomNavigationTarget.Messages(
-                        focusedEventId = eventId
-                    )
+            val roomNavTarget = NavTarget.Room(
+                roomIdOrAlias = roomIdOrAlias,
+                serverNames = serverNames,
+                trigger = trigger,
+                initialElement = RoomNavigationTarget.Messages(
+                    focusedEventId = eventId
                 )
             )
+            backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
         }
     }
 
@@ -530,4 +539,32 @@ class LoggedInFlowNode @AssistedInject constructor(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
     ) : Node(buildContext, plugins = plugins)
+}
+
+@Parcelize
+private class AttachRoomOperation(
+    val roomTarget: LoggedInFlowNode.NavTarget.Room,
+    val clearBackstack: Boolean,
+) : BackStackOperation<LoggedInFlowNode.NavTarget> {
+    override fun isApplicable(elements: NavElements<LoggedInFlowNode.NavTarget, BackStack.State>) = true
+
+    override fun invoke(elements: BackStackElements<LoggedInFlowNode.NavTarget>): BackStackElements<LoggedInFlowNode.NavTarget> {
+        return if (clearBackstack) {
+            // Makes sure the room list target is alone in the backstack and stashed
+            elements.mapNotNull { element ->
+                if (element.key.navTarget == LoggedInFlowNode.NavTarget.RoomList) {
+                    element.transitionTo(STASHED, this)
+                } else {
+                    null
+                }
+            } + BackStackElement(
+                key = NavKey(roomTarget),
+                fromState = CREATED,
+                targetState = ACTIVE,
+                operation = this
+            )
+        } else {
+            Push<LoggedInFlowNode.NavTarget>(roomTarget).invoke(elements)
+        }
+    }
 }
