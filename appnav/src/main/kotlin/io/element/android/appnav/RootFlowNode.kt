@@ -303,6 +303,7 @@ class RootFlowNode @AssistedInject constructor(
                             trigger = JoinedRoom.Trigger.MobilePermalink,
                             serverNames = permalinkData.viaParameters,
                             eventId = permalinkData.eventId,
+                            clearBackstack = true
                         )
                     }
                     is PermalinkData.UserLink -> {
@@ -318,7 +319,7 @@ class RootFlowNode @AssistedInject constructor(
             .apply {
                 when (deeplinkData) {
                     is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                    is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias())
+                    is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias(), clearBackstack = true)
                 }
             }
     }
