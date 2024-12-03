@@ -392,7 +392,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     location = event.content.location,
                     description = event.content.description,
                 )
-                overlay.show(navTarget)
+                backstack.push(navTarget)
                 true
             }
             else -> false
