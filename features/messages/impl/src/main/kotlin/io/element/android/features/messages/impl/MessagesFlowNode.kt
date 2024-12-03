@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -331,16 +332,9 @@ class MessagesFlowNode @AssistedInject constructor(
     private fun processEventClick(event: TimelineItem.Event): Boolean {
         return when (event.content) {
             is TimelineItemImageContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension,
-                        senderName = event.safeSenderName,
-                        dateSent = event.sentTime,
-                    ),
+                val navTarget = buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
@@ -351,16 +345,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 /* Sticker may have an empty url and no thumbnail
                    if encrypted on certain bridges */
                 if (event.content.preferredMediaSource != null) {
-                    val navTarget = NavTarget.MediaViewer(
-                        mediaInfo = MediaInfo(
-                            filename = event.content.filename,
-                            caption = event.content.caption,
-                            mimeType = event.content.mimeType,
-                            formattedFileSize = event.content.formattedFileSize,
-                            fileExtension = event.content.fileExtension,
-                            senderName = event.safeSenderName,
-                            dateSent = event.sentTime,
-                        ),
+                    val navTarget = buildMediaViewerNavTarget(
+                        event = event,
+                        content = event.content,
                         mediaSource = event.content.preferredMediaSource,
                         thumbnailSource = event.content.thumbnailSource,
                     )
@@ -371,16 +358,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 }
             }
             is TimelineItemVideoContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension,
-                        senderName = event.safeSenderName,
-                        dateSent = event.sentTime,
-                    ),
+                val navTarget = buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
@@ -388,16 +368,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 true
             }
             is TimelineItemFileContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension,
-                        senderName = event.safeSenderName,
-                        dateSent = event.sentTime,
-                    ),
+                val navTarget = buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
@@ -405,16 +378,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 true
             }
             is TimelineItemAudioContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension,
-                        senderName = event.safeSenderName,
-                        dateSent = event.sentTime,
-                    ),
+                val navTarget = buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
                 )
@@ -431,6 +397,27 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             else -> false
         }
+    }
+
+    private fun buildMediaViewerNavTarget(
+        event: TimelineItem.Event,
+        content: TimelineItemEventContentWithAttachment,
+        mediaSource: MediaSource,
+        thumbnailSource: MediaSource?,
+    ): NavTarget {
+        return NavTarget.MediaViewer(
+            mediaInfo = MediaInfo(
+                filename = content.filename,
+                caption = content.caption,
+                mimeType = content.mimeType,
+                formattedFileSize = content.formattedFileSize,
+                fileExtension = content.fileExtension,
+                senderName = event.safeSenderName,
+                dateSent = event.sentTime,
+            ),
+            mediaSource = mediaSource,
+            thumbnailSource = thumbnailSource,
+        )
     }
 
     @Composable
