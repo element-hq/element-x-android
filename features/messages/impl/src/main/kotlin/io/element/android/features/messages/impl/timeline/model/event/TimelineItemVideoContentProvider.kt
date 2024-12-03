@@ -35,7 +35,7 @@ fun aTimelineItemVideoContent(
     blurHash = blurhash,
     aspectRatio = aspectRatio,
     duration = 100.milliseconds,
-    videoSource = MediaSource(""),
+    mediaSource = MediaSource(""),
     width = 150,
     height = 300,
     thumbnailWidth = 150,

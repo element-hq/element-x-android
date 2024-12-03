@@ -19,8 +19,10 @@ data class TimelineItemVoiceContent(
     override val formattedCaption: CharSequence?,
     override val isEdited: Boolean,
     val duration: Duration,
-    val mediaSource: MediaSource,
-    val mimeType: String,
+    override val mediaSource: MediaSource,
+    override val formattedFileSize: String,
+    override val fileExtension: String,
+    override val mimeType: String,
     val waveform: ImmutableList<Float>,
 ) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemAudioContent"

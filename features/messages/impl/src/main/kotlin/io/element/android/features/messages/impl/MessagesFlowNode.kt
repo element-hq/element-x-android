@@ -381,7 +381,7 @@ class MessagesFlowNode @AssistedInject constructor(
                         senderName = event.safeSenderName,
                         dateSent = event.sentTime,
                     ),
-                    mediaSource = event.content.videoSource,
+                    mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
@@ -398,7 +398,7 @@ class MessagesFlowNode @AssistedInject constructor(
                         senderName = event.safeSenderName,
                         dateSent = event.sentTime,
                     ),
-                    mediaSource = event.content.fileSource,
+                    mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
