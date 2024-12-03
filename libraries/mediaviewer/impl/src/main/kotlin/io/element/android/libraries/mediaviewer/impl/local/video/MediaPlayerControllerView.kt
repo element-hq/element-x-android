@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -73,12 +74,13 @@ fun MediaPlayerControllerView(
                 }
                 Box(
                     modifier = Modifier
-                        .clickable { onTogglePlay() }
                         .size(36.dp)
                         .background(
                             color = bgColor,
                             shape = CircleShape,
                         )
+                        .clip(CircleShape)
+                        .clickable { onTogglePlay() }
                         .padding(8.dp),
                     contentAlignment = Alignment.Center,
                 ) {

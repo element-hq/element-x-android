@@ -129,7 +129,7 @@ fun MediaViewerView(
                     canShare = state.canShare,
                     mimeType = state.mediaInfo.mimeType,
                     caption = state.mediaInfo.caption,
-                    onHeightChanged = { bottomPaddingInPixels = it },
+                    onHeightChange = { bottomPaddingInPixels = it },
                     eventSink = state.eventSink
                 )
             }
@@ -325,7 +325,7 @@ private fun MediaViewerBottomBar(
     canShare: Boolean,
     mimeType: String,
     caption: String?,
-    onHeightChanged: (Int) -> Unit,
+    onHeightChange: (Int) -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -334,7 +334,7 @@ private fun MediaViewerBottomBar(
             .fillMaxWidth()
             .background(Color(0x99101317))
             .onSizeChanged {
-                onHeightChanged(it.height)
+                onHeightChange(it.height)
             },
     ) {
         HorizontalDivider()
