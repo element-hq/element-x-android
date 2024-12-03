@@ -382,7 +382,7 @@ class TimelineItemContentMessageFactoryTest {
             mimeType = MimeTypes.OctetStream,
             waveform = emptyList<Float>().toImmutableList(),
             fileExtension = "",
-            formattedFileSize = "",
+            formattedFileSize = "0 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -422,8 +422,8 @@ class TimelineItemContentMessageFactoryTest {
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
             waveform = persistentListOf(1f, 2f),
-            fileExtension = "",
-            formattedFileSize = "",
+            fileExtension = "ogg",
+            formattedFileSize = "123 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
