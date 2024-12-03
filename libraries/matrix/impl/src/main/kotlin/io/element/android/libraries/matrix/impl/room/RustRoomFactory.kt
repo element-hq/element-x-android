@@ -141,7 +141,7 @@ class RustRoomFactory(
         }
         val innerRoom = try {
             roomListItem.previewRoom(via = emptyList())
-        } catch (e: RoomListException) {
+        } catch (e: Exception) {
             Timber.e(e, "Failed to get pending room for $roomId")
             return@withContext null
         }
