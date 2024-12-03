@@ -47,7 +47,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -101,21 +100,14 @@ class MapRealtimePresenterPresenter @Inject constructor(
 
         val mapTile by mapTypeStore.mapTileProviderFlow.collectAsState(initial = "")
 
-//
-//        LaunchedEffect(permissionsState.permissions) {
-//            if (permissionsState.isAnyGranted) {
-//                permissionDialog = MapRealtimePresenterState.Dialog.None
-//            }
-//        }
-
         LaunchedEffect(Unit) {
             if (permissionsState.isAnyGranted) {
                 permissionDialog = MapRealtimePresenterState.Dialog.None
             }
             // Start fetching GTFS-realtime data
-            scope.launch(Dispatchers.IO) {
-                startFetchingRealtimeLocations()
-            }
+//            scope.launch(Dispatchers.IO) {
+//                startFetchingRealtimeLocations()
+//            }
         }
 
         fun handleEvents(event: MapRealtimeEvents) {
