@@ -11,10 +11,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -22,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -63,8 +67,22 @@ fun MediaPlayerControllerView(
                     .widthIn(max = 480.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(
-                    onClick = onTogglePlay,
+                val bgColor = if (state.isPlaying) {
+                    ElementTheme.colors.bgCanvasDefault
+                } else {
+                    ElementTheme.colors.textPrimary
+                }
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(
+                            color = bgColor,
+                            shape = CircleShape,
+                        )
+                        .clip(CircleShape)
+                        .clickable { onTogglePlay() }
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center,
                 ) {
                     if (state.isPlaying) {
                         Icon(
@@ -75,7 +93,7 @@ fun MediaPlayerControllerView(
                     } else {
                         Icon(
                             imageVector = CompoundIcons.PlaySolid(),
-                            tint = ElementTheme.colors.iconPrimary,
+                            tint = ElementTheme.colors.iconOnSolidPrimary,
                             contentDescription = stringResource(CommonStrings.a11y_play)
                         )
                     }

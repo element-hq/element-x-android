@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -329,98 +330,91 @@ class MessagesFlowNode @AssistedInject constructor(
     }
 
     private fun processEventClick(event: TimelineItem.Event): Boolean {
-        return when (event.content) {
+        val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension
-                    ),
+                buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                overlay.show(navTarget)
-                true
             }
             is TimelineItemStickerContent -> {
                 /* Sticker may have an empty url and no thumbnail
                    if encrypted on certain bridges */
-                if (event.content.preferredMediaSource != null) {
-                    val navTarget = NavTarget.MediaViewer(
-                        mediaInfo = MediaInfo(
-                            filename = event.content.filename,
-                            caption = event.content.caption,
-                            mimeType = event.content.mimeType,
-                            formattedFileSize = event.content.formattedFileSize,
-                            fileExtension = event.content.fileExtension
-                        ),
-                        mediaSource = event.content.preferredMediaSource,
+                event.content.preferredMediaSource?.let { preferredMediaSource ->
+                    buildMediaViewerNavTarget(
+                        event = event,
+                        content = event.content,
+                        mediaSource = preferredMediaSource,
                         thumbnailSource = event.content.thumbnailSource,
                     )
-                    overlay.show(navTarget)
-                    true
-                } else {
-                    false
                 }
             }
             is TimelineItemVideoContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension
-                    ),
-                    mediaSource = event.content.videoSource,
+                buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
+                    mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                overlay.show(navTarget)
-                true
             }
             is TimelineItemFileContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension
-                    ),
-                    mediaSource = event.content.fileSource,
+                buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
+                    mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                overlay.show(navTarget)
-                true
             }
             is TimelineItemAudioContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        filename = event.content.filename,
-                        caption = event.content.caption,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension
-                    ),
+                buildMediaViewerNavTarget(
+                    event = event,
+                    content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
                 )
-                overlay.show(navTarget)
-                true
             }
             is TimelineItemLocationContent -> {
-                val navTarget = NavTarget.LocationViewer(
+                NavTarget.LocationViewer(
                     location = event.content.location,
                     description = event.content.description,
                 )
+            }
+            else -> null
+        }
+        return when (navTarget) {
+            is NavTarget.MediaViewer -> {
                 overlay.show(navTarget)
+                true
+            }
+            is NavTarget.LocationViewer -> {
+                backstack.push(navTarget)
                 true
             }
             else -> false
         }
+    }
+
+    private fun buildMediaViewerNavTarget(
+        event: TimelineItem.Event,
+        content: TimelineItemEventContentWithAttachment,
+        mediaSource: MediaSource,
+        thumbnailSource: MediaSource?,
+    ): NavTarget {
+        return NavTarget.MediaViewer(
+            mediaInfo = MediaInfo(
+                filename = content.filename,
+                caption = content.caption,
+                mimeType = content.mimeType,
+                formattedFileSize = content.formattedFileSize,
+                fileExtension = content.fileExtension,
+                senderName = event.safeSenderName,
+                dateSent = event.sentTime,
+            ),
+            mediaSource = mediaSource,
+            thumbnailSource = thumbnailSource,
+        )
     }
 
     @Composable

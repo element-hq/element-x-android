@@ -16,10 +16,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -36,21 +41,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
@@ -80,6 +90,8 @@ fun MediaViewerView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
 
+    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
+    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     BackHandler { onBackClick() }
     Scaffold(
         modifier,
@@ -88,6 +100,7 @@ fun MediaViewerView(
     ) {
         MediaViewerPage(
             showOverlay = showOverlay,
+            bottomPaddingInPixels = bottomPaddingInPixels,
             state = state,
             onDismiss = {
                 onBackClick()
@@ -97,14 +110,29 @@ fun MediaViewerView(
             }
         )
         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-            MediaViewerTopBar(
-                actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                mimeType = state.mediaInfo.mimeType,
-                onBackClick = onBackClick,
-                canDownload = state.canDownload,
-                canShare = state.canShare,
-                eventSink = state.eventSink
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+            ) {
+                MediaViewerTopBar(
+                    actionsEnabled = state.downloadedMedia is AsyncData.Success,
+                    senderName = state.mediaInfo.senderName,
+                    dateSent = state.mediaInfo.dateSent,
+                    onBackClick = onBackClick,
+                    eventSink = state.eventSink
+                )
+                MediaViewerBottomBar(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    actionsEnabled = state.downloadedMedia is AsyncData.Success,
+                    canDownload = state.canDownload,
+                    canShare = state.canShare,
+                    mimeType = state.mediaInfo.mimeType,
+                    caption = state.mediaInfo.caption,
+                    onHeightChange = { bottomPaddingInPixels = it },
+                    eventSink = state.eventSink
+                )
+            }
         }
     }
 }
@@ -112,6 +140,7 @@ fun MediaViewerView(
 @Composable
 private fun MediaViewerPage(
     showOverlay: Boolean,
+    bottomPaddingInPixels: Int,
     state: MediaViewerState,
     onDismiss: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
@@ -148,8 +177,8 @@ private fun MediaViewerPage(
 
         Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
+                .fillMaxSize()
+                .navigationBarsPadding()
         ) {
             Box(contentAlignment = Alignment.Center) {
                 val zoomableState = rememberZoomableState(
@@ -168,6 +197,7 @@ private fun MediaViewerPage(
 
                 LocalMediaView(
                     modifier = Modifier.fillMaxSize(),
+                    bottomPaddingInPixels = bottomPaddingInPixels,
                     localMediaViewState = localMediaViewState,
                     localMedia = state.downloadedMedia.dataOrNull(),
                     mediaInfo = state.mediaInfo,
@@ -193,8 +223,8 @@ private fun MediaViewerPage(
             if (showProgress) {
                 LinearProgressIndicator(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .height(2.dp)
+                        .fillMaxWidth()
+                        .height(2.dp)
                 )
             }
         }
@@ -246,23 +276,100 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
     return showProgress
 }
 
+@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
-    canDownload: Boolean,
-    canShare: Boolean,
-    mimeType: String,
+    senderName: String?,
+    dateSent: String?,
     onBackClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
     TopAppBar(
-        title = {},
+        title = {
+            if (senderName != null && dateSent != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 48.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = senderName,
+                        style = ElementTheme.typography.fontBodyMdMedium,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                    Text(
+                        text = dateSent,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                }
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent.copy(0.6f),
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
+            // TODO Add action to open infos.
+        }
+    )
+}
+
+@Composable
+private fun MediaViewerBottomBar(
+    actionsEnabled: Boolean,
+    canDownload: Boolean,
+    canShare: Boolean,
+    mimeType: String,
+    caption: String?,
+    onHeightChange: (Int) -> Unit,
+    eventSink: (MediaViewerEvents) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color(0x99101317))
+            .onSizeChanged {
+                onHeightChange(it.height)
+            },
+    ) {
+        HorizontalDivider()
+        if (caption != null) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                text = caption,
+                maxLines = 5,
+                overflow = TextOverflow.Ellipsis,
+                style = ElementTheme.typography.fontBodyLgRegular,
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (canShare) {
+                IconButton(
+                    enabled = actionsEnabled,
+                    onClick = {
+                        eventSink(MediaViewerEvents.Share)
+                    },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.ShareAndroid(),
+                        contentDescription = stringResource(id = CommonStrings.action_share)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
@@ -293,21 +400,8 @@ private fun MediaViewerTopBar(
                     )
                 }
             }
-            if (canShare) {
-                IconButton(
-                    enabled = actionsEnabled,
-                    onClick = {
-                        eventSink(MediaViewerEvents.Share)
-                    },
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.ShareAndroid(),
-                        contentDescription = stringResource(id = CommonStrings.action_share)
-                    )
-                }
-            }
         }
-    )
+    }
 }
 
 @Composable

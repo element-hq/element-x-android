@@ -46,7 +46,9 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                             caption = null,
                             mimeType = mimeType,
                             formattedFileSize = "",
-                            fileExtension = ""
+                            fileExtension = "",
+                            senderName = null,
+                            dateSent = null,
                         ),
                         mediaSource = MediaSource(url = avatarUrl),
                         thumbnailSource = null,

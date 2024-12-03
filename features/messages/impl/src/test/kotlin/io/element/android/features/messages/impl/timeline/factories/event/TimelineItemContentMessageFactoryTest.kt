@@ -239,7 +239,7 @@ class TimelineItemContentMessageFactoryTest {
             formattedCaption = null,
             isEdited = false,
             duration = Duration.ZERO,
-            videoSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             aspectRatio = null,
             blurHash = null,
@@ -291,7 +291,7 @@ class TimelineItemContentMessageFactoryTest {
             formattedCaption = SpannedString("formatted"),
             isEdited = true,
             duration = 1.minutes,
-            videoSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             aspectRatio = 3f,
             blurHash = A_BLUR_HASH,
@@ -380,7 +380,9 @@ class TimelineItemContentMessageFactoryTest {
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
-            waveform = emptyList<Float>().toImmutableList()
+            waveform = emptyList<Float>().toImmutableList(),
+            fileExtension = "",
+            formattedFileSize = "0 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -419,7 +421,9 @@ class TimelineItemContentMessageFactoryTest {
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
-            waveform = persistentListOf(1f, 2f)
+            waveform = persistentListOf(1f, 2f),
+            fileExtension = "ogg",
+            formattedFileSize = "123 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -571,7 +575,7 @@ class TimelineItemContentMessageFactoryTest {
             caption = null,
             formattedCaption = null,
             isEdited = false,
-            fileSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
@@ -612,7 +616,7 @@ class TimelineItemContentMessageFactoryTest {
             caption = null,
             formattedCaption = null,
             isEdited = true,
-            fileSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             formattedFileSize = "123 Bytes",
             fileExtension = "pdf",
