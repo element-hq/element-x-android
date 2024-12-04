@@ -8,18 +8,22 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -34,20 +38,20 @@ import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
-import io.element.android.libraries.mediaviewer.api.local.rememberLocalMediaViewState
+import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.display.TextDisplay
-import me.saket.telephoto.zoomable.ZoomSpec
-import me.saket.telephoto.zoomable.rememberZoomableState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentsPreviewView(
     state: AttachmentsPreviewState,
+    localMediaRenderer: LocalMediaRenderer,
     modifier: Modifier = Modifier,
 ) {
     fun postSendAttachment() {
@@ -79,9 +83,11 @@ fun AttachmentsPreviewView(
                 title = {},
             )
         }
-    ) {
+    ) { paddingValues ->
         AttachmentPreviewContent(
+            modifier = Modifier.padding(paddingValues),
             state = state,
+            localMediaRenderer = localMediaRenderer,
             onSendClick = ::postSendAttachment,
         )
     }
@@ -99,12 +105,17 @@ private fun AttachmentSendStateView(
     onRetryClick: () -> Unit
 ) {
     when (sendActionState) {
-        is SendActionState.Sending -> {
+        is SendActionState.Sending.Processing -> {
             ProgressDialog(
-                type = when (sendActionState) {
-                    is SendActionState.Sending.Uploading -> ProgressDialogType.Determinate(sendActionState.progress)
-                    SendActionState.Sending.Processing -> ProgressDialogType.Indeterminate
-                },
+                type = ProgressDialogType.Indeterminate,
+                text = stringResource(id = CommonStrings.common_sending),
+                showCancelButton = true,
+                onDismissRequest = onDismissClick,
+            )
+        }
+        is SendActionState.Sending.Uploading -> {
+            ProgressDialog(
+                type = ProgressDialogType.Determinate(sendActionState.progress),
                 text = stringResource(id = CommonStrings.common_sending),
                 showCancelButton = true,
                 onDismissRequest = onDismissClick,
@@ -124,30 +135,23 @@ private fun AttachmentSendStateView(
 @Composable
 private fun AttachmentPreviewContent(
     state: AttachmentsPreviewState,
+    localMediaRenderer: LocalMediaRenderer,
     onSendClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = Modifier
+    Column(
+        modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding(),
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .weight(1f),
             contentAlignment = Alignment.Center
         ) {
             when (val attachment = state.attachment) {
                 is Attachment.Media -> {
-                    val localMediaViewState = rememberLocalMediaViewState(
-                        zoomableState = rememberZoomableState(
-                            zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
-                        )
-                    )
-                    LocalMediaView(
-                        modifier = Modifier.fillMaxSize(),
-                        localMedia = attachment.localMedia,
-                        localMediaViewState = localMediaViewState,
-                        onClick = {}
-                    )
+                    localMediaRenderer.Render(attachment.localMedia)
                 }
             }
         }
@@ -158,7 +162,6 @@ private fun AttachmentPreviewContent(
                 .fillMaxWidth()
                 .background(ElementTheme.colors.bgCanvasDefault)
                 .height(IntrinsicSize.Min)
-                .align(Alignment.BottomCenter)
                 .imePadding(),
         )
     }
@@ -174,7 +177,10 @@ private fun AttachmentsPreviewBottomActions(
         modifier = modifier,
         state = state.textEditorState,
         voiceMessageState = VoiceMessageState.Idle,
-        composerMode = MessageComposerMode.Attachment(state.allowCaption),
+        composerMode = MessageComposerMode.Attachment(
+            allowCaption = state.allowCaption,
+            showCaptionCompatibilityWarning = state.showCaptionCompatibilityWarning,
+        ),
         onRequestFocus = {},
         onSendMessage = onSendClick,
         showTextFormatting = false,
@@ -200,5 +206,15 @@ private fun AttachmentsPreviewBottomActions(
 internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) = ElementPreviewDark {
     AttachmentsPreviewView(
         state = state,
+        localMediaRenderer = object : LocalMediaRenderer {
+            @Composable
+            override fun Render(localMedia: LocalMedia) {
+                Image(
+                    painter = painterResource(id = CommonDrawables.sample_background),
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = null,
+                )
+            }
+        }
     )
 }

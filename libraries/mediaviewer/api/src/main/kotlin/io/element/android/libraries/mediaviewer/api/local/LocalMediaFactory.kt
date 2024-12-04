@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.api.local
 
 import android.net.Uri
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.mediaviewer.api.MediaInfo
 
 interface LocalMediaFactory {
     /**

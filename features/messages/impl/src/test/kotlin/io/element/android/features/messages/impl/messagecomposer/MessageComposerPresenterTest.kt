@@ -1586,7 +1586,12 @@ fun anEditMode(
 fun anEditCaptionMode(
     eventOrTransactionId: EventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
     caption: String = A_CAPTION,
-) = MessageComposerMode.EditCaption(eventOrTransactionId, caption)
+    showCaptionCompatibilityWarning: Boolean = false,
+) = MessageComposerMode.EditCaption(
+    eventOrTransactionId = eventOrTransactionId,
+    content = caption,
+    showCaptionCompatibilityWarning = showCaptionCompatibilityWarning,
+)
 
 fun aReplyMode() = MessageComposerMode.Reply(
     replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),

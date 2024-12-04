@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Sie können es nicht bestätigen?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
   <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
@@ -16,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Vergleiche die Zahlen"</string>
   <string name="screen_session_verification_complete_subtitle">"Deine neue Session ist nun verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten und wird von anderen Benutzern als vertrauenswürdig eingestuft."</string>
   <string name="screen_session_verification_enter_recovery_key">"Wiederherstellungsschlüssel eingeben"</string>
+  <string name="screen_session_verification_failed_subtitle">"Entweder ist bei der Anfrage ein Timeout aufgetreten, oder die Anfrage wurde abgelehnt, oder es gab eine Nichtübereinstimmung bei der Überprüfung."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Beweise deine Identität, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen."</string>
   <string name="screen_session_verification_open_existing_session_title">"Öffne eine bestehende Session"</string>
   <string name="screen_session_verification_positive_button_canceled">"Verifizierung wiederholen"</string>
@@ -23,8 +25,20 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Warten auf eine Übereinstimmung"</string>
   <string name="screen_session_verification_ready_subtitle">"Vergleiche eine spezielle Reihe von Emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Vergleiche die einzelnen Emojis und stelle sicher, dass sie in der gleichen Reihenfolge erscheinen."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Angemeldet"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"Entweder ist bei der Anfrage ein Timeout aufgetreten, oder die Anfrage wurde abgelehnt, oder es gab eine Nichtübereinstimmung bei der Überprüfung."</string>
+  <string name="screen_session_verification_request_failure_title">"Überprüfung fehlgeschlagen"</string>
+  <string name="screen_session_verification_request_footer">"Fahren Sie nur fort, falls Sie für diese Überprüfung verantwortlich sind.."</string>
+  <string name="screen_session_verification_request_subtitle">"Verifizieren Sie das andere Gerät, um die Sicherheit Ihres Nachrichtenverlaufs zu gewährleisten."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Jetzt können Sie gesichert Nachrichten auf Ihrem anderen Gerät lesen oder senden."</string>
+  <string name="screen_session_verification_request_success_title">"Gerät verifiziert"</string>
+  <string name="screen_session_verification_request_title">"Verifizierung angefordert"</string>
   <string name="screen_session_verification_they_dont_match">"Sie stimmen nicht überein"</string>
   <string name="screen_session_verification_they_match">"Sie stimmen überein"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Stellen Sie sicher, dass die App auf dem anderen Gerät geöffnet ist, bevor Sie die Überprüfung auf diesem Gerät aus starten."</string>
+  <string name="screen_session_verification_use_another_device_title">"Öffnen Sie die App auf einem anderen verifizierten Gerät"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"Sie sollten ein Popup-Fenster auf dem anderen Gerät sehen. Starten Sie die Überprüfung von dort aus."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Starten Sie die Überprüfung auf dem anderen Gerät"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Akzeptiere die Anfrage, um den Verifizierungsprozess in deiner anderen Session zu starten, um fortzufahren."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Warten auf die Annahme der Anfrage"</string>
   <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>

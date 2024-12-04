@@ -145,6 +145,7 @@ private fun RustUtdCause.map(): UtdCause {
         RustUtdCause.VERIFICATION_VIOLATION -> UtdCause.VerificationViolation
         RustUtdCause.UNSIGNED_DEVICE -> UtdCause.UnsignedDevice
         RustUtdCause.UNKNOWN_DEVICE -> UtdCause.UnknownDevice
+        RustUtdCause.HISTORICAL_MESSAGE -> UtdCause.HistoricalMessage
     }
 }
 

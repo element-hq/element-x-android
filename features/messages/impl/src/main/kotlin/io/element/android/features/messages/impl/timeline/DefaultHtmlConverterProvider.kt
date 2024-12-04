@@ -63,6 +63,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
                         return TextDisplay.Custom(mentionSpan)
                     }
                 },
+                isEditor = false,
                 isMention = { _, url -> mentionDetector?.isMention(url).orFalse() }
             ).apply {
                 configureWith(editorStyle)

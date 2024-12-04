@@ -40,6 +40,15 @@ fun TimelineItemEncryptedView(
                 UtdCause.UnknownDevice -> {
                     CommonStrings.common_unable_to_decrypt_insecure_device to CompoundDrawables.ic_compound_block
                 }
+                UtdCause.HistoricalMessage -> {
+                    CommonStrings.timeline_decryption_failure_historical_event_no_key_backup to CompoundDrawables.ic_compound_block
+                }
+                UtdCause.WithheldUnverifiedOrInsecureDevice -> {
+                    CommonStrings.timeline_decryption_failure_withheld_unverified to CompoundDrawables.ic_compound_block
+                }
+                UtdCause.WithheldBySender -> {
+                    CommonStrings.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
+                }
                 else -> {
                     CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
                 }

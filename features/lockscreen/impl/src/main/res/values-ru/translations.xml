@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"биометрическая идентификация"</string>
   <string name="screen_app_lock_biometric_unlock">"биометрическая разблокировка"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Разблокировать с помощью биометрии"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Подтвердить биометрические данные"</string>
   <string name="screen_app_lock_forgot_pin">"Забыли PIN-код?"</string>
   <string name="screen_app_lock_settings_change_pin">"Изменить PIN-код"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Разрешить биометрическую разблокировку"</string>

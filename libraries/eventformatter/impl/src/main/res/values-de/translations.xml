@@ -28,7 +28,7 @@
   <string name="state_event_room_invite_you">"%1$s hat dich eingeladen"</string>
   <string name="state_event_room_join">"%1$s hat den Raum betreten"</string>
   <string name="state_event_room_join_by_you">"Du hast den Raum betreten"</string>
-  <string name="state_event_room_knock">"%1$s hat angefragt beizutreten"</string>
+  <string name="state_event_room_knock">"%1$s beantragt den Beitritt"</string>
   <string name="state_event_room_knock_accepted">"%1$s hat %2$s den Beitritt erlaubt"</string>
   <string name="state_event_room_knock_accepted_by_you">"Du hast %1$s den Beitritt erlaubt."</string>
   <string name="state_event_room_knock_by_you">"Du hast angefragt beizutreten"</string>
