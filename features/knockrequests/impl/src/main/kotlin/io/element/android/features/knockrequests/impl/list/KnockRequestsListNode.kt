@@ -15,7 +15,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
@@ -24,7 +23,6 @@ class KnockRequestsListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: KnockRequestsListPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

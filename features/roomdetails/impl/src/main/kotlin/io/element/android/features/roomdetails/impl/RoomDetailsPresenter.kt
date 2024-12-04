@@ -169,10 +169,6 @@ class RoomDetailsPresenter @Inject constructor(
         )
     }
 
-    private fun getCanBan(membersState: MatrixRoomMembersState): Any {
-        TODO("Not yet implemented")
-    }
-
     @Composable
     private fun roomMemberDetailsPresenter(dmMemberState: RoomMember?) = remember(dmMemberState) {
         dmMemberState?.let { roomMember ->

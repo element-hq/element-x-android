@@ -10,7 +10,6 @@ package io.element.android.features.knockrequests.impl
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class KnockRequest(
     val userId: UserId,
@@ -30,6 +29,3 @@ fun KnockRequest.getAvatarData(size: AvatarSize) = AvatarData(
 fun KnockRequest.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
-
-
-

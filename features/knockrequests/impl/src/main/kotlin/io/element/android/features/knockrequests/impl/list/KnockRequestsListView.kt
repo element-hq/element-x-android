@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -28,7 +29,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -43,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.features.knockrequests.impl.R
 import io.element.android.features.knockrequests.impl.getAvatarData
 import io.element.android.features.knockrequests.impl.getBestName
 import io.element.android.libraries.architecture.AsyncData
@@ -54,6 +59,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
@@ -90,8 +96,10 @@ fun KnockRequestsListView(
 }
 
 @Composable
-private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Modifier) {
-
+private fun KnockRequestsListContent(
+    state: KnockRequestsListState,
+    modifier: Modifier = Modifier,
+) {
     fun onAcceptClick(knockRequest: KnockRequest) {
         state.eventSink(KnockRequestsListEvents.Accept(knockRequest))
     }
@@ -99,6 +107,8 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
     fun onDeclineClick(knockRequest: KnockRequest) {
         state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
     }
+
+    var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
 
     Box(modifier.fillMaxSize()) {
         when (state.knockRequests) {
@@ -114,6 +124,7 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
                         canBan = state.canBan,
                         onAcceptClick = ::onAcceptClick,
                         onDeclineClick = ::onDeclineClick,
+                        contentPadding = PaddingValues(bottom = bottomPaddingInPixels.toDp()),
                     )
                 }
             }
@@ -129,6 +140,9 @@ private fun KnockRequestsListContent(state: KnockRequestsListState, modifier: Mo
             KnockRequestsAcceptAll(
                 onClick = {
                     state.eventSink(KnockRequestsListEvents.AcceptAll)
+                },
+                onHeightChange = { height ->
+                    bottomPaddingInPixels = height
                 },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -186,8 +200,12 @@ private fun KnockRequestsList(
     onAcceptClick: (KnockRequest) -> Unit,
     onDeclineClick: (KnockRequest) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = contentPadding,
+    ) {
         itemsIndexed(knockRequests) { index, knockRequest ->
             KnockRequestItem(
                 knockRequest = knockRequest,
@@ -316,7 +334,7 @@ private fun KnockRequestItem(
             if (canBan) {
                 Spacer(modifier = Modifier.height(12.dp))
                 TextButton(
-                    text = stringResource(CommonStrings.screen_knock_requests_list_decline_and_ban_action_title),
+                    text = stringResource(R.string.screen_knock_requests_list_decline_and_ban_action_title),
                     onClick = {
                         onAcceptClick(knockRequest)
                     },
@@ -325,22 +343,25 @@ private fun KnockRequestItem(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-
         }
     }
 }
 
 @Composable
-private fun KnockRequestsAcceptAll(onClick: () -> Unit, modifier: Modifier) {
+private fun KnockRequestsAcceptAll(
+    onClick: () -> Unit,
+    onHeightChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .shadow(elevation = 24.dp, spotColor = Color.Transparent)
             .background(color = ElementTheme.colors.bgCanvasDefault)
             .padding(vertical = 12.dp, horizontal = 16.dp)
-    )
-    {
+            .onSizeChanged { onHeightChange(it.height) }
+    ) {
         OutlinedButton(
-            text = ("Accept all"),
+            text = stringResource(R.string.screen_knock_requests_list_accept_all_button_title),
             onClick = onClick,
             size = ButtonSize.Medium,
             modifier = Modifier.fillMaxWidth(),
@@ -360,8 +381,8 @@ private fun KnockRequestsEmptyList(
         contentAlignment = Alignment.Center,
     ) {
         IconTitleSubtitleMolecule(
-            title = "No pending request to join",
-            subTitle = "When somebody will ask to join the room, you’ll be able to see their request here.",
+            title = stringResource(R.string.screen_knock_requests_list_empty_state_title),
+            subTitle = stringResource(R.string.screen_knock_requests_list_empty_state_description),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Pin()),
         )
     }
@@ -373,7 +394,7 @@ private fun KnockRequestsListTopBar(onBackClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
-                text = "Requests to join",
+                text = stringResource(R.string.screen_knock_requests_list_title),
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },

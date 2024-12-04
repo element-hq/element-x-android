@@ -26,7 +26,6 @@ import javax.inject.Inject
 class KnockRequestsListPresenter @Inject constructor(
     private val room: MatrixRoom,
 ) : Presenter<KnockRequestsListState> {
-
     @Composable
     override fun present(): KnockRequestsListState {
         val currentAction = remember { mutableStateOf<KnockRequestsCurrentAction>(KnockRequestsCurrentAction.None) }
@@ -56,7 +55,7 @@ class KnockRequestsListPresenter @Inject constructor(
         }
 
         LaunchedEffect(currentAction) {
-            when (val action = currentAction.value) {
+            when (currentAction.value) {
                 is KnockRequestsCurrentAction.Accept -> {
                     // Accept the knock request
                 }

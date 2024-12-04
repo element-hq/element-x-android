@@ -286,6 +286,12 @@
         "screen_join_room_.*",
         "screen\\.join_room\\..*"
       ]
+    },
+    {
+      "name" : ":features:knockrequests:impl",
+      "includeRegex" : [
+        "screen\\.knock_requests_list\\..*"
+      ]
     }
   ]
 }

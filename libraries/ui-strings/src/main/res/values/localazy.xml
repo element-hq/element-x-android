@@ -296,11 +296,6 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Accept all"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Decline and ban"</string>
-  <string name="screen_knock_requests_list_empty_state_description">"When somebody will ask to join the room, you’ll be able to see their request here."</string>
-  <string name="screen_knock_requests_list_empty_state_title">"No pending request to join"</string>
-  <string name="screen_knock_requests_list_title">"Requests to join"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

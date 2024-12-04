@@ -5,8 +5,6 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-import extension.setupAnvil
-
 plugins {
     id("io.element.android-library")
 }
@@ -19,4 +17,3 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
 }
-
