@@ -17,6 +17,7 @@ data class KnockRequest(
     val displayName: String?,
     val avatarUrl: String?,
     val reason: String?,
+    val formattedDate: String?,
 )
 
 fun KnockRequest.getAvatarData(size: AvatarSize) = AvatarData(

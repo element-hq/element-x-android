@@ -222,15 +222,27 @@ private fun KnockRequestItem(
         Avatar(knockRequest.getAvatarData(AvatarSize.KnockRequestItem))
         Spacer(modifier = Modifier.width(16.dp))
         Column {
-            // Name
-            Text(
-                modifier = Modifier.clipToBounds(),
-                text = knockRequest.getBestName(),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.primary,
-                style = ElementTheme.typography.fontBodyLgMedium,
-            )
+            // Name and date
+            Row {
+                Text(
+                    modifier = Modifier
+                        .clipToBounds()
+                        .weight(1f),
+                    text = knockRequest.getBestName(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                )
+                if (!knockRequest.formattedDate.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = knockRequest.formattedDate,
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                    )
+                }
+            }
             // UserId
             if (!knockRequest.displayName.isNullOrEmpty()) {
                 Text(

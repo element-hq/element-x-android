@@ -106,11 +106,13 @@ fun aKnockRequest(
     displayName: String? = "Jacob Ross",
     avatarUrl: String? = null,
     reason: String? = "Hi, I would like to get access to this room please.",
+    formattedDate: String = "20 Nov 2024",
 ) = KnockRequest(
     userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
     reason = reason,
+    formattedDate = formattedDate,
 )
 
 fun aKnockRequestsListState(
