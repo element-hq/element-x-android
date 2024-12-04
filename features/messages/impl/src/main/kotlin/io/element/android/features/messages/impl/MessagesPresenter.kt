@@ -28,9 +28,8 @@ import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -93,7 +92,7 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
-    actionListPresenterFactory: ActionListPresenter.Factory,
+    @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
@@ -110,14 +109,13 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
-    private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
-
     @AssistedFactory
     interface Factory {
         fun create(
             navigator: MessagesNavigator,
             composerPresenter: Presenter<MessageComposerState>,
             timelinePresenter: Presenter<TimelineState>,
+            actionListPresenter: Presenter<ActionListState>,
         ): MessagesPresenter
     }
 
@@ -272,7 +270,8 @@ class MessagesPresenter @AssistedInject constructor(
         timelineState: TimelineState,
     ) = launch {
         when (action) {
-            TimelineItemAction.Copy -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
@@ -403,26 +402,28 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionAddCaption(
+    private suspend fun handleActionAddCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
             content = "",
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
     }
 
-    private fun handleActionEditCaption(
+    private suspend fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
             content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
@@ -488,11 +489,17 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-
         clipboardHelper.copyPlainText(content)
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
+        }
+    }
+
+    private suspend fun handleCopyCaption(event: TimelineItem.Event) {
+        val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
+        clipboardHelper.copyPlainText(content)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }
 }

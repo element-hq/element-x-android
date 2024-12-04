@@ -15,6 +15,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -33,20 +34,16 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
-import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.operation.show
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.parcelize.Parcelize
@@ -61,6 +58,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val messagesEntryPoint: MessagesEntryPoint,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
+    private val mediaViewerEntryPoint: MediaViewerEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -211,22 +209,18 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomMemberDetailsNode>(buildContext, plugins)
             }
             is NavTarget.AvatarPreview -> {
-                // We need to fake the MimeType here for the viewer to work.
-                val mimeType = MimeTypes.Images
-                val input = MediaViewerNode.Inputs(
-                    mediaInfo = MediaInfo(
-                        filename = navTarget.name,
-                        caption = null,
-                        mimeType = mimeType,
-                        formattedFileSize = "",
-                        fileExtension = ""
-                    ),
-                    mediaSource = MediaSource(url = navTarget.avatarUrl),
-                    thumbnailSource = null,
-                    canDownload = false,
-                    canShare = false,
-                )
-                createNode<AvatarPreviewNode>(buildContext, listOf(input))
+                val callback = object : MediaViewerEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                mediaViewerEntryPoint.nodeBuilder(this, buildContext)
+                    .avatar(
+                        navTarget.name,
+                        navTarget.avatarUrl,
+                    )
+                    .callback(callback)
+                    .build()
             }
 
             is NavTarget.PollHistory -> {

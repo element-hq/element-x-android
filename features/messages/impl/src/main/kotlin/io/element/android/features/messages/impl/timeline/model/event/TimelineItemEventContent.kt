@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 @Immutable
 sealed interface TimelineItemEventContent {
@@ -26,6 +27,10 @@ sealed interface TimelineItemEventContentWithAttachment :
     val filename: String
     val caption: String?
     val formattedCaption: CharSequence?
+    val mediaSource: MediaSource
+    val mimeType: String
+    val formattedFileSize: String
+    val fileExtension: String
 
     val bestDescription: String
         get() = caption ?: filename

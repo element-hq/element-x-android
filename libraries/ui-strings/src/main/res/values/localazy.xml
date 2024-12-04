@@ -46,8 +46,10 @@
   <string name="action_confirm_password">"Confirm password"</string>
   <string name="action_continue">"Continue"</string>
   <string name="action_copy">"Copy"</string>
+  <string name="action_copy_caption">"Copy caption"</string>
   <string name="action_copy_link">"Copy link"</string>
   <string name="action_copy_link_to_message">"Copy link to message"</string>
+  <string name="action_copy_text">"Copy text"</string>
   <string name="action_create">"Create"</string>
   <string name="action_create_a_room">"Create a room"</string>
   <string name="action_deactivate">"Deactivate"</string>
@@ -94,6 +96,7 @@
   <string name="action_reject">"Reject"</string>
   <string name="action_remove">"Remove"</string>
   <string name="action_remove_caption">"Remove caption"</string>
+  <string name="action_remove_message">"Remove message"</string>
   <string name="action_reply">"Reply"</string>
   <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
@@ -297,6 +300,7 @@ Reason: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
@@ -347,4 +351,7 @@ Reason: %1$s."</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your identity."</string>
 </resources>

@@ -21,7 +21,7 @@ constraintlayout = "2.2.0"
 constraintlayout_compose = "1.1.0"
 lifecycle = "2.8.7"
 activity = "1.9.3"
-media3 = "1.4.1"
+media3 = "1.5.0"
 camera = "1.4.0"
 
 # Compose
@@ -46,14 +46,14 @@ coil = "2.7.0"
 showkase = "1.0.3"
 appyx = "1.5.1"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.13"
+wysiwyg = "2.37.14"
 telephoto = "0.14.0"
 
 # Dependency analysis
 dependencyAnalysis = "2.5.0"
 
 # DI
-dagger = "2.52"
+dagger = "2.53"
 anvil = "0.4.0"
 
 # Auto service
@@ -150,7 +150,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
 test_mockk = "io.mockk:mockk:1.13.13"
-test_konsist = "com.lemonappdev:konsist:0.16.1"
+test_konsist = "com.lemonappdev:konsist:0.17.1"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
@@ -173,7 +173,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.65"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.68"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -201,7 +201,7 @@ matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.3.3"
-sigpwned_emoji4j = "com.sigpwned:emoji4j-core:15.1.2"
+sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 
 # Di
 inject = "javax.inject:javax.inject:1"
@@ -233,7 +233,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.7"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.2"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:11.1.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
@@ -241,6 +241,6 @@ paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-sonarqube = "org.sonarqube:6.0.0.5145"
+sonarqube = "org.sonarqube:6.0.1.5171"
 licensee = "app.cash.licensee:1.12.0"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

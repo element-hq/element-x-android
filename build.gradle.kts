@@ -52,6 +52,10 @@ allprojects {
         detektPlugins("io.nlopez.compose.rules:detekt:0.4.19")
     }
 
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        exclude("io/element/android/tests/konsist/failures/**")
+    }
+
     // KtLint
     apply {
         plugin("org.jlleitschuh.gradle.ktlint")
@@ -75,6 +79,7 @@ allprojects {
         val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
         filter {
             exclude { element -> element.file.path.contains(generatedPath) }
+            exclude("io/element/android/tests/konsist/failures/**")
         }
     }
     // Dependency check

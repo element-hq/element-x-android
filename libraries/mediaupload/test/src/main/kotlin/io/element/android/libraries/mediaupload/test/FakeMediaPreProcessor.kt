@@ -16,10 +16,13 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.CompletableDeferred
 import java.io.File
 import kotlin.time.Duration.Companion.seconds
 
-class FakeMediaPreProcessor : MediaPreProcessor {
+class FakeMediaPreProcessor(
+    private val processLatch: CompletableDeferred<Unit>? = null,
+) : MediaPreProcessor {
     var processCallCount = 0
         private set
 
@@ -41,6 +44,7 @@ class FakeMediaPreProcessor : MediaPreProcessor {
         deleteOriginal: Boolean,
         compressIfPossible: Boolean
     ): Result<MediaUploadInfo> = simulateLongTask {
+        processLatch?.await()
         processCallCount++
         result
     }

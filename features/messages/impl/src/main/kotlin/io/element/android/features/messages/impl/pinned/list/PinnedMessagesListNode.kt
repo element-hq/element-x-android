@@ -19,6 +19,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -35,6 +36,7 @@ class PinnedMessagesListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: PinnedMessagesListPresenter.Factory,
+    actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
@@ -47,7 +49,10 @@ class PinnedMessagesListNode @AssistedInject constructor(
         fun onForwardEventClick(eventId: EventId)
     }
 
-    private val presenter = presenterFactory.create(this)
+    private val presenter = presenterFactory.create(
+        navigator = this,
+        actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
+    )
     private val callbacks = plugins<Callback>()
 
     private fun onEventClick(event: TimelineItem.Event) {

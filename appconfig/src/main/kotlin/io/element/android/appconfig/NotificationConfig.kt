@@ -11,14 +11,20 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 
 object NotificationConfig {
-    // TODO EAx Implement and set to true at some point
-    const val SUPPORT_MARK_AS_READ_ACTION = false
+    /**
+     * If set to true, the notification will have a "Mark as read" action.
+     */
+    const val SHOW_MARK_AS_READ_ACTION = true
 
-    // TODO EAx Implement and set to true at some point
-    const val SUPPORT_JOIN_DECLINE_INVITE = false
+    /**
+     * If set to true, the notification for invitation will have two actions to accept or decline the invite.
+     */
+    const val SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS = true
 
-    // TODO EAx Implement and set to true at some point
-    const val SUPPORT_QUICK_REPLY_ACTION = false
+    /**
+     * If set to true, the notification will have a "Quick reply" action, allow to compose and send a message to the room.
+     */
+    const val SHOW_QUICK_REPLY_ACTION = true
 
     @ColorInt
     val NOTIFICATION_ACCENT_COLOR: Int = Color.parseColor("#FF0DBD8B")

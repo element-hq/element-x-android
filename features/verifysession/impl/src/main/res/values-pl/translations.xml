@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Porównaj liczby"</string>
   <string name="screen_session_verification_complete_subtitle">"Twoja nowa sesja jest teraz zweryfikowana. Ma ona dostęp do Twoich zaszyfrowanych wiadomości, a inni użytkownicy będą widzieć ją jako zaufaną."</string>
   <string name="screen_session_verification_enter_recovery_key">"Wprowadź klucz przywracania"</string>
+  <string name="screen_session_verification_failed_subtitle">"Albo upłynął limit czasu żądania, albo żądanie zostało odrzucone, albo wystąpił błąd weryfikacji."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Udowodnij, że to ty, aby uzyskać dostęp do historii zaszyfrowanych wiadomości."</string>
   <string name="screen_session_verification_open_existing_session_title">"Otwórz istniejącą sesję"</string>
   <string name="screen_session_verification_positive_button_canceled">"Ponów weryfikację"</string>
@@ -25,9 +26,11 @@
   <string name="screen_session_verification_ready_subtitle">"Porównaj unikalny zestaw emoji."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Porównaj unikalne emoji, upewniając się, że pojawiły się w tej samej kolejności."</string>
   <string name="screen_session_verification_request_details_timestamp">"Zalogowano"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"Albo upłynął limit czasu żądania, albo żądanie zostało odrzucone, albo wystąpił błąd weryfikacji."</string>
   <string name="screen_session_verification_request_failure_title">"Weryfikacja nie powiodła się"</string>
   <string name="screen_session_verification_request_footer">"Kontynuuj tylko, jeśli to Ty zainicjowałeś tę weryfikację."</string>
   <string name="screen_session_verification_request_subtitle">"Zweryfikuj drugie urządzenie, aby zabezpieczyć historię wiadomości."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Już możesz bezpiecznie czytać lub wysyłać wiadomości na drugim urządzeniu."</string>
   <string name="screen_session_verification_request_success_title">"Urządzenie zweryfikowane"</string>
   <string name="screen_session_verification_request_title">"Zażądano weryfikacji"</string>
   <string name="screen_session_verification_they_dont_match">"Nie pasują do siebie"</string>

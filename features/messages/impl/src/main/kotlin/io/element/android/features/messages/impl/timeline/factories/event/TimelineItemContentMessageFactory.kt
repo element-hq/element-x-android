@@ -147,7 +147,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
-                    videoSource = messageType.source,
+                    mediaSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
@@ -186,6 +186,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                             waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
+                            formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                            fileExtension = fileExtensionExtractor.extractFromName(messageType.filename)
                         )
                     }
                     false -> {
@@ -211,7 +213,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     formattedCaption = parseHtml(messageType.formattedCaption) ?: messageType.caption?.withLinks(),
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
-                    fileSource = messageType.source,
+                    mediaSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.fromFileExtension(fileExtension),
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                     fileExtension = fileExtension

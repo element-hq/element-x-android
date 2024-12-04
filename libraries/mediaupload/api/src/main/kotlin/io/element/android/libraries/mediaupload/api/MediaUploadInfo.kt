@@ -22,3 +22,11 @@ sealed interface MediaUploadInfo {
     data class VoiceMessage(override val file: File, val audioInfo: AudioInfo, val waveform: List<Float>) : MediaUploadInfo
     data class AnyFile(override val file: File, val fileInfo: FileInfo) : MediaUploadInfo
 }
+
+fun MediaUploadInfo.allFiles(): List<File> {
+    return listOfNotNull(
+        file,
+        (this@allFiles as? MediaUploadInfo.Image)?.thumbnailFile,
+        (this@allFiles as? MediaUploadInfo.Video)?.thumbnailFile,
+    )
+}

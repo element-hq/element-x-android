@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Bitte bestätigen Sie, dass Sie Ihr Benutzerkonto deaktivieren möchten. Diese Aktion kann nicht rückgängig gemacht werden."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Lösche alle meine Nachrichten"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Warnung: Benutzern werden möglicherweise unvollständige Konversationen angezeigt."</string>
+  <string name="screen_deactivate_account_description">"Wenn Sie Ihr Konto deaktivieren%1$s, wird es:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irreversibel"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s Ihr Konto (Sie können sich nicht erneut anmelden und Ihre ID kann nicht wiederverwendet werden)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Dauerhaft deaktivieren"</string>
+  <string name="screen_deactivate_account_list_item_2">"Sie werden aus allen Chatrooms entfernt."</string>
+  <string name="screen_deactivate_account_list_item_3">"Löschen Sie Ihre Kontoinformationen von unserem Identitätsserver."</string>
+  <string name="screen_deactivate_account_list_item_4">"Gelöschte Nachrichten werden für bereits registrierte Benutzer weiterhin sichtbar sein, wenn sie auch neuen oder nicht registrierten Benutzern nicht mehr zur Verfügung stehen."</string>
+  <string name="screen_deactivate_account_title">"Benutzerkonto deaktivieren"</string>
+</resources>

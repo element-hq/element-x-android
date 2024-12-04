@@ -3,11 +3,22 @@
   <string name="screen_create_room_action_create_room">"Neuer Raum"</string>
   <string name="screen_create_room_add_people_title">"Personen einladen"</string>
   <string name="screen_create_room_error_creating_room">"Beim Erstellen des Chats ist ein Fehler aufgetreten"</string>
-  <string name="screen_create_room_private_option_description">"Die Nachrichten in diesem Chat sind verschlüsselt. Die Verschlüsselung kann nicht nachträglich deaktiviert werden."</string>
-  <string name="screen_create_room_private_option_title">"Privater Raum (nur auf Einladung)"</string>
-  <string name="screen_create_room_public_option_description">"Die Nachrichten sind nicht verschlüsselt und können von jedem gelesen werden. Die Verschlüsselung kann zu einem späteren Zeitpunkt aktiviert werden."</string>
-  <string name="screen_create_room_public_option_title">"Öffentlicher Raum (für alle)"</string>
+  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chatroom. Alle Nachrichten sind durchgehend verschlüsselt."</string>
+  <string name="screen_create_room_private_option_title">"Privater Chatroom"</string>
+  <string name="screen_create_room_public_option_description">"Jeder kann diesen Chatroom finden.
+Sie können dies aber jederzeit in den Chatroomeinstellungen ändern."</string>
+  <string name="screen_create_room_public_option_title">"Öffentlicher Chatroom"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Jeder kann diesem Chatroom beitreten"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Jemand"</string>
+  <string name="screen_create_room_room_access_section_header">"Chatroom Zugang"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann darum bitten, dem Chatroom beizutreten, aber ein Administrator oder ein Moderator muss die Anfrage akzeptieren."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Diese Chatroomadresse existiert bereits. Bitte versuchen Sie, das Adressenfeld des Chatrooms zu bearbeiten oder den Namen des Chatrooms zu ändern"</string>
+  <string name="screen_create_room_room_address_section_footer">"Damit dieser Chatroom im öffentlichen Chatroomverzeichnis sichtbar ist, benötigen Sie eine Chatroomadresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Chatroom Adresse"</string>
   <string name="screen_create_room_room_name_label">"Raumname"</string>
+  <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chatrooms"</string>
   <string name="screen_create_room_title">"Raum erstellen"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
   <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
