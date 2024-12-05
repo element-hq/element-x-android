@@ -101,6 +101,7 @@ fun RoomDetailsView(
     invitePeople: () -> Unit,
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
+    openMediaGallery: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: () -> Unit,
     onPinnedMessagesClick: () -> Unit,
@@ -212,7 +213,11 @@ fun RoomDetailsView(
             PollsSection(
                 openPollHistory = openPollHistory
             )
-
+            if (state.canShowMediaGallery) {
+                MediaGallerySection(
+                    onClick = openMediaGallery
+                )
+            }
             if (state.isEncrypted) {
                 SecuritySection()
             }
@@ -556,6 +561,19 @@ private fun PollsSection(
 }
 
 @Composable
+private fun MediaGallerySection(
+    onClick: () -> Unit,
+) {
+    PreferenceCategory {
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_media_gallery_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
+            onClick = onClick,
+        )
+    }
+}
+
+@Composable
 private fun SecuritySection() {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title)) {
         ListItem(
@@ -610,6 +628,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         invitePeople = {},
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
+        openMediaGallery = {},
         openAdminSettings = {},
         onJoinCallClick = {},
         onPinnedMessagesClick = {},

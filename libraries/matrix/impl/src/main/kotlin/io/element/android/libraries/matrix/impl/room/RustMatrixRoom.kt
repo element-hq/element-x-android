@@ -78,6 +78,7 @@ import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -215,6 +216,26 @@ class RustMatrixRoom(
                 maxConcurrentRequests = 10u,
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
+            }
+        }.onFailure {
+            if (it is CancellationException) {
+                throw it
+            }
+        }
+    }
+
+    override suspend fun mediaTimeline(): Result<Timeline> {
+        return runCatching {
+            innerRoom.messageFilteredTimeline(
+                internalIdPrefix = "MediaGallery_",
+                allowedMessageTypes = listOf(
+                    RoomMessageEventMessageType.FILE,
+                    RoomMessageEventMessageType.IMAGE,
+                    RoomMessageEventMessageType.VIDEO,
+                    RoomMessageEventMessageType.AUDIO,
+                )
+            ).let { inner ->
+                createTimeline(inner, mode = Timeline.Mode.MEDIA)
             }
         }.onFailure {
             if (it is CancellationException) {

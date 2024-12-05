@@ -15,6 +15,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -38,10 +39,15 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.mediagallery.api.MediaGalleryEntryPoint
+import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -52,6 +58,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
+    private val mediaGalleryEntryPoint: MediaGalleryEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
@@ -94,7 +101,18 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
 
         @Parcelize
+        data class AttachmentPreview(
+            val eventId: EventId?,
+            val mediaInfo: MediaInfo,
+            val mediaSource: MediaSource,
+            val thumbnailSource: MediaSource?,
+        ) : NavTarget
+
+        @Parcelize
         data object PollHistory : NavTarget
+
+        @Parcelize
+        data object MediaGallery : NavTarget
 
         @Parcelize
         data object AdminSettings : NavTarget
@@ -129,6 +147,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openPollHistory() {
                         backstack.push(NavTarget.PollHistory)
+                    }
+
+                    override fun openMediaGallery() {
+                        backstack.push(NavTarget.MediaGallery)
                     }
 
                     override fun openAdminSettings() {
@@ -204,6 +226,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun onDone() {
                         overlay.hide()
                     }
+
+                    override fun onViewInTimeline(eventId: EventId) {
+                        // Cannot happen
+                    }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
                     .avatar(
@@ -213,9 +239,65 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+            is NavTarget.AttachmentPreview -> {
+                val callback = object : MediaViewerEntryPoint.Callback {
+                    override fun onDone() {
+                        overlay.hide()
+                    }
 
+                    override fun onViewInTimeline(eventId: EventId) {
+                        val permalinkData = PermalinkData.RoomLink(
+                            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
+                            eventId = eventId,
+                        )
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach {
+                            it.onPermalinkClick(permalinkData, pushToBackstack = false)
+                        }
+                    }
+                }
+                mediaViewerEntryPoint.nodeBuilder(this, buildContext)
+                    .params(
+                        MediaViewerEntryPoint.Params(
+                            eventId = navTarget.eventId,
+                            mediaInfo = navTarget.mediaInfo,
+                            mediaSource = navTarget.mediaSource,
+                            thumbnailSource = navTarget.thumbnailSource,
+                            canShowInfo = true,
+                            canDownload = true,
+                            canShare = true,
+                        )
+                    )
+                    .callback(callback)
+                    .build()
+            }
             is NavTarget.PollHistory -> {
                 pollHistoryEntryPoint.createNode(this, buildContext)
+            }
+            is NavTarget.MediaGallery -> {
+                val callback = object : MediaGalleryEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+
+                    override fun onItemClick(
+                        eventId: EventId?,
+                        mediaInfo: MediaInfo,
+                        mediaSource: MediaSource,
+                        thumbnailSource: MediaSource?,
+                    ) {
+                        overlay.show(
+                            NavTarget.AttachmentPreview(
+                                eventId = eventId,
+                                mediaInfo = mediaInfo,
+                                mediaSource = mediaSource,
+                                thumbnailSource = thumbnailSource,
+                            )
+                        )
+                    }
+                }
+                mediaGalleryEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
 
             is NavTarget.AdminSettings -> {

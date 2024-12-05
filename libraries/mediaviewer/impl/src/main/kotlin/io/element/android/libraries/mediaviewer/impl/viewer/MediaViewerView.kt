@@ -72,6 +72,7 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.mediaviewer.impl.viewer.details.MediaDetailsBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 import me.saket.telephoto.flick.FlickToDismiss
@@ -93,6 +94,7 @@ fun MediaViewerView(
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     BackHandler { onBackClick() }
+    var showBottomSheet by remember { mutableStateOf(false) }
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
@@ -119,8 +121,9 @@ fun MediaViewerView(
                     actionsEnabled = state.downloadedMedia is AsyncData.Success,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
+                    canShowInfo = state.canShowInfo,
                     onBackClick = onBackClick,
-                    eventSink = state.eventSink
+                    onInfoClick = { showBottomSheet = true },
                 )
                 MediaViewerBottomBar(
                     modifier = Modifier.align(Alignment.BottomCenter),
@@ -134,6 +137,15 @@ fun MediaViewerView(
                 )
             }
         }
+    }
+    if (showBottomSheet) {
+        MediaDetailsBottomSheet(
+            eventId = state.eventId,
+            canDelete = state.canDelete,
+            mediaInfo = state.mediaInfo,
+            onDismiss = { showBottomSheet = false },
+            eventSink = state.eventSink,
+        )
     }
 }
 
@@ -276,15 +288,15 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
     return showProgress
 }
 
-@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
     senderName: String?,
     dateSent: String?,
+    canShowInfo: Boolean,
     onBackClick: () -> Unit,
-    eventSink: (MediaViewerEvents) -> Unit,
+    onInfoClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -292,8 +304,6 @@ private fun MediaViewerTopBar(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = 48.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = senderName,
@@ -313,7 +323,17 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
-            // TODO Add action to open infos.
+            if (canShowInfo) {
+                IconButton(
+                    onClick = onInfoClick,
+                    enabled = actionsEnabled,
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Info(),
+                        contentDescription = null,
+                    )
+                }
+            }
         }
     )
 }

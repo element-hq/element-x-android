@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -81,6 +82,10 @@ class UserProfileFlowNode @AssistedInject constructor(
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
                         backstack.pop()
+                    }
+
+                    override fun onViewInTimeline(eventId: EventId) {
+                       // Cannot happen
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)

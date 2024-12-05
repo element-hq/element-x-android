@@ -9,16 +9,20 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 
 data class MediaViewerState(
+    val eventId: EventId?,
     val mediaInfo: MediaInfo,
     val thumbnailSource: MediaSource?,
     val downloadedMedia: AsyncData<LocalMedia>,
     val snackbarMessage: SnackbarMessage?,
+    val canShowInfo: Boolean,
     val canDownload: Boolean,
     val canShare: Boolean,
+    val canDelete: Boolean,
     val eventSink: (MediaViewerEvents) -> Unit,
 )

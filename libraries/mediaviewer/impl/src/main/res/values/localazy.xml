@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_details_file_format">"File format"</string>
+  <string name="screen_media_details_filename">"File name"</string>
+  <string name="screen_media_details_uploaded_by">"Uploaded by"</string>
+  <string name="screen_media_details_uploaded_on">"Uploaded on"</string>
+</resources>

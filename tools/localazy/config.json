@@ -93,6 +93,18 @@
       ]
     },
     {
+      "name" : ":libraries:mediagallery:impl",
+      "includeRegex" : [
+        "screen_media_browser_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:mediaviewer:impl",
+      "includeRegex" : [
+        "screen\\.media_details\\..*"
+      ]
+    },
+    {
       "name" : ":libraries:eventformatter:impl",
       "includeRegex" : [
         "state_event_.*"

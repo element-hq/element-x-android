@@ -61,3 +61,11 @@ fun String.replacePrefix(oldPrefix: String, newPrefix: String): String {
         this
     }
 }
+
+/**
+ * Surround with brackets.
+ */
+fun String.withBrackets(prefix: String = "(", suffix: String = ")"): String {
+    return "$prefix$this$suffix"
+}
+
