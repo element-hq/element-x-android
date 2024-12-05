@@ -146,7 +146,7 @@ class RoomDetailsNode @AssistedInject constructor(
             openAdminSettings = this::openAdminSettings,
             onJoinCallClick = ::onJoinCall,
             onPinnedMessagesClick = ::openPinnedMessages,
-            onKnockRequestsClick = ::openKnockRequestsLists
+            onKnockRequestsClick = ::openKnockRequestsLists,
         )
     }
 }
