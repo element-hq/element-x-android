@@ -7,6 +7,7 @@
 
 package io.element.android.features.knockrequests.impl.list
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.knockrequests.impl.KnockRequest
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -23,6 +24,7 @@ data class KnockRequestsListState(
     val canAcceptAll = knockRequests is AsyncData.Success && knockRequests.data.size > 1
 }
 
+@Immutable
 sealed interface KnockRequestsCurrentAction {
     data object None : KnockRequestsCurrentAction
     data class Accept(val knockRequest: KnockRequest, val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
