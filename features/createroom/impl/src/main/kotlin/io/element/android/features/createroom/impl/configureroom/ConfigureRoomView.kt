@@ -240,9 +240,9 @@ private fun RoomTopic(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
-        placeholder = stringResource(CommonStrings.common_topic_placeholder),
         onValueChange = onTopicChange,
         maxLines = 3,
+        supportingText = stringResource(CommonStrings.common_topic_placeholder),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
         ),

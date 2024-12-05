@@ -28,6 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -65,6 +67,7 @@ class MessagesNode @AssistedInject constructor(
     messageComposerPresenterFactory: MessageComposerPresenter.Factory,
     timelinePresenterFactory: TimelinePresenter.Factory,
     presenterFactory: MessagesPresenter.Factory,
+    actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
@@ -73,6 +76,7 @@ class MessagesNode @AssistedInject constructor(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(this),
         timelinePresenter = timelinePresenterFactory.create(this),
+        actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
     )
     private val callbacks = plugins<Callback>()
 

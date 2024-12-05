@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room.preview
 
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
@@ -25,7 +26,7 @@ object RoomPreviewInfoMapper {
             avatarUrl = info.avatarUrl,
             numberOfJoinedMembers = info.numJoinedMembers.toLong(),
             roomType = info.roomType.map(),
-            isHistoryWorldReadable = info.isHistoryWorldReadable,
+            isHistoryWorldReadable = info.isHistoryWorldReadable.orFalse(),
             isJoined = info.membership == Membership.JOINED,
             isInvited = info.membership == Membership.INVITED,
             isPublic = info.joinRule == JoinRule.Public,

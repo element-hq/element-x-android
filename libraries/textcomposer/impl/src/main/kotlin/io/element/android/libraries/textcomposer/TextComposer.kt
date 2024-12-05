@@ -10,8 +10,10 @@ package io.element.android.libraries.textcomposer
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -26,8 +28,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +40,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -66,6 +72,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
+import io.element.android.libraries.textcomposer.model.showCaptionCompatibilityWarning
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
@@ -121,8 +128,8 @@ fun TextComposer(
     }
 
     val layoutModifier = modifier
-            .fillMaxSize()
-            .height(IntrinsicSize.Min)
+        .fillMaxSize()
+        .height(IntrinsicSize.Min)
 
     val composerOptionsButton: @Composable () -> Unit = remember(composerMode) {
         @Composable {
@@ -146,7 +153,7 @@ fun TextComposer(
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
-    } else if (composerMode is MessageComposerMode.Attachment) {
+    } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
@@ -182,7 +189,7 @@ fun TextComposer(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         placeholder = placeholder,
-                        showPlaceholder = { state.state.text.value().isEmpty() },
+                        showPlaceholder = state.state.text.value().isEmpty(),
                         subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
@@ -337,8 +344,8 @@ private fun StandardLayout(
             if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
-                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                            .size(48.dp),
+                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                        .size(48.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     voiceDeleteButton()
@@ -348,8 +355,8 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                    .padding(bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
             ) {
                 voiceRecording()
             }
@@ -362,16 +369,16 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                    .padding(bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
             ) {
                 textInput()
             }
         }
         Box(
-                Modifier
-                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                        .size(48.dp),
+            Modifier
+                .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                .size(48.dp),
             contentAlignment = Alignment.Center,
         ) {
             endButton()
@@ -393,8 +400,8 @@ private fun TextFormattingLayout(
     ) {
         Box(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp)
+                .weight(1f)
+                .padding(horizontal = 12.dp)
         ) {
             textInput()
         }
@@ -428,9 +435,9 @@ private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
     placeholder: String,
-    showPlaceholder: () -> Boolean,
+    showPlaceholder: Boolean,
     subcomposing: Boolean,
-    textInput: @Composable () -> Unit,
+    textInput: @Composable BoxScope.() -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -438,11 +445,11 @@ private fun TextInputBox(
 
     Column(
         modifier = Modifier
-                .clip(roundedCorners)
-                .border(0.5.dp, borderColor, roundedCorners)
-                .background(color = bgColor)
-                .requiredHeightIn(min = 42.dp)
-                .fillMaxSize(),
+            .clip(roundedCorners)
+            .border(0.5.dp, borderColor, roundedCorners)
+            .background(color = bgColor)
+            .requiredHeightIn(min = 42.dp)
+            .fillMaxSize(),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -453,15 +460,15 @@ private fun TextInputBox(
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                    // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                    .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
+                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
-            if (showPlaceholder()) {
+            if (showPlaceholder) {
                 Text(
-                    placeholder,
+                    text = placeholder,
                     style = defaultTypography.copy(
                         color = ElementTheme.colors.textSecondary,
                     ),
@@ -471,6 +478,24 @@ private fun TextInputBox(
             }
 
             textInput()
+
+            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+                var showBottomSheet by remember { mutableStateOf(false) }
+                Icon(
+                    modifier = Modifier
+                        .clickable { showBottomSheet = true }
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .align(Alignment.CenterEnd),
+                    imageVector = CompoundIcons.InfoSolid(),
+                    tint = ElementTheme.colors.iconCriticalPrimary,
+                    contentDescription = null,
+                )
+                if (showBottomSheet) {
+                    CaptionWarningBottomSheet(
+                        onDismiss = { showBottomSheet = false },
+                    )
+                }
+            }
         }
     }
 }
@@ -492,7 +517,7 @@ private fun TextInput(
         composerMode = composerMode,
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,
-        showPlaceholder = { state.messageHtml.isEmpty() },
+        showPlaceholder = state.messageHtml.isEmpty(),
         subcomposing = subcomposing,
     ) {
         RichTextEditor(
@@ -501,8 +526,8 @@ private fun TextInput(
             // This prevents it gaining focus and mutating the state.
             registerStateUpdates = !subcomposing,
             modifier = Modifier
-                    .padding(top = 6.dp, bottom = 6.dp)
-                    .fillMaxWidth(),
+                .padding(top = 6.dp, bottom = 6.dp)
+                .fillMaxWidth(),
             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveRoomMentionDisplay = resolveRoomMentionDisplay,
@@ -602,13 +627,14 @@ internal fun TextComposerEditCaptionPreview() = ElementPreview {
 internal fun TextComposerAddCaptionPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
-    ) { _, textEditorState ->
+    ) { index, textEditorState ->
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = aMessageComposerModeEditCaption(
                 // No caption so that the UI will be in add caption mode
                 content = "",
+                showCompatibilityWarning = index == 0,
             ),
             enableVoiceMessages = false,
         )
@@ -657,7 +683,10 @@ internal fun TextComposerCaptionPreview() = ElementPreview {
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Attachment(allowCaption = index < list.size),
+            composerMode = MessageComposerMode.Attachment(
+                allowCaption = index < list.size,
+                showCaptionCompatibilityWarning = index == 0,
+            ),
             enableVoiceMessages = false,
         )
     }
@@ -762,9 +791,11 @@ fun aMessageComposerModeEdit(
 fun aMessageComposerModeEditCaption(
     eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
     content: String,
+    showCompatibilityWarning: Boolean = false,
 ) = MessageComposerMode.EditCaption(
     eventOrTransactionId = eventOrTransactionId,
-    content = content
+    content = content,
+    showCaptionCompatibilityWarning = showCompatibilityWarning,
 )
 
 fun aMessageComposerModeReply(

@@ -32,6 +32,7 @@
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
   <string name="action_accept">"Accepter"</string>
+  <string name="action_add_caption">"Ajouter une légende"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
   <string name="action_call">"Appel"</string>
@@ -45,8 +46,10 @@
   <string name="action_confirm_password">"Confirmez le mot de passe"</string>
   <string name="action_continue">"Continuer"</string>
   <string name="action_copy">"Copier"</string>
+  <string name="action_copy_caption">"Copier la légende"</string>
   <string name="action_copy_link">"Copier le lien"</string>
   <string name="action_copy_link_to_message">"Copier le lien vers le message"</string>
+  <string name="action_copy_text">"Copier le texte"</string>
   <string name="action_create">"Créer"</string>
   <string name="action_create_a_room">"Créer un salon"</string>
   <string name="action_deactivate">"Désactiver"</string>
@@ -57,6 +60,7 @@
   <string name="action_discard">"Annuler"</string>
   <string name="action_done">"Terminé"</string>
   <string name="action_edit">"Modifier"</string>
+  <string name="action_edit_caption">"Modifier la légende"</string>
   <string name="action_edit_poll">"Modifier le sondage"</string>
   <string name="action_enable">"Activer"</string>
   <string name="action_end_poll">"Terminer le sondage"</string>
@@ -91,6 +95,8 @@
   <string name="action_react">"Réagissez"</string>
   <string name="action_reject">"Rejeter"</string>
   <string name="action_remove">"Supprimer"</string>
+  <string name="action_remove_caption">"Supprimer la légende"</string>
+  <string name="action_remove_message">"Supprimer le message"</string>
   <string name="action_reply">"Répondre"</string>
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
   <string name="action_report_bug">"Signaler un problème"</string>
@@ -123,6 +129,7 @@
   <string name="action_yes">"Oui"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
+  <string name="common_adding_caption">"Ajout d’une légende"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
   <string name="common_analytics">"Statistiques d’utilisation"</string>
   <string name="common_appearance">"Apparence"</string>
@@ -143,6 +150,7 @@
   <string name="common_do_not_show_this_again">"Ne plus afficher"</string>
   <string name="common_edited_suffix">"(modifié)"</string>
   <string name="common_editing">"Édition"</string>
+  <string name="common_editing_caption">"Modification de la légende"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Chiffrement"</string>
   <string name="common_encryption_enabled">"Chiffrement activé"</string>
@@ -246,6 +254,7 @@ Raison: %1$s."</string>
   <string name="common_unable_to_invite_title">"Impossible d’envoyer une ou plusieurs invitations"</string>
   <string name="common_unlock">"Déverrouillage"</string>
   <string name="common_unmute">"Retirer la sourdine"</string>
+  <string name="common_unsupported_call">"Appel non pris en charge"</string>
   <string name="common_unsupported_event">"Événement non pris en charge"</string>
   <string name="common_username">"Nom d’utilisateur"</string>
   <string name="common_verification_cancelled">"Vérification annulée"</string>
@@ -290,7 +299,22 @@ Raison: %1$s."</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Oui, tout accepter"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Êtes-vous sûr de vouloir accepter toutes les demandes pour rejoindre le salon ?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Tout accepter"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Tout accepter"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Oui, rejeter et bannir"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Êtes-vous sûr de vouloir rejeter la demande et bannir %1$s? Cet utilisateur ne pourra pas demander à nouveau à rejoindre ce salon."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Refuser et interdire l’accès"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Oui, refuser"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Êtes-vous sûr de vouloir refuser la demande de %1$s à rejoindre le salon?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Refuser l’accès"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Refuser et bannir"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Lorsque quelqu’un demandera à rejoindre le salon, vous pourrez voir sa demande ici."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Personne ne demande à rejoindre le salon"</string>
+  <string name="screen_knock_requests_list_title">"Demandes en attente"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Cliquez (clic long) sur un message et choisissez « %1$s » pour qu‘il apparaisse ici."</string>
@@ -311,12 +335,21 @@ Raison: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Un ou plusieurs de vos appareils ne sont pas vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler et réessayer plus tard après avoir vérifié tous vos appareils."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Votre message n’a pas été envoyé car vous n’avez pas vérifié tous vos appareils"</string>
   <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
+  <string name="screen_room_details_requests_to_join_title">"Demandes en attente"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s et %2$d autre personne souhaitent rejoindre ce salon"</item>
+    <item quantity="other">"%1$s et %2$d autres personnes souhaitent rejoindre ce salon"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Tout afficher"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accepter"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s souhaite rejoindre ce salon"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Voir"</string>
   <string name="screen_room_title">"Discussion"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Demande d’adhésion envoyée"</string>
   <string name="screen_share_location_title">"Partage de position"</string>

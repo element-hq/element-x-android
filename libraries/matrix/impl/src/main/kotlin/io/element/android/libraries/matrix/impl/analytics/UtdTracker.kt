@@ -27,6 +27,7 @@ class UtdTracker(
             UtdCause.UNKNOWN_DEVICE -> {
                 Error.Name.ExpectedSentByInsecureDevice
             }
+            UtdCause.HISTORICAL_MESSAGE -> Error.Name.HistoricalMessage
         }
         val event = Error(
             context = null,

@@ -102,7 +102,10 @@ class CreateRoomDataStore @Inject constructor(
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(
                 roomVisibility = when (config.roomVisibility) {
-                    is RoomVisibilityState.Public -> config.roomVisibility.copy(roomAddress = RoomAddress.Edited(address))
+                    is RoomVisibilityState.Public -> {
+                        val sanitizedAddress = address.lowercase()
+                        config.roomVisibility.copy(roomAddress = RoomAddress.Edited(sanitizedAddress))
+                    }
                     else -> config.roomVisibility
                 }
             )

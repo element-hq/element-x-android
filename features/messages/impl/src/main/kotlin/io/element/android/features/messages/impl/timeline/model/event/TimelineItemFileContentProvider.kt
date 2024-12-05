@@ -31,7 +31,7 @@ fun aTimelineItemFileContent(
     formattedCaption = null,
     isEdited = false,
     thumbnailSource = null,
-    fileSource = MediaSource(url = ""),
+    mediaSource = MediaSource(url = ""),
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",
     fileExtension = "pdf"

@@ -18,6 +18,8 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
+internal const val MAX_KNOCK_MESSAGE_LENGTH = 500
+
 @Immutable
 data class JoinRoomState(
     val contentState: ContentState,
