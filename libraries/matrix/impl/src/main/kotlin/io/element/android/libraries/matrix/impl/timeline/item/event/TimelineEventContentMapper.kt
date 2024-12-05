@@ -146,6 +146,8 @@ private fun RustUtdCause.map(): UtdCause {
         RustUtdCause.UNSIGNED_DEVICE -> UtdCause.UnsignedDevice
         RustUtdCause.UNKNOWN_DEVICE -> UtdCause.UnknownDevice
         RustUtdCause.HISTORICAL_MESSAGE -> UtdCause.HistoricalMessage
+        RustUtdCause.WITHHELD_FOR_UNVERIFIED_OR_INSECURE_DEVICE -> UtdCause.WithheldUnverifiedOrInsecureDevice
+        RustUtdCause.WITHHELD_BY_SENDER -> UtdCause.WithheldBySender
     }
 }
 
