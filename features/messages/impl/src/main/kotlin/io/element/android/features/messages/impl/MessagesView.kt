@@ -118,6 +118,7 @@ fun MessagesView(
     onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
+    knockRequestsBanner: @Composable (Modifier) -> Unit,
 ) {
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
@@ -215,6 +216,7 @@ fun MessagesView(
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                knockRequestsBanner = knockRequestsBanner,
             )
         },
         snackbarHost = {
@@ -284,6 +286,7 @@ private fun MessagesViewContent(
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
+    knockRequestsBanner: @Composable (Modifier) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -371,6 +374,9 @@ private fun MessagesViewContent(
                             onClick = ::focusOnPinnedEvent,
                             onViewAllClick = onViewAllPinnedMessagesClick,
                         )
+                    }
+                    Box(modifier = Modifier.padding(all = 16.dp)) {
+                        knockRequestsBanner(Modifier)
                     }
                 }
             },
@@ -539,5 +545,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onJoinCallClick = {},
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
+        knockRequestsBanner = {},
     )
 }

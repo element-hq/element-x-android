@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerRenderer
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -71,6 +72,7 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
+    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(
         navigator = this,
@@ -98,6 +100,7 @@ class MessagesNode @AssistedInject constructor(
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
         fun onViewAllPinnedEvents()
+        fun onViewKnockRequests()
     }
 
     override fun onBuilt() {
@@ -206,6 +209,10 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onJoinCallClick(room.roomId) }
     }
 
+    private fun onViewKnockRequestsClick() {
+        callbacks.forEach { it.onViewKnockRequests() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
@@ -231,6 +238,12 @@ class MessagesNode @AssistedInject constructor(
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
                 onViewAllPinnedMessagesClick = this::onViewAllPinnedMessagesClick,
+                knockRequestsBanner = { modifier ->
+                    knockRequestsBannerRenderer.View(
+                        modifier = modifier,
+                        onViewRequestsClick = this::onViewKnockRequestsClick
+                    )
+                },
                 modifier = modifier,
             )
 
