@@ -7,6 +7,7 @@
 
 package io.element.android.features.maprealtime.impl
 
+//import org.ramani.compose.Margins
 import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,10 +44,10 @@ import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.Style
 import org.ramani.compose.CameraPosition
+import org.ramani.compose.CompassMargins
 import org.ramani.compose.LocationRequestProperties
 import org.ramani.compose.LocationStyling
 import org.ramani.compose.MapLibre
-import org.ramani.compose.Margins
 import org.ramani.compose.UiSettings
 
 @Composable
@@ -81,9 +82,15 @@ fun MapRealtimeView(
         mutableStateOf(CameraPosition())
     }
 
+    val locationRequestState = rememberSaveable { mutableStateOf<LocationRequestProperties>(LocationRequestProperties(interval = 250L)) }
+
     val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
 
-    val myCompassMargins = Margins(left = 0, top = 650, right = 45)
+//    val styleUrl = rememberSaveable { mutableStateOf("https://demotiles.maplibre.org/style.json") }
+    val styleUrl = rememberSaveable { mutableStateOf("https://api.maptiler.com/maps/openstreetmap/style.json?key=4N19bSbSelzpOSfUibeB") }
+    val styleBuilder = Style.Builder().fromUri(styleUrl.value)
+
+    val myCompassMargins = CompassMargins(left = 0, top = 650, right = 45)
     val uiSettings = UiSettings(compassMargins = myCompassMargins)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -91,9 +98,9 @@ fun MapRealtimeView(
         MapLibre(
             modifier = Modifier
                 .fillMaxSize(),
-            styleBuilder = Style.Builder().fromUri(state.styleUrl),
+            styleBuilder = styleBuilder,
             cameraPosition = cameraPosition.value,
-            locationRequestProperties = LocationRequestProperties(interval = 250L),
+            locationRequestProperties = locationRequestState.value,
             renderMode = RenderMode.COMPASS,
             userLocation = currentUserLocation,
             onMapLongClick = { latLng ->
@@ -106,7 +113,8 @@ fun MapRealtimeView(
             uiSettings = uiSettings
         ) {
             state.liveLocationShares.map { item ->
-                LocationSymbol(item)
+                val st = if (state.mapType.mapKey == "satellite") "White" else "Black"
+                LocationSymbol(item, st)
             }
         }
 
