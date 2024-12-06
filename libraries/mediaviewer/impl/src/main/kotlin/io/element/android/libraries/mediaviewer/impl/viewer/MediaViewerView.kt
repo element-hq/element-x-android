@@ -17,8 +17,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +51,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -117,6 +116,9 @@ fun MediaViewerView(
             ) {
                 MediaViewerTopBar(
                     actionsEnabled = state.downloadedMedia is AsyncData.Success,
+                    canDownload = state.canDownload,
+                    canShare = state.canShare,
+                    mimeType = state.mediaInfo.mimeType,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
                     onBackClick = onBackClick,
@@ -124,13 +126,9 @@ fun MediaViewerView(
                 )
                 MediaViewerBottomBar(
                     modifier = Modifier.align(Alignment.BottomCenter),
-                    actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                    canDownload = state.canDownload,
-                    canShare = state.canShare,
-                    mimeType = state.mediaInfo.mimeType,
+                    showDivider = state.mediaInfo.mimeType.isMimeTypeVideo(),
                     caption = state.mediaInfo.caption,
                     onHeightChange = { bottomPaddingInPixels = it },
-                    eventSink = state.eventSink
                 )
             }
         }
@@ -276,11 +274,13 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
     return showProgress
 }
 
-@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
+    canDownload: Boolean,
+    canShare: Boolean,
+    mimeType: String,
     senderName: String?,
     dateSent: String?,
     onBackClick: () -> Unit,
@@ -292,8 +292,6 @@ private fun MediaViewerTopBar(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = 48.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = senderName,
@@ -313,55 +311,12 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
-            // TODO Add action to open infos.
-        }
-    )
-}
-
-@Composable
-private fun MediaViewerBottomBar(
-    actionsEnabled: Boolean,
-    canDownload: Boolean,
-    canShare: Boolean,
-    mimeType: String,
-    caption: String?,
-    onHeightChange: (Int) -> Unit,
-    eventSink: (MediaViewerEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color(0x99101317))
-            .onSizeChanged {
-                onHeightChange(it.height)
-            },
-    ) {
-        HorizontalDivider()
-        if (caption != null) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                text = caption,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodyLgRegular,
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
             if (canShare) {
                 IconButton(
                     enabled = actionsEnabled,
                     onClick = {
                         eventSink(MediaViewerEvents.Share)
                     },
-                    modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
                         imageVector = CompoundIcons.ShareAndroid(),
@@ -369,7 +324,6 @@ private fun MediaViewerBottomBar(
                     )
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
@@ -400,6 +354,39 @@ private fun MediaViewerBottomBar(
                     )
                 }
             }
+            // TODO Add action to open infos.
+        }
+    )
+}
+
+@Composable
+private fun MediaViewerBottomBar(
+    caption: String?,
+    showDivider: Boolean,
+    onHeightChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color(0x99101317))
+            .onSizeChanged {
+                onHeightChange(it.height)
+            },
+    ) {
+        if (caption != null) {
+            if (showDivider) {
+                HorizontalDivider()
+            }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                text = caption,
+                maxLines = 5,
+                overflow = TextOverflow.Ellipsis,
+                style = ElementTheme.typography.fontBodyLgRegular,
+            )
         }
     }
 }
