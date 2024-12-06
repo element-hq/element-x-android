@@ -51,6 +51,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -125,6 +126,7 @@ fun MediaViewerView(
                 )
                 MediaViewerBottomBar(
                     modifier = Modifier.align(Alignment.BottomCenter),
+                    showDivider = state.mediaInfo.mimeType.isMimeTypeVideo(),
                     caption = state.mediaInfo.caption,
                     onHeightChange = { bottomPaddingInPixels = it },
                 )
@@ -360,6 +362,7 @@ private fun MediaViewerTopBar(
 @Composable
 private fun MediaViewerBottomBar(
     caption: String?,
+    showDivider: Boolean,
     onHeightChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -371,8 +374,10 @@ private fun MediaViewerBottomBar(
                 onHeightChange(it.height)
             },
     ) {
-        HorizontalDivider()
         if (caption != null) {
+            if (showDivider) {
+                HorizontalDivider()
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
