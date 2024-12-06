@@ -77,7 +77,7 @@ private fun VisibleKnockRequestsBannerView(
     Surface(
         modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.small,
-        color = ElementTheme.colors.bgCanvasDefault,
+        color = ElementTheme.colors.bgCanvasDefaultLevel1,
         shadowElevation = 24.dp
     ) {
         Column(
@@ -180,7 +180,7 @@ private fun KnockRequestAvatarListView(
                     modifier = Modifier
                             .size(size = avatarSize)
                             .clip(CircleShape)
-                            .background(color = ElementTheme.colors.bgCanvasDefault)
+                            .background(color = ElementTheme.colors.bgCanvasDefaultLevel1)
                             .zIndex(-index.toFloat()),
                     ) {
                     Avatar(
