@@ -18,4 +18,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.tests.testutils)
     implementation(projects.libraries.matrix.api)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
 }

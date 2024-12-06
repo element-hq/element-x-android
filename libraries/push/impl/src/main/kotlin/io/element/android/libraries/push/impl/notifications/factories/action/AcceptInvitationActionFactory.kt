@@ -11,12 +11,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import javax.inject.Inject
@@ -27,8 +29,8 @@ class AcceptInvitationActionFactory @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
 ) {
-    // offer to type a quick accept button
-    fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action {
+    fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action? {
+        if (!NotificationConfig.SHOW_ACCEPT_AND_DECLINE_INVITE_ACTIONS) return null
         val sessionId = inviteNotifiableEvent.sessionId.value
         val roomId = inviteNotifiableEvent.roomId.value
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
@@ -44,7 +46,7 @@ class AcceptInvitationActionFactory @Inject constructor(
         )
         return NotificationCompat.Action.Builder(
             R.drawable.vector_notification_accept_invitation,
-            stringProvider.getString(R.string.notification_invitation_action_join),
+            stringProvider.getString(CommonStrings.action_accept),
             pendingIntent
         ).build()
     }

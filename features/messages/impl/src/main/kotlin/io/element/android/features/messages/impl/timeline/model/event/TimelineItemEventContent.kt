@@ -8,17 +8,29 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 @Immutable
 sealed interface TimelineItemEventContent {
     val type: String
 }
 
+interface TimelineItemEventMutableContent {
+    /** Whether the event has been edited. */
+    val isEdited: Boolean
+}
+
 @Immutable
-sealed interface TimelineItemEventContentWithAttachment : TimelineItemEventContent {
+sealed interface TimelineItemEventContentWithAttachment :
+    TimelineItemEventContent,
+    TimelineItemEventMutableContent {
     val filename: String
     val caption: String?
     val formattedCaption: CharSequence?
+    val mediaSource: MediaSource
+    val mimeType: String
+    val formattedFileSize: String
+    val fileExtension: String
 
     val bestDescription: String
         get() = caption ?: filename
@@ -74,9 +86,7 @@ fun TimelineItemEventContent.canReact(): Boolean =
 /**
  * Whether the event content has been edited.
  */
-fun TimelineItemEventContent.isEdited(): Boolean =
-    when (this) {
-        is TimelineItemTextBasedContent -> isEdited
-        is TimelineItemPollContent -> isEdited
-        else -> false
-    }
+fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
+    is TimelineItemEventMutableContent -> isEdited
+    else -> false
+}

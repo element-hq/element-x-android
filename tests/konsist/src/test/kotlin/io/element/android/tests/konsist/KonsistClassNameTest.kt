@@ -48,6 +48,9 @@ class KonsistClassNameTest {
         Konsist.scopeFromProduction()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)
+            .withoutName(
+                "AspectRatioProvider",
+            )
             .also {
                 // Check that classes are actually found
                 assertThat(it.size).isGreaterThan(100)
@@ -70,6 +73,11 @@ class KonsistClassNameTest {
 
     @Test
     fun `Fake classes must be named using Fake and the interface it fakes`() {
+        var failingCases = 0
+        val failingCasesList = listOf(
+            "FakeWrongClassName",
+            "FakeWrongClassSubInterfaceName",
+        )
         Konsist.scopeFromProject()
             .classes()
             .withNameContaining("Fake")
@@ -81,16 +89,19 @@ class KonsistClassNameTest {
                 val interfaceName = it.name
                     .replace("FakeRust", "")
                     .replace("Fake", "")
-                (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
+                val result = (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
                     it.parents().any { parent ->
-                        // Workaround to get the parent name. For instance:
-                        // parent.name used to return `UserListPresenter.Factory` but is now returning `Factory`.
-                        // So we need to retrieve the name of the parent class differently.
-                        val packageName = parent.packagee!!.name
-                        val parentName = parent.fullyQualifiedName!!.substringAfter("$packageName.").replace(".", "")
+                        val parentName = parent.name.replace(".", "")
                         parentName == interfaceName
                     }
+                if (!result && it.name in failingCasesList) {
+                    failingCases++
+                    true
+                } else {
+                    result
+                }
             }
+        assertThat(failingCases).isEqualTo(failingCasesList.size)
     }
 
     @Test

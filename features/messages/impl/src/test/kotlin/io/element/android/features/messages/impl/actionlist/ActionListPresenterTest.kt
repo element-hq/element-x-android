@@ -26,15 +26,19 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -172,8 +176,53 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.ReportContent,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for others message in a thread`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        presenter.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                isThreaded = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = false,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.ReplyInThread,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -219,8 +268,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -265,8 +314,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -312,8 +361,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -359,10 +408,55 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for my message in a thread`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        presenter.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                isThreaded = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    )
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.ReplyInThread,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -407,10 +501,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -429,7 +523,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                isEditable = false,
+                isEditable = true,
                 content = aTimelineItemImageContent(),
             )
             initialState.eventSink.invoke(
@@ -444,8 +538,6 @@ class ActionListPresenterTest {
                     ),
                 )
             )
-            // val loadingState = awaitItem()
-            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -457,8 +549,158 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.AddCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for a media item - caption disabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = true,
+            isPinFeatureEnabled = true,
+            allowCaption = false,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                isEditable = true,
+                content = aTimelineItemImageContent(),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    ),
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        // Not here
+                        // TimelineItemAction.AddCaption,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for a media with caption item`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                isEditable = true,
+                content = aTimelineItemImageContent(
+                    caption = A_CAPTION,
+                ),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    ),
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.EditCaption,
+                        TimelineItemAction.CopyCaption,
+                        TimelineItemAction.RemoveCaption,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for a media with caption item - other user event`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true, isPinFeatureEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                content = aTimelineItemImageContent(
+                    caption = A_CAPTION,
+                ),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = true,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = true,
+                    ),
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Pin,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.CopyCaption,
+                        TimelineItemAction.ViewSource,
+                        TimelineItemAction.ReportContent,
                     )
                 )
             )
@@ -571,10 +813,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Pin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -618,9 +860,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -672,10 +914,10 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.Unpin,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -768,7 +1010,7 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
-                        TimelineItemAction.Copy,
+                        TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -807,11 +1049,11 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Edit,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Edit,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -850,8 +1092,8 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
@@ -912,7 +1154,9 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 isMine = true,
                 isEditable = false,
-                content = aTimelineItemVoiceContent(),
+                content = aTimelineItemVoiceContent(
+                    caption = null,
+                ),
             )
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(
@@ -1011,6 +1255,7 @@ private fun createActionListPresenter(
     isDeveloperModeEnabled: Boolean,
     isPinFeatureEnabled: Boolean,
     room: MatrixRoom = FakeMatrixRoom(),
+    allowCaption: Boolean = true,
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return DefaultActionListPresenter(
@@ -1018,6 +1263,11 @@ private fun createActionListPresenter(
         appPreferencesStore = preferencesStore,
         isPinnedMessagesFeatureEnabled = { isPinFeatureEnabled },
         room = room,
-        userSendFailureFactory = VerifiedUserSendFailureFactory(room)
+        userSendFailureFactory = VerifiedUserSendFailureFactory(room),
+        featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.MediaCaptionCreation.key to allowCaption,
+            ),
+        )
     )
 }

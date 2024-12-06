@@ -21,12 +21,14 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionComparator
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -36,6 +38,8 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeForwa
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -59,12 +63,15 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: MatrixRoom,
     private val userSendFailureFactory: VerifiedUserSendFailureFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
     interface Factory : ActionListPresenter.Factory {
         override fun create(postProcessor: TimelineItemActionPostProcessor): DefaultActionListPresenter
     }
+
+    private val comparator = TimelineItemActionComparator()
 
     @Composable
     override fun present(): ActionListState {
@@ -133,7 +140,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         }
     }
 
-    private fun buildActions(
+    private suspend fun buildActions(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
@@ -141,7 +148,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
         isEventPinned: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
-        return buildList {
+        return buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
                 if (timelineItem.isThreaded) {
                     add(TimelineItemAction.ReplyInThread)
@@ -153,7 +160,19 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 add(TimelineItemAction.Forward)
             }
             if (timelineItem.isEditable) {
-                add(TimelineItemAction.Edit)
+                if (timelineItem.content is TimelineItemEventContentWithAttachment) {
+                    // Caption
+                    if (timelineItem.content.caption == null) {
+                        if (featureFlagService.isFeatureEnabled(FeatureFlags.MediaCaptionCreation)) {
+                            add(TimelineItemAction.AddCaption)
+                        }
+                    } else {
+                        add(TimelineItemAction.EditCaption)
+                        add(TimelineItemAction.RemoveCaption)
+                    }
+                } else {
+                    add(TimelineItemAction.Edit)
+                }
             }
             if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
                 add(TimelineItemAction.EndPoll)
@@ -167,7 +186,9 @@ class DefaultActionListPresenter @AssistedInject constructor(
                 }
             }
             if (timelineItem.content.canBeCopied()) {
-                add(TimelineItemAction.Copy)
+                add(TimelineItemAction.CopyText)
+            } else if ((timelineItem.content as? TimelineItemEventContentWithAttachment)?.caption.isNullOrBlank().not()) {
+                add(TimelineItemAction.CopyCaption)
             }
             if (timelineItem.isRemote) {
                 add(TimelineItemAction.CopyLink)
@@ -183,6 +204,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
             }
         }
             .postFilter(timelineItem.content)
+            .sortedWith(comparator)
             .let(postProcessor::process)
     }
 }
@@ -190,7 +212,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
 /**
  * Post filter the actions based on the content of the event.
  */
-private fun List<TimelineItemAction>.postFilter(content: TimelineItemEventContent): List<TimelineItemAction> {
+private fun Iterable<TimelineItemAction>.postFilter(content: TimelineItemEventContent): Iterable<TimelineItemAction> {
     return filter { action ->
         when (content) {
             is TimelineItemCallNotifyContent,

@@ -31,7 +31,6 @@ fun aMessageComposerState(
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
-    attachmentsState: AttachmentsState = AttachmentsState.None,
     suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
     eventSink: (MessageComposerEvents) -> Unit = {},
 ) = MessageComposerState(
@@ -42,7 +41,6 @@ fun aMessageComposerState(
     showAttachmentSourcePicker = showAttachmentSourcePicker,
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
-    attachmentsState = attachmentsState,
     suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     eventSink = eventSink,

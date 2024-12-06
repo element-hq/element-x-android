@@ -28,9 +28,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -60,12 +64,20 @@ class MessagesNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
+    messageComposerPresenterFactory: MessageComposerPresenter.Factory,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     presenterFactory: MessagesPresenter.Factory,
+    actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
-    private val presenter = presenterFactory.create(this)
+    private val presenter = presenterFactory.create(
+        navigator = this,
+        composerPresenter = messageComposerPresenterFactory.create(this),
+        timelinePresenter = timelinePresenterFactory.create(this),
+        actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
+    )
     private val callbacks = plugins<Callback>()
 
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
@@ -112,10 +124,6 @@ class MessagesNode @AssistedInject constructor(
             ?.map { it.onEventClick(event) }
             ?.all { it }
             .orFalse()
-    }
-
-    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
     private fun onUserDataClick(userId: UserId) {
@@ -178,6 +186,10 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onEditPollClick(eventId) }
     }
 
+    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>) {
+        callbacks.forEach { it.onPreviewAttachments(attachments) }
+    }
+
     private fun onViewAllPinnedMessagesClick() {
         callbacks.forEach { it.onViewAllPinnedEvents() }
     }
@@ -213,7 +225,6 @@ class MessagesNode @AssistedInject constructor(
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
-                onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
                 onSendLocationClick = this::onSendLocationClick,

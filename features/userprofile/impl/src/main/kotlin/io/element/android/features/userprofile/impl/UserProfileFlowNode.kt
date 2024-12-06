@@ -15,6 +15,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -24,18 +25,14 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.userprofile.impl.root.UserProfileNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
-import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
-import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -44,6 +41,7 @@ class UserProfileFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val sessionIdHolder: CurrentSessionIdHolder,
+    private val mediaViewerEntryPoint: MediaViewerEntryPoint,
 ) : BaseFlowNode<UserProfileFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -80,22 +78,18 @@ class UserProfileFlowNode @AssistedInject constructor(
                 createNode<UserProfileNode>(buildContext, listOf(callback, params))
             }
             is NavTarget.AvatarPreview -> {
-                // We need to fake the MimeType here for the viewer to work.
-                val mimeType = MimeTypes.Images
-                val input = MediaViewerNode.Inputs(
-                    mediaInfo = MediaInfo(
+                val callback = object : MediaViewerEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                mediaViewerEntryPoint.nodeBuilder(this, buildContext)
+                    .avatar(
                         filename = navTarget.name,
-                        caption = null,
-                        mimeType = mimeType,
-                        formattedFileSize = "",
-                        fileExtension = "",
-                    ),
-                    mediaSource = MediaSource(url = navTarget.avatarUrl),
-                    thumbnailSource = null,
-                    canDownload = false,
-                    canShare = false,
-                )
-                createNode<AvatarPreviewNode>(buildContext, listOf(input))
+                        avatarUrl = navTarget.avatarUrl
+                    )
+                    .callback(callback)
+                    .build()
             }
         }
     }

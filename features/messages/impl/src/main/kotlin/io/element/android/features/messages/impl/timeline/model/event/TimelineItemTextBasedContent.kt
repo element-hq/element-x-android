@@ -14,7 +14,9 @@ import org.jsoup.nodes.Document
  * Represents a text based content of a timeline item event (a message, a notice, an emote event...).
  */
 @Immutable
-sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
+sealed interface TimelineItemTextBasedContent :
+    TimelineItemEventContent,
+    TimelineItemEventMutableContent {
     /** The raw body of the event, in Markdown format. */
     val body: String
 
@@ -29,9 +31,6 @@ sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
 
     /** The plain text version of the event body. This is the Markdown version without actual Markdown formatting. */
     val plainText: String
-
-    /** Whether the event has been edited. */
-    val isEdited: Boolean
 
     /** The raw HTML body of the event. */
     val htmlBody: String?

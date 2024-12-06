@@ -34,6 +34,7 @@
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
   <string name="action_accept">"Разрешить"</string>
+  <string name="action_add_caption">"Добавить подпись"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Позвонить"</string>
@@ -47,8 +48,10 @@
   <string name="action_confirm_password">"Подтвердите пароль"</string>
   <string name="action_continue">"Продолжить"</string>
   <string name="action_copy">"Копировать"</string>
+  <string name="action_copy_caption">"Скопировать подпись"</string>
   <string name="action_copy_link">"Скопировать ссылку"</string>
   <string name="action_copy_link_to_message">"Скопировать ссылку в сообщение"</string>
+  <string name="action_copy_text">"Копировать текст"</string>
   <string name="action_create">"Создать"</string>
   <string name="action_create_a_room">"Создать комнату"</string>
   <string name="action_deactivate">"Отключить"</string>
@@ -59,6 +62,7 @@
   <string name="action_discard">"Отменить"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
+  <string name="action_edit_caption">"Изменить подпись"</string>
   <string name="action_edit_poll">"Редактировать опрос"</string>
   <string name="action_enable">"Включить"</string>
   <string name="action_end_poll">"Завершить опрос"</string>
@@ -93,6 +97,8 @@
   <string name="action_react">"Реакция"</string>
   <string name="action_reject">"Отклонить"</string>
   <string name="action_remove">"Удалить"</string>
+  <string name="action_remove_caption">"Удалить подпись"</string>
+  <string name="action_remove_message">"Удалить сообщение"</string>
   <string name="action_reply">"Ответить"</string>
   <string name="action_reply_in_thread">"Ответить в теме"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
@@ -125,6 +131,7 @@
   <string name="action_yes">"Да"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
+  <string name="common_adding_caption">"Добавление подписи"</string>
   <string name="common_advanced_settings">"Дополнительные настройки"</string>
   <string name="common_analytics">"Аналитика"</string>
   <string name="common_appearance">"Внешний вид"</string>
@@ -145,6 +152,7 @@
   <string name="common_do_not_show_this_again">"Не показывать больше"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
+  <string name="common_editing_caption">"Редактирование подписи"</string>
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption">"Шифрование"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
@@ -295,8 +303,22 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Да, принять все"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Вы действительно хотите принять все заявки на присоединение?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Принять все запросы"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Принять всё"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Да, отклонить и запретить"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверен, что хочешь отклонить и запретить %1$s? Этот пользователь больше не сможет запросить доступ к этой комнате."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Отклонить и запретить доступ"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Да, отклонить"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Вы уверены, что хотите отклонить %1$s запрос на присоединение к этой комнате?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Отклонить доступ"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Отклонить и запретить"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Нет ожидающих запросов на присоединение"</string>
+  <string name="screen_knock_requests_list_title">"Запросы на присоединение"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Подпись может быть не видна пользователям старых приложений."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите “%1$s”, чтобы добавить его сюда."</string>
@@ -318,6 +340,7 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не проверены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, проверив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_details_pinned_events_row_title">"Закрепленные сообщения"</string>
+  <string name="screen_room_details_requests_to_join_title">"Запросы на вступление"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <plurals name="screen_room_multiple_knock_requests_title">

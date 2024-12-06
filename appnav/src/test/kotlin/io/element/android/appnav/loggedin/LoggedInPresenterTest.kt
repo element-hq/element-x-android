@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -501,9 +502,8 @@ class LoggedInPresenterTest {
         // - The sliding sync proxy is no longer supported
         // - The native sliding sync is supported
         val matrixClient = FakeMatrixClient(
-            isUsingNativeSlidingSyncLambda = { false },
-            isSlidingSyncProxySupportedLambda = { false },
-            isNativeSlidingSyncSupportedLambda = { true },
+            currentSlidingSyncVersionLambda = { Result.success(SlidingSyncVersion.Proxy) },
+            availableSlidingSyncVersionsLambda = { Result.success(listOf(SlidingSyncVersion.Native)) },
         )
         val presenter = createLoggedInPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -521,9 +521,8 @@ class LoggedInPresenterTest {
     @Test
     fun `present - CheckSlidingSyncProxyAvailability will not force the migration if native sliding sync is not supported too`() = runTest {
         val matrixClient = FakeMatrixClient(
-            isUsingNativeSlidingSyncLambda = { false },
-            isSlidingSyncProxySupportedLambda = { false },
-            isNativeSlidingSyncSupportedLambda = { false },
+            currentSlidingSyncVersionLambda = { Result.success(SlidingSyncVersion.Proxy) },
+            availableSlidingSyncVersionsLambda = { Result.success(emptyList()) },
         )
         val presenter = createLoggedInPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {

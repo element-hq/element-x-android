@@ -27,6 +27,9 @@ class UtdTracker(
             UtdCause.UNKNOWN_DEVICE -> {
                 Error.Name.ExpectedSentByInsecureDevice
             }
+            UtdCause.HISTORICAL_MESSAGE -> Error.Name.HistoricalMessage
+            UtdCause.WITHHELD_FOR_UNVERIFIED_OR_INSECURE_DEVICE -> Error.Name.RoomKeysWithheldForUnverifiedDevice
+            UtdCause.WITHHELD_BY_SENDER -> Error.Name.OlmKeysNotSentError
         }
         val event = Error(
             context = null,

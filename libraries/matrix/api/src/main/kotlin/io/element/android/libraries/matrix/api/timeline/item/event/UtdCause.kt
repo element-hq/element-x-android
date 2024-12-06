@@ -12,5 +12,22 @@ enum class UtdCause {
     SentBeforeWeJoined,
     VerificationViolation,
     UnsignedDevice,
-    UnknownDevice
+    UnknownDevice,
+
+    /**
+     * Expected utd because this is a device-historical message and
+     * key storage is not setup or not configured correctly.
+     */
+    HistoricalMessage,
+
+    /**
+     * The key was withheld on purpose because your device is insecure and/or the
+     * sender trust requirement settings are not met for your device.
+     */
+    WithheldUnverifiedOrInsecureDevice,
+
+    /**
+     * Key is withheld by sender.
+     */
+    WithheldBySender,
 }

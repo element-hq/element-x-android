@@ -16,18 +16,22 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
         get() = sequenceOf(
             aTimelineItemFileContent(),
             aTimelineItemFileContent("A bigger name file.pdf"),
-            aTimelineItemFileContent("An even bigger bigger bigger bigger bigger bigger bigger file name which doesn't fit .pdf"),
+            aTimelineItemFileContent("An even bigger bigger bigger bigger bigger bigger bigger file name which doesn't fit.pdf"),
+            aTimelineItemFileContent(caption = "A caption"),
+            aTimelineItemFileContent(caption = "An even bigger bigger bigger bigger bigger bigger bigger caption"),
         )
 }
 
 fun aTimelineItemFileContent(
     fileName: String = "A file.pdf",
+    caption: String? = null,
 ) = TimelineItemFileContent(
     filename = fileName,
-    caption = null,
+    caption = caption,
     formattedCaption = null,
+    isEdited = false,
     thumbnailSource = null,
-    fileSource = MediaSource(url = ""),
+    mediaSource = MediaSource(url = ""),
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",
     fileExtension = "pdf"

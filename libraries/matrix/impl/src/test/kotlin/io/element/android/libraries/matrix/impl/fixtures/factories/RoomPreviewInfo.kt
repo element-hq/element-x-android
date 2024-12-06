@@ -32,5 +32,6 @@ internal fun aRustRoomPreviewInfo(
         isHistoryWorldReadable = true,
         membership = membership,
         joinRule = joinRule,
+        heroes = null,
     )
 }

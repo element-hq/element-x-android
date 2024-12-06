@@ -10,8 +10,10 @@ package io.element.android.libraries.textcomposer
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -26,8 +28,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +40,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -66,6 +72,7 @@ import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
+import io.element.android.libraries.textcomposer.model.showCaptionCompatibilityWarning
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
@@ -124,23 +131,29 @@ fun TextComposer(
         .fillMaxSize()
         .height(IntrinsicSize.Min)
 
-    val composerOptionsButton: @Composable () -> Unit = remember {
+    val composerOptionsButton: @Composable () -> Unit = remember(composerMode) {
         @Composable {
-            if (composerMode is MessageComposerMode.Attachment) {
-                Spacer(modifier = Modifier.width(9.dp))
-            } else {
-                ComposerOptionsButton(
-                    modifier = Modifier
-                        .size(48.dp),
-                    onClick = onAddAttachment
-                )
+            when (composerMode) {
+                is MessageComposerMode.Attachment -> {
+                    Spacer(modifier = Modifier.width(9.dp))
+                }
+                is MessageComposerMode.EditCaption -> {
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+                else -> {
+                    ComposerOptionsButton(
+                        modifier = Modifier
+                            .size(48.dp),
+                        onClick = onAddAttachment
+                    )
+                }
             }
         }
     }
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
-    } else if (composerMode is MessageComposerMode.Attachment) {
+    } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
@@ -176,7 +189,7 @@ fun TextComposer(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         placeholder = placeholder,
-                        showPlaceholder = { state.state.text.value().isEmpty() },
+                        showPlaceholder = state.state.text.value().isEmpty(),
                         subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
@@ -422,9 +435,9 @@ private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
     placeholder: String,
-    showPlaceholder: () -> Boolean,
+    showPlaceholder: Boolean,
     subcomposing: Boolean,
-    textInput: @Composable () -> Unit,
+    textInput: @Composable BoxScope.() -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -453,9 +466,9 @@ private fun TextInputBox(
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
-            if (showPlaceholder()) {
+            if (showPlaceholder) {
                 Text(
-                    placeholder,
+                    text = placeholder,
                     style = defaultTypography.copy(
                         color = ElementTheme.colors.textSecondary,
                     ),
@@ -465,6 +478,24 @@ private fun TextInputBox(
             }
 
             textInput()
+
+            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+                var showBottomSheet by remember { mutableStateOf(false) }
+                Icon(
+                    modifier = Modifier
+                        .clickable { showBottomSheet = true }
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .align(Alignment.CenterEnd),
+                    imageVector = CompoundIcons.InfoSolid(),
+                    tint = ElementTheme.colors.iconCriticalPrimary,
+                    contentDescription = null,
+                )
+                if (showBottomSheet) {
+                    CaptionWarningBottomSheet(
+                        onDismiss = { showBottomSheet = false },
+                    )
+                }
+            }
         }
     }
 }
@@ -486,7 +517,7 @@ private fun TextInput(
         composerMode = composerMode,
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,
-        showPlaceholder = { state.messageHtml.isEmpty() },
+        showPlaceholder = state.messageHtml.isEmpty(),
         subcomposing = subcomposing,
     ) {
         RichTextEditor(
@@ -575,6 +606,43 @@ internal fun TextComposerEditPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
+internal fun TextComposerEditCaptionPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeEditCaption(
+                // Set an existing caption so that the UI will be in edit caption mode
+                content = "An existing caption",
+            ),
+            enableVoiceMessages = false,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerAddCaptionPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList()
+    ) { index, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeEditCaption(
+                // No caption so that the UI will be in add caption mode
+                content = "",
+                showCompatibilityWarning = index == 0,
+            ),
+            enableVoiceMessages = false,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
 internal fun MarkdownTextComposerEditPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateMarkdownList()
@@ -615,7 +683,10 @@ internal fun TextComposerCaptionPreview() = ElementPreview {
         ATextComposer(
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Attachment(allowCaption = index < list.size),
+            composerMode = MessageComposerMode.Attachment(
+                allowCaption = index < list.size,
+                showCaptionCompatibilityWarning = index == 0,
+            ),
             enableVoiceMessages = false,
         )
     }
@@ -715,6 +786,16 @@ fun aMessageComposerModeEdit(
 ) = MessageComposerMode.Edit(
     eventOrTransactionId = eventOrTransactionId,
     content = content
+)
+
+fun aMessageComposerModeEditCaption(
+    eventOrTransactionId: EventOrTransactionId = EventId("$1234").toEventOrTransactionId(),
+    content: String,
+    showCompatibilityWarning: Boolean = false,
+) = MessageComposerMode.EditCaption(
+    eventOrTransactionId = eventOrTransactionId,
+    content = content,
+    showCaptionCompatibilityWarning = showCompatibilityWarning,
 )
 
 fun aMessageComposerModeReply(

@@ -36,6 +36,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
             filename = content.filename,
             caption = content.body,
             formattedCaption = null,
+            isEdited = false,
             mediaSource = content.source,
             thumbnailSource = content.info.thumbnailSource,
             mimeType = content.info.mimetype ?: MimeTypes.OctetStream,

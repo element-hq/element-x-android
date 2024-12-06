@@ -9,7 +9,7 @@ package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.biometric.BiometricPrompt
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
+import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockError
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.architecture.AsyncAction
@@ -25,7 +25,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
             aPinUnlockState(showBiometricUnlock = false),
             aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
             aPinUnlockState(signOutAction = AsyncAction.Loading),
-            aPinUnlockState(biometricUnlockResult = BiometricUnlock.AuthenticationResult.Failure(
+            aPinUnlockState(biometricUnlockResult = BiometricAuthenticator.AuthenticationResult.Failure(
                 BiometricUnlockError(BiometricPrompt.ERROR_LOCKOUT, "Biometric auth disabled")
             )),
         )
@@ -37,7 +37,7 @@ fun aPinUnlockState(
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,
     showBiometricUnlock: Boolean = true,
-    biometricUnlockResult: BiometricUnlock.AuthenticationResult? = null,
+    biometricUnlockResult: BiometricAuthenticator.AuthenticationResult? = null,
     isUnlocked: Boolean = false,
     signOutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
 ) = PinUnlockState(

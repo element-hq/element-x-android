@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
@@ -102,10 +103,7 @@ class LoggedInPresenter @Inject constructor(
                     }
                 }
                 LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
-                    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
-                    forceNativeSlidingSyncMigration = !matrixClient.isUsingNativeSlidingSync() &&
-                        matrixClient.isNativeSlidingSyncSupported() &&
-                        !matrixClient.isSlidingSyncProxySupported()
+                    forceNativeSlidingSyncMigration = matrixClient.forceNativeSlidingSyncMigration().getOrDefault(false)
                 }
                 LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
                     // Enable native sliding sync if it wasn't already the case
@@ -123,6 +121,18 @@ class LoggedInPresenter @Inject constructor(
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             eventSink = ::handleEvent
         )
+    }
+
+    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
+    private suspend fun MatrixClient.forceNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
+        val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
+        if (currentSlidingSyncVersion == SlidingSyncVersion.Proxy) {
+            val availableSlidingSyncVersions = availableSlidingSyncVersions().getOrThrow()
+            availableSlidingSyncVersions.contains(SlidingSyncVersion.Native) &&
+                !availableSlidingSyncVersions.contains(SlidingSyncVersion.Proxy)
+        } else {
+            false
+        }
     }
 
     private suspend fun ensurePusherIsRegistered(pusherRegistrationState: MutableState<AsyncData<Unit>>) {

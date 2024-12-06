@@ -14,11 +14,12 @@ data class TimelineItemFileContent(
     override val filename: String,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
-    val fileSource: MediaSource,
+    override val isEdited: Boolean,
+    override val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
-    val formattedFileSize: String,
-    val fileExtension: String,
-    val mimeType: String,
+    override val formattedFileSize: String,
+    override val fileExtension: String,
+    override val mimeType: String,
 ) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemFileContent"
 

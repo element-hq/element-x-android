@@ -22,7 +22,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.isDm
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -30,7 +29,6 @@ import javax.inject.Inject
 
 class LeaveRoomPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val roomMembershipObserver: RoomMembershipObserver,
     private val dispatchers: CoroutineDispatchers,
 ) : Presenter<LeaveRoomState> {
     @Composable
@@ -58,7 +56,6 @@ class LeaveRoomPresenter @Inject constructor(
                 is LeaveRoomEvent.LeaveRoom -> scope.launch(dispatchers.io) {
                     client.leaveRoom(
                         roomId = event.roomId,
-                        roomMembershipObserver = roomMembershipObserver,
                         confirmation = confirmation,
                         progress = progress,
                         error = error,
@@ -88,7 +85,6 @@ private suspend fun showLeaveRoomAlert(
 
 private suspend fun MatrixClient.leaveRoom(
     roomId: RoomId,
-    roomMembershipObserver: RoomMembershipObserver,
     confirmation: MutableState<LeaveRoomState.Confirmation>,
     progress: MutableState<LeaveRoomState.Progress>,
     error: MutableState<LeaveRoomState.Error>,
@@ -96,12 +92,11 @@ private suspend fun MatrixClient.leaveRoom(
     confirmation.value = LeaveRoomState.Confirmation.Hidden
     progress.value = LeaveRoomState.Progress.Shown
     getRoom(roomId)?.use { room ->
-        room.leave().onSuccess {
-            roomMembershipObserver.notifyUserLeftRoom(room.roomId)
-        }.onFailure {
-            Timber.e(it, "Error while leaving room ${room.displayName} - ${room.roomId}")
-            error.value = LeaveRoomState.Error.Shown
-        }
+        room.leave()
+            .onFailure {
+                Timber.e(it, "Error while leaving room ${room.roomId}")
+                error.value = LeaveRoomState.Error.Shown
+            }
     }
     progress.value = LeaveRoomState.Progress.Hidden
 }

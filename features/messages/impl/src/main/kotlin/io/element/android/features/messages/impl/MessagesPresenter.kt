@@ -28,21 +28,20 @@ import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
-import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -88,12 +87,12 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
-    private val composerPresenter: Presenter<MessageComposerState>,
+    @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
-    timelinePresenterFactory: TimelinePresenter.Factory,
+    @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
-    private val actionListPresenterFactory: ActionListPresenter.Factory,
+    @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
@@ -110,12 +109,14 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
-    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
-    private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
-
     @AssistedFactory
     interface Factory {
-        fun create(navigator: MessagesNavigator): MessagesPresenter
+        fun create(
+            navigator: MessagesNavigator,
+            composerPresenter: Presenter<MessageComposerState>,
+            timelinePresenter: Presenter<TimelineState>,
+            actionListPresenter: Presenter<ActionListState>,
+        ): MessagesPresenter
     }
 
     @Composable
@@ -269,10 +270,14 @@ class MessagesPresenter @AssistedInject constructor(
         timelineState: TimelineState,
     ) = launch {
         when (action) {
-            TimelineItemAction.Copy -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
+            TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
+            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
+            TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply,
             TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
@@ -282,6 +287,16 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+        }
+    }
+
+    private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
+        timelineController.invokeOnCurrentTimeline {
+            editCaption(
+                eventOrTransactionId = targetEvent.eventOrTransactionId,
+                caption = null,
+                formattedCaption = null,
+            )
         }
     }
 
@@ -387,6 +402,34 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
+    private suspend fun handleActionAddCaption(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+    ) {
+        val composerMode = MessageComposerMode.EditCaption(
+            eventOrTransactionId = targetEvent.eventOrTransactionId,
+            content = "",
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
+        )
+        composerState.eventSink(
+            MessageComposerEvents.SetMode(composerMode)
+        )
+    }
+
+    private suspend fun handleActionEditCaption(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+    ) {
+        val composerMode = MessageComposerMode.EditCaption(
+            eventOrTransactionId = targetEvent.eventOrTransactionId,
+            content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+            showCaptionCompatibilityWarning = featureFlagsService.isFeatureEnabled(FeatureFlags.MediaCaptionWarning),
+        )
+        composerState.eventSink(
+            MessageComposerEvents.SetMode(composerMode)
+        )
+    }
+
     private suspend fun handleActionReply(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
@@ -446,11 +489,17 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-
         clipboardHelper.copyPlainText(content)
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
+        }
+    }
+
+    private suspend fun handleCopyCaption(event: TimelineItem.Event) {
+        val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
+        clipboardHelper.copyPlainText(content)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }
 }

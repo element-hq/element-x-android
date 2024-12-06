@@ -14,8 +14,9 @@ data class TimelineItemVideoContent(
     override val filename: String,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val isEdited: Boolean,
     val duration: Duration,
-    val videoSource: MediaSource,
+    override val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val aspectRatio: Float?,
     val blurHash: String?,
@@ -23,9 +24,9 @@ data class TimelineItemVideoContent(
     val width: Int?,
     val thumbnailWidth: Int?,
     val thumbnailHeight: Int?,
-    val mimeType: String,
-    val formattedFileSize: String,
-    val fileExtension: String,
+    override val mimeType: String,
+    override val formattedFileSize: String,
+    override val fileExtension: String,
 ) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemImageContent"
 

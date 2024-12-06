@@ -48,8 +48,11 @@ fun aTimelineItemVoiceContent(
     filename = filename,
     caption = caption,
     formattedCaption = null,
+    isEdited = false,
     duration = duration,
     mediaSource = mediaSource,
     mimeType = mimeType,
     waveform = waveform.toPersistentList(),
+    formattedFileSize = "1.0 MB",
+    fileExtension = "ogg",
 )

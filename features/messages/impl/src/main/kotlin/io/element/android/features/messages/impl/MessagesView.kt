@@ -32,10 +32,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,10 +53,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
-import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
@@ -83,8 +79,6 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
-import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.ProgressDialogType
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
@@ -96,6 +90,7 @@ import io.element.android.libraries.designsystem.theme.components.BottomSheetDra
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.HideKeyboardWhenDisposed
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
@@ -117,7 +112,6 @@ fun MessagesView(
     onEventContentClick: (event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -131,11 +125,7 @@ fun MessagesView(
 
     KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
 
-    AttachmentStateView(
-        state = state.composerState.attachmentsState,
-        onPreviewAttachments = onPreviewAttachments,
-        onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
-    )
+    HideKeyboardWhenDisposed()
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -273,34 +263,6 @@ private fun ReinviteDialog(state: MessagesState) {
             onSubmitClick = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite)) },
             onDismiss = { state.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel)) }
         )
-    }
-}
-
-@Composable
-private fun AttachmentStateView(
-    state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-    onCancel: () -> Unit,
-) {
-    when (state) {
-        AttachmentsState.None -> Unit
-        is AttachmentsState.Previewing -> {
-            val latestOnPreviewAttachments by rememberUpdatedState(onPreviewAttachments)
-            LaunchedEffect(state) {
-                latestOnPreviewAttachments(state.attachments)
-            }
-        }
-        is AttachmentsState.Sending -> {
-            ProgressDialog(
-                type = when (state) {
-                    is AttachmentsState.Sending.Uploading -> ProgressDialogType.Determinate(state.progress)
-                    is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
-                },
-                text = stringResource(id = CommonStrings.common_sending),
-                showCancelButton = true,
-                onDismissRequest = onCancel,
-            )
-        }
     }
 }
 
@@ -572,7 +534,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onEventContentClick = { false },
         onUserDataClick = {},
         onLinkClick = {},
-        onPreviewAttachments = {},
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},

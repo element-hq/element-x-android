@@ -64,7 +64,7 @@ import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
-import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
+import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
@@ -237,8 +237,9 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = null,
             formattedCaption = null,
+            isEdited = false,
             duration = Duration.ZERO,
-            videoSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             aspectRatio = null,
             blurHash = null,
@@ -278,7 +279,8 @@ class TimelineItemContentMessageFactoryTest {
                         thumbnailSource = MediaSource("url_thumbnail"),
                         blurhash = A_BLUR_HASH,
                     ),
-                )
+                ),
+                isEdited = true,
             ),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
@@ -287,8 +289,9 @@ class TimelineItemContentMessageFactoryTest {
             filename = "body.mp4",
             caption = "body.mp4 caption",
             formattedCaption = SpannedString("formatted"),
+            isEdited = true,
             duration = 1.minutes,
-            videoSource = MediaSource(url = "url", json = null),
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             aspectRatio = 3f,
             blurHash = A_BLUR_HASH,
@@ -315,6 +318,7 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = null,
             formattedCaption = null,
+            isEdited = false,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
@@ -339,7 +343,8 @@ class TimelineItemContentMessageFactoryTest {
                         size = 123L,
                         mimetype = MimeTypes.Mp3,
                     )
-                )
+                ),
+                isEdited = true,
             ),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
@@ -348,6 +353,7 @@ class TimelineItemContentMessageFactoryTest {
             filename = "body.mp3",
             caption = null,
             formattedCaption = null,
+            isEdited = true,
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Mp3,
@@ -370,10 +376,13 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
             caption = null,
             formattedCaption = null,
+            isEdited = false,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
-            waveform = emptyList<Float>().toImmutableList()
+            waveform = emptyList<Float>().toImmutableList(),
+            fileExtension = "",
+            formattedFileSize = "0 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -397,7 +406,8 @@ class TimelineItemContentMessageFactoryTest {
                         duration = 1.minutes,
                         waveform = persistentListOf(1f, 2f),
                     ),
-                )
+                ),
+                isEdited = true,
             ),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
@@ -407,10 +417,13 @@ class TimelineItemContentMessageFactoryTest {
             filename = "body.ogg",
             caption = null,
             formattedCaption = null,
+            isEdited = true,
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
-            waveform = persistentListOf(1f, 2f)
+            waveform = persistentListOf(1f, 2f),
+            fileExtension = "ogg",
+            formattedFileSize = "123 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -433,6 +446,7 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = null,
             formattedCaption = null,
+            isEdited = false,
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.OctetStream,
@@ -454,6 +468,7 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = "body",
             formattedCaption = null,
+            isEdited = false,
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
@@ -483,6 +498,7 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = null,
             formattedCaption = null,
+            isEdited = false,
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource(url = "thumbnail://url", json = null),
             formattedFileSize = "8192 Bytes",
@@ -520,15 +536,17 @@ class TimelineItemContentMessageFactoryTest {
                         thumbnailSource = MediaSource("url_thumbnail"),
                         blurhash = A_BLUR_HASH,
                     )
-                )
+                ),
+                isEdited = true,
             ),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
             filename = "body.jpg",
-            formattedCaption = SpannedString("formatted"),
             caption = "body.jpg caption",
+            formattedCaption = SpannedString("formatted"),
+            isEdited = true,
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             formattedFileSize = "888 Bytes",
@@ -556,7 +574,8 @@ class TimelineItemContentMessageFactoryTest {
             filename = "filename",
             caption = null,
             formattedCaption = null,
-            fileSource = MediaSource(url = "url", json = null),
+            isEdited = false,
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
@@ -586,7 +605,8 @@ class TimelineItemContentMessageFactoryTest {
                         ),
                         thumbnailSource = MediaSource("url_thumbnail"),
                     )
-                )
+                ),
+                isEdited = true,
             ),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
@@ -595,7 +615,8 @@ class TimelineItemContentMessageFactoryTest {
             filename = "body.pdf",
             caption = null,
             formattedCaption = null,
-            fileSource = MediaSource(url = "url", json = null),
+            isEdited = true,
+            mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             formattedFileSize = "123 Bytes",
             fileExtension = "pdf",

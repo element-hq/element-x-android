@@ -57,6 +57,7 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_HTTP_CLIENT("matrix_sdk::http_client"),
     MATRIX_SDK_CLIENT("matrix_sdk::client"),
     MATRIX_SDK_OIDC("matrix_sdk::oidc"),
+    MATRIX_SDK_SEND_QUEUE("matrix_sdk::send_queue"),
     MATRIX_SDK_SLIDING_SYNC("matrix_sdk::sliding_sync"),
     MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
     MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),

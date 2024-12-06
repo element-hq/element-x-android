@@ -14,19 +14,21 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LeaveRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -126,26 +128,27 @@ class LeaveRoomPresenterTest {
 
     @Test
     fun `present - leaving a room leaves the room`() = runTest {
-        val roomMembershipObserver = RoomMembershipObserver()
+        val leaveRoomLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom(
-                        leaveRoomLambda = { Result.success(Unit) }
+                        leaveRoomLambda = leaveRoomLambda
                     ),
                 )
             },
-            roomMembershipObserver = roomMembershipObserver
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
-            // Membership observer should receive a 'left room' change
-            assertThat(roomMembershipObserver.updates.first().change).isEqualTo(MembershipChange.LEFT)
+            advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
+            assert(leaveRoomLambda)
+                .isCalledOnce()
+                .withNoParameter()
         }
     }
 
@@ -227,9 +230,7 @@ class LeaveRoomPresenterTest {
 
 private fun TestScope.createLeaveRoomPresenter(
     client: MatrixClient = FakeMatrixClient(),
-    roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
 ): LeaveRoomPresenter = LeaveRoomPresenter(
     client = client,
-    roomMembershipObserver = roomMembershipObserver,
     dispatchers = testCoroutineDispatchers(false),
 )
