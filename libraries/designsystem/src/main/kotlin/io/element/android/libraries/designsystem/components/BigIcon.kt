@@ -49,7 +49,11 @@ object BigIcon {
          * @param vectorIcon the [ImageVector] to display
          * @param contentDescription the content description of the icon, if any. It defaults to `null`
          */
-        data class Default(val vectorIcon: ImageVector, val contentDescription: String? = null) : Style
+        data class Default(
+            val vectorIcon: ImageVector,
+            val contentDescription: String? = null,
+            val destructive: Boolean = false,
+        ) : Style
 
         /**
          * An alert style with a transparent background.
@@ -84,25 +88,40 @@ object BigIcon {
         modifier: Modifier = Modifier,
     ) {
         val backgroundColor = when (style) {
-            is Style.Default -> ElementTheme.colors.bgSubtleSecondary
-            Style.Alert, Style.Success -> Color.Transparent
+            is Style.Default -> if (style.destructive) {
+                ElementTheme.colors.bgCriticalSubtle
+            } else {
+                ElementTheme.colors.bgSubtleSecondary
+            }
+            Style.Alert,
+            Style.Success -> Color.Transparent
             Style.AlertSolid -> ElementTheme.colors.bgCriticalSubtle
             Style.SuccessSolid -> ElementTheme.colors.bgSuccessSubtle
         }
         val icon = when (style) {
             is Style.Default -> style.vectorIcon
-            Style.Alert, Style.AlertSolid -> CompoundIcons.Error()
-            Style.Success, Style.SuccessSolid -> CompoundIcons.CheckCircleSolid()
+            Style.Alert,
+            Style.AlertSolid -> CompoundIcons.Error()
+            Style.Success,
+            Style.SuccessSolid -> CompoundIcons.CheckCircleSolid()
         }
         val contentDescription = when (style) {
             is Style.Default -> style.contentDescription
-            Style.Alert, Style.AlertSolid -> stringResource(CommonStrings.common_error)
-            Style.Success, Style.SuccessSolid -> stringResource(CommonStrings.common_success)
+            Style.Alert,
+            Style.AlertSolid -> stringResource(CommonStrings.common_error)
+            Style.Success,
+            Style.SuccessSolid -> stringResource(CommonStrings.common_success)
         }
         val iconTint = when (style) {
-            is Style.Default -> ElementTheme.colors.iconSecondary
-            Style.Alert, Style.AlertSolid -> ElementTheme.colors.iconCriticalPrimary
-            Style.Success, Style.SuccessSolid -> ElementTheme.colors.iconSuccessPrimary
+            is Style.Default -> if (style.destructive) {
+                ElementTheme.colors.iconCriticalPrimary
+            } else {
+                ElementTheme.colors.iconSecondary
+            }
+            Style.Alert,
+            Style.AlertSolid -> ElementTheme.colors.iconCriticalPrimary
+            Style.Success,
+            Style.SuccessSolid -> ElementTheme.colors.iconSuccessPrimary
         }
         Box(
             modifier = modifier
@@ -140,6 +159,7 @@ internal class BigIconStyleProvider : PreviewParameterProvider<BigIcon.Style> {
             BigIcon.Style.Default(Icons.Filled.CatchingPokemon),
             BigIcon.Style.Alert,
             BigIcon.Style.AlertSolid,
+            BigIcon.Style.Default(Icons.Filled.CatchingPokemon, destructive = true),
             BigIcon.Style.Success,
             BigIcon.Style.SuccessSolid
         )
