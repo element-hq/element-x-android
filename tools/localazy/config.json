@@ -165,6 +165,7 @@
       "name" : ":features:roomdetails:impl",
       "includeRegex" : [
         "screen_room_details_.*",
+        "screen\\.room_details\\..*",
         "screen_room_member_list_.*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
@@ -285,6 +286,12 @@
       "includeRegex" : [
         "screen_join_room_.*",
         "screen\\.join_room\\..*"
+      ]
+    },
+    {
+      "name" : ":features:knockrequests:impl",
+      "includeRegex" : [
+        "screen\\.knock_requests_list\\..*"
       ]
     }
   ]

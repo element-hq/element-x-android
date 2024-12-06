@@ -54,4 +54,6 @@ enum class AvatarSize(val dp: Dp) {
     EditProfileDetails(96.dp),
 
     Suggestion(32.dp),
+
+    KnockRequestItem(52.dp),
 }

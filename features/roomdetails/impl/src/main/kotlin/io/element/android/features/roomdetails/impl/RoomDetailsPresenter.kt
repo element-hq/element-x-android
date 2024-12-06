@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.ui.room.canHandleKnockRequestsAsState
 import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
@@ -69,7 +70,7 @@ class RoomDetailsPresenter @Inject constructor(
         val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
         val isUserAdmin = room.isOwnUserAdmin()
-
+        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.displayName).trim() } }
@@ -90,6 +91,7 @@ class RoomDetailsPresenter @Inject constructor(
 
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
+
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
@@ -99,6 +101,8 @@ class RoomDetailsPresenter @Inject constructor(
         val roomType by getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
 
+        val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
+
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
 
@@ -107,6 +111,12 @@ class RoomDetailsPresenter @Inject constructor(
                 canEditTopic && roomType is RoomDetailsType.Room -> RoomTopicState.CanAddTopic
                 else -> RoomTopicState.Hidden
             }
+        }
+
+        val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
+        val knockRequestsCount by remember { mutableStateOf(null) }
+        val canShowKnockRequests by remember {
+            derivedStateOf { isKnockRequestsEnabled && canHandleKnockRequests }
         }
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
@@ -153,6 +163,8 @@ class RoomDetailsPresenter @Inject constructor(
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
             pinnedMessagesCount = pinnedMessagesCount,
+            canShowKnockRequests = canShowKnockRequests,
+            knockRequestsCount = knockRequestsCount,
             eventSink = ::handleEvents,
         )
     }

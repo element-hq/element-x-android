@@ -129,7 +129,7 @@ class RoomDetailsViewTest {
                 ),
                 onPinnedMessagesClick = callback,
             )
-            rule.clickOn(CommonStrings.screen_room_details_pinned_events_row_title)
+            rule.clickOn(R.string.screen_room_details_pinned_events_row_title)
         }
     }
 
@@ -253,6 +253,21 @@ class RoomDetailsViewTest {
         rule.clickOn(R.string.screen_room_details_leave_room_title)
         eventsRecorder.assertSingle(RoomDetailsEvent.LeaveRoom)
     }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on knock requests invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canShowKnockRequests = true,
+                ),
+                onKnockRequestsClick = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_requests_to_join_title)
+        }
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDetailView(
@@ -270,6 +285,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
+    onKnockRequestsClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -285,6 +301,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             openAdminSettings = openAdminSettings,
             onJoinCallClick = onJoinCallClick,
             onPinnedMessagesClick = onPinnedMessagesClick,
+            onKnockRequestsClick = onKnockRequestsClick,
         )
     }
 }
