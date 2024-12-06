@@ -238,9 +238,9 @@ class MessagesNode @AssistedInject constructor(
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
                 onViewAllPinnedMessagesClick = this::onViewAllPinnedMessagesClick,
-                knockRequestsBanner = { modifier ->
+                knockRequestsBannerView = {
                     knockRequestsBannerRenderer.View(
-                        modifier = modifier,
+                        modifier = Modifier,
                         onViewRequestsClick = this::onViewKnockRequestsClick
                     )
                 },

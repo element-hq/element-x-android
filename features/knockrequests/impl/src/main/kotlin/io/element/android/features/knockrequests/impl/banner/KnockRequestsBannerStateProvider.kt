@@ -16,15 +16,23 @@ import kotlinx.collections.immutable.toImmutableList
 class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsBannerState> {
     override val values: Sequence<KnockRequestsBannerState>
         get() = sequenceOf(
-            KnockRequestsBannerState.Hidden,
-            aVisibleKnockRequestsBannerState(),
-            aVisibleKnockRequestsBannerState(
+            aKnockRequestsBannerState(),
+            aKnockRequestsBannerState(
+                knockRequests = listOf(
+                    aKnockRequest(
+                        reason = "A very long reason that should probably be truncated, " +
+                            "but could be also expanded so you can see it over the lines, wow," +
+                            "very amazing reason, I know, right, I'm so good at writing reasons."
+                    )
+                )
+            ),
+            aKnockRequestsBannerState(
                 knockRequests = listOf(
                     aKnockRequest(),
                     aKnockRequest(displayName = "Alice")
                 )
             ),
-            aVisibleKnockRequestsBannerState(
+            aKnockRequestsBannerState(
                 knockRequests = listOf(
                     aKnockRequest(),
                     aKnockRequest(displayName = "Alice"),
@@ -32,24 +40,28 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
                     aKnockRequest(displayName = "Charlie")
                 )
             ),
-            aVisibleKnockRequestsBannerState(
+            aKnockRequestsBannerState(
                 canAccept = false
             ),
-            aVisibleKnockRequestsBannerState(
+            aKnockRequestsBannerState(
                 acceptAction = AsyncAction.Loading
             ),
-            aVisibleKnockRequestsBannerState(
-                acceptAction = AsyncAction.Failure(Throwable())
+            aKnockRequestsBannerState(
+                acceptAction = AsyncAction.Failure(Throwable("Failed to accept knock"))
             ),
         )
 }
 
-fun aVisibleKnockRequestsBannerState(
+fun aKnockRequestsBannerState(
     knockRequests: List<KnockRequest> = listOf(aKnockRequest()),
     acceptAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     canAccept: Boolean = true,
-) = KnockRequestsBannerState.Visible(
+    isVisible: Boolean = true,
+    eventSink: (KnockRequestsBannerEvents) -> Unit = {}
+) = KnockRequestsBannerState(
     knockRequests = knockRequests.toImmutableList(),
     acceptAction = acceptAction,
-    canAccept = canAccept
+    canAccept = canAccept,
+    isVisible = isVisible,
+    eventSink = eventSink,
 )

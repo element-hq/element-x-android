@@ -533,7 +533,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                knockRequestsBanner = {}
+                knockRequestsBannerView = {}
             )
         }
     }

@@ -17,16 +17,13 @@ import javax.inject.Inject
 @ContributesBinding(RoomScope::class)
 class DefaultKnockRequestsBannerRenderer @Inject constructor(
     private val presenter: KnockRequestsBannerPresenter,
-): KnockRequestsBannerRenderer {
-
+) : KnockRequestsBannerRenderer {
     @Composable
     override fun View(modifier: Modifier, onViewRequestsClick: () -> Unit) {
         val state = presenter.present()
         KnockRequestsBannerView(
             state = state,
-            onDismissClick = {},
             onViewRequestsClick = onViewRequestsClick,
         )
     }
-
 }

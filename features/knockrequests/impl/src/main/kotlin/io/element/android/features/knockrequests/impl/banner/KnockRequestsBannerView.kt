@@ -7,6 +7,9 @@
 
 package io.element.android.features.knockrequests.impl.banner
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -52,96 +56,102 @@ private const val MAX_AVATAR_COUNT = 3
 @Composable
 fun KnockRequestsBannerView(
     state: KnockRequestsBannerState,
-    onDismissClick: () -> Unit,
     onViewRequestsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (state) {
-        is KnockRequestsBannerState.Hidden -> Unit
-        is KnockRequestsBannerState.Visible -> VisibleKnockRequestsBannerView(
-            state = state,
-            onDismissClick = onDismissClick,
-            onViewRequestsClick = onViewRequestsClick,
-            modifier = modifier
-        )
+    AnimatedVisibility(
+        visible = state.isVisible,
+        enter = expandVertically(),
+        exit = shrinkVertically(),
+        modifier = modifier,
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.small,
+            color = ElementTheme.colors.bgCanvasDefaultLevel1,
+            shadowElevation = 24.dp,
+            modifier = Modifier.padding(16.dp),
+        ) {
+            KnockRequestsBannerContent(
+                state = state,
+                onViewRequestsClick = onViewRequestsClick,
+            )
+        }
     }
 }
 
 @Composable
-private fun VisibleKnockRequestsBannerView(
-    state: KnockRequestsBannerState.Visible,
-    onDismissClick: () -> Unit,
+private fun KnockRequestsBannerContent(
+    state: KnockRequestsBannerState,
     onViewRequestsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface(
-        modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.small,
-        color = ElementTheme.colors.bgCanvasDefaultLevel1,
-        shadowElevation = 24.dp
+    fun onDismissClick() {
+        state.eventSink(KnockRequestsBannerEvents.Dismiss)
+    }
+
+    Column(
+        modifier
+            .fillMaxWidth()
+            .padding(all = 16.dp)
     ) {
-        Column(
-                Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp)
-        ) {
-            Row {
-                KnockRequestAvatarView(state.knockRequests)
-                Spacer(modifier = Modifier.width(10.dp))
-                Column(modifier = Modifier.weight(1f)) {
+        Row {
+            KnockRequestAvatarView(state.knockRequests)
+            Spacer(modifier = Modifier.width(10.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = state.formattedTitle(),
+                    style = ElementTheme.typography.fontBodyMdMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Start,
+                )
+                if (state.subtitle != null) {
                     Text(
-                        text = state.formattedTitle(),
-                        style = ElementTheme.typography.fontBodyMdMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        text = state.subtitle,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = MaterialTheme.colorScheme.secondary,
                         textAlign = TextAlign.Start,
                     )
-                    if (state.subtitle != null) {
-                        Text(
-                            text = state.subtitle,
-                            style = ElementTheme.typography.fontBodySmRegular,
-                            color = MaterialTheme.colorScheme.secondary,
-                            textAlign = TextAlign.Start,
-                        )
-                    }
                 }
-                Icon(
-                    modifier = Modifier.clickable(onClick = onDismissClick),
-                    imageVector = CompoundIcons.Close(),
-                    contentDescription = stringResource(CommonStrings.action_close)
-                )
             }
-            if (state.reason != null) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = state.reason,
-                    color = ElementTheme.colors.textPrimary,
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-            }
+            Icon(
+                modifier = Modifier.clickable(onClick = ::onDismissClick),
+                imageVector = CompoundIcons.Close(),
+                contentDescription = stringResource(CommonStrings.action_close)
+            )
+        }
+        if (state.reason != null) {
             Spacer(modifier = Modifier.height(16.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (state.knockRequests.size > 1) {
+            Text(
+                text = state.reason,
+                color = ElementTheme.colors.textPrimary,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (state.knockRequests.size > 1) {
+                Button(
+                    text = "View all",
+                    onClick = onViewRequestsClick,
+                    size = ButtonSize.MediumLowPadding,
+                    modifier = Modifier.weight(1f),
+                )
+            } else {
+                OutlinedButton(
+                    text = "View",
+                    onClick = onViewRequestsClick,
+                    size = ButtonSize.MediumLowPadding,
+                    modifier = Modifier.weight(1f),
+                )
+                if (state.canAccept) {
                     Button(
-                        text = "View all",
-                        onClick = onViewRequestsClick,
+                        text = "Accept",
+                        onClick = {},
                         size = ButtonSize.MediumLowPadding,
                         modifier = Modifier.weight(1f),
                     )
-                } else {
-                    OutlinedButton(
-                        text = "View",
-                        onClick = onViewRequestsClick,
-                        size = ButtonSize.MediumLowPadding,
-                        modifier = Modifier.weight(1f),
-                    )
-                    if (state.canAccept) {
-                        Button(
-                            text = "Accept",
-                            onClick = {},
-                            size = ButtonSize.MediumLowPadding,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
                 }
             }
         }
@@ -178,11 +188,11 @@ private fun KnockRequestAvatarListView(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                            .size(size = avatarSize)
-                            .clip(CircleShape)
-                            .background(color = ElementTheme.colors.bgCanvasDefaultLevel1)
-                            .zIndex(-index.toFloat()),
-                    ) {
+                        .size(size = avatarSize)
+                        .clip(CircleShape)
+                        .background(color = ElementTheme.colors.bgCanvasDefaultLevel1)
+                        .zIndex(-index.toFloat()),
+                ) {
                     Avatar(
                         modifier = Modifier.padding(2.dp),
                         avatarData = knockRequest.getAvatarData(AvatarSize.KnockRequestBanner),
@@ -197,8 +207,6 @@ private fun KnockRequestAvatarListView(
 internal fun KnockRequestsBannerViewPreview(@PreviewParameter(KnockRequestsBannerStateProvider::class) state: KnockRequestsBannerState) = ElementPreview {
     KnockRequestsBannerView(
         state = state,
-        onDismissClick = {},
         onViewRequestsClick = {},
-        modifier = Modifier.padding(16.dp)
     )
 }
