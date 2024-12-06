@@ -26,6 +26,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
@@ -95,6 +96,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
+    private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -146,6 +148,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object PinnedMessagesList : NavTarget
+
+        @Parcelize
+        data object KnockRequestsList : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -225,6 +230,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onViewAllPinnedEvents() {
                         backstack.push(NavTarget.PinnedMessagesList)
+                    }
+
+                    override fun onViewKnockRequests() {
+                        backstack.push(NavTarget.KnockRequestsList)
                     }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
@@ -325,6 +334,9 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             NavTarget.Empty -> {
                 node(buildContext) {}
+            }
+            NavTarget.KnockRequestsList -> {
+                knockRequestsListEntryPoint.createNode(this, buildContext)
             }
         }
     }
