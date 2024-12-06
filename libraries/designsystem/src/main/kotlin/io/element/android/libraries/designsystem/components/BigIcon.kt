@@ -10,9 +10,12 @@ package io.element.android.libraries.designsystem.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CatchingPokemon
@@ -142,11 +145,19 @@ object BigIcon {
 
 @PreviewsDayNight
 @Composable
-internal fun BigIconPreview() {
-    ElementPreview {
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(10.dp)) {
-            val provider = BigIconStyleProvider()
-            for (style in provider.values) {
+internal fun BigIconPreview() = ElementPreview {
+    LazyVerticalGrid(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
+        columns = GridCells.Adaptive(minSize = 64.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        items(BigIconStyleProvider().values.toList()) { style ->
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
                 BigIcon(style = style)
             }
         }
