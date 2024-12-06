@@ -51,11 +51,12 @@ object BigIcon {
          *
          * @param vectorIcon the [ImageVector] to display
          * @param contentDescription the content description of the icon, if any. It defaults to `null`
+         * @param useCriticalTint whether the icon and background should be rendered using critical tint
          */
         data class Default(
             val vectorIcon: ImageVector,
             val contentDescription: String? = null,
-            val destructive: Boolean = false,
+            val useCriticalTint: Boolean = false,
         ) : Style
 
         /**
@@ -91,7 +92,7 @@ object BigIcon {
         modifier: Modifier = Modifier,
     ) {
         val backgroundColor = when (style) {
-            is Style.Default -> if (style.destructive) {
+            is Style.Default -> if (style.useCriticalTint) {
                 ElementTheme.colors.bgCriticalSubtle
             } else {
                 ElementTheme.colors.bgSubtleSecondary
@@ -116,7 +117,7 @@ object BigIcon {
             Style.SuccessSolid -> stringResource(CommonStrings.common_success)
         }
         val iconTint = when (style) {
-            is Style.Default -> if (style.destructive) {
+            is Style.Default -> if (style.useCriticalTint) {
                 ElementTheme.colors.iconCriticalPrimary
             } else {
                 ElementTheme.colors.iconSecondary
@@ -170,7 +171,7 @@ internal class BigIconStyleProvider : PreviewParameterProvider<BigIcon.Style> {
             BigIcon.Style.Default(Icons.Filled.CatchingPokemon),
             BigIcon.Style.Alert,
             BigIcon.Style.AlertSolid,
-            BigIcon.Style.Default(Icons.Filled.CatchingPokemon, destructive = true),
+            BigIcon.Style.Default(Icons.Filled.CatchingPokemon, useCriticalTint = true),
             BigIcon.Style.Success,
             BigIcon.Style.SuccessSolid
         )
