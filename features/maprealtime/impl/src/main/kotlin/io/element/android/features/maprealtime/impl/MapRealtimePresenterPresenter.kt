@@ -31,7 +31,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.transit.realtime.GtfsRealtime.FeedMessage
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
@@ -47,14 +46,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.net.URL
 import javax.inject.Inject
 
 class MapRealtimePresenterPresenter @Inject constructor(
@@ -69,8 +64,8 @@ class MapRealtimePresenterPresenter @Inject constructor(
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
 
     // This is for demo purposes only. This should be replaced with actual vehicle locations.
-    private val _vehicleLocations = MutableStateFlow<List<MapRealtimeLocationDot>>(emptyList())
-    val vehicleLocations: StateFlow<List<MapRealtimeLocationDot>> = _vehicleLocations
+//    private val _vehicleLocations = MutableStateFlow<List<LiveLocationShare>>(emptyList())
+//    val vehicleLocations: StateFlow<List<LiveLocationShare>> = _vehicleLocations
 
     @Composable
     override fun present(): MapRealtimePresenterState {
@@ -175,34 +170,45 @@ class MapRealtimePresenterPresenter @Inject constructor(
             .launchIn(this)
     }
 
-    private suspend fun startFetchingRealtimeLocations() {
-        // Coroutine to periodically fetch and update the vehicle positions
-        while (true) {
-            try {
-                val feedUrl = URL("https://www.fairfaxcounty.gov/gtfsrt/vehicles") // Replace with your GTFS URL
-                val feed = FeedMessage.parseFrom(feedUrl.openStream())
-
-                val locations = feed.entityList.mapNotNull { entity ->
-                    entity.vehicle?.let { vehicle ->
-                        MapRealtimeLocationDot(
-                            userName = busIdToString(vehicle.vehicle.id.toInt()),
-                            location = Location(
-                                lat = vehicle.position.latitude.toDouble(),
-                                lon = vehicle.position.longitude.toDouble(),
-                                accuracy = 1.0.toFloat() // TODO (tb): fix this to use the actual accuracy
-                            )
-                        )
-
-                    }
-                }
-
-                _vehicleLocations.value = locations
-            } catch (e: Exception) {
-                e.printStackTrace() // Catch-all for any other exceptions
-            }
-            delay(5000) // Update interval, e.g., every 5 seconds
-        }
-    }
+//    private suspend fun startFetchingRealtimeLocations() {
+//        // Coroutine to periodically fetch and update the vehicle positions
+//        while (true) {
+//            try {
+//                val feedUrl = URL("https://www.fairfaxcounty.gov/gtfsrt/vehicles") // Replace with your GTFS URL
+//                val feed = FeedMessage.parseFrom(feedUrl.openStream())
+//
+//                val locations = feed.entityList.take(20).mapNotNull { entity ->
+//                    entity.vehicle?.let { vehicle ->
+//                        val geoLocation = Location(
+//                            lat = vehicle.position.latitude.toDouble(),
+//                            lon = vehicle.position.longitude.toDouble(),
+//                            accuracy = 1.0.toFloat() // TODO (tb): fix this to use the actual accuracy
+//                        )
+//
+//                        val stringLocation = geoLocation.toGeoUri()
+//
+//                        LiveLocationShare(
+//                            userId = UserId(busIdToString(vehicle.vehicle.id.toInt())),
+//                            lastLocation = LastLocation(
+//                                location = io.element.android.libraries.matrix.api.location.Location(
+//                                    body = "Location was shared",
+//                                    geoUri = stringLocation,
+//                                    description = null,
+//                                    zoomLevel = 0,
+//                                ),
+//                                ts = 0u
+//                            )
+//                        )
+//                    }
+//                }
+//
+//                _vehicleLocations.value = locations
+//            } catch (e: Exception) {
+//                e.printStackTrace() // Catch-all for any other exceptions
+//            }
+//            delay(5000) // Update interval, e.g., every 5 seconds
+//        }
+//    }
 
     fun busIdToString(busId: Int): String {
         // Map the bus ID to a string representation based on a mod and a base character
@@ -211,7 +217,7 @@ class MapRealtimePresenterPresenter @Inject constructor(
         val letter = baseChar + idValue  // Convert to a letter between 'A' and 'Z'
         busId.toString().takeLast(2)  // Take last 2 digits as a suffix for uniqueness
 
-        return "$letter"
+        return "@$letter:srkt.dev"
     }
 
     private fun CoroutineScope.setMapTileProvider(mapProvider: String) = launch {

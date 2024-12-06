@@ -98,3 +98,4 @@ includeProjects(File(rootDir, "services"), ":services")
 //        substitute(module("io.element.android:compound-android")).using(project(":compound"))
 //    }
 // }
+//includeBuild("../ramani-maps/ramani-maplibre")
