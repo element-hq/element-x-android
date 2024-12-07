@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.LocationSearching
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -87,10 +88,10 @@ fun MapRealtimeView(
     val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
 
 //    val styleUrl = rememberSaveable { mutableStateOf("https://demotiles.maplibre.org/style.json") }
-    val styleUrl = rememberSaveable { mutableStateOf("https://api.maptiler.com/maps/openstreetmap/style.json?key=4N19bSbSelzpOSfUibeB") }
-    val styleBuilder = Style.Builder().fromUri(styleUrl.value)
+//    val styleUrl = rememberSaveable { mutableStateOf(state.styleUrl) }
+    val styleBuilder = Style.Builder().fromUri(state.styleUrl)
 
-    val myCompassMargins = CompassMargins(left = 0, top = 650, right = 45)
+    val myCompassMargins = CompassMargins(left = 0, top = 850, right = 45)
     val uiSettings = UiSettings(compassMargins = myCompassMargins)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -110,7 +111,7 @@ fun MapRealtimeView(
                 enablePulse = false,
                 accuracyColor = 0xFF2496F9.toInt(),
             ),
-            uiSettings = uiSettings
+            uiSettings = uiSettings,
         ) {
             state.liveLocationShares.map { item ->
                 val st = if (state.mapType.mapKey == "satellite") "White" else "Black"
@@ -133,6 +134,7 @@ fun MapRealtimeView(
                 onJoinCallClicked = onJoinCallClick,
                 isCallOngoing = isCallOngoing
             )
+            RoundedIconButton(icon = Icons.Outlined.PlayArrow, onClick = { println("start") })
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {
