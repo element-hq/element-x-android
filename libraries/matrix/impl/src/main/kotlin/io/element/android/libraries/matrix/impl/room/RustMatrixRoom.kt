@@ -179,6 +179,7 @@ class RustMatrixRoom(
                                     ),
                                     ts = it.lastLocation.ts,
                                 ),
+                                isLive = it.isLive
                             )
                         }
                     )
@@ -773,6 +774,12 @@ class RustMatrixRoom(
     override suspend fun stopLiveLocationShare(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.stopLiveLocationShare()
+        }
+    }
+
+    override suspend fun sendLiveLocation(geoUri: String) = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.sendLiveLocation(geoUri)
         }
     }
 }
