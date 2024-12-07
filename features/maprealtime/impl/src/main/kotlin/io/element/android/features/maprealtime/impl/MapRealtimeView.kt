@@ -7,7 +7,6 @@
 
 package io.element.android.features.maprealtime.impl
 
-//import org.ramani.compose.Margins
 import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -135,14 +134,17 @@ fun MapRealtimeView(
                 onJoinCallClicked = onJoinCallClick,
                 isCallOngoing = isCallOngoing
             )
-            RoundedIconButton(icon = if (state.isSharingLocation) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
+            RoundedIconButton(
+                icon = if (state.isSharingLocation) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
                 onClick = {
                     if (state.isSharingLocation) {
                         state.eventSink(MapRealtimeEvents.StopLiveLocationShare)
                     } else {
                         state.eventSink(MapRealtimeEvents.StartLiveLocationShare)
                     }
-                })
+                },
+                color = if (state.isSharingLocation) Color.Red else Color.Green
+            )
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {
@@ -165,12 +167,12 @@ fun MapRealtimeView(
 }
 
 @Composable
-fun RoundedIconButton(icon: ImageVector, onClick: () -> Unit) {
+fun RoundedIconButton(icon: ImageVector, onClick: () -> Unit, color: Color = Color.White) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
             .size(48.dp)
-            .background(Color.White, CircleShape)
+            .background(color, CircleShape)
     ) {
         Icon(
             imageVector = icon,
