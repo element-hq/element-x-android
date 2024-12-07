@@ -18,4 +18,6 @@ sealed interface MapRealtimeEvents {
     data class MapLongPress(val coords: LatLng) : MapRealtimeEvents
     data class SendLongPressLocation(val coords: LatLng) : MapRealtimeEvents
     data class MapTypeSelected(val mapType: MapType) : MapRealtimeEvents
+    data object StartLiveLocationShare : MapRealtimeEvents
+    data object StopLiveLocationShare : MapRealtimeEvents
 }

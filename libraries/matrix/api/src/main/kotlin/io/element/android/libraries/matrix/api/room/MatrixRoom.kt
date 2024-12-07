@@ -404,4 +404,8 @@ interface MatrixRoom : Closeable {
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit>
 
     override fun close() = destroy()
+
+    suspend fun startLiveLocationShare(durationMillis: ULong): Result<Unit>
+
+    suspend fun stopLiveLocationShare(): Result<Unit>
 }
