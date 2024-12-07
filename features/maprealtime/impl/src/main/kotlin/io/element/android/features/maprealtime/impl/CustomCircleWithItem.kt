@@ -40,7 +40,7 @@ fun CustomCircleWithItem(
     val draggableCenterState = remember { mutableStateOf(center) }
 
     UpdateCenter(coord = center, centerUpdated = { draggableCenterState.value = it })
-    
+
     // Invisible circle, this is the draggable
     Circle(
         center = draggableCenterState.value,
@@ -87,7 +87,6 @@ fun CustomCircleWithItem(
         Symbol(
             center = center,
             color = textColor,
-            textColor = textColor,
             isDraggable = false,
             text = text,
             size = itemSize,

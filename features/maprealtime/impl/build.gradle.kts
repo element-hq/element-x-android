@@ -44,7 +44,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.accompanist.permission)
     implementation(project(":features:location:impl"))
-    implementation(group = "org.mobilitydata", name = "gtfs-realtime-bindings", version = "0.0.8")
 
 
     testImplementation(libs.test.junit)
