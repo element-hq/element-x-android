@@ -46,6 +46,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -95,6 +96,10 @@ class MapRealtimePresenterPresenter @Inject constructor(
 
         val mapTile by mapTypeStore.mapTileProviderFlow.collectAsState(initial = "")
 
+        var isSharingLocation: Boolean by remember {
+            mutableStateOf(false)
+        }
+
         LaunchedEffect(Unit) {
             if (permissionsState.isAnyGranted) {
                 permissionDialog = MapRealtimePresenterState.Dialog.None
@@ -132,6 +137,18 @@ class MapRealtimePresenterPresenter @Inject constructor(
                         sendLocation(event)
                     }
                 }
+                MapRealtimeEvents.StartLiveLocationShare -> {
+                    isSharingLocation = true
+                    scope.launch {
+                        startLiveLocationShare()
+                    }
+                }
+                MapRealtimeEvents.StopLiveLocationShare -> {
+                    isSharingLocation = false
+                    scope.launch {
+                        stopLiveLocationShare()
+                    }
+                }
             }
         }
 
@@ -142,7 +159,7 @@ class MapRealtimePresenterPresenter @Inject constructor(
             showMapTypeDialog = showMapTypeDialog,
             appName = appName,
             roomName = roomName,
-            isSharingLocation = false,
+            isSharingLocation = isSharingLocation,
             mapType = mapTypes.find { it.mapKey == mapTile } ?: mapTypes[2],
             liveLocationShares = liveLocationShares
         )
@@ -238,6 +255,16 @@ class MapRealtimePresenterPresenter @Inject constructor(
             zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
             assetType = AssetType.SENDER
         )
+    }
+
+    private suspend fun startLiveLocationShare() {
+        room.startLiveLocationShare((60 * 1000).toULong())
+        delay(5000) // pause to test arrival times
+//        room.sendUserLocationBeacon("geo:40.6892532,-74.0445482;u=35")
+    }
+
+    private suspend fun stopLiveLocationShare() {
+        room.stopLiveLocationShare()
     }
 }
 
