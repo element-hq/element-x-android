@@ -24,4 +24,5 @@ data class LastLocation(
 data class LiveLocationShare(
     val userId: UserId,
     val lastLocation: LastLocation,
+    val isLive: Boolean,
 )

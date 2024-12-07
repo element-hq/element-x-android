@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -134,7 +135,14 @@ fun MapRealtimeView(
                 onJoinCallClicked = onJoinCallClick,
                 isCallOngoing = isCallOngoing
             )
-            RoundedIconButton(icon = Icons.Outlined.PlayArrow, onClick = { println("start") })
+            RoundedIconButton(icon = if (state.isSharingLocation) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
+                onClick = {
+                    if (state.isSharingLocation) {
+                        state.eventSink(MapRealtimeEvents.StopLiveLocationShare)
+                    } else {
+                        state.eventSink(MapRealtimeEvents.StartLiveLocationShare)
+                    }
+                })
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPosition.value = CameraPosition(cameraPosition.value).apply {
