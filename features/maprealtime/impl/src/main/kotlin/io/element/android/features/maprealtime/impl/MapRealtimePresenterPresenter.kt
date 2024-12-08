@@ -143,6 +143,7 @@ class MapRealtimePresenterPresenter @Inject constructor(
                     scope.launch {
                         stopLiveLocationShare()
                     }
+                    LocationForegroundService.stop(context)
                 }
             }
         }
