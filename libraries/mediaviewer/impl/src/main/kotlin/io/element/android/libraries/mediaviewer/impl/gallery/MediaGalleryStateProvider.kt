@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aDate
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aFile
@@ -27,16 +28,19 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
             aMediaGalleryState(
                 imageItems = AsyncData.Success(
                     listOf(
-                        aDate(),
-                        anImage(),
-                        aDate(),
-                        anImage(),
-                        aVideo(),
-                        anImage(),
-                        anImage(),
-                        anImage(),
-                        anImage(),
-                        anImage(),
+                        aDate(id = UniqueId("0")),
+                        anImage(id = UniqueId("1")),
+                        aDate(
+                            id = UniqueId("2"),
+                            formattedDate = "September 2004",
+                        ),
+                        anImage(id = UniqueId("3")),
+                        aVideo(id = UniqueId("4")),
+                        anImage(id = UniqueId("5")),
+                        anImage(id = UniqueId("6")),
+                        anImage(id = UniqueId("7")),
+                        anImage(id = UniqueId("8")),
+                        anImage(id = UniqueId("9")),
                     ).toImmutableList()
                 )
             ),
@@ -48,13 +52,16 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                 mode = MediaGalleryMode.Files,
                 fileItems = AsyncData.Success(
                     listOf(
-                        aDate(),
-                        aFile(),
-                        aDate(),
-                        aFile(),
-                        aFile(),
-                        aFile(),
-                        aFile(),
+                        aDate(id = UniqueId("0")),
+                        aFile(id = UniqueId("1")),
+                        aDate(
+                            id = UniqueId("2"),
+                            formattedDate = "September 2004",
+                        ),
+                        aFile(id = UniqueId("3")),
+                        aFile(id = UniqueId("4")),
+                        aFile(id = UniqueId("5")),
+                        aFile(id = UniqueId("6")),
                     ).toImmutableList()
                 )
             ),

@@ -15,11 +15,12 @@ import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 
 fun anImage(
+    id: UniqueId = UniqueId("imageId"),
     eventId: EventId? = null,
     senderId: UserId? = null,
 ): MediaItem.Image {
     return MediaItem.Image(
-        id = UniqueId("imageId"),
+        id = id,
         eventId = eventId,
         mediaInfo = anImageMediaInfo(
             senderId = senderId,
