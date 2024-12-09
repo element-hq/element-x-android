@@ -29,3 +29,17 @@ fun KnockRequest.getAvatarData(size: AvatarSize) = AvatarData(
 fun KnockRequest.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
+
+fun aKnockRequest(
+    userId: UserId = UserId("@jacob_ross:example.com"),
+    displayName: String? = "Jacob Ross",
+    avatarUrl: String? = null,
+    reason: String? = "Hi, I would like to get access to this room please.",
+    formattedDate: String = "20 Nov 2024",
+) = KnockRequest(
+    userId = userId,
+    displayName = displayName,
+    avatarUrl = avatarUrl,
+    reason = reason,
+    formattedDate = formattedDate,
+)

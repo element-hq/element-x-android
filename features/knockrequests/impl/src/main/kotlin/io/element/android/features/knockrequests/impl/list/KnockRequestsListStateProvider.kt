@@ -9,6 +9,7 @@ package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.features.knockrequests.impl.aKnockRequest
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -100,20 +101,6 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             ),
         )
 }
-
-fun aKnockRequest(
-    userId: UserId = UserId("@jacob_ross:example.com"),
-    displayName: String? = "Jacob Ross",
-    avatarUrl: String? = null,
-    reason: String? = "Hi, I would like to get access to this room please.",
-    formattedDate: String = "20 Nov 2024",
-) = KnockRequest(
-    userId = userId,
-    displayName = displayName,
-    avatarUrl = avatarUrl,
-    reason = reason,
-    formattedDate = formattedDate,
-)
 
 fun aKnockRequestsListState(
     knockRequests: AsyncData<ImmutableList<KnockRequest>> = AsyncData.Success(persistentListOf()),

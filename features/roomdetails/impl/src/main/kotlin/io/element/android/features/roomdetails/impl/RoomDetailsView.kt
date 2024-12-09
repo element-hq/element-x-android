@@ -242,7 +242,7 @@ fun RoomDetailsView(
 private fun KnockRequestsItem(knockRequestsCount: Int?, onKnockRequestsClick: () -> Unit) {
     ListItem(
         headlineContent = { Text(stringResource(R.string.screen_room_details_requests_to_join_title)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.AskToJoin())),
         trailingContent = if (knockRequestsCount == null || knockRequestsCount == 0) {
             null
         } else {

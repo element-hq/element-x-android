@@ -383,7 +383,7 @@ private fun KnockRequestsEmptyList(
         IconTitleSubtitleMolecule(
             title = stringResource(R.string.screen_knock_requests_list_empty_state_title),
             subTitle = stringResource(R.string.screen_knock_requests_list_empty_state_description),
-            iconStyle = BigIcon.Style.Default(CompoundIcons.Pin()),
+            iconStyle = BigIcon.Style.Default(CompoundIcons.AskToJoin()),
         )
     }
 }

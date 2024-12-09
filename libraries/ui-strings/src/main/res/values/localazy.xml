@@ -322,18 +322,10 @@ Reason: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not verified one or more of your devices"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s +%2$d other want to join this room"</item>
-    <item quantity="other">"%1$s +%2$d others want to join this room"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"View all"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Accept"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s wants to join this room"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"View"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
   <string name="screen_share_location_title">"Share location"</string>
