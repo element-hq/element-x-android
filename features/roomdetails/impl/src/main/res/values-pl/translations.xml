@@ -52,6 +52,7 @@
   <string name="screen_room_details_notification_mode_custom">"Niestandardowy"</string>
   <string name="screen_room_details_notification_mode_default">"Domyślny"</string>
   <string name="screen_room_details_notification_title">"Powiadomienia"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Przypięte wiadomości"</string>
   <string name="screen_room_details_roles_and_permissions">"Role i uprawnienia"</string>
   <string name="screen_room_details_room_name_label">"Nazwa pokoju"</string>
   <string name="screen_room_details_security_title">"Bezpieczeństwo"</string>

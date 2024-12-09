@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Emodzsi hozzáadása"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ez a(z) %1$s kezdete."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ez a beszélgetés kezdete."</string>
+  <string name="screen_room_timeline_legacy_call">"Nem támogatott hívás. Kérdezze meg, hogy a hívó fél tudja-e használni az új Element X alkalmazást."</string>
   <string name="screen_room_timeline_less_reactions">"Kevesebb megjelenítése"</string>
   <string name="screen_room_timeline_message_copied">"Üzenet másolva"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában"</string>

@@ -315,7 +315,6 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше повідомлення не було надіслано, тому що %1$s не перевірив усі пристрої"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Закріплені повідомлення"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>

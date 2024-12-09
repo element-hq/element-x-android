@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"biometrikus hitelesítés"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrikus feloldás"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Feloldás biometrikus adatokkal"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Biometrikus megerősítés"</string>
   <string name="screen_app_lock_forgot_pin">"Elfelejtette a PIN-kódot?"</string>
   <string name="screen_app_lock_settings_change_pin">"PIN-kód módosítása"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Biometrikus feloldás engedélyezése"</string>

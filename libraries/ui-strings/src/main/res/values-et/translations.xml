@@ -299,20 +299,13 @@ Põhjus: %1$s."</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Jah, võta kõik vastu"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_description">"Kas sa oled kindel, et soovid kõik vastu liitumist soovinud võtta?"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_title">"Võta kõik vastu"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Nõustu kõigiga"</string>
-  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Jah, keeldu liitumisest ning keela ligipääs"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Kas sa oled kindel, et soovid kasutajale %1$s keelata ligipääsu siia jututuppa ning seada talle suhtluskeelu? Seetõttu ta ei saa ka enam hiljem liitumispalvet saata."</string>
-  <string name="screen_knock_requests_list_ban_alert_title">"Keeldu liitumisest ja keela ligipääs"</string>
-  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Jah, keeldu"</string>
-  <string name="screen_knock_requests_list_decline_alert_description">"Kas sa oled kindel, et soovid kasutajale %1$s keelata ligipääsu siia jututuppa?"</string>
-  <string name="screen_knock_requests_list_decline_alert_title">"Keela ligipääs"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Keeldu ja määra suhtluskeeld"</string>
-  <string name="screen_knock_requests_list_empty_state_description">"Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin."</string>
-  <string name="screen_knock_requests_list_empty_state_title">"Pole ühtegi liitumispalvet"</string>
-  <string name="screen_knock_requests_list_title">"Liitumispalved"</string>
+  <string name="screen_media_browser_empty_state_subtitle">"Antud jututuppa üleslaaditud pildid ja videod kuvatakse siin."</string>
+  <string name="screen_media_browser_empty_state_title">"Mitte keegi pole veel meediat üles laadinud"</string>
+  <string name="screen_media_browser_list_loading_files">"Laadime faile…"</string>
+  <string name="screen_media_browser_list_loading_media">"Laadime meediat…"</string>
+  <string name="screen_media_browser_list_mode_files">"Failid"</string>
+  <string name="screen_media_browser_list_mode_media">"Meedia"</string>
+  <string name="screen_media_browser_title">"Meedia ja failid"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -334,8 +327,6 @@ Põhjus: %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Üks või enam sinu seadet on verifitseerimata. Sa võid sõnumi ikkagi ära saata või katkestad saatmise ning proovid uuesti, kui oled kõik oma seadmed verifitseerinud."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Esiletõstetud sõnumid"</string>
-  <string name="screen_room_details_requests_to_join_title">"Liitumispalved"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
   <plurals name="screen_room_multiple_knock_requests_title">
@@ -364,4 +355,7 @@ Põhjus: %1$s."</string>
   <string name="screen_view_location_title">"Asukoht"</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
 </resources>

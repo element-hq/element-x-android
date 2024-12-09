@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?"</string>
-  <string name="rageshake_detection_dialog_content">"Vous semblez secouez votre téléphone avec frustration. Souhaitez-vous ouvrir le formulaire pour reporter un problème?"</string>
+  <string name="rageshake_detection_dialog_content">"Vous semblez secouez votre téléphone avec frustration. Souhaitez-vous ouvrir le formulaire pour reporter un problème ?"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
 </resources>
