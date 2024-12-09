@@ -11,10 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.features.knockrequests.impl.R
 import io.element.android.features.knockrequests.impl.getBestName
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.ui.strings.CommonPlurals
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 data class KnockRequestsBannerState(
@@ -40,12 +39,12 @@ data class KnockRequestsBannerState(
     fun formattedTitle(): String {
         return when (knockRequests.size) {
             0 -> ""
-            1 -> stringResource(CommonStrings.screen_room_single_knock_request_title, knockRequests.first().getBestName())
+            1 -> stringResource(R.string.screen_room_single_knock_request_title, knockRequests.first().getBestName())
             else -> {
                 val firstRequest = knockRequests.first()
                 val otherRequestsCount = knockRequests.size - 1
                 pluralStringResource(
-                    id = CommonPlurals.screen_room_multiple_knock_requests_title,
+                    id = R.plurals.screen_room_multiple_knock_requests_title,
                     count = otherRequestsCount,
                     firstRequest.getBestName(),
                     otherRequestsCount

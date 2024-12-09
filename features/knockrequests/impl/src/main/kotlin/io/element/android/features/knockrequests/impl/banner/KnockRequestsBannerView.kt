@@ -37,6 +37,7 @@ import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.features.knockrequests.impl.R
 import io.element.android.features.knockrequests.impl.getAvatarData
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -133,21 +134,21 @@ private fun KnockRequestsBannerContent(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (state.knockRequests.size > 1) {
                 Button(
-                    text = "View all",
+                    text = stringResource(R.string.screen_room_multiple_knock_requests_view_all_button_title),
                     onClick = onViewRequestsClick,
                     size = ButtonSize.MediumLowPadding,
                     modifier = Modifier.weight(1f),
                 )
             } else {
                 OutlinedButton(
-                    text = "View",
+                    text = stringResource(R.string.screen_room_single_knock_request_view_button_title),
                     onClick = onViewRequestsClick,
                     size = ButtonSize.MediumLowPadding,
                     modifier = Modifier.weight(1f),
                 )
                 if (state.canAccept) {
                     Button(
-                        text = "Accept",
+                        text = stringResource(R.string.screen_room_single_knock_request_accept_button_title),
                         onClick = {},
                         size = ButtonSize.MediumLowPadding,
                         modifier = Modifier.weight(1f),

@@ -291,7 +291,9 @@
     {
       "name" : ":features:knockrequests:impl",
       "includeRegex" : [
-        "screen\\.knock_requests_list\\..*"
+        "screen\\.knock_requests_list\\..*",
+        "screen\\.room\\.single_knock_request.*",
+        "screen\\.room\\.multiple_knock_requests.*"
       ]
     }
   ]

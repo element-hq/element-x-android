@@ -14,4 +14,12 @@
   <string name="screen_knock_requests_list_empty_state_description">"When somebody will ask to join the room, you’ll be able to see their request here."</string>
   <string name="screen_knock_requests_list_empty_state_title">"No pending request to join"</string>
   <string name="screen_knock_requests_list_title">"Requests to join"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d other want to join this room"</item>
+    <item quantity="other">"%1$s +%2$d others want to join this room"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"View all"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accept"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s wants to join this room"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"View"</string>
 </resources>
