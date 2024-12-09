@@ -38,7 +38,9 @@ class AndroidLocalMediaFactoryTest {
                 mimeType = MimeTypes.Jpeg,
                 formattedFileSize = "4MB",
                 fileExtension = "jpg",
+                senderId = null,
                 senderName = A_USER_NAME,
+                senderAvatar = null,
                 dateSent = "12:34"
             )
         )

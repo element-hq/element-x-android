@@ -68,6 +68,9 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.R
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
+import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -92,6 +95,7 @@ fun MediaViewerView(
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     BackHandler { onBackClick() }
+    var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
@@ -121,7 +125,16 @@ fun MediaViewerView(
                     mimeType = state.mediaInfo.mimeType,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
+                    canShowInfo = state.canShowInfo,
                     onBackClick = onBackClick,
+                    onInfoClick = {
+                        mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                            eventId = state.eventId,
+                            canDelete = state.canDelete,
+                            mediaInfo = state.mediaInfo,
+                            thumbnailSource = state.thumbnailSource,
+                        )
+                    },
                     eventSink = state.eventSink
                 )
                 MediaViewerBottomBar(
@@ -131,6 +144,40 @@ fun MediaViewerView(
                     onHeightChange = { bottomPaddingInPixels = it },
                 )
             }
+        }
+    }
+    when (val bottomSheetState = mediaBottomSheetState) {
+        MediaBottomSheetState.Hidden -> Unit
+        is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
+            MediaDetailsBottomSheet(
+                state = bottomSheetState,
+                onViewInTimeline = {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                },
+                onDelete = { eventId ->
+                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                        eventId = eventId,
+                        mediaInfo = state.mediaInfo,
+                        thumbnailSource = state.thumbnailSource,
+                    )
+                },
+                onDismiss = {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                },
+            )
+        }
+        is MediaBottomSheetState.MediaDeleteConfirmationState -> {
+            MediaDeleteConfirmationBottomSheet(
+                state = bottomSheetState,
+                onDelete = {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    state.eventSink(MediaViewerEvents.Delete(it))
+                },
+                onDismiss = {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                },
+            )
         }
     }
 }
@@ -283,7 +330,9 @@ private fun MediaViewerTopBar(
     mimeType: String,
     senderName: String?,
     dateSent: String?,
+    canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
     TopAppBar(
@@ -354,7 +403,17 @@ private fun MediaViewerTopBar(
                     )
                 }
             }
-            // TODO Add action to open infos.
+            if (canShowInfo) {
+                IconButton(
+                    onClick = onInfoClick,
+                    enabled = actionsEnabled,
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Info(),
+                        contentDescription = null,
+                    )
+                }
+            }
         }
     )
 }

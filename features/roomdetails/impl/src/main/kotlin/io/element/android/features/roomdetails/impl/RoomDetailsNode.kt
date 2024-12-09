@@ -45,6 +45,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openRoomNotificationSettings()
         fun openAvatarPreview(name: String, url: String)
         fun openPollHistory()
+        fun openMediaGallery()
         fun openAdminSettings()
         fun openPinnedMessagesList()
         fun openKnockRequestsList()
@@ -75,6 +76,10 @@ class RoomDetailsNode @AssistedInject constructor(
 
     private fun openPollHistory() {
         callbacks.forEach { it.openPollHistory() }
+    }
+
+    private fun openMediaGallery() {
+        callbacks.forEach { it.openMediaGallery() }
     }
 
     private fun onJoinCall() {
@@ -143,6 +148,7 @@ class RoomDetailsNode @AssistedInject constructor(
             invitePeople = ::invitePeople,
             openAvatarPreview = ::openAvatarPreview,
             openPollHistory = ::openPollHistory,
+            openMediaGallery = ::openMediaGallery,
             openAdminSettings = this::openAdminSettings,
             onJoinCallClick = ::onJoinCall,
             onPinnedMessagesClick = ::openPinnedMessages,
