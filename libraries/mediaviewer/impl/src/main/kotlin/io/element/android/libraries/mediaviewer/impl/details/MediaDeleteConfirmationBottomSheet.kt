@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -107,15 +106,9 @@ private fun MediaRow(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val bgColor = if (LocalInspectionMode.current) {
-            ElementTheme.colors.bgDecorative1
-        } else {
-            Color.Transparent
-        }
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .background(bgColor),
+                .size(40.dp),
         ) {
             if (state.thumbnailSource == null) {
                 BigIcon(
