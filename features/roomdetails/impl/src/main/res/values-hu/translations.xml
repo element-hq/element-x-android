@@ -49,9 +49,12 @@
   <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
   <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
+  <string name="screen_room_details_media_gallery_title">"Média és fájlok"</string>
   <string name="screen_room_details_notification_mode_custom">"Egyéni"</string>
   <string name="screen_room_details_notification_mode_default">"Alapértelmezett"</string>
   <string name="screen_room_details_notification_title">"Értesítések"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Kitűzött üzenetek"</string>
+  <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
   <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>

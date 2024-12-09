@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Attiva/disattiva l\'elenco puntato"</string>
   <string name="rich_text_editor_close_formatting_options">"Chiudi le opzioni di formattazione"</string>
   <string name="rich_text_editor_code_block">"Attiva/disattiva il blocco di codice"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Aggiungi una didascalia"</string>
   <string name="rich_text_editor_composer_placeholder">"Messaggio…"</string>
   <string name="rich_text_editor_create_link">"Crea un collegamento"</string>
   <string name="rich_text_editor_edit_link">"Modifica collegamento"</string>
