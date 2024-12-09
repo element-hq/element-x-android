@@ -30,10 +30,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aVideoMediaInfo(
@@ -42,50 +42,51 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aPdfMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anApkMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anApkMediaInfo(),
             ),
             anApkMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anAudioMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anAudioMediaInfo(),
             ),
             anAudioMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             anImageMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
+                    canShowInfo = false,
                     canDownload = false,
                     canShare = false,
                 )
@@ -96,15 +97,19 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 fun aMediaViewerState(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
+    canShowInfo: Boolean = true,
     canDownload: Boolean = true,
     canShare: Boolean = true,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
+    eventId = null,
     mediaInfo = mediaInfo,
     thumbnailSource = null,
     downloadedMedia = downloadedMedia,
     snackbarMessage = null,
+    canShowInfo = canShowInfo,
     canDownload = canDownload,
     canShare = canShare,
+    canDelete = true,
     eventSink = eventSink,
 )

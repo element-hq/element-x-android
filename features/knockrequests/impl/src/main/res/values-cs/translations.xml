@@ -14,4 +14,13 @@
   <string name="screen_knock_requests_list_empty_state_description">"Když někdo požádá o vstup do místnosti, uvidíte jeho žádost zde."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Žádná čekající žádost o vstup"</string>
   <string name="screen_knock_requests_list_title">"Žádosti o vstup"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d další chce vstoupit do této místnosti"</item>
+    <item quantity="few">"%1$s +%2$d další chtějí vstoupit do této místnosti"</item>
+    <item quantity="other">"%1$s +%2$d dalších chce vstoupit do této místnosti"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobrazit vše"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Přijmout"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s chce vstoupit do této místnosti"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Zobrazit"</string>
 </resources>

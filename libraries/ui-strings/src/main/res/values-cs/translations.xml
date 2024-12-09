@@ -303,13 +303,6 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="screen_media_browser_empty_state_subtitle">"Obrázky a videa nahraná do této místnosti budou zobrazeny zde."</string>
-  <string name="screen_media_browser_empty_state_title">"Zatím nebyla nahrána žádná média"</string>
-  <string name="screen_media_browser_list_loading_files">"Načítání souborů…"</string>
-  <string name="screen_media_browser_list_loading_media">"Načítání médií…"</string>
-  <string name="screen_media_browser_list_mode_files">"Soubory"</string>
-  <string name="screen_media_browser_list_mode_media">"Média"</string>
-  <string name="screen_media_browser_title">"Média a soubory"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
@@ -334,19 +327,10 @@ Důvod: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s +%2$d další chce vstoupit do této místnosti"</item>
-    <item quantity="few">"%1$s +%2$d další chtějí vstoupit do této místnosti"</item>
-    <item quantity="other">"%1$s +%2$d dalších chce vstoupit do této místnosti"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Přijmout"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s chce vstoupit do této místnosti"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Zobrazit"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>

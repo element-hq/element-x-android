@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.api
 
 import android.os.Parcelable
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,11 +19,14 @@ data class MediaInfo(
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
+    val senderId: UserId?,
     val senderName: String?,
+    val senderAvatar: String?,
     val dateSent: String?,
 ) : Parcelable
 
 fun anImageMediaInfo(
+    senderId: UserId? = UserId("@alice:server.org"),
     caption: String? = null,
     senderName: String? = null,
     dateSent: String? = null,
@@ -32,7 +36,9 @@ fun anImageMediaInfo(
     mimeType = MimeTypes.Jpeg,
     formattedFileSize = "4MB",
     fileExtension = "jpg",
+    senderId = senderId,
     senderName = senderName,
+    senderAvatar = null,
     dateSent = dateSent,
 )
 
@@ -46,24 +52,31 @@ fun aVideoMediaInfo(
     mimeType = MimeTypes.Mp4,
     formattedFileSize = "14MB",
     fileExtension = "mp4",
+    senderId = UserId("@alice:server.org"),
     senderName = senderName,
+    senderAvatar = null,
     dateSent = dateSent,
 )
 
 fun aPdfMediaInfo(
+    filename: String = "a pdf file.pdf",
+    caption: String? = null,
     senderName: String? = null,
     dateSent: String? = null,
 ): MediaInfo = MediaInfo(
-    filename = "a pdf file.pdf",
-    caption = null,
+    filename = filename,
+    caption = caption,
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "23MB",
     fileExtension = "pdf",
+    senderId = UserId("@alice:server.org"),
     senderName = senderName,
+    senderAvatar = null,
     dateSent = dateSent,
 )
 
 fun anApkMediaInfo(
+    senderId: UserId? = UserId("@alice:server.org"),
     senderName: String? = null,
     dateSent: String? = null,
 ): MediaInfo = MediaInfo(
@@ -72,7 +85,9 @@ fun anApkMediaInfo(
     mimeType = MimeTypes.Apk,
     formattedFileSize = "50MB",
     fileExtension = "apk",
+    senderId = senderId,
     senderName = senderName,
+    senderAvatar = null,
     dateSent = dateSent,
 )
 
@@ -85,6 +100,8 @@ fun anAudioMediaInfo(
     mimeType = MimeTypes.Mp3,
     formattedFileSize = "7MB",
     fileExtension = "mp3",
+    senderId = UserId("@alice:server.org"),
     senderName = senderName,
+    senderAvatar = null,
     dateSent = dateSent,
 )
