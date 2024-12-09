@@ -24,7 +24,7 @@ class KnockRequestsBannerPresenter @Inject constructor() : Presenter<KnockReques
 
         fun handleEvents(event: KnockRequestsBannerEvents) {
             when (event) {
-                is KnockRequestsBannerEvents.Accept -> Unit
+                is KnockRequestsBannerEvents.AcceptSingleRequest -> Unit
                 is KnockRequestsBannerEvents.Dismiss -> {
                     shouldShowBanner = false
                 }

@@ -90,6 +90,10 @@ private fun KnockRequestsBannerContent(
         state.eventSink(KnockRequestsBannerEvents.Dismiss)
     }
 
+    fun onAcceptClick() {
+        state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+    }
+
     Column(
         modifier
             .fillMaxWidth()
@@ -149,7 +153,7 @@ private fun KnockRequestsBannerContent(
                 if (state.canAccept) {
                     Button(
                         text = stringResource(R.string.screen_room_single_knock_request_accept_button_title),
-                        onClick = {},
+                        onClick = ::onAcceptClick,
                         size = ButtonSize.MediumLowPadding,
                         modifier = Modifier.weight(1f),
                     )

@@ -7,9 +7,7 @@
 
 package io.element.android.features.knockrequests.impl.banner
 
-import io.element.android.features.knockrequests.impl.KnockRequest
-
 sealed interface KnockRequestsBannerEvents {
-    data class Accept(val knockRequest: KnockRequest) : KnockRequestsBannerEvents
+    data object AcceptSingleRequest : KnockRequestsBannerEvents
     data object Dismiss : KnockRequestsBannerEvents
 }
