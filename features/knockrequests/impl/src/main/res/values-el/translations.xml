@@ -14,4 +14,12 @@
   <string name="screen_knock_requests_list_empty_state_description">"Όταν κάποιος θα ζητήσει να συμμετάσχει στο δωμάτιο, θα μπορείς να δεις το αίτημά του εδώ."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Δεν υπάρχει εκκρεμές αίτημα συμμετοχής"</string>
   <string name="screen_knock_requests_list_title">"Αιτήματα συμμετοχής"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+    <item quantity="other">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Προβολή όλων"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Αποδοχή"</string>
+  <string name="screen_room_single_knock_request_title">"Ο χρήστης %1$s θέλει να μπει σε αυτό το δωμάτιο"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Προβολή"</string>
 </resources>
