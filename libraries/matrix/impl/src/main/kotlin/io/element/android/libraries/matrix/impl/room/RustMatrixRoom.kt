@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
+import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
@@ -76,6 +78,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
+import org.matrix.rustcomponents.sdk.JoinRequest
+import org.matrix.rustcomponents.sdk.RequestsToJoinListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -153,6 +157,15 @@ class RustMatrixRoom(
                         )
                     }
                 )
+            }
+        })
+    }
+
+    override val knockRequestsFlow: Flow<List<KnockRequest>> = mxCallbackFlow {
+        innerRoom.subscribeToJoinRequests(object : RequestsToJoinListener {
+            override fun call(joinRequests: List<JoinRequest>) {
+                val knockRequests = joinRequests.map { RustKnockRequest(it) }
+                channel.trySend(knockRequests)
             }
         })
     }

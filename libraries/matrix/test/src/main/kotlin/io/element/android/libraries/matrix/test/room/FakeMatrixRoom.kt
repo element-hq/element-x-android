@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -161,6 +162,13 @@ class FakeMatrixRoom(
 
     fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
         _identityStateChangesFlow.tryEmit(identityStateChanges)
+    }
+
+    private val _knockRequestsFlow: MutableSharedFlow<List<KnockRequest>> = MutableSharedFlow(replay = 1)
+    override val knockRequestsFlow: Flow<List<KnockRequest>> = _knockRequestsFlow
+
+    fun emitKnockRequests(knockRequests: List<KnockRequest>) {
+        _knockRequestsFlow.tryEmit(knockRequests)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
