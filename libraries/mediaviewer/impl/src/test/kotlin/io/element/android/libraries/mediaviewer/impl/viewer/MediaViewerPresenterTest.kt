@@ -308,9 +308,12 @@ class MediaViewerPresenterTest {
             val successState = awaitItem()
             assertThat(successState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             successState.eventSink(MediaViewerEvents.Delete(AN_EVENT_ID))
-            redactEventLambda.assertions().isCalledOnce().with(
-                value(AN_EVENT_ID.toEventOrTransactionId()), value(null)
-            )
+            redactEventLambda.assertions()
+                .isCalledOnce()
+                .with(
+                    value(AN_EVENT_ID.toEventOrTransactionId()),
+                    value(null),
+                )
             onItemDeletedLambda.assertions().isCalledOnce()
         }
     }
@@ -372,4 +375,3 @@ class MediaViewerPresenterTest {
         )
     }
 }
-
