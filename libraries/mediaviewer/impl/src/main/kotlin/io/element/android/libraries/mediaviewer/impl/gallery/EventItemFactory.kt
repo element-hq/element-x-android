@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
@@ -49,7 +49,7 @@ interface EventItemFactory {
     fun create(currentTimelineItem: MatrixTimelineItem.Event): MediaItem.Event?
 }
 
-@ContributesBinding(AppScope::class)
+@ContributesBinding(RoomScope::class)
 class DefaultEventItemFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,

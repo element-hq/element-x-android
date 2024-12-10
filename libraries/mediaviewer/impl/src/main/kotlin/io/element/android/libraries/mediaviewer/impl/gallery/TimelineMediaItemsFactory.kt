@@ -12,7 +12,7 @@ import io.element.android.libraries.androidutils.diff.DefaultDiffCacheInvalidato
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
@@ -33,7 +33,7 @@ interface TimelineMediaItemsFactory {
     suspend fun onCanPaginate()
 }
 
-@ContributesBinding(AppScope::class)
+@ContributesBinding(RoomScope::class)
 class DefaultTimelineMediaItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: VirtualItemFactory,

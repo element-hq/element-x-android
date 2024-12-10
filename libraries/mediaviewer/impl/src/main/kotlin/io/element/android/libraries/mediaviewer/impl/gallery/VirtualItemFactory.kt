@@ -9,7 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import javax.inject.Inject
@@ -18,7 +18,7 @@ interface VirtualItemFactory {
     fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem?
 }
 
-@ContributesBinding(AppScope::class)
+@ContributesBinding(RoomScope::class)
 class DefaultVirtualItemFactory @Inject constructor(
     private val daySeparatorFormatter: DaySeparatorFormatter,
 ) : VirtualItemFactory {
