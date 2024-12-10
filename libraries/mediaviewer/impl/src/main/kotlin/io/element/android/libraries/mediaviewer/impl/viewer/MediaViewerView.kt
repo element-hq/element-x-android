@@ -95,7 +95,6 @@ fun MediaViewerView(
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     BackHandler { onBackClick() }
-    var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
@@ -128,12 +127,7 @@ fun MediaViewerView(
                     canShowInfo = state.canShowInfo,
                     onBackClick = onBackClick,
                     onInfoClick = {
-                        mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
-                            eventId = state.eventId,
-                            canDelete = state.canDelete,
-                            mediaInfo = state.mediaInfo,
-                            thumbnailSource = state.thumbnailSource,
-                        )
+                        state.eventSink(MediaViewerEvents.OpenInfo)
                     },
                     eventSink = state.eventSink
                 )
@@ -146,24 +140,19 @@ fun MediaViewerView(
             }
         }
     }
-    when (val bottomSheetState = mediaBottomSheetState) {
+    when (val bottomSheetState = state.mediaBottomSheetState) {
         MediaBottomSheetState.Hidden -> Unit
         is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
             MediaDetailsBottomSheet(
                 state = bottomSheetState,
                 onViewInTimeline = {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                     state.eventSink(MediaViewerEvents.ViewInTimeline(it))
                 },
                 onDelete = { eventId ->
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
-                        eventId = eventId,
-                        mediaInfo = state.mediaInfo,
-                        thumbnailSource = state.thumbnailSource,
-                    )
+                    state.eventSink(MediaViewerEvents.ConfirmDelete(eventId))
                 },
                 onDismiss = {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
                 },
             )
         }
@@ -171,11 +160,10 @@ fun MediaViewerView(
             MediaDeleteConfirmationBottomSheet(
                 state = bottomSheetState,
                 onDelete = {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                     state.eventSink(MediaViewerEvents.Delete(it))
                 },
                 onDismiss = {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
                 },
             )
         }

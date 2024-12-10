@@ -11,11 +11,9 @@ import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -37,6 +35,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTran
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
@@ -78,15 +77,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                 mediaFile.value?.close()
             }
         }
-
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val canDelete by produceState(false, syncUpdateFlow.value) {
-            value = when (inputs.mediaInfo.senderId) {
-                null -> false
-                room.sessionId -> room.canRedactOwn().getOrElse { false } && inputs.eventId != null
-                else -> room.canRedactOther().getOrElse { false } && inputs.eventId != null
-            }
-        }
+        var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
         fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
             when (mediaViewerEvents) {
@@ -95,9 +86,35 @@ class MediaViewerPresenter @AssistedInject constructor(
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
                 MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
                 MediaViewerEvents.OpenWith -> coroutineScope.open(localMedia.value)
-                is MediaViewerEvents.Delete -> coroutineScope.delete(mediaViewerEvents.eventId)
+                is MediaViewerEvents.Delete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.delete(mediaViewerEvents.eventId)
+                }
                 is MediaViewerEvents.ViewInTimeline -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(mediaViewerEvents.eventId)
+                }
+                MediaViewerEvents.OpenInfo -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                        eventId = inputs.eventId,
+                        canDelete = when (inputs.mediaInfo.senderId) {
+                            null -> false
+                            room.sessionId -> room.canRedactOwn().getOrElse { false } && inputs.eventId != null
+                            else -> room.canRedactOther().getOrElse { false } && inputs.eventId != null
+                        },
+                        mediaInfo = inputs.mediaInfo,
+                        thumbnailSource = inputs.thumbnailSource,
+                    )
+                }
+                is MediaViewerEvents.ConfirmDelete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                        eventId = mediaViewerEvents.eventId,
+                        mediaInfo = inputs.mediaInfo,
+                        thumbnailSource = inputs.thumbnailSource ?: inputs.mediaSource,
+                    )
+                }
+                MediaViewerEvents.CloseBottomSheet -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
             }
         }
@@ -111,7 +128,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             canShowInfo = inputs.canShowInfo,
             canDownload = inputs.canDownload,
             canShare = inputs.canShare,
-            canDelete = canDelete,
+            mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvents
         )
     }

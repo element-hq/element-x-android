@@ -16,5 +16,8 @@ sealed interface MediaViewerEvents {
     data object RetryLoading : MediaViewerEvents
     data object ClearLoadingError : MediaViewerEvents
     data class ViewInTimeline(val eventId: EventId) : MediaViewerEvents
+    data object OpenInfo : MediaViewerEvents
+    data class ConfirmDelete(val eventId: EventId) : MediaViewerEvents
+    data object CloseBottomSheet : MediaViewerEvents
     data class Delete(val eventId: EventId) : MediaViewerEvents
 }

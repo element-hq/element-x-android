@@ -17,6 +17,9 @@ import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -91,6 +94,12 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     canShare = false,
                 )
             },
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+            ),
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDeleteConfirmationState(),
+            ),
         )
 }
 
@@ -100,6 +109,7 @@ fun aMediaViewerState(
     canShowInfo: Boolean = true,
     canDownload: Boolean = true,
     canShare: Boolean = true,
+    mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
     eventId = null,
@@ -110,6 +120,6 @@ fun aMediaViewerState(
     canShowInfo = canShowInfo,
     canDownload = canDownload,
     canShare = canShare,
-    canDelete = true,
+    mediaBottomSheetState = mediaBottomSheetState,
     eventSink = eventSink,
 )

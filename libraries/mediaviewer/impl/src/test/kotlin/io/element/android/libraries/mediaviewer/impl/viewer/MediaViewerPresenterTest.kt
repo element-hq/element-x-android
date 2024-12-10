@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.tests.testutils.WarmUpRule
@@ -67,7 +68,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.canDownload).isTrue()
             assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.canDelete).isFalse()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
@@ -87,7 +88,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isFalse()
             assertThat(initialState.canDownload).isTrue()
             assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.canDelete).isFalse()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
@@ -107,7 +108,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.canDownload).isTrue()
             assertThat(initialState.canShare).isFalse()
-            assertThat(initialState.canDelete).isFalse()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
@@ -127,7 +128,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.canDownload).isFalse()
             assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.canDelete).isFalse()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
@@ -147,7 +148,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.canDownload).isTrue()
             assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.canDelete).isTrue()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
@@ -168,7 +169,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.canDownload).isTrue()
             assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.canDelete).isFalse()
+            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 

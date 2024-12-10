@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 
 data class MediaViewerState(
     val eventId: EventId?,
@@ -23,6 +24,6 @@ data class MediaViewerState(
     val canShowInfo: Boolean,
     val canDownload: Boolean,
     val canShare: Boolean,
-    val canDelete: Boolean,
+    val mediaBottomSheetState: MediaBottomSheetState,
     val eventSink: (MediaViewerEvents) -> Unit,
 )
