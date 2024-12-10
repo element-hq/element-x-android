@@ -54,10 +54,10 @@ class MediaItemsPostProcessor @Inject constructor() {
                     when (item) {
                         is MediaItem.Image,
                         is MediaItem.Video -> {
-                            imageAndVideoItemsSubList.add(item)
+                            imageAndVideoItemsSubList.add(0, item)
                         }
                         is MediaItem.File -> {
-                            fileItemsSublist.add(item)
+                            fileItemsSublist.add(0, item)
                         }
                     }
                 }
@@ -66,6 +66,14 @@ class MediaItemsPostProcessor @Inject constructor() {
                     fileItems.add(item)
                 }
             }
+        }
+        if (imageAndVideoItemsSubList.isNotEmpty()) {
+            // Should not happen, since the SDK is always adding a date separator
+            imageAndVideoItems.addAll(imageAndVideoItemsSubList)
+        }
+        if (fileItemsSublist.isNotEmpty()) {
+            // Should not happen, since the SDK is always adding a date separator
+            fileItems.addAll(fileItemsSublist)
         }
         return GroupedMediaItems(
             imageAndVideoItems = imageAndVideoItems.toImmutableList(),

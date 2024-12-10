@@ -12,7 +12,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aDate
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
@@ -29,9 +29,9 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                 groupedMediaItems = AsyncData.Success(
                     aGroupedMediaItems(
                         imageAndVideoItems = listOf(
-                            aDate(id = UniqueId("0")),
+                            aMediaItemDateSeparator(id = UniqueId("0")),
                             aMediaItemImage(id = UniqueId("1")),
-                            aDate(
+                            aMediaItemDateSeparator(
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
@@ -55,9 +55,9 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                 groupedMediaItems = AsyncData.Success(
                     aGroupedMediaItems(
                         fileItems = listOf(
-                            aDate(id = UniqueId("0")),
+                            aMediaItemDateSeparator(id = UniqueId("0")),
                             aMediaItemFile(id = UniqueId("1")),
-                            aDate(
+                            aMediaItemDateSeparator(
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),

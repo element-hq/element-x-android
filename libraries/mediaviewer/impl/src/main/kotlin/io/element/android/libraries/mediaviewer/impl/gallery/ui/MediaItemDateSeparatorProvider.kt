@@ -14,12 +14,12 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 class MediaItemDateSeparatorProvider : PreviewParameterProvider<MediaItem.DateSeparator> {
     override val values: Sequence<MediaItem.DateSeparator>
         get() = sequenceOf(
-            aDate(),
-            aDate(formattedDate = "A long date that should be truncated"),
+            aMediaItemDateSeparator(),
+            aMediaItemDateSeparator(formattedDate = "A long date that should be truncated"),
         )
 }
 
-fun aDate(
+fun aMediaItemDateSeparator(
     id: UniqueId = UniqueId("dateId"),
     formattedDate: String = "October 2024",
 ): MediaItem.DateSeparator {
