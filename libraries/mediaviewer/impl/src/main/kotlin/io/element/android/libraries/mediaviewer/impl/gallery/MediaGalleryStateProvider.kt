@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aDate
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aFile
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aVideo
@@ -65,6 +67,8 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                     ).toImmutableList()
                 )
             ),
+            aMediaGalleryState(mediaBottomSheetState = aMediaDetailsBottomSheetState()),
+            aMediaGalleryState(mediaBottomSheetState = aMediaDeleteConfirmationState()),
         )
 }
 
@@ -73,12 +77,13 @@ private fun aMediaGalleryState(
     mode: MediaGalleryMode = MediaGalleryMode.Images,
     imageAndVideoItems: AsyncData<ImmutableList<MediaItem>> = AsyncData.Uninitialized,
     fileItems: AsyncData<ImmutableList<MediaItem>> = AsyncData.Uninitialized,
+    mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
 ) = MediaGalleryState(
     roomName = roomName,
     mode = mode,
     imageAndVideoItems = imageAndVideoItems,
     fileItems = fileItems,
-    mediaBottomSheetState = MediaBottomSheetState.Hidden,
+    mediaBottomSheetState = mediaBottomSheetState,
     snackbarMessage = null,
     eventSink = {}
 )

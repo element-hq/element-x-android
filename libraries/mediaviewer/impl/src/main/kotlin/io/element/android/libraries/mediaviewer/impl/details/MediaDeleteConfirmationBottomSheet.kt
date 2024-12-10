@@ -38,7 +38,6 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -155,13 +154,7 @@ private fun MediaRow(
 @Composable
 internal fun MediaDeleteConfirmationBottomSheetPreview() = ElementPreview {
     MediaDeleteConfirmationBottomSheet(
-        state = MediaBottomSheetState.MediaDeleteConfirmationState(
-            eventId = EventId("\$eventId"),
-            mediaInfo = anImageMediaInfo(
-                senderName = "Alice",
-            ),
-            thumbnailSource = null,
-        ),
+        state = aMediaDeleteConfirmationState(),
         onDelete = {},
         onDismiss = {},
     )

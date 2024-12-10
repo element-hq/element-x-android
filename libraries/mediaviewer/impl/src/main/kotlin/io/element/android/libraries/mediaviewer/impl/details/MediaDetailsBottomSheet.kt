@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaInfo
-import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -195,14 +194,7 @@ private fun SectionText(
 @Composable
 internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
     MediaDetailsBottomSheet(
-        state = MediaBottomSheetState.MediaDetailsBottomSheetState(
-            eventId = EventId("\$eventId"),
-            canDelete = true,
-            mediaInfo = anImageMediaInfo(
-                senderName = "Alice",
-            ),
-            thumbnailSource = null,
-        ),
+        state = aMediaDetailsBottomSheetState(),
         onViewInTimeline = {},
         onDelete = {},
         onDismiss = {},
