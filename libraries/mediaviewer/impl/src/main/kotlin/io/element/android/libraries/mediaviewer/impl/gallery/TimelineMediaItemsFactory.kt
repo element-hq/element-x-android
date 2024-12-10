@@ -8,12 +8,12 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.diff.DefaultDiffCacheInvalidator
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.mediaviewer.impl.gallery.diff.TimelineMediaItemsCacheInvalidator
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -46,7 +46,7 @@ class DefaultTimelineMediaItemsFactory @Inject constructor(
     private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, MediaItem>(
         diffCache = diffCache,
         detectMoves = false,
-        cacheInvalidator = TimelineMediaItemsCacheInvalidator()
+        cacheInvalidator = DefaultDiffCacheInvalidator()
     ) { old, new ->
         if (old is MatrixTimelineItem.Event && new is MatrixTimelineItem.Event) {
             old.uniqueId == new.uniqueId
