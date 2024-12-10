@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class MediaGalleryState(
     val roomName: String,
     val mode: MediaGalleryMode,
-    val imageItems: AsyncData<ImmutableList<MediaItem>>,
+    val imageAndVideoItems: AsyncData<ImmutableList<MediaItem>>,
     val fileItems: AsyncData<ImmutableList<MediaItem>>,
     val mediaBottomSheetState: MediaBottomSheetState,
     val snackbarMessage: SnackbarMessage?,

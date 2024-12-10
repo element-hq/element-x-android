@@ -77,7 +77,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         var mediaItems by remember {
             mutableStateOf<AsyncData<ImmutableList<MediaItem>>>(AsyncData.Uninitialized)
         }
-        val imageItems by remember {
+        val imageAndVideoItems by remember {
             derivedStateOf {
                 mediaItemsPostProcessor.process(
                     mediaItems = mediaItems,
@@ -157,7 +157,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         return MediaGalleryState(
             roomName = roomInfo?.name ?: room.displayName,
             mode = mode,
-            imageItems = imageItems,
+            imageAndVideoItems = imageAndVideoItems,
             fileItems = fileItems,
             mediaBottomSheetState = mediaBottomSheetState,
             snackbarMessage = snackbarMessage,

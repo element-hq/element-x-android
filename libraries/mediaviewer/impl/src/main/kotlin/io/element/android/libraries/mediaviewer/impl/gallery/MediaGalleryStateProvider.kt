@@ -23,10 +23,10 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
     override val values: Sequence<MediaGalleryState>
         get() = sequenceOf(
             aMediaGalleryState(),
-            aMediaGalleryState(imageItems = AsyncData.Loading()),
-            aMediaGalleryState(imageItems = AsyncData.Success(emptyList<MediaItem.Image>().toPersistentList())),
+            aMediaGalleryState(imageAndVideoItems = AsyncData.Loading()),
+            aMediaGalleryState(imageAndVideoItems = AsyncData.Success(emptyList<MediaItem.Image>().toPersistentList())),
             aMediaGalleryState(
-                imageItems = AsyncData.Success(
+                imageAndVideoItems = AsyncData.Success(
                     listOf(
                         aDate(id = UniqueId("0")),
                         anImage(id = UniqueId("1")),
@@ -71,12 +71,12 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
 private fun aMediaGalleryState(
     roomName: String = "Room name",
     mode: MediaGalleryMode = MediaGalleryMode.Images,
-    imageItems: AsyncData<ImmutableList<MediaItem>> = AsyncData.Uninitialized,
+    imageAndVideoItems: AsyncData<ImmutableList<MediaItem>> = AsyncData.Uninitialized,
     fileItems: AsyncData<ImmutableList<MediaItem>> = AsyncData.Uninitialized,
 ) = MediaGalleryState(
     roomName = roomName,
     mode = mode,
-    imageItems = imageItems,
+    imageAndVideoItems = imageAndVideoItems,
     fileItems = fileItems,
     mediaBottomSheetState = MediaBottomSheetState.Hidden,
     snackbarMessage = null,

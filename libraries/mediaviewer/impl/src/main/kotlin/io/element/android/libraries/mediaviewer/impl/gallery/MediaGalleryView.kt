@@ -129,7 +129,7 @@ fun MediaGalleryView(
                 val mode = MediaGalleryMode.entries[page]
                 when (mode) {
                     MediaGalleryMode.Images -> MediaGalleryImages(
-                        images = state.imageItems,
+                        imagesAndVideos = state.imageAndVideoItems,
                         eventSink = state.eventSink,
                         onItemClick = onItemClick,
                     )
@@ -180,21 +180,21 @@ fun MediaGalleryView(
 
 @Composable
 private fun MediaGalleryImages(
-    images: AsyncData<ImmutableList<MediaItem>>,
+    imagesAndVideos: AsyncData<ImmutableList<MediaItem>>,
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    when (images) {
+    when (imagesAndVideos) {
         AsyncData.Uninitialized,
         is AsyncData.Loading -> {
             LoadingContent(MediaGalleryMode.Images)
         }
         is AsyncData.Success -> {
-            if (images.data.isEmpty()) {
+            if (imagesAndVideos.data.isEmpty()) {
                 EmptyContent()
             } else {
                 MediaGalleryImageGrid(
-                    images = images.data,
+                    imagesAndVideos = imagesAndVideos.data,
                     eventSink = eventSink,
                     onItemClick = onItemClick,
                 )
@@ -202,7 +202,7 @@ private fun MediaGalleryImages(
         }
         is AsyncData.Failure -> {
             ErrorContent(
-                error = images.error,
+                error = imagesAndVideos.error,
             )
         }
     }
@@ -275,7 +275,7 @@ private fun MediaGalleryFilesList(
 
 @Composable
 private fun MediaGalleryImageGrid(
-    images: ImmutableList<MediaItem>,
+    imagesAndVideos: ImmutableList<MediaItem>,
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
@@ -296,7 +296,7 @@ private fun MediaGalleryImageGrid(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(
-            images,
+            imagesAndVideos,
             span = { item ->
                 when (item) {
                     is MediaItem.LoadingIndicator,
@@ -318,7 +318,7 @@ private fun MediaGalleryImageGrid(
                 }
                 is MediaItem.Image -> {
                     ImageItemView(
-                        item,
+                        image = item,
                         onClick = { onItemClick(item) },
                         onLongClick = {
                             eventSink(MediaGalleryEvents.OpenInfo(item))
@@ -327,7 +327,7 @@ private fun MediaGalleryImageGrid(
                 }
                 is MediaItem.Video -> {
                     VideoItemView(
-                        item,
+                        video = item,
                         onClick = { onItemClick(item) },
                         onLongClick = {
                             eventSink(MediaGalleryEvents.OpenInfo(item))

@@ -61,7 +61,7 @@ class MediaGalleryPresenterTest {
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             assertThat(initialState.roomName).isEqualTo(A_ROOM_NAME)
-            assertThat(initialState.imageItems.dataOrNull()).isEmpty()
+            assertThat(initialState.imageAndVideoItems.dataOrNull()).isEmpty()
             assertThat(initialState.fileItems.dataOrNull()).isEmpty()
             assertThat(initialState.snackbarMessage).isNull()
         }
