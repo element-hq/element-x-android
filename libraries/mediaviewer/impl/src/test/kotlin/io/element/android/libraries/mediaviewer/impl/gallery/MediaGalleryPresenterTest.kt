@@ -247,7 +247,6 @@ class MediaGalleryPresenterTest {
             room = room,
             timelineMediaItemsFactory = FakeTimelineMediaItemsFactory(
                 replaceWithLambda = lambdaRecorder<List<MatrixTimelineItem>, Unit> { _ -> },
-                onCanPaginateLambda = lambdaRecorder<Unit> { },
             ),
             localMediaFactory = localMediaFactory,
             mediaLoader = matrixMediaLoader,

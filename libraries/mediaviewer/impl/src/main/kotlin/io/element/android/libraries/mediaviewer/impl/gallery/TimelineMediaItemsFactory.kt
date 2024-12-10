@@ -14,7 +14,6 @@ import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
@@ -23,14 +22,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 interface TimelineMediaItemsFactory {
     val timelineItems: Flow<ImmutableList<MediaItem>>
-
     suspend fun replaceWith(timelineItems: List<MatrixTimelineItem>)
-    suspend fun onCanPaginate()
 }
 
 @ContributesBinding(RoomScope::class)
@@ -38,7 +34,6 @@ class DefaultTimelineMediaItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: VirtualItemFactory,
     private val eventItemFactory: EventItemFactory,
-    private val systemClock: SystemClock,
 ) : TimelineMediaItemsFactory {
     private val _timelineItems = MutableSharedFlow<ImmutableList<MediaItem>>(replay = 1)
     private val lock = Mutex()
@@ -63,26 +58,6 @@ class DefaultTimelineMediaItemsFactory @Inject constructor(
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
             buildAndEmitTimelineItemStates(timelineItems)
-        }
-    }
-
-    /**
-     * Update the timestamp of the loading indicator, so that it may trigger a new pagination request.
-     */
-    override suspend fun onCanPaginate() {
-        lock.withLock {
-            val values = _timelineItems.replayCache.firstOrNull() ?: return@withLock
-            val lastItem = values.lastOrNull()
-            if (lastItem is MediaItem.LoadingIndicator) {
-                val newList = values.toMutableList().apply {
-                    removeAt(size - 1)
-                    val newTs = systemClock.epochMillis()
-                    add(lastItem.copy(timestamp = newTs))
-                }
-                _timelineItems.emit(newList.toPersistentList())
-            } else {
-                Timber.w("onCanPaginate called but last item is not a loading indicator")
-            }
         }
     }
 

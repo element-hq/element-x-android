@@ -16,16 +16,11 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeTimelineMediaItemsFactory(
     private val replaceWithLambda: (List<MatrixTimelineItem>) -> Unit = { lambdaError() },
-    private val onCanPaginateLambda: () -> Unit = { lambdaError() }
 ) : TimelineMediaItemsFactory {
     override val timelineItems: Flow<ImmutableList<MediaItem>>
         get() = flowOf(emptyList<MediaItem>().toImmutableList())
 
     override suspend fun replaceWith(timelineItems: List<MatrixTimelineItem>) {
         replaceWithLambda(timelineItems)
-    }
-
-    override suspend fun onCanPaginate() {
-        onCanPaginateLambda()
     }
 }

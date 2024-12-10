@@ -183,14 +183,6 @@ class MediaGalleryPresenter @AssistedInject constructor(
                         }
                         .launchIn(this)
 
-                    timeline.data.paginationStatus(Timeline.PaginationDirection.BACKWARDS)
-                        .onEach { backwardPaginationStatus ->
-                            if (backwardPaginationStatus.canPaginate) {
-                                timelineMediaItemsFactory.onCanPaginate()
-                            }
-                        }
-                        .launchIn(this)
-
                     timelineMediaItemsFactory.timelineItems.map { timelineItems ->
                         AsyncData.Success(timelineItems)
                     }
