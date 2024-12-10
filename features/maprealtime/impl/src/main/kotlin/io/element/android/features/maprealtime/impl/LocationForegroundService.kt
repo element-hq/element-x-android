@@ -26,20 +26,24 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import io.element.android.features.location.api.Location
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import io.element.android.features.location.api.LocationRepository
+import io.element.android.features.location.api.LocationServiceState
+import io.element.android.features.location.api.LocationServiceStateRepository
+import io.element.android.libraries.architecture.bindings
 import timber.log.Timber
+import javax.inject.Inject
 
 class LocationForegroundService : Service() {
 
-    companion object {
-        private val _locationFlow = MutableStateFlow<Location?>(null)
-        val locationFlow = _locationFlow.asStateFlow()
+    @Inject
+    lateinit var locationRepository: LocationRepository
 
+    @Inject
+    lateinit var locationServiceStateRepository: LocationServiceStateRepository
+
+    private var isServiceRunning = false
+
+    companion object {
         fun start(context: Context) {
             val intent = Intent(context, LocationForegroundService::class.java)
             ContextCompat.startForegroundService(context, intent)
@@ -51,22 +55,50 @@ class LocationForegroundService : Service() {
         }
     }
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private var locationClient: FusedLocationProviderClient? = null
 
-    lateinit var locationClient: FusedLocationProviderClient
+    private val locationRequest by lazy {
+        LocationRequest.Builder(3 * 1000)
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .build()
+    }
+
+    private val locationCallback: LocationCallback by lazy {
+        object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                result.locations.forEach { location ->
+                    val matrixLocation = Location(location.latitude, location.longitude, location.accuracy)
+                    Timber.tag("LocationForegroundService").d("New Location received=$matrixLocation, geoUri=${matrixLocation.toGeoUri()}")
+                    locationRepository.send(matrixLocation)
+
+                    // Location might be emitted just after the service gets destroyed, hence this check is needed
+                    if (isServiceRunning) {
+                        locationServiceStateRepository.set(LocationServiceState.LOCATION_EVENT_EMITTED)
+                    } else {
+                        locationServiceStateRepository.set(LocationServiceState.STOPPED)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
+        applicationContext.bindings<ServiceComponent>().inject(this)
+
         locationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationServiceStateRepository.set(LocationServiceState.CREATED)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        isServiceRunning = false
+        locationClient?.removeLocationUpdates(locationCallback)
+        locationServiceStateRepository.set(LocationServiceState.STOPPED)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        isServiceRunning = true
         // check for location permissions
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -75,6 +107,7 @@ class LocationForegroundService : Service() {
             startForeground(1, createNotification())
         }
 
+        locationServiceStateRepository.set(LocationServiceState.STARTED)
         handleLocationUpdates()
         return START_STICKY
     }
@@ -109,21 +142,7 @@ class LocationForegroundService : Service() {
 
     @SuppressLint("MissingPermission")
     private fun handleLocationUpdates() {
-        val locationRequest = LocationRequest.Builder(3 * 1000)
-            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-            .build()
-        val locationCallback: LocationCallback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                result.locations.forEach { location ->
-                    val matrixLocation = Location(location.latitude, location.longitude, location.accuracy)
-                    scope.launch {
-                        Timber.e(matrixLocation.toGeoUri())
-                        _locationFlow.emit(matrixLocation)
-                    }
-                }
-            }
-        }
         // check permissions
-        locationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        locationClient?.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 }

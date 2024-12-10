@@ -21,6 +21,7 @@ data class MapRealtimePresenterState(
     val roomName: String,
     val eventSink: (MapRealtimeEvents) -> Unit,
     val isSharingLocation: Boolean,
+    val isWaitingForLocation: Boolean,
     val mapType: MapType,
     val liveLocationShares: List<LiveLocationShare>,
 ) {

@@ -8,6 +8,7 @@
 package io.element.android.features.maprealtime.impl
 
 import android.location.Location
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import io.element.android.features.maprealtime.impl.common.PermissionDeniedDialo
 import io.element.android.features.maprealtime.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import org.maplibre.android.geometry.LatLng
@@ -134,16 +136,15 @@ fun MapRealtimeView(
                 onJoinCallClicked = onJoinCallClick,
                 isCallOngoing = isCallOngoing
             )
-            RoundedIconButton(
-                icon = if (state.isSharingLocation) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
+            LocationButton(
+                state = state,
                 onClick = {
                     if (state.isSharingLocation) {
                         state.eventSink(MapRealtimeEvents.StopLiveLocationShare)
                     } else {
                         state.eventSink(MapRealtimeEvents.StartLiveLocationShare)
                     }
-                },
-                color = if (state.isSharingLocation) Color.Red else Color.Green
+                }
             )
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
@@ -163,6 +164,48 @@ fun MapRealtimeView(
                 )
             )
         })
+    }
+}
+
+@Composable
+fun LocationButton(
+    state: MapRealtimePresenterState,
+    onClick: () -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(48.dp)
+    ) {
+        if (state.isWaitingForLocation) {
+            Canvas(modifier = Modifier.size(48.dp)) {
+                drawCircle(color = Color.Green)
+            }
+
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                color = Color.White,
+                strokeWidth = 2.dp,
+            )
+        } else {
+            val (imageVector, backgroundColor) = if (state.isSharingLocation) {
+                Icons.Outlined.Stop to Color.Red
+            } else {
+                Icons.Outlined.PlayArrow to Color.Green
+            }
+
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(backgroundColor, CircleShape)
+            ) {
+                Icon(
+                    imageVector = imageVector,
+                    contentDescription = "Icon",
+                    tint = Color.Black
+                )
+            }
+        }
     }
 }
 
