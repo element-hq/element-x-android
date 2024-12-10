@@ -16,11 +16,15 @@ import kotlinx.collections.immutable.ImmutableList
 data class MediaGalleryState(
     val roomName: String,
     val mode: MediaGalleryMode,
-    val imageAndVideoItems: AsyncData<ImmutableList<MediaItem>>,
-    val fileItems: AsyncData<ImmutableList<MediaItem>>,
+    val groupedMediaItems: AsyncData<GroupedMediaItems>,
     val mediaBottomSheetState: MediaBottomSheetState,
     val snackbarMessage: SnackbarMessage?,
     val eventSink: (MediaGalleryEvents) -> Unit,
+)
+
+data class GroupedMediaItems(
+    val imageAndVideoItems: ImmutableList<MediaItem>,
+    val fileItems: ImmutableList<MediaItem>,
 )
 
 enum class MediaGalleryMode(val stringResource: Int) {

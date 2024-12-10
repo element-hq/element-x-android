@@ -29,6 +29,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -54,13 +55,17 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             assertThat(initialState.roomName).isEqualTo(A_ROOM_NAME)
-            assertThat(initialState.imageAndVideoItems.dataOrNull()).isEmpty()
-            assertThat(initialState.fileItems.dataOrNull()).isEmpty()
+            assertThat(initialState.groupedMediaItems.dataOrNull()).isEqualTo(
+                GroupedMediaItems(
+                    imageAndVideoItems = persistentListOf(),
+                    fileItems = persistentListOf(),
+                )
+            )
             assertThat(initialState.snackbarMessage).isNull()
         }
     }
@@ -79,7 +84,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             initialState.eventSink(MediaGalleryEvents.ChangeMode(MediaGalleryMode.Files))
@@ -111,7 +116,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = anImage(
@@ -155,7 +160,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = anImage(
@@ -188,7 +193,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             // Delete bottom sheet
             val item = anImage()
@@ -221,7 +226,7 @@ class MediaGalleryPresenterTest {
             navigator = navigator,
         )
         presenter.test {
-            skipItems(2)
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MediaGalleryEvents.ViewInTimeline(AN_EVENT_ID))
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))

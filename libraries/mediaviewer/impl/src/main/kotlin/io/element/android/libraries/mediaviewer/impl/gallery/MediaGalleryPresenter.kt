@@ -77,23 +77,13 @@ class MediaGalleryPresenter @AssistedInject constructor(
         var mediaItems by remember {
             mutableStateOf<AsyncData<ImmutableList<MediaItem>>>(AsyncData.Uninitialized)
         }
-        val imageAndVideoItems by remember {
+        val groupedMediaItems by remember {
             derivedStateOf {
                 mediaItemsPostProcessor.process(
                     mediaItems = mediaItems,
-                    predicate = { it is MediaItem.Image || it is MediaItem.Video },
                 )
             }
         }
-        val fileItems by remember {
-            derivedStateOf {
-                mediaItemsPostProcessor.process(
-                    mediaItems = mediaItems,
-                    predicate = { it is MediaItem.File },
-                )
-            }
-        }
-
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
@@ -165,8 +155,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         return MediaGalleryState(
             roomName = roomInfo?.name ?: room.displayName,
             mode = mode,
-            imageAndVideoItems = imageAndVideoItems,
-            fileItems = fileItems,
+            groupedMediaItems = groupedMediaItems,
             mediaBottomSheetState = mediaBottomSheetState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents

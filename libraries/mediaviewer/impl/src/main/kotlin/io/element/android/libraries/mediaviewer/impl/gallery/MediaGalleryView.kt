@@ -127,18 +127,11 @@ fun MediaGalleryView(
                 modifier = Modifier,
             ) { page ->
                 val mode = MediaGalleryMode.entries[page]
-                when (mode) {
-                    MediaGalleryMode.Images -> MediaGalleryImages(
-                        imagesAndVideos = state.imageAndVideoItems,
-                        eventSink = state.eventSink,
-                        onItemClick = onItemClick,
-                    )
-                    MediaGalleryMode.Files -> MediaGalleryFiles(
-                        files = state.fileItems,
-                        eventSink = state.eventSink,
-                        onItemClick = onItemClick,
-                    )
-                }
+                MediaGalleryPage(
+                    mode = mode,
+                    state = state,
+                    onItemClick = onItemClick,
+                )
             }
         }
     }
@@ -179,62 +172,69 @@ fun MediaGalleryView(
 }
 
 @Composable
-private fun MediaGalleryImages(
-    imagesAndVideos: AsyncData<ImmutableList<MediaItem>>,
-    eventSink: (MediaGalleryEvents) -> Unit,
+private fun MediaGalleryPage(
+    mode: MediaGalleryMode,
+    state: MediaGalleryState,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    when (imagesAndVideos) {
+    when (val groupedMediaItems = state.groupedMediaItems) {
         AsyncData.Uninitialized,
         is AsyncData.Loading -> {
-            LoadingContent(MediaGalleryMode.Images)
+            LoadingContent(mode)
         }
         is AsyncData.Success -> {
-            if (imagesAndVideos.data.isEmpty()) {
-                EmptyContent()
-            } else {
-                MediaGalleryImageGrid(
-                    imagesAndVideos = imagesAndVideos.data,
-                    eventSink = eventSink,
+            when (mode) {
+                MediaGalleryMode.Images -> MediaGalleryImages(
+                    imagesAndVideos = groupedMediaItems.data.imageAndVideoItems,
+                    eventSink = state.eventSink,
+                    onItemClick = onItemClick,
+                )
+                MediaGalleryMode.Files -> MediaGalleryFiles(
+                    files = groupedMediaItems.data.fileItems,
+                    eventSink = state.eventSink,
                     onItemClick = onItemClick,
                 )
             }
         }
         is AsyncData.Failure -> {
             ErrorContent(
-                error = imagesAndVideos.error,
+                error = groupedMediaItems.error,
             )
         }
     }
 }
 
 @Composable
-private fun MediaGalleryFiles(
-    files: AsyncData<ImmutableList<MediaItem>>,
+private fun MediaGalleryImages(
+    imagesAndVideos: ImmutableList<MediaItem>,
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    when (files) {
-        AsyncData.Uninitialized,
-        is AsyncData.Loading -> {
-            LoadingContent(MediaGalleryMode.Files)
-        }
-        is AsyncData.Success -> {
-            if (files.data.isEmpty()) {
-                EmptyContent()
-            } else {
-                MediaGalleryFilesList(
-                    files = files.data,
-                    eventSink = eventSink,
-                    onItemClick = onItemClick,
-                )
-            }
-        }
-        is AsyncData.Failure -> {
-            ErrorContent(
-                error = files.error,
-            )
-        }
+    if (imagesAndVideos.isEmpty()) {
+        EmptyContent()
+    } else {
+        MediaGalleryImageGrid(
+            imagesAndVideos = imagesAndVideos,
+            eventSink = eventSink,
+            onItemClick = onItemClick,
+        )
+    }
+}
+
+@Composable
+private fun MediaGalleryFiles(
+    files: ImmutableList<MediaItem>,
+    eventSink: (MediaGalleryEvents) -> Unit,
+    onItemClick: (MediaItem.Event) -> Unit,
+) {
+    if (files.isEmpty()) {
+        EmptyContent()
+    } else {
+        MediaGalleryFilesList(
+            files = files,
+            eventSink = eventSink,
+            onItemClick = onItemClick,
+        )
     }
 }
 

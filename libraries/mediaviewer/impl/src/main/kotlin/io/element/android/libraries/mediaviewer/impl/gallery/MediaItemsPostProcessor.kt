@@ -17,54 +17,68 @@ import javax.inject.Inject
 interface MediaItemsPostProcessor {
     fun process(
         mediaItems: AsyncData<ImmutableList<MediaItem>>,
-        predicate: (MediaItem.Event) -> Boolean,
-    ): AsyncData<ImmutableList<MediaItem>>
+    ): AsyncData<GroupedMediaItems>
 }
 
 @ContributesBinding(RoomScope::class)
 class DefaultMediaItemsPostProcessor @Inject constructor() : MediaItemsPostProcessor {
     override fun process(
         mediaItems: AsyncData<ImmutableList<MediaItem>>,
-        predicate: (MediaItem.Event) -> Boolean,
-    ): AsyncData<ImmutableList<MediaItem>> {
+    ): AsyncData<GroupedMediaItems> {
         return when (mediaItems) {
-            is AsyncData.Uninitialized -> mediaItems
-            is AsyncData.Loading -> mediaItems
-            is AsyncData.Failure -> mediaItems
+            is AsyncData.Uninitialized -> AsyncData.Uninitialized
+            is AsyncData.Loading -> AsyncData.Loading()
+            is AsyncData.Failure -> AsyncData.Failure(mediaItems.error)
             is AsyncData.Success -> AsyncData.Success(
-                process(
-                    mediaItems = mediaItems.data,
-                    predicate = predicate,
-                )
+                mediaItems.data.process()
             )
         }
     }
 
-    private fun process(
-        mediaItems: List<MediaItem>,
-        predicate: (MediaItem.Event) -> Boolean,
-    ) = buildList {
-        val eventList = mutableListOf<MediaItem.Event>()
-        for (item in mediaItems) {
+    private fun List<MediaItem>.process(): GroupedMediaItems {
+        val imageAndVideoItems = mutableListOf<MediaItem>()
+        val fileItems = mutableListOf<MediaItem>()
+
+        val imageAndVideoItemsSubList = mutableListOf<MediaItem.Event>()
+        val fileItemsSublist = mutableListOf<MediaItem.Event>()
+        forEach { item ->
             when (item) {
                 is MediaItem.DateSeparator -> {
-                    if (eventList.isNotEmpty()) {
+                    if (imageAndVideoItemsSubList.isNotEmpty()) {
                         // Date separator first
-                        add(item)
+                        imageAndVideoItems.add(item)
                         // Then events
-                        addAll(eventList)
-                        eventList.clear()
+                        imageAndVideoItems.addAll(imageAndVideoItemsSubList)
+                        imageAndVideoItemsSubList.clear()
+                    }
+                    if (fileItemsSublist.isNotEmpty()) {
+                        // Date separator first
+                        fileItems.add(item)
+                        // Then events
+                        fileItems.addAll(fileItemsSublist)
+                        fileItemsSublist.clear()
                     }
                 }
                 is MediaItem.Event -> {
-                    if (predicate(item)) {
-                        eventList.add(item)
+                    when (item) {
+                        is MediaItem.Image,
+                        is MediaItem.Video -> {
+                            imageAndVideoItemsSubList.add(item)
+                        }
+                        is MediaItem.File -> {
+                            fileItemsSublist.add(item)
+                        }
                     }
                 }
                 is MediaItem.LoadingIndicator -> {
-                    add(item)
+                    imageAndVideoItems.add(item)
+                    fileItems.add(item)
                 }
             }
         }
-    }.toImmutableList()
+        return GroupedMediaItems(
+            imageAndVideoItems = imageAndVideoItems.toImmutableList(),
+            fileItems = fileItems.toImmutableList(),
+        )
+    }
 }
