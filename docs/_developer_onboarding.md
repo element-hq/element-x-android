@@ -152,7 +152,8 @@ automatically by the Element X Android build.
 Troubleshooting:
  - You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
  - If you get the error `thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', .cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-ndk-2.11.0/src/cli.rs:345:18` try updating your Cargo NDK version. In this case, 2.11.0 is too old so `cargo install cargo-ndk` to install a newer version.
-
+ - If you get the error `Unsupported class file major version <n>`, try changing your JVM version by setting
+   `JAVA_HOME` and, if building via Android Studio, "File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Gradle JDK".
 
 ### The Android project
 
