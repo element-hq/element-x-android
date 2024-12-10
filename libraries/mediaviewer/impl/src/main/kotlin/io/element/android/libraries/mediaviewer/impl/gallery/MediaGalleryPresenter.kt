@@ -140,7 +140,6 @@ class MediaGalleryPresenter @AssistedInject constructor(
                             null -> false
                             room.sessionId -> room.canRedactOwn().getOrElse { false } && event.mediaItem.eventId() != null
                             else -> room.canRedactOther().getOrElse { false } && event.mediaItem.eventId() != null
-
                         },
                         mediaInfo = event.mediaItem.mediaInfo(),
                         thumbnailSource = when (event.mediaItem) {

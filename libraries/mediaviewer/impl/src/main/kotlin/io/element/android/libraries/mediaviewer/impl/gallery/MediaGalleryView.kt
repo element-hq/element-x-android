@@ -381,8 +381,7 @@ private fun ErrorContent(error: Throwable) {
 }
 
 @Composable
-private fun EmptyContent(
-) {
+private fun EmptyContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -433,4 +432,3 @@ internal fun MediaGalleryViewPreview(
         onItemClick = {},
     )
 }
-

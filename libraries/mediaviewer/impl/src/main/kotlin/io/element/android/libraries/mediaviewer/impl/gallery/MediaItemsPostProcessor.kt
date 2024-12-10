@@ -22,8 +22,7 @@ interface MediaItemsPostProcessor {
 }
 
 @ContributesBinding(RoomScope::class)
-class DefaultMediaItemsPostProcessor @Inject constructor(
-) : MediaItemsPostProcessor {
+class DefaultMediaItemsPostProcessor @Inject constructor() : MediaItemsPostProcessor {
     override fun process(
         mediaItems: AsyncData<ImmutableList<MediaItem>>,
         predicate: (MediaItem.Event) -> Boolean,
