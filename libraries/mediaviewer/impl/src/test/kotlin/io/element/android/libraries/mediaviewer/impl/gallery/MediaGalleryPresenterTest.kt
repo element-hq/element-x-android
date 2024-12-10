@@ -9,10 +9,11 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
+import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -24,12 +25,15 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
+import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -55,7 +59,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -84,7 +88,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             initialState.eventSink(MediaGalleryEvents.ChangeMode(MediaGalleryMode.Files))
@@ -106,7 +110,7 @@ class MediaGalleryPresenterTest {
         `present - bottom sheet state - own message`(canDeleteOwn = false)
     }
 
-    private suspend fun `present - bottom sheet state - own message`(canDeleteOwn: Boolean) {
+    private suspend fun TestScope.`present - bottom sheet state - own message`(canDeleteOwn: Boolean) {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
@@ -116,7 +120,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = aMediaItemImage(
@@ -150,7 +154,7 @@ class MediaGalleryPresenterTest {
         `present - bottom sheet state - other message`(canDeleteOther = false)
     }
 
-    private suspend fun `present - bottom sheet state - other message`(canDeleteOther: Boolean) {
+    private suspend fun TestScope.`present - bottom sheet state - other message`(canDeleteOther: Boolean) {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
@@ -160,7 +164,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = aMediaItemImage(
@@ -193,7 +197,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             // Delete bottom sheet
             val item = aMediaItemImage()
@@ -226,14 +230,14 @@ class MediaGalleryPresenterTest {
             navigator = navigator,
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val initialState = awaitItem()
             initialState.eventSink(MediaGalleryEvents.ViewInTimeline(AN_EVENT_ID))
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 
-    private fun createMediaGalleryPresenter(
+    private fun TestScope.createMediaGalleryPresenter(
         matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
@@ -245,14 +249,21 @@ class MediaGalleryPresenterTest {
         return MediaGalleryPresenter(
             navigator = navigator,
             room = room,
-            timelineMediaItemsFactory = FakeTimelineMediaItemsFactory(
-                replaceWithLambda = lambdaRecorder<List<MatrixTimelineItem>, Unit> { _ -> },
+            timelineMediaItemsFactory = TimelineMediaItemsFactory(
+                dispatchers = testCoroutineDispatchers(),
+                virtualItemFactory = VirtualItemFactory(
+                    daySeparatorFormatter = FakeDaySeparatorFormatter(),
+                ),
+                eventItemFactory = EventItemFactory(
+                    fileSizeFormatter = FakeFileSizeFormatter(),
+                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+                ),
             ),
             localMediaFactory = localMediaFactory,
             mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
-            mediaItemsPostProcessor = FakeMediaItemsPostProcessor(),
+            mediaItemsPostProcessor = MediaItemsPostProcessor(),
         )
     }
 }

@@ -7,22 +7,15 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import javax.inject.Inject
 
-interface VirtualItemFactory {
-    fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem?
-}
-
-@ContributesBinding(RoomScope::class)
-class DefaultVirtualItemFactory @Inject constructor(
+class VirtualItemFactory @Inject constructor(
     private val daySeparatorFormatter: DaySeparatorFormatter,
-) : VirtualItemFactory {
-    override fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem? {
+) {
+    fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem? {
         return when (val virtual = timelineItem.virtual) {
             is VirtualTimelineItem.DayDivider -> MediaItem.DateSeparator(
                 id = timelineItem.uniqueId,

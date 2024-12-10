@@ -7,22 +7,13 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.di.RoomScope
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
-interface MediaItemsPostProcessor {
+class MediaItemsPostProcessor @Inject constructor() {
     fun process(
-        mediaItems: AsyncData<ImmutableList<MediaItem>>,
-    ): AsyncData<GroupedMediaItems>
-}
-
-@ContributesBinding(RoomScope::class)
-class DefaultMediaItemsPostProcessor @Inject constructor() : MediaItemsPostProcessor {
-    override fun process(
         mediaItems: AsyncData<ImmutableList<MediaItem>>,
     ): AsyncData<GroupedMediaItems> {
         return when (mediaItems) {

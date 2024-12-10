@@ -7,12 +7,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.diff.DefaultDiffCacheInvalidator
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -24,17 +22,11 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-interface TimelineMediaItemsFactory {
-    val timelineItems: Flow<ImmutableList<MediaItem>>
-    suspend fun replaceWith(timelineItems: List<MatrixTimelineItem>)
-}
-
-@ContributesBinding(RoomScope::class)
-class DefaultTimelineMediaItemsFactory @Inject constructor(
+class TimelineMediaItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: VirtualItemFactory,
     private val eventItemFactory: EventItemFactory,
-) : TimelineMediaItemsFactory {
+) {
     private val _timelineItems = MutableSharedFlow<ImmutableList<MediaItem>>(replay = 1)
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<MediaItem>()
@@ -50,9 +42,9 @@ class DefaultTimelineMediaItemsFactory @Inject constructor(
         }
     }
 
-    override val timelineItems: Flow<ImmutableList<MediaItem>> = _timelineItems.distinctUntilChanged()
+    val timelineItems: Flow<ImmutableList<MediaItem>> = _timelineItems.distinctUntilChanged()
 
-    override suspend fun replaceWith(
+    suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {

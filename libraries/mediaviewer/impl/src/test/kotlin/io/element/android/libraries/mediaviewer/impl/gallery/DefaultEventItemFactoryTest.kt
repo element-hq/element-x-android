@@ -55,7 +55,7 @@ import kotlin.time.Duration.Companion.seconds
 class DefaultEventItemFactoryTest {
     @Test
     fun `create check all null cases`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val contents = listOf(
             CallNotifyContent,
             FailedToParseMessageLikeContent("", ""),
@@ -100,7 +100,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create MessageContent check all null cases`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val messageTypes = listOf(
             EmoteMessageType("", null),
             NoticeMessageType("", null),
@@ -125,7 +125,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for FileMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -169,7 +169,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for ImageMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -217,7 +217,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for AudioMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -260,7 +260,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for VideoMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -310,7 +310,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for VoiceMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -357,7 +357,7 @@ class DefaultEventItemFactoryTest {
 
     @Test
     fun `create for StickerMessageType`() {
-        val factory = createDefaultEventItemFactory()
+        val factory = createEventItemFactory()
         val result = factory.create(
             MatrixTimelineItem.Event(
                 uniqueId = A_UNIQUE_ID,
@@ -404,7 +404,7 @@ class DefaultEventItemFactoryTest {
     }
 }
 
-private fun createDefaultEventItemFactory() = DefaultEventItemFactory(
+private fun createEventItemFactory() = EventItemFactory(
     fileSizeFormatter = FakeFileSizeFormatter(),
     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
 )
