@@ -252,7 +252,7 @@ class RoomDetailsViewTest {
         eventsRecorder.assertSingle(RoomDetailsEvent.SetFavorite(true))
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1500dp")
     @Test
     fun `click on leave emit expected Event`() {
         val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
