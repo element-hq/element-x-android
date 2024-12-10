@@ -10,7 +10,6 @@ package io.element.android.features.knockrequests.impl.banner
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,18 +21,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.knockrequests.impl.KnockRequest
@@ -183,23 +184,38 @@ private fun KnockRequestAvatarListView(
     modifier: Modifier = Modifier,
 ) {
     val avatarSize = AvatarSize.KnockRequestBanner.dp
-    Row(
+    Box(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(-avatarSize / 2),
     ) {
         knockRequests
             .take(MAX_AVATAR_COUNT)
-            .forEachIndexed { index, knockRequest ->
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(size = avatarSize)
-                        .clip(CircleShape)
-                        .background(color = ElementTheme.colors.bgCanvasDefaultLevel1)
-                        .zIndex(-index.toFloat()),
-                ) {
+            .reversed()
+            .let { smallReversedList ->
+                val lastItemIndex = smallReversedList.size - 1
+                smallReversedList.forEachIndexed { index, knockRequest ->
                     Avatar(
-                        modifier = Modifier.padding(2.dp),
+                        modifier = Modifier
+                            .padding(start = avatarSize / 2 * (lastItemIndex - index))
+                            .graphicsLayer {
+                                compositingStrategy = CompositingStrategy.Offscreen
+                            }
+                            .drawWithContent {
+                                // Draw content and clear the pixels for the avatar on the left.
+                                drawContent()
+                                if (index < lastItemIndex) {
+                                    drawCircle(
+                                        color = Color.Black,
+                                        center = Offset(
+                                            x = 0f,
+                                            y = size.height / 2,
+                                        ),
+                                        radius = avatarSize.toPx() / 2,
+                                        blendMode = BlendMode.Clear,
+                                    )
+                                }
+                            }
+                            .size(size = avatarSize)
+                            .padding(2.dp),
                         avatarData = knockRequest.getAvatarData(AvatarSize.KnockRequestBanner),
                     )
                 }
