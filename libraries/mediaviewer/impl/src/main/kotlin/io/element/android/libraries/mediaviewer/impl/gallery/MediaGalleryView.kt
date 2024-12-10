@@ -41,6 +41,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -376,8 +377,11 @@ private fun LoadingMoreIndicator(
 
 @Composable
 private fun ErrorContent(error: Throwable) {
-    // TODO
-    Text("Error: $error")
+    AsyncFailure(
+        throwable = error,
+        onRetry = null,
+        modifier = Modifier.fillMaxSize(),
+    )
 }
 
 @Composable
