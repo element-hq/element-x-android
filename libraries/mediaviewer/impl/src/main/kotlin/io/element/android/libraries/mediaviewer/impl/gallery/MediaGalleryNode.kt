@@ -31,14 +31,14 @@ class MediaGalleryNode @AssistedInject constructor(
     )
 
     interface Callback : Plugin {
-        fun onDone()
+        fun onBackClick()
         fun onItemClick(item: MediaItem.Event)
         fun onViewInTimeline(eventId: EventId)
     }
 
-    private fun onDone() {
+    private fun onBackClick() {
         plugins<Callback>().forEach {
-            it.onDone()
+            it.onBackClick()
         }
     }
 
@@ -59,7 +59,7 @@ class MediaGalleryNode @AssistedInject constructor(
         val state = presenter.present()
         MediaGalleryView(
             state = state,
-            onBackClick = ::onDone,
+            onBackClick = ::onBackClick,
             onItemClick = ::onItemClick,
             modifier = modifier,
         )

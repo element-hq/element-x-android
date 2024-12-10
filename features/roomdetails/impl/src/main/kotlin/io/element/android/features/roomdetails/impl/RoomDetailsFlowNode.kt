@@ -243,7 +243,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaGallery -> {
                 val callback = object : MediaGalleryEntryPoint.Callback {
-                    override fun onDone() {
+                    override fun onBackClick() {
                         backstack.pop()
                     }
 

@@ -22,7 +22,7 @@ interface MediaGalleryEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onDone()
+        fun onBackClick()
         fun onViewInTimeline(eventId: EventId)
     }
 }

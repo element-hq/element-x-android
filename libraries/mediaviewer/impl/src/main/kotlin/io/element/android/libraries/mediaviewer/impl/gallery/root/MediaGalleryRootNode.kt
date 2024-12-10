@@ -67,9 +67,9 @@ class MediaGalleryRootNode @AssistedInject constructor(
         ) : NavTarget
     }
 
-    private fun onDone() {
+    private fun onBackClick() {
         plugins<MediaGalleryEntryPoint.Callback>().forEach {
-            it.onDone()
+            it.onBackClick()
         }
     }
 
@@ -83,8 +83,8 @@ class MediaGalleryRootNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : MediaGalleryNode.Callback {
-                    override fun onDone() {
-                        this@MediaGalleryRootNode.onDone()
+                    override fun onBackClick() {
+                        this@MediaGalleryRootNode.onBackClick()
                     }
 
                     override fun onViewInTimeline(eventId: EventId) {
