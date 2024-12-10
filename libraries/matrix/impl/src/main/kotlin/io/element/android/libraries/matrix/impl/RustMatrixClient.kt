@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.features.location.api.LocationRepository
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.bool.orFalse
@@ -129,6 +130,7 @@ class RustMatrixClient(
     clock: SystemClock,
     timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     featureFlagService: FeatureFlagService,
+    locationRepository: LocationRepository,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -195,6 +197,7 @@ class RustMatrixClient(
         timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
         featureFlagService = featureFlagService,
         roomMembershipObserver = roomMembershipObserver,
+        locationRepository = locationRepository,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(

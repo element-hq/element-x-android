@@ -18,6 +18,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -48,5 +49,6 @@ class RustMatrixClientTest {
         clock = FakeSystemClock(),
         timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
         featureFlagService = FakeFeatureFlagService(),
+        locationRepository = mockk(relaxed = true),
     )
 }
