@@ -38,7 +38,7 @@ fun DateItemView(
 
 @PreviewsDayNight
 @Composable
-internal fun PreviewDateItemView(
+internal fun DateItemViewPreview(
     @PreviewParameter(MediaItemDateSeparatorProvider::class) date: MediaItem.DateSeparator,
 ) = ElementPreview {
     DateItemView(date)
