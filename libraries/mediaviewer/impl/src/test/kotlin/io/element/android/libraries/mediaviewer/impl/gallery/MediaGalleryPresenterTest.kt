@@ -9,9 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -242,11 +240,6 @@ class MediaGalleryPresenterTest {
         return MediaGalleryPresenter(
             navigator = navigator,
             room = room,
-            timelineProvider = MediaGalleryTimelineProvider(
-                room = room,
-                networkMonitor = FakeNetworkMonitor(),
-                featureFlagService = FakeFeatureFlagService(),
-            ),
             timelineMediaItemsFactory = FakeTimelineMediaItemsFactory(
                 replaceWithLambda = lambdaRecorder<List<MatrixTimelineItem>, Unit> { _ -> },
                 onCanPaginateLambda = lambdaRecorder<Unit> { },

@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -50,7 +51,6 @@ import kotlinx.coroutines.launch
 class MediaGalleryPresenter @AssistedInject constructor(
     @Assisted private val navigator: MediaGalleryNavigator,
     private val room: MatrixRoom,
-    private val timelineProvider: MediaGalleryTimelineProvider,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
@@ -97,15 +97,26 @@ class MediaGalleryPresenter @AssistedInject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
+        var timeline by remember { mutableStateOf<AsyncData<Timeline>>(AsyncData.Uninitialized) }
+        LaunchedEffect(Unit) {
+            room.mediaTimeline()
+                .fold(
+                    { timeline = AsyncData.Success(it) },
+                    { timeline = AsyncData.Failure(it) },
+                )
+        }
+        DisposableEffect(Unit) {
+            onDispose {
+                timeline.dataOrNull()?.close()
+            }
+        }
+
         MediaListEffect(
+            timeline = timeline,
             onItemsChange = { newItems ->
                 mediaItems = newItems
             }
         )
-
-        LaunchedEffect(Unit) {
-            timelineProvider.launchIn(this)
-        }
 
         fun handleEvents(event: MediaGalleryEvents) {
             when (event) {
@@ -113,11 +124,9 @@ class MediaGalleryPresenter @AssistedInject constructor(
                     mode = event.mode
                 }
                 is MediaGalleryEvents.LoadMore -> coroutineScope.launch {
-                    timelineProvider.invokeOnTimeline {
-                        paginate(event.direction)
-                    }
+                    timeline.dataOrNull()?.paginate(event.direction)
                 }
-                is MediaGalleryEvents.Delete -> coroutineScope.delete(event.eventId)
+                is MediaGalleryEvents.Delete -> coroutineScope.delete(timeline, event.eventId)
                 is MediaGalleryEvents.SaveOnDisk -> coroutineScope.saveOnDisk(event.mediaItem)
                 is MediaGalleryEvents.Share -> coroutineScope.share(event.mediaItem)
                 is MediaGalleryEvents.ViewInTimeline -> {
@@ -166,18 +175,19 @@ class MediaGalleryPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun MediaListEffect(onItemsChange: (AsyncData<ImmutableList<MediaItem>>) -> Unit) {
+    private fun MediaListEffect(
+        timeline: AsyncData<Timeline>,
+        onItemsChange: (AsyncData<ImmutableList<MediaItem>>) -> Unit,
+    ) {
         val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
 
-        val timelineState by timelineProvider.timelineStateFlow.collectAsState()
-
-        LaunchedEffect(timelineState) {
-            when (val asyncTimeline = timelineState) {
+        LaunchedEffect(timeline) {
+            when (timeline) {
                 AsyncData.Uninitialized -> flowOf(AsyncData.Uninitialized)
-                is AsyncData.Failure -> flowOf(AsyncData.Failure(asyncTimeline.error))
+                is AsyncData.Failure -> flowOf(AsyncData.Failure(timeline.error))
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
-                    asyncTimeline.data.timelineItems
+                    timeline.data.timelineItems
                         .onEach { items ->
                             timelineMediaItemsFactory.replaceWith(
                                 timelineItems = items,
@@ -185,7 +195,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
                         }
                         .launchIn(this)
 
-                    asyncTimeline.data.paginationStatus(Timeline.PaginationDirection.BACKWARDS)
+                    timeline.data.paginationStatus(Timeline.PaginationDirection.BACKWARDS)
                         .onEach { backwardPaginationStatus ->
                             if (backwardPaginationStatus.canPaginate) {
                                 timelineMediaItemsFactory.onCanPaginate()
@@ -205,13 +215,14 @@ class MediaGalleryPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.delete(eventId: EventId) = launch {
-        timelineProvider.invokeOnTimeline {
-            redactEvent(
-                eventOrTransactionId = eventId.toEventOrTransactionId(),
-                reason = null,
-            )
-        }
+    private fun CoroutineScope.delete(
+        timeline: AsyncData<Timeline>,
+        eventId: EventId,
+    ) = launch {
+        timeline.dataOrNull()?.redactEvent(
+            eventOrTransactionId = eventId.toEventOrTransactionId(),
+            reason = null,
+        )
     }
 
     private suspend fun downloadMedia(mediaItem: MediaItem.Event): Result<LocalMedia> {

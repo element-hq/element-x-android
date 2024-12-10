@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.flick)
 
-    implementation(projects.features.networkmonitor.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
@@ -52,7 +51,6 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
 
-    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaviewer.test)
