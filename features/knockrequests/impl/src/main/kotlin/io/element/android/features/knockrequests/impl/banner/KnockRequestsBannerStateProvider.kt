@@ -49,6 +49,13 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
             aKnockRequestsBannerState(
                 acceptAction = AsyncAction.Failure(Throwable("Failed to accept knock"))
             ),
+            aKnockRequestsBannerState(
+                knockRequests = listOf(
+                    aKnockRequest(
+                        displayName = "A_very_long_display_name_so_that_the_text_can_be_displayed_on_multiple_lines"
+                    )
+                )
+            ),
         )
 }
 
