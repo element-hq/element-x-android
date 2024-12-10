@@ -302,9 +302,7 @@ private fun MediaGalleryImageGrid(
                 when (item) {
                     is MediaItem.LoadingIndicator,
                     is MediaItem.DateSeparator -> GridItemSpan(columns)
-                    is MediaItem.Image,
-                    is MediaItem.Video,
-                    is MediaItem.File -> GridItemSpan(1)
+                    is MediaItem.Event -> GridItemSpan(1)
                 }
             },
             key = { it.id() },

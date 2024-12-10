@@ -67,7 +67,7 @@ fun ImageItemView(
 @Composable
 internal fun ImageItemViewPreview() = ElementPreview {
     ImageItemView(
-        image = anImage(),
+        image = aMediaItemImage(),
         onClick = {},
         onLongClick = {},
     )

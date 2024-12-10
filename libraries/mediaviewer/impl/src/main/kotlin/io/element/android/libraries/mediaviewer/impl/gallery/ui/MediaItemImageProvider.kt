@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 
-fun anImage(
+fun aMediaItemImage(
     id: UniqueId = UniqueId("imageId"),
     eventId: EventId? = null,
     senderId: UserId? = null,

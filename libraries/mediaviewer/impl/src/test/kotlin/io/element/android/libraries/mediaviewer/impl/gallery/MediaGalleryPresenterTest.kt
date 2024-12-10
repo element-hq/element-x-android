@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.anImage
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.tests.testutils.WarmUpRule
@@ -119,7 +119,7 @@ class MediaGalleryPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-            val item = anImage(
+            val item = aMediaItemImage(
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID,
             )
@@ -163,7 +163,7 @@ class MediaGalleryPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-            val item = anImage(
+            val item = aMediaItemImage(
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID_2,
             )
@@ -196,7 +196,7 @@ class MediaGalleryPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             // Delete bottom sheet
-            val item = anImage()
+            val item = aMediaItemImage()
             initialState.eventSink(MediaGalleryEvents.ConfirmDelete(AN_EVENT_ID, item.mediaInfo, item.thumbnailSource))
             val deleteState = awaitItem()
             assertThat(deleteState.mediaBottomSheetState).isEqualTo(

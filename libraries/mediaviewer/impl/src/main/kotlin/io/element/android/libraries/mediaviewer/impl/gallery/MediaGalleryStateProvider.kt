@@ -13,9 +13,10 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aDate
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aFile
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aVideo
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.anImage
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import kotlinx.collections.immutable.toImmutableList
 
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
@@ -29,18 +30,19 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                     aGroupedMediaItems(
                         imageAndVideoItems = listOf(
                             aDate(id = UniqueId("0")),
-                            anImage(id = UniqueId("1")),
+                            aMediaItemImage(id = UniqueId("1")),
                             aDate(
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
-                            anImage(id = UniqueId("3")),
-                            aVideo(id = UniqueId("4")),
-                            anImage(id = UniqueId("5")),
-                            anImage(id = UniqueId("6")),
-                            anImage(id = UniqueId("7")),
-                            anImage(id = UniqueId("8")),
-                            anImage(id = UniqueId("9")),
+                            aMediaItemImage(id = UniqueId("3")),
+                            aMediaItemVideo(id = UniqueId("4")),
+                            aMediaItemImage(id = UniqueId("5")),
+                            aMediaItemImage(id = UniqueId("6")),
+                            aMediaItemImage(id = UniqueId("7")),
+                            aMediaItemImage(id = UniqueId("8")),
+                            aMediaItemImage(id = UniqueId("9")),
+                            aMediaItemLoadingIndicator(),
                         ).toImmutableList()
                     )
                 ),
@@ -54,15 +56,14 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                     aGroupedMediaItems(
                         fileItems = listOf(
                             aDate(id = UniqueId("0")),
-                            aFile(id = UniqueId("1")),
+                            aMediaItemFile(id = UniqueId("1")),
                             aDate(
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
-                            aFile(id = UniqueId("3")),
-                            aFile(id = UniqueId("4")),
-                            aFile(id = UniqueId("5")),
-                            aFile(id = UniqueId("6")),
+                            aMediaItemFile(id = UniqueId("3")),
+                            aMediaItemFile(id = UniqueId("4")),
+                            aMediaItemLoadingIndicator(),
                         ).toImmutableList()
                     )
                 ),

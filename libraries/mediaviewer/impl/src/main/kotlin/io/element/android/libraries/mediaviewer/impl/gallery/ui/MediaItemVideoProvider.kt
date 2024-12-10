@@ -16,14 +16,14 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 class MediaItemVideoProvider : PreviewParameterProvider<MediaItem.Video> {
     override val values: Sequence<MediaItem.Video>
         get() = sequenceOf(
-            aVideo(),
-            aVideo(
+            aMediaItemVideo(),
+            aMediaItemVideo(
                 duration = null,
             ),
         )
 }
 
-fun aVideo(
+fun aMediaItemVideo(
     id: UniqueId = UniqueId("videoId"),
     mediaSource: MediaSource = MediaSource(""),
     duration: String? = "1:23",

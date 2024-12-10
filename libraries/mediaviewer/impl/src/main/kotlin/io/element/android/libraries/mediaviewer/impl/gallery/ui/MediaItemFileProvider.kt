@@ -17,18 +17,18 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 class MediaItemFileProvider : PreviewParameterProvider<MediaItem.File> {
     override val values: Sequence<MediaItem.File>
         get() = sequenceOf(
-            aFile(),
-            aFile(
+            aMediaItemFile(),
+            aMediaItemFile(
                 filename = "A long filename that should be truncated.jpg",
                 caption = "A caption",
             ),
-            aFile(
+            aMediaItemFile(
                 caption = loremIpsum,
             ),
         )
 }
 
-fun aFile(
+fun aMediaItemFile(
     id: UniqueId = UniqueId("fileId"),
     filename: String = "filename",
     caption: String? = null,
