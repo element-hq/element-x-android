@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+//import org.matrix.rustcomponents.sdk.LiveLocationShareListener
+import io.element.android.features.location.api.LocationRepository
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
@@ -76,6 +78,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -118,6 +121,7 @@ class RustMatrixRoom(
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    locationRepository: LocationRepository,
 ) : MatrixRoom {
     override val roomId = RoomId(innerRoom.id())
 
@@ -229,12 +233,18 @@ class RustMatrixRoom(
     init {
         val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
         val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
-        combine(membershipChanges, powerLevelChanges) { _, _ -> }
-            // Skip initial one
-            .drop(1)
-            // The new events should already be in the SDK cache, no need to fetch them from the server
-            .onEach { roomMemberListFetcher.fetchRoomMembers(source = RoomMemberListFetcher.Source.CACHE) }
-            .launchIn(roomCoroutineScope)
+
+        merge(
+            locationRepository.observeDistinct()
+                .onEach { location ->
+                    sendLiveLocation(geoUri = location.toGeoUri())
+                },
+            combine(membershipChanges, powerLevelChanges) { _, _ -> }
+                // Skip initial one
+                .drop(1)
+                // The new events should already be in the SDK cache, no need to fetch them from the server
+                .onEach { roomMemberListFetcher.fetchRoomMembers(source = RoomMemberListFetcher.Source.CACHE) }
+        ).launchIn(roomCoroutineScope)
     }
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
@@ -819,7 +829,7 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendLiveLocation(geoUri: String) = withContext(roomDispatcher) {
+    private suspend fun sendLiveLocation(geoUri: String) = withContext(roomDispatcher) {
         runCatching {
             innerRoom.sendLiveLocation(geoUri)
         }

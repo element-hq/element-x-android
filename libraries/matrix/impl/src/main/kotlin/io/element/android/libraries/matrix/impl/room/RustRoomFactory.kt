@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import androidx.collection.lruCache
 import io.element.android.appconfig.TimelineConfig
+import io.element.android.features.location.api.LocationRepository
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -52,6 +53,7 @@ class RustRoomFactory(
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val locationRepository: LocationRepository,
 ) {
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
@@ -121,6 +123,7 @@ class RustRoomFactory(
                 matrixRoomInfoMapper = matrixRoomInfoMapper,
                 featureFlagService = featureFlagService,
                 roomMembershipObserver = roomMembershipObserver,
+                locationRepository = locationRepository,
             )
         }
     }

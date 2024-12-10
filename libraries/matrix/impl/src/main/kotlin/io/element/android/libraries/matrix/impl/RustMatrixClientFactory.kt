@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.features.location.api.LocationRepository
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -51,6 +52,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
+    private val locationRepository: LocationRepository,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
 
@@ -88,6 +90,7 @@ class RustMatrixClientFactory @Inject constructor(
             clock = clock,
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
             featureFlagService = featureFlagService,
+            locationRepository = locationRepository,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

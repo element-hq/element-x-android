@@ -408,6 +408,4 @@ interface MatrixRoom : Closeable {
     suspend fun startLiveLocationShare(durationMillis: ULong): Result<Unit>
 
     suspend fun stopLiveLocationShare(): Result<Unit>
-
-    suspend fun sendLiveLocation(geoUri: String): Result<Unit>
 }

@@ -27,6 +27,7 @@ dependencies {
         debugImplementation(libs.matrix.sdk)
     }
     implementation(projects.appconfig)
+    implementation(projects.features.location.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)
@@ -54,5 +55,6 @@ dependencies {
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.test.turbine)
 }
