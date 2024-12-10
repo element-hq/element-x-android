@@ -14,9 +14,9 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aDate
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
 import kotlinx.collections.immutable.toImmutableList
 
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
