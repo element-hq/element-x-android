@@ -81,6 +81,17 @@ class RoomDetailsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
+    fun `click on media gallery invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                openMediaGallery = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_media_gallery_title)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
     fun `click on notification invokes expected callback`() {
         ensureCalledOnce { callback ->
             rule.setRoomDetailView(
@@ -282,6 +293,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     invitePeople: () -> Unit = EnsureNeverCalled(),
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
+    openMediaGallery: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
@@ -298,6 +310,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             invitePeople = invitePeople,
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
+            openMediaGallery = openMediaGallery,
             openAdminSettings = openAdminSettings,
             onJoinCallClick = onJoinCallClick,
             onPinnedMessagesClick = onPinnedMessagesClick,
