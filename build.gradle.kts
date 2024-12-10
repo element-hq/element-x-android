@@ -49,7 +49,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.19")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
