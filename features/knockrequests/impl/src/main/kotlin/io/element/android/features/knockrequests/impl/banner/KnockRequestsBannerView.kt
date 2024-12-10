@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -104,7 +103,7 @@ private fun KnockRequestsBannerContent(
         Row {
             KnockRequestAvatarView(
                 state.knockRequests,
-                modifier = Modifier.align(Alignment.CenterVertically),
+                modifier = Modifier.padding(top = 2.dp),
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
