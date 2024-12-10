@@ -204,7 +204,7 @@ class FakeMatrixRoom(
         pinnedEventsTimelineResult()
     }
 
-    override suspend fun mediaTimeline(): Result<Timeline> = simulateLongTask  {
+    override suspend fun mediaTimeline(): Result<Timeline> = simulateLongTask {
         mediaTimelineResult()
     }
 
