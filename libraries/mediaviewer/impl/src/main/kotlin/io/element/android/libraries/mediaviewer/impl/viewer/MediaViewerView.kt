@@ -68,6 +68,9 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.R
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
+import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -121,7 +124,11 @@ fun MediaViewerView(
                     mimeType = state.mediaInfo.mimeType,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
+                    canShowInfo = state.canShowInfo,
                     onBackClick = onBackClick,
+                    onInfoClick = {
+                        state.eventSink(MediaViewerEvents.OpenInfo)
+                    },
                     eventSink = state.eventSink
                 )
                 MediaViewerBottomBar(
@@ -131,6 +138,34 @@ fun MediaViewerView(
                     onHeightChange = { bottomPaddingInPixels = it },
                 )
             }
+        }
+    }
+    when (val bottomSheetState = state.mediaBottomSheetState) {
+        MediaBottomSheetState.Hidden -> Unit
+        is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
+            MediaDetailsBottomSheet(
+                state = bottomSheetState,
+                onViewInTimeline = {
+                    state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                },
+                onDelete = { eventId ->
+                    state.eventSink(MediaViewerEvents.ConfirmDelete(eventId))
+                },
+                onDismiss = {
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                },
+            )
+        }
+        is MediaBottomSheetState.MediaDeleteConfirmationState -> {
+            MediaDeleteConfirmationBottomSheet(
+                state = bottomSheetState,
+                onDelete = {
+                    state.eventSink(MediaViewerEvents.Delete(it))
+                },
+                onDismiss = {
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                },
+            )
         }
     }
 }
@@ -283,7 +318,9 @@ private fun MediaViewerTopBar(
     mimeType: String,
     senderName: String?,
     dateSent: String?,
+    canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
     TopAppBar(
@@ -354,7 +391,17 @@ private fun MediaViewerTopBar(
                     )
                 }
             }
-            // TODO Add action to open infos.
+            if (canShowInfo) {
+                IconButton(
+                    onClick = onInfoClick,
+                    enabled = actionsEnabled,
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Info(),
+                        contentDescription = null,
+                    )
+                }
+            }
         }
     )
 }

@@ -14,4 +14,12 @@
   <string name="screen_knock_requests_list_empty_state_description">"Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Pole ühtegi liitumispalvet"</string>
   <string name="screen_knock_requests_list_title">"Liitumispalved"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s + veel %2$d kasutaja soovivad selle jututoaga liituda"</item>
+    <item quantity="other">"%1$s + veel %2$d kasutajat soovivad selle jututoaga liituda"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Vaata kõiki"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Nõustu"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s soovib selle jututoaga liituda"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Vaata"</string>
 </resources>

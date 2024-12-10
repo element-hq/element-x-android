@@ -18,6 +18,7 @@ import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.toFile
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -41,7 +42,9 @@ class AndroidLocalMediaFactory @Inject constructor(
         name = mediaInfo.filename,
         caption = mediaInfo.caption,
         formattedFileSize = mediaInfo.formattedFileSize,
+        senderId = mediaInfo.senderId,
         senderName = mediaInfo.senderName,
+        senderAvatar = mediaInfo.senderAvatar,
         dateSent = mediaInfo.dateSent,
     )
 
@@ -56,7 +59,9 @@ class AndroidLocalMediaFactory @Inject constructor(
         name = name,
         caption = null,
         formattedFileSize = formattedFileSize,
+        senderId = null,
         senderName = null,
+        senderAvatar = null,
         dateSent = null,
     )
 
@@ -66,7 +71,9 @@ class AndroidLocalMediaFactory @Inject constructor(
         name: String?,
         caption: String?,
         formattedFileSize: String?,
+        senderId: UserId?,
         senderName: String?,
+        senderAvatar: String?,
         dateSent: String?,
     ): LocalMedia {
         val resolvedMimeType = mimeType ?: context.getMimeType(uri) ?: MimeTypes.OctetStream
@@ -81,7 +88,9 @@ class AndroidLocalMediaFactory @Inject constructor(
                 caption = caption,
                 formattedFileSize = fileSize,
                 fileExtension = fileExtension,
+                senderId = senderId,
                 senderName = senderName,
+                senderAvatar = senderAvatar,
                 dateSent = dateSent,
             )
         )
