@@ -59,7 +59,7 @@ Element X Android supports many languages. You can help us to translate the app 
 
 Note that for now, we keep control on the French and German translations.
 
-Translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/. Note that this page is updated every Tuesday. 
+Translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/. Note that this page is updated every Tuesday.
 
 More instructions about translating the application can be found at [CONTRIBUTING.md](CONTRIBUTING.md#strings).
 
@@ -83,8 +83,11 @@ You can also come chat with the community in the Matrix [room](https://matrix.to
 
 ## Build instructions
 
-Just clone the project and open it in Android Studio.
-Makes sure to select the `app` configuration when building (as we also have sample apps in the project).
+Just clone the project and open it in Android Studio. Make sure to select the
+`app` configuration when building (as we also have sample apps in the project).
+
+To build against a local copy of the Rust SDK, see the [Developer
+onboarding](docs/_developer_onboarding.md#build-the-sdk-locally) instructions.
 
 ## Support
 
