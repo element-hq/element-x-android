@@ -37,7 +37,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -206,8 +205,8 @@ class MapRealtimePresenterPresenter @Inject constructor(
     }
 
     private suspend fun startLiveLocationShare() {
-        room.startLiveLocationShare((60 * 1000).toULong())
-        delay(5000) // pause to test arrival times
+        // Default to 24 hours.
+        room.startLiveLocationShare((24 * 60 * 60 * 1000).toULong())
     }
 
     private suspend fun stopLiveLocationShare() {
