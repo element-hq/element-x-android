@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -233,7 +234,8 @@ class RustMatrixRoom(
                     RoomMessageEventMessageType.IMAGE,
                     RoomMessageEventMessageType.VIDEO,
                     RoomMessageEventMessageType.AUDIO,
-                )
+                ),
+                dateDividerMode = DateDividerMode.DAILY,
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.MEDIA)
             }
