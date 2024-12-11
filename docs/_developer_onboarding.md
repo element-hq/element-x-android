@@ -130,9 +130,9 @@ Prerequisites:
   ```
   cargo install cargo-ndk
   ```
-* Install the Android Rust toolchain:
+* Install the Android Rust toolchain for your machine's hardware:
   ```
-  rustup target add aarch64-linux-android
+  rustup target add `uname -m`-linux-android
   ```
 * Depending on the location of the Android SDK, you may need to set
   `ANDROID_HOME`:

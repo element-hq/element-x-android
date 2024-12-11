@@ -59,6 +59,10 @@ buildApp=${buildApp:-no}
 
 cd "${elementPwd}"
 
+default_arch="$(uname -m)-linux-android"
+read -p "Enter the architecture you want to build for (default '$default_arch'): " target_arch
+target_arch="${target_arch:-${default_arch}}"
+
 # If folder ../matrix-rust-components-kotlin does not exist, clone the repo
 if [ ! -d "../matrix-rust-components-kotlin" ]; then
     printf "\nFolder ../matrix-rust-components-kotlin does not exist. Cloning the repository into ../matrix-rust-components-kotlin.\n\n"
@@ -71,8 +75,8 @@ git reset --hard
 git checkout main
 git pull
 
-printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
-./scripts/build.sh -p "${rustSdkPath}" -m sdk -t aarch64-linux-android -o "${elementPwd}/libraries/rustsdk"
+printf "\nBuilding the SDK for ${target_arch}...\n\n"
+./scripts/build.sh -p "${rustSdkPath}" -m sdk -t "${target_arch}" -o "${elementPwd}/libraries/rustsdk"
 
 cd "${elementPwd}"
 mv ./libraries/rustsdk/sdk-android-debug.aar ./libraries/rustsdk/matrix-rust-sdk.aar
