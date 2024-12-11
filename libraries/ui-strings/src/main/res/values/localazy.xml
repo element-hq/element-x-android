@@ -148,6 +148,7 @@
   <string name="common_device_id">"Device ID"</string>
   <string name="common_direct_chat">"Direct chat"</string>
   <string name="common_do_not_show_this_again">"Do not show this again"</string>
+  <string name="common_downloading">"Downloading"</string>
   <string name="common_edited_suffix">"(edited)"</string>
   <string name="common_editing">"Editing"</string>
   <string name="common_editing_caption">"Editing caption"</string>
@@ -342,6 +343,7 @@ Reason: %1$s."</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your identity."</string>
 </resources>

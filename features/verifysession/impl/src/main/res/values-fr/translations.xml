@@ -22,7 +22,7 @@
   <string name="screen_session_verification_open_existing_session_title">"Ouvrir une session existante"</string>
   <string name="screen_session_verification_positive_button_canceled">"Réessayer la vérification"</string>
   <string name="screen_session_verification_positive_button_initial">"Je suis prêt.e"</string>
-  <string name="screen_session_verification_positive_button_verifying_ongoing">"En attente de correspondance"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"En attente de correspondance…"</string>
   <string name="screen_session_verification_ready_subtitle">"Comparer un groupe unique d’Emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Comparez les emoji uniques en veillant à ce qu’ils apparaissent dans le même ordre."</string>
   <string name="screen_session_verification_request_details_timestamp">"Connecté"</string>

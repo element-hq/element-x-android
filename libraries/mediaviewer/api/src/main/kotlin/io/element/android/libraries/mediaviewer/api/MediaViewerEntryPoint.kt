@@ -12,6 +12,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 interface MediaViewerEntryPoint : FeatureEntryPoint {
@@ -26,12 +27,15 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onDone()
+        fun onViewInTimeline(eventId: EventId)
     }
 
     data class Params(
+        val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
+        val canShowInfo: Boolean,
         val canDownload: Boolean,
         val canShare: Boolean,
     ) : NodeInputs

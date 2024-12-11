@@ -8,7 +8,6 @@
 package io.element.android.features.userprofile.impl.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -21,7 +20,6 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.features.userprofile.shared.UserProfileView
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
@@ -69,12 +67,6 @@ class UserProfileNode @AssistedInject constructor(
 
         val state = presenter.present()
 
-        LaunchedEffect(state.startDmActionState) {
-            val result = state.startDmActionState
-            if (result is AsyncAction.Success) {
-                onStartDM(result.data)
-            }
-        }
         UserProfileView(
             state = state,
             modifier = modifier,

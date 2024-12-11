@@ -17,6 +17,9 @@ import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -30,10 +33,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aVideoMediaInfo(
@@ -42,69 +45,81 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aPdfMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anApkMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anApkMediaInfo(),
             ),
             anApkMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anAudioMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anAudioMediaInfo(),
             ),
             anAudioMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             anImageMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
+                    canShowInfo = false,
                     canDownload = false,
                     canShare = false,
                 )
             },
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+            ),
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDeleteConfirmationState(),
+            ),
         )
 }
 
 fun aMediaViewerState(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
+    canShowInfo: Boolean = true,
     canDownload: Boolean = true,
     canShare: Boolean = true,
+    mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
+    eventId = null,
     mediaInfo = mediaInfo,
     thumbnailSource = null,
     downloadedMedia = downloadedMedia,
     snackbarMessage = null,
+    canShowInfo = canShowInfo,
     canDownload = canDownload,
     canShare = canShare,
+    mediaBottomSheetState = mediaBottomSheetState,
     eventSink = eventSink,
 )

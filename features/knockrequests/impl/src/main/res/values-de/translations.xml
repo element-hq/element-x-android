@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ja, akzeptiere alle"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Sind Sie sicher, dass Sie alle Beitrittsanfragen akzeptieren möchten?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Akzeptiere alle Anfragen"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Alle akzeptieren"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, ablehnen und sperren"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Sind Sie sicher, dass Sie %1$s ablehnen und  sperren möchten ? Dieser Benutzer kann keinen erneuten Zugriff auf diesen Raum anfordern."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Ablehnen und Zugriff verbieten"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ja, ablehnen"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Sind Sie sicher, dass Sie die %1$s Anfrage, diesem Chatroom beizutreten, ablehnen möchten ?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Zugriff verweigern"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Ablehnen und sperren"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Falls jemand um Aufnahme in den Raum bittet, können Sie dessen Anfrage hier sehen."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Keine ausstehende Beitrittsanfrage"</string>
+  <string name="screen_knock_requests_list_title">"Beitrittsanfragen"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s+ %2$d andere wollen diesem Chatroom beitreten"</item>
+    <item quantity="other">"%1$s+ %2$d andere wollen diesem Chatroom beitreten"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Alles ansehen"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Akzeptieren"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s möchte diesem Chatroom beitreten"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Ansicht"</string>
+</resources>

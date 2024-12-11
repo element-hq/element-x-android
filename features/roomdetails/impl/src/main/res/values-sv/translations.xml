@@ -52,6 +52,7 @@
   <string name="screen_room_details_notification_mode_custom">"Anpassad"</string>
   <string name="screen_room_details_notification_mode_default">"Förval"</string>
   <string name="screen_room_details_notification_title">"Aviseringar"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
   <string name="screen_room_details_roles_and_permissions">"Roller och behörigheter"</string>
   <string name="screen_room_details_room_name_label">"Rumsnamn"</string>
   <string name="screen_room_details_security_title">"Säkerhet"</string>

@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
@@ -79,6 +80,10 @@ class RoomDetailsPresenter @Inject constructor(
         val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
+        var canShowMediaGallery by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            canShowMediaGallery = featureFlagService.isFeatureEnabled(FeatureFlags.MediaGallery)
+        }
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size } }
 
         LaunchedEffect(Unit) {
@@ -162,6 +167,7 @@ class RoomDetailsPresenter @Inject constructor(
             isPublic = isPublic,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
+            canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,

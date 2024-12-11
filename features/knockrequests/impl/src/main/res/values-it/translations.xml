@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Sì, accetta tutte"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Sei sicuro di voler accettare tutte le richieste di accesso?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Accetta tutte le richieste"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Accetta tutte"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Sì, rifiuta e blocca"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Sei sicuro di voler rifiutare e bloccare %1$s? Questo utente non potrà richiedere nuovamente l\'accesso per entrare in questa stanza."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Rifiuta e blocca l\'accesso"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Sì, rifiuta"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Sei sicuro di voler rifiutare la richiesta di %1$s ad entrare in a questa stanza?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Rifiuta l\'accesso"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Rifiuta e blocca"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Quando qualcuno ti chiederà di entrare nella stanza, potrai vedere la sua richiesta qui."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Nessuna richiesta di accesso in sospeso"</string>
+  <string name="screen_knock_requests_list_title">"Richieste di accesso"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d vogliono entrare in questa stanza"</item>
+    <item quantity="other">"%1$s +%2$d vogliono entrare in questa stanza"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Visualizza tutte"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accetta"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s vuole entrare in questa stanza"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Visualizza"</string>
+</resources>

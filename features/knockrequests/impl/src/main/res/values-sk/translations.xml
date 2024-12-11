@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_button_title">"Prijať všetky"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmietnuť a zakázať"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Žiadna čakajúca žiadosť o pripojenie"</string>
+  <string name="screen_knock_requests_list_title">"Žiadosti o pripojenie"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d ďalší chcú vstúpiť do tejto miestnosti"</item>
+    <item quantity="few">"%1$s +%2$d ďalší chcú vstúpiť do tejto miestnosti"</item>
+    <item quantity="other">"%1$s +%2$d ďalších chce vstúpiť do tejto miestnosti"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobraziť všetko"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Prijať"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s chce vstúpiť do tejto miestnosti"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Zobraziť"</string>
+</resources>

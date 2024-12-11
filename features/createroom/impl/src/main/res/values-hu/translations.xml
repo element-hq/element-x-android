@@ -13,6 +13,8 @@ Ezt bármikor módosíthatja a szobabeállításokban."</string>
   <string name="screen_create_room_room_access_section_header">"Szobahozzáférés"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Csatlakozás kérése"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét."</string>
   <string name="screen_create_room_room_address_section_footer">"Ahhoz, hogy ez a szoba látható legyen a nyilvános szobák címtárában, meg kell adnia a szoba címét."</string>
   <string name="screen_create_room_room_address_section_title">"Szoba címe"</string>
   <string name="screen_create_room_room_name_label">"Szoba neve"</string>

@@ -158,7 +158,7 @@
   <string name="common_error">"Erreur"</string>
   <string name="common_error_registering_pusher_android">"Une erreur s’est produite, il est possible que vous ne receviez pas de notifications pour les nouveaux messages. Veuillez résoudre les problèmes liés aux notifications depuis les paramètres.
 
-Raison: %1$s."</string>
+Raison : %1$s."</string>
   <string name="common_everyone">"Tout le monde"</string>
   <string name="common_failed">"Échec"</string>
   <string name="common_favourite">"Favori"</string>
@@ -275,8 +275,8 @@ Raison: %1$s."</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
   <string name="dialog_title_warning">"Attention"</string>
-  <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter?"</string>
-  <string name="dialog_unsaved_changes_title">"Enregistrer les changements?"</string>
+  <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter ?"</string>
+  <string name="dialog_unsaved_changes_title">"Enregistrer les changements ?"</string>
   <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
@@ -299,20 +299,6 @@ Raison: %1$s."</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Oui, tout accepter"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_description">"Êtes-vous sûr de vouloir accepter toutes les demandes pour rejoindre le salon ?"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_title">"Tout accepter"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Tout accepter"</string>
-  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Oui, rejeter et bannir"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Êtes-vous sûr de vouloir rejeter la demande et bannir %1$s? Cet utilisateur ne pourra pas demander à nouveau à rejoindre ce salon."</string>
-  <string name="screen_knock_requests_list_ban_alert_title">"Refuser et interdire l’accès"</string>
-  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Oui, refuser"</string>
-  <string name="screen_knock_requests_list_decline_alert_description">"Êtes-vous sûr de vouloir refuser la demande de %1$s à rejoindre le salon?"</string>
-  <string name="screen_knock_requests_list_decline_alert_title">"Refuser l’accès"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Refuser et bannir"</string>
-  <string name="screen_knock_requests_list_empty_state_description">"Lorsque quelqu’un demandera à rejoindre le salon, vous pourrez voir sa demande ici."</string>
-  <string name="screen_knock_requests_list_empty_state_title">"Personne ne demande à rejoindre le salon"</string>
-  <string name="screen_knock_requests_list_title">"Demandes en attente"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
@@ -334,22 +320,12 @@ Raison: %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Un ou plusieurs de vos appareils ne sont pas vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler et réessayer plus tard après avoir vérifié tous vos appareils."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Votre message n’a pas été envoyé car vous n’avez pas vérifié tous vos appareils"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
-  <string name="screen_room_details_requests_to_join_title">"Demandes en attente"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s et %2$d autre personne souhaitent rejoindre ce salon"</item>
-    <item quantity="other">"%1$s et %2$d autres personnes souhaitent rejoindre ce salon"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Tout afficher"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Accepter"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s souhaite rejoindre ce salon"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Voir"</string>
   <string name="screen_room_title">"Discussion"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Demande d’adhésion envoyée"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
@@ -364,4 +340,7 @@ Raison: %1$s."</string>
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"fr"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Les anciens messages ne sont pas disponibles sur cet appareil"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Impossible de déchiffrer le message"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Ce message a été bloqué soit parce que vous n’avez pas vérifié votre session, soit parce que l’expéditeur doit vérifier votre identité."</string>
 </resources>
