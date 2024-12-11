@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room.knock
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import org.matrix.rustcomponents.sdk.JoinRequest
@@ -14,11 +15,13 @@ import org.matrix.rustcomponents.sdk.JoinRequest
 class RustKnockRequest(
     private val inner: JoinRequest,
 ) : KnockRequest {
+    override val eventId: EventId = EventId(inner.eventId)
     override val userId: UserId = UserId(inner.userId)
     override val displayName: String? = inner.displayName
     override val avatarUrl: String? = inner.avatarUrl
     override val reason: String? = inner.reason
     override val timestamp: Long? = inner.timestamp?.toLong()
+    override val isSeen: Boolean = inner.isSeen
 
     override suspend fun accept(): Result<Unit> = runCatching {
         inner.actions.accept()

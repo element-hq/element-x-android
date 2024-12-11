@@ -8,27 +8,28 @@
 package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.knockrequests.impl.KnockRequest
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import kotlinx.collections.immutable.ImmutableList
 
 data class KnockRequestsListState(
-    val knockRequests: AsyncData<ImmutableList<KnockRequest>>,
-    val currentAction: KnockRequestsCurrentAction,
+    val knockRequests: AsyncData<ImmutableList<KnockRequestPresentable>>,
+    val actionTarget: KnockRequestsActionTarget,
+    val asyncAction: AsyncAction<Unit>,
     val canAccept: Boolean,
     val canDecline: Boolean,
     val canBan: Boolean,
     val eventSink: (KnockRequestsListEvents) -> Unit,
 ) {
-    val canAcceptAll = knockRequests is AsyncData.Success && knockRequests.data.size > 1
+    val canAcceptAll = canAccept && knockRequests is AsyncData.Success && knockRequests.data.size > 1
 }
 
 @Immutable
-sealed interface KnockRequestsCurrentAction {
-    data object None : KnockRequestsCurrentAction
-    data class Accept(val knockRequest: KnockRequest, val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
-    data class Decline(val knockRequest: KnockRequest, val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
-    data class DeclineAndBan(val knockRequest: KnockRequest, val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
-    data class AcceptAll(val async: AsyncAction<Unit>) : KnockRequestsCurrentAction
+sealed interface KnockRequestsActionTarget {
+    data object None : KnockRequestsActionTarget
+    data class Accept(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
+    data class Decline(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
+    data class DeclineAndBan(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
+    data object AcceptAll : KnockRequestsActionTarget
 }

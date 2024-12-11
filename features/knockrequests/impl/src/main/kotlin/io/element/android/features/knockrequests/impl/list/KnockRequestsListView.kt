@@ -46,23 +46,25 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.knockrequests.impl.KnockRequest
 import io.element.android.features.knockrequests.impl.R
-import io.element.android.features.knockrequests.impl.getAvatarData
-import io.element.android.features.knockrequests.impl.getBestName
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -70,6 +72,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -100,12 +103,16 @@ private fun KnockRequestsListContent(
     state: KnockRequestsListState,
     modifier: Modifier = Modifier,
 ) {
-    fun onAcceptClick(knockRequest: KnockRequest) {
+    fun onAcceptClick(knockRequest: KnockRequestPresentable) {
         state.eventSink(KnockRequestsListEvents.Accept(knockRequest))
     }
 
-    fun onDeclineClick(knockRequest: KnockRequest) {
+    fun onDeclineClick(knockRequest: KnockRequestPresentable) {
         state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
+    }
+
+    fun onBanClick(knockRequest: KnockRequestPresentable) {
+        state.eventSink(KnockRequestsListEvents.DeclineAndBan(knockRequest))
     }
 
     var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
@@ -124,16 +131,30 @@ private fun KnockRequestsListContent(
                         canBan = state.canBan,
                         onAcceptClick = ::onAcceptClick,
                         onDeclineClick = ::onDeclineClick,
+                        onBanClick = ::onBanClick,
                         contentPadding = PaddingValues(bottom = bottomPaddingInPixels.toDp()),
                     )
                 }
             }
+            is AsyncData.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = ElementTheme.colors.iconPrimary,
+                )
+            }
             else -> Unit
         }
         KnockRequestsActionsView(
-            actions = state.currentAction,
+            actionTarget = state.actionTarget,
+            asyncAction = state.asyncAction,
+            onConfirm = {
+                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+            },
+            onRetry = {
+                state.eventSink(KnockRequestsListEvents.RetryCurrentAction)
+            },
             onDismiss = {
-                state.eventSink(KnockRequestsListEvents.DismissCurrentAction)
+                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
             },
         )
         if (state.canAcceptAll) {
@@ -152,53 +173,45 @@ private fun KnockRequestsListContent(
 
 @Composable
 private fun KnockRequestsActionsView(
-    actions: KnockRequestsCurrentAction,
+    actionTarget: KnockRequestsActionTarget,
+    asyncAction: AsyncAction<Unit>,
+    onConfirm: () -> Unit,
     onDismiss: () -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-        when (actions) {
-            is KnockRequestsCurrentAction.AcceptAll -> {
-                AsyncActionView(
-                    async = actions.async,
-                    onSuccess = {},
-                    onErrorDismiss = onDismiss,
+        AsyncActionView(
+            async = asyncAction,
+            onSuccess = { onDismiss() },
+            onErrorDismiss = onDismiss,
+            confirmationDialog = {
+                ConfirmationDialog(
+                    title = "Confirmation",
+                    content = "Are you sure?",
+                    onSubmitClick = onConfirm,
+                    onDismiss = onDismiss,
                 )
-            }
-            is KnockRequestsCurrentAction.Accept -> {
-                AsyncActionView(
-                    async = actions.async,
-                    onSuccess = {},
-                    onErrorDismiss = onDismiss,
+            },
+            progressDialog = {
+                ProgressDialog(
+                    text = "Loading",
                 )
-            }
-            is KnockRequestsCurrentAction.Decline -> {
-                AsyncActionView(
-                    async = actions.async,
-                    onSuccess = {},
-                    onErrorDismiss = onDismiss,
-                )
-            }
-            is KnockRequestsCurrentAction.DeclineAndBan -> {
-                AsyncActionView(
-                    async = actions.async,
-                    onSuccess = {},
-                    onErrorDismiss = onDismiss,
-                )
-            }
-            KnockRequestsCurrentAction.None -> Unit
-        }
+            },
+            onRetry = onRetry,
+        )
     }
 }
 
 @Composable
 private fun KnockRequestsList(
-    knockRequests: ImmutableList<KnockRequest>,
+    knockRequests: ImmutableList<KnockRequestPresentable>,
     canAccept: Boolean,
     canDecline: Boolean,
     canBan: Boolean,
-    onAcceptClick: (KnockRequest) -> Unit,
-    onDeclineClick: (KnockRequest) -> Unit,
+    onAcceptClick: (KnockRequestPresentable) -> Unit,
+    onDeclineClick: (KnockRequestPresentable) -> Unit,
+    onBanClick: (KnockRequestPresentable) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -214,6 +227,7 @@ private fun KnockRequestsList(
                 canDecline = canDecline,
                 canAccept = canAccept,
                 onDeclineClick = onDeclineClick,
+                onBanClick = onBanClick,
             )
             if (index != knockRequests.size - 1) {
                 HorizontalDivider()
@@ -224,12 +238,13 @@ private fun KnockRequestsList(
 
 @Composable
 private fun KnockRequestItem(
-    knockRequest: KnockRequest,
+    knockRequest: KnockRequestPresentable,
     canAccept: Boolean,
     canDecline: Boolean,
     canBan: Boolean,
-    onAcceptClick: (KnockRequest) -> Unit,
-    onDeclineClick: (KnockRequest) -> Unit,
+    onAcceptClick: (KnockRequestPresentable) -> Unit,
+    onDeclineClick: (KnockRequestPresentable) -> Unit,
+    onBanClick: (KnockRequestPresentable) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -252,10 +267,11 @@ private fun KnockRequestItem(
                     color = MaterialTheme.colorScheme.primary,
                     style = ElementTheme.typography.fontBodyLgMedium,
                 )
-                if (!knockRequest.formattedDate.isNullOrEmpty()) {
+                val formattedDate = knockRequest.formattedDate
+                if (!formattedDate.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = knockRequest.formattedDate,
+                        text = formattedDate,
                         color = MaterialTheme.colorScheme.secondary,
                         style = ElementTheme.typography.fontBodySmRegular,
                     )
@@ -272,7 +288,8 @@ private fun KnockRequestItem(
                 )
             }
             // Reason
-            if (!knockRequest.reason.isNullOrBlank()) {
+            val reason = knockRequest.reason
+            if (!reason.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 var isExpanded by rememberSaveable(knockRequest.userId) { mutableStateOf(false) }
                 var isExpandable by rememberSaveable(knockRequest.userId) { mutableStateOf(false) }
@@ -283,7 +300,7 @@ private fun KnockRequestItem(
                         .clickable(enabled = isExpandable) { isExpanded = !isExpanded }
                 ) {
                     Text(
-                        text = knockRequest.reason,
+                        text = reason,
                         style = ElementTheme.typography.fontBodyMdRegular,
                         maxLines = if (isExpanded) Int.MAX_VALUE else 3,
                         onTextLayout = { result ->
@@ -336,7 +353,7 @@ private fun KnockRequestItem(
                 TextButton(
                     text = stringResource(R.string.screen_knock_requests_list_decline_and_ban_action_title),
                     onClick = {
-                        onAcceptClick(knockRequest)
+                        onBanClick(knockRequest)
                     },
                     destructive = true,
                     size = ButtonSize.Small,

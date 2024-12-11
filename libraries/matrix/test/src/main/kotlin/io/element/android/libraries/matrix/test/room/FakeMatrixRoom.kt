@@ -49,12 +49,14 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.test.TestScope
 import java.io.File
 
 class FakeMatrixRoom(
@@ -73,6 +75,7 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     override val liveTimeline: Timeline = FakeTimeline(),
+    override val roomCoroutineScope: CoroutineScope = TestScope(),
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
     private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },

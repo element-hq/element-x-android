@@ -11,70 +11,109 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.canBanAsState
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import io.element.android.libraries.matrix.ui.room.canKickAsState
-import kotlinx.collections.immutable.persistentListOf
 import javax.inject.Inject
 
 class KnockRequestsListPresenter @Inject constructor(
     private val room: MatrixRoom,
+    private val knockRequestsService: KnockRequestsService,
 ) : Presenter<KnockRequestsListState> {
     @Composable
     override fun present(): KnockRequestsListState {
-        val currentAction = remember { mutableStateOf<KnockRequestsCurrentAction>(KnockRequestsCurrentAction.None) }
+        val asyncAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        var actionTarget by remember { mutableStateOf<KnockRequestsActionTarget>(KnockRequestsActionTarget.None) }
+        var targetActionConfirmed by remember { mutableStateOf(false) }
+        var retryCount by remember { mutableIntStateOf(0) }
+
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canBan by room.canBanAsState(syncUpdateFlow.value)
         val canDecline by room.canKickAsState(syncUpdateFlow.value)
         val canAccept by room.canInviteAsState(syncUpdateFlow.value)
 
+        val knockRequests by knockRequestsService.knockRequestsFlow.collectAsState()
+
         fun handleEvents(event: KnockRequestsListEvents) {
             when (event) {
                 KnockRequestsListEvents.AcceptAll -> {
-                    currentAction.value = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.AcceptAll
                 }
                 is KnockRequestsListEvents.Accept -> {
-                    currentAction.value = KnockRequestsCurrentAction.Accept(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.Accept(event.knockRequest)
                 }
                 is KnockRequestsListEvents.Decline -> {
-                    currentAction.value = KnockRequestsCurrentAction.Decline(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.Decline(event.knockRequest)
                 }
                 is KnockRequestsListEvents.DeclineAndBan -> {
-                    currentAction.value = KnockRequestsCurrentAction.DeclineAndBan(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.DeclineAndBan(event.knockRequest)
                 }
-                KnockRequestsListEvents.DismissCurrentAction -> {
-                    currentAction.value = KnockRequestsCurrentAction.None
+                KnockRequestsListEvents.ResetCurrentAction -> {
+                    actionTarget = KnockRequestsActionTarget.None
+                }
+                KnockRequestsListEvents.RetryCurrentAction -> {
+                    retryCount++
+                }
+                KnockRequestsListEvents.ConfirmCurrentAction -> {
+                    targetActionConfirmed = true
                 }
             }
         }
 
-        LaunchedEffect(currentAction) {
-            when (currentAction.value) {
-                is KnockRequestsCurrentAction.Accept -> {
-                    // Accept the knock request
+        LaunchedEffect(actionTarget, targetActionConfirmed, retryCount) {
+            when (val action = actionTarget) {
+                is KnockRequestsActionTarget.Accept -> {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.acceptKnockRequest(action.knockRequest)
+                    }
                 }
-                is KnockRequestsCurrentAction.Decline -> {
-                    // Decline the knock request
+                is KnockRequestsActionTarget.Decline -> {
+                    if (targetActionConfirmed) {
+                        runUpdatingState(asyncAction) {
+                            knockRequestsService.declineKnockRequest(action.knockRequest)
+                        }
+                    } else {
+                        asyncAction.value = AsyncAction.ConfirmingNoParams
+                    }
                 }
-                is KnockRequestsCurrentAction.DeclineAndBan -> {
-                    // Decline and ban the user
+                is KnockRequestsActionTarget.DeclineAndBan -> {
+                    if (targetActionConfirmed) {
+                        runUpdatingState(asyncAction) {
+                            knockRequestsService.declineAndBanKnockRequest(action.knockRequest)
+                        }
+                    } else {
+                        asyncAction.value = AsyncAction.ConfirmingNoParams
+                    }
                 }
-                is KnockRequestsCurrentAction.AcceptAll -> {
-                    // Accept all knock requests
+                is KnockRequestsActionTarget.AcceptAll -> {
+                    if (targetActionConfirmed) {
+                        runUpdatingState(asyncAction) {
+                            knockRequestsService.acceptAllKnockRequests()
+                        }
+                    } else {
+                        asyncAction.value = AsyncAction.ConfirmingNoParams
+                    }
                 }
-                KnockRequestsCurrentAction.None -> Unit
+                KnockRequestsActionTarget.None -> {
+                    targetActionConfirmed = false
+                    asyncAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
         return KnockRequestsListState(
-            knockRequests = AsyncData.Success(persistentListOf()),
-            currentAction = currentAction.value,
+            knockRequests = knockRequests,
+            actionTarget = actionTarget,
+            asyncAction = asyncAction.value,
             canAccept = canAccept,
             canDecline = canDecline,
             canBan = canBan,

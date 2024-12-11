@@ -7,14 +7,17 @@
 
 package io.element.android.libraries.matrix.api.room.knock
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
 interface KnockRequest {
+    val eventId: EventId
     val userId: UserId
     val displayName: String?
     val avatarUrl: String?
     val reason: String?
     val timestamp: Long?
+    val isSeen: Boolean
 
     suspend fun accept(): Result<Unit>
 

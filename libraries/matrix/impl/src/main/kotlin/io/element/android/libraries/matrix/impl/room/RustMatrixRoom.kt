@@ -79,7 +79,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.JoinRequest
-import org.matrix.rustcomponents.sdk.RequestsToJoinListener
+import org.matrix.rustcomponents.sdk.JoinRequestsListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -162,7 +162,7 @@ class RustMatrixRoom(
     }
 
     override val knockRequestsFlow: Flow<List<KnockRequest>> = mxCallbackFlow {
-        innerRoom.subscribeToJoinRequests(object : RequestsToJoinListener {
+        innerRoom.subscribeToJoinRequests(object : JoinRequestsListener {
             override fun call(joinRequests: List<JoinRequest>) {
                 val knockRequests = joinRequests.map { RustKnockRequest(it) }
                 channel.trySend(knockRequests)
@@ -176,7 +176,7 @@ class RustMatrixRoom(
     // ...except getMember methods as it could quickly fill the roomDispatcher...
     private val roomMembersDispatcher = coroutineDispatchers.io.limitedParallelism(8)
 
-    private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
+    override val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
     private val _syncUpdateFlow = MutableStateFlow(0L)
     private val roomMemberListFetcher = RoomMemberListFetcher(innerRoom, roomMembersDispatcher)
 

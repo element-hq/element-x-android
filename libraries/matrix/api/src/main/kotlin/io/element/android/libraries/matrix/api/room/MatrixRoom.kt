@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
@@ -52,6 +53,8 @@ interface MatrixRoom : Closeable {
     val isPublic: Boolean
     val activeMemberCount: Long
     val joinedMemberCount: Long
+
+    val roomCoroutineScope: CoroutineScope
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
