@@ -47,10 +47,10 @@ import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.Style
 import org.ramani.compose.CameraPosition
-import org.ramani.compose.CompassMargins
 import org.ramani.compose.LocationRequestProperties
 import org.ramani.compose.LocationStyling
 import org.ramani.compose.MapLibre
+import org.ramani.compose.Margins
 import org.ramani.compose.UiSettings
 
 @Composable
@@ -93,7 +93,7 @@ fun MapRealtimeView(
 //    val styleUrl = rememberSaveable { mutableStateOf(state.styleUrl) }
     val styleBuilder = Style.Builder().fromUri(state.styleUrl)
 
-    val myCompassMargins = CompassMargins(left = 0, top = 850, right = 45)
+    val myCompassMargins = Margins(left = 0, top = 850, right = 45)
     val uiSettings = UiSettings(compassMargins = myCompassMargins)
 
     Box(modifier = Modifier.fillMaxSize()) {

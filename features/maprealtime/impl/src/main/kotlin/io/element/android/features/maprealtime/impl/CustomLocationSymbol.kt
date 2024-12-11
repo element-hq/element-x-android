@@ -11,36 +11,23 @@ import androidx.compose.runtime.Composable
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.matrix.api.location.LiveLocationShare
 import org.maplibre.android.geometry.LatLng
-import org.ramani.compose.CircleWithItem
 
 @Composable
 fun LocationSymbol(item: LiveLocationShare, textColor: String) {
     val location = Location.fromGeoUri(item.lastLocation.location.geoUri) ?: return
     val latLng = LatLng(location.lat, location.lon)
 
-//    CustomCircleWithItem(
-//        center = latLng,
-//        radius = 10.0F,
-//        isDraggable = false,
-//        color = "#F6993A",
-//        text = item.userId.toString(),
-//        zIndex = 1,
-//        itemSize = 12F,
-//        borderColor = "#4A4A4A",
-//        borderWidth = 3.0F,
-//        imageId = null,
-//        textColor = textColor
-//    )
-    CircleWithItem(
+    CustomCircleWithItem(
         center = latLng,
         radius = 10.0F,
         isDraggable = false,
         color = "#F6993A",
-        text = "HE",
+        text = item.userId.extractedDisplayName,
         zIndex = 1,
         itemSize = 12F,
         borderColor = "#4A4A4A",
         borderWidth = 3.0F,
         imageId = null,
+        textColor = textColor
     )
 }
