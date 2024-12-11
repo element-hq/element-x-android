@@ -22,6 +22,7 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             is ClientBuildException.SlidingSync -> AuthenticationException.Generic(message)
             is ClientBuildException.WellKnownDeserializationException -> AuthenticationException.Generic(message)
             is ClientBuildException.WellKnownLookupFailed -> AuthenticationException.Generic(message)
+            is ClientBuildException.EventCache -> AuthenticationException.Generic(message)
         }
         else -> AuthenticationException.Generic(message)
     }
