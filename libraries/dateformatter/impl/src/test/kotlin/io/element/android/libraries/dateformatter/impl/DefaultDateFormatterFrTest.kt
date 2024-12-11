@@ -181,6 +181,32 @@ class DefaultDateFormatterFrTest {
     }
 
     @Test
+    fun `test two days before same time`() {
+        val now = "1980-04-06T18:35:24.00Z"
+        val dat = "1980-04-04T18:35:24.00Z"
+        val ts = Instant.parse(dat).toEpochMilliseconds()
+        val formatter = createFormatter(now)
+        assertThat(formatter.format(ts, DateFormatterMode.Full)).isEqualTo("4 avril 1980 à 18:35")
+        assertThat(formatter.format(ts, DateFormatterMode.Month)).isEqualTo("Avril 1980")
+        assertThat(formatter.format(ts, DateFormatterMode.Day)).isEqualTo("Vendredi 4 avril")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate)).isEqualTo("4 avr.")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOnly)).isEqualTo("18:35")
+    }
+
+    @Test
+    fun `test two days before same time relative`() {
+        val now = "1980-04-06T18:35:24.00Z"
+        val dat = "1980-04-04T18:35:24.00Z"
+        val ts = Instant.parse(dat).toEpochMilliseconds()
+        val formatter = createFormatter(now)
+        assertThat(formatter.format(ts, DateFormatterMode.Full, true)).isEqualTo("Vendredi à 18:35")
+        assertThat(formatter.format(ts, DateFormatterMode.Month, true)).isEqualTo("Ce mois-ci")
+        assertThat(formatter.format(ts, DateFormatterMode.Day, true)).isEqualTo("Vendredi")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("4 avr.")
+        assertThat(formatter.format(ts, DateFormatterMode.TimeOnly, true)).isEqualTo("18:35")
+    }
+
+    @Test
     fun `test one month before same time`() {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-03-06T18:35:24.00Z"
