@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-//import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import io.element.android.features.location.api.LocationRepository
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
