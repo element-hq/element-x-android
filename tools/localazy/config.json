@@ -81,6 +81,12 @@
       ]
     },
     {
+      "name" : ":libraries:dateformatter:impl",
+      "includeRegex" : [
+        "common\\.date\\..*"
+      ]
+    },
+    {
       "name" : ":libraries:permissions:api",
       "includeRegex" : [
         "dialog\\.permission_.*"

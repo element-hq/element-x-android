@@ -14,16 +14,12 @@ import io.element.android.libraries.dateformatter.impl.TimezoneProvider
 import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import java.util.Locale
 
 @Module
 @ContributesTo(AppScope::class)
 object DateFormatterModule {
     @Provides
     fun providesClock(): Clock = Clock.System
-
-    @Provides
-    fun providesLocale(): Locale = Locale.getDefault()
 
     @Provides
     fun providesTimezone(): TimezoneProvider = TimezoneProvider { TimeZone.currentSystemDefault() }

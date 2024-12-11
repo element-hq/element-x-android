@@ -40,7 +40,8 @@ class FakeLocalMediaFactory(
             senderId = null,
             senderName = null,
             senderAvatar = null,
-            dateSent = null
+            dateSent = null,
+            dateSentFull = null,
         )
         return aLocalMedia(uri, mediaInfo)
     }

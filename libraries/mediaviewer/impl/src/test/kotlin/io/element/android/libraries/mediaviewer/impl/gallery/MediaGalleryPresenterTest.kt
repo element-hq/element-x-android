@@ -10,9 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
-import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
-import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -254,12 +252,12 @@ class MediaGalleryPresenterTest {
             timelineMediaItemsFactory = TimelineMediaItemsFactory(
                 dispatchers = testCoroutineDispatchers(),
                 virtualItemFactory = VirtualItemFactory(
-                    daySeparatorFormatter = FakeDaySeparatorFormatter(),
+                    dateFormatter = FakeDateFormatter(),
                 ),
                 eventItemFactory = EventItemFactory(
                     fileSizeFormatter = FakeFileSizeFormatter(),
                     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(A_FORMATTED_DATE),
+                    dateFormatter = FakeDateFormatter(),
                 ),
             ),
             localMediaFactory = localMediaFactory,

@@ -37,6 +37,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
@@ -49,6 +50,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             displayNameAmbiguous = true,
                             timelineItemReactions = reactionsState,
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(
@@ -62,6 +64,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemVideoContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(
@@ -75,6 +78,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemFileContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(
@@ -88,6 +92,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemAudioContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(
@@ -101,6 +106,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemVoiceContent(caption = null),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(
@@ -114,6 +120,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemLocationContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
@@ -125,6 +132,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemLocationContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = false,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
@@ -136,6 +144,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             content = aTimelineItemPollContent(),
                             timelineItemReactions = reactionsState
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = false,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemPollActionList(),
@@ -147,6 +156,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             timelineItemReactions = reactionsState,
                             messageShield = MessageShield.UnknownDevice(isCritical = true)
                         ),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
@@ -155,6 +165,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                 anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(),
+                        sentTimeFull = "January 1, 1970 at 12:00 AM",
                         displayEmojiReactions = true,
                         verifiedUserSendFailure = anUnsignedDeviceSendFailure(),
                         actions = aTimelineItemActionList(),

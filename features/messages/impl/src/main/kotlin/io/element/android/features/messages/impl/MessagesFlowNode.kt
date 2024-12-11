@@ -55,6 +55,8 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -97,6 +99,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
+    private val dateFormatter: DateFormatter,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -436,7 +439,14 @@ class MessagesFlowNode @AssistedInject constructor(
                 senderId = event.senderId,
                 senderName = event.safeSenderName,
                 senderAvatar = event.senderAvatar.url,
-                dateSent = event.sentTime,
+                dateSent = dateFormatter.format(
+                    event.sentTimeMillis,
+                    mode = DateFormatterMode.Day,
+                ),
+                dateSentFull = dateFormatter.format(
+                    timestamp = event.sentTimeMillis,
+                    mode = DateFormatterMode.Full,
+                ),
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,

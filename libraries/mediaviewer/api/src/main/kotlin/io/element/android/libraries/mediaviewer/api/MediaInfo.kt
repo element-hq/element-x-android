@@ -23,6 +23,7 @@ data class MediaInfo(
     val senderName: String?,
     val senderAvatar: String?,
     val dateSent: String?,
+    val dateSentFull: String?,
 ) : Parcelable
 
 fun anImageMediaInfo(
@@ -30,6 +31,7 @@ fun anImageMediaInfo(
     caption: String? = null,
     senderName: String? = null,
     dateSent: String? = null,
+    dateSentFull: String? = null,
 ): MediaInfo = MediaInfo(
     filename = "an image file.jpg",
     caption = caption,
@@ -40,12 +42,14 @@ fun anImageMediaInfo(
     senderName = senderName,
     senderAvatar = null,
     dateSent = dateSent,
+    dateSentFull = dateSentFull,
 )
 
 fun aVideoMediaInfo(
     caption: String? = null,
     senderName: String? = null,
     dateSent: String? = null,
+    dateSentFull: String? = null,
 ): MediaInfo = MediaInfo(
     filename = "a video file.mp4",
     caption = caption,
@@ -56,6 +60,7 @@ fun aVideoMediaInfo(
     senderName = senderName,
     senderAvatar = null,
     dateSent = dateSent,
+    dateSentFull = dateSentFull,
 )
 
 fun aPdfMediaInfo(
@@ -63,6 +68,7 @@ fun aPdfMediaInfo(
     caption: String? = null,
     senderName: String? = null,
     dateSent: String? = null,
+    dateSentFull: String? = null,
 ): MediaInfo = MediaInfo(
     filename = filename,
     caption = caption,
@@ -73,12 +79,14 @@ fun aPdfMediaInfo(
     senderName = senderName,
     senderAvatar = null,
     dateSent = dateSent,
+    dateSentFull = dateSentFull,
 )
 
 fun anApkMediaInfo(
     senderId: UserId? = UserId("@alice:server.org"),
     senderName: String? = null,
     dateSent: String? = null,
+    dateSentFull: String? = null,
 ): MediaInfo = MediaInfo(
     filename = "an apk file.apk",
     caption = null,
@@ -89,11 +97,13 @@ fun anApkMediaInfo(
     senderName = senderName,
     senderAvatar = null,
     dateSent = dateSent,
+    dateSentFull = dateSentFull,
 )
 
 fun anAudioMediaInfo(
     senderName: String? = null,
     dateSent: String? = null,
+    dateSentFull: String? = null,
 ): MediaInfo = MediaInfo(
     filename = "an audio file.mp3",
     caption = null,
@@ -104,4 +114,5 @@ fun anAudioMediaInfo(
     senderName = senderName,
     senderAvatar = null,
     dateSent = dateSent,
+    dateSentFull = dateSentFull,
 )

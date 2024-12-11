@@ -31,9 +31,8 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.androidutils.system.DateTimeObserver
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
@@ -188,6 +187,7 @@ class RoomListPresenterTest {
                 createRoomListRoomSummary(
                     numberOfUnreadMentions = 1,
                     numberOfUnreadMessages = 2,
+                    timestamp = "0 TimeOrDate true",
                 )
             )
             cancelAndIgnoreRemainingEvents()
@@ -633,9 +633,7 @@ class RoomListPresenterTest {
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
-        lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
-            givenFormat(A_FORMATTED_DATE)
-        },
+        dateFormatter: DateFormatter = FakeDateFormatter(),
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
@@ -652,7 +650,7 @@ class RoomListPresenterTest {
         roomListDataSource = RoomListDataSource(
             roomListService = client.roomListService,
             roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+                dateFormatter = dateFormatter,
                 roomLastMessageFormatter = roomLastMessageFormatter,
             ),
             coroutineDispatchers = testCoroutineDispatchers(),

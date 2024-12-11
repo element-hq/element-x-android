@@ -53,6 +53,7 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                             senderName = null,
                             senderAvatar = null,
                             dateSent = null,
+                            dateSentFull = null,
                         ),
                         mediaSource = MediaSource(url = avatarUrl),
                         thumbnailSource = null,

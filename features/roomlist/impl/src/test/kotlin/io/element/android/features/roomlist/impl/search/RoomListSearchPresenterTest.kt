@@ -12,7 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -143,7 +143,7 @@ fun TestScope.createRoomListSearchPresenter(
         dataSource = RoomListSearchDataSource(
             roomListService = roomListService,
             roomSummaryFactory = aRoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
+                dateFormatter = FakeDateFormatter(),
                 roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
