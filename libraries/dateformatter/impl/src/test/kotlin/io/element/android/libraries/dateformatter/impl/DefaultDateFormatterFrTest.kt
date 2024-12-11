@@ -10,10 +10,7 @@ package io.element.android.libraries.dateformatter.impl
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.dateformatter.test.FakeClock
-import io.element.android.tests.testutils.InstrumentationStringProvider
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -233,45 +230,5 @@ class DefaultDateFormatterFrTest {
         assertThat(formatter.format(ts, DateFormatterMode.Day, true)).isEqualTo("6 avril 1979")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOrDate, true)).isEqualTo("06.04.1979")
         assertThat(formatter.format(ts, DateFormatterMode.TimeOnly, true)).isEqualTo("18:35")
-    }
-
-    /**
-     * Create DefaultLastMessageFormatter and set current time to the provided date.
-     */
-    private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): DefaultDateFormatter {
-        val clock = FakeClock().apply { givenInstant(Instant.parse(currentDate)) }
-        val localDateTimeProvider = LocalDateTimeProvider(clock) { TimeZone.UTC }
-        val dateFormatters = DateFormatters(
-            localeChangeObserver = {},
-            clock = clock,
-            timeZoneProvider = { TimeZone.UTC },
-        )
-        val stringProvider = InstrumentationStringProvider()
-        val dateFormatterDay = DefaultDateFormatterDay(
-            localDateTimeProvider = localDateTimeProvider,
-            dateFormatters = dateFormatters,
-        )
-        return DefaultDateFormatter(
-            dateFormatterFull = DateFormatterFull(
-                stringProvider = stringProvider,
-                localDateTimeProvider = localDateTimeProvider,
-                dateFormatters = dateFormatters,
-                dateFormatterDay = dateFormatterDay,
-            ),
-            dateFormatterMonth = DateFormatterMonth(
-                stringProvider = stringProvider,
-                localDateTimeProvider = localDateTimeProvider,
-                dateFormatters = dateFormatters,
-            ),
-            dateFormatterDay = dateFormatterDay,
-            dateFormatterTime = DateFormatterTime(
-                localDateTimeProvider = localDateTimeProvider,
-                dateFormatters = dateFormatters,
-            ),
-            dateFormatterTimeOnly = DateFormatterTimeOnly(
-                localDateTimeProvider = localDateTimeProvider,
-                dateFormatters = dateFormatters,
-            ),
-        )
     }
 }
