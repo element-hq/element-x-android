@@ -13,7 +13,7 @@ import org.matrix.rustcomponents.sdk.VirtualTimelineItem as RustVirtualTimelineI
 class VirtualTimelineItemMapper {
     fun map(virtualTimelineItem: RustVirtualTimelineItem): VirtualTimelineItem {
         return when (virtualTimelineItem) {
-            is RustVirtualTimelineItem.DayDivider -> VirtualTimelineItem.DayDivider(virtualTimelineItem.ts.toLong())
+            is RustVirtualTimelineItem.DateDivider -> VirtualTimelineItem.DayDivider(virtualTimelineItem.ts.toLong())
             RustVirtualTimelineItem.ReadMarker -> VirtualTimelineItem.ReadMarker
         }
     }
