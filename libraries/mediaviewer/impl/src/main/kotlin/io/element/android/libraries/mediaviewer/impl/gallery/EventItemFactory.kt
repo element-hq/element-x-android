@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
@@ -39,21 +40,18 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import timber.log.Timber
-import java.text.DateFormat
-import java.util.Date
 import javax.inject.Inject
 
 class EventItemFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) {
-    private val timeFormatter = DateFormat.getDateInstance()
-
     fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
     ): MediaItem.Event? {
         val event = currentTimelineItem.event
-        val sentTime = timeFormatter.format(Date(currentTimelineItem.event.timestamp))
+        val sentTime = lastMessageTimestampFormatter.format(currentTimelineItem.event.timestamp)
         return when (val content = event.content) {
             CallNotifyContent,
             is FailedToParseMessageLikeContent,
