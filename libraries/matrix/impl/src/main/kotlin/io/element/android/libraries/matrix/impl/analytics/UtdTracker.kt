@@ -39,6 +39,10 @@ class UtdTracker(
             timeToDecryptMillis = info.timeToDecryptMs?.toInt() ?: -1,
             domain = Error.Domain.E2EE,
             name = name,
+            eventLocalAgeMillis = info.eventLocalAgeMillis.toInt(),
+            userTrustsOwnIdentity = info.userTrustsOwnIdentity,
+            isFederated = info.ownHomeserver != info.senderHomeserver,
+            isMatrixDotOrg = info.ownHomeserver == "matrix.org",
         )
         analyticsService.capture(event)
     }
