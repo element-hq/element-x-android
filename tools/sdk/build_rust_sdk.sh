@@ -60,6 +60,9 @@ buildApp=${buildApp:-no}
 cd "${elementPwd}"
 
 default_arch="$(uname -m)-linux-android"
+# On ARM MacOS, `uname -m` returns arm64, but the toolchain is called aarch64
+default_arch="${default_arch/arm64/aarch64}"
+
 read -p "Enter the architecture you want to build for (default '$default_arch'): " target_arch
 target_arch="${target_arch:-${default_arch}}"
 
