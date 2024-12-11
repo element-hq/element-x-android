@@ -37,7 +37,9 @@ class FakeLocalMediaFactory(
             mimeType = mimeType ?: fallbackMimeType,
             formattedFileSize = formattedFileSize ?: fallbackFileSize,
             fileExtension = fileExtensionExtractor.extractFromName(safeName),
+            senderId = null,
             senderName = null,
+            senderAvatar = null,
             dateSent = null
         )
         return aLocalMedia(uri, mediaInfo)

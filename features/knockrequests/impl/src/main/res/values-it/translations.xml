@@ -14,4 +14,12 @@
   <string name="screen_knock_requests_list_empty_state_description">"Quando qualcuno ti chiederà di entrare nella stanza, potrai vedere la sua richiesta qui."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Nessuna richiesta di accesso in sospeso"</string>
   <string name="screen_knock_requests_list_title">"Richieste di accesso"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d vogliono entrare in questa stanza"</item>
+    <item quantity="other">"%1$s +%2$d vogliono entrare in questa stanza"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Visualizza tutte"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accetta"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s vuole entrare in questa stanza"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Visualizza"</string>
 </resources>

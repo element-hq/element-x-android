@@ -154,4 +154,11 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    MediaGallery(
+        key = "feature.media_gallery",
+        title = "Allow user to open the media gallery",
+        description = null,
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
+        isFinished = false,
+    ),
 }

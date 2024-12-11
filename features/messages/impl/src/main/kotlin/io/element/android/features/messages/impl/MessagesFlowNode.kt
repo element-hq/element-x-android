@@ -117,6 +117,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
@@ -241,15 +242,21 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
+                    eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
+                    canShowInfo = true,
                     canDownload = true,
                     canShare = true,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
                         overlay.hide()
+                    }
+
+                    override fun onViewInTimeline(eventId: EventId) {
+                        viewInTimeline(eventId)
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
@@ -311,11 +318,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewInTimelineClick(eventId: EventId) {
-                        val permalinkData = PermalinkData.RoomLink(
-                            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
-                            eventId = eventId,
-                        )
-                        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
+                        viewInTimeline(eventId)
                     }
 
                     override fun onRoomPermalinkClick(data: PermalinkData.RoomLink) {
@@ -339,6 +342,14 @@ class MessagesFlowNode @AssistedInject constructor(
                 knockRequestsListEntryPoint.createNode(this, buildContext)
             }
         }
+    }
+
+    private fun viewInTimeline(eventId: EventId) {
+        val permalinkData = PermalinkData.RoomLink(
+            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
+            eventId = eventId,
+        )
+        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
     }
 
     private fun processEventClick(event: TimelineItem.Event): Boolean {
@@ -415,13 +426,16 @@ class MessagesFlowNode @AssistedInject constructor(
         thumbnailSource: MediaSource?,
     ): NavTarget {
         return NavTarget.MediaViewer(
+            eventId = event.eventId,
             mediaInfo = MediaInfo(
                 filename = content.filename,
                 caption = content.caption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
+                senderId = event.senderId,
                 senderName = event.safeSenderName,
+                senderAvatar = event.senderAvatar.url,
                 dateSent = event.sentTime,
             ),
             mediaSource = mediaSource,

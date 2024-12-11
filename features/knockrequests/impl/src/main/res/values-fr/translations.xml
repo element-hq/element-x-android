@@ -14,4 +14,12 @@
   <string name="screen_knock_requests_list_empty_state_description">"Lorsque quelqu’un demandera à rejoindre le salon, vous pourrez voir sa demande ici."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Personne ne demande à rejoindre le salon"</string>
   <string name="screen_knock_requests_list_title">"Demandes en attente"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s et %2$d autre personne souhaitent rejoindre ce salon"</item>
+    <item quantity="other">"%1$s et %2$d autres personnes souhaitent rejoindre ce salon"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Tout afficher"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accepter"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s souhaite rejoindre ce salon"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Voir"</string>
 </resources>

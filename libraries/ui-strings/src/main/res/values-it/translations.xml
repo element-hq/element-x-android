@@ -299,11 +299,6 @@ Motivo:. %1$s"</string>
   <string name="invite_friends_text">"Ehi, parliamo su %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
-  <string name="screen_media_browser_empty_state_subtitle">"Le immagini e i video caricati in questa stanza verranno mostrati qui."</string>
-  <string name="screen_media_browser_empty_state_title">"Nessun file multimediale ancora caricato"</string>
-  <string name="screen_media_browser_list_mode_files">"File"</string>
-  <string name="screen_media_browser_list_mode_media">"Contenuti multimediali"</string>
-  <string name="screen_media_browser_title">"File e contenuti multimediali"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Le didascalie potrebbero non essere visibili agli utenti di app meno recenti."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
@@ -327,18 +322,10 @@ Motivo:. %1$s"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Il tuo messaggio non è stato inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s +%2$d vogliono entrare in questa stanza"</item>
-    <item quantity="other">"%1$s +%2$d vogliono entrare in questa stanza"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Visualizza tutte"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
   <string name="screen_room_pinned_banner_loading_description">"Caricamento messaggio…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Mostra tutti"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Accetta"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s vuole entrare in questa stanza"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Visualizza"</string>
   <string name="screen_room_title">"Conversazione"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Richiesta di accesso inviata"</string>
   <string name="screen_share_location_title">"Condividi posizione"</string>

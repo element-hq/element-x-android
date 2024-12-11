@@ -133,6 +133,7 @@ class FakeMatrixRoom(
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
     private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
     private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
+    private val mediaTimelineResult: () -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -201,6 +202,10 @@ class FakeMatrixRoom(
 
     override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
         pinnedEventsTimelineResult()
+    }
+
+    override suspend fun mediaTimeline(): Result<Timeline> = simulateLongTask {
+        mediaTimelineResult()
     }
 
     override suspend fun subscribeToSync() {

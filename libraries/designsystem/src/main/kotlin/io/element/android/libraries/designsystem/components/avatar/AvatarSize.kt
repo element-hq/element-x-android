@@ -57,4 +57,6 @@ enum class AvatarSize(val dp: Dp) {
 
     KnockRequestItem(52.dp),
     KnockRequestBanner(32.dp),
+
+    MediaSender(32.dp),
 }

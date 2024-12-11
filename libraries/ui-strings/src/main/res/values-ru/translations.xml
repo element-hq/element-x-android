@@ -303,13 +303,6 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
-  <string name="screen_media_browser_empty_state_subtitle">"Здесь будут показаны изображения и видео, загруженные в данную комнату."</string>
-  <string name="screen_media_browser_empty_state_title">"Пока что нет загруженных медиафайлов"</string>
-  <string name="screen_media_browser_list_loading_files">"Загрузка файлов…"</string>
-  <string name="screen_media_browser_list_loading_media">"Загрузка медиа…"</string>
-  <string name="screen_media_browser_list_mode_files">"Файлы"</string>
-  <string name="screen_media_browser_list_mode_media">"Медиа"</string>
-  <string name="screen_media_browser_title">"Медиа и файлы"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Подпись может быть не видна пользователям старых приложений."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
@@ -334,19 +327,10 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s +%2$d хочет присоединиться к этой комнате"</item>
-    <item quantity="few">"%1$s +%2$d хотят присоединиться к этой комнате"</item>
-    <item quantity="many">"%1$s +%2$d хотят присоединиться к этой комнате"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Показать все"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закрепленные сообщения"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Принять"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s хочет присоединиться к этой комнате"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Просмотр"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>

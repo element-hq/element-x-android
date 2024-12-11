@@ -25,11 +25,17 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
+import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +44,8 @@ import io.element.android.libraries.androidutils.R as UtilsR
 
 class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerEntryPoint.Params,
+    @Assisted private val navigator: MediaViewerNavigator,
+    private val room: MatrixRoom,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
@@ -45,7 +53,10 @@ class MediaViewerPresenter @AssistedInject constructor(
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     interface Factory {
-        fun create(inputs: MediaViewerEntryPoint.Params): MediaViewerPresenter
+        fun create(
+            inputs: MediaViewerEntryPoint.Params,
+            navigator: MediaViewerNavigator,
+        ): MediaViewerPresenter
     }
 
     @Composable
@@ -66,6 +77,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                 mediaFile.value?.close()
             }
         }
+        var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
         fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
             when (mediaViewerEvents) {
@@ -74,16 +86,49 @@ class MediaViewerPresenter @AssistedInject constructor(
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
                 MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
                 MediaViewerEvents.OpenWith -> coroutineScope.open(localMedia.value)
+                is MediaViewerEvents.Delete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.delete(mediaViewerEvents.eventId)
+                }
+                is MediaViewerEvents.ViewInTimeline -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    navigator.onViewInTimelineClick(mediaViewerEvents.eventId)
+                }
+                MediaViewerEvents.OpenInfo -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                        eventId = inputs.eventId,
+                        canDelete = when (inputs.mediaInfo.senderId) {
+                            null -> false
+                            room.sessionId -> room.canRedactOwn().getOrElse { false } && inputs.eventId != null
+                            else -> room.canRedactOther().getOrElse { false } && inputs.eventId != null
+                        },
+                        mediaInfo = inputs.mediaInfo,
+                        thumbnailSource = inputs.thumbnailSource,
+                    )
+                }
+                is MediaViewerEvents.ConfirmDelete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                        eventId = mediaViewerEvents.eventId,
+                        mediaInfo = inputs.mediaInfo,
+                        thumbnailSource = inputs.thumbnailSource ?: inputs.mediaSource,
+                    )
+                }
+                MediaViewerEvents.CloseBottomSheet -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                }
             }
         }
 
         return MediaViewerState(
+            eventId = inputs.eventId,
             mediaInfo = inputs.mediaInfo,
             thumbnailSource = inputs.thumbnailSource,
             downloadedMedia = localMedia.value,
             snackbarMessage = snackbarMessage,
+            canShowInfo = inputs.canShowInfo,
             canDownload = inputs.canDownload,
             canShare = inputs.canShare,
+            mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvents
         )
     }
@@ -124,6 +169,17 @@ class MediaViewerPresenter @AssistedInject constructor(
                     snackbarDispatcher.post(snackbarMessage)
                 }
         }
+    }
+
+    private fun CoroutineScope.delete(eventId: EventId) = launch {
+        room.liveTimeline.redactEvent(eventId.toEventOrTransactionId(), null)
+            .onFailure {
+                val snackbarMessage = SnackbarMessage(CommonStrings.error_unknown)
+                snackbarDispatcher.post(snackbarMessage)
+            }
+            .onSuccess {
+                navigator.onItemDeleted()
+            }
     }
 
     private fun CoroutineScope.share(localMedia: AsyncData<LocalMedia>) = launch {

@@ -107,6 +107,11 @@ interface MatrixRoom : Closeable {
      */
     suspend fun pinnedEventsTimeline(): Result<Timeline>
 
+    /**
+     * Create a new timeline for the media events of the room.
+     */
+    suspend fun mediaTimeline(): Result<Timeline>
+
     fun destroy()
 
     suspend fun subscribeToSync()
