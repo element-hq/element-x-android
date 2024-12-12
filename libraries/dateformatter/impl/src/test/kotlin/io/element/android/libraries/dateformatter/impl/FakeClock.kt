@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.dateformatter.test
+package io.element.android.libraries.dateformatter.impl
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant

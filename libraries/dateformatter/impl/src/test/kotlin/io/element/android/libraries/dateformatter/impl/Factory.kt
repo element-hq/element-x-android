@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import io.element.android.libraries.dateformatter.test.FakeClock
 import io.element.android.tests.testutils.InstrumentationStringProvider
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
