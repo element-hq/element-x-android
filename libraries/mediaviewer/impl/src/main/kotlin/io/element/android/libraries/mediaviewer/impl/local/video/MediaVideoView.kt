@@ -64,7 +64,7 @@ fun MediaVideoView(
     } else {
         val context = LocalContext.current
         remember {
-            ExoPlayerWrapper.create(context)
+            ExoPlayer.Builder(context).build()
         }
     }
     ExoPlayerMediaVideoView(

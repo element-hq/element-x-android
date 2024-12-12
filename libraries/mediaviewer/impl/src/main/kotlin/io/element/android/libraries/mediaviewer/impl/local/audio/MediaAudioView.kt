@@ -69,7 +69,6 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.video.ExoPlayerForPreview
-import io.element.android.libraries.mediaviewer.impl.local.video.ExoPlayerWrapper
 import io.element.android.libraries.mediaviewer.impl.local.video.MediaPlayerControllerState
 import io.element.android.libraries.mediaviewer.impl.local.video.MediaPlayerControllerView
 import kotlinx.collections.immutable.toPersistentList
@@ -91,7 +90,7 @@ fun MediaAudioView(
     } else {
         val context = LocalContext.current
         remember {
-            ExoPlayerWrapper.create(context)
+            ExoPlayer.Builder(context).build()
         }
     }
     ExoPlayerMediaAudioView(
