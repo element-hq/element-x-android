@@ -48,7 +48,8 @@ class AndroidLocalMediaFactoryTest {
                 senderName = A_USER_NAME,
                 senderAvatar = null,
                 dateSent = "12:34",
-                dateSentFull = "full"
+                dateSentFull = "full",
+                waveform = null,
             )
         )
     }
