@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.local.video
+package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
