@@ -26,12 +26,13 @@ class DateFormatters @Inject constructor(
     localeChangeObserver: LocaleChangeObserver,
     private val clock: Clock,
     private val timeZoneProvider: TimezoneProvider,
+    locale: Locale,
 ) : LocaleChangeListener {
     init {
         localeChangeObserver.addListener(this)
     }
 
-    private var dateTimeFormatters: DateTimeFormatters = DateTimeFormatters(Locale.getDefault())
+    private var dateTimeFormatters: DateTimeFormatters = DateTimeFormatters(locale)
 
     override fun onLocaleChange() {
         Timber.w("Locale changed, updating formatters")

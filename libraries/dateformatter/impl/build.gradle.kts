@@ -8,7 +8,7 @@ import extension.setupAnvil
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
 }
 
 setupAnvil()
@@ -25,6 +25,7 @@ android {
     dependencies {
         implementation(libs.dagger)
         implementation(projects.libraries.core)
+        implementation(projects.libraries.designsystem)
         implementation(projects.libraries.di)
         implementation(projects.libraries.uiStrings)
         implementation(projects.services.toolbox.api)
