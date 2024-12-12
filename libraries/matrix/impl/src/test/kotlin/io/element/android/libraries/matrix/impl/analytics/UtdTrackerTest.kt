@@ -9,10 +9,10 @@ package io.element.android.libraries.matrix.impl.analytics
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Error
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUnableToDecryptInfo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.UnableToDecryptInfo
 import uniffi.matrix_sdk_crypto.UtdCause
 
 class UtdTrackerTest {
@@ -21,7 +21,7 @@ class UtdTrackerTest {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
         sut.onUtd(
-            UnableToDecryptInfo(
+            aRustUnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = null,
                 cause = UtdCause.UNKNOWN,
@@ -46,7 +46,7 @@ class UtdTrackerTest {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
         sut.onUtd(
-            UnableToDecryptInfo(
+            aRustUnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = 123.toULong(),
                 cause = UtdCause.UNKNOWN,
@@ -71,7 +71,7 @@ class UtdTrackerTest {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
         sut.onUtd(
-            UnableToDecryptInfo(
+            aRustUnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = 123.toULong(),
                 cause = UtdCause.SENT_BEFORE_WE_JOINED,
@@ -96,7 +96,7 @@ class UtdTrackerTest {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
         sut.onUtd(
-            UnableToDecryptInfo(
+            aRustUnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = 123.toULong(),
                 cause = UtdCause.UNSIGNED_DEVICE,
@@ -119,7 +119,7 @@ class UtdTrackerTest {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
         sut.onUtd(
-            UnableToDecryptInfo(
+            aRustUnableToDecryptInfo(
                 eventId = AN_EVENT_ID.value,
                 timeToDecryptMs = 123.toULong(),
                 cause = UtdCause.VERIFICATION_VIOLATION,
