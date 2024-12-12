@@ -10,8 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -162,7 +161,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -209,7 +209,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -253,7 +254,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -301,7 +303,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -350,7 +353,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -397,7 +401,8 @@ class DefaultEventItemFactoryTest {
                     senderId = A_USER_ID,
                     senderName = "alice",
                     senderAvatar = null,
-                    dateSent = A_FORMATTED_DATE,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -409,5 +414,5 @@ class DefaultEventItemFactoryTest {
 private fun createEventItemFactory() = EventItemFactory(
     fileSizeFormatter = FakeFileSizeFormatter(),
     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-    lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(A_FORMATTED_DATE),
+    dateFormatter = FakeDateFormatter(),
 )

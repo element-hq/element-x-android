@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -86,6 +87,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -128,6 +130,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -170,6 +173,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -215,6 +219,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -263,6 +268,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -308,6 +314,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -355,6 +362,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -403,6 +411,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -448,6 +457,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -496,6 +506,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -542,6 +553,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -592,6 +604,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -641,6 +654,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -691,6 +705,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -738,6 +753,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = stateEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -808,6 +824,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -855,6 +872,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -909,6 +927,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1006,6 +1025,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1046,6 +1066,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1089,6 +1110,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1131,6 +1153,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1174,6 +1197,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1214,6 +1238,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
+                    sentTimeFull = "0 Full true",
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
@@ -1268,6 +1293,7 @@ private fun createActionListPresenter(
             initialState = mapOf(
                 FeatureFlags.MediaCaptionCreation.key to allowCaption,
             ),
-        )
+        ),
+        dateFormatter = FakeDateFormatter(),
     )
 }

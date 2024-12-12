@@ -5,12 +5,12 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.dateformatter.test
+package io.element.android.libraries.dateformatter.impl.previews
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
-class FakeClock : Clock {
+class PreviewClock : Clock {
     private var instant: Instant = Instant.fromEpochMilliseconds(0)
 
     fun givenInstant(instant: Instant) {

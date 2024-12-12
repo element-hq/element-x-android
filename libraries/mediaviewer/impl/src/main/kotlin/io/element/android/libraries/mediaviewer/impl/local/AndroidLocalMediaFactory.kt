@@ -46,6 +46,7 @@ class AndroidLocalMediaFactory @Inject constructor(
         senderName = mediaInfo.senderName,
         senderAvatar = mediaInfo.senderAvatar,
         dateSent = mediaInfo.dateSent,
+        dateSentFull = mediaInfo.dateSentFull,
     )
 
     override fun createFromUri(
@@ -63,6 +64,7 @@ class AndroidLocalMediaFactory @Inject constructor(
         senderName = null,
         senderAvatar = null,
         dateSent = null,
+        dateSentFull = null,
     )
 
     private fun createFromUri(
@@ -75,6 +77,7 @@ class AndroidLocalMediaFactory @Inject constructor(
         senderName: String?,
         senderAvatar: String?,
         dateSent: String?,
+        dateSentFull: String?,
     ): LocalMedia {
         val resolvedMimeType = mimeType ?: context.getMimeType(uri) ?: MimeTypes.OctetStream
         val fileName = name ?: context.getFileName(uri) ?: ""
@@ -92,6 +95,7 @@ class AndroidLocalMediaFactory @Inject constructor(
                 senderName = senderName,
                 senderAvatar = senderAvatar,
                 dateSent = dateSent,
+                dateSentFull = dateSentFull,
             )
         )
     }

@@ -10,12 +10,15 @@ package io.element.android.libraries.mediaviewer.impl.details
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 
-fun aMediaDetailsBottomSheetState(): MediaBottomSheetState.MediaDetailsBottomSheetState {
+fun aMediaDetailsBottomSheetState(
+    dateSentFull: String = "December 6, 2024 at 12:59",
+): MediaBottomSheetState.MediaDetailsBottomSheetState {
     return MediaBottomSheetState.MediaDetailsBottomSheetState(
         eventId = EventId("\$eventId"),
         canDelete = true,
         mediaInfo = anImageMediaInfo(
             senderName = "Alice",
+            dateSentFull = dateSentFull,
         ),
         thumbnailSource = null,
     )

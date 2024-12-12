@@ -7,13 +7,14 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 
 fun aRoomListRoomSummaryFactory(
-    lastMessageTimestampFormatter: LastMessageTimestampFormatter = LastMessageTimestampFormatter { _ -> "Today" },
+    dateFormatter: DateFormatter = FakeDateFormatter { _, _, _ -> "Today" },
     roomLastMessageFormatter: RoomLastMessageFormatter = RoomLastMessageFormatter { _, _ -> "Hey" }
 ) = RoomListRoomSummaryFactory(
-    lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+    dateFormatter = dateFormatter,
     roomLastMessageFormatter = roomLastMessageFormatter
 )

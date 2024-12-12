@@ -327,6 +327,7 @@ class MessagesViewTest {
             actionListState = anActionListState(
                 target = ActionListState.Target.Success(
                     event = timelineItem,
+                    sentTimeFull = "",
                     displayEmojiReactions = true,
                     actions = persistentListOf(TimelineItemAction.Edit),
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
@@ -399,6 +400,7 @@ class MessagesViewTest {
             actionListState = anActionListState(
                 target = ActionListState.Target.Success(
                     event = timelineItem,
+                    sentTimeFull = "",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(TimelineItemAction.Edit),
@@ -427,6 +429,7 @@ class MessagesViewTest {
             actionListState = anActionListState(
                 target = ActionListState.Target.Success(
                     event = timelineItem,
+                    sentTimeFull = "",
                     displayEmojiReactions = true,
                     verifiedUserSendFailure = aChangedIdentitySendFailure(),
                     actions = persistentListOf(),

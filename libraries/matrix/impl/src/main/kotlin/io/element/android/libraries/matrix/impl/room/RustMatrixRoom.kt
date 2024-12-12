@@ -235,7 +235,7 @@ class RustMatrixRoom(
                     RoomMessageEventMessageType.VIDEO,
                     RoomMessageEventMessageType.AUDIO,
                 ),
-                dateDividerMode = DateDividerMode.DAILY,
+                dateDividerMode = DateDividerMode.MONTHLY,
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.MEDIA)
             }
