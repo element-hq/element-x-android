@@ -45,6 +45,9 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
+import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
+import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
+import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -57,16 +60,7 @@ fun MediaVideoView(
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
-    val exoPlayer = if (LocalInspectionMode.current) {
-        remember {
-            ExoPlayerForPreview()
-        }
-    } else {
-        val context = LocalContext.current
-        remember {
-            ExoPlayer.Builder(context).build()
-        }
-    }
+    val exoPlayer = rememberExoPlayer()
     ExoPlayerMediaVideoView(
         localMediaViewState = localMediaViewState,
         bottomPaddingInPixels = bottomPaddingInPixels,
