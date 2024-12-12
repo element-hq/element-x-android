@@ -288,6 +288,7 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = false,
                             markAsUnreadFeatureFlagEnabled = true,
+                            eventCacheFeatureFlagEnabled = false,
                             hasNewContent = false,
                         )
                     )
@@ -305,6 +306,7 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = true,
                             markAsUnreadFeatureFlagEnabled = true,
+                            eventCacheFeatureFlagEnabled = false,
                             hasNewContent = false,
                         )
                     )
@@ -335,6 +337,7 @@ class RoomListPresenterTest {
                         isDm = false,
                         isFavorite = false,
                         markAsUnreadFeatureFlagEnabled = true,
+                        eventCacheFeatureFlagEnabled = false,
                         hasNewContent = false,
                     )
                 )

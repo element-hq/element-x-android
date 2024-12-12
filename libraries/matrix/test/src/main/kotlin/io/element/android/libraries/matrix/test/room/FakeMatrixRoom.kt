@@ -574,6 +574,10 @@ class FakeMatrixRoom(
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
+
+    override suspend fun clearEventCacheStorage(): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

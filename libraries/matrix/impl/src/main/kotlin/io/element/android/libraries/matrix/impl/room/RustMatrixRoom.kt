@@ -569,6 +569,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun clearEventCacheStorage(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.clearEventCacheStorage()
+        }
+    }
+
     override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.kickUser(userId.value, reason)
