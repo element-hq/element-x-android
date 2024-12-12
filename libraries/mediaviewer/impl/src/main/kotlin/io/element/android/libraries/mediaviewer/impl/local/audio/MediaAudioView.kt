@@ -14,7 +14,6 @@ import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,8 +68,8 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
-import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
+import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.collections.immutable.toPersistentList
@@ -270,6 +269,7 @@ private fun ExoPlayerMediaAudioView(
             if (waveform == null) {
                 // Display the info below the player
                 AudioInfoView(
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     info = info,
                     metadata = metadata,
                 )
@@ -308,40 +308,46 @@ private fun ExoPlayerMediaAudioView(
 }
 
 @Composable
-fun ColumnScope.AudioInfoView(
+private fun AudioInfoView(
     info: MediaInfo?,
     metadata: MediaMetadata?,
+    modifier: Modifier = Modifier,
 ) {
-    // Render the info about the file and from the metadata
-    val metaDataInfo = metadata.buildInfo()
-    if (metaDataInfo.isNotEmpty()) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = metaDataInfo,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-    if (info != null) {
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = info.filename,
-            maxLines = 2,
-            style = ElementTheme.typography.fontBodyLgRegular,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = formatFileExtensionAndSize(info.fileExtension, info.formattedFileSize),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.primary
-        )
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // Render the info about the file and from the metadata
+        val metaDataInfo = metadata.buildInfo()
+        if (metaDataInfo.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = metaDataInfo,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+        if (info != null) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = info.filename,
+                maxLines = 2,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = formatFileExtensionAndSize(info.fileExtension, info.formattedFileSize),
+                style = ElementTheme.typography.fontBodyMdRegular,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     }
 }
 
