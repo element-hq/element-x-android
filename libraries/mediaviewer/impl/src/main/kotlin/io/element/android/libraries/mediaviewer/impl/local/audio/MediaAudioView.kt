@@ -69,7 +69,9 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
+import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
+import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
@@ -241,10 +243,7 @@ private fun ExoPlayerMediaAudioView(
                         showCursor = true,
                         waveform = waveform.toPersistentList(),
                         onSeek = {
-                            if (exoPlayer.isPlaying.not()) {
-                                exoPlayer.play()
-                            }
-                            exoPlayer.seekTo((it * exoPlayer.duration).toLong())
+                            exoPlayer.seekToEnsurePlaying((it * exoPlayer.duration).toLong())
                         },
                         seekEnabled = true,
                     )
@@ -279,21 +278,10 @@ private fun ExoPlayerMediaAudioView(
         MediaPlayerControllerView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
-                if (exoPlayer.isPlaying) {
-                    exoPlayer.pause()
-                } else {
-                    if (exoPlayer.playbackState == Player.STATE_ENDED) {
-                        exoPlayer.seekTo(0)
-                    } else {
-                        exoPlayer.play()
-                    }
-                }
+                exoPlayer.togglePlay()
             },
             onSeekChange = {
-                if (exoPlayer.isPlaying.not()) {
-                    exoPlayer.play()
-                }
-                exoPlayer.seekTo(it.toLong())
+                exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
                 // Cannot happen for audio files

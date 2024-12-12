@@ -47,7 +47,9 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
+import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
+import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -208,22 +210,11 @@ private fun ExoPlayerMediaVideoView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
                 autoHideController++
-                if (exoPlayer.isPlaying) {
-                    exoPlayer.pause()
-                } else {
-                    if (exoPlayer.playbackState == Player.STATE_ENDED) {
-                        exoPlayer.seekTo(0)
-                    } else {
-                        exoPlayer.play()
-                    }
-                }
+                exoPlayer.togglePlay()
             },
             onSeekChange = {
                 autoHideController++
-                if (exoPlayer.isPlaying.not()) {
-                    exoPlayer.play()
-                }
-                exoPlayer.seekTo(it.toLong())
+                exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
                 autoHideController++
