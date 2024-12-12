@@ -146,6 +146,7 @@ class RoomListPresenter @Inject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(event.roomListRoomSummary.toInviteData())
                     )
                 }
+                is RoomListEvents.ClearCacheOfRoom -> coroutineScope.clearCacheOfRoom(event.roomId)
             }
         }
 
@@ -255,7 +256,8 @@ class RoomListPresenter @Inject constructor(
             isDm = event.roomListRoomSummary.isDm,
             isFavorite = event.roomListRoomSummary.isFavorite,
             markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
-            hasNewContent = event.roomListRoomSummary.hasNewContent
+            hasNewContent = event.roomListRoomSummary.hasNewContent,
+            eventCacheFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.EventCache),
         )
         contextMenuState.value = initialState
 
@@ -309,6 +311,12 @@ class RoomListPresenter @Inject constructor(
                 .onSuccess {
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
                 }
+        }
+    }
+
+    private fun CoroutineScope.clearCacheOfRoom(roomId: RoomId) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.clearEventCacheStorage()
         }
     }
 
