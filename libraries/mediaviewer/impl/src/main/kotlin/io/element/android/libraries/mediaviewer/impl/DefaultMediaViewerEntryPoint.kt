@@ -54,6 +54,7 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                             senderAvatar = null,
                             dateSent = null,
                             dateSentFull = null,
+                            waveform = null,
                         ),
                         mediaSource = MediaSource(url = avatarUrl),
                         thumbnailSource = null,

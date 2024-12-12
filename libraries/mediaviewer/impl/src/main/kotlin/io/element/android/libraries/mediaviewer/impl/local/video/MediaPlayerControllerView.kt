@@ -133,21 +133,23 @@ fun MediaPlayerControllerView(
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
                 )
-                IconButton(
-                    onClick = onToggleMute,
-                ) {
-                    if (state.isMuted) {
-                        Icon(
-                            imageVector = CompoundIcons.VolumeOffSolid(),
-                            tint = ElementTheme.colors.iconPrimary,
-                            contentDescription = stringResource(CommonStrings.common_unmute)
-                        )
-                    } else {
-                        Icon(
-                            imageVector = CompoundIcons.VolumeOnSolid(),
-                            tint = ElementTheme.colors.iconPrimary,
-                            contentDescription = stringResource(CommonStrings.common_mute)
-                        )
+                if (state.canMute) {
+                    IconButton(
+                        onClick = onToggleMute,
+                    ) {
+                        if (state.isMuted) {
+                            Icon(
+                                imageVector = CompoundIcons.VolumeOffSolid(),
+                                tint = ElementTheme.colors.iconPrimary,
+                                contentDescription = stringResource(CommonStrings.common_unmute)
+                            )
+                        } else {
+                            Icon(
+                                imageVector = CompoundIcons.VolumeOnSolid(),
+                                tint = ElementTheme.colors.iconPrimary,
+                                contentDescription = stringResource(CommonStrings.common_mute)
+                            )
+                        }
                     }
                 }
             }

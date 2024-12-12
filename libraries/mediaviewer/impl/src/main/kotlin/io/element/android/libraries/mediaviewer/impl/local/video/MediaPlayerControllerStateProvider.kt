@@ -18,6 +18,9 @@ open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPl
             durationInMillis = 83_000,
             isMuted = true,
         ),
+        aMediaPlayerControllerState(
+            canMute = false,
+        ),
     )
 }
 
@@ -27,11 +30,13 @@ private fun aMediaPlayerControllerState(
     progressInMillis: Long = 0,
     // Default to 1 minute and 23 seconds
     durationInMillis: Long = 83_000,
+    canMute: Boolean = true,
     isMuted: Boolean = false,
 ) = MediaPlayerControllerState(
     isVisible = isVisible,
     isPlaying = isPlaying,
     progressInMillis = progressInMillis,
     durationInMillis = durationInMillis,
+    canMute = canMute,
     isMuted = isMuted,
 )

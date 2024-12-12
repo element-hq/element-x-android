@@ -135,6 +135,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
                         thumbnailSource = when (event.mediaItem) {
                             is MediaItem.Image -> event.mediaItem.thumbnailSource ?: event.mediaItem.mediaSource
                             is MediaItem.Video -> event.mediaItem.thumbnailSource ?: event.mediaItem.mediaSource
+                            is MediaItem.Audio -> null
                             is MediaItem.File -> null
                         },
                     )

@@ -86,7 +86,7 @@ class EventItemFactory @Inject constructor(
                         Timber.w("Should not happen: ${content.type}")
                         null
                     }
-                    is AudioMessageType -> MediaItem.File(
+                    is AudioMessageType -> MediaItem.Audio(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -100,8 +100,11 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
+                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
+                        waveform = null,
                     )
                     is FileMessageType -> MediaItem.File(
                         id = currentTimelineItem.uniqueId,
@@ -117,6 +120,7 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -134,6 +138,7 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -152,6 +157,7 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -170,12 +176,13 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
-                    is VoiceMessageType -> MediaItem.File(
+                    is VoiceMessageType -> MediaItem.Audio(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -189,8 +196,11 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
+                            waveform = type.details?.waveform,
                         ),
                         mediaSource = type.source,
+                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
+                        waveform = type.details?.waveform,
                     )
                 }
             }

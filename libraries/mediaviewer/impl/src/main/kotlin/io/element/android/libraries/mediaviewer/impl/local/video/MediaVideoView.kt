@@ -92,6 +92,7 @@ private fun ExoPlayerMediaVideoView(
                 isPlaying = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
+                canMute = true,
                 isMuted = false,
             )
         )
