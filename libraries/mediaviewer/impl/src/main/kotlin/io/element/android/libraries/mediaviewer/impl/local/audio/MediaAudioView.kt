@@ -131,30 +131,32 @@ private fun ExoPlayerMediaAudioView(
 
     localMediaViewState.playableState = playableState
 
-    val playerListener = object : Player.Listener {
-        override fun onRenderedFirstFrame() {
-            localMediaViewState.isReady = true
-        }
-
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isPlaying = isPlaying,
-            )
-        }
-
-        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-            if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                exoPlayer.duration.takeIf { it >= 0 }
-                    ?.let {
-                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                            durationInMillis = it,
-                        )
-                    }
+    val playerListener = remember {
+        object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                localMediaViewState.isReady = true
             }
-        }
 
-        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
-            metadata = mediaMetadata
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isPlaying = isPlaying,
+                )
+            }
+
+            override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+                if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
+                    exoPlayer.duration.takeIf { it >= 0 }
+                        ?.let {
+                            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                                durationInMillis = it,
+                            )
+                        }
+                }
+            }
+
+            override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+                metadata = mediaMetadata
+            }
         }
     }
 

@@ -102,31 +102,33 @@ private fun ExoPlayerMediaVideoView(
 
     localMediaViewState.playableState = playableState
 
-    val playerListener = object : Player.Listener {
-        override fun onRenderedFirstFrame() {
-            localMediaViewState.isReady = true
-        }
+    val playerListener = remember {
+        object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                localMediaViewState.isReady = true
+            }
 
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isPlaying = isPlaying,
-            )
-        }
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isPlaying = isPlaying,
+                )
+            }
 
-        override fun onVolumeChanged(volume: Float) {
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isMuted = volume == 0f,
-            )
-        }
+            override fun onVolumeChanged(volume: Float) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isMuted = volume == 0f,
+                )
+            }
 
-        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-            if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                exoPlayer.duration.takeIf { it >= 0 }
-                    ?.let {
-                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                            durationInMillis = it,
-                        )
-                    }
+            override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+                if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
+                    exoPlayer.duration.takeIf { it >= 0 }
+                        ?.let {
+                            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                                durationInMillis = it,
+                            )
+                        }
+                }
             }
         }
     }
