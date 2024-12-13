@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_media_browser_empty_state_subtitle">"Obrázky a videa nahraná do této místnosti budou zobrazeny zde."</string>
-  <string name="screen_media_browser_empty_state_title">"Zatím nebyla nahrána žádná média"</string>
   <string name="screen_media_browser_list_loading_files">"Načítání souborů…"</string>
   <string name="screen_media_browser_list_loading_media">"Načítání médií…"</string>
   <string name="screen_media_browser_list_mode_files">"Soubory"</string>
   <string name="screen_media_browser_list_mode_media">"Média"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Obrázky a videa nahraná do této místnosti budou zobrazeny zde."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Zatím nebyla nahrána žádná média"</string>
   <string name="screen_media_browser_title">"Média a soubory"</string>
 </resources>

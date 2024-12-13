@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -213,7 +214,11 @@ private fun MediaGalleryImages(
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (imagesAndVideos.isEmpty()) {
-        EmptyContent()
+        EmptyContent(
+            titleRes = R.string.screen_media_browser_media_empty_state_title,
+            subtitleRes = R.string.screen_media_browser_media_empty_state_subtitle,
+            icon = CompoundIcons.Image(),
+        )
     } else {
         MediaGalleryImageGrid(
             imagesAndVideos = imagesAndVideos,
@@ -230,7 +235,11 @@ private fun MediaGalleryFiles(
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (files.isEmpty()) {
-        EmptyContent()
+        EmptyContent(
+            titleRes = R.string.screen_media_browser_files_empty_state_title,
+            subtitleRes = R.string.screen_media_browser_files_empty_state_subtitle,
+            icon = CompoundIcons.Files(),
+        )
     } else {
         MediaGalleryFilesList(
             files = files,
@@ -394,7 +403,11 @@ private fun ErrorContent(error: Throwable) {
 }
 
 @Composable
-private fun EmptyContent() {
+fun EmptyContent(
+    titleRes: Int,
+    subtitleRes: Int,
+    icon: ImageVector,
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -403,9 +416,9 @@ private fun EmptyContent() {
                 .fillMaxWidth()
                 .padding(top = 44.dp)
                 .padding(24.dp),
-            title = stringResource(R.string.screen_media_browser_empty_state_title),
-            iconStyle = BigIcon.Style.Default(CompoundIcons.Image()),
-            subtitle = stringResource(R.string.screen_media_browser_empty_state_subtitle),
+            title = stringResource(titleRes),
+            iconStyle = BigIcon.Style.Default(icon),
+            subtitle = stringResource(subtitleRes),
         )
     }
 }
