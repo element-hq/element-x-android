@@ -12,8 +12,8 @@ import uniffi.matrix_sdk_crypto.UtdCause
 
 internal fun aRustUnableToDecryptInfo(
     eventId: String,
-    timeToDecryptMs: ULong?,
-    cause: UtdCause,
+    timeToDecryptMs: ULong? = null,
+    cause: UtdCause = UtdCause.UNKNOWN,
     eventLocalAgeMillis: Long = 0L,
     userTrustsOwnIdentity: Boolean = false,
     senderHomeserver: String = "",
