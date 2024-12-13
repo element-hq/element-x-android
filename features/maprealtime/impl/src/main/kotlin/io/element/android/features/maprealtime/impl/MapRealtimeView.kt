@@ -27,7 +27,6 @@ import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,12 +47,6 @@ import io.element.android.libraries.maplibre.compose.CameraPositionState
 import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import org.maplibre.android.camera.CameraPosition
-
-//import org.ramani.compose.LocationRequestProperties
-//import org.ramani.compose.LocationStyling
-//import org.ramani.compose.MapLibre
-//import org.ramani.compose.Margins
-//import org.ramani.compose.UiSettings
 
 @Composable
 fun MapRealtimeView(
@@ -87,17 +80,6 @@ fun MapRealtimeView(
         mutableStateOf(CameraPositionState())
     }
 
-//    val locationRequestState = rememberSaveable { mutableStateOf<LocationRequestProperties>(LocationRequestProperties(interval = 250L)) }
-
-//    val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
-
-    val styleUrl = rememberSaveable { mutableStateOf("https://demotiles.maplibre.org/style.json") }
-//    val styleUrl = rememberSaveable { mutableStateOf(state.styleUrl) }
-//    val styleBuilder = Style.Builder().fromUri(state.styleUrl)
-
-//    val myCompassMargins = Margins(left = 0, top = 850, right = 45)
-//    val uiSettings = UiSettings(compassMargins = myCompassMargins)
-    println("viktor, compose")
     Box(modifier = Modifier.fillMaxSize()) {
         MapLibreMap(
             modifier = Modifier.fillMaxSize(),
@@ -117,31 +99,6 @@ fun MapRealtimeView(
                 LocationSymbol(item, st)
             }
         }
-//        MapLibre(
-//            modifier = Modifier
-//                .fillMaxSize(),
-//            styleBuilder = styleBuilder,
-//            cameraPosition = cameraPosition.value,
-//            locationRequestProperties = locationRequestState.value,
-//            renderMode = RenderMode.COMPASS,
-//            userLocation = currentUserLocation,
-//            onMapLongClick = { latLng ->
-//                println("viktor, onMapLongClick")
-//                state.eventSink(MapRealtimeEvents.MapLongPress(latLng))
-//            },
-//            locationStyling = LocationStyling(
-//                enablePulse = false,
-//                accuracyColor = 0xFF2496F9.toInt(),
-//            ),
-//            uiSettings = uiSettings,
-//        ) {
-//            println("viktor, content")
-//            state.liveLocationShares.map { item ->
-//                println("viktor, item=${item.isLive}")
-//                val st = if (state.mapType.mapKey == "satellite") "White" else "Black"
-//                LocationSymbol(item, st)
-//            }
-//        }
 
         Column(
             modifier = Modifier

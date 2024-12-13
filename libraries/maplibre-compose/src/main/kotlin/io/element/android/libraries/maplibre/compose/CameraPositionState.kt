@@ -111,13 +111,12 @@ public class CameraPositionState(
     public var cameraMode: CameraMode
         get() = rawCameraMode
         set(value) {
-            println("viktor, cameraMode=$value")
             synchronized(lock) {
                 val map = map
                 if (map == null) {
                     rawCameraMode = value
                 } else {
-                    map.locationComponent.cameraMode = value.toInternal()
+//                    map.locationComponent.cameraMode = value.toInternal()
                 }
             }
         }
@@ -145,7 +144,6 @@ public class CameraPositionState(
                 error("CameraPositionState may only be associated with one MapLibreMap at a time")
             }
             this.map = map
-            println("viktor, setMap=$map")
             if (map == null) {
                 isMoving = false
             } else {

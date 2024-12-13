@@ -9,10 +9,8 @@
 
 package io.element.android.libraries.maplibre.compose
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
@@ -22,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.LocationComponentActivationOptions
 import org.maplibre.android.location.LocationComponentOptions
-import org.maplibre.android.location.OnCameraTrackingChangedListener
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
@@ -41,7 +38,6 @@ internal class MapPropertiesNode(
 ) : MapNode {
 
     init {
-        println("viktors, MapPropertiesNode init ")
         val locationComponentOptionBuilder = LocationComponentOptions.builder(context)
             .pulseEnabled(locationSettings.pulseEnabled)
 
@@ -98,9 +94,9 @@ internal class MapPropertiesNode(
             // addOnCameraIdleListener is only invoked when the camera position
             // is changed via .animate(). To handle updating state when .move()
             // is used, it's necessary to set the camera's position here as well
-            cameraPositionState.rawPosition = map.cameraPosition
+//            cameraPositionState.rawPosition = map.cameraPosition
             // Updating user location on every camera move due to lack of a better location updates API.
-            cameraPositionState.location = map.locationComponent.lastKnownLocation
+//            cameraPositionState.location = map.locationComponent.lastKnownLocation
         }
 
         map.addOnMapLongClickListener { point ->
@@ -118,35 +114,23 @@ internal class MapPropertiesNode(
         map.addOnCameraMoveListener {
             cameraPositionState.rawPosition = map.cameraPosition
             // Updating user location on every camera move due to lack of a better location updates API.
-            cameraPositionState.location = map.locationComponent.lastKnownLocation
+//            cameraPositionState.location = map.locationComponent.lastKnownLocation
         }
-        map.locationComponent.addOnCameraTrackingChangedListener(object : OnCameraTrackingChangedListener {
-            override fun onCameraTrackingDismissed() {}
-
-            override fun onCameraTrackingChanged(currentMode: Int) {
-                cameraPositionState.rawCameraMode = CameraMode.fromInternal(currentMode)
-            }
-        })
+//        map.locationComponent.addOnCameraTrackingChangedListener(object : OnCameraTrackingChangedListener {
+//            override fun onCameraTrackingDismissed() {}
+//
+//            override fun onCameraTrackingChanged(currentMode: Int) {
+//                cameraPositionState.rawCameraMode = CameraMode.fromInternal(currentMode)
+//            }
+//        })
     }
 
     override fun onRemoved() {
-        println("viktor, MapUpdater onRemoved")
-        map.locationComponent.onStop()
         cameraPositionState.setMap(null)
     }
 
     override fun onCleared() {
-        println("viktor, MapUpdater onCleared")
-        map.locationComponent.onDestroy()
         cameraPositionState.setMap(null)
-    }
-
-    private fun isFineLocationGranted(context: Context): Boolean {
-        return context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun isCoarseLocationGranted(context: Context): Boolean {
-        return context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 }
 
@@ -178,7 +162,6 @@ internal fun MapUpdater(
             )
         },
         update = {
-            println("viktor, MapUpdater, update")
             set(locationSettings.locationEnabled) {
                 map.locationComponent.isLocationComponentEnabled = it
                 map.locationComponent.renderMode = RenderMode.COMPASS

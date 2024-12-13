@@ -292,6 +292,8 @@ internal class MapApplier(
     }
 
     override fun onClear() {
+        decorations.forEach { it.onCleared() }
+        decorations.clear()
         circleManagerMap.values.forEach { it.deleteAll() }
         circleManagerMap.clear()
         fillManagerMap.values.forEach { it.deleteAll() }
@@ -302,8 +304,7 @@ internal class MapApplier(
         lineManagerMap.clear()
         zIndexReferenceAnnotationManagerMap.values.forEach { it.deleteAll() }
         zIndexReferenceAnnotationManagerMap.clear()
-        decorations.forEach { it.onCleared() }
-        decorations.clear()
+
     }
 
     override fun insertBottomUp(index: Int, instance: MapNode) {

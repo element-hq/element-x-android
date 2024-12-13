@@ -170,7 +170,6 @@ class MapRealtimePresenterPresenter @Inject constructor(
             .onEach { locationShares ->
                 // Location share is only ever an array of 1 element
                 val newShare = locationShares.firstOrNull()
-                println("viktor, newShare=$newShare")
                 if (newShare != null) {
                     val existingShareIndex = accumulatedShares.indexOfFirst { it.userId == newShare.userId }
                     if (existingShareIndex == -1) {
