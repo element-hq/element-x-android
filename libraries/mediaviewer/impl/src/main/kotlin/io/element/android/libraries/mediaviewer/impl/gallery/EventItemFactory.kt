@@ -196,7 +196,7 @@ class EventItemFactory @Inject constructor(
                             senderAvatar = event.senderProfile.getAvatarUrl(),
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
-                            waveform = type.details?.waveform,
+                            waveform = type.details?.waveform.orEmpty(),
                         ),
                         mediaSource = type.source,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
