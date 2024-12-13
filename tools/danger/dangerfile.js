@@ -104,17 +104,11 @@ if (hasPngs) {
 
 // Check that translations have not been modified by developers
 const translationAllowList = [
-    "RiotTranslateBot",
-    "github-actions[bot]",
+    "ElementBot",
 ]
 
 if (!translationAllowList.includes(user)) {
-   if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
-       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) or `github-actions[bot]` (i.e. translations coming from automation) are allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
-   }
-
-   // Check that new strings are not added to `values/strings.xml`
-   if (editedFiles.some(file => file.endsWith("ui-strings/src/main/res/values/strings.xml"))) {
-      fail("`ui-strings/src/main/res/values/strings.xml` has been edited. This file will be overridden in the next strings synchronisation. Please add new strings in the file `values/strings_eax.xml` instead.")
+   if (editedFiles.some(file => file.endsWith("translations.xml"))) {
+       fail("Some translation files have been edited. Only user `ElementBot` (i.e. translations coming from Localazy) is allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md#strings).")
    }
 }
