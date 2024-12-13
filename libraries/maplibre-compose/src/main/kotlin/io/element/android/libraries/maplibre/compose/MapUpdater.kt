@@ -187,8 +187,6 @@ internal fun MapUpdater(
             set(uiSettings.attributionGravity) { map.uiSettings.attributionGravity = it }
             set(uiSettings.attributionTintColor) { map.uiSettings.setAttributionTintColor(it.toArgb()) }
 
-//            set(symbolManagerSettings.iconAllowOverlap) { symbolManager.iconAllowOverlap = it }
-
             update(cameraPositionState) { this.cameraPositionState = it }
         }
     )

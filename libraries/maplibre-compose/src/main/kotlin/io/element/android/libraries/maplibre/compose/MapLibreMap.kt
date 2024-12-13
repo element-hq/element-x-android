@@ -206,6 +206,8 @@ private fun MapLifecycle(mapView: MapView) {
     }
     DisposableEffect(mapView) {
         onDispose {
+            // Before destroying the mapView, call onStop() to stop rendering and any ongoing updates (i.e. animations)
+            mapView.onStop()
             mapView.onDestroy()
             mapView.removeAllViews()
         }
