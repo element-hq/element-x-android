@@ -21,7 +21,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
@@ -29,6 +28,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
+import io.element.android.libraries.voiceplayer.api.VoiceMessageException
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService

@@ -5,21 +5,25 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.voicemessages.timeline
+package io.element.android.libraries.voiceplayer.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
-import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
+import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
+import io.element.android.libraries.voiceplayer.api.VoiceMessageException
+import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class VoiceMessagePresenterTest {
@@ -41,7 +45,7 @@ class VoiceMessagePresenterTest {
     fun `pressing play downloads and plays`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
+            duration = 2_000.milliseconds,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -79,7 +83,7 @@ class VoiceMessagePresenterTest {
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
             analyticsService = analyticsService,
-            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
+            duration = 2_000.milliseconds,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -115,7 +119,7 @@ class VoiceMessagePresenterTest {
     fun `pressing pause while playing pauses`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
+            duration = 2_000.milliseconds,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,7 +151,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `content with null eventId shows disabled button`() = runTest {
         val presenter = createVoiceMessagePresenter(
-            content = aTimelineItemVoiceContent(eventId = null),
+            eventId = null,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -164,7 +168,7 @@ class VoiceMessagePresenterTest {
     fun `seeking before play`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(duration = 10_000.milliseconds),
+            duration = 10_000.milliseconds,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -188,7 +192,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `seeking after play`() = runTest {
         val presenter = createVoiceMessagePresenter(
-            content = aTimelineItemVoiceContent(duration = 10_000.milliseconds),
+            duration = 10_000.milliseconds,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -224,19 +228,23 @@ fun TestScope.createVoiceMessagePresenter(
     mediaPlayer: FakeMediaPlayer = FakeMediaPlayer(),
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     analyticsService: AnalyticsService = FakeAnalyticsService(),
-    content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
+    eventId: EventId? = EventId("\$anEventId"),
+    filename: String = "filename doesn't really matter for a voice message",
+    duration: Duration = 61_000.milliseconds,
+    contentUri: String = "mxc://matrix.org/1234567890abcdefg",
+    mimeType: String = MimeTypes.Ogg,
+    mediaSource: MediaSource = MediaSource(contentUri),
 ) = VoiceMessagePresenter(
-    voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, filename ->
-        DefaultVoiceMessagePlayer(
-            mediaPlayer = mediaPlayer,
-            voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
-            eventId = eventId,
-            mediaSource = mediaSource,
-            mimeType = mimeType,
-            filename = filename
-        )
-    },
     analyticsService = analyticsService,
     scope = this,
-    content = content,
+    player = DefaultVoiceMessagePlayer(
+        mediaPlayer = mediaPlayer,
+        voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
+        eventId = eventId,
+        mediaSource = mediaSource,
+        mimeType = mimeType,
+        filename = filename
+    ),
+    eventId = eventId,
+    duration = duration,
 )

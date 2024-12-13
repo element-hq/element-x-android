@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.voicemessages.timeline
+package io.element.android.libraries.voiceplayer.api
 
 sealed interface VoiceMessageEvents {
     data object PlayPause : VoiceMessageEvents
