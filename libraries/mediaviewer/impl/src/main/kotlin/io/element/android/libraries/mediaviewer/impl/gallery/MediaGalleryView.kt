@@ -403,7 +403,7 @@ private fun ErrorContent(error: Throwable) {
 }
 
 @Composable
-fun EmptyContent(
+private fun EmptyContent(
     titleRes: Int,
     subtitleRes: Int,
     icon: ImageVector,
