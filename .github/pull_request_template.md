@@ -44,7 +44,7 @@ Uncomment this markdown table below and edit the last line `|||`:
 
 <!-- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked. -->
 
-- [ ] Changes have been tested on an Android device or Android emulator with API 23
+- [ ] Changes have been tested on an Android device or Android emulator with API 24
 - [ ] UI change has been tested on both light and dark themes
 - [ ] Accessibility has been taken into account. See https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md#accessibility
 - [ ] Pull request is based on the develop branch
