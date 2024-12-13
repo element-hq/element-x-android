@@ -8,6 +8,7 @@
 package io.element.android.features.location.impl.common
 
 import android.Manifest
+import android.graphics.Rect
 import android.view.Gravity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -37,6 +38,20 @@ object MapDefaults {
             attributionTintColor = ElementTheme.colors.iconPrimary
         )
 
+    val mapRealtimeSettings: MapUiSettings
+        @Composable
+        @ReadOnlyComposable
+        get() = MapUiSettings(
+            compassEnabled = true,
+            compassMargins = Rect(0, 850, 45, 0),
+            rotationGesturesEnabled = true,
+            scrollGesturesEnabled = true,
+            tiltGesturesEnabled = false,
+            zoomGesturesEnabled = true,
+            isLogoEnabled = false,
+            isAttributionEnabled = false,
+        )
+
     val symbolManagerSettings: MapSymbolManagerSettings
         get() = MapSymbolManagerSettings(
             iconAllowOverlap = true
@@ -52,6 +67,12 @@ object MapDefaults {
             accuracyColor = Color.Black,
             pulseEnabled = true,
             pulseColor = Color.Black,
+        )
+
+    val mapRealtimeLocationSettings: MapLocationSettings
+        get() = MapLocationSettings(
+            accuracyColor = Color(0xFF2496F9),
+            pulseEnabled = false,
         )
 
     val centerCameraPosition = CameraPosition.Builder()

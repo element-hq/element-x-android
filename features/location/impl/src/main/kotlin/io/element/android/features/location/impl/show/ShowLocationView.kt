@@ -44,15 +44,14 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
-import io.element.android.libraries.maplibre.compose.IconAnchor
 import io.element.android.libraries.maplibre.compose.MapLibreMap
-import io.element.android.libraries.maplibre.compose.Symbol
+import io.element.android.libraries.maplibre.compose.TextSymbol
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
-import io.element.android.libraries.maplibre.compose.rememberSymbolState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableMap
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.style.layers.Property.ICON_ANCHOR_BOTTOM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,12 +167,10 @@ fun ShowLocationView(
                     locationEnabled = state.hasLocationPermission,
                 ),
             ) {
-                Symbol(
-                    iconId = PIN_ID,
-                    state = rememberSymbolState(
-                        position = LatLng(state.location.lat, state.location.lon)
-                    ),
-                    iconAnchor = IconAnchor.BOTTOM,
+                TextSymbol(
+                    imageId = PIN_ID,
+                    center = LatLng(state.location.lat, state.location.lon),
+                    imageAnchor = ICON_ANCHOR_BOTTOM,
                 )
             }
         }

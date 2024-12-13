@@ -40,10 +40,10 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.awaitCancellation
 import org.maplibre.android.MapLibre
+import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.Style
-import org.maplibre.android.plugins.annotation.SymbolManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -71,9 +71,10 @@ public fun MapLibreMap(
     uiSettings: MapUiSettings = DefaultMapUiSettings,
     symbolManagerSettings: MapSymbolManagerSettings = DefaultMapSymbolManagerSettings,
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
+    onMapLongClick: ((LatLng) -> Unit)? = null,
     content: (
-        @Composable @MapLibreMapComposable
-        () -> Unit
+    @Composable @MapLibreMapComposable
+    () -> Unit
     )? = null,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
@@ -120,6 +121,7 @@ public fun MapLibreMap(
                     uiSettings = currentUiSettings,
                     locationSettings = currentMapLocationSettings,
                     symbolManagerSettings = currentSymbolManagerSettings,
+                    onMapLongClick = onMapLongClick,
                 )
                 CompositionLocalProvider(
                     LocalCameraPositionState provides cameraPositionState,
@@ -145,16 +147,15 @@ private suspend inline fun CompositionContext.newComposition(
     mapView: MapView,
     styleUri: String,
     images: ImmutableMap<String, Int>,
-    noinline content: @Composable () -> Unit
+    noinline content: @Composable () -> Unit,
 ): Composition {
     val map = mapView.awaitMap()
     val style = map.awaitStyle(context, styleUri, images)
-    val symbolManager = SymbolManager(mapView, map, style)
     return Composition(
-        MapApplier(map, style, symbolManager),
-        this
-    ).apply {
-        setContent(content)
+        applier = MapApplier(map, style, mapView),
+        parent = this,
+    ).also {
+        it.setContent(content)
     }
 }
 
@@ -205,6 +206,8 @@ private fun MapLifecycle(mapView: MapView) {
     }
     DisposableEffect(mapView) {
         onDispose {
+            // Before destroying the mapView, call onStop() to stop rendering and any ongoing updates (i.e. animations)
+            mapView.onStop()
             mapView.onDestroy()
             mapView.removeAllViews()
         }
@@ -213,7 +216,6 @@ private fun MapLifecycle(mapView: MapView) {
 
 private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Event>): LifecycleEventObserver =
     LifecycleEventObserver { _, event ->
-        event.targetState
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
                 // Skip calling mapView.onCreate if the lifecycle did not go through onDestroy - in
@@ -228,6 +230,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             Lifecycle.Event.ON_PAUSE -> this.onPause()
             Lifecycle.Event.ON_STOP -> this.onStop()
             Lifecycle.Event.ON_DESTROY -> {
+                this.onDestroy()
                 // handled in onDispose
             }
             Lifecycle.Event.ON_ANY -> error("ON_ANY should never be used")
