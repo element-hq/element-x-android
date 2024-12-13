@@ -39,7 +39,6 @@ dependencies {
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
-//    implementation(libs.ramaniMaplibre)
     implementation(libs.playServicesLocation)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.accompanist.permission)
