@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.maplibre.compose
 
+import android.graphics.Rect
 import android.view.Gravity
 import androidx.compose.ui.graphics.Color
 
@@ -21,11 +22,14 @@ internal val DefaultMapUiSettings = MapUiSettings()
  */
 public data class MapUiSettings(
     public val compassEnabled: Boolean = true,
+    public val compassMargins: Rect = Rect(),
     public val rotationGesturesEnabled: Boolean = true,
     public val scrollGesturesEnabled: Boolean = true,
     public val tiltGesturesEnabled: Boolean = true,
     public val zoomGesturesEnabled: Boolean = true,
+    public val isLogoEnabled: Boolean = true,
     public val logoGravity: Int = Gravity.BOTTOM,
     public val attributionGravity: Int = Gravity.BOTTOM,
     public val attributionTintColor: Color = Color.Unspecified,
+    public val isAttributionEnabled: Boolean = true,
 )
