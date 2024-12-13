@@ -40,10 +40,10 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.awaitCancellation
 import org.maplibre.android.MapLibre
+import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.Style
-import org.maplibre.android.plugins.annotation.SymbolManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -71,6 +71,7 @@ public fun MapLibreMap(
     uiSettings: MapUiSettings = DefaultMapUiSettings,
     symbolManagerSettings: MapSymbolManagerSettings = DefaultMapSymbolManagerSettings,
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
+    onMapLongClick: ((LatLng) -> Unit)? = null,
     content: (
         @Composable @MapLibreMapComposable
         () -> Unit
@@ -108,25 +109,31 @@ public fun MapLibreMap(
     val currentContent by rememberUpdatedState(content)
 
     LaunchedEffect(styleUri, images) {
-        disposingComposition {
-            parentComposition.newComposition(
-                context = context,
-                mapView = mapView,
-                styleUri = styleUri,
-                images = images,
-            ) {
-                MapUpdater(
-                    cameraPositionState = currentCameraPositionState,
-                    uiSettings = currentUiSettings,
-                    locationSettings = currentMapLocationSettings,
-                    symbolManagerSettings = currentSymbolManagerSettings,
-                )
-                CompositionLocalProvider(
-                    LocalCameraPositionState provides cameraPositionState,
+        try {
+            println("viktor, LaunchedEffect")
+            disposingComposition {
+                parentComposition.newComposition(
+                    context = context,
+                    mapView = mapView,
+                    styleUri = styleUri,
+                    images = images,
                 ) {
-                    currentContent?.invoke()
+                    MapUpdater(
+                        cameraPositionState = currentCameraPositionState,
+                        uiSettings = currentUiSettings,
+                        locationSettings = currentMapLocationSettings,
+                        symbolManagerSettings = currentSymbolManagerSettings,
+                        onMapLongClick = onMapLongClick,
+                    )
+                    CompositionLocalProvider(
+                        LocalCameraPositionState provides cameraPositionState,
+                    ) {
+                        currentContent?.invoke()
+                    }
                 }
             }
+        } finally {
+            println("viktor, finally")
         }
     }
 }
@@ -147,13 +154,16 @@ private suspend inline fun CompositionContext.newComposition(
     images: ImmutableMap<String, Int>,
     noinline content: @Composable () -> Unit
 ): Composition {
+    println("viktor, newComposition")
     val map = mapView.awaitMap()
+    println("viktor, after awaitMap")
     val style = map.awaitStyle(context, styleUri, images)
-    val symbolManager = SymbolManager(mapView, map, style)
+    println("viktor, after awaitStyle")
     return Composition(
-        MapApplier(map, style, symbolManager),
+        MapApplier(map, style, mapView),
         this
     ).apply {
+        println("viktor, setContent")
         setContent(content)
     }
 }
@@ -201,10 +211,13 @@ private fun MapLifecycle(mapView: MapView) {
         onDispose {
             lifecycle.removeObserver(mapLifecycleObserver)
             context.unregisterComponentCallbacks(callbacks)
+
+            println("viktor, lifecycle onDispose")
         }
     }
     DisposableEffect(mapView) {
         onDispose {
+            println("viktor, mapView onDispose")
             mapView.onDestroy()
             mapView.removeAllViews()
         }
@@ -213,7 +226,6 @@ private fun MapLifecycle(mapView: MapView) {
 
 private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Event>): LifecycleEventObserver =
     LifecycleEventObserver { _, event ->
-        event.targetState
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
                 // Skip calling mapView.onCreate if the lifecycle did not go through onDestroy - in
@@ -225,9 +237,17 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             }
             Lifecycle.Event.ON_START -> this.onStart()
             Lifecycle.Event.ON_RESUME -> this.onResume()
-            Lifecycle.Event.ON_PAUSE -> this.onPause()
-            Lifecycle.Event.ON_STOP -> this.onStop()
+            Lifecycle.Event.ON_PAUSE -> {
+                println("viktor, onpause")
+                this.onPause()
+            }
+            Lifecycle.Event.ON_STOP -> {
+                println("viktor, onstop")
+                this.onStop()
+            }
             Lifecycle.Event.ON_DESTROY -> {
+                println("viktor, ondestroy")
+                this.onDestroy()
                 // handled in onDispose
             }
             Lifecycle.Event.ON_ANY -> error("ON_ANY should never be used")

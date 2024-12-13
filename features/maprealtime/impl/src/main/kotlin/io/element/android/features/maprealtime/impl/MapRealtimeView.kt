@@ -7,7 +7,6 @@
 
 package io.element.android.features.maprealtime.impl
 
-import android.location.Location
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.location.impl.all.composables.MapToolbar
+import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.maprealtime.impl.common.PermissionDeniedDialog
 import io.element.android.features.maprealtime.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,15 +43,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import org.maplibre.android.geometry.LatLng
-import org.maplibre.android.location.modes.RenderMode
-import org.maplibre.android.maps.Style
-import org.ramani.compose.CameraPosition
-import org.ramani.compose.LocationRequestProperties
-import org.ramani.compose.LocationStyling
-import org.ramani.compose.MapLibre
-import org.ramani.compose.Margins
-import org.ramani.compose.UiSettings
+import io.element.android.libraries.maplibre.compose.CameraMode
+import io.element.android.libraries.maplibre.compose.CameraPositionState
+import io.element.android.libraries.maplibre.compose.MapLibreMap
+import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
+import org.maplibre.android.camera.CameraPosition
+
+//import org.ramani.compose.LocationRequestProperties
+//import org.ramani.compose.LocationStyling
+//import org.ramani.compose.MapLibre
+//import org.ramani.compose.Margins
+//import org.ramani.compose.UiSettings
 
 @Composable
 fun MapRealtimeView(
@@ -81,45 +83,65 @@ fun MapRealtimeView(
         )
     }
 
-    val cameraPosition = rememberSaveable {
-        mutableStateOf(CameraPosition())
+    val cameraPositionState = rememberCameraPositionState {
+        mutableStateOf(CameraPositionState())
     }
 
-    val locationRequestState = rememberSaveable { mutableStateOf<LocationRequestProperties>(LocationRequestProperties(interval = 250L)) }
+//    val locationRequestState = rememberSaveable { mutableStateOf<LocationRequestProperties>(LocationRequestProperties(interval = 250L)) }
 
-    val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
+//    val currentUserLocation = rememberSaveable { mutableStateOf(Location(null)) }
 
-//    val styleUrl = rememberSaveable { mutableStateOf("https://demotiles.maplibre.org/style.json") }
+    val styleUrl = rememberSaveable { mutableStateOf("https://demotiles.maplibre.org/style.json") }
 //    val styleUrl = rememberSaveable { mutableStateOf(state.styleUrl) }
-    val styleBuilder = Style.Builder().fromUri(state.styleUrl)
+//    val styleBuilder = Style.Builder().fromUri(state.styleUrl)
 
-    val myCompassMargins = Margins(left = 0, top = 850, right = 45)
-    val uiSettings = UiSettings(compassMargins = myCompassMargins)
-
+//    val myCompassMargins = Margins(left = 0, top = 850, right = 45)
+//    val uiSettings = UiSettings(compassMargins = myCompassMargins)
+    println("viktor, compose")
     Box(modifier = Modifier.fillMaxSize()) {
-
-        MapLibre(
-            modifier = Modifier
-                .fillMaxSize(),
-            styleBuilder = styleBuilder,
-            cameraPosition = cameraPosition.value,
-            locationRequestProperties = locationRequestState.value,
-            renderMode = RenderMode.COMPASS,
-            userLocation = currentUserLocation,
-            onMapLongClick = { latLng ->
-                state.eventSink(MapRealtimeEvents.MapLongPress(latLng))
-            },
-            locationStyling = LocationStyling(
-                enablePulse = false,
-                accuracyColor = 0xFF2496F9.toInt(),
+        MapLibreMap(
+            modifier = Modifier.fillMaxSize(),
+            styleUri = state.styleUrl,
+            cameraPositionState = cameraPositionState,
+            uiSettings = MapDefaults.mapRealtimeSettings,
+            symbolManagerSettings = MapDefaults.symbolManagerSettings,
+            locationSettings = MapDefaults.mapRealtimeLocationSettings.copy(
+                locationEnabled = state.hasLocationPermission,
             ),
-            uiSettings = uiSettings,
+            onMapLongClick = {
+                state.eventSink(MapRealtimeEvents.MapLongPress(it))
+            }
         ) {
             state.liveLocationShares.map { item ->
                 val st = if (state.mapType.mapKey == "satellite") "White" else "Black"
                 LocationSymbol(item, st)
             }
         }
+//        MapLibre(
+//            modifier = Modifier
+//                .fillMaxSize(),
+//            styleBuilder = styleBuilder,
+//            cameraPosition = cameraPosition.value,
+//            locationRequestProperties = locationRequestState.value,
+//            renderMode = RenderMode.COMPASS,
+//            userLocation = currentUserLocation,
+//            onMapLongClick = { latLng ->
+//                println("viktor, onMapLongClick")
+//                state.eventSink(MapRealtimeEvents.MapLongPress(latLng))
+//            },
+//            locationStyling = LocationStyling(
+//                enablePulse = false,
+//                accuracyColor = 0xFF2496F9.toInt(),
+//            ),
+//            uiSettings = uiSettings,
+//        ) {
+//            println("viktor, content")
+//            state.liveLocationShares.map { item ->
+//                println("viktor, item=${item.isLive}")
+//                val st = if (state.mapType.mapKey == "satellite") "White" else "Black"
+//                LocationSymbol(item, st)
+//            }
+//        }
 
         Column(
             modifier = Modifier
@@ -148,13 +170,10 @@ fun MapRealtimeView(
             )
             RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
-                cameraPosition.value = CameraPosition(cameraPosition.value).apply {
-                    this.target = LatLng(
-                        currentUserLocation.value.latitude,
-                        currentUserLocation.value.longitude
-                    )
-                    this.zoom = 17.0
-                }
+                cameraPositionState.position = CameraPosition.Builder()
+                    .zoom(17.0)
+                    .build()
+                cameraPositionState.cameraMode = CameraMode.TRACKING
             })
         }
         MapTypeBottomSheet(state = state, onTileProviderSelected = { provider ->

@@ -24,6 +24,7 @@ internal class MapTilerTileServerStyleUriBuilder(
 
     override fun build(darkMode: Boolean): String {
         val mapId = if (darkMode) darkMapId else lightMapId
+        return "https://api.maptiler.com/maps/" + "streets-v2" + "/style.json?key=" + "4N19bSbSelzpOSfUibeB"
         return "$MAPTILER_BASE_URL/$mapId/style.json?key=$apiKey"
     }
 }

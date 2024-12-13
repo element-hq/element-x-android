@@ -10,9 +10,9 @@ package io.element.android.features.maprealtime.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import io.element.android.libraries.maplibre.compose.Circle
+import io.element.android.libraries.maplibre.compose.TextSymbol
 import org.maplibre.android.geometry.LatLng
-import org.ramani.compose.Circle
-import org.ramani.compose.Symbol
 
 @Composable
 fun UpdateCenter(coord: LatLng, centerUpdated: (LatLng) -> Unit) {
@@ -73,7 +73,7 @@ fun CustomCircleWithItem(
     )
 
     imageId?.let {
-        Symbol(
+        TextSymbol(
             center = center,
             color = "Black",
             isDraggable = false,
@@ -84,7 +84,7 @@ fun CustomCircleWithItem(
     }
 
     text?.let {
-        Symbol(
+        TextSymbol(
             center = center,
             color = textColor,
             isDraggable = false,
