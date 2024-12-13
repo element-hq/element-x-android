@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.LocationComponentActivationOptions
 import org.maplibre.android.location.LocationComponentOptions
+import org.maplibre.android.location.OnCameraTrackingChangedListener
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
@@ -94,9 +95,9 @@ internal class MapPropertiesNode(
             // addOnCameraIdleListener is only invoked when the camera position
             // is changed via .animate(). To handle updating state when .move()
             // is used, it's necessary to set the camera's position here as well
-//            cameraPositionState.rawPosition = map.cameraPosition
+            cameraPositionState.rawPosition = map.cameraPosition
             // Updating user location on every camera move due to lack of a better location updates API.
-//            cameraPositionState.location = map.locationComponent.lastKnownLocation
+            cameraPositionState.location = map.locationComponent.lastKnownLocation
         }
 
         map.addOnMapLongClickListener { point ->
@@ -114,15 +115,15 @@ internal class MapPropertiesNode(
         map.addOnCameraMoveListener {
             cameraPositionState.rawPosition = map.cameraPosition
             // Updating user location on every camera move due to lack of a better location updates API.
-//            cameraPositionState.location = map.locationComponent.lastKnownLocation
+            cameraPositionState.location = map.locationComponent.lastKnownLocation
         }
-//        map.locationComponent.addOnCameraTrackingChangedListener(object : OnCameraTrackingChangedListener {
-//            override fun onCameraTrackingDismissed() {}
-//
-//            override fun onCameraTrackingChanged(currentMode: Int) {
-//                cameraPositionState.rawCameraMode = CameraMode.fromInternal(currentMode)
-//            }
-//        })
+        map.locationComponent.addOnCameraTrackingChangedListener(object : OnCameraTrackingChangedListener {
+            override fun onCameraTrackingDismissed() {}
+
+            override fun onCameraTrackingChanged(currentMode: Int) {
+                cameraPositionState.rawCameraMode = CameraMode.fromInternal(currentMode)
+            }
+        })
     }
 
     override fun onRemoved() {

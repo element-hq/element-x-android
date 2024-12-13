@@ -73,8 +73,8 @@ public fun MapLibreMap(
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
     onMapLongClick: ((LatLng) -> Unit)? = null,
     content: (
-        @Composable @MapLibreMapComposable
-        () -> Unit
+    @Composable @MapLibreMapComposable
+    () -> Unit
     )? = null,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
@@ -147,13 +147,13 @@ private suspend inline fun CompositionContext.newComposition(
     mapView: MapView,
     styleUri: String,
     images: ImmutableMap<String, Int>,
-    noinline content: @Composable () -> Unit
+    noinline content: @Composable () -> Unit,
 ): Composition {
     val map = mapView.awaitMap()
     val style = map.awaitStyle(context, styleUri, images)
     return Composition(
-        MapApplier(map, style, mapView),
-        this
+        applier = MapApplier(map, style, mapView),
+        parent = this,
     ).also {
         it.setContent(content)
     }

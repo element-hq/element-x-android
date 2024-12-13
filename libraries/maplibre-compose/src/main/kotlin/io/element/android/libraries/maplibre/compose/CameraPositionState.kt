@@ -116,7 +116,7 @@ public class CameraPositionState(
                 if (map == null) {
                     rawCameraMode = value
                 } else {
-//                    map.locationComponent.cameraMode = value.toInternal()
+                    map.locationComponent.cameraMode = value.toInternal()
                 }
             }
         }
