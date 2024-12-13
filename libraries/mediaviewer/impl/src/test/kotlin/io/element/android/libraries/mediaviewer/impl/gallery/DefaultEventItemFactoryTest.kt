@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
@@ -163,6 +164,7 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = null,
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -211,6 +213,7 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = null,
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -242,7 +245,7 @@ class DefaultEventItemFactoryTest {
             )
         )
         assertThat(result).isEqualTo(
-            MediaItem.File(
+            MediaItem.Audio(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
                 mediaInfo = MediaInfo(
@@ -256,8 +259,11 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = null,
                 ),
                 mediaSource = MediaSource(""),
+                duration = "7:36",
+                waveform = null,
             )
         )
     }
@@ -305,6 +311,7 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = null,
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -333,7 +340,7 @@ class DefaultEventItemFactoryTest {
                             ),
                             details = AudioDetails(
                                 duration = 456.seconds,
-                                waveform = persistentListOf(),
+                                waveform = persistentListOf(1f, 2f),
                             )
                         )
                     )
@@ -341,7 +348,7 @@ class DefaultEventItemFactoryTest {
             )
         )
         assertThat(result).isEqualTo(
-            MediaItem.File(
+            MediaItem.Audio(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
                 mediaInfo = MediaInfo(
@@ -355,8 +362,11 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = listOf(1f, 2f).toImmutableList(),
                 ),
                 mediaSource = MediaSource(""),
+                duration = "7:36",
+                waveform = listOf(1f, 2f).toImmutableList(),
             )
         )
     }
@@ -403,6 +413,7 @@ class DefaultEventItemFactoryTest {
                     senderAvatar = null,
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
+                    waveform = null,
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,

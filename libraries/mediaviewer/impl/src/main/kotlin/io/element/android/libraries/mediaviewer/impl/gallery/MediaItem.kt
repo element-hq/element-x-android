@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
+import kotlinx.collections.immutable.ImmutableList
 
 sealed interface MediaItem {
     data class DateSeparator(
@@ -51,6 +52,15 @@ sealed interface MediaItem {
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
     }
 
+    data class Audio(
+        val id: UniqueId,
+        val eventId: EventId?,
+        val mediaInfo: MediaInfo,
+        val mediaSource: MediaSource,
+        val duration: String?,
+        val waveform: ImmutableList<Float>?,
+    ) : Event
+
     data class File(
         val id: UniqueId,
         val eventId: EventId?,
@@ -66,6 +76,7 @@ fun MediaItem.id(): UniqueId {
         is MediaItem.Image -> id
         is MediaItem.Video -> id
         is MediaItem.File -> id
+        is MediaItem.Audio -> id
     }
 }
 
@@ -74,6 +85,7 @@ fun MediaItem.Event.eventId(): EventId? {
         is MediaItem.Image -> eventId
         is MediaItem.Video -> eventId
         is MediaItem.File -> eventId
+        is MediaItem.Audio -> eventId
     }
 }
 
@@ -82,6 +94,7 @@ fun MediaItem.Event.mediaInfo(): MediaInfo {
         is MediaItem.Image -> mediaInfo
         is MediaItem.Video -> mediaInfo
         is MediaItem.File -> mediaInfo
+        is MediaItem.Audio -> mediaInfo
     }
 }
 
@@ -90,6 +103,7 @@ fun MediaItem.Event.mediaSource(): MediaSource {
         is MediaItem.Image -> mediaSource
         is MediaItem.Video -> mediaSource
         is MediaItem.File -> mediaSource
+        is MediaItem.Audio -> mediaSource
     }
 }
 
@@ -98,5 +112,6 @@ fun MediaItem.Event.thumbnailSource(): MediaSource? {
         is MediaItem.Image -> thumbnailSource
         is MediaItem.Video -> thumbnailSource
         is MediaItem.File -> null
+        is MediaItem.Audio -> null
     }
 }

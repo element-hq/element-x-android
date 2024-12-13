@@ -47,6 +47,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
@@ -447,6 +448,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     timestamp = event.sentTimeMillis,
                     mode = DateFormatterMode.Full,
                 ),
+                waveform = (content as? TimelineItemVoiceContent)?.waveform,
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,

@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
@@ -100,6 +101,16 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(
                 mediaBottomSheetState = aMediaDeleteConfirmationState(),
             ),
+            anAudioMediaInfo(
+                waveForm = aWaveForm(),
+            ).let {
+                aMediaViewerState(
+                    downloadedMedia = AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    mediaInfo = it,
+                )
+            },
         )
 }
 

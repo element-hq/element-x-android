@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.local.video
+package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -133,21 +133,23 @@ fun MediaPlayerControllerView(
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
                 )
-                IconButton(
-                    onClick = onToggleMute,
-                ) {
-                    if (state.isMuted) {
-                        Icon(
-                            imageVector = CompoundIcons.VolumeOffSolid(),
-                            tint = ElementTheme.colors.iconPrimary,
-                            contentDescription = stringResource(CommonStrings.common_unmute)
-                        )
-                    } else {
-                        Icon(
-                            imageVector = CompoundIcons.VolumeOnSolid(),
-                            tint = ElementTheme.colors.iconPrimary,
-                            contentDescription = stringResource(CommonStrings.common_mute)
-                        )
+                if (state.canMute) {
+                    IconButton(
+                        onClick = onToggleMute,
+                    ) {
+                        if (state.isMuted) {
+                            Icon(
+                                imageVector = CompoundIcons.VolumeOffSolid(),
+                                tint = ElementTheme.colors.iconPrimary,
+                                contentDescription = stringResource(CommonStrings.common_unmute)
+                            )
+                        } else {
+                            Icon(
+                                imageVector = CompoundIcons.VolumeOnSolid(),
+                                tint = ElementTheme.colors.iconPrimary,
+                                contentDescription = stringResource(CommonStrings.common_mute)
+                            )
+                        }
                     }
                 }
             }

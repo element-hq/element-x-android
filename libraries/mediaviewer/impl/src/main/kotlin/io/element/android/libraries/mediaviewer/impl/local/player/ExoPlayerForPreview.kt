@@ -11,7 +11,7 @@
     "DEPRECATION",
 )
 
-package io.element.android.libraries.mediaviewer.impl.local.video
+package io.element.android.libraries.mediaviewer.impl.local.player
 
 import android.annotation.SuppressLint
 import android.media.AudioDeviceInfo

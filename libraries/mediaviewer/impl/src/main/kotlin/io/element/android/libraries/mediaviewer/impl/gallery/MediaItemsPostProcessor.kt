@@ -56,6 +56,7 @@ class MediaItemsPostProcessor @Inject constructor() {
                         is MediaItem.Video -> {
                             imageAndVideoItemsSubList.add(0, item)
                         }
+                        is MediaItem.Audio,
                         is MediaItem.File -> {
                             fileItemsSublist.add(0, item)
                         }

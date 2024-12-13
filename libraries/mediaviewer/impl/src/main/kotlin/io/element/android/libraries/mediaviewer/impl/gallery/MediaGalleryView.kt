@@ -59,6 +59,7 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.AudioItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.DateItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
@@ -257,6 +258,13 @@ private fun MediaGalleryFilesList(
                     onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
                     onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
+                is MediaItem.Audio -> AudioItemView(
+                    item,
+                    onClick = { onItemClick(item) },
+                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
+                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
+                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                )
                 is MediaItem.DateSeparator -> DateItemView(item)
                 is MediaItem.Image,
                 is MediaItem.Video -> {
@@ -311,6 +319,9 @@ private fun MediaGalleryImageGrid(
             when (item) {
                 is MediaItem.DateSeparator -> {
                     DateItemView(item)
+                }
+                is MediaItem.Audio -> {
+                    // Should not happen
                 }
                 is MediaItem.File -> {
                     // Should not happen
