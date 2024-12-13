@@ -50,5 +50,4 @@ Uncomment this markdown table below and edit the last line `|||`:
 - [ ] Pull request is based on the develop branch
 - [ ] Pull request title will be used in the release note, it clearly define what will change for the user
 - [ ] Pull request includes screenshots or videos if containing UI changes
-- [ ] Pull request includes a [sign off](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off)
 - [ ] You've made a self review of your PR
