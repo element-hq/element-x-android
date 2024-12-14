@@ -41,7 +41,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("https://custom.url")
+        val result = sut.getGateway("https://custom.url", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("https://custom.url")
         assertThat(result).isEqualTo("https://custom.url/_matrix/push/v1/notify")
     }
@@ -54,7 +54,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("https://custom.url:123")
+        val result = sut.getGateway("https://custom.url:123", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("https://custom.url:123")
         assertThat(result).isEqualTo("https://custom.url:123/_matrix/push/v1/notify")
     }
@@ -67,7 +67,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("https://custom.url:123/some/path")
+        val result = sut.getGateway("https://custom.url:123/some/path", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("https://custom.url:123")
         assertThat(result).isEqualTo("https://custom.url:123/_matrix/push/v1/notify")
     }
@@ -80,7 +80,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("http://custom.url:123/some/path")
+        val result = sut.getGateway("http://custom.url:123/some/path", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url:123")
         assertThat(result).isEqualTo("http://custom.url:123/_matrix/push/v1/notify")
     }
@@ -93,7 +93,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("http://custom.url")
+        val result = sut.getGateway("http://custom.url", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url")
         assertThat(result).isEqualTo("http://custom.url/_matrix/push/v1/notify")
     }
@@ -106,7 +106,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("invalid")
+        val result = sut.getGateway("invalid", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isNull()
         assertThat(result).isEqualTo(UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL)
     }
@@ -119,7 +119,7 @@ class DefaultUnifiedPushGatewayResolverTest {
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
-        val result = sut.getGateway("https://custom.url")
+        val result = sut.getGateway("https://custom.url", null)
         assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("https://custom.url")
         assertThat(result).isEqualTo("https://custom.url/_matrix/push/v1/notify")
     }
