@@ -63,7 +63,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
         Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
         coroutineScope.launch {
-            val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+            val gateway = unifiedPushGatewayResolver.getGateway(endpoint, unifiedPushStore.getPushGateway(instance))
             unifiedPushStore.storePushGateway(instance, gateway)
             val result = newGatewayHandler.handle(endpoint, gateway, instance)
                 .onFailure {
