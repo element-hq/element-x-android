@@ -591,6 +591,14 @@ class FakeMatrixRoom(
         return withdrawVerificationAndResendResult(userIds, sendHandle)
     }
 
+    override suspend fun startLiveLocationShare(durationMillis: ULong): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun stopLiveLocationShare(): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
