@@ -241,7 +241,7 @@ fun MessagesView(
                         .consumeWindowInsets(padding)
                 }
 
-                if (state.isMessagesCollapsed) {
+                val messagesModifier = if (state.isMessagesCollapsed) {
                     Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding)
@@ -253,6 +253,7 @@ fun MessagesView(
                         .padding(padding)
                         .consumeWindowInsets(padding)
                 }
+
 
                 MessagesViewContent(
                     state = state,

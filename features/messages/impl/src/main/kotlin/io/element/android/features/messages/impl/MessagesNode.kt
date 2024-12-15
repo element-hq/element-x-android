@@ -74,7 +74,7 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
-    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer
+    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
     private val mapRealtimePresenterPresenter: MapRealtimePresenterPresenter
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(
