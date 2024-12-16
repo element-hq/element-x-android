@@ -64,7 +64,6 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
-                            aMediaItemFile(id = UniqueId("3")),
                             aMediaItemAudio(id = UniqueId("4")),
                             aMediaItemVoice(
                                 id = UniqueId("5"),

@@ -27,6 +27,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -60,12 +62,16 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.gallery.di.aFakeMediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.gallery.di.rememberPresenter
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.AudioItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.DateItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
+import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.max
 
@@ -256,6 +262,7 @@ private fun MediaGalleryFilesList(
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
+    val presenterFactories = LocalMediaItemPresenterFactories.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -275,12 +282,16 @@ private fun MediaGalleryFilesList(
                     onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
                     onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
-                is MediaItem.Voice -> VoiceItemView(
-                    item,
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
-                )
+                is MediaItem.Voice -> {
+                    val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
+                    VoiceItemView(
+                        presenter.present(),
+                        item,
+                        onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
+                        onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
+                        onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                    )
+                }
                 is MediaItem.DateSeparator -> DateItemView(item)
                 is MediaItem.Image,
                 is MediaItem.Video -> {
@@ -462,9 +473,13 @@ private fun LoadingContent(
 internal fun MediaGalleryViewPreview(
     @PreviewParameter(MediaGalleryStateProvider::class) state: MediaGalleryState
 ) = ElementPreview {
-    MediaGalleryView(
-        state = state,
-        onBackClick = {},
-        onItemClick = {},
-    )
+    CompositionLocalProvider(
+        LocalMediaItemPresenterFactories provides aFakeMediaItemPresenterFactories(),
+    ) {
+        MediaGalleryView(
+            state = state,
+            onBackClick = {},
+            onItemClick = {},
+        )
+    }
 }
