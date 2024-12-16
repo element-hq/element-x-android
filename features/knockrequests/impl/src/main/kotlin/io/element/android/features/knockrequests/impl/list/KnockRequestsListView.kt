@@ -11,6 +11,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -72,7 +73,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -137,10 +137,18 @@ private fun KnockRequestsListContent(
                 }
             }
             is AsyncData.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center),
-                    color = ElementTheme.colors.iconPrimary,
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = spacedBy(16.dp),
+                    modifier = Modifier.align(Alignment.Center)
+                ) {
+                    CircularProgressIndicator(color = ElementTheme.colors.iconPrimary)
+                    Text(
+                        text = stringResource(R.string.screen_knock_requests_list_initial_loading_title),
+                        style = ElementTheme.typography.fontBodyLgRegular,
+                        color = ElementTheme.colors.textPrimary,
+                    )
+                }
             }
             else -> Unit
         }
@@ -186,21 +194,76 @@ private fun KnockRequestsActionsView(
             onSuccess = { onDismiss() },
             onErrorDismiss = onDismiss,
             confirmationDialog = {
-                ConfirmationDialog(
-                    title = "Confirmation",
-                    content = "Are you sure?",
-                    onSubmitClick = onConfirm,
+                KnockRequestActionConfirmation(
+                    actionTarget = actionTarget,
+                    onSubmit = onConfirm,
                     onDismiss = onDismiss,
                 )
             },
             progressDialog = {
-                ProgressDialog(
-                    text = "Loading",
-                )
+                KnockRequestActionProgress(target = actionTarget)
+            },
+            errorMessage = {
+                when (actionTarget) {
+                    is KnockRequestsActionTarget.Accept -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    else -> ""
+                }
             },
             onRetry = onRetry,
         )
     }
+}
+
+@Composable
+private fun KnockRequestActionConfirmation(
+    actionTarget: KnockRequestsActionTarget,
+    onSubmit: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val (title, content) = when (actionTarget) {
+        KnockRequestsActionTarget.AcceptAll -> Pair(
+            stringResource(R.string.screen_knock_requests_list_accept_all_alert_title),
+            stringResource(R.string.screen_knock_requests_list_accept_all_alert_description),
+        )
+        is KnockRequestsActionTarget.Decline -> Pair(
+            stringResource(R.string.screen_knock_requests_list_decline_alert_title),
+            stringResource(R.string.screen_knock_requests_list_decline_alert_description, actionTarget.knockRequest.getBestName()),
+        )
+        is KnockRequestsActionTarget.DeclineAndBan -> Pair(
+            stringResource(R.string.screen_knock_requests_list_ban_alert_title),
+            stringResource(R.string.screen_knock_requests_list_ban_alert_description, actionTarget.knockRequest.getBestName()),
+        )
+        else -> return
+    }
+    ConfirmationDialog(
+        title = title,
+        content = content,
+        onSubmitClick = onSubmit,
+        onDismiss = onDismiss,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun KnockRequestActionProgress(
+    target: KnockRequestsActionTarget,
+    modifier: Modifier = Modifier,
+) {
+    val progressText = when (target) {
+        is KnockRequestsActionTarget.Accept -> stringResource(R.string.screen_knock_requests_list_accept_loading_title)
+        is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_decline_loading_title)
+        is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_ban_loading_title)
+        KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_loading_title)
+        else -> return
+    }
+    ProgressDialog(
+        text = progressText,
+        modifier = modifier,
+    )
 }
 
 @Composable

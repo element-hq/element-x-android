@@ -58,7 +58,9 @@ class KnockRequestsListPresenter @Inject constructor(
                     actionTarget = KnockRequestsActionTarget.DeclineAndBan(event.knockRequest)
                 }
                 KnockRequestsListEvents.ResetCurrentAction -> {
+                    asyncAction.value = AsyncAction.Uninitialized
                     actionTarget = KnockRequestsActionTarget.None
+                    targetActionConfirmed = false
                 }
                 KnockRequestsListEvents.RetryCurrentAction -> {
                     retryCount++
@@ -103,10 +105,7 @@ class KnockRequestsListPresenter @Inject constructor(
                         asyncAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
-                KnockRequestsActionTarget.None -> {
-                    targetActionConfirmed = false
-                    asyncAction.value = AsyncAction.Uninitialized
-                }
+                KnockRequestsActionTarget.None -> Unit
             }
         }
 
