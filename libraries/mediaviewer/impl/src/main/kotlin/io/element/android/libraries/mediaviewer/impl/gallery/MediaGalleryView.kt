@@ -34,7 +34,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -73,7 +72,6 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -315,19 +313,11 @@ private fun MediaGalleryImageGrid(
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val horizontalPadding = 16.dp
-    val itemSpacing = 4.dp
-    val availableWidth = screenWidth - horizontalPadding * 2
-    val minCellWidth = 80.dp
-    // Calculate the number of columns
-    val columns = max(1, (availableWidth / (minCellWidth + itemSpacing)).toInt())
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = horizontalPadding),
-        columns = GridCells.Fixed(columns),
+            .padding(horizontal = 16.dp),
+        columns = GridCells.Adaptive(80.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -336,7 +326,7 @@ private fun MediaGalleryImageGrid(
             span = { item ->
                 when (item) {
                     is MediaItem.LoadingIndicator,
-                    is MediaItem.DateSeparator -> GridItemSpan(columns)
+                    is MediaItem.DateSeparator -> GridItemSpan(maxLineSpan)
                     is MediaItem.Event -> GridItemSpan(1)
                 }
             },
