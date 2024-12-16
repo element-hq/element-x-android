@@ -65,6 +65,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.DateItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.max
 
@@ -274,6 +275,12 @@ private fun MediaGalleryFilesList(
                     onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
                     onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
+                is MediaItem.Voice -> VoiceItemView(
+                    item,
+                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
+                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
+                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                )
                 is MediaItem.DateSeparator -> DateItemView(item)
                 is MediaItem.Image,
                 is MediaItem.Video -> {
@@ -330,6 +337,9 @@ private fun MediaGalleryImageGrid(
                     DateItemView(item)
                 }
                 is MediaItem.Audio -> {
+                    // Should not happen
+                }
+                is MediaItem.Voice -> {
                     // Should not happen
                 }
                 is MediaItem.File -> {

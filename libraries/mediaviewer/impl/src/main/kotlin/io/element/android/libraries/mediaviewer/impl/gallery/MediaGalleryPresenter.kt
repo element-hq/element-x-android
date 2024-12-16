@@ -137,6 +137,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
                             is MediaItem.Video -> event.mediaItem.thumbnailSource ?: event.mediaItem.mediaSource
                             is MediaItem.Audio -> null
                             is MediaItem.File -> null
+                            is MediaItem.Voice -> null
                         },
                     )
                 }

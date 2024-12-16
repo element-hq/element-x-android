@@ -8,7 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.core.extensions.withBrackets
+import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -39,11 +37,11 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun AudioItemView(
-    audio: MediaItem.Audio,
-    onClick: () -> Unit,
+fun VoiceItemView(
+    voice: MediaItem.Voice,
     onShareClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onInfoClick: () -> Unit,
@@ -54,11 +52,10 @@ fun AudioItemView(
             .fillMaxWidth()
             .padding(top = 20.dp, start = 16.dp, end = 16.dp),
     ) {
-        FilenameRow(
-            audio = audio,
-            onClick = onClick,
+        VoiceInfoRow(
+            voice = voice,
         )
-        val caption = audio.mediaInfo.caption
+        val caption = voice.mediaInfo.caption
         if (caption != null) {
             Spacer(modifier = Modifier.height(16.dp))
             Caption(caption)
@@ -74,9 +71,8 @@ fun AudioItemView(
 }
 
 @Composable
-private fun FilenameRow(
-    audio: MediaItem.Audio,
-    onClick: () -> Unit,
+private fun VoiceInfoRow(
+    voice: MediaItem.Voice,
 ) {
     Row(
         modifier = Modifier
@@ -85,7 +81,6 @@ private fun FilenameRow(
                 color = ElementTheme.colors.bgSubtleSecondary,
                 shape = RoundedCornerShape(12.dp),
             )
-            .clickable { onClick() }
             .fillMaxWidth()
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -93,18 +88,24 @@ private fun FilenameRow(
         Icon(
             modifier = Modifier
                 .background(
-                    color = ElementTheme.colors.bgActionSecondaryRest,
+                    color = ElementTheme.colors.bgCanvasDefault,
                     shape = CircleShape,
                 )
-                .size(32.dp)
+                .border(
+                    width = 1.dp,
+                    color = ElementTheme.colors.borderInteractiveSecondary,
+                    shape = CircleShape,
+                )
+                .size(36.dp)
                 .padding(6.dp),
-            imageVector = Icons.Outlined.GraphicEq,
+            imageVector = CompoundIcons.PlaySolid(),
+            tint = ElementTheme.colors.iconSecondary,
             contentDescription = null,
         )
-        audio.duration?.let {
+        voice.duration?.let {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = audio.duration,
+                text = voice.duration,
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
@@ -112,22 +113,18 @@ private fun FilenameRow(
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = audio.mediaInfo.filename,
-            modifier = Modifier.weight(1f),
-            style = ElementTheme.typography.fontBodyLgRegular,
-            color = ElementTheme.colors.textPrimary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+        WaveformPlaybackView(
+            modifier = Modifier
+                .weight(1f)
+                .height(34.dp),
+            playbackProgress = 0f,
+            showCursor = false,
+            waveform = voice.waveform.toPersistentList(),
+            onSeek = {
+
+            },
+            seekEnabled = true,
         )
-        val formattedSize = audio.mediaInfo.formattedFileSize
-        if (formattedSize.isNotEmpty()) {
-            Text(
-                text = formattedSize.withBrackets(),
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = ElementTheme.colors.textPrimary,
-            )
-        }
     }
 }
 
@@ -182,12 +179,11 @@ private fun ActionIconsRow(
 
 @PreviewsDayNight
 @Composable
-internal fun AudioItemViewPreview(
-    @PreviewParameter(MediaItemAudioProvider::class) audio: MediaItem.Audio,
+internal fun VoiceItemViewPreview(
+    @PreviewParameter(MediaItemVoiceProvider::class) voice: MediaItem.Voice,
 ) = ElementPreview {
-    AudioItemView(
-        audio = audio,
-        onClick = {},
+    VoiceItemView(
+        voice = voice,
         onShareClick = {},
         onDownloadClick = {},
         onInfoClick = {},

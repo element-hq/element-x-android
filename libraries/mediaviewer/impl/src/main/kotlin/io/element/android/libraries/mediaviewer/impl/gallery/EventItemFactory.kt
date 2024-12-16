@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
+import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -104,7 +105,6 @@ class EventItemFactory @Inject constructor(
                         ),
                         mediaSource = type.source,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
-                        waveform = null,
                     )
                     is FileMessageType -> MediaItem.File(
                         id = currentTimelineItem.uniqueId,
@@ -182,7 +182,7 @@ class EventItemFactory @Inject constructor(
                         thumbnailSource = type.info?.thumbnailSource,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
-                    is VoiceMessageType -> MediaItem.Audio(
+                    is VoiceMessageType -> MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -200,7 +200,7 @@ class EventItemFactory @Inject constructor(
                         ),
                         mediaSource = type.source,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
-                        waveform = type.details?.waveform,
+                        waveform = type.details?.waveform ?: persistentListOf(),
                     )
                 }
             }
