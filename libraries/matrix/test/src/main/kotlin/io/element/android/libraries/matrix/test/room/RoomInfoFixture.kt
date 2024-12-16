@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -33,6 +34,7 @@ fun aRoomInfo(
     avatarUrl: String? = AN_AVATAR_URL,
     isDirect: Boolean = false,
     isPublic: Boolean = true,
+    joinRule: JoinRule? = JoinRule.Public,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
@@ -64,6 +66,7 @@ fun aRoomInfo(
     avatarUrl = avatarUrl,
     isDirect = isDirect,
     isPublic = isPublic,
+    joinRule = joinRule,
     isSpace = isSpace,
     isTombstoned = isTombstoned,
     isFavorite = isFavorite,
