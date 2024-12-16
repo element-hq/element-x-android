@@ -148,6 +148,7 @@
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
   <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
+  <string name="common_downloading">"Laadime alla"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
   <string name="common_editing">"Muutmine"</string>
   <string name="common_editing_caption">"Muudame selgitust"</string>
@@ -341,6 +342,7 @@ Põhjus: %1$s."</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul puudub ligipääs sellele sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
 </resources>

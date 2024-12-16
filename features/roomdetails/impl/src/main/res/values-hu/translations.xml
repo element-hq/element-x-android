@@ -57,6 +57,7 @@
   <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
   <string name="screen_room_details_room_name_label">"Szoba neve"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>
   <string name="screen_room_details_share_room_title">"Szoba megosztása"</string>
   <string name="screen_room_details_title">"Szobainformációk"</string>

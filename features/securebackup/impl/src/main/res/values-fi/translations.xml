@@ -9,7 +9,7 @@
   <string name="screen_chat_backup_key_storage_toggle_title">"Salli avainten säilytys"</string>
   <string name="screen_chat_backup_recovery_action_change">"Vaihda palautusavain"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet menettänyt kaikki nykyiset laitteesi."</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Käytä palautusavainta"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Syötä palautusavain"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Avainten säilytys ei ole tällä hetkellä synkronoitu."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ota palautus käyttöön"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Pääset käsiksi salattuihin viesteihisi, jos menetät kaikki laitteesi tai olet kirjautunut ulos %1$s -sovelluksesta kaikkialla."</string>

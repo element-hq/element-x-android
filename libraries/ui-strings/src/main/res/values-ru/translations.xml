@@ -150,6 +150,7 @@
   <string name="common_device_id">"Идентификатор устройства"</string>
   <string name="common_direct_chat">"Личный чат"</string>
   <string name="common_do_not_show_this_again">"Не показывать больше"</string>
+  <string name="common_downloading">"Загрузка"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_editing_caption">"Редактирование подписи"</string>
@@ -346,6 +347,7 @@
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ru"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"На этом устройстве недоступна история сообщений"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас нет доступа к этому сообщению"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано по причине того, что вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность."</string>
 </resources>
