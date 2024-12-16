@@ -127,6 +127,7 @@
   <string name="action_view_in_timeline">"View in timeline"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
+  <string name="action_yes_try_again">"Yes, try again"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_adding_caption">"Adding caption"</string>
