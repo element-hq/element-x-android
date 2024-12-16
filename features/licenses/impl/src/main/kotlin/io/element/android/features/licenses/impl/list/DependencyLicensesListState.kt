@@ -13,4 +13,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class DependencyLicensesListState(
     val licenses: AsyncData<ImmutableList<DependencyLicenseItem>>,
+    val filter: String,
+    val eventSink: (DependencyLicensesListEvent) -> Unit,
 )
