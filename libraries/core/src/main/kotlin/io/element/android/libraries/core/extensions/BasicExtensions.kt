@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.core.extensions
 
+import java.text.Normalizer
 import java.util.Locale
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
@@ -82,4 +83,9 @@ fun String.safeCapitalize(): String {
             it.toString()
         }
     }
+}
+
+fun String.withoutAccents(): String {
+    return Normalizer.normalize(this, Normalizer.Form.NFD)
+        .replace("\\p{Mn}+".toRegex(), "")
 }

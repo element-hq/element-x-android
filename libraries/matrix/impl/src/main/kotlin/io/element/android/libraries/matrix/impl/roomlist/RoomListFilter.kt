@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.core.extensions.withoutAccents
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
@@ -30,7 +31,7 @@ val RoomListFilter.predicate
             !roomSummary.isInvited() && (roomSummary.info.numUnreadNotifications > 0 || roomSummary.info.isMarkedUnread)
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
-            roomSummary.info.name.orEmpty().contains(pattern, ignoreCase = true)
+            roomSummary.info.name?.withoutAccents().orEmpty().contains(normalizedPattern, ignoreCase = true)
         }
         RoomListFilter.Invite -> { roomSummary: RoomSummary ->
             roomSummary.isInvited()
