@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -102,6 +104,12 @@ fun ReportMessageView(
 
             Row(
                 modifier = Modifier
+                    .toggleable(
+                        value = state.blockUser,
+                        role = Role.Checkbox,
+                        enabled = !isSending,
+                        onValueChange = { state.eventSink(ReportMessageEvents.ToggleBlockUser) }
+                    )
                     .fillMaxWidth()
                     .padding(vertical = 12.dp)
             ) {
@@ -119,7 +127,7 @@ fun ReportMessageView(
                 Switch(
                     enabled = !isSending,
                     checked = state.blockUser,
-                    onCheckedChange = { state.eventSink(ReportMessageEvents.ToggleBlockUser) },
+                    onCheckedChange = null,
                 )
             }
 

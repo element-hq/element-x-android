@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_poll_add_option_btn">"Add option"</string>
+  <string name="screen_create_poll_remove_option_btn">"Remove option"</string>
   <string name="screen_create_poll_anonymous_desc">"Show results only after poll ends"</string>
   <string name="screen_create_poll_anonymous_headline">"Hide votes"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>

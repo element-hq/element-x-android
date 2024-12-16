@@ -7,9 +7,11 @@
 
 package io.element.android.features.preferences.impl.notifications.edit
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -38,11 +40,16 @@ fun DefaultNotificationSettingOption(
         else -> null
     }
     ListItem(
-        modifier = modifier,
+        modifier = modifier
+        .selectable(
+            selected = isSelected,
+            role = Role.RadioButton,
+            enabled = true,
+                        onClick = { onSelectOption(mode) }
+        ),
         headlineContent = { Text(title) },
         supportingContent = subtitle?.let { { Text(it) } },
         trailingContent = ListItemContent.RadioButton(selected = isSelected),
-        onClick = { onSelectOption(mode) },
     )
 }
 

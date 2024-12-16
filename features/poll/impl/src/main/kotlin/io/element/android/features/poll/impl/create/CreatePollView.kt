@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -145,7 +147,7 @@ fun CreatePollView(
                     trailingContent = ListItemContent.Custom {
                         Icon(
                             imageVector = CompoundIcons.Delete(),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.screen_create_poll_remove_option_btn),
                             modifier = Modifier.clickable(answer.canDelete) {
                                 state.eventSink(CreatePollEvents.RemoveAnswer(index))
                             },
@@ -176,11 +178,18 @@ fun CreatePollView(
                 Column {
                     HorizontalDivider()
                     ListItem(
+                        modifier = Modifier
+                        .toggleable(
+                            value = state.pollKind == PollKind.Undisclosed,
+                            role = Role.Checkbox,
+                            enabled = true,
+                            onValueChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) }
+                        ),
                         headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
                             checked = state.pollKind == PollKind.Undisclosed,
-                            onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
+                            onChange = null,
                         ),
                     )
                     if (state.canDelete) {
