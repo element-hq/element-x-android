@@ -57,6 +57,7 @@
   <string name="screen_room_details_requests_to_join_title">"Žádosti o vstup"</string>
   <string name="screen_room_details_roles_and_permissions">"Role a oprávnění"</string>
   <string name="screen_room_details_room_name_label">"Název místnosti"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Zabezpečení a soukromí"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
   <string name="screen_room_details_title">"Informace o místnosti"</string>

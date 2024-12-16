@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_loading_files">"Ladataan tiedostoja…"</string>
+  <string name="screen_media_browser_list_loading_media">"Ladataan mediaa…"</string>
+  <string name="screen_media_browser_list_mode_files">"Tiedostot"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Tähän huoneeseen lähetetyt kuvat ja videot näytetään täällä."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Mediaa ei ole vielä lähetetty"</string>
+  <string name="screen_media_browser_title">"Media ja tiedostot"</string>
+  <string name="screen_media_details_file_format">"Tiedostomuoto"</string>
+  <string name="screen_media_details_filename">"Tiedostonimi"</string>
+  <string name="screen_media_details_uploaded_by">"Lähettäjä:"</string>
+  <string name="screen_media_details_uploaded_on">"Lähetetty"</string>
+</resources>

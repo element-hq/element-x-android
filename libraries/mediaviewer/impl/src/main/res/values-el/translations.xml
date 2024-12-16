@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Αυτό το αρχείο θα αφαιρεθεί από την αίθουσα και τα μέλη δεν θα έχουν πρόσβαση σε αυτό."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Διαγραφή αρχείου;"</string>
+  <string name="screen_media_browser_list_loading_files">"Φόρτωση αρχείων…"</string>
+  <string name="screen_media_browser_list_loading_media">"Φόρτωση πολυμέσων…"</string>
+  <string name="screen_media_browser_list_mode_files">"Αρχεία"</string>
+  <string name="screen_media_browser_list_mode_media">"Πολυμέσα"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Εικόνες και βίντεο που μεταφορτώνονται σε αυτό το δωμάτιο θα εμφανίζονται εδώ."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Δεν έχουν μεταφορτωθεί ακόμα πολυμέσα"</string>
+  <string name="screen_media_browser_title">"Πολυμέσα και αρχεία"</string>
+  <string name="screen_media_details_file_format">"Μορφή αρχείου"</string>
+  <string name="screen_media_details_filename">"Όνομα αρχείου"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Αυτό το αρχείο θα αφαιρεθεί από το δωμάτιο και τα μέλη δεν θα έχουν πρόσβαση σε αυτό."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Διαγραφή αρχείου;"</string>
+  <string name="screen_media_details_uploaded_by">"Μεταφορτώθηκε από"</string>
+  <string name="screen_media_details_uploaded_on">"Μεταφορτώθηκε στις"</string>
+</resources>

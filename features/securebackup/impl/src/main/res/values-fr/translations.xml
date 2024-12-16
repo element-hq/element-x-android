@@ -12,7 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Utiliser la clé de récupération"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Le stockage de vos clés est actuellement désynchronisé."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurer la sauvegarde"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnectés de %1$s partout."</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnecté de %1$s partout."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Ouvrez %1$s sur un ordinateur"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Connectez-vous à nouveau à votre compte"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Lorsque vous devrez vérifier la session, choisissez %1$s"</string>
@@ -31,7 +31,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Êtes-vous certain de vouloir désactiver la sauvegarde ?"</string>
   <string name="screen_key_backup_disable_description">"Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas :"</string>
   <string name="screen_key_backup_disable_description_point_1">"Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Perte de l’accès à vos messages chiffrés si vous êtes déconnectés de %1$s partout"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Perte de l’accès à vos messages chiffrés si vous êtes déconnecté de %1$s partout"</string>
   <string name="screen_key_backup_disable_title">"Êtes-vous certain de vouloir désactiver la sauvegarde ?"</string>
   <string name="screen_recovery_key_change_description">"Obtenez une nouvelle clé de récupération dans le cas où vous avez oublié l’ancienne. Après le changement, l’ancienne clé ne sera plus utilisable."</string>
   <string name="screen_recovery_key_change_generate_key">"Générer une nouvelle clé"</string>

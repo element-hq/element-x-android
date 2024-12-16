@@ -16,7 +16,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Varmista, että alla olevat numerot vastaavat toisessa istunnossa näkyviä numeroita."</string>
   <string name="screen_session_verification_compare_numbers_title">"Vertaa numeroita"</string>
   <string name="screen_session_verification_complete_subtitle">"Uusi kirjautumisesi on nyt vahvistettu. Sillä on pääsy salattuihin viesteihisi, ja muut käyttäjät näkevät sen luotettuna."</string>
-  <string name="screen_session_verification_enter_recovery_key">"Käytä palautusavainta"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Syötä palautusavain"</string>
   <string name="screen_session_verification_failed_subtitle">"Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi."</string>
   <string name="screen_session_verification_open_existing_session_title">"Avaa laite, jossa olet jo kirjautuneena"</string>
