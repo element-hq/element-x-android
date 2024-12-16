@@ -19,7 +19,10 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.extensions.firstIfSingle
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.ui.room.canHandleKnockRequestsAsState
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +36,7 @@ class KnockRequestsBannerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val knockRequestsService: KnockRequestsService,
     private val appCoroutineScope: CoroutineScope,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<KnockRequestsBannerState> {
     @Composable
     override fun present(): KnockRequestsBannerState {
@@ -46,11 +50,13 @@ class KnockRequestsBannerPresenter @Inject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canAccept by room.canInviteAsState(syncUpdateFlow.value)
+        val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
         val showAcceptError = remember { mutableStateOf(false) }
+        val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
 
         val shouldShowBanner by remember {
             derivedStateOf {
-                knockRequests.isNotEmpty()
+                isKnockRequestsEnabled && canHandleKnockRequests && knockRequests.isNotEmpty()
             }
         }
 

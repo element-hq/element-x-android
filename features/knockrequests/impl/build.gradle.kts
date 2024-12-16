@@ -26,6 +26,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.featureflag.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
