@@ -9,11 +9,12 @@ package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
@@ -23,6 +24,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.canBanAsState
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import io.element.android.libraries.matrix.ui.room.canKickAsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KnockRequestsListPresenter @Inject constructor(
@@ -33,8 +36,6 @@ class KnockRequestsListPresenter @Inject constructor(
     override fun present(): KnockRequestsListState {
         val asyncAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         var actionTarget by remember { mutableStateOf<KnockRequestsActionTarget>(KnockRequestsActionTarget.None) }
-        var targetActionConfirmed by remember { mutableStateOf(false) }
-        var retryCount by remember { mutableIntStateOf(0) }
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canBan by room.canBanAsState(syncUpdateFlow.value)
@@ -42,6 +43,8 @@ class KnockRequestsListPresenter @Inject constructor(
         val canAccept by room.canInviteAsState(syncUpdateFlow.value)
 
         val knockRequests by knockRequestsService.knockRequestsFlow.collectAsState()
+
+        val coroutineScope = rememberCoroutineScope()
 
         fun handleEvents(event: KnockRequestsListEvents) {
             when (event) {
@@ -60,53 +63,17 @@ class KnockRequestsListPresenter @Inject constructor(
                 KnockRequestsListEvents.ResetCurrentAction -> {
                     asyncAction.value = AsyncAction.Uninitialized
                     actionTarget = KnockRequestsActionTarget.None
-                    targetActionConfirmed = false
                 }
                 KnockRequestsListEvents.RetryCurrentAction -> {
-                    retryCount++
+                    coroutineScope.executeAction(actionTarget, asyncAction, isActionConfirmed = true)
                 }
                 KnockRequestsListEvents.ConfirmCurrentAction -> {
-                    targetActionConfirmed = true
+                    coroutineScope.executeAction(actionTarget, asyncAction, isActionConfirmed = true)
                 }
             }
         }
-
-        LaunchedEffect(actionTarget, targetActionConfirmed, retryCount) {
-            when (val action = actionTarget) {
-                is KnockRequestsActionTarget.Accept -> {
-                    runUpdatingState(asyncAction) {
-                        knockRequestsService.acceptKnockRequest(action.knockRequest)
-                    }
-                }
-                is KnockRequestsActionTarget.Decline -> {
-                    if (targetActionConfirmed) {
-                        runUpdatingState(asyncAction) {
-                            knockRequestsService.declineKnockRequest(action.knockRequest)
-                        }
-                    } else {
-                        asyncAction.value = AsyncAction.ConfirmingNoParams
-                    }
-                }
-                is KnockRequestsActionTarget.DeclineAndBan -> {
-                    if (targetActionConfirmed) {
-                        runUpdatingState(asyncAction) {
-                            knockRequestsService.declineAndBanKnockRequest(action.knockRequest)
-                        }
-                    } else {
-                        asyncAction.value = AsyncAction.ConfirmingNoParams
-                    }
-                }
-                is KnockRequestsActionTarget.AcceptAll -> {
-                    if (targetActionConfirmed) {
-                        runUpdatingState(asyncAction) {
-                            knockRequestsService.acceptAllKnockRequests()
-                        }
-                    } else {
-                        asyncAction.value = AsyncAction.ConfirmingNoParams
-                    }
-                }
-                KnockRequestsActionTarget.None -> Unit
-            }
+        LaunchedEffect(actionTarget) {
+            executeAction(actionTarget, asyncAction, isActionConfirmed = false)
         }
 
         return KnockRequestsListState(
@@ -118,5 +85,47 @@ class KnockRequestsListPresenter @Inject constructor(
             canBan = canBan,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.executeAction(
+        actionTarget: KnockRequestsActionTarget,
+        asyncAction: MutableState<AsyncAction<Unit>>,
+        isActionConfirmed: Boolean,
+    ) = launch {
+        when (actionTarget) {
+            is KnockRequestsActionTarget.Accept -> {
+                runUpdatingState(asyncAction) {
+                    knockRequestsService.acceptKnockRequest(actionTarget.knockRequest)
+                }
+            }
+            is KnockRequestsActionTarget.Decline -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.declineKnockRequest(actionTarget.knockRequest)
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            is KnockRequestsActionTarget.DeclineAndBan -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.declineAndBanKnockRequest(actionTarget.knockRequest)
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            is KnockRequestsActionTarget.AcceptAll -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.acceptAllKnockRequests()
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            KnockRequestsActionTarget.None -> Unit
+        }
     }
 }
