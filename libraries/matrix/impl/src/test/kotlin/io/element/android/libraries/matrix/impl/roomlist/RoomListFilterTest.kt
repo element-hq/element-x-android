@@ -74,7 +74,12 @@ class RoomListFilterTest {
     fun `Room list filter group`() = runTest {
         val filter = RoomListFilter.Category.Group
         assertThat(roomSummaries.filter(filter)).containsExactly(
-            regularRoom, favoriteRoom, markedAsUnreadRoom, unreadNotificationRoom, roomToSearch, roomWithAccent
+            regularRoom,
+            favoriteRoom,
+            markedAsUnreadRoom,
+            unreadNotificationRoom,
+            roomToSearch,
+            roomWithAccent,
         )
     }
 
