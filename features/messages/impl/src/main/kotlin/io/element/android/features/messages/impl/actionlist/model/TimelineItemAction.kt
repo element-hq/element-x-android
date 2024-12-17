@@ -30,7 +30,7 @@ sealed class TimelineItemAction(
     data object Edit : TimelineItemAction(CommonStrings.action_edit, CompoundDrawables.ic_compound_edit)
     data object EditCaption : TimelineItemAction(CommonStrings.action_edit_caption, CompoundDrawables.ic_compound_edit)
     data object AddCaption : TimelineItemAction(CommonStrings.action_add_caption, CompoundDrawables.ic_compound_edit)
-    data object RemoveCaption : TimelineItemAction(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_delete, destructive = true)
+    data object RemoveCaption : TimelineItemAction(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_close, destructive = true)
     data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CompoundDrawables.ic_compound_code)
     data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CompoundDrawables.ic_compound_chat_problem, destructive = true)
     data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end)
