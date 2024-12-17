@@ -224,24 +224,29 @@ private fun KnockRequestActionConfirmation(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (title, content) = when (actionTarget) {
-        KnockRequestsActionTarget.AcceptAll -> Pair(
+    val (title, content, submitText) = when (actionTarget) {
+        KnockRequestsActionTarget.AcceptAll -> Triple(
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_title),
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_description),
+            stringResource(R.string.screen_knock_requests_list_accept_all_alert_confirm_button_title),
+
         )
-        is KnockRequestsActionTarget.Decline -> Pair(
+        is KnockRequestsActionTarget.Decline -> Triple(
             stringResource(R.string.screen_knock_requests_list_decline_alert_title),
             stringResource(R.string.screen_knock_requests_list_decline_alert_description, actionTarget.knockRequest.getBestName()),
+            stringResource(R.string.screen_knock_requests_list_decline_alert_confirm_button_title),
         )
-        is KnockRequestsActionTarget.DeclineAndBan -> Pair(
+        is KnockRequestsActionTarget.DeclineAndBan -> Triple(
             stringResource(R.string.screen_knock_requests_list_ban_alert_title),
             stringResource(R.string.screen_knock_requests_list_ban_alert_description, actionTarget.knockRequest.getBestName()),
+            stringResource(R.string.screen_knock_requests_list_ban_alert_confirm_button_title),
         )
         else -> return
     }
     ConfirmationDialog(
         title = title,
         content = content,
+        submitText = submitText,
         onSubmitClick = onSubmit,
         onDismiss = onDismiss,
         modifier = modifier,
