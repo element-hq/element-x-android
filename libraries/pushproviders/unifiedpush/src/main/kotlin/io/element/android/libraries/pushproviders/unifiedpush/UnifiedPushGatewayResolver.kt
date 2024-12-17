@@ -14,6 +14,7 @@ import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
+import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
@@ -55,7 +56,7 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
                         UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
                     }
                 } catch (exception: HttpException) {
-                    if (exception.code() == 404) {
+                    if (exception.code() == HttpURLConnection.HTTP_NOT_FOUND) {
                         logger.i("Checking for UnifiedPush endpoint yielded 404, using fallback")
                         UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
                     } else {
