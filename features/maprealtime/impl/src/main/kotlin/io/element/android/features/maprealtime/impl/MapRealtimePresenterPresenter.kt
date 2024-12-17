@@ -86,7 +86,7 @@ class MapRealtimePresenterPresenter @Inject constructor(
         val mapTile by mapTypeStore.mapTileProviderFlow.collectAsState(initial = "")
 
         var isSharingLocation: Boolean by remember {
-            mutableStateOf(false)
+            mutableStateOf(locationServiceStateRepository.get() == LocationServiceState.LOCATION_EVENT_EMITTED)
         }
 
         val locationServiceState: State<LocationServiceState> = locationServiceStateRepository.observeDistinct().collectAsState()

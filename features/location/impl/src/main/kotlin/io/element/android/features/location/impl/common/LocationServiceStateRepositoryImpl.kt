@@ -21,6 +21,8 @@ class LocationServiceStateRepositoryImpl @Inject constructor(): LocationServiceS
 
     override fun observeDistinct(): StateFlow<LocationServiceState> = locationServiceStateFlow
 
+    override fun get(): LocationServiceState = locationServiceStateFlow.value
+
     override fun set(state: LocationServiceState) {
         _locationServiceStateFlow.tryEmit(state)
     }
