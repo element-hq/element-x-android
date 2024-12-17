@@ -14,7 +14,6 @@ import io.element.android.libraries.designsystem.R
 internal val iconsOther = listOf(
     R.drawable.ic_cancel,
     R.drawable.ic_encryption_enabled,
-    R.drawable.ic_groups,
     R.drawable.ic_notification_small,
     R.drawable.ic_plus_composer,
     R.drawable.ic_stop,
