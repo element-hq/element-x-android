@@ -57,7 +57,6 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
-        val duration: String?,
     ) : Event
 
     data class Voice(

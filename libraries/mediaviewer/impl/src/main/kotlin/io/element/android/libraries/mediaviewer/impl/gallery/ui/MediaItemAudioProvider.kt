@@ -32,7 +32,6 @@ fun aMediaItemAudio(
     id: UniqueId = UniqueId("fileId"),
     filename: String = "filename",
     caption: String? = null,
-    duration: String? = "1:23",
 ): MediaItem.Audio {
     return MediaItem.Audio(
         id = id,
@@ -42,6 +41,5 @@ fun aMediaItemAudio(
             caption = caption,
         ),
         mediaSource = MediaSource(""),
-        duration = duration,
     )
 }

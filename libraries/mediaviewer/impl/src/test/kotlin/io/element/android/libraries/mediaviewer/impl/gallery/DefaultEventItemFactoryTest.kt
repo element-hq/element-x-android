@@ -262,7 +262,6 @@ class DefaultEventItemFactoryTest {
                     waveform = null,
                 ),
                 mediaSource = MediaSource(""),
-                duration = "7:36",
             )
         )
     }

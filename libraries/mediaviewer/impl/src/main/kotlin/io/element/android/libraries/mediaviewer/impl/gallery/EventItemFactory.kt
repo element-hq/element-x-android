@@ -104,7 +104,6 @@ class EventItemFactory @Inject constructor(
                             waveform = null,
                         ),
                         mediaSource = type.source,
-                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
                     is FileMessageType -> MediaItem.File(
                         id = currentTimelineItem.uniqueId,

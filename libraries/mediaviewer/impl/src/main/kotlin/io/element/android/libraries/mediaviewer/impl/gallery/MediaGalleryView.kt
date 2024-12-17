@@ -267,24 +267,18 @@ private fun MediaGalleryFilesList(
         items(files) { item ->
             when (item) {
                 is MediaItem.File -> FileItemView(
-                    item,
+                    file = item,
                     onClick = { onItemClick(item) },
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
                 is MediaItem.Audio -> AudioItemView(
-                    item,
+                    audio = item,
                     onClick = { onItemClick(item) },
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
                     VoiceItemView(
-                        presenter.present(),
-                        item,
+                        state = presenter.present(),
+                        voice = item,
                         onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
                         onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
                         onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
