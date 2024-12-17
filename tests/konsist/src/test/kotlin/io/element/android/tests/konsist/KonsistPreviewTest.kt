@@ -128,6 +128,7 @@ class KonsistPreviewTest {
                 "TimelineVideoWithCaptionRowPreview",
                 "TimelineViewMessageShieldPreview",
                 "UserAvatarColorsPreview",
+                "VoiceItemViewPlayPreview",
             )
             .assertTrue(
                 additionalMessage = "Functions for Preview should be named like this: <ViewUnderPreview>Preview. " +

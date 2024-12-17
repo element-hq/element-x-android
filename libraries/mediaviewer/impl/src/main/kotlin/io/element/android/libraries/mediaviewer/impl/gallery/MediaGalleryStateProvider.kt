@@ -19,6 +19,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVoice
 import kotlinx.collections.immutable.toImmutableList
 
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
@@ -63,9 +64,8 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
-                            aMediaItemFile(id = UniqueId("3")),
                             aMediaItemAudio(id = UniqueId("4")),
-                            aMediaItemAudio(
+                            aMediaItemVoice(
                                 id = UniqueId("5"),
                                 waveform = aWaveForm(),
                             ),

@@ -49,8 +49,8 @@ fun FileItemView(
 ) {
     Column(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            .fillMaxWidth()
+            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
     ) {
         FilenameRow(
             file = file,
@@ -78,24 +78,24 @@ private fun FilenameRow(
 ) {
     Row(
         modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(
-                        color = ElementTheme.colors.bgSubtleSecondary,
-                        shape = RoundedCornerShape(12.dp),
-                )
-                .clickable { onClick() }
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                color = ElementTheme.colors.bgSubtleSecondary,
+                shape = RoundedCornerShape(12.dp),
+            )
+            .clickable { onClick() }
+            .fillMaxWidth()
+            .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier
-                    .background(
-                            color = ElementTheme.colors.bgActionSecondaryRest,
-                            shape = CircleShape,
-                    )
-                    .size(32.dp)
-                    .padding(6.dp),
+                .background(
+                    color = ElementTheme.colors.bgActionSecondaryRest,
+                    shape = CircleShape,
+                )
+                .size(32.dp)
+                .padding(6.dp),
             imageVector = CompoundIcons.Attachment(),
             contentDescription = null,
         )

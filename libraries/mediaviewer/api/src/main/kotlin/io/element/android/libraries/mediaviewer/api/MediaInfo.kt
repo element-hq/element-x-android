@@ -125,3 +125,24 @@ fun anAudioMediaInfo(
     dateSentFull = dateSentFull,
     waveform = waveForm,
 )
+
+fun aVoiceMediaInfo(
+    filename: String = "a voice file.ogg",
+    caption: String? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+    dateSentFull: String? = null,
+    waveForm: List<Float>? = null,
+): MediaInfo = MediaInfo(
+    filename = filename,
+    caption = caption,
+    mimeType = MimeTypes.Ogg,
+    formattedFileSize = "3MB",
+    fileExtension = "ogg",
+    senderId = UserId("@alice:server.org"),
+    senderName = senderName,
+    senderAvatar = null,
+    dateSent = dateSent,
+    dateSentFull = dateSentFull,
+    waveform = waveForm,
+)

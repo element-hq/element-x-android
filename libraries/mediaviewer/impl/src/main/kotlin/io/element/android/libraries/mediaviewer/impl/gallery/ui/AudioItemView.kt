@@ -8,7 +8,6 @@
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.core.extensions.withBrackets
-import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -39,7 +39,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun AudioItemView(
@@ -94,18 +93,12 @@ private fun FilenameRow(
         Icon(
             modifier = Modifier
                 .background(
-                    color = ElementTheme.colors.bgCanvasDefault,
+                    color = ElementTheme.colors.bgActionSecondaryRest,
                     shape = CircleShape,
                 )
-                .border(
-                    width = 1.dp,
-                    color = ElementTheme.colors.borderInteractiveSecondary,
-                    shape = CircleShape,
-                )
-                .size(36.dp)
+                .size(32.dp)
                 .padding(6.dp),
-            imageVector = CompoundIcons.PlaySolid(),
-            tint = ElementTheme.colors.iconSecondary,
+            imageVector = Icons.Outlined.GraphicEq,
             contentDescription = null,
         )
         audio.duration?.let {
@@ -119,34 +112,20 @@ private fun FilenameRow(
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-        val waveform = audio.waveform
-        if (waveform == null) {
+        Text(
+            text = audio.mediaInfo.filename,
+            modifier = Modifier.weight(1f),
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        val formattedSize = audio.mediaInfo.formattedFileSize
+        if (formattedSize.isNotEmpty()) {
             Text(
-                text = audio.mediaInfo.filename,
-                modifier = Modifier.weight(1f),
+                text = formattedSize.withBrackets(),
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            val formattedSize = audio.mediaInfo.formattedFileSize
-            if (formattedSize.isNotEmpty()) {
-                Text(
-                    text = formattedSize.withBrackets(),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textPrimary,
-                )
-            }
-        } else {
-            WaveformPlaybackView(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(34.dp),
-                playbackProgress = 0f,
-                showCursor = false,
-                waveform = waveform.toPersistentList(),
-                onSeek = {},
-                seekEnabled = false,
             )
         }
     }

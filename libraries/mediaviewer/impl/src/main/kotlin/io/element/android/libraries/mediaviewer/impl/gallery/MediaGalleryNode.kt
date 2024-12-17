@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -18,12 +19,15 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresenterFactories
 
 @ContributesNode(RoomScope::class)
 class MediaGalleryNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaGalleryPresenter.Factory,
+    private val mediaItemPresenterFactories: MediaItemPresenterFactories,
 ) : Node(buildContext, plugins = plugins),
     MediaGalleryNavigator {
     private val presenter = presenterFactory.create(
@@ -56,12 +60,16 @@ class MediaGalleryNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        MediaGalleryView(
-            state = state,
-            onBackClick = ::onBackClick,
-            onItemClick = ::onItemClick,
-            modifier = modifier,
-        )
+        CompositionLocalProvider(
+            LocalMediaItemPresenterFactories provides mediaItemPresenterFactories,
+        ) {
+            val state = presenter.present()
+            MediaGalleryView(
+                state = state,
+                onBackClick = ::onBackClick,
+                onItemClick = ::onItemClick,
+                modifier = modifier,
+            )
+        }
     }
 }

@@ -263,7 +263,6 @@ class DefaultEventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 duration = "7:36",
-                waveform = null,
             )
         )
     }
@@ -348,7 +347,7 @@ class DefaultEventItemFactoryTest {
             )
         )
         assertThat(result).isEqualTo(
-            MediaItem.Audio(
+            MediaItem.Voice(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
                 mediaInfo = MediaInfo(

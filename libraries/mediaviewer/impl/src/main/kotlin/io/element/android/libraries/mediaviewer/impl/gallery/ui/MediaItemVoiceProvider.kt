@@ -9,39 +9,46 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.preview.loremIpsum
+import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
+import io.element.android.libraries.mediaviewer.api.aVoiceMediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import kotlinx.collections.immutable.toImmutableList
 
-class MediaItemAudioProvider : PreviewParameterProvider<MediaItem.Audio> {
-    override val values: Sequence<MediaItem.Audio>
+class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
+    override val values: Sequence<MediaItem.Voice>
         get() = sequenceOf(
-            aMediaItemAudio(),
-            aMediaItemAudio(
-                filename = "A long filename that should be truncated.mp3",
+            aMediaItemVoice(),
+            aMediaItemVoice(
+                filename = "A long filename that should be truncated.ogg",
                 caption = "A caption",
             ),
-            aMediaItemAudio(
+            aMediaItemVoice(
                 caption = loremIpsum,
+            ),
+            aMediaItemVoice(
+                waveform = emptyList(),
             ),
         )
 }
 
-fun aMediaItemAudio(
+fun aMediaItemVoice(
     id: UniqueId = UniqueId("fileId"),
-    filename: String = "filename",
+    filename: String = "filename.ogg",
     caption: String? = null,
     duration: String? = "1:23",
-): MediaItem.Audio {
-    return MediaItem.Audio(
+    waveform: List<Float> = aWaveForm(),
+): MediaItem.Voice {
+    return MediaItem.Voice(
         id = id,
         eventId = null,
-        mediaInfo = anAudioMediaInfo(
+        mediaInfo = aVoiceMediaInfo(
             filename = filename,
             caption = caption,
         ),
         mediaSource = MediaSource(""),
         duration = duration,
+        waveform = waveform.toImmutableList(),
     )
 }
