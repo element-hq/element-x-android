@@ -14,6 +14,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.knockrequests.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -31,7 +36,12 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(projects.libraries.featureflag.test)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

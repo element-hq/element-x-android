@@ -8,13 +8,13 @@
 package io.element.android.features.knockrequests.impl.data
 
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -22,23 +22,24 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.supervisorScope
-import javax.inject.Inject
 
-@SingleIn(RoomScope::class)
-class KnockRequestsService @Inject constructor(room: MatrixRoom) {
+class KnockRequestsService(
+    knockRequestsFlow: Flow<List<KnockRequest>>,
+    coroutineScope: CoroutineScope,
+) {
 
     // Keep track of the knock requests that have been handled, so we don't have to wait for sync to remove them.
     private val handledKnockRequestIds = MutableStateFlow<Set<EventId>>(emptySet())
 
     val knockRequestsFlow = combine(
-        room.wrappedKnockRequestsFlow(),
+        knockRequestsFlow.wrapped(),
         handledKnockRequestIds,
     ) { knockRequests, handledKnockIds ->
         val presentableKnockRequests = knockRequests
             .filter { it.eventId !in handledKnockIds }
             .toImmutableList()
         AsyncData.Success(presentableKnockRequests)
-    }.stateIn(room.roomCoroutineScope, SharingStarted.Lazily, AsyncData.Loading())
+    }.stateIn(coroutineScope, SharingStarted.Lazily, AsyncData.Loading())
 
     private fun knockRequestsList() = knockRequestsFlow.value.dataOrNull().orEmpty()
 
@@ -129,7 +130,7 @@ class KnockRequestsService @Inject constructor(room: MatrixRoom) {
 
     private fun knockRequestNotFoundResult() = Result.failure<Unit>(IllegalArgumentException("Knock request not found"))
 
-    private fun MatrixRoom.wrappedKnockRequestsFlow() = knockRequestsFlow.map { knockRequests ->
+    private fun Flow<List<KnockRequest>>.wrapped() = map { knockRequests ->
         knockRequests.map { KnockRequestWrapper(it) }
     }
 }
