@@ -26,9 +26,8 @@ import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -155,10 +154,18 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - toggling simplified sliding sync changes the preferences and logs out the user`() = runTest {
-        val logoutCallRecorder = lambdaRecorder<Boolean, String?> { "" }
+        val latch1 = CompletableDeferred<Unit>()
+        val latch2 = CompletableDeferred<Unit>()
+        val logoutCallRecorder = lambdaRecorder<Boolean, String?> {
+            if (latch1.isActive) {
+                latch1.complete(Unit)
+            } else {
+                latch2.complete(Unit)
+            }
+            ""
+        }
         val logoutUseCase = FakeLogoutUseCase(logoutLambda = logoutCallRecorder)
         val preferences = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences, logoutUseCase = logoutUseCase)
@@ -171,13 +178,12 @@ class DeveloperSettingsPresenterTest {
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
-            advanceUntilIdle()
+            latch1.await()
             logoutCallRecorder.assertions().isCalledOnce()
-
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
-            advanceUntilIdle()
+            latch2.await()
             logoutCallRecorder.assertions().isCalledExactly(times = 2)
         }
     }
