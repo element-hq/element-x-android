@@ -467,7 +467,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
+            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditPoll, aMessageEvent(content = aTimelineItemPollContent())))
             awaitItem()
             onEditPollClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }

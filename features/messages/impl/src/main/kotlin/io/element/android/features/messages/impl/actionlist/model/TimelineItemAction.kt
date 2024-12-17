@@ -28,6 +28,7 @@ enum class TimelineItemAction(
     Reply(CommonStrings.action_reply, CompoundDrawables.ic_compound_reply),
     ReplyInThread(CommonStrings.action_reply_in_thread, CompoundDrawables.ic_compound_reply),
     Edit(CommonStrings.action_edit, CompoundDrawables.ic_compound_edit),
+    EditPoll(CommonStrings.action_edit_poll, CompoundDrawables.ic_compound_edit),
     EditCaption(CommonStrings.action_edit_caption, CompoundDrawables.ic_compound_edit),
     AddCaption(CommonStrings.action_add_caption, CompoundDrawables.ic_compound_edit),
     RemoveCaption(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_close, destructive = true),

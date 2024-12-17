@@ -179,8 +179,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -225,8 +225,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -273,8 +273,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -320,8 +320,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -368,8 +368,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -417,9 +417,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
@@ -463,9 +463,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.ReplyInThread,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
@@ -512,9 +512,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                     )
@@ -559,9 +559,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.AddCaption,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -612,8 +612,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         // Not here
                         // TimelineItemAction.AddCaption,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -660,9 +660,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.EditCaption,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyCaption,
                         TimelineItemAction.RemoveCaption,
                         TimelineItemAction.ViewSource,
@@ -711,8 +711,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyCaption,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
@@ -830,9 +830,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.Redact,
                     )
@@ -878,8 +878,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
@@ -933,9 +933,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Unpin,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.CopyLink,
+                        TimelineItemAction.Unpin,
                         TimelineItemAction.CopyText,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
@@ -1072,9 +1072,9 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Reply,
-                        TimelineItemAction.Pin,
+                        TimelineItemAction.EditPoll,
                         TimelineItemAction.CopyLink,
-                        TimelineItemAction.Edit,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -1116,8 +1116,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Reply,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -1158,8 +1158,8 @@ class ActionListPresenterTest {
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -1203,8 +1203,8 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Pin,
                         TimelineItemAction.CopyLink,
+                        TimelineItemAction.Pin,
                         TimelineItemAction.Redact,
                     )
                 )
