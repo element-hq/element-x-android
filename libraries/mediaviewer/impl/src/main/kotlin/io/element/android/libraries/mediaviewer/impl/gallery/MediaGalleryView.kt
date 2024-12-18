@@ -264,19 +264,26 @@ private fun MediaGalleryFilesList(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(files) { item ->
+        items(
+            items = files,
+            key = { it.id() },
+            contentType = { it::class.java },
+        ) { item ->
             when (item) {
                 is MediaItem.File -> FileItemView(
+                    modifier = Modifier.animateItem(),
                     file = item,
                     onClick = { onItemClick(item) },
                 )
                 is MediaItem.Audio -> AudioItemView(
+                    modifier = Modifier.animateItem(),
                     audio = item,
                     onClick = { onItemClick(item) },
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
                     VoiceItemView(
+                        modifier = Modifier.animateItem(),
                         state = presenter.present(),
                         voice = item,
                         onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
@@ -284,13 +291,19 @@ private fun MediaGalleryFilesList(
                         onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                     )
                 }
-                is MediaItem.DateSeparator -> DateItemView(item)
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item
+                )
                 is MediaItem.Image,
                 is MediaItem.Video -> {
                     // Should not happen
                 }
                 is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
+                    LoadingMoreIndicator(
+                        modifier = Modifier.animateItem(),
+                        direction = item.direction,
+                    )
                     val latestEventSink by rememberUpdatedState(eventSink)
                     LaunchedEffect(item.timestamp) {
                         latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
@@ -316,7 +329,7 @@ private fun MediaGalleryImageGrid(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(
-            imagesAndVideos,
+            items = imagesAndVideos,
             span = { item ->
                 when (item) {
                     is MediaItem.LoadingIndicator,
@@ -328,9 +341,10 @@ private fun MediaGalleryImageGrid(
             contentType = { it::class.java },
         ) { item ->
             when (item) {
-                is MediaItem.DateSeparator -> {
-                    DateItemView(item)
-                }
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                )
                 is MediaItem.Audio -> {
                     // Should not happen
                 }
@@ -340,26 +354,27 @@ private fun MediaGalleryImageGrid(
                 is MediaItem.File -> {
                     // Should not happen
                 }
-                is MediaItem.Image -> {
-                    ImageItemView(
-                        image = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
-                is MediaItem.Video -> {
-                    VideoItemView(
-                        video = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
+                is MediaItem.Image -> ImageItemView(
+                    modifier = Modifier.animateItem(),
+                    image = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
+                is MediaItem.Video -> VideoItemView(
+                    modifier = Modifier.animateItem(),
+                    video = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
                 is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
+                    LoadingMoreIndicator(
+                        modifier = Modifier.animateItem(),
+                        direction = item.direction,
+                    )
                     val latestEventSink by rememberUpdatedState(eventSink)
                     LaunchedEffect(item.timestamp) {
                         latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
