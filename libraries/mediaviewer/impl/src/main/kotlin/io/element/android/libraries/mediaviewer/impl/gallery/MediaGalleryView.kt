@@ -34,7 +34,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -73,7 +72,6 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -266,44 +264,46 @@ private fun MediaGalleryFilesList(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(files) { item ->
+        items(
+            items = files,
+            key = { it.id() },
+            contentType = { it::class.java },
+        ) { item ->
             when (item) {
                 is MediaItem.File -> FileItemView(
-                    item,
+                    modifier = Modifier.animateItem(),
+                    file = item,
                     onClick = { onItemClick(item) },
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
                 is MediaItem.Audio -> AudioItemView(
-                    item,
+                    modifier = Modifier.animateItem(),
+                    audio = item,
                     onClick = { onItemClick(item) },
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
                     VoiceItemView(
-                        presenter.present(),
-                        item,
+                        modifier = Modifier.animateItem(),
+                        state = presenter.present(),
+                        voice = item,
                         onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
                         onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
                         onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                     )
                 }
-                is MediaItem.DateSeparator -> DateItemView(item)
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item
+                )
                 is MediaItem.Image,
                 is MediaItem.Video -> {
                     // Should not happen
                 }
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -315,28 +315,20 @@ private fun MediaGalleryImageGrid(
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val horizontalPadding = 16.dp
-    val itemSpacing = 4.dp
-    val availableWidth = screenWidth - horizontalPadding * 2
-    val minCellWidth = 80.dp
-    // Calculate the number of columns
-    val columns = max(1, (availableWidth / (minCellWidth + itemSpacing)).toInt())
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = horizontalPadding),
-        columns = GridCells.Fixed(columns),
+            .padding(horizontal = 16.dp),
+        columns = GridCells.Adaptive(80.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(
-            imagesAndVideos,
+            items = imagesAndVideos,
             span = { item ->
                 when (item) {
                     is MediaItem.LoadingIndicator,
-                    is MediaItem.DateSeparator -> GridItemSpan(columns)
+                    is MediaItem.DateSeparator -> GridItemSpan(maxLineSpan)
                     is MediaItem.Event -> GridItemSpan(1)
                 }
             },
@@ -344,9 +336,10 @@ private fun MediaGalleryImageGrid(
             contentType = { it::class.java },
         ) { item ->
             when (item) {
-                is MediaItem.DateSeparator -> {
-                    DateItemView(item)
-                }
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                )
                 is MediaItem.Audio -> {
                     // Should not happen
                 }
@@ -356,31 +349,27 @@ private fun MediaGalleryImageGrid(
                 is MediaItem.File -> {
                     // Should not happen
                 }
-                is MediaItem.Image -> {
-                    ImageItemView(
-                        image = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
-                is MediaItem.Video -> {
-                    VideoItemView(
-                        video = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.Image -> ImageItemView(
+                    modifier = Modifier.animateItem(),
+                    image = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
+                is MediaItem.Video -> VideoItemView(
+                    modifier = Modifier.animateItem(),
+                    video = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -388,14 +377,15 @@ private fun MediaGalleryImageGrid(
 
 @Composable
 private fun LoadingMoreIndicator(
-    direction: Timeline.PaginationDirection,
+    item: MediaItem.LoadingIndicator,
+    eventSink: (MediaGalleryEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        when (direction) {
+        when (item.direction) {
             Timeline.PaginationDirection.FORWARDS -> {
                 LinearProgressIndicator(
                     modifier = Modifier
@@ -410,6 +400,10 @@ private fun LoadingMoreIndicator(
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
+        }
+        val latestEventSink by rememberUpdatedState(eventSink)
+        LaunchedEffect(item.timestamp) {
+            latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
         }
     }
 }

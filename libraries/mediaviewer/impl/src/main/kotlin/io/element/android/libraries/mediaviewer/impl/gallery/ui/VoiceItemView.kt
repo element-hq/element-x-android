@@ -66,18 +66,19 @@ fun VoiceItemView(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            .padding(horizontal = 16.dp),
     ) {
+        Spacer(modifier = Modifier.height(20.dp))
         VoiceInfoRow(
             state = state,
             voice = voice,
         )
         val caption = voice.mediaInfo.caption
         if (caption != null) {
+            CaptionView(caption)
+        } else {
             Spacer(modifier = Modifier.height(16.dp))
-            Caption(caption)
         }
-        Spacer(modifier = Modifier.height(16.dp))
         ActionIconsRow(
             onShareClick = onShareClick,
             onDownloadClick = onDownloadClick,
@@ -116,7 +117,7 @@ private fun VoiceInfoRow(
         }
         Spacer(Modifier.width(8.dp))
         Text(
-            text = state.time,
+            text = if (state.progress > 0f) state.time else voice.duration ?: state.time,
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdMedium,
             maxLines = 1,
@@ -253,18 +254,6 @@ private fun CustomIconButton(
             disabledContentColor = ElementTheme.colors.iconDisabled,
         ),
         content = content,
-    )
-}
-
-@Composable
-private fun Caption(caption: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = caption,
-        maxLines = 5,
-        overflow = TextOverflow.Ellipsis,
-        style = ElementTheme.typography.fontBodyLgRegular,
-        color = ElementTheme.colors.textPrimary,
     )
 }
 
