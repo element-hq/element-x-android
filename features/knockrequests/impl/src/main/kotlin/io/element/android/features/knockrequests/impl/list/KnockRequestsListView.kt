@@ -206,9 +206,9 @@ private fun KnockRequestsActionsView(
             errorMessage = {
                 when (actionTarget) {
                     is KnockRequestsActionTarget.Accept -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
-                    is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
-                    is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
-                    KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
+                    is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
+                    KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_failed_alert_description)
                     else -> ""
                 }
             },
