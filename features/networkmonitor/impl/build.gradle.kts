@@ -20,7 +20,11 @@ android {
 dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.dagger)
+    implementation(libs.network.okhttp.okhttp)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.sessionStorage.api)
+    implementation(projects.services.appnavstate.api)
     api(projects.features.networkmonitor.api)
 }
