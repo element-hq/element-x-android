@@ -62,7 +62,7 @@ import org.junit.Test
     }
 
     @Test
-    fun `present - when everything is setup to manage knocks with data, then the banner should be visible `() = runTest {
+    fun `present - when everything is setup to manage knocks with data, then the banner should be visible`() = runTest {
         val knockRequests = flowOf(
             listOf(
                 FakeKnockRequest(
