@@ -360,6 +360,7 @@ We do not recommend enabling encryption for rooms that anyone can find and join.
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"You need to verify this device for access to historical messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your identity."</string>

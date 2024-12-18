@@ -15,10 +15,17 @@ enum class UtdCause {
     UnknownDevice,
 
     /**
-     * Expected utd because this is a device-historical message and
-     * key storage is not setup or not configured correctly.
+     * We are missing the keys for this event, but it is a "device-historical" message and
+     * there is no key storage backup on the server, presumably because the user has turned it off.
      */
-    HistoricalMessage,
+    HistoricalMessageAndBackupIsDisabled,
+
+    /**
+     * We are missing the keys for this event, but it is a "device-historical"
+     * message, and even though a key storage backup does exist, we can't use
+     * it because our device is unverified.
+     */
+    HistoricalMessageAndDeviceIsUnverified,
 
     /**
      * The key was withheld on purpose because your device is insecure and/or the

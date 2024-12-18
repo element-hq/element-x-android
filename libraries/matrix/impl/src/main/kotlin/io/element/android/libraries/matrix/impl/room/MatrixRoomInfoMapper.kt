@@ -67,6 +67,7 @@ fun RustMembership.map(): CurrentUserMembership = when (this) {
     RustMembership.JOINED -> CurrentUserMembership.JOINED
     RustMembership.LEFT -> CurrentUserMembership.LEFT
     Membership.KNOCKED -> CurrentUserMembership.KNOCKED
+    RustMembership.BANNED -> CurrentUserMembership.BANNED
 }
 
 fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
