@@ -85,10 +85,10 @@ class MediaItemsPostProcessorTest {
             expectedImageAndVideoItems = emptyList(),
             expectedFileItems = listOf(
                 date1,
-                file1,
-                file2,
-                file3,
                 audio1,
+                file3,
+                file2,
+                file1,
             ),
         )
     }
@@ -104,9 +104,9 @@ class MediaItemsPostProcessorTest {
             ),
             expectedImageAndVideoItems = listOf(
                 date1,
-                image1,
-                image2,
                 image3,
+                image2,
+                image1,
             ),
             expectedFileItems = emptyList(),
         )
@@ -124,13 +124,13 @@ class MediaItemsPostProcessorTest {
             ),
             expectedImageAndVideoItems = listOf(
                 date1,
-                video1,
                 image1,
+                video1,
             ),
             expectedFileItems = listOf(
                 date1,
-                file1,
                 audio1,
+                file1,
             ),
         )
     }
@@ -167,6 +167,11 @@ class MediaItemsPostProcessorTest {
     fun `process will handle complex case`() {
         test(
             mediaItems = listOf(
+                file3,
+                date3,
+                video3,
+                video2,
+                date2,
                 voice3,
                 voice2,
                 voice1,
@@ -177,33 +182,28 @@ class MediaItemsPostProcessorTest {
                 image1,
                 video1,
                 date1,
-                file3,
-                date3,
-                video3,
-                video2,
-                date2,
                 loading1,
             ),
             expectedImageAndVideoItems = listOf(
-                date1,
-                video1,
-                image1,
                 date2,
-                video2,
                 video3,
+                video2,
+                date1,
+                image1,
+                video1,
                 loading1,
             ),
             expectedFileItems = listOf(
-                date1,
-                file1,
-                audio1,
-                audio2,
-                audio3,
-                voice1,
-                voice2,
-                voice3,
                 date3,
                 file3,
+                date1,
+                voice3,
+                voice2,
+                voice1,
+                audio3,
+                audio2,
+                audio1,
+                file1,
                 loading1,
             ),
         )
