@@ -117,7 +117,7 @@ private fun VoiceInfoRow(
         }
         Spacer(Modifier.width(8.dp))
         Text(
-            text = state.time,
+            text = if (state.progress > 0f) state.time else voice.duration ?: state.time,
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdMedium,
             maxLines = 1,
