@@ -27,7 +27,6 @@ class KnockRequestsService(
     knockRequestsFlow: Flow<List<KnockRequest>>,
     coroutineScope: CoroutineScope,
 ) {
-
     // Keep track of the knock requests that have been handled, so we don't have to wait for sync to remove them.
     private val handledKnockRequestIds = MutableStateFlow<Set<EventId>>(emptySet())
 

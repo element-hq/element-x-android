@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class) class KnockRequestsBannerPresenterTest {
-
     @Test
     fun `present - when feature is disabled then the banner should be hidden`() = runTest {
         val knockRequests = flowOf(listOf(FakeKnockRequest()))

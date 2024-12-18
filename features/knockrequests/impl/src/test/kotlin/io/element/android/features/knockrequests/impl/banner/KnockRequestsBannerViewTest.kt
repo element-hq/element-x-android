@@ -26,7 +26,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class KnockRequestsListViewTest {
+class KnockRequestsBannerViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 

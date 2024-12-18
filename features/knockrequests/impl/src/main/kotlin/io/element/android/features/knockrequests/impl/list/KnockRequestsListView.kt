@@ -229,7 +229,6 @@ private fun KnockRequestActionConfirmation(
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_title),
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_description),
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_confirm_button_title),
-
         )
         is KnockRequestsActionTarget.Decline -> Triple(
             stringResource(R.string.screen_knock_requests_list_decline_alert_title),

@@ -30,7 +30,7 @@ class FakeKnockRequest(
     val declineAndBanLambda: (String?) -> Result<Unit> = { lambdaError() },
     val markAsSeenLambda: () -> Result<Unit> = { lambdaError() },
 ) : KnockRequest {
-    override suspend fun accept(): Result<Unit> = simulateLongTask{
+    override suspend fun accept(): Result<Unit> = simulateLongTask {
         acceptLambda()
     }
 

@@ -10,8 +10,8 @@ package io.element.android.features.knockrequests.impl.banner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.features.knockrequests.impl.R
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.libraries.core.extensions.firstIfSingle
 import kotlinx.collections.immutable.ImmutableList
 

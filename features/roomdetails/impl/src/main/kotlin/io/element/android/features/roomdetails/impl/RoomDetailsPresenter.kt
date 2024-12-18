@@ -50,7 +50,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -108,7 +107,6 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
-
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
