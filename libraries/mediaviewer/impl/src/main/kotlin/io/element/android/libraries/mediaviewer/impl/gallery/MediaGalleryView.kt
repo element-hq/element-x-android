@@ -299,16 +299,11 @@ private fun MediaGalleryFilesList(
                 is MediaItem.Video -> {
                     // Should not happen
                 }
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(
-                        modifier = Modifier.animateItem(),
-                        direction = item.direction,
-                    )
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -370,16 +365,11 @@ private fun MediaGalleryImageGrid(
                         eventSink(MediaGalleryEvents.OpenInfo(item))
                     },
                 )
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(
-                        modifier = Modifier.animateItem(),
-                        direction = item.direction,
-                    )
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -387,14 +377,15 @@ private fun MediaGalleryImageGrid(
 
 @Composable
 private fun LoadingMoreIndicator(
-    direction: Timeline.PaginationDirection,
+    item: MediaItem.LoadingIndicator,
+    eventSink: (MediaGalleryEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        when (direction) {
+        when (item.direction) {
             Timeline.PaginationDirection.FORWARDS -> {
                 LinearProgressIndicator(
                     modifier = Modifier
@@ -409,6 +400,10 @@ private fun LoadingMoreIndicator(
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
+        }
+        val latestEventSink by rememberUpdatedState(eventSink)
+        LaunchedEffect(item.timestamp) {
+            latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
         }
     }
 }
