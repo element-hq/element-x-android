@@ -7,21 +7,25 @@
 
 package io.element.android.features.messages.impl.actionlist.model
 
+import androidx.annotation.VisibleForTesting
+
 class TimelineItemActionComparator : Comparator<TimelineItemAction> {
     // See order in https://www.figma.com/design/ux3tYoZV9WghC7hHT9Fhk0/Compound-iOS-Components?node-id=2946-2392
-    private val orderedList = listOf(
+    @VisibleForTesting
+    val orderedList = listOf(
         TimelineItemAction.EndPoll,
         TimelineItemAction.ViewInTimeline,
         TimelineItemAction.Reply,
         TimelineItemAction.ReplyInThread,
         TimelineItemAction.Forward,
-        TimelineItemAction.Pin,
-        TimelineItemAction.Unpin,
-        TimelineItemAction.CopyLink,
         TimelineItemAction.Edit,
-        TimelineItemAction.CopyText,
+        TimelineItemAction.EditPoll,
         TimelineItemAction.AddCaption,
         TimelineItemAction.EditCaption,
+        TimelineItemAction.CopyLink,
+        TimelineItemAction.Pin,
+        TimelineItemAction.Unpin,
+        TimelineItemAction.CopyText,
         TimelineItemAction.CopyCaption,
         TimelineItemAction.RemoveCaption,
         TimelineItemAction.ViewSource,

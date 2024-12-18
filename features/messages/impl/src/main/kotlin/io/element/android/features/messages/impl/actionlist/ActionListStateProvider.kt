@@ -203,6 +203,7 @@ fun aTimelineItemActionList(
 fun aTimelineItemPollActionList(): ImmutableList<TimelineItemAction> {
     return setOf(
         TimelineItemAction.EndPoll,
+        TimelineItemAction.EditPoll,
         TimelineItemAction.Reply,
         TimelineItemAction.Pin,
         TimelineItemAction.CopyLink,

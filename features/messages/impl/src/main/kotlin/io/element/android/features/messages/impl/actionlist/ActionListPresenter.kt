@@ -178,6 +178,8 @@ class DefaultActionListPresenter @AssistedInject constructor(
                         add(TimelineItemAction.EditCaption)
                         add(TimelineItemAction.RemoveCaption)
                     }
+                } else if (timelineItem.content is TimelineItemPollContent) {
+                    add(TimelineItemAction.EditPoll)
                 } else {
                     add(TimelineItemAction.Edit)
                 }

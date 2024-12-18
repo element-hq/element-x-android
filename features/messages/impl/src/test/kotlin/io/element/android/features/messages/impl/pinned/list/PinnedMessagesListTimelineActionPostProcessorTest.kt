@@ -27,24 +27,7 @@ class PinnedMessagesListTimelineActionPostProcessorTest {
     fun `ensure that some actions are kept and some other are filtered out`() {
         val sut = PinnedMessagesListTimelineActionPostProcessor()
         val result = sut.process(
-            listOf(
-                TimelineItemAction.Forward,
-                TimelineItemAction.CopyText,
-                TimelineItemAction.CopyCaption,
-                TimelineItemAction.CopyLink,
-                TimelineItemAction.Redact,
-                TimelineItemAction.Reply,
-                TimelineItemAction.ReplyInThread,
-                TimelineItemAction.Edit,
-                TimelineItemAction.EditCaption,
-                TimelineItemAction.AddCaption,
-                TimelineItemAction.RemoveCaption,
-                TimelineItemAction.ViewSource,
-                TimelineItemAction.ReportContent,
-                TimelineItemAction.EndPoll,
-                TimelineItemAction.Pin,
-                TimelineItemAction.Unpin,
-            )
+            TimelineItemAction.entries.toList()
         )
         assertThat(result).isEqualTo(
             listOf(
