@@ -10,10 +10,10 @@ package io.element.android.libraries.matrix.impl.room.knock
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import org.matrix.rustcomponents.sdk.JoinRequest
+import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 
 class RustKnockRequest(
-    private val inner: JoinRequest,
+    private val inner: InnerKnockRequest,
 ) : KnockRequest {
     override val eventId: EventId = EventId(inner.eventId)
     override val userId: UserId = UserId(inner.userId)

@@ -78,8 +78,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
-import org.matrix.rustcomponents.sdk.JoinRequest
-import org.matrix.rustcomponents.sdk.JoinRequestsListener
+import org.matrix.rustcomponents.sdk.KnockRequestsListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -95,6 +94,7 @@ import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
+import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -162,8 +162,8 @@ class RustMatrixRoom(
     }
 
     override val knockRequestsFlow: Flow<List<KnockRequest>> = mxCallbackFlow {
-        innerRoom.subscribeToJoinRequests(object : JoinRequestsListener {
-            override fun call(joinRequests: List<JoinRequest>) {
+        innerRoom.subscribeToKnockRequests(object : KnockRequestsListener {
+            override fun call(joinRequests: List<InnerKnockRequest>) {
                 val knockRequests = joinRequests.map { RustKnockRequest(it) }
                 channel.trySend(knockRequests)
             }
