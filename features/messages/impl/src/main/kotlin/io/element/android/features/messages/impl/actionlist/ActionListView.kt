@@ -185,6 +185,7 @@ private fun ActionListViewContent(
                     Column {
                         MessageSummary(
                             event = target.event,
+                            sentTimeFull = target.sentTimeFull,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
@@ -245,7 +246,11 @@ private fun ActionListViewContent(
 
 @Suppress("MultipleEmitters") // False positive
 @Composable
-private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modifier) {
+private fun MessageSummary(
+    event: TimelineItem.Event,
+    sentTimeFull: String,
+    modifier: Modifier = Modifier,
+) {
     val content: @Composable () -> Unit
     val icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
     val contentStyle = ElementTheme.typography.fontBodyMdRegular.copy(color = MaterialTheme.colorScheme.secondary)
@@ -300,20 +305,23 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         icon()
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            SenderName(
-                senderId = event.senderId,
-                senderProfile = event.senderProfile,
-                senderNameMode = SenderNameMode.ActionList,
-            )
+            Row {
+                SenderName(
+                    modifier = Modifier.weight(1f),
+                    senderId = event.senderId,
+                    senderProfile = event.senderProfile,
+                    senderNameMode = SenderNameMode.ActionList,
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = sentTimeFull,
+                    style = ElementTheme.typography.fontBodyXsRegular,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.End,
+                )
+            }
             content()
         }
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            event.sentTime,
-            style = ElementTheme.typography.fontBodyXsRegular,
-            color = MaterialTheme.colorScheme.secondary,
-            textAlign = TextAlign.End,
-        )
     }
 }
 

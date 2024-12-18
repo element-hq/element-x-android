@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.roomselect.api)
+    implementation(projects.libraries.voiceplayer.api)
     implementation(projects.libraries.voicerecorder.api)
     implementation(projects.libraries.mediaplayer.api)
     implementation(projects.libraries.uiUtils)

@@ -3,10 +3,10 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.7.2"
-kotlin = "2.0.21"
+android_gradle_plugin = "8.7.3"
+kotlin = "2.1.0"
 kotlinpoet = "2.0.0"
-ksp = "2.0.21-1.0.28"
+ksp = "2.1.0-1.0.29"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -22,17 +22,17 @@ constraintlayout_compose = "1.1.0"
 lifecycle = "2.8.7"
 activity = "1.9.3"
 media3 = "1.5.0"
-camera = "1.4.0"
+camera = "1.4.1"
 
 # Compose
-compose_bom = "2024.11.00"
+compose_bom = "2024.12.01"
 composecompiler = "1.5.15"
 
 # Coroutines
 coroutines = "1.9.0"
 
 # Accompanist
-accompanist = "0.36.0"
+accompanist = "0.37.0"
 
 # Test
 test_core = "1.6.1"
@@ -50,10 +50,10 @@ wysiwyg = "2.37.14"
 telephoto = "0.14.0"
 
 # Dependency analysis
-dependencyAnalysis = "2.5.0"
+dependencyAnalysis = "2.6.1"
 
 # DI
-dagger = "2.53"
+dagger = "2.53.1"
 anvil = "0.4.0"
 
 # Auto service
@@ -61,7 +61,7 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.1"
-kover = "0.8.3"
+kover = "0.9.0"
 
 [libraries]
 # Project
@@ -150,7 +150,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
 test_mockk = "io.mockk:mockk:1.13.13"
-test_konsist = "com.lemonappdev:konsist:0.17.1"
+test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
@@ -169,11 +169,11 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.18.1"
+jsoup = "org.jsoup:jsoup:1.18.3"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.70"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.72"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -187,7 +187,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.6.1"
+maplibre = "org.maplibre.gl:android-sdk:11.7.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
@@ -195,7 +195,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.9.3"
-sentry = "io.sentry:sentry-android:7.18.1"
+sentry = "io.sentry:sentry-android:7.19.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

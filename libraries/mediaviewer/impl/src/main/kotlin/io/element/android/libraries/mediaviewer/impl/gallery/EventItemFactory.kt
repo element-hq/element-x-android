@@ -8,7 +8,8 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
@@ -39,19 +40,27 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
+import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 import javax.inject.Inject
 
 class EventItemFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
-    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
+    private val dateFormatter: DateFormatter,
 ) {
     fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
     ): MediaItem.Event? {
         val event = currentTimelineItem.event
-        val sentTime = lastMessageTimestampFormatter.format(currentTimelineItem.event.timestamp)
+        val dateSent = dateFormatter.format(
+            currentTimelineItem.event.timestamp,
+            mode = DateFormatterMode.Day,
+        )
+        val dateSentFull = dateFormatter.format(
+            timestamp = currentTimelineItem.event.timestamp,
+            mode = DateFormatterMode.Full,
+        )
         return when (val content = event.content) {
             CallNotifyContent,
             is FailedToParseMessageLikeContent,
@@ -78,7 +87,7 @@ class EventItemFactory @Inject constructor(
                         Timber.w("Should not happen: ${content.type}")
                         null
                     }
-                    is AudioMessageType -> MediaItem.File(
+                    is AudioMessageType -> MediaItem.Audio(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -90,7 +99,9 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -106,7 +117,9 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -122,7 +135,9 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -139,7 +154,9 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -156,13 +173,15 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
                         duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
-                    is VoiceMessageType -> MediaItem.File(
+                    is VoiceMessageType -> MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -174,9 +193,13 @@ class EventItemFactory @Inject constructor(
                             senderId = event.sender,
                             senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
                             senderAvatar = event.senderProfile.getAvatarUrl(),
-                            dateSent = sentTime,
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = type.details?.waveform.orEmpty(),
                         ),
                         mediaSource = type.source,
+                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
+                        waveform = type.details?.waveform ?: persistentListOf(),
                     )
                 }
             }

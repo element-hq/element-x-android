@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.voiceplayer.api)
     implementation(projects.services.toolbox.api)
 
     api(projects.libraries.mediaviewer.api)

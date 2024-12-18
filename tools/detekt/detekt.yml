@@ -224,6 +224,7 @@ Compose:
       - LocalCompoundColors
       - LocalSnackbarDispatcher
       - LocalCameraPositionState
+      - LocalMediaItemPresenterFactories
       - LocalTimelineItemPresenterFactories
       - LocalRoomMemberProfilesCache
       - LocalMentionSpanTheme

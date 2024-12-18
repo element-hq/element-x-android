@@ -7,57 +7,64 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import android.text.format.DateFormat
 import android.text.format.DateUtils
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
+import timber.log.Timber
 import java.time.Period
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
+@SingleIn(AppScope::class)
 class DateFormatters @Inject constructor(
-    private val locale: Locale,
+    localeChangeObserver: LocaleChangeObserver,
     private val clock: Clock,
     private val timeZoneProvider: TimezoneProvider,
-) {
-    private val onlyTimeFormatter: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+    locale: Locale,
+) : LocaleChangeListener {
+    init {
+        localeChangeObserver.addListener(this)
     }
 
-    private val dateWithMonthFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
-        DateTimeFormatter.ofPattern(pattern, locale)
-    }
+    private var dateTimeFormatters: DateTimeFormatters = DateTimeFormatters(locale)
 
-    private val dateWithYearFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
-        DateTimeFormatter.ofPattern(pattern, locale)
-    }
-
-    private val dateWithFullFormatFormatter: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale)
+    override fun onLocaleChange() {
+        Timber.w("Locale changed, updating formatters")
+        dateTimeFormatters = DateTimeFormatters(Locale.getDefault())
     }
 
     internal fun formatTime(localDateTime: LocalDateTime): String {
-        return onlyTimeFormatter.format(localDateTime.toJavaLocalDateTime())
+        return dateTimeFormatters.onlyTimeFormatter.format(localDateTime.toJavaLocalDateTime())
+    }
+
+    internal fun formatDateWithMonthAndYear(localDateTime: LocalDateTime): String {
+        return dateTimeFormatters.dateWithMonthAndYearFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDateWithMonth(localDateTime: LocalDateTime): String {
-        return dateWithMonthFormatter.format(localDateTime.toJavaLocalDateTime())
+        return dateTimeFormatters.dateWithMonthFormatter.format(localDateTime.toJavaLocalDateTime())
+    }
+
+    internal fun formatDateWithDay(localDateTime: LocalDateTime): String {
+        return dateTimeFormatters.dateWithDayFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDateWithYear(localDateTime: LocalDateTime): String {
-        return dateWithYearFormatter.format(localDateTime.toJavaLocalDateTime())
+        return dateTimeFormatters.dateWithYearFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDateWithFullFormat(localDateTime: LocalDateTime): String {
-        return dateWithFullFormatFormatter.format(localDateTime.toJavaLocalDateTime())
+        return dateTimeFormatters.dateWithFullFormatFormatter.format(localDateTime.toJavaLocalDateTime())
+    }
+
+    internal fun formatDateWithFullFormatNoYear(localDateTime: LocalDateTime): String {
+        return dateTimeFormatters.dateWithFullFormatNoYearFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDate(
@@ -75,12 +82,12 @@ class DateFormatters @Inject constructor(
         }
     }
 
-    private fun getRelativeDay(ts: Long): String {
+    internal fun getRelativeDay(ts: Long, default: String = ""): String {
         return DateUtils.getRelativeTimeSpanString(
             ts,
             clock.now().toEpochMilliseconds(),
             DateUtils.DAY_IN_MILLIS,
             DateUtils.FORMAT_SHOW_WEEKDAY
-        )?.toString() ?: ""
+        )?.toString() ?: default
     }
 }

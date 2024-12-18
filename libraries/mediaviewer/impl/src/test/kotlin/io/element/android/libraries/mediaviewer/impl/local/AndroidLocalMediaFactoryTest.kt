@@ -27,11 +27,15 @@ class AndroidLocalMediaFactoryTest {
     @Test
     fun `test AndroidLocalMediaFactory`() {
         val sut = createAndroidLocalMediaFactory()
-        val result = sut.createFromMediaFile(aMediaFile(), anImageMediaInfo(
-            senderId = A_USER_ID,
-            senderName = A_USER_NAME,
-            dateSent = "12:34",
-        ))
+        val result = sut.createFromMediaFile(
+            mediaFile = aMediaFile(),
+            mediaInfo = anImageMediaInfo(
+                senderId = A_USER_ID,
+                senderName = A_USER_NAME,
+                dateSent = "12:34",
+                dateSentFull = "full",
+            )
+        )
         assertThat(result.uri.toString()).endsWith("aPath")
         assertThat(result.info).isEqualTo(
             MediaInfo(
@@ -43,7 +47,9 @@ class AndroidLocalMediaFactoryTest {
                 senderId = A_USER_ID,
                 senderName = A_USER_NAME,
                 senderAvatar = null,
-                dateSent = "12:34"
+                dateSent = "12:34",
+                dateSentFull = "full",
+                waveform = null,
             )
         )
     }

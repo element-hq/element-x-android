@@ -5,17 +5,17 @@
  * Please see LICENSE in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.preferences.impl.developer
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -24,8 +24,8 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -38,37 +38,29 @@ class DeveloperSettingsPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `present - ensures initial state is correct`() = runTest {
+    fun `present - ensures initial states are correct`() = runTest {
         val presenter = createDeveloperSettingsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.features).isEmpty()
-            assertThat(initialState.clearCacheAction).isEqualTo(AsyncData.Uninitialized)
-            assertThat(initialState.cacheSize).isEqualTo(AsyncData.Uninitialized)
-            assertThat(initialState.customElementCallBaseUrlState).isNotNull()
-            assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
-            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
-            assertThat(initialState.hideImagesAndVideos).isFalse()
-            val loadedState = awaitItem()
-            assertThat(loadedState.rageshakeState.isEnabled).isFalse()
-            assertThat(loadedState.rageshakeState.isSupported).isTrue()
-            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(0.3f)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - ensures feature list is loaded`() = runTest {
-        val presenter = createDeveloperSettingsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val state = awaitLastSequentialItem()
-            val numberOfModifiableFeatureFlags = FeatureFlags.entries.count { it.isFinished.not() }
-            assertThat(state.features).hasSize(numberOfModifiableFeatureFlags)
-            cancelAndIgnoreRemainingEvents()
+        presenter.test {
+            awaitItem().also { state ->
+                assertThat(state.features).isEmpty()
+                assertThat(state.clearCacheAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(state.cacheSize).isEqualTo(AsyncData.Uninitialized)
+                assertThat(state.customElementCallBaseUrlState).isNotNull()
+                assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
+                assertThat(state.isSimpleSlidingSyncEnabled).isFalse()
+                assertThat(state.hideImagesAndVideos).isFalse()
+                assertThat(state.rageshakeState.isEnabled).isFalse()
+                assertThat(state.rageshakeState.isSupported).isTrue()
+                assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)
+            }
+            awaitItem().also { state ->
+                assertThat(state.features).isNotEmpty()
+                val numberOfModifiableFeatureFlags = FeatureFlags.entries.count { it.isFinished.not() }
+                assertThat(state.features).hasSize(numberOfModifiableFeatureFlags)
+            }
+            awaitItem().also { state ->
+                assertThat(state.cacheSize).isInstanceOf(AsyncData.Success::class.java)
+            }
         }
     }
 
@@ -76,30 +68,28 @@ class DeveloperSettingsPresenterTest {
     fun `present - ensures Room directory search is not present on release Google Play builds`() = runTest {
         val buildMeta = aBuildMeta(buildType = BuildType.RELEASE, flavorDescription = "GooglePlay")
         val presenter = createDeveloperSettingsPresenter(buildMeta = buildMeta)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val state = awaitLastSequentialItem()
-            assertThat(state.features).doesNotContain(FeatureFlags.RoomDirectorySearch)
-            cancelAndIgnoreRemainingEvents()
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.features).doesNotContain(FeatureFlags.RoomDirectorySearch)
+            }
         }
     }
 
     @Test
     fun `present - ensures state is updated when enabled feature event is triggered`() = runTest {
         val presenter = createDeveloperSettingsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val stateBeforeEvent = awaitItem()
-            val featureBeforeEvent = stateBeforeEvent.features.first()
-            stateBeforeEvent.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(featureBeforeEvent, !featureBeforeEvent.isEnabled))
-            val stateAfterEvent = awaitItem()
-            val featureAfterEvent = stateAfterEvent.features.first()
-            assertThat(featureBeforeEvent.key).isEqualTo(featureAfterEvent.key)
-            assertThat(featureBeforeEvent.isEnabled).isNotEqualTo(featureAfterEvent.isEnabled)
-            cancelAndIgnoreRemainingEvents()
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                val feature = state.features.first()
+                state.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(feature, !feature.isEnabled))
+            }
+            awaitItem().also { state ->
+                val feature = state.features.first()
+                assertThat(feature.isEnabled).isTrue()
+                assertThat(feature.key).isEqualTo(feature.key)
+            }
         }
     }
 
@@ -107,19 +97,25 @@ class DeveloperSettingsPresenterTest {
     fun `present - clear cache`() = runTest {
         val clearCacheUseCase = FakeClearCacheUseCase()
         val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+        presenter.test {
+            skipItems(2)
             assertThat(clearCacheUseCase.executeHasBeenCalled).isFalse()
-            initialState.eventSink(DeveloperSettingsEvents.ClearCache)
-            val stateAfterEvent = awaitItem()
-            assertThat(stateAfterEvent.clearCacheAction).isInstanceOf(AsyncData.Loading::class.java)
-            skipItems(1)
-            assertThat(awaitItem().clearCacheAction).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
-            cancelAndIgnoreRemainingEvents()
+            awaitItem().also { state ->
+                state.eventSink(DeveloperSettingsEvents.ClearCache)
+            }
+            awaitItem().also { state ->
+                assertThat(state.clearCacheAction).isInstanceOf(AsyncAction.Loading::class.java)
+            }
+            awaitItem().also { state ->
+                assertThat(state.clearCacheAction).isInstanceOf(AsyncAction.Success::class.java)
+                assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
+            }
+            awaitItem().also { state ->
+                assertThat(state.cacheSize).isInstanceOf(AsyncData.Loading::class.java)
+            }
+            awaitItem().also { state ->
+                assertThat(state.cacheSize).isInstanceOf(AsyncData.Success::class.java)
+            }
         }
     }
 
@@ -127,26 +123,25 @@ class DeveloperSettingsPresenterTest {
     fun `present - custom element call base url`() = runTest {
         val preferencesStore = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferencesStore)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
-            initialState.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.ahoy"))
-            val updatedItem = awaitItem()
-            assertThat(updatedItem.customElementCallBaseUrlState.baseUrl).isEqualTo("https://call.element.ahoy")
-            assertThat(updatedItem.customElementCallBaseUrlState.defaultUrl).isEqualTo(ElementCallConfig.DEFAULT_BASE_URL)
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
+                state.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.ahoy"))
+            }
+            awaitItem().also { state ->
+                assertThat(state.customElementCallBaseUrlState.baseUrl).isEqualTo("https://call.element.ahoy")
+                assertThat(state.customElementCallBaseUrlState.defaultUrl).isEqualTo(ElementCallConfig.DEFAULT_BASE_URL)
+            }
         }
     }
 
     @Test
     fun `present - custom element call base url validator needs at least an HTTP scheme and host`() = runTest {
         val presenter = createDeveloperSettingsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val urlValidator = awaitLastSequentialItem().customElementCallBaseUrlState.validator
+        presenter.test {
+            skipItems(2)
+            val urlValidator = awaitItem().customElementCallBaseUrlState.validator
             assertThat(urlValidator("")).isTrue() // We allow empty string to clear the value and use the default one
             assertThat(urlValidator("test")).isFalse()
             assertThat(urlValidator("http://")).isFalse()
@@ -155,30 +150,31 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - toggling simplified sliding sync changes the preferences and logs out the user`() = runTest {
         val logoutCallRecorder = lambdaRecorder<Boolean, String?> { "" }
         val logoutUseCase = FakeLogoutUseCase(logoutLambda = logoutCallRecorder)
         val preferences = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences, logoutUseCase = logoutUseCase)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitLastSequentialItem()
-            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
-
-            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
-            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
-            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
-            advanceUntilIdle()
-            logoutCallRecorder.assertions().isCalledOnce()
-
-            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
-            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
-            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
-            advanceUntilIdle()
-            logoutCallRecorder.assertions().isCalledExactly(times = 2)
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.isSimpleSlidingSyncEnabled).isFalse()
+                state.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isSimpleSlidingSyncEnabled).isTrue()
+                assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+                advanceUntilIdle()
+                logoutCallRecorder.assertions().isCalledOnce()
+                state.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isSimpleSlidingSyncEnabled).isFalse()
+                assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
+                advanceUntilIdle()
+                logoutCallRecorder.assertions().isCalledExactly(2)
+            }
         }
     }
 
@@ -186,17 +182,21 @@ class DeveloperSettingsPresenterTest {
     fun `present - toggling hide image and video`() = runTest {
         val preferences = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitLastSequentialItem()
-            assertThat(initialState.hideImagesAndVideos).isFalse()
-            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
-            assertThat(awaitItem().hideImagesAndVideos).isTrue()
-            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(false))
-            assertThat(awaitItem().hideImagesAndVideos).isFalse()
-            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.hideImagesAndVideos).isFalse()
+                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
+            }
+            awaitItem().also { state ->
+                assertThat(state.hideImagesAndVideos).isTrue()
+                assertThat(preferences.doesHideImagesAndVideosFlow().first()).isTrue()
+                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(false))
+            }
+            awaitItem().also { state ->
+                assertThat(state.hideImagesAndVideos).isFalse()
+                assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
+            }
         }
     }
 

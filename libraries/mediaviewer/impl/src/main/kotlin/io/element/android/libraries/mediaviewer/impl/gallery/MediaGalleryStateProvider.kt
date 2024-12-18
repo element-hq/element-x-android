@@ -9,14 +9,17 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemAudio
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVoice
 import kotlinx.collections.immutable.toImmutableList
 
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
@@ -61,8 +64,11 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
                             ),
-                            aMediaItemFile(id = UniqueId("3")),
-                            aMediaItemFile(id = UniqueId("4")),
+                            aMediaItemAudio(id = UniqueId("4")),
+                            aMediaItemVoice(
+                                id = UniqueId("5"),
+                                waveform = aWaveForm(),
+                            ),
                             aMediaItemLoadingIndicator(),
                         ).toImmutableList()
                     )

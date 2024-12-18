@@ -7,19 +7,24 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import javax.inject.Inject
 
 class VirtualItemFactory @Inject constructor(
-    private val daySeparatorFormatter: DaySeparatorFormatter,
+    private val dateFormatter: DateFormatter,
 ) {
     fun create(timelineItem: MatrixTimelineItem.Virtual): MediaItem? {
         return when (val virtual = timelineItem.virtual) {
             is VirtualTimelineItem.DayDivider -> MediaItem.DateSeparator(
                 id = timelineItem.uniqueId,
-                formattedDate = daySeparatorFormatter.format(virtual.timestamp)
+                formattedDate = dateFormatter.format(
+                    timestamp = virtual.timestamp,
+                    mode = DateFormatterMode.Month,
+                    useRelative = true,
+                )
             )
             VirtualTimelineItem.LastForwardIndicator -> null
             is VirtualTimelineItem.LoadingIndicator -> MediaItem.LoadingIndicator(

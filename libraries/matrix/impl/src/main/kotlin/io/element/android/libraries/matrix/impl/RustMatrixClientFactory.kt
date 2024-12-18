@@ -109,9 +109,7 @@ class RustMatrixClientFactory @Inject constructor(
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
-            // TODO Add a feature flag to enable persistent storage
-            // See https://github.com/matrix-org/matrix-rust-sdk/pull/4396
-            .useEventCachePersistentStorage(false)
+            .useEventCachePersistentStorage(featureFlagService.isFeatureEnabled(FeatureFlags.EventCache))
             .roomKeyRecipientStrategy(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                     CollectStrategy.IdentityBasedStrategy

@@ -11,30 +11,30 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
-sealed class TimelineItemAction(
+enum class TimelineItemAction(
     @StringRes val titleRes: Int,
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    data object ViewInTimeline : TimelineItemAction(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on)
-    data object Forward : TimelineItemAction(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward)
-    data object CopyText : TimelineItemAction(CommonStrings.action_copy_text, CompoundDrawables.ic_compound_copy)
-    data object CopyCaption : TimelineItemAction(CommonStrings.action_copy_caption, CompoundDrawables.ic_compound_copy)
-    data object CopyLink : TimelineItemAction(CommonStrings.action_copy_link_to_message, CompoundDrawables.ic_compound_link)
-    data object Redact : TimelineItemAction(CommonStrings.action_remove, CompoundDrawables.ic_compound_delete, destructive = true)
-    data object Reply : TimelineItemAction(CommonStrings.action_reply, CompoundDrawables.ic_compound_reply)
-    data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, CompoundDrawables.ic_compound_reply)
-    data object Edit : TimelineItemAction(CommonStrings.action_edit, CompoundDrawables.ic_compound_edit)
-    data object EditCaption : TimelineItemAction(CommonStrings.action_edit_caption, CompoundDrawables.ic_compound_edit)
-    data object AddCaption : TimelineItemAction(CommonStrings.action_add_caption, CompoundDrawables.ic_compound_edit)
-    data object RemoveCaption : TimelineItemAction(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_delete, destructive = true)
-    data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_options)
-    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CompoundDrawables.ic_compound_chat_problem, destructive = true)
-    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end)
-    data object Pin : TimelineItemAction(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin)
-    data object Unpin : TimelineItemAction(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin)
+    ViewInTimeline(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on),
+    Forward(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward),
+    CopyText(CommonStrings.action_copy_text, CompoundDrawables.ic_compound_copy),
+    CopyCaption(CommonStrings.action_copy_caption, CompoundDrawables.ic_compound_copy),
+    CopyLink(CommonStrings.action_copy_link_to_message, CompoundDrawables.ic_compound_link),
+    Redact(CommonStrings.action_remove, CompoundDrawables.ic_compound_delete, destructive = true),
+    Reply(CommonStrings.action_reply, CompoundDrawables.ic_compound_reply),
+    ReplyInThread(CommonStrings.action_reply_in_thread, CompoundDrawables.ic_compound_reply),
+    Edit(CommonStrings.action_edit, CompoundDrawables.ic_compound_edit),
+    EditPoll(CommonStrings.action_edit_poll, CompoundDrawables.ic_compound_edit),
+    EditCaption(CommonStrings.action_edit_caption, CompoundDrawables.ic_compound_edit),
+    AddCaption(CommonStrings.action_add_caption, CompoundDrawables.ic_compound_edit),
+    RemoveCaption(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_close, destructive = true),
+    ViewSource(CommonStrings.action_view_source, CompoundDrawables.ic_compound_code),
+    ReportContent(CommonStrings.action_report_content, CompoundDrawables.ic_compound_chat_problem, destructive = true),
+    EndPoll(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end),
+    Pin(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin),
+    Unpin(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin),
 }

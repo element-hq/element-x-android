@@ -8,9 +8,9 @@
 package io.element.android.features.messages.impl.timeline.di
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
-import io.element.android.features.messages.impl.voicemessages.timeline.aVoiceMessageState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.voiceplayer.api.VoiceMessageState
+import io.element.android.libraries.voiceplayer.api.aVoiceMessageState
 
 /**
  * A fake [TimelineItemPresenterFactories] for screenshot tests.

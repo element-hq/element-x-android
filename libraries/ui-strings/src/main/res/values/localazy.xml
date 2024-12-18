@@ -330,6 +330,22 @@ Reason: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Anyone can ask to join the room but an administrator or moderator will have to accept the request."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Yes, enable encryption"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.
+No one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.
+We do not recommend enabling encryption for rooms that anyone can find and join."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Enable encryption?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Once enabled, encryption cannot be disabled."</string>
+  <string name="screen_security_and_privacy_encryption_section_title">"Encryption"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can find and join"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"People can only join if they are invited"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>
+  <string name="screen_security_and_privacy_room_access_section_title">"Room access"</string>
+  <string name="screen_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
@@ -344,6 +360,7 @@ Reason: %1$s."</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"You need to verify this device for access to historical messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your identity."</string>

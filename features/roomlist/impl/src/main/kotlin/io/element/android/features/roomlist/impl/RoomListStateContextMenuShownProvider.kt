@@ -31,4 +31,5 @@ internal fun aContextMenuShown(
     markAsUnreadFeatureFlagEnabled = true,
     hasNewContent = hasNewContent,
     isFavorite = isFavorite,
+    eventCacheFeatureFlagEnabled = false,
 )

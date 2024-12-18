@@ -45,6 +45,11 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
+import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
+import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
+import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
+import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
+import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -57,16 +62,7 @@ fun MediaVideoView(
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
 ) {
-    val exoPlayer = if (LocalInspectionMode.current) {
-        remember {
-            ExoPlayerForPreview()
-        }
-    } else {
-        val context = LocalContext.current
-        remember {
-            ExoPlayerWrapper.create(context)
-        }
-    }
+    val exoPlayer = rememberExoPlayer()
     ExoPlayerMediaVideoView(
         localMediaViewState = localMediaViewState,
         bottomPaddingInPixels = bottomPaddingInPixels,
@@ -92,6 +88,7 @@ private fun ExoPlayerMediaVideoView(
                 isPlaying = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
+                canMute = true,
                 isMuted = false,
             )
         )
@@ -107,31 +104,33 @@ private fun ExoPlayerMediaVideoView(
 
     localMediaViewState.playableState = playableState
 
-    val playerListener = object : Player.Listener {
-        override fun onRenderedFirstFrame() {
-            localMediaViewState.isReady = true
-        }
+    val playerListener = remember {
+        object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                localMediaViewState.isReady = true
+            }
 
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isPlaying = isPlaying,
-            )
-        }
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isPlaying = isPlaying,
+                )
+            }
 
-        override fun onVolumeChanged(volume: Float) {
-            mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isMuted = volume == 0f,
-            )
-        }
+            override fun onVolumeChanged(volume: Float) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isMuted = volume == 0f,
+                )
+            }
 
-        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-            if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                exoPlayer.duration.takeIf { it >= 0 }
-                    ?.let {
-                        mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                            durationInMillis = it,
-                        )
-                    }
+            override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+                if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
+                    exoPlayer.duration.takeIf { it >= 0 }
+                        ?.let {
+                            mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                                durationInMillis = it,
+                            )
+                        }
+                }
             }
         }
     }
@@ -211,22 +210,11 @@ private fun ExoPlayerMediaVideoView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
                 autoHideController++
-                if (exoPlayer.isPlaying) {
-                    exoPlayer.pause()
-                } else {
-                    if (exoPlayer.playbackState == Player.STATE_ENDED) {
-                        exoPlayer.seekTo(0)
-                    } else {
-                        exoPlayer.play()
-                    }
-                }
+                exoPlayer.togglePlay()
             },
             onSeekChange = {
                 autoHideController++
-                if (exoPlayer.isPlaying.not()) {
-                    exoPlayer.play()
-                }
-                exoPlayer.seekTo(it.toLong())
+                exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
                 autoHideController++

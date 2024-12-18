@@ -11,7 +11,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.FakeDateTimeObserver
 import io.element.android.libraries.androidutils.system.DateTimeObserver
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -30,12 +30,12 @@ class RoomListDataSourceTest {
             postAllRooms(listOf(aRoomSummary()))
         }
         val dateTimeObserver = FakeDateTimeObserver()
-        val lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter()
-        lastMessageTimestampFormatter.givenFormat("Today")
+        var dateFormatterResult = "Today"
+        val dateFormatter = FakeDateFormatter({ _, _, _ -> dateFormatterResult })
         val roomListDataSource = createRoomListDataSource(
             roomListService = roomListService,
             roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+                dateFormatter = dateFormatter,
             ),
             dateTimeObserver = dateTimeObserver,
         )
@@ -47,7 +47,7 @@ class RoomListDataSourceTest {
             val initialRoomList = awaitItem()
             assertThat(initialRoomList).isNotEmpty()
             assertThat(initialRoomList.first().timestamp).isEqualTo("Today")
-            lastMessageTimestampFormatter.givenFormat("Yesterday")
+            dateFormatterResult = "Yesterday"
             // Trigger a date change
             dateTimeObserver.given(DateTimeObserver.Event.DateChanged(Instant.MIN, Instant.now()))
             // Check there is a new list and it's not the same as the previous one
@@ -64,12 +64,12 @@ class RoomListDataSourceTest {
             postAllRooms(listOf(aRoomSummary()))
         }
         val dateTimeObserver = FakeDateTimeObserver()
-        val lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter()
-        lastMessageTimestampFormatter.givenFormat("Today")
+        var dateFormatterResult = "Today"
+        val dateFormatter = FakeDateFormatter({ _, _, _ -> dateFormatterResult })
         val roomListDataSource = createRoomListDataSource(
             roomListService = roomListService,
             roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+                dateFormatter = dateFormatter,
             ),
             dateTimeObserver = dateTimeObserver,
         )
@@ -80,7 +80,7 @@ class RoomListDataSourceTest {
             val initialRoomList = awaitItem()
             assertThat(initialRoomList).isNotEmpty()
             assertThat(initialRoomList.first().timestamp).isEqualTo("Today")
-            lastMessageTimestampFormatter.givenFormat("Yesterday")
+            dateFormatterResult = "Yesterday"
             // Trigger a timezone change
             dateTimeObserver.given(DateTimeObserver.Event.TimeZoneChanged)
             // Check there is a new list and it's not the same as the previous one

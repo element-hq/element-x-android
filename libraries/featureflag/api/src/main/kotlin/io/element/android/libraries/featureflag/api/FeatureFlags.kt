@@ -161,4 +161,11 @@ enum class FeatureFlags(
         defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
+    EventCache(
+        key = "feature.event_cache",
+        title = "Use SDK Event cache",
+        description = "Warning: you must kill and restart the app for the change to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

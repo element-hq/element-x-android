@@ -71,7 +71,7 @@ fun MediaDetailsBottomSheet(
             }
             SectionText(
                 title = stringResource(R.string.screen_media_details_uploaded_on),
-                text = state.mediaInfo.dateSent.orEmpty(),
+                text = state.mediaInfo.dateSentFull.orEmpty(),
             )
             SectionText(
                 title = stringResource(R.string.screen_media_details_filename),

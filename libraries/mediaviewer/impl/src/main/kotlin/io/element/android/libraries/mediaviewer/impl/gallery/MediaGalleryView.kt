@@ -27,18 +27,20 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -59,12 +61,17 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.gallery.di.aFakeMediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.gallery.di.rememberPresenter
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.AudioItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.DateItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
+import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -212,7 +219,11 @@ private fun MediaGalleryImages(
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (imagesAndVideos.isEmpty()) {
-        EmptyContent()
+        EmptyContent(
+            titleRes = R.string.screen_media_browser_media_empty_state_title,
+            subtitleRes = R.string.screen_media_browser_media_empty_state_subtitle,
+            icon = CompoundIcons.Image(),
+        )
     } else {
         MediaGalleryImageGrid(
             imagesAndVideos = imagesAndVideos,
@@ -229,7 +240,11 @@ private fun MediaGalleryFiles(
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (files.isEmpty()) {
-        EmptyContent()
+        EmptyContent(
+            titleRes = R.string.screen_media_browser_files_empty_state_title,
+            subtitleRes = R.string.screen_media_browser_files_empty_state_subtitle,
+            icon = CompoundIcons.Files(),
+        )
     } else {
         MediaGalleryFilesList(
             files = files,
@@ -245,30 +260,50 @@ private fun MediaGalleryFilesList(
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
+    val presenterFactories = LocalMediaItemPresenterFactories.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(files) { item ->
+        items(
+            items = files,
+            key = { it.id() },
+            contentType = { it::class.java },
+        ) { item ->
             when (item) {
                 is MediaItem.File -> FileItemView(
-                    item,
+                    modifier = Modifier.animateItem(),
+                    file = item,
                     onClick = { onItemClick(item) },
-                    onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                    onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                    onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
                 )
-                is MediaItem.DateSeparator -> DateItemView(item)
+                is MediaItem.Audio -> AudioItemView(
+                    modifier = Modifier.animateItem(),
+                    audio = item,
+                    onClick = { onItemClick(item) },
+                )
+                is MediaItem.Voice -> {
+                    val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
+                    VoiceItemView(
+                        modifier = Modifier.animateItem(),
+                        state = presenter.present(),
+                        voice = item,
+                        onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
+                        onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
+                        onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                    )
+                }
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item
+                )
                 is MediaItem.Image,
                 is MediaItem.Video -> {
                     // Should not happen
                 }
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -280,28 +315,20 @@ private fun MediaGalleryImageGrid(
     eventSink: (MediaGalleryEvents) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val horizontalPadding = 16.dp
-    val itemSpacing = 4.dp
-    val availableWidth = screenWidth - horizontalPadding * 2
-    val minCellWidth = 80.dp
-    // Calculate the number of columns
-    val columns = max(1, (availableWidth / (minCellWidth + itemSpacing)).toInt())
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = horizontalPadding),
-        columns = GridCells.Fixed(columns),
+            .padding(horizontal = 16.dp),
+        columns = GridCells.Adaptive(80.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(
-            imagesAndVideos,
+            items = imagesAndVideos,
             span = { item ->
                 when (item) {
                     is MediaItem.LoadingIndicator,
-                    is MediaItem.DateSeparator -> GridItemSpan(columns)
+                    is MediaItem.DateSeparator -> GridItemSpan(maxLineSpan)
                     is MediaItem.Event -> GridItemSpan(1)
                 }
             },
@@ -309,37 +336,40 @@ private fun MediaGalleryImageGrid(
             contentType = { it::class.java },
         ) { item ->
             when (item) {
-                is MediaItem.DateSeparator -> {
-                    DateItemView(item)
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                )
+                is MediaItem.Audio -> {
+                    // Should not happen
+                }
+                is MediaItem.Voice -> {
+                    // Should not happen
                 }
                 is MediaItem.File -> {
                     // Should not happen
                 }
-                is MediaItem.Image -> {
-                    ImageItemView(
-                        image = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
-                is MediaItem.Video -> {
-                    VideoItemView(
-                        video = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
-                        },
-                    )
-                }
-                is MediaItem.LoadingIndicator -> {
-                    LoadingMoreIndicator(item.direction)
-                    val latestEventSink by rememberUpdatedState(eventSink)
-                    LaunchedEffect(item.timestamp) {
-                        latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-                    }
-                }
+                is MediaItem.Image -> ImageItemView(
+                    modifier = Modifier.animateItem(),
+                    image = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
+                is MediaItem.Video -> VideoItemView(
+                    modifier = Modifier.animateItem(),
+                    video = item,
+                    onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
+                )
+                is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
+                    modifier = Modifier.animateItem(),
+                    item = item,
+                    eventSink = eventSink,
+                )
             }
         }
     }
@@ -347,14 +377,15 @@ private fun MediaGalleryImageGrid(
 
 @Composable
 private fun LoadingMoreIndicator(
-    direction: Timeline.PaginationDirection,
+    item: MediaItem.LoadingIndicator,
+    eventSink: (MediaGalleryEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        when (direction) {
+        when (item.direction) {
             Timeline.PaginationDirection.FORWARDS -> {
                 LinearProgressIndicator(
                     modifier = Modifier
@@ -370,6 +401,10 @@ private fun LoadingMoreIndicator(
                 )
             }
         }
+        val latestEventSink by rememberUpdatedState(eventSink)
+        LaunchedEffect(item.timestamp) {
+            latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
+        }
     }
 }
 
@@ -383,7 +418,11 @@ private fun ErrorContent(error: Throwable) {
 }
 
 @Composable
-private fun EmptyContent() {
+private fun EmptyContent(
+    titleRes: Int,
+    subtitleRes: Int,
+    icon: ImageVector,
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -392,9 +431,9 @@ private fun EmptyContent() {
                 .fillMaxWidth()
                 .padding(top = 44.dp)
                 .padding(24.dp),
-            title = stringResource(R.string.screen_media_browser_empty_state_title),
-            iconStyle = BigIcon.Style.Default(CompoundIcons.Image()),
-            subtitle = stringResource(R.string.screen_media_browser_empty_state_subtitle),
+            title = stringResource(titleRes),
+            iconStyle = BigIcon.Style.Default(icon),
+            subtitle = stringResource(subtitleRes),
         )
     }
 }
@@ -428,9 +467,13 @@ private fun LoadingContent(
 internal fun MediaGalleryViewPreview(
     @PreviewParameter(MediaGalleryStateProvider::class) state: MediaGalleryState
 ) = ElementPreview {
-    MediaGalleryView(
-        state = state,
-        onBackClick = {},
-        onItemClick = {},
-    )
+    CompositionLocalProvider(
+        LocalMediaItemPresenterFactories provides aFakeMediaItemPresenterFactories(),
+    ) {
+        MediaGalleryView(
+            state = state,
+            onBackClick = {},
+            onItemClick = {},
+        )
+    }
 }

@@ -242,6 +242,11 @@ interface MatrixRoom : Closeable {
     suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit>
 
     /**
+     * Clear the event cache storage for the current room.
+     */
+    suspend fun clearEventCacheStorage(): Result<Unit>
+
+    /**
      * Share a location message in the room.
      *
      * @param body A human readable textual representation of the location.

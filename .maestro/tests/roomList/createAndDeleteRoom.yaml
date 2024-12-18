@@ -30,5 +30,6 @@ appId: ${MAESTRO_APP_ID}
 # assert there's 1 member and 2 invitees
 - tapOn: "Back"
 - scroll
+- scroll
 - tapOn: "Leave room"
 - tapOn: "Leave"

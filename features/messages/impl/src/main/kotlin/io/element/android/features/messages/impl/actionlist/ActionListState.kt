@@ -24,6 +24,7 @@ data class ActionListState(
         data class Loading(val event: TimelineItem.Event) : Target
         data class Success(
             val event: TimelineItem.Event,
+            val sentTimeFull: String,
             val displayEmojiReactions: Boolean,
             val verifiedUserSendFailure: VerifiedUserSendFailure,
             val actions: ImmutableList<TimelineItemAction>,
