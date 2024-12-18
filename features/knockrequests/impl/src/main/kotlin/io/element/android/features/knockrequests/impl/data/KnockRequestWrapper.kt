@@ -12,23 +12,23 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 
 class KnockRequestWrapper(
-    private val knockRequest: KnockRequest,
+    private val inner: KnockRequest,
     dateFormatter: (Long?) -> String? = { null }
 ) : KnockRequestPresentable {
-    override val eventId: EventId = knockRequest.eventId
-    override val userId: UserId = knockRequest.userId
-    override val displayName: String? = knockRequest.displayName
-    override val avatarUrl: String? = knockRequest.avatarUrl
-    override val reason: String? = knockRequest.reason?.trim()
-    override val formattedDate: String? = dateFormatter(knockRequest.timestamp)
+    override val eventId: EventId = inner.eventId
+    override val userId: UserId = inner.userId
+    override val displayName: String? = inner.displayName
+    override val avatarUrl: String? = inner.avatarUrl
+    override val reason: String? = inner.reason?.trim()
+    override val formattedDate: String? = dateFormatter(inner.timestamp)
 
-    val isSeen: Boolean = knockRequest.isSeen
+    val isSeen: Boolean = inner.isSeen
 
-    suspend fun accept(): Result<Unit> = knockRequest.accept()
+    suspend fun accept(): Result<Unit> = inner.accept()
 
-    suspend fun decline(reason: String?): Result<Unit> = knockRequest.decline(reason)
+    suspend fun decline(reason: String?): Result<Unit> = inner.decline(reason)
 
-    suspend fun declineAndBan(reason: String?): Result<Unit> = knockRequest.declineAndBan(reason)
+    suspend fun declineAndBan(reason: String?): Result<Unit> = inner.declineAndBan(reason)
 
-    suspend fun markAsSeen(): Result<Unit> = knockRequest.markAsSeen()
+    suspend fun markAsSeen(): Result<Unit> = inner.markAsSeen()
 }

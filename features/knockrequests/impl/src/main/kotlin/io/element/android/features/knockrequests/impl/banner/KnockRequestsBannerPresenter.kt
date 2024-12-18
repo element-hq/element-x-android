@@ -19,11 +19,6 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.extensions.firstIfSingle
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.room.canHandleKnockRequestsAsState
-import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -33,10 +28,8 @@ import javax.inject.Inject
 private const val ACCEPT_ERROR_DISPLAY_DURATION = 1500L
 
 class KnockRequestsBannerPresenter @Inject constructor(
-    private val room: MatrixRoom,
     private val knockRequestsService: KnockRequestsService,
     private val appCoroutineScope: CoroutineScope,
-    private val featureFlagService: FeatureFlagService,
 ) : Presenter<KnockRequestsBannerState> {
     @Composable
     override fun present(): KnockRequestsBannerState {
@@ -48,15 +41,12 @@ class KnockRequestsBannerPresenter @Inject constructor(
             }
         }.collectAsState()
 
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val canAccept by room.canInviteAsState(syncUpdateFlow.value)
-        val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
+        val permissions by knockRequestsService.permissionsFlow.collectAsState()
         val showAcceptError = remember { mutableStateOf(false) }
-        val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
 
         val shouldShowBanner by remember {
             derivedStateOf {
-                isKnockRequestsEnabled && canHandleKnockRequests && knockRequests.isNotEmpty()
+                permissions.canHandle && knockRequests.isNotEmpty()
             }
         }
 
@@ -79,7 +69,7 @@ class KnockRequestsBannerPresenter @Inject constructor(
         return KnockRequestsBannerState(
             knockRequests = knockRequests,
             displayAcceptError = showAcceptError.value,
-            canAccept = canAccept,
+            canAccept = permissions.canAccept,
             isVisible = shouldShowBanner,
             eventSink = ::handleEvents,
         )

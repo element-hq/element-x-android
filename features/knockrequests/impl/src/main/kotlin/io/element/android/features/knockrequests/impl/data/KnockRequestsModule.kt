@@ -12,6 +12,8 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 @Module
@@ -19,7 +21,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 object KnockRequestsModule {
     @Provides
     @SingleIn(RoomScope::class)
-    fun knockRequestsService(room: MatrixRoom): KnockRequestsService {
-        return KnockRequestsService(room.knockRequestsFlow, room.roomCoroutineScope)
+    fun knockRequestsService(room: MatrixRoom, featureFlagService: FeatureFlagService): KnockRequestsService {
+        return KnockRequestsService(
+            knockRequestsFlow = room.knockRequestsFlow,
+            permissionsFlow = room.knockRequestPermissionsFlow(),
+            isKnockFeatureEnabledFlow = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock),
+            coroutineScope = room.roomCoroutineScope
+        )
     }
 }

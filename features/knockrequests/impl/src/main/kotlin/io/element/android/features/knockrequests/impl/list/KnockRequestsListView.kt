@@ -126,9 +126,9 @@ private fun KnockRequestsListContent(
                 } else {
                     KnockRequestsList(
                         knockRequests = knockRequests,
-                        canAccept = state.canAccept,
-                        canDecline = state.canDecline,
-                        canBan = state.canBan,
+                        canAccept = state.permissions.canAccept,
+                        canDecline = state.permissions.canDecline,
+                        canBan = state.permissions.canBan,
                         onAcceptClick = ::onAcceptClick,
                         onDeclineClick = ::onDeclineClick,
                         onBanClick = ::onBanClick,

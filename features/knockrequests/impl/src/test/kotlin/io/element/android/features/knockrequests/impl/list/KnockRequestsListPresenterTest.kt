@@ -10,13 +10,13 @@
 package io.element.android.features.knockrequests.impl.list
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.knock.FakeKnockRequest
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -35,15 +35,15 @@ class KnockRequestsListPresenterTest {
         presenter.test {
             awaitItem().also { state ->
                 assertThat(state.knockRequests).isInstanceOf(AsyncData.Loading::class.java)
-                assertThat(state.canAccept).isFalse()
-                assertThat(state.canDecline).isFalse()
-                assertThat(state.canBan).isFalse()
+                assertThat(state.permissions.canAccept).isFalse()
+                assertThat(state.permissions.canDecline).isFalse()
+                assertThat(state.permissions.canBan).isFalse()
             }
             awaitItem().also { state ->
                 assertThat(state.knockRequests).isInstanceOf(AsyncData.Loading::class.java)
-                assertThat(state.canAccept).isTrue()
-                assertThat(state.canDecline).isTrue()
-                assertThat(state.canBan).isTrue()
+                assertThat(state.permissions.canAccept).isTrue()
+                assertThat(state.permissions.canDecline).isTrue()
+                assertThat(state.permissions.canBan).isTrue()
             }
             awaitItem().also { state ->
                 assertThat(state.knockRequests).isInstanceOf(AsyncData.Success::class.java)
@@ -293,18 +293,12 @@ class KnockRequestsListPresenterTest {
         canBan: Boolean = true,
         knockRequestsFlow: Flow<List<KnockRequest>> = flowOf(emptyList())
     ): KnockRequestsListPresenter {
-        val room = FakeMatrixRoom(
-            canInviteResult = { Result.success(canAccept) },
-            canKickResult = { Result.success(canDecline) },
-            canBanResult = { Result.success(canBan) }
-        )
         val knockRequestsService = KnockRequestsService(
             knockRequestsFlow = knockRequestsFlow,
-            coroutineScope = backgroundScope
+            coroutineScope = backgroundScope,
+            isKnockFeatureEnabledFlow = flowOf(true),
+            permissionsFlow = flowOf(KnockRequestPermissions(canAccept, canDecline, canBan)),
         )
-        return KnockRequestsListPresenter(
-            room = room,
-            knockRequestsService = knockRequestsService,
-        )
+        return KnockRequestsListPresenter(knockRequestsService = knockRequestsService)
     }
 }

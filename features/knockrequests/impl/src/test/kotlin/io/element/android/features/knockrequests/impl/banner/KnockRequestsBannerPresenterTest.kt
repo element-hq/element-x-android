@@ -8,14 +8,12 @@
 package io.element.android.features.knockrequests.impl.banner
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.knock.FakeKnockRequest
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -234,19 +232,12 @@ private fun TestScope.createKnockRequestsBannerPresenter(
 ): KnockRequestsBannerPresenter {
     val knockRequestsService = KnockRequestsService(
         knockRequestsFlow = knockRequestsFlow,
-        coroutineScope = backgroundScope
-    )
-    val featureFlagService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.Knock.key to isFeatureEnabled
-        )
+        coroutineScope = backgroundScope,
+        isKnockFeatureEnabledFlow = flowOf(isFeatureEnabled),
+        permissionsFlow = flowOf(KnockRequestPermissions(canAcceptKnockRequests, canAcceptKnockRequests, canAcceptKnockRequests)),
     )
     return KnockRequestsBannerPresenter(
-        room = FakeMatrixRoom(
-            canInviteResult = { Result.success(canAcceptKnockRequests) }
-        ),
         knockRequestsService = knockRequestsService,
         appCoroutineScope = this,
-        featureFlagService = featureFlagService
     )
 }

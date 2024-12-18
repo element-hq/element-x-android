@@ -20,16 +20,11 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.room.canBanAsState
-import io.element.android.libraries.matrix.ui.room.canInviteAsState
-import io.element.android.libraries.matrix.ui.room.canKickAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KnockRequestsListPresenter @Inject constructor(
-    private val room: MatrixRoom,
     private val knockRequestsService: KnockRequestsService,
 ) : Presenter<KnockRequestsListState> {
     @Composable
@@ -37,11 +32,7 @@ class KnockRequestsListPresenter @Inject constructor(
         val asyncAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         var actionTarget by remember { mutableStateOf<KnockRequestsActionTarget>(KnockRequestsActionTarget.None) }
 
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val canBan by room.canBanAsState(syncUpdateFlow.value)
-        val canDecline by room.canKickAsState(syncUpdateFlow.value)
-        val canAccept by room.canInviteAsState(syncUpdateFlow.value)
-
+        val permissions by knockRequestsService.permissionsFlow.collectAsState()
         val knockRequests by knockRequestsService.knockRequestsFlow.collectAsState()
 
         val coroutineScope = rememberCoroutineScope()
@@ -79,10 +70,8 @@ class KnockRequestsListPresenter @Inject constructor(
         return KnockRequestsListState(
             knockRequests = knockRequests,
             actionTarget = actionTarget,
+            permissions = permissions,
             asyncAction = asyncAction.value,
-            canAccept = canAccept,
-            canDecline = canDecline,
-            canBan = canBan,
             eventSink = ::handleEvents
         )
     }

@@ -10,6 +10,7 @@ package io.element.android.features.knockrequests.impl.data
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -19,26 +20,39 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.getAndUpdate
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.supervisorScope
 
 class KnockRequestsService(
     knockRequestsFlow: Flow<List<KnockRequest>>,
+    permissionsFlow: Flow<KnockRequestPermissions>,
+    isKnockFeatureEnabledFlow: Flow<Boolean>,
     coroutineScope: CoroutineScope,
 ) {
     // Keep track of the knock requests that have been handled, so we don't have to wait for sync to remove them.
     private val handledKnockRequestIds = MutableStateFlow<Set<EventId>>(emptySet())
 
     val knockRequestsFlow = combine(
-        knockRequestsFlow.wrapped(),
+        isKnockFeatureEnabledFlow,
+        knockRequestsFlow,
         handledKnockRequestIds,
-    ) { knockRequests, handledKnockIds ->
-        val presentableKnockRequests = knockRequests
-            .filter { it.eventId !in handledKnockIds }
-            .toImmutableList()
-        AsyncData.Success(presentableKnockRequests)
+    ) { isKnockEnabled, knockRequests, handledKnockIds ->
+        if (!isKnockEnabled) {
+            AsyncData.Success(persistentListOf())
+        } else {
+            val presentableKnockRequests = knockRequests
+                .filter { it.eventId !in handledKnockIds }
+                .map { inner -> KnockRequestWrapper(inner) }
+                .toImmutableList()
+            AsyncData.Success(presentableKnockRequests)
+        }
     }.stateIn(coroutineScope, SharingStarted.Lazily, AsyncData.Loading())
+
+    val permissionsFlow = permissionsFlow.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Lazily,
+        initialValue = KnockRequestPermissions(canAccept = false, canDecline = false, canBan = false)
+    )
 
     private fun knockRequestsList() = knockRequestsFlow.value.dataOrNull().orEmpty()
 
@@ -128,8 +142,4 @@ class KnockRequestsService(
     }
 
     private fun knockRequestNotFoundResult() = Result.failure<Unit>(IllegalArgumentException("Knock request not found"))
-
-    private fun Flow<List<KnockRequest>>.wrapped() = map { knockRequests ->
-        knockRequests.map { KnockRequestWrapper(it) }
-    }
 }
