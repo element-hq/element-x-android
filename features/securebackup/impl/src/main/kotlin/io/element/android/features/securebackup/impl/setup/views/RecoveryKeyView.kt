@@ -9,6 +9,7 @@ package io.element.android.features.securebackup.impl.setup.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -88,35 +91,31 @@ private fun RecoveryKeyStaticContent(
     state: RecoveryKeyViewState,
     onClick: (() -> Unit)?,
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(
                 color = ElementTheme.colors.bgSubtleSecondary,
-                shape = RoundedCornerShape(14.dp)
             )
             .clickableIfNotNull(onClick)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 16.dp, vertical = 11.dp),
+        contentAlignment = Alignment.Center,
     ) {
         if (state.formattedRecoveryKey != null) {
-            Text(
-                text = state.formattedRecoveryKey,
-                modifier = Modifier.weight(1f),
-            )
-            Icon(
-                imageVector = CompoundIcons.Copy(),
-                contentDescription = stringResource(id = CommonStrings.action_copy),
-                tint = ElementTheme.colors.iconSecondary,
+            RecoveryKeyWithCopy(
+                recoveryKey = state.formattedRecoveryKey,
+                alpha = 1f,
             )
         } else {
+            // Use an invisible recovery key to ensure that the Box size is correct.
+            val fakeFormattedRecoveryKey = List(12) { "XXXX" }.joinToString(" ")
+            RecoveryKeyWithCopy(
+                recoveryKey = fakeFormattedRecoveryKey,
+                alpha = 0f,
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 11.dp)
             ) {
                 if (state.inProgress) {
                     CircularProgressIndicator(
@@ -141,6 +140,31 @@ private fun RecoveryKeyStaticContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun RecoveryKeyWithCopy(
+    recoveryKey: String,
+    alpha: Float,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .alpha(alpha),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = recoveryKey,
+            color = ElementTheme.colors.textSecondary,
+            style = ElementTheme.typography.fontBodyLgRegular.copy(fontFamily = FontFamily.Monospace),
+            modifier = Modifier.weight(1f),
+        )
+        Icon(
+            imageVector = CompoundIcons.Copy(),
+            contentDescription = stringResource(id = CommonStrings.action_copy),
+            tint = ElementTheme.colors.iconSecondary,
+        )
     }
 }
 
