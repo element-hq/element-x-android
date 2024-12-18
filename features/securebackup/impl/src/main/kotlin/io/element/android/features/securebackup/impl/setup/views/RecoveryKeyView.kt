@@ -90,14 +90,14 @@ private fun RecoveryKeyStaticContent(
 ) {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .background(
-                        color = ElementTheme.colors.bgSubtleSecondary,
-                        shape = RoundedCornerShape(14.dp)
-                )
-                .clickableIfNotNull(onClick)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(
+                color = ElementTheme.colors.bgSubtleSecondary,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .clickableIfNotNull(onClick)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (state.formattedRecoveryKey != null) {
@@ -115,15 +115,15 @@ private fun RecoveryKeyStaticContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 11.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 11.dp)
             ) {
                 if (state.inProgress) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                                .progressSemantics()
-                                .padding(end = 8.dp)
-                                .size(16.dp),
+                            .progressSemantics()
+                            .padding(end = 8.dp)
+                            .size(16.dp),
                         color = ElementTheme.colors.textPrimary,
                         strokeWidth = 1.5.dp,
                     )
@@ -160,12 +160,12 @@ private fun RecoveryKeyFormContent(
     }
     TextField(
         modifier = Modifier
-                .fillMaxWidth()
-                .testTag(TestTags.recoveryKey)
-                .autofill(
-                        autofillTypes = listOf(AutofillType.Password),
-                        onFill = { onChange(it) },
-                ),
+            .fillMaxWidth()
+            .testTag(TestTags.recoveryKey)
+            .autofill(
+                autofillTypes = listOf(AutofillType.Password),
+                onFill = { onChange(it) },
+            ),
         minLines = 2,
         value = state.formattedRecoveryKey.orEmpty(),
         onValueChange = onChange,
