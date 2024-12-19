@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class KnockRequestsListState(
     val knockRequests: AsyncData<ImmutableList<KnockRequestPresentable>>,
-    val actionTarget: KnockRequestsActionTarget,
+    val currentAction: KnockRequestsAction,
     val asyncAction: AsyncAction<Unit>,
     val permissions: KnockRequestPermissions,
     val eventSink: (KnockRequestsListEvents) -> Unit,
@@ -25,10 +25,10 @@ data class KnockRequestsListState(
 }
 
 @Immutable
-sealed interface KnockRequestsActionTarget {
-    data object None : KnockRequestsActionTarget
-    data class Accept(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
-    data class Decline(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
-    data class DeclineAndBan(val knockRequest: KnockRequestPresentable) : KnockRequestsActionTarget
-    data object AcceptAll : KnockRequestsActionTarget
+sealed interface KnockRequestsAction {
+    data object None : KnockRequestsAction
+    data class Accept(val knockRequest: KnockRequestPresentable) : KnockRequestsAction
+    data class Decline(val knockRequest: KnockRequestPresentable) : KnockRequestsAction
+    data class DeclineAndBan(val knockRequest: KnockRequestPresentable) : KnockRequestsAction
+    data object AcceptAll : KnockRequestsAction
 }

@@ -109,7 +109,7 @@ class KnockRequestsListViewTest {
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
                 asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 eventSink = eventsRecorder,
             ),
         )
@@ -125,7 +125,7 @@ class KnockRequestsListViewTest {
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
                 asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 eventSink = eventsRecorder,
             ),
         )
@@ -141,7 +141,7 @@ class KnockRequestsListViewTest {
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
                 asyncAction = AsyncAction.ConfirmingNoParams,
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 eventSink = eventsRecorder,
             ),
         )

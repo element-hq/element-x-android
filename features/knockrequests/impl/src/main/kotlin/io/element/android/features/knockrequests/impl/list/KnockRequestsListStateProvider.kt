@@ -65,7 +65,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequestPresentable()
                     )
                 ),
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 asyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aKnockRequestsListState(
@@ -74,7 +74,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequestPresentable()
                     )
                 ),
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 asyncAction = AsyncAction.Loading,
             ),
             aKnockRequestsListState(
@@ -88,7 +88,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                     canDecline = true,
                     canBan = true,
                 ),
-                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                currentAction = KnockRequestsAction.AcceptAll,
                 asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
             ),
             aKnockRequestsListState(
@@ -132,7 +132,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
 
 fun aKnockRequestsListState(
     knockRequests: AsyncData<ImmutableList<KnockRequestPresentable>> = AsyncData.Success(persistentListOf()),
-    actionTarget: KnockRequestsActionTarget = KnockRequestsActionTarget.None,
+    currentAction: KnockRequestsAction = KnockRequestsAction.None,
     asyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     permissions: KnockRequestPermissions = KnockRequestPermissions(
         canAccept = true,
@@ -142,7 +142,7 @@ fun aKnockRequestsListState(
     eventSink: (KnockRequestsListEvents) -> Unit = {},
 ) = KnockRequestsListState(
     knockRequests = knockRequests,
-    actionTarget = actionTarget,
+    currentAction = currentAction,
     asyncAction = asyncAction,
     permissions = permissions,
     eventSink = eventSink,

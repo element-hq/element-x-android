@@ -153,7 +153,7 @@ private fun KnockRequestsListContent(
             else -> Unit
         }
         KnockRequestsActionsView(
-            actionTarget = state.actionTarget,
+            currentAction = state.currentAction,
             asyncAction = state.asyncAction,
             onConfirm = {
                 state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
@@ -181,7 +181,7 @@ private fun KnockRequestsListContent(
 
 @Composable
 private fun KnockRequestsActionsView(
-    actionTarget: KnockRequestsActionTarget,
+    currentAction: KnockRequestsAction,
     asyncAction: AsyncAction<Unit>,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
@@ -195,20 +195,20 @@ private fun KnockRequestsActionsView(
             onErrorDismiss = onDismiss,
             confirmationDialog = {
                 KnockRequestActionConfirmation(
-                    actionTarget = actionTarget,
+                    currentAction = currentAction,
                     onSubmit = onConfirm,
                     onDismiss = onDismiss,
                 )
             },
             progressDialog = {
-                KnockRequestActionProgress(target = actionTarget)
+                KnockRequestActionProgress(target = currentAction)
             },
             errorMessage = {
-                when (actionTarget) {
-                    is KnockRequestsActionTarget.Accept -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
-                    is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
-                    is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
-                    KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_failed_alert_description)
+                when (currentAction) {
+                    is KnockRequestsAction.Accept -> stringResource(R.string.screen_knock_requests_list_accept_failed_alert_description)
+                    is KnockRequestsAction.Decline -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
+                    is KnockRequestsAction.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
+                    KnockRequestsAction.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_failed_alert_description)
                     else -> ""
                 }
             },
@@ -219,25 +219,25 @@ private fun KnockRequestsActionsView(
 
 @Composable
 private fun KnockRequestActionConfirmation(
-    actionTarget: KnockRequestsActionTarget,
+    currentAction: KnockRequestsAction,
     onSubmit: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (title, content, submitText) = when (actionTarget) {
-        KnockRequestsActionTarget.AcceptAll -> Triple(
+    val (title, content, submitText) = when (currentAction) {
+        KnockRequestsAction.AcceptAll -> Triple(
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_title),
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_description),
             stringResource(R.string.screen_knock_requests_list_accept_all_alert_confirm_button_title),
         )
-        is KnockRequestsActionTarget.Decline -> Triple(
+        is KnockRequestsAction.Decline -> Triple(
             stringResource(R.string.screen_knock_requests_list_decline_alert_title),
-            stringResource(R.string.screen_knock_requests_list_decline_alert_description, actionTarget.knockRequest.getBestName()),
+            stringResource(R.string.screen_knock_requests_list_decline_alert_description, currentAction.knockRequest.getBestName()),
             stringResource(R.string.screen_knock_requests_list_decline_alert_confirm_button_title),
         )
-        is KnockRequestsActionTarget.DeclineAndBan -> Triple(
+        is KnockRequestsAction.DeclineAndBan -> Triple(
             stringResource(R.string.screen_knock_requests_list_ban_alert_title),
-            stringResource(R.string.screen_knock_requests_list_ban_alert_description, actionTarget.knockRequest.getBestName()),
+            stringResource(R.string.screen_knock_requests_list_ban_alert_description, currentAction.knockRequest.getBestName()),
             stringResource(R.string.screen_knock_requests_list_ban_alert_confirm_button_title),
         )
         else -> return
@@ -254,14 +254,14 @@ private fun KnockRequestActionConfirmation(
 
 @Composable
 private fun KnockRequestActionProgress(
-    target: KnockRequestsActionTarget,
+    target: KnockRequestsAction,
     modifier: Modifier = Modifier,
 ) {
     val progressText = when (target) {
-        is KnockRequestsActionTarget.Accept -> stringResource(R.string.screen_knock_requests_list_accept_loading_title)
-        is KnockRequestsActionTarget.Decline -> stringResource(R.string.screen_knock_requests_list_decline_loading_title)
-        is KnockRequestsActionTarget.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_ban_loading_title)
-        KnockRequestsActionTarget.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_loading_title)
+        is KnockRequestsAction.Accept -> stringResource(R.string.screen_knock_requests_list_accept_loading_title)
+        is KnockRequestsAction.Decline -> stringResource(R.string.screen_knock_requests_list_decline_loading_title)
+        is KnockRequestsAction.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_ban_loading_title)
+        KnockRequestsAction.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_loading_title)
         else -> return
     }
     ProgressDialog(

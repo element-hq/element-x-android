@@ -69,7 +69,7 @@ class KnockRequestsListPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.Accept(knockRequestPresentable))
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.Accept(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
@@ -79,7 +79,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull().orEmpty()).isEmpty()
             }
             assert(acceptLambda).isCalledOnce()
@@ -103,7 +103,7 @@ class KnockRequestsListPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.Accept(knockRequestPresentable))
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.Accept(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
@@ -120,7 +120,7 @@ class KnockRequestsListPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull()).hasSize(1)
             }
             assert(acceptLambda).isCalledExactly(2)
@@ -144,7 +144,7 @@ class KnockRequestsListPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.Decline(knockRequestPresentable))
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.Decline(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
                 state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
             }
@@ -158,7 +158,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull().orEmpty()).isEmpty()
             }
         }
@@ -182,7 +182,7 @@ class KnockRequestsListPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.DeclineAndBan(knockRequestPresentable))
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.DeclineAndBan(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
                 state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
             }
@@ -196,7 +196,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull().orEmpty()).isEmpty()
             }
         }
@@ -223,7 +223,7 @@ class KnockRequestsListPresenterTest {
             }
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.AcceptAll)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.AcceptAll)
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
                 state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
             }
@@ -237,7 +237,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull().orEmpty()).isEmpty()
             }
         }
@@ -265,7 +265,7 @@ class KnockRequestsListPresenterTest {
             }
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.AcceptAll)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.AcceptAll)
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
                 state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
             }
@@ -279,7 +279,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-                assertThat(state.actionTarget).isEqualTo(KnockRequestsActionTarget.None)
+                assertThat(state.currentAction).isEqualTo(KnockRequestsAction.None)
                 assertThat(state.knockRequests.dataOrNull()).hasSize(1)
             }
         }
