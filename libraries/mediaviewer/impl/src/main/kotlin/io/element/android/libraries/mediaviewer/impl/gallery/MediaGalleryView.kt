@@ -153,6 +153,12 @@ fun MediaGalleryView(
                 onViewInTimeline = { eventId ->
                     state.eventSink(MediaGalleryEvents.ViewInTimeline(eventId))
                 },
+                onShare = { eventId ->
+                    state.eventSink(MediaGalleryEvents.Share(eventId))
+                },
+                onDownload = { eventId ->
+                    state.eventSink(MediaGalleryEvents.SaveOnDisk(eventId))
+                },
                 onDelete = { eventId ->
                     state.eventSink(
                         MediaGalleryEvents.ConfirmDelete(
@@ -276,11 +282,17 @@ private fun MediaGalleryFilesList(
                     modifier = Modifier.animateItem(),
                     file = item,
                     onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
                 )
                 is MediaItem.Audio -> AudioItemView(
                     modifier = Modifier.animateItem(),
                     audio = item,
                     onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
@@ -288,9 +300,9 @@ private fun MediaGalleryFilesList(
                         modifier = Modifier.animateItem(),
                         state = presenter.present(),
                         voice = item,
-                        onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                        onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                        onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                        onLongClick = {
+                            eventSink(MediaGalleryEvents.OpenInfo(item))
+                        },
                     )
                 }
                 is MediaItem.DateSeparator -> DateItemView(
