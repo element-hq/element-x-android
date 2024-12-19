@@ -7,9 +7,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -58,9 +59,7 @@ import kotlinx.coroutines.delay
 fun VoiceItemView(
     state: VoiceMessageState,
     voice: MediaItem.Voice,
-    onShareClick: () -> Unit,
-    onDownloadClick: () -> Unit,
-    onInfoClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -72,6 +71,7 @@ fun VoiceItemView(
         VoiceInfoRow(
             state = state,
             voice = voice,
+            onLongClick = onLongClick,
         )
         val caption = voice.mediaInfo.caption
         if (caption != null) {
@@ -79,19 +79,16 @@ fun VoiceItemView(
         } else {
             Spacer(modifier = Modifier.height(16.dp))
         }
-        ActionIconsRow(
-            onShareClick = onShareClick,
-            onDownloadClick = onDownloadClick,
-            onInfoClick = onInfoClick,
-        )
         HorizontalDivider()
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun VoiceInfoRow(
     state: VoiceMessageState,
     voice: MediaItem.Voice,
+    onLongClick: () -> Unit,
 ) {
     fun playPause() {
         state.eventSink(VoiceMessageEvents.PlayPause)
@@ -104,6 +101,7 @@ private fun VoiceInfoRow(
                 color = ElementTheme.colors.bgSubtleSecondary,
                 shape = RoundedCornerShape(12.dp),
             )
+            .combinedClickable(onClick = {}, onLongClick = onLongClick)
             .fillMaxWidth()
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -257,43 +255,6 @@ private fun CustomIconButton(
     )
 }
 
-@Composable
-private fun ActionIconsRow(
-    onShareClick: () -> Unit,
-    onDownloadClick: () -> Unit,
-    onInfoClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        IconButton(
-            onClick = onShareClick,
-        ) {
-            Icon(
-                imageVector = CompoundIcons.ShareAndroid(),
-                contentDescription = null,
-            )
-        }
-        IconButton(
-            onClick = onDownloadClick,
-        ) {
-            Icon(
-                imageVector = CompoundIcons.Download(),
-                contentDescription = null,
-            )
-        }
-        IconButton(
-            onClick = onInfoClick,
-        ) {
-            Icon(
-                imageVector = CompoundIcons.Info(),
-                contentDescription = null,
-            )
-        }
-    }
-}
-
 @PreviewsDayNight
 @Composable
 internal fun VoiceItemViewPreview(
@@ -302,9 +263,7 @@ internal fun VoiceItemViewPreview(
     VoiceItemView(
         state = aVoiceMessageState(),
         voice = voice,
-        onShareClick = {},
-        onDownloadClick = {},
-        onInfoClick = {},
+        onLongClick = {},
     )
 }
 
@@ -316,8 +275,6 @@ internal fun VoiceItemViewPlayPreview(
     VoiceItemView(
         state = state,
         voice = aMediaItemVoice(),
-        onShareClick = {},
-        onDownloadClick = {},
-        onInfoClick = {},
+        onLongClick = {},
     )
 }

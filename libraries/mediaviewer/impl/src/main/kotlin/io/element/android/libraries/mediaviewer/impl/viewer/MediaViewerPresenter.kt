@@ -83,9 +83,18 @@ class MediaViewerPresenter @AssistedInject constructor(
             when (mediaViewerEvents) {
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
                 MediaViewerEvents.ClearLoadingError -> localMedia.value = AsyncData.Uninitialized
-                MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
-                MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
-                MediaViewerEvents.OpenWith -> coroutineScope.open(localMedia.value)
+                MediaViewerEvents.SaveOnDisk -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.saveOnDisk(localMedia.value)
+                }
+                MediaViewerEvents.Share -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.share(localMedia.value)
+                }
+                MediaViewerEvents.OpenWith -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.open(localMedia.value)
+                }
                 is MediaViewerEvents.Delete -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     coroutineScope.delete(mediaViewerEvents.eventId)
@@ -126,8 +135,6 @@ class MediaViewerPresenter @AssistedInject constructor(
             downloadedMedia = localMedia.value,
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
-            canDownload = inputs.canDownload,
-            canShare = inputs.canShare,
             mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvents
         )

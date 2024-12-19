@@ -119,8 +119,6 @@ fun MediaViewerView(
             ) {
                 MediaViewerTopBar(
                     actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                    canDownload = state.canDownload,
-                    canShare = state.canShare,
                     mimeType = state.mediaInfo.mimeType,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
@@ -147,6 +145,12 @@ fun MediaViewerView(
                 state = bottomSheetState,
                 onViewInTimeline = {
                     state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                },
+                onShare = {
+                    state.eventSink(MediaViewerEvents.Share)
+                },
+                onDownload = {
+                    state.eventSink(MediaViewerEvents.SaveOnDisk)
                 },
                 onDelete = { eventId ->
                     state.eventSink(MediaViewerEvents.ConfirmDelete(eventId))
@@ -313,8 +317,6 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
-    canDownload: Boolean,
-    canShare: Boolean,
     mimeType: String,
     senderName: String?,
     dateSent: String?,
@@ -348,19 +350,6 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
-            if (canShare) {
-                IconButton(
-                    enabled = actionsEnabled,
-                    onClick = {
-                        eventSink(MediaViewerEvents.Share)
-                    },
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.ShareAndroid(),
-                        contentDescription = stringResource(id = CommonStrings.action_share)
-                    )
-                }
-            }
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
@@ -375,19 +364,6 @@ private fun MediaViewerTopBar(
                     else -> Icon(
                         imageVector = Icons.AutoMirrored.Filled.OpenInNew,
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
-                    )
-                }
-            }
-            if (canDownload) {
-                IconButton(
-                    enabled = actionsEnabled,
-                    onClick = {
-                        eventSink(MediaViewerEvents.SaveOnDisk)
-                    },
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.Download(),
-                        contentDescription = stringResource(id = CommonStrings.action_save),
                     )
                 }
             }

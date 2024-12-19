@@ -22,8 +22,6 @@ data class MediaViewerState(
     val downloadedMedia: AsyncData<LocalMedia>,
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
-    val canDownload: Boolean,
-    val canShare: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
     val eventSink: (MediaViewerEvents) -> Unit,
 )

@@ -251,8 +251,6 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
                     canShowInfo = true,
-                    canDownload = true,
-                    canShare = true,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {

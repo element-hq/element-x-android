@@ -158,7 +158,7 @@ enum class FeatureFlags(
         key = "feature.media_gallery",
         title = "Allow user to open the media gallery",
         description = null,
-        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
+        defaultValue = { true },
         isFinished = false,
     ),
     EventCache(

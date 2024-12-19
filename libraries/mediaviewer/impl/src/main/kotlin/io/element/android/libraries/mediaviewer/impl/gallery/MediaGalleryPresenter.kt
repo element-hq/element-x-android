@@ -117,8 +117,16 @@ class MediaGalleryPresenter @AssistedInject constructor(
                     timeline.dataOrNull()?.paginate(event.direction)
                 }
                 is MediaGalleryEvents.Delete -> coroutineScope.delete(timeline, event.eventId)
-                is MediaGalleryEvents.SaveOnDisk -> coroutineScope.saveOnDisk(event.mediaItem)
-                is MediaGalleryEvents.Share -> coroutineScope.share(event.mediaItem)
+                is MediaGalleryEvents.SaveOnDisk -> coroutineScope.launch {
+                    mediaItems.dataOrNull().find(event.eventId)?.let {
+                        saveOnDisk(it)
+                    }
+                }
+                is MediaGalleryEvents.Share -> coroutineScope.launch {
+                    mediaItems.dataOrNull().find(event.eventId)?.let {
+                        share(it)
+                    }
+                }
                 is MediaGalleryEvents.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
@@ -221,7 +229,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
             }
     }
 
-    private fun CoroutineScope.saveOnDisk(mediaItem: MediaItem.Event) = launch {
+    private suspend fun saveOnDisk(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
             .mapCatching { localMedia ->
                 localMediaActions.saveOnDisk(localMedia)
@@ -236,7 +244,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
             }
     }
 
-    private fun CoroutineScope.share(mediaItem: MediaItem.Event) = launch {
+    private suspend fun share(mediaItem: MediaItem.Event) {
         downloadMedia(mediaItem)
             .mapCatching { localMedia ->
                 localMediaActions.share(localMedia)
@@ -254,4 +262,12 @@ class MediaGalleryPresenter @AssistedInject constructor(
             CommonStrings.error_unknown
         }
     }
+}
+
+private fun List<MediaItem>?.find(eventId: EventId?): MediaItem.Event? {
+    if (this == null || eventId == null) {
+        return null
+    }
+    return filterIsInstance<MediaItem.Event>()
+        .firstOrNull { it.eventId() == eventId }
 }

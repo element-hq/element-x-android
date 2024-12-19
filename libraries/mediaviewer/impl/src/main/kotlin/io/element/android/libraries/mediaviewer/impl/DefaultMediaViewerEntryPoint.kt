@@ -59,8 +59,6 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                         mediaSource = MediaSource(url = avatarUrl),
                         thumbnailSource = null,
                         canShowInfo = false,
-                        canDownload = false,
-                        canShare = false,
                     )
                 )
             }

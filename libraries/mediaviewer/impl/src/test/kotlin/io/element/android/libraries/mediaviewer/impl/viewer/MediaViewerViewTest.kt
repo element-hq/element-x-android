@@ -20,6 +20,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -54,16 +55,6 @@ class MediaViewerViewTest {
         testMenuAction(CommonStrings.action_open_with, MediaViewerEvents.OpenWith)
     }
 
-    @Test
-    fun `clicking on save emit expected Event`() {
-        testMenuAction(CommonStrings.action_save, MediaViewerEvents.SaveOnDisk)
-    }
-
-    @Test
-    fun `clicking on share emit expected Event`() {
-        testMenuAction(CommonStrings.action_share, MediaViewerEvents.Share)
-    }
-
     private fun testMenuAction(contentDescriptionRes: Int, expectedEvent: MediaViewerEvents) {
         val eventsRecorder = EventsRecorder<MediaViewerEvents>()
         rule.setMediaViewerView(
@@ -77,6 +68,32 @@ class MediaViewerViewTest {
         )
         val contentDescription = rule.activity.getString(contentDescriptionRes)
         rule.onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(expectedEvent)
+    }
+
+    @Test
+    fun `clicking on save emit expected Event`() {
+        testBottomSheetAction(CommonStrings.action_save, MediaViewerEvents.SaveOnDisk)
+    }
+
+    @Test
+    fun `clicking on share emit expected Event`() {
+        testBottomSheetAction(CommonStrings.action_share, MediaViewerEvents.Share)
+    }
+
+    private fun testBottomSheetAction(contentDescriptionRes: Int, expectedEvent: MediaViewerEvents) {
+        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        rule.setMediaViewerView(
+            aMediaViewerState(
+                downloadedMedia = AsyncData.Success(
+                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
+                ),
+                mediaInfo = anImageMediaInfo(),
+                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(contentDescriptionRes)
         eventsRecorder.assertSingle(expectedEvent)
     }
 

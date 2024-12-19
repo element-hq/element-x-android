@@ -7,8 +7,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 fun FileItemView(
     file: MediaItem.File,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -51,6 +53,7 @@ fun FileItemView(
         FilenameRow(
             file = file,
             onClick = onClick,
+            onLongClick = onLongClick,
         )
         val caption = file.mediaInfo.caption
         if (caption != null) {
@@ -62,10 +65,12 @@ fun FileItemView(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FilenameRow(
     file: MediaItem.File,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -74,7 +79,7 @@ private fun FilenameRow(
                 color = ElementTheme.colors.bgSubtleSecondary,
                 shape = RoundedCornerShape(12.dp),
             )
-            .clickable { onClick() }
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .fillMaxWidth()
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -118,5 +123,6 @@ internal fun FileItemViewPreview(
     FileItemView(
         file = file,
         onClick = {},
+        onLongClick = {},
     )
 }
