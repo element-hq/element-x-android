@@ -88,8 +88,8 @@ private fun VideoInfoRow(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.White.copy(alpha = 0f),
-                        Color.White,
+                        ElementTheme.colors.bgCanvasDefault.copy(alpha = 0f),
+                        ElementTheme.colors.bgCanvasDefault,
                     )
                 )
             )
