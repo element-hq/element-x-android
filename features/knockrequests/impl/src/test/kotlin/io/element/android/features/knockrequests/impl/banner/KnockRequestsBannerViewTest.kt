@@ -14,7 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.knockrequests.impl.R
-import io.element.android.features.knockrequests.impl.data.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -51,9 +51,9 @@ class KnockRequestsBannerViewTest {
             rule.setKnockRequestsBannerView(
                 state = aKnockRequestsBannerState(
                     knockRequests = listOf(
-                        aKnockRequest(displayName = "Alice"),
-                        aKnockRequest(displayName = "Bob"),
-                        aKnockRequest(displayName = "Charlie")
+                        aKnockRequestPresentable(displayName = "Alice"),
+                        aKnockRequestPresentable(displayName = "Bob"),
+                        aKnockRequestPresentable(displayName = "Charlie")
                     ),
                     eventSink = eventsRecorder,
                 ),

@@ -10,7 +10,7 @@ package io.element.android.features.knockrequests.impl.data
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
-fun aKnockRequest(
+fun aKnockRequestPresentable(
     eventId: EventId = EventId("\$eventId"),
     userId: UserId = UserId("@jacob_ross:example.com"),
     displayName: String? = "Jacob Ross",

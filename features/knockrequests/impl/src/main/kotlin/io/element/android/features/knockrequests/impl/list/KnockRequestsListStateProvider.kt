@@ -10,7 +10,7 @@ package io.element.android.features.knockrequests.impl.list
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
-import io.element.android.features.knockrequests.impl.data.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -31,14 +31,14 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest(
+                        aKnockRequestPresentable(
                             reason = "A very long reason that should probably be truncated, " +
                                 "but could be also expanded so you can see it over the lines, wow," +
                                 "very amazing reason, I know, right, I'm so good at writing reasons."
@@ -49,8 +49,8 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest(),
-                        aKnockRequest(
+                        aKnockRequestPresentable(),
+                        aKnockRequestPresentable(
                             userId = UserId("@user:example.com"),
                             displayName = null,
                             avatarUrl = null,
@@ -62,7 +62,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 actionTarget = KnockRequestsActionTarget.AcceptAll,
@@ -71,7 +71,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 actionTarget = KnockRequestsActionTarget.AcceptAll,
@@ -80,7 +80,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 permissions = KnockRequestPermissions(
@@ -94,7 +94,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 permissions = KnockRequestPermissions(
@@ -106,7 +106,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 permissions = KnockRequestPermissions(
@@ -118,7 +118,7 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
                 permissions = KnockRequestPermissions(

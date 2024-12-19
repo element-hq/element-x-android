@@ -12,7 +12,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.knockrequests.impl.R
-import io.element.android.features.knockrequests.impl.data.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -48,7 +48,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `clicking on accept emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequest = aKnockRequest()
+        val knockRequest = aKnockRequestPresentable()
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(persistentListOf(knockRequest)),
@@ -62,7 +62,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `clicking on decline emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequest = aKnockRequest()
+        val knockRequest = aKnockRequestPresentable()
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(persistentListOf(knockRequest)),
@@ -76,7 +76,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `clicking on decline and ban emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequest = aKnockRequest()
+        val knockRequest = aKnockRequestPresentable()
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(persistentListOf(knockRequest)),
@@ -90,7 +90,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `clicking on accept all emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequests = persistentListOf(aKnockRequest(), aKnockRequest())
+        val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
@@ -104,7 +104,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `retry on async view retry emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequests = persistentListOf(aKnockRequest(), aKnockRequest())
+        val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
@@ -120,7 +120,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `canceling async view emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequests = persistentListOf(aKnockRequest(), aKnockRequest())
+        val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),
@@ -136,7 +136,7 @@ class KnockRequestsListViewTest {
     @Test
     fun `confirming async view emit the expected event`() {
         val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
-        val knockRequests = persistentListOf(aKnockRequest(), aKnockRequest())
+        val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         rule.setKnockRequestsListView(
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(knockRequests),

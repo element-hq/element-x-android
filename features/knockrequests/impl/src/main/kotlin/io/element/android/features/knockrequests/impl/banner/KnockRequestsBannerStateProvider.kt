@@ -9,7 +9,7 @@ package io.element.android.features.knockrequests.impl.banner
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
-import io.element.android.features.knockrequests.impl.data.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import kotlinx.collections.immutable.toImmutableList
 
 class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsBannerState> {
@@ -18,7 +18,7 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
             aKnockRequestsBannerState(),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
-                    aKnockRequest(
+                    aKnockRequestPresentable(
                         reason = "A very long reason that should probably be truncated, " +
                             "but could be also expanded so you can see it over the lines, wow," +
                             "very amazing reason, I know, right, I'm so good at writing reasons."
@@ -27,16 +27,16 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
             ),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
-                    aKnockRequest(),
-                    aKnockRequest(displayName = "Alice")
+                    aKnockRequestPresentable(),
+                    aKnockRequestPresentable(displayName = "Alice")
                 )
             ),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
-                    aKnockRequest(),
-                    aKnockRequest(displayName = "Alice"),
-                    aKnockRequest(displayName = "Bob"),
-                    aKnockRequest(displayName = "Charlie")
+                    aKnockRequestPresentable(),
+                    aKnockRequestPresentable(displayName = "Alice"),
+                    aKnockRequestPresentable(displayName = "Bob"),
+                    aKnockRequestPresentable(displayName = "Charlie")
                 )
             ),
             aKnockRequestsBannerState(
@@ -47,7 +47,7 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
             ),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
-                    aKnockRequest(
+                    aKnockRequestPresentable(
                         displayName = "A_very_long_display_name_so_that_the_text_can_be_displayed_on_multiple_lines"
                     )
                 )
@@ -56,7 +56,7 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
 }
 
 fun aKnockRequestsBannerState(
-    knockRequests: List<KnockRequestPresentable> = listOf(aKnockRequest()),
+    knockRequests: List<KnockRequestPresentable> = listOf(aKnockRequestPresentable()),
     displayAcceptError: Boolean = false,
     canAccept: Boolean = true,
     isVisible: Boolean = true,
