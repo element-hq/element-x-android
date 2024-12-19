@@ -20,9 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -37,9 +39,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.knockrequests.impl.KnockRequest
 import io.element.android.features.knockrequests.impl.R
-import io.element.android.features.knockrequests.impl.getAvatarData
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
+import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -61,22 +65,42 @@ fun KnockRequestsBannerView(
     onViewRequestsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedVisibility(
-        visible = state.isVisible,
-        enter = expandVertically(),
-        exit = shrinkVertically(),
-        modifier = modifier,
-    ) {
-        Surface(
-            shape = MaterialTheme.shapes.small,
-            color = ElementTheme.colors.bgCanvasDefaultLevel1,
-            shadowElevation = 24.dp,
-            modifier = Modifier.padding(16.dp),
+    Box(modifier = modifier) {
+        AnimatedVisibility(
+            visible = state.isVisible,
+            enter = expandVertically(),
+            exit = shrinkVertically(),
         ) {
-            KnockRequestsBannerContent(
-                state = state,
-                onViewRequestsClick = onViewRequestsClick,
-            )
+            Surface(
+                shape = MaterialTheme.shapes.small,
+                color = ElementTheme.colors.bgCanvasDefaultLevel1,
+                shadowElevation = 24.dp,
+                modifier = Modifier.padding(16.dp),
+            ) {
+                KnockRequestsBannerContent(
+                    state = state,
+                    onViewRequestsClick = onViewRequestsClick,
+                )
+            }
+        }
+        KnockRequestsAcceptErrorView(displayError = state.displayAcceptError)
+    }
+}
+
+@Composable
+private fun KnockRequestsAcceptErrorView(
+    displayError: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val asyncIndicatorState = rememberAsyncIndicatorState()
+    AsyncIndicatorHost(modifier = modifier.statusBarsPadding(), state = asyncIndicatorState)
+    LaunchedEffect(displayError) {
+        if (displayError) {
+            asyncIndicatorState.enqueue {
+                AsyncIndicator.Custom(text = stringResource(CommonStrings.error_unknown))
+            }
+        } else {
+            asyncIndicatorState.clear()
         }
     }
 }
@@ -96,9 +120,9 @@ private fun KnockRequestsBannerContent(
     }
 
     Column(
-        modifier
-            .fillMaxWidth()
-            .padding(all = 16.dp)
+            modifier
+                    .fillMaxWidth()
+                    .padding(all = 16.dp)
     ) {
         Row {
             KnockRequestAvatarView(
@@ -122,13 +146,15 @@ private fun KnockRequestsBannerContent(
                     )
                 }
             }
+            Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 modifier = Modifier.clickable(onClick = ::onDismissClick),
                 imageVector = CompoundIcons.Close(),
                 contentDescription = stringResource(CommonStrings.action_close)
             )
         }
-        if (state.reason != null) {
+        val reason = state.reason
+        if (!reason.isNullOrEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = state.reason,
@@ -169,7 +195,7 @@ private fun KnockRequestsBannerContent(
 
 @Composable
 private fun KnockRequestAvatarView(
-    knockRequests: ImmutableList<KnockRequest>,
+    knockRequests: ImmutableList<KnockRequestPresentable>,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
@@ -183,7 +209,7 @@ private fun KnockRequestAvatarView(
 
 @Composable
 private fun KnockRequestAvatarListView(
-    knockRequests: ImmutableList<KnockRequest>,
+    knockRequests: ImmutableList<KnockRequestPresentable>,
     modifier: Modifier = Modifier,
 ) {
     val avatarSize = AvatarSize.KnockRequestBanner.dp
@@ -198,27 +224,27 @@ private fun KnockRequestAvatarListView(
                 smallReversedList.forEachIndexed { index, knockRequest ->
                     Avatar(
                         modifier = Modifier
-                            .padding(start = avatarSize / 2 * (lastItemIndex - index))
-                            .graphicsLayer {
-                                compositingStrategy = CompositingStrategy.Offscreen
-                            }
-                            .drawWithContent {
-                                // Draw content and clear the pixels for the avatar on the left.
-                                drawContent()
-                                if (index < lastItemIndex) {
-                                    drawCircle(
-                                        color = Color.Black,
-                                        center = Offset(
-                                            x = 0f,
-                                            y = size.height / 2,
-                                        ),
-                                        radius = avatarSize.toPx() / 2,
-                                        blendMode = BlendMode.Clear,
-                                    )
+                                .padding(start = avatarSize / 2 * (lastItemIndex - index))
+                                .graphicsLayer {
+                                    compositingStrategy = CompositingStrategy.Offscreen
                                 }
-                            }
-                            .size(size = avatarSize)
-                            .padding(2.dp),
+                                .drawWithContent {
+                                    // Draw content and clear the pixels for the avatar on the left.
+                                    drawContent()
+                                    if (index < lastItemIndex) {
+                                        drawCircle(
+                                                color = Color.Black,
+                                                center = Offset(
+                                                        x = 0f,
+                                                        y = size.height / 2,
+                                                ),
+                                                radius = avatarSize.toPx() / 2,
+                                                blendMode = BlendMode.Clear,
+                                        )
+                                    }
+                                }
+                                .size(size = avatarSize)
+                                .padding(2.dp),
                         avatarData = knockRequest.getAvatarData(AvatarSize.KnockRequestBanner),
                     )
                 }

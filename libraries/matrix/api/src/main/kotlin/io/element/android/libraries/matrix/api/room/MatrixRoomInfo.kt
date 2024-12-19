@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -27,6 +28,7 @@ data class MatrixRoomInfo(
     val avatarUrl: String?,
     val isDirect: Boolean,
     val isPublic: Boolean,
+    val joinRule: JoinRule?,
     val isSpace: Boolean,
     val isTombstoned: Boolean,
     val isFavorite: Boolean,
