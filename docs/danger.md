@@ -24,7 +24,6 @@ Here are the checks that Danger does so far:
 - Big PR got a warning to recommend to split
 - PR contains a correct title and a label to categorize the release note
 - PR does not modify frozen classes
-- PR contains a Sign-Off, with exception for Element employee contributors
 - PR with change on layout should include screenshot in the description (TODO Not supported yet!)
 - PR which adds png file warn about the usage of vector drawables
 - non draft PR should have a reviewer
