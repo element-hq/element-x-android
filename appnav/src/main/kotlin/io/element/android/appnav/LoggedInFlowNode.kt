@@ -84,6 +84,7 @@ import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyn
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -196,9 +197,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ) { syncState, networkStatus ->
                     Pair(syncState, networkStatus)
                 }
-                    .collect { (syncState, networkStatus) ->
-                        Timber.d("Sync state: $syncState, network status: $networkStatus")
-                        if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {
+                    .collectIndexed { index, (syncState, networkStatus) ->
+                        Timber.d("Sync state: $syncState, network status: $networkStatus, index: $index")
+                        if (syncState != SyncState.Running && (index == 0 || networkStatus == NetworkStatus.Online)) {
                             syncService.startSync()
                         }
                     }
