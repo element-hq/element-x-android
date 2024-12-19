@@ -41,6 +41,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -427,6 +428,7 @@ private fun EmptyContent(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
+        OnboardingBackground()
         PageTitle(
             modifier = Modifier
                 .fillMaxWidth()
