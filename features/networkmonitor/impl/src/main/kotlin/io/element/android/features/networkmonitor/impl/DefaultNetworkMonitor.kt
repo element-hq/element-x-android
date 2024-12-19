@@ -136,7 +136,7 @@ class DefaultNetworkMonitor @Inject constructor(
             .flatMapLatest {
                 channelFlow<NetworkStatus> {
                     while (coroutineContext.isActive) {
-                        val request = Request.Builder().url("$homeServerUrl/_matrix/client/versions").build()
+                        val request = Request.Builder().method("HEAD", null).url("$homeServerUrl/_matrix/client/versions").build()
                         try {
                             if (okHttpClient.newCall(request).execute().isSuccessful) {
                                 Timber.tag(tag).d("Home server is reachable")
