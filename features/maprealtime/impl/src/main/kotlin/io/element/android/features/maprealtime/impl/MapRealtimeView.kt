@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +42,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.maplibre.compose.CameraMode
-import io.element.android.libraries.maplibre.compose.CameraPositionState
 import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import org.maplibre.android.camera.CameraPosition
@@ -58,8 +56,22 @@ fun MapRealtimeView(
     isCallOngoing: Boolean
 ) {
 
+    val cameraPositionState = rememberCameraPositionState {
+        cameraMode = CameraMode.TRACKING
+    }
+
     LaunchedEffect(Unit) {
         state.eventSink(MapRealtimeEvents.RequestPermissions)
+
+        if (state.hasGpsEnabled && state.hasLocationPermission) {
+            cameraPositionState.position = CameraPosition.Builder()
+                .zoom(MapDefaults.DEFAULT_ZOOM)
+                .build()
+
+            cameraPositionState.cameraMode = CameraMode.TRACKING
+        } else {
+            cameraPositionState.position = MapDefaults.fallbackCameraPosition
+        }
     }
 
     when (state.permissionDialog) {
@@ -74,10 +86,6 @@ fun MapRealtimeView(
             onDismiss = { state.eventSink(MapRealtimeEvents.DismissDialog) },
             appName = state.appName,
         )
-    }
-
-    val cameraPositionState = rememberCameraPositionState {
-        mutableStateOf(CameraPositionState())
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -125,10 +133,12 @@ fun MapRealtimeView(
                     }
                 }
             )
-            RoundedIconButton(icon = Icons.Outlined.Layers, onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
+            RoundedIconButton(
+                icon = Icons.Outlined.Layers,
+                onClick = { state.eventSink(MapRealtimeEvents.OpenMapTypeDialog) })
             RoundedIconButton(icon = Icons.Outlined.LocationSearching, onClick = {
                 cameraPositionState.position = CameraPosition.Builder()
-                    .zoom(17.0)
+                    .zoom(MapDefaults.DEFAULT_ZOOM)
                     .build()
                 cameraPositionState.cameraMode = CameraMode.TRACKING
             })

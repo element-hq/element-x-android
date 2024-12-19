@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.location.LiveLocationShare
 data class MapRealtimePresenterState(
     val permissionDialog: Dialog,
     val hasLocationPermission: Boolean,
+    val hasGpsEnabled: Boolean,
     val showMapTypeDialog: Boolean,
     val appName: String,
     val roomName: String,

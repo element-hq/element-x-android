@@ -80,7 +80,13 @@ object MapDefaults {
         .zoom(2.7)
         .build()
 
-    const val DEFAULT_ZOOM = 15.0
+    const val DEFAULT_ZOOM = 14.0
+
+    // Is used when permissions were not granted or GPS not enabled
+    val fallbackCameraPosition = CameraPosition.Builder()
+        .target(LatLng(38.87446976112359, -77.13022592962992))
+        .zoom(DEFAULT_ZOOM)
+        .build()
 
     val permissions = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 }

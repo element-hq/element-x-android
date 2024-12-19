@@ -12,5 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface LocationServiceStateRepository {
     fun observeDistinct(): StateFlow<LocationServiceState>
 
+    fun get(): LocationServiceState
     fun set(state: LocationServiceState)
 }
