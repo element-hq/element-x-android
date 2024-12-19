@@ -7,8 +7,10 @@
 
 package io.element.android.libraries.designsystem.components.list
 
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -26,13 +28,18 @@ fun RadioButtonListItem(
     compactLayout: Boolean = false,
 ) {
     ListItem(
-        modifier = modifier,
+        modifier = modifier
+            .selectable(
+                selected = selected,
+                role = Role.RadioButton,
+                enabled = enabled,
+                            onClick = onSelect
+            ),
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
         leadingContent = ListItemContent.RadioButton(selected, null, enabled, compact = compactLayout),
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,
-        onClick = onSelect,
     )
 }

@@ -7,9 +7,11 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.Theme
@@ -53,6 +55,13 @@ fun AdvancedSettingsView(
             }
         )
         ListItem(
+            modifier = Modifier
+            .toggleable(
+                value = state.isDeveloperModeEnabled,
+                role = Role.Checkbox,
+                enabled = true,
+                            onValueChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
+            ),
             headlineContent = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))
             },
@@ -61,10 +70,16 @@ fun AdvancedSettingsView(
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isDeveloperModeEnabled,
-            ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
+            )
         )
         ListItem(
+            modifier = Modifier
+            .toggleable(
+                value = state.isSharePresenceEnabled,
+                role = Role.Checkbox,
+                enabled = true,
+                            onValueChange = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
+            ),
             headlineContent = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence))
             },
@@ -73,10 +88,26 @@ fun AdvancedSettingsView(
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isSharePresenceEnabled,
-            ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
+            )
         )
         ListItem(
+            modifier = Modifier
+            .toggleable(
+                value = state.doesCompressMedia,
+                role = Role.Checkbox,
+                enabled = true,
+                            onValueChange = {
+                                val newValue = !state.doesCompressMedia
+                                analyticsService.captureInteraction(
+                                    if (newValue) {
+                                        Interaction.Name.MobileSettingsOptimizeMediaUploadsEnabled
+                                    } else {
+                                        Interaction.Name.MobileSettingsOptimizeMediaUploadsDisabled
+                                    }
+                                )
+                                state.eventSink(AdvancedSettingsEvents.SetCompressMedia(newValue))
+                            }
+            ),
             headlineContent = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_media_compression_title))
             },
@@ -86,17 +117,6 @@ fun AdvancedSettingsView(
             trailingContent = ListItemContent.Switch(
                 checked = state.doesCompressMedia,
             ),
-            onClick = {
-                val newValue = !state.doesCompressMedia
-                analyticsService.captureInteraction(
-                    if (newValue) {
-                        Interaction.Name.MobileSettingsOptimizeMediaUploadsEnabled
-                    } else {
-                        Interaction.Name.MobileSettingsOptimizeMediaUploadsDisabled
-                    }
-                )
-                state.eventSink(AdvancedSettingsEvents.SetCompressMedia(newValue))
-            }
         )
     }
 

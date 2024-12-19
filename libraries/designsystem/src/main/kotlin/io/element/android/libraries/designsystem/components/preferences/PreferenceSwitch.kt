@@ -9,9 +9,11 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -35,7 +37,13 @@ fun PreferenceSwitch(
     showIconAreaIfNoIcon: Boolean = false,
 ) {
     ListItem(
-        modifier = modifier,
+        modifier = modifier
+            .toggleable(
+                value = isChecked,
+                role = Role.Checkbox,
+                enabled = enabled,
+                onValueChange = { onCheckedChange.takeIf { enabled }?.let { { onCheckedChange(!isChecked) } } }
+            ),
         enabled = enabled,
         onClick = onCheckedChange.takeIf { enabled }?.let { { onCheckedChange(!isChecked) } },
         leadingContent = preferenceIcon(

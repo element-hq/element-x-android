@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -281,6 +283,13 @@ private fun RoomVisibilityOptions(
         RoomVisibilityItem.entries.forEach { item ->
             val isSelected = item == selected
             ListItem(
+                modifier = Modifier
+                .selectable(
+                    selected = isSelected,
+                    role = Role.RadioButton,
+                    enabled = true,
+                    onClick = { onOptionClick(item) }
+                ),
                 leadingContent = ListItemContent.Custom {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Big,
@@ -291,7 +300,6 @@ private fun RoomVisibilityOptions(
                 headlineContent = { Text(text = stringResource(item.title)) },
                 supportingContent = { Text(text = stringResource(item.description)) },
                 trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                onClick = { onOptionClick(item) },
             )
         }
     }
@@ -308,11 +316,18 @@ private fun RoomAccessOptions(
         modifier = modifier,
     ) {
         RoomAccessItem.entries.forEach { item ->
+            val isSelected = item == selected
             ListItem(
+                modifier = Modifier
+                .selectable(
+                    selected = isSelected,
+                    role = Role.RadioButton,
+                    enabled = true,
+                                onClick = { onOptionClick(item) }
+                ),
                 headlineContent = { Text(text = stringResource(item.title)) },
                 supportingContent = { Text(text = stringResource(item.description)) },
-                trailingContent = ListItemContent.RadioButton(selected = item == selected),
-                onClick = { onOptionClick(item) },
+                trailingContent = ListItemContent.RadioButton(selected = isSelected),
             )
         }
     }
