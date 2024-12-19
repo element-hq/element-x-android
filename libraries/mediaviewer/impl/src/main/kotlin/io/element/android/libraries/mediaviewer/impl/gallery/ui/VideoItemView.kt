@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -84,6 +85,14 @@ private fun VideoInfoRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0f),
+                        Color.White,
+                    )
+                )
+            )
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
