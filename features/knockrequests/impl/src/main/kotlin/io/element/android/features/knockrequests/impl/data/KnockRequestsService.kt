@@ -105,7 +105,7 @@ class KnockRequestsService(
         if (results.all { it.isSuccess }) {
             Result.success(Unit)
         } else {
-            Result.failure(IllegalStateException("Failed to accept all knock requests"))
+            Result.failure(KnockRequestsException.AcceptAllPartiallyFailed)
         }
     }
 
@@ -140,6 +140,6 @@ class KnockRequestsService(
                 }
             }
     }
-
-    private fun knockRequestNotFoundResult() = Result.failure<Unit>(IllegalArgumentException("Knock request not found"))
 }
+
+private fun knockRequestNotFoundResult() = Result.failure<Unit>(KnockRequestsException.KnockRequestNotFound)
