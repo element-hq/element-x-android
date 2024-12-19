@@ -106,7 +106,8 @@ fun MediaGalleryView(
             modifier = Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
