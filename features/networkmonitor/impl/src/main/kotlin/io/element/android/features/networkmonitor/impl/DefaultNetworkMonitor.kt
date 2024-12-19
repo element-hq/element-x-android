@@ -12,26 +12,22 @@ package io.element.android.features.networkmonitor.impl
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.networkmonitor.api.IdleModeDetector
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.delay
@@ -45,10 +41,8 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -70,8 +64,10 @@ class DefaultNetworkMonitor @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val sessionStore: SessionStore,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val appForegroundStateService: AppForegroundStateService,
+    private val idleModeDetector: IdleModeDetector,
 ) : NetworkMonitor {
+    private val tag = DefaultNetworkMonitor::class.simpleName.toString()
+
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
     private val networkStatus: SharedFlow<NetworkStatus> = callbackFlow {
@@ -99,16 +95,16 @@ class DefaultNetworkMonitor @Inject constructor(
         val request = NetworkRequest.Builder().build()
 
         connectivityManager.registerNetworkCallback(request, callback)
-        Timber.d("Subscribe")
+        Timber.tag(tag).d("Subscribe")
         awaitClose {
-            Timber.d("Unsubscribe")
+            Timber.tag(tag).d("Unsubscribe")
             connectivityManager.unregisterNetworkCallback(callback)
         }
     }
         .distinctUntilChanged()
         .debounce(300)
         .onEach {
-            Timber.d("NetworkStatus changed=$it")
+            Timber.tag(tag).d("NetworkStatus changed=$it")
         }
         .shareIn(sessionCoroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
 
@@ -132,32 +128,34 @@ class DefaultNetworkMonitor @Inject constructor(
             return@withContext flowOf(NetworkStatus.Offline)
         }
 
-        appForegroundStateService.isInForeground
-            .onEach { Timber.d("App is in foreground=$it") }
+        idleModeDetector.subscribeToIdleMode()
+            .onEach { isInDoze -> Timber.tag(tag).d("Device is in doze mode=$isInDoze") }
             // Only check network connectivity while the app is in foreground,
             // otherwise Doze might prevent the network request from working
-            .filter { it }
+            .filter { isInDoze -> !isInDoze }
             .flatMapLatest {
                 channelFlow<NetworkStatus> {
                     while (coroutineContext.isActive) {
                         val request = Request.Builder().url("$homeServerUrl/_matrix/client/versions").build()
                         try {
                             if (okHttpClient.newCall(request).execute().isSuccessful) {
-                                Timber.d("Home server is reachable")
+                                Timber.tag(tag).d("Home server is reachable")
                                 trySend(NetworkStatus.Online)
                             } else {
+                                Timber.tag(tag).d("Home server is not reachable")
                                 trySend(NetworkStatus.Offline)
                             }
                         } catch (e: CancellationException) {
                             throw e
                         } catch (e: Exception) {
-                            Timber.e(e, "Failed to check home server connectivity")
+                            Timber.tag(tag).e(e, "Failed to check home server connectivity")
                             trySend(NetworkStatus.Offline)
                         }
 
                         delay(30.seconds)
                     }
                 }
-        }.flowOn(coroutineDispatchers.io)
+        }
+            .flowOn(coroutineDispatchers.io)
     }
 }

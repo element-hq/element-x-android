@@ -25,6 +25,5 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.sessionStorage.api)
-    implementation(projects.services.appnavstate.api)
     api(projects.features.networkmonitor.api)
 }
