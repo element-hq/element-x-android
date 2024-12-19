@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
@@ -36,6 +37,7 @@ class MatrixRoomInfoMapper {
             avatarUrl = it.avatarUrl,
             isDirect = it.isDirect,
             isPublic = it.isPublic,
+            joinRule = it.joinRule?.map(),
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,
             isFavorite = it.isFavourite,

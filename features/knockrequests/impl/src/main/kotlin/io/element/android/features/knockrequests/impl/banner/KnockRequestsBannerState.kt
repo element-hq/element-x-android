@@ -10,17 +10,15 @@ package io.element.android.features.knockrequests.impl.banner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import io.element.android.features.knockrequests.impl.KnockRequest
 import io.element.android.features.knockrequests.impl.R
-import io.element.android.features.knockrequests.impl.getBestName
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.libraries.core.extensions.firstIfSingle
 import kotlinx.collections.immutable.ImmutableList
 
 data class KnockRequestsBannerState(
     val isVisible: Boolean,
-    val knockRequests: ImmutableList<KnockRequest>,
-    val acceptAction: AsyncAction<Unit>,
+    val knockRequests: ImmutableList<KnockRequestPresentable>,
+    val displayAcceptError: Boolean,
     val canAccept: Boolean,
     val eventSink: (KnockRequestsBannerEvents) -> Unit,
 ) {

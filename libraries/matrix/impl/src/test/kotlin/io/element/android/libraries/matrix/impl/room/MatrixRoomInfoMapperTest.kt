@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
@@ -31,6 +32,7 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 
 class MatrixRoomInfoMapperTest {
@@ -47,6 +49,7 @@ class MatrixRoomInfoMapperTest {
                     isDirect = true,
                     isPublic = false,
                     isSpace = false,
+                    joinRule = RustJoinRule.Invite,
                     isTombstoned = false,
                     isFavourite = false,
                     canonicalAlias = A_ROOM_ALIAS.value,
@@ -83,6 +86,7 @@ class MatrixRoomInfoMapperTest {
                 isSpace = false,
                 isTombstoned = false,
                 isFavorite = false,
+                joinRule = JoinRule.Invite,
                 canonicalAlias = A_ROOM_ALIAS,
                 alternativeAliases = listOf(A_ROOM_ALIAS).toImmutableList(),
                 currentUserMembership = CurrentUserMembership.JOINED,
@@ -125,6 +129,7 @@ class MatrixRoomInfoMapperTest {
                     avatarUrl = null,
                     isDirect = false,
                     isPublic = true,
+                    joinRule = null,
                     isSpace = false,
                     isTombstoned = false,
                     isFavourite = true,
@@ -159,6 +164,7 @@ class MatrixRoomInfoMapperTest {
                 avatarUrl = null,
                 isDirect = false,
                 isPublic = true,
+                joinRule = null,
                 isSpace = false,
                 isTombstoned = false,
                 isFavorite = true,

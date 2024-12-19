@@ -9,76 +9,112 @@ package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.room.canBanAsState
-import io.element.android.libraries.matrix.ui.room.canInviteAsState
-import io.element.android.libraries.matrix.ui.room.canKickAsState
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.libraries.architecture.runUpdatingState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KnockRequestsListPresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val knockRequestsService: KnockRequestsService,
 ) : Presenter<KnockRequestsListState> {
     @Composable
     override fun present(): KnockRequestsListState {
-        val currentAction = remember { mutableStateOf<KnockRequestsCurrentAction>(KnockRequestsCurrentAction.None) }
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val canBan by room.canBanAsState(syncUpdateFlow.value)
-        val canDecline by room.canKickAsState(syncUpdateFlow.value)
-        val canAccept by room.canInviteAsState(syncUpdateFlow.value)
+        val asyncAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        var actionTarget by remember { mutableStateOf<KnockRequestsActionTarget>(KnockRequestsActionTarget.None) }
+
+        val permissions by knockRequestsService.permissionsFlow.collectAsState()
+        val knockRequests by knockRequestsService.knockRequestsFlow.collectAsState()
+
+        val coroutineScope = rememberCoroutineScope()
 
         fun handleEvents(event: KnockRequestsListEvents) {
             when (event) {
                 KnockRequestsListEvents.AcceptAll -> {
-                    currentAction.value = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.AcceptAll
                 }
                 is KnockRequestsListEvents.Accept -> {
-                    currentAction.value = KnockRequestsCurrentAction.Accept(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.Accept(event.knockRequest)
                 }
                 is KnockRequestsListEvents.Decline -> {
-                    currentAction.value = KnockRequestsCurrentAction.Decline(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.Decline(event.knockRequest)
                 }
                 is KnockRequestsListEvents.DeclineAndBan -> {
-                    currentAction.value = KnockRequestsCurrentAction.DeclineAndBan(event.knockRequest, AsyncAction.Uninitialized)
+                    actionTarget = KnockRequestsActionTarget.DeclineAndBan(event.knockRequest)
                 }
-                KnockRequestsListEvents.DismissCurrentAction -> {
-                    currentAction.value = KnockRequestsCurrentAction.None
+                KnockRequestsListEvents.ResetCurrentAction -> {
+                    asyncAction.value = AsyncAction.Uninitialized
+                    actionTarget = KnockRequestsActionTarget.None
+                }
+                KnockRequestsListEvents.RetryCurrentAction -> {
+                    coroutineScope.executeAction(actionTarget, asyncAction, isActionConfirmed = true)
+                }
+                KnockRequestsListEvents.ConfirmCurrentAction -> {
+                    coroutineScope.executeAction(actionTarget, asyncAction, isActionConfirmed = true)
                 }
             }
         }
-
-        LaunchedEffect(currentAction) {
-            when (currentAction.value) {
-                is KnockRequestsCurrentAction.Accept -> {
-                    // Accept the knock request
-                }
-                is KnockRequestsCurrentAction.Decline -> {
-                    // Decline the knock request
-                }
-                is KnockRequestsCurrentAction.DeclineAndBan -> {
-                    // Decline and ban the user
-                }
-                is KnockRequestsCurrentAction.AcceptAll -> {
-                    // Accept all knock requests
-                }
-                KnockRequestsCurrentAction.None -> Unit
-            }
+        LaunchedEffect(actionTarget) {
+            executeAction(actionTarget, asyncAction, isActionConfirmed = false)
         }
 
         return KnockRequestsListState(
-            knockRequests = AsyncData.Success(persistentListOf()),
-            currentAction = currentAction.value,
-            canAccept = canAccept,
-            canDecline = canDecline,
-            canBan = canBan,
+            knockRequests = knockRequests,
+            actionTarget = actionTarget,
+            permissions = permissions,
+            asyncAction = asyncAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.executeAction(
+        actionTarget: KnockRequestsActionTarget,
+        asyncAction: MutableState<AsyncAction<Unit>>,
+        isActionConfirmed: Boolean,
+    ) = launch {
+        when (actionTarget) {
+            is KnockRequestsActionTarget.Accept -> {
+                runUpdatingState(asyncAction) {
+                    knockRequestsService.acceptKnockRequest(actionTarget.knockRequest)
+                }
+            }
+            is KnockRequestsActionTarget.Decline -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.declineKnockRequest(actionTarget.knockRequest)
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            is KnockRequestsActionTarget.DeclineAndBan -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.declineAndBanKnockRequest(actionTarget.knockRequest)
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            is KnockRequestsActionTarget.AcceptAll -> {
+                if (isActionConfirmed) {
+                    runUpdatingState(asyncAction) {
+                        knockRequestsService.acceptAllKnockRequests()
+                    }
+                } else {
+                    asyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+            }
+            KnockRequestsActionTarget.None -> Unit
+        }
     }
 }

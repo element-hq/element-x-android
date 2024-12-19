@@ -8,8 +8,9 @@
 package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.knockrequests.impl.KnockRequest
-import io.element.android.features.knockrequests.impl.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.features.knockrequests.impl.data.aKnockRequest
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -64,7 +65,8 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                currentAction = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Loading),
+                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                asyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
@@ -72,7 +74,8 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                canAccept = false,
+                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                asyncAction = AsyncAction.Loading,
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
@@ -80,7 +83,13 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                canDecline = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = false,
+                    canDecline = true,
+                    canBan = true,
+                ),
+                actionTarget = KnockRequestsActionTarget.AcceptAll,
+                asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
@@ -88,8 +97,11 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                canAccept = false,
-                canDecline = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = true,
+                    canDecline = false,
+                    canBan = true,
+                ),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
@@ -97,23 +109,41 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
                         aKnockRequest()
                     )
                 ),
-                canBan = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = false,
+                    canDecline = false,
+                    canBan = true,
+                ),
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequest()
+                    )
+                ),
+                permissions = KnockRequestPermissions(
+                    canAccept = true,
+                    canDecline = true,
+                    canBan = false,
+                ),
             ),
         )
 }
 
 fun aKnockRequestsListState(
-    knockRequests: AsyncData<ImmutableList<KnockRequest>> = AsyncData.Success(persistentListOf()),
-    currentAction: KnockRequestsCurrentAction = KnockRequestsCurrentAction.None,
-    canAccept: Boolean = true,
-    canDecline: Boolean = true,
-    canBan: Boolean = true,
+    knockRequests: AsyncData<ImmutableList<KnockRequestPresentable>> = AsyncData.Success(persistentListOf()),
+    actionTarget: KnockRequestsActionTarget = KnockRequestsActionTarget.None,
+    asyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    permissions: KnockRequestPermissions = KnockRequestPermissions(
+        canAccept = true,
+        canDecline = true,
+        canBan = true,
+    ),
     eventSink: (KnockRequestsListEvents) -> Unit = {},
 ) = KnockRequestsListState(
     knockRequests = knockRequests,
-    currentAction = currentAction,
-    canAccept = canAccept,
-    canDecline = canDecline,
-    canBan = canBan,
+    actionTarget = actionTarget,
+    asyncAction = asyncAction,
+    permissions = permissions,
     eventSink = eventSink,
 )

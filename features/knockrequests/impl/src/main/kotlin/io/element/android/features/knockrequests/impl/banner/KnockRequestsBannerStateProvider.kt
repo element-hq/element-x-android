@@ -8,9 +8,8 @@
 package io.element.android.features.knockrequests.impl.banner
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.knockrequests.impl.KnockRequest
-import io.element.android.features.knockrequests.impl.aKnockRequest
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.features.knockrequests.impl.data.aKnockRequest
 import kotlinx.collections.immutable.toImmutableList
 
 class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsBannerState> {
@@ -44,10 +43,7 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
                 canAccept = false
             ),
             aKnockRequestsBannerState(
-                acceptAction = AsyncAction.Loading
-            ),
-            aKnockRequestsBannerState(
-                acceptAction = AsyncAction.Failure(Throwable("Failed to accept knock"))
+                displayAcceptError = true
             ),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
@@ -60,14 +56,14 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
 }
 
 fun aKnockRequestsBannerState(
-    knockRequests: List<KnockRequest> = listOf(aKnockRequest()),
-    acceptAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    knockRequests: List<KnockRequestPresentable> = listOf(aKnockRequest()),
+    displayAcceptError: Boolean = false,
     canAccept: Boolean = true,
     isVisible: Boolean = true,
     eventSink: (KnockRequestsBannerEvents) -> Unit = {}
 ) = KnockRequestsBannerState(
     knockRequests = knockRequests.toImmutableList(),
-    acceptAction = acceptAction,
+    displayAcceptError = displayAcceptError,
     canAccept = canAccept,
     isVisible = isVisible,
     eventSink = eventSink,
