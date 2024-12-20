@@ -25,7 +25,9 @@ import kotlinx.collections.immutable.toImmutableList
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
     override val values: Sequence<MediaGalleryState>
         get() = sequenceOf(
-            aMediaGalleryState(),
+            aMediaGalleryState(
+                roomName = "A long room name that will be truncated",
+            ),
             aMediaGalleryState(groupedMediaItems = AsyncData.Loading()),
             aMediaGalleryState(groupedMediaItems = AsyncData.Success(aGroupedMediaItems())),
             aMediaGalleryState(
