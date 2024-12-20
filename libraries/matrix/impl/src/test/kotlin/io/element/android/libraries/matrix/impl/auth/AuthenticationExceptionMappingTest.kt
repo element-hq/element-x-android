@@ -52,6 +52,8 @@ class AuthenticationExceptionMappingTest {
             .isException<AuthenticationException.Generic>("WellKnown Deserialization")
         assertThat(ClientBuildException.WellKnownLookupFailed("WellKnown Lookup Failed").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
+        assertThat(ClientBuildException.EventCache("EventCache error").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("EventCache error")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

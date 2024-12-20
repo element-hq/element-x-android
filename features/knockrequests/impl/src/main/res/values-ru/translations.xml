@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Да, принять все"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Вы действительно хотите принять все заявки на присоединение?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Принять все запросы"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Принять всё"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Да, отклонить и запретить"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверен, что хочешь отклонить и запретить %1$s? Этот пользователь больше не сможет запросить доступ к этой комнате."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Отклонить и запретить доступ"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Да, отклонить"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Вы уверены, что хотите отклонить %1$s запрос на присоединение к этой комнате?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Отклонить доступ"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Отклонить и запретить"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Нет ожидающих запросов на присоединение"</string>
+  <string name="screen_knock_requests_list_title">"Запросы на присоединение"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d хочет присоединиться к этой комнате"</item>
+    <item quantity="few">"%1$s +%2$d хотят присоединиться к этой комнате"</item>
+    <item quantity="many">"%1$s +%2$d хотят присоединиться к этой комнате"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Показать все"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Принять"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s хочет присоединиться к этой комнате"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Просмотр"</string>
+</resources>

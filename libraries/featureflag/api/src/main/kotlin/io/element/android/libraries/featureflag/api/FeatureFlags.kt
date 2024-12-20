@@ -154,4 +154,18 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    MediaGallery(
+        key = "feature.media_gallery",
+        title = "Allow user to open the media gallery",
+        description = null,
+        defaultValue = { true },
+        isFinished = false,
+    ),
+    EventCache(
+        key = "feature.event_cache",
+        title = "Use SDK Event cache",
+        description = "Warning: you must kill and restart the app for the change to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

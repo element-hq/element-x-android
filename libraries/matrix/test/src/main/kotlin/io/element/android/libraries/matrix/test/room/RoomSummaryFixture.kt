@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -46,6 +47,7 @@ fun aRoomSummary(
     avatarUrl: String? = null,
     isDirect: Boolean = false,
     isPublic: Boolean = true,
+    joinRule: JoinRule? = JoinRule.Public,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
@@ -79,6 +81,7 @@ fun aRoomSummary(
         avatarUrl = avatarUrl,
         isDirect = isDirect,
         isPublic = isPublic,
+        joinRule = joinRule,
         isSpace = isSpace,
         isTombstoned = isTombstoned,
         isFavorite = isFavorite,

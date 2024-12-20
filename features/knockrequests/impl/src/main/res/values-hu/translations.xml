@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Igen, az összes elfogadása"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Biztos, hogy elfogadja az összes csatlakozási kérelmet?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Minden kérés elfogadása"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Összes elfogadása"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Nem sikerült az összes kérés fogadása. Újra megpróbálja?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Nem sikerült az összes kérés elfogadása"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Összes csatlakozási kérés elfogadása"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Nem sikerült elfogadni a kérést. Megpróbálja újra?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Nem sikerült elfogadni a kérést"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Csatlakozási kérés elfogadása"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Igen, elutasítás és kitiltás"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Biztos, hogy elutasítja %1$s kérését és ki is tiltja? Többé nem fogja tudni azt kérni, hogy csatlakozhasson ehhez a szobához."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"A hozzáférés elutasítása és kitiltás"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"A hozzáférés megtagadása és kitiltás"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Igen, elutasítás"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Biztos, hogy elutasítja %1$s kérését, hogy csatlakozzon a szobához?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Hozzáférés elutasítása"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Elutasítás és kitiltás"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Nem sikerült elutasítani a kérést. Megpróbálja újra?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Nem sikerült elutasítani a kérést"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Csatlakozási kérés elutasítása"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Ha valaki csatlakozni kíván a szobához, itt láthatja a kérését."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Nincs függőben lévő csatlakozási kérelem"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Csatlakozási kérések betöltése…"</string>
+  <string name="screen_knock_requests_list_title">"Csatlakozási kérelmek"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához"</item>
+    <item quantity="other">"%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Összes megtekintése"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Elfogadás"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s szeretne csatlakozni ehhez a szobához"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Megtekintés"</string>
+</resources>

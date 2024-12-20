@@ -81,6 +81,12 @@
       ]
     },
     {
+      "name" : ":libraries:dateformatter:impl",
+      "includeRegex" : [
+        "common\\.date\\..*"
+      ]
+    },
+    {
       "name" : ":libraries:permissions:api",
       "includeRegex" : [
         "dialog\\.permission_.*"
@@ -90,6 +96,13 @@
       "name" : ":libraries:androidutils",
       "includeRegex" : [
         "error_no_compatible_app_found"
+      ]
+    },
+    {
+      "name" : ":libraries:mediaviewer:impl",
+      "includeRegex" : [
+        "screen\\.media_details\\..*",
+        "screen_media_browser_.*"
       ]
     },
     {
@@ -165,6 +178,7 @@
       "name" : ":features:roomdetails:impl",
       "includeRegex" : [
         "screen_room_details_.*",
+        "screen\\.room_details\\..*",
         "screen_room_member_list_.*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
@@ -285,6 +299,14 @@
       "includeRegex" : [
         "screen_join_room_.*",
         "screen\\.join_room\\..*"
+      ]
+    },
+    {
+      "name" : ":features:knockrequests:impl",
+      "includeRegex" : [
+        "screen\\.knock_requests_list\\..*",
+        "screen\\.room\\.single_knock_request.*",
+        "screen\\.room\\.multiple_knock_requests.*"
       ]
     }
   ]

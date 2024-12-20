@@ -49,11 +49,15 @@
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
   <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
+  <string name="screen_room_details_media_gallery_title">"Media and files"</string>
   <string name="screen_room_details_notification_mode_custom">"Custom"</string>
   <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
+  <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles and permissions"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_title">"Room info"</string>

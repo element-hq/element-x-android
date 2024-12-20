@@ -14,9 +14,9 @@ class PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostProc
     override fun process(actions: List<TimelineItemAction>): List<TimelineItemAction> {
         return buildList {
             add(TimelineItemAction.ViewInTimeline)
-            actions.firstOrNull { it is TimelineItemAction.Unpin }?.let(::add)
-            actions.firstOrNull { it is TimelineItemAction.Forward }?.let(::add)
-            actions.firstOrNull { it is TimelineItemAction.ViewSource }?.let(::add)
+            actions.firstOrNull { it == TimelineItemAction.Unpin }?.let(::add)
+            actions.firstOrNull { it == TimelineItemAction.Forward }?.let(::add)
+            actions.firstOrNull { it == TimelineItemAction.ViewSource }?.let(::add)
         }
     }
 }

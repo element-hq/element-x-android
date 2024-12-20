@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_mode_files">"File"</string>
+  <string name="screen_media_browser_list_mode_media">"Contenuti multimediali"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Le immagini e i video caricati in questa stanza verranno mostrati qui."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Nessun file multimediale ancora caricato"</string>
+  <string name="screen_media_browser_title">"File e contenuti multimediali"</string>
+</resources>

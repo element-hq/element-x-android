@@ -9,7 +9,8 @@ package io.element.android.features.poll.impl.history.model
 
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toPersistentList
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 class PollHistoryItemsFactory @Inject constructor(
     private val pollContentStateFactory: PollContentStateFactory,
-    private val daySeparatorFormatter: DaySeparatorFormatter,
+    private val dateFormatter: DateFormatter,
     private val dispatchers: CoroutineDispatchers,
 ) {
     suspend fun create(timelineItems: List<MatrixTimelineItem>): PollHistoryItems = withContext(dispatchers.computation) {
@@ -45,7 +46,11 @@ class PollHistoryItemsFactory @Inject constructor(
                 val pollContent = timelineItem.event.content as? PollContent ?: return null
                 val pollContentState = pollContentStateFactory.create(timelineItem.event, pollContent)
                 PollHistoryItem(
-                    formattedDate = daySeparatorFormatter.format(timelineItem.event.timestamp),
+                    formattedDate = dateFormatter.format(
+                        timestamp = timelineItem.event.timestamp,
+                        mode = DateFormatterMode.Day,
+                        useRelative = true
+                    ),
                     state = pollContentState
                 )
             }

@@ -68,6 +68,9 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.R
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
+import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -116,12 +119,14 @@ fun MediaViewerView(
             ) {
                 MediaViewerTopBar(
                     actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                    canDownload = state.canDownload,
-                    canShare = state.canShare,
                     mimeType = state.mediaInfo.mimeType,
                     senderName = state.mediaInfo.senderName,
                     dateSent = state.mediaInfo.dateSent,
+                    canShowInfo = state.canShowInfo,
                     onBackClick = onBackClick,
+                    onInfoClick = {
+                        state.eventSink(MediaViewerEvents.OpenInfo)
+                    },
                     eventSink = state.eventSink
                 )
                 MediaViewerBottomBar(
@@ -131,6 +136,40 @@ fun MediaViewerView(
                     onHeightChange = { bottomPaddingInPixels = it },
                 )
             }
+        }
+    }
+    when (val bottomSheetState = state.mediaBottomSheetState) {
+        MediaBottomSheetState.Hidden -> Unit
+        is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
+            MediaDetailsBottomSheet(
+                state = bottomSheetState,
+                onViewInTimeline = {
+                    state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                },
+                onShare = {
+                    state.eventSink(MediaViewerEvents.Share)
+                },
+                onDownload = {
+                    state.eventSink(MediaViewerEvents.SaveOnDisk)
+                },
+                onDelete = { eventId ->
+                    state.eventSink(MediaViewerEvents.ConfirmDelete(eventId))
+                },
+                onDismiss = {
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                },
+            )
+        }
+        is MediaBottomSheetState.MediaDeleteConfirmationState -> {
+            MediaDeleteConfirmationBottomSheet(
+                state = bottomSheetState,
+                onDelete = {
+                    state.eventSink(MediaViewerEvents.Delete(it))
+                },
+                onDismiss = {
+                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                },
+            )
         }
     }
 }
@@ -278,12 +317,12 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
 @Composable
 private fun MediaViewerTopBar(
     actionsEnabled: Boolean,
-    canDownload: Boolean,
-    canShare: Boolean,
     mimeType: String,
     senderName: String?,
     dateSent: String?,
+    canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
     TopAppBar(
@@ -297,11 +336,15 @@ private fun MediaViewerTopBar(
                         text = senderName,
                         style = ElementTheme.typography.fontBodyMdMedium,
                         color = ElementTheme.colors.textPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = dateSent,
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = ElementTheme.colors.textPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -311,19 +354,6 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
-            if (canShare) {
-                IconButton(
-                    enabled = actionsEnabled,
-                    onClick = {
-                        eventSink(MediaViewerEvents.Share)
-                    },
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.ShareAndroid(),
-                        contentDescription = stringResource(id = CommonStrings.action_share)
-                    )
-                }
-            }
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
@@ -341,20 +371,17 @@ private fun MediaViewerTopBar(
                     )
                 }
             }
-            if (canDownload) {
+            if (canShowInfo) {
                 IconButton(
+                    onClick = onInfoClick,
                     enabled = actionsEnabled,
-                    onClick = {
-                        eventSink(MediaViewerEvents.SaveOnDisk)
-                    },
                 ) {
                     Icon(
-                        imageVector = CompoundIcons.Download(),
-                        contentDescription = stringResource(id = CommonStrings.action_save),
+                        imageVector = CompoundIcons.Info(),
+                        contentDescription = null,
                     )
                 }
             }
-            // TODO Add action to open infos.
         }
     )
 }

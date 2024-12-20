@@ -33,6 +33,7 @@ class DependencyLicensesListPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.licenses.isSuccess()).isTrue()
             assertThat(finalState.licenses.dataOrNull()).isEmpty()
+            assertThat(finalState.filter).isEqualTo("")
         }
     }
 
@@ -51,6 +52,40 @@ class DependencyLicensesListPresenterTest {
             assertThat(finalState.licenses.isSuccess()).isTrue()
             assertThat(finalState.licenses.dataOrNull()!!.size).isEqualTo(1)
             assertThat(finalState.licenses.dataOrNull()!!.get(0)).isEqualTo(anItem)
+        }
+    }
+
+    @Test
+    fun `present - initial state, one license, set filter`() = runTest {
+        val anItem = aDependencyLicenseItem()
+        val presenter = createPresenter {
+            listOf(anItem)
+        }
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.licenses).isInstanceOf(AsyncData.Loading::class.java)
+            val loadedState = awaitItem()
+            assertThat(loadedState.licenses.isSuccess()).isTrue()
+            assertThat(loadedState.licenses.dataOrNull()!!.size).isEqualTo(1)
+            loadedState.eventSink(DependencyLicensesListEvent.SetFilter("dep"))
+            awaitItem().let { state ->
+                assertThat(state.licenses.dataOrNull()!!.size).isEqualTo(1)
+                assertThat(state.filter).isEqualTo("dep")
+            }
+            loadedState.eventSink(DependencyLicensesListEvent.SetFilter("bleh"))
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.licenses.dataOrNull()!!.size).isEqualTo(0)
+                assertThat(state.filter).isEqualTo("bleh")
+            }
+            loadedState.eventSink(DependencyLicensesListEvent.SetFilter(""))
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.licenses.dataOrNull()!!.size).isEqualTo(1)
+                assertThat(state.filter).isEqualTo("")
+            }
         }
     }
 

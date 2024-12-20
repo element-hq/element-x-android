@@ -7,6 +7,9 @@
 
 package io.element.android.libraries.core.extensions
 
+import java.text.Normalizer
+import java.util.Locale
+
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 fun Boolean.to01() = if (this) "1" else "0"
 
@@ -60,4 +63,29 @@ fun String.replacePrefix(oldPrefix: String, newPrefix: String): String {
     } else {
         this
     }
+}
+
+/**
+ * Surround with brackets.
+ */
+fun String.withBrackets(prefix: String = "(", suffix: String = ")"): String {
+    return "$prefix$this$suffix"
+}
+
+/**
+ * Capitalize the string.
+ */
+fun String.safeCapitalize(): String {
+    return replaceFirstChar {
+        if (it.isLowerCase()) {
+            it.titlecase(Locale.getDefault())
+        } else {
+            it.toString()
+        }
+    }
+}
+
+fun String.withoutAccents(): String {
+    return Normalizer.normalize(this, Normalizer.Form.NFD)
+        .replace("\\p{Mn}+".toRegex(), "")
 }

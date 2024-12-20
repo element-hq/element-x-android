@@ -27,7 +27,9 @@ class UtdTracker(
             UtdCause.UNKNOWN_DEVICE -> {
                 Error.Name.ExpectedSentByInsecureDevice
             }
-            UtdCause.HISTORICAL_MESSAGE -> Error.Name.HistoricalMessage
+            UtdCause.HISTORICAL_MESSAGE_AND_BACKUP_IS_DISABLED,
+            UtdCause.HISTORICAL_MESSAGE_AND_DEVICE_IS_UNVERIFIED,
+                -> Error.Name.HistoricalMessage
             UtdCause.WITHHELD_FOR_UNVERIFIED_OR_INSECURE_DEVICE -> Error.Name.RoomKeysWithheldForUnverifiedDevice
             UtdCause.WITHHELD_BY_SENDER -> Error.Name.OlmKeysNotSentError
         }
@@ -39,6 +41,10 @@ class UtdTracker(
             timeToDecryptMillis = info.timeToDecryptMs?.toInt() ?: -1,
             domain = Error.Domain.E2EE,
             name = name,
+            eventLocalAgeMillis = info.eventLocalAgeMillis.toInt(),
+            userTrustsOwnIdentity = info.userTrustsOwnIdentity,
+            isFederated = info.ownHomeserver != info.senderHomeserver,
+            isMatrixDotOrg = info.ownHomeserver == "matrix.org",
         )
         analyticsService.capture(event)
     }

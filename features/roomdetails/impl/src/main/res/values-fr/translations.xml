@@ -31,7 +31,7 @@
   <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
   <string name="screen_room_change_role_section_users">"Membres"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
-  <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les changements?"</string>
+  <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les changements ?"</string>
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
@@ -49,11 +49,15 @@
   <string name="screen_room_details_invite_people_title">"Inviter des amis"</string>
   <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>
+  <string name="screen_room_details_media_gallery_title">"Médias et fichiers"</string>
   <string name="screen_room_details_notification_mode_custom">"Personnalisé"</string>
   <string name="screen_room_details_notification_mode_default">"Défaut"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
+  <string name="screen_room_details_requests_to_join_title">"Demandes en attente"</string>
   <string name="screen_room_details_roles_and_permissions">"Rôles et autorisations"</string>
   <string name="screen_room_details_room_name_label">"Nom du salon"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Sécurité &amp; confidentialité"</string>
   <string name="screen_room_details_security_title">"Sécurité"</string>
   <string name="screen_room_details_share_room_title">"Partager le salon"</string>
   <string name="screen_room_details_title">"Informations du salon"</string>
@@ -61,7 +65,7 @@
   <string name="screen_room_details_updating_room">"Mise à jour du salon…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Bannir"</string>
   <string name="screen_room_member_list_ban_member_confirmation_description">"L‘utilisateur ne pourra pas rejoindre le salon à nouveau, même si il est invité."</string>
-  <string name="screen_room_member_list_ban_member_confirmation_title">"Êtes-vous certain de vouloir bannir ce membre?"</string>
+  <string name="screen_room_member_list_ban_member_confirmation_title">"Êtes-vous certain de vouloir bannir ce membre ?"</string>
   <string name="screen_room_member_list_banned_empty">"Il n’y a pas d’utilisateur banni dans ce salon."</string>
   <string name="screen_room_member_list_banning_user">"Bannissement de %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
@@ -109,7 +113,7 @@
   <string name="screen_room_roles_and_permissions_permissions_header">"Autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset">"Réinitialisation des autorisations"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"La réinitialisation des autorisations entraîne la perte des réglages actuels."</string>
-  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des autorisations?"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des autorisations ?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Rôles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Détails du salon"</string>
   <string name="screen_room_roles_and_permissions_title">"Rôles et autorisations"</string>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"This file will be removed from the room and members won’t have access to it."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Delete file?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Documents, audio files, and voice messages uploaded to this room will be shown here."</string>
+  <string name="screen_media_browser_files_empty_state_title">"No files uploaded yet"</string>
+  <string name="screen_media_browser_list_loading_files">"Loading files…"</string>
+  <string name="screen_media_browser_list_loading_media">"Loading media…"</string>
+  <string name="screen_media_browser_list_mode_files">"Files"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Images and videos uploaded to this room will be shown here."</string>
+  <string name="screen_media_browser_media_empty_state_title">"No media uploaded yet"</string>
+  <string name="screen_media_browser_title">"Media and files"</string>
+  <string name="screen_media_details_file_format">"File format"</string>
+  <string name="screen_media_details_filename">"File name"</string>
+  <string name="screen_media_details_redact_confirmation_message">"This file will be removed from the room and members won’t have access to it."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Delete file?"</string>
+  <string name="screen_media_details_uploaded_by">"Uploaded by"</string>
+  <string name="screen_media_details_uploaded_on">"Uploaded on"</string>
+</resources>

@@ -29,8 +29,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 
 @Composable
 fun TimelineItemEventContentView(

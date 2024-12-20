@@ -52,6 +52,7 @@
   <string name="screen_room_details_notification_mode_custom">"Personalizado"</string>
   <string name="screen_room_details_notification_mode_default">"Predefinição"</string>
   <string name="screen_room_details_notification_title">"Notificações"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Mensagens afixadas"</string>
   <string name="screen_room_details_roles_and_permissions">"Cargos e permissões"</string>
   <string name="screen_room_details_room_name_label">"Nome da sala"</string>
   <string name="screen_room_details_security_title">"Segurança"</string>

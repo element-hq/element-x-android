@@ -52,6 +52,8 @@
   <string name="screen_room_details_notification_mode_custom">"Vlastné"</string>
   <string name="screen_room_details_notification_mode_default">"Predvolené"</string>
   <string name="screen_room_details_notification_title">"Oznámenia"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pripnuté správy"</string>
+  <string name="screen_room_details_requests_to_join_title">"Žiadosti o vstup"</string>
   <string name="screen_room_details_roles_and_permissions">"Roly a povolenia"</string>
   <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
   <string name="screen_room_details_security_title">"Bezpečnosť"</string>

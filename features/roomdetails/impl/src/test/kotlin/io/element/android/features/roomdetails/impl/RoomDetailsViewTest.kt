@@ -81,6 +81,17 @@ class RoomDetailsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
+    fun `click on media gallery invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                openMediaGallery = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_media_gallery_title)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
     fun `click on notification invokes expected callback`() {
         ensureCalledOnce { callback ->
             rule.setRoomDetailView(
@@ -129,7 +140,7 @@ class RoomDetailsViewTest {
                 ),
                 onPinnedMessagesClick = callback,
             )
-            rule.clickOn(CommonStrings.screen_room_details_pinned_events_row_title)
+            rule.clickOn(R.string.screen_room_details_pinned_events_row_title)
         }
     }
 
@@ -241,7 +252,7 @@ class RoomDetailsViewTest {
         eventsRecorder.assertSingle(RoomDetailsEvent.SetFavorite(true))
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1500dp")
     @Test
     fun `click on leave emit expected Event`() {
         val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
@@ -252,6 +263,21 @@ class RoomDetailsViewTest {
         )
         rule.clickOn(R.string.screen_room_details_leave_room_title)
         eventsRecorder.assertSingle(RoomDetailsEvent.LeaveRoom)
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on knock requests invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canShowKnockRequests = true,
+                ),
+                onKnockRequestsClick = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_requests_to_join_title)
+        }
     }
 }
 
@@ -267,9 +293,11 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     invitePeople: () -> Unit = EnsureNeverCalled(),
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
+    openMediaGallery: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
+    onKnockRequestsClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -282,9 +310,11 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             invitePeople = invitePeople,
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
+            openMediaGallery = openMediaGallery,
             openAdminSettings = openAdminSettings,
             onJoinCallClick = onJoinCallClick,
             onPinnedMessagesClick = onPinnedMessagesClick,
+            onKnockRequestsClick = onKnockRequestsClick,
         )
     }
 }

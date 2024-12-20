@@ -8,7 +8,6 @@
 package io.element.android.features.roomlist.impl.model
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -84,6 +83,7 @@ internal fun createRoomListRoomSummary(
     isFavorite: Boolean = false,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     heroes: List<AvatarData> = emptyList(),
+    timestamp: String? = null,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -92,7 +92,7 @@ internal fun createRoomListRoomSummary(
     numberOfUnreadMessages = numberOfUnreadMessages,
     numberOfUnreadNotifications = numberOfUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
-    timestamp = A_FORMATTED_DATE,
+    timestamp = timestamp,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     displayType = displayType,

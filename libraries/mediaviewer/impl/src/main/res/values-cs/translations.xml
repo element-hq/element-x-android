@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Tento soubor bude odstraněn z místnosti a členové k němu nebudou mít přístup."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Smazat soubor?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Zde se zobrazí dokumenty, zvukové soubory a hlasové zprávy nahrané do této místnosti."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Zatím nebyly nahrány žádné soubory"</string>
+  <string name="screen_media_browser_list_loading_files">"Načítání souborů…"</string>
+  <string name="screen_media_browser_list_loading_media">"Načítání médií…"</string>
+  <string name="screen_media_browser_list_mode_files">"Soubory"</string>
+  <string name="screen_media_browser_list_mode_media">"Média"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Obrázky a videa nahraná do této místnosti budou zobrazeny zde."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Zatím nebyla nahrána žádná média"</string>
+  <string name="screen_media_browser_title">"Média a soubory"</string>
+  <string name="screen_media_details_file_format">"Formát souboru"</string>
+  <string name="screen_media_details_filename">"Název souboru"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Tento soubor bude odstraněn z místnosti a členové k němu nebudou mít přístup."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Smazat soubor?"</string>
+  <string name="screen_media_details_uploaded_by">"Nahrál(a)"</string>
+  <string name="screen_media_details_uploaded_on">"Nahráno"</string>
+</resources>

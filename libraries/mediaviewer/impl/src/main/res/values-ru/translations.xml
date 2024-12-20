@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Этот файл будет удален из комнаты и участники не будут иметь к нему доступ."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Удалить файл?"</string>
+  <string name="screen_media_browser_list_loading_files">"Загрузка файлов…"</string>
+  <string name="screen_media_browser_list_loading_media">"Загрузка медиа…"</string>
+  <string name="screen_media_browser_list_mode_files">"Файлы"</string>
+  <string name="screen_media_browser_list_mode_media">"Медиа"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Здесь будут показаны изображения и видео, загруженные в данную комнату."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Пока что нет загруженных медиафайлов"</string>
+  <string name="screen_media_browser_title">"Медиа и файлы"</string>
+  <string name="screen_media_details_file_format">"Формат файла"</string>
+  <string name="screen_media_details_filename">"Имя файла"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Этот файл будет удален из комнаты и у участников не будет к нему доступа."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Удалить файл?"</string>
+  <string name="screen_media_details_uploaded_by">"Загружено"</string>
+  <string name="screen_media_details_uploaded_on">"Загружено на"</string>
+</resources>

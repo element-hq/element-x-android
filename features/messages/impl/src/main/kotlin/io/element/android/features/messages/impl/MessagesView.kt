@@ -118,6 +118,7 @@ fun MessagesView(
     onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
+    knockRequestsBannerView: @Composable () -> Unit,
 ) {
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
@@ -195,8 +196,8 @@ fun MessagesView(
             MessagesViewContent(
                 state = state,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
+                        .padding(padding)
+                        .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
@@ -215,6 +216,7 @@ fun MessagesView(
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                knockRequestsBannerView = knockRequestsBannerView,
             )
         },
         snackbarHost = {
@@ -284,12 +286,13 @@ private fun MessagesViewContent(
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
+    knockRequestsBannerView: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding(),
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -372,6 +375,7 @@ private fun MessagesViewContent(
                             onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }
+                    knockRequestsBannerView()
                 }
             },
             sheetContent = { subcomposing: Boolean ->
@@ -398,13 +402,13 @@ private fun MessagesViewComposerBottomSheetContents(
         Column(modifier = Modifier.fillMaxWidth()) {
             SuggestionsPickerView(
                 modifier = Modifier
-                    .heightIn(max = 230.dp)
-                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                    .nestedScroll(object : NestedScrollConnection {
-                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                            return available
-                        }
-                    }),
+                        .heightIn(max = 230.dp)
+                        // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                        .nestedScroll(object : NestedScrollConnection {
+                            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                                return available
+                            }
+                        }),
                 roomId = state.roomId,
                 roomName = state.roomName.dataOrNull(),
                 roomAvatarData = state.roomAvatar.dataOrNull(),
@@ -452,8 +456,8 @@ private fun MessagesViewTopBar(
         title = {
             val roundedCornerShape = RoundedCornerShape(8.dp)
             val titleModifier = Modifier
-                .clip(roundedCornerShape)
-                .clickable { onRoomDetailsClick() }
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() }
             if (roomName != null && roomAvatar != null) {
                 RoomAvatarAndNameRow(
                     roomName = roomName,
@@ -508,9 +512,9 @@ private fun RoomAvatarAndNameRow(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary)
-            .padding(16.dp),
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondary)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -539,5 +543,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onJoinCallClick = {},
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
+        knockRequestsBannerView = {},
     )
 }

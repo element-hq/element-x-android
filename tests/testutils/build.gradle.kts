@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.services.toolbox.api)
     implementation(libs.test.turbine)
     implementation(libs.molecule.runtime)
     implementation(libs.androidx.compose.ui.test.junit)

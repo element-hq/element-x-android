@@ -4,7 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Numeroimaton luettelo päälle/pois"</string>
   <string name="rich_text_editor_close_formatting_options">"Sulje muotoiluasetukset"</string>
   <string name="rich_text_editor_code_block">"Koodilohko päälle/pois"</string>
-  <string name="rich_text_editor_composer_caption_placeholder">"Valinnainen kuvateksti…"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Lisää kuvateksti"</string>
   <string name="rich_text_editor_composer_placeholder">"Viesti…"</string>
   <string name="rich_text_editor_create_link">"Luo linkki"</string>
   <string name="rich_text_editor_edit_link">"Muokkaa linkkiä"</string>

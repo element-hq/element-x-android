@@ -101,9 +101,11 @@ fun RoomDetailsView(
     invitePeople: () -> Unit,
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
+    openMediaGallery: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: () -> Unit,
     onPinnedMessagesClick: () -> Unit,
+    onKnockRequestsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -206,13 +208,23 @@ fun RoomDetailsView(
                         memberCount = state.memberCount,
                         openRoomMemberList = openRoomMemberList,
                     )
+                    if (state.canShowKnockRequests) {
+                        KnockRequestsItem(
+                            knockRequestsCount = state.knockRequestsCount,
+                            onKnockRequestsClick = onKnockRequestsClick
+                        )
+                    }
                 }
             }
 
             PollsSection(
                 openPollHistory = openPollHistory
             )
-
+            if (state.canShowMediaGallery) {
+                MediaGallerySection(
+                    onClick = openMediaGallery
+                )
+            }
             if (state.isEncrypted) {
                 SecuritySection()
             }
@@ -229,6 +241,20 @@ fun RoomDetailsView(
             )
         }
     }
+}
+
+@Composable
+private fun KnockRequestsItem(knockRequestsCount: Int?, onKnockRequestsClick: () -> Unit) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_requests_to_join_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.AskToJoin())),
+        trailingContent = if (knockRequestsCount == null || knockRequestsCount == 0) {
+            null
+        } else {
+            ListItemContent.Text(knockRequestsCount.toString())
+        },
+        onClick = onKnockRequestsClick,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -525,7 +551,7 @@ private fun PinnedMessagesItem(
 ) {
     val analyticsService = LocalAnalyticsService.current
     ListItem(
-        headlineContent = { Text(stringResource(CommonStrings.screen_room_details_pinned_events_row_title)) },
+        headlineContent = { Text(stringResource(R.string.screen_room_details_pinned_events_row_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
         trailingContent =
         if (pinnedMessagesCount == null) {
@@ -551,6 +577,19 @@ private fun PollsSection(
             headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
             onClick = openPollHistory,
+        )
+    }
+}
+
+@Composable
+private fun MediaGallerySection(
+    onClick: () -> Unit,
+) {
+    PreferenceCategory {
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_media_gallery_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
+            onClick = onClick,
         )
     }
 }
@@ -610,8 +649,10 @@ private fun ContentToPreview(state: RoomDetailsState) {
         invitePeople = {},
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
+        openMediaGallery = {},
         openAdminSettings = {},
         onJoinCallClick = {},
         onPinnedMessagesClick = {},
+        onKnockRequestsClick = {},
     )
 }

@@ -21,7 +21,7 @@ import io.element.android.features.poll.impl.history.model.PollHistoryItemsFacto
 import io.element.android.features.poll.impl.model.DefaultPollContentStateFactory
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
-import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -161,7 +161,7 @@ class PollHistoryPresenterTest {
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         pollHistoryItemFactory: PollHistoryItemsFactory = PollHistoryItemsFactory(
             pollContentStateFactory = DefaultPollContentStateFactory(FakeMatrixClient()),
-            daySeparatorFormatter = FakeDaySeparatorFormatter(),
+            dateFormatter = FakeDateFormatter(),
             dispatchers = testCoroutineDispatchers(),
         ),
     ): PollHistoryPresenter {

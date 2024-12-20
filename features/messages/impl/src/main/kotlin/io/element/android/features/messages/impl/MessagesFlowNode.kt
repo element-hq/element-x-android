@@ -26,6 +26,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
@@ -46,6 +47,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
@@ -54,6 +56,8 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -95,6 +99,8 @@ class MessagesFlowNode @AssistedInject constructor(
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
+    private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
+    private val dateFormatter: DateFormatter,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -115,6 +121,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
@@ -146,6 +153,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object PinnedMessagesList : NavTarget
+
+        @Parcelize
+        data object KnockRequestsList : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -226,21 +236,29 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onViewAllPinnedEvents() {
                         backstack.push(NavTarget.PinnedMessagesList)
                     }
+
+                    override fun onViewKnockRequests() {
+                        backstack.push(NavTarget.KnockRequestsList)
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
+                    eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
-                    canDownload = true,
-                    canShare = true,
+                    canShowInfo = true,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
                         overlay.hide()
+                    }
+
+                    override fun onViewInTimeline(eventId: EventId) {
+                        viewInTimeline(eventId)
                     }
                 }
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
@@ -302,11 +320,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewInTimelineClick(eventId: EventId) {
-                        val permalinkData = PermalinkData.RoomLink(
-                            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
-                            eventId = eventId,
-                        )
-                        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
+                        viewInTimeline(eventId)
                     }
 
                     override fun onRoomPermalinkClick(data: PermalinkData.RoomLink) {
@@ -326,7 +340,18 @@ class MessagesFlowNode @AssistedInject constructor(
             NavTarget.Empty -> {
                 node(buildContext) {}
             }
+            NavTarget.KnockRequestsList -> {
+                knockRequestsListEntryPoint.createNode(this, buildContext)
+            }
         }
+    }
+
+    private fun viewInTimeline(eventId: EventId) {
+        val permalinkData = PermalinkData.RoomLink(
+            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
+            eventId = eventId,
+        )
+        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
     }
 
     private fun processEventClick(event: TimelineItem.Event): Boolean {
@@ -403,14 +428,25 @@ class MessagesFlowNode @AssistedInject constructor(
         thumbnailSource: MediaSource?,
     ): NavTarget {
         return NavTarget.MediaViewer(
+            eventId = event.eventId,
             mediaInfo = MediaInfo(
                 filename = content.filename,
                 caption = content.caption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
+                senderId = event.senderId,
                 senderName = event.safeSenderName,
-                dateSent = event.sentTime,
+                senderAvatar = event.senderAvatar.url,
+                dateSent = dateFormatter.format(
+                    event.sentTimeMillis,
+                    mode = DateFormatterMode.Day,
+                ),
+                dateSentFull = dateFormatter.format(
+                    timestamp = event.sentTimeMillis,
+                    mode = DateFormatterMode.Full,
+                ),
+                waveform = (content as? TimelineItemVoiceContent)?.waveform,
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,

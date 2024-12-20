@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
@@ -17,6 +18,9 @@ import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -30,64 +34,79 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aVideoMediaInfo(
-                senderName = "Sally Sanderson",
-                dateSent = "21 NOV, 2024",
+                senderName = "A very long name so that it will be truncated and will not be displayed on multiple lines",
+                dateSent = "A very very long date that will be truncated and will not be displayed on multiple lines",
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aPdfMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anApkMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anApkMediaInfo(),
             ),
             anApkMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             aMediaViewerState(
-                AsyncData.Loading(),
-                anAudioMediaInfo(),
+                downloadedMedia = AsyncData.Loading(),
+                mediaInfo = anAudioMediaInfo(),
             ),
             anAudioMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
+                    mediaInfo = it,
                 )
             },
             anImageMediaInfo().let {
                 aMediaViewerState(
-                    AsyncData.Success(
+                    downloadedMedia = AsyncData.Success(
                         LocalMedia(Uri.EMPTY, it)
                     ),
-                    it,
-                    canDownload = false,
-                    canShare = false,
+                    mediaInfo = it,
+                    canShowInfo = false,
+                )
+            },
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+            ),
+            aMediaViewerState(
+                mediaBottomSheetState = aMediaDeleteConfirmationState(),
+            ),
+            anAudioMediaInfo(
+                waveForm = aWaveForm(),
+            ).let {
+                aMediaViewerState(
+                    downloadedMedia = AsyncData.Success(
+                        LocalMedia(Uri.EMPTY, it)
+                    ),
+                    mediaInfo = it,
                 )
             },
         )
@@ -96,15 +115,16 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 fun aMediaViewerState(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
-    canDownload: Boolean = true,
-    canShare: Boolean = true,
+    canShowInfo: Boolean = true,
+    mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
+    eventId = null,
     mediaInfo = mediaInfo,
     thumbnailSource = null,
     downloadedMedia = downloadedMedia,
     snackbarMessage = null,
-    canDownload = canDownload,
-    canShare = canShare,
+    canShowInfo = canShowInfo,
+    mediaBottomSheetState = mediaBottomSheetState,
     eventSink = eventSink,
 )

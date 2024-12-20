@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Ez a fájl el lesz távolítva a szobából, és a tagok nem férhetnek hozzá."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Törli a fájlt?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"A szobába feltöltött dokumentumok, hangfájlok és hangüzenetek itt jelennek meg."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Még nincsenek fájlok feltöltve"</string>
+  <string name="screen_media_browser_list_loading_files">"Fájlok betöltése…"</string>
+  <string name="screen_media_browser_list_loading_media">"Média betöltése…"</string>
+  <string name="screen_media_browser_list_mode_files">"Fájlok"</string>
+  <string name="screen_media_browser_list_mode_media">"Média"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Az ebbe a szobába feltöltött képek és videók itt jelennek meg."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Még nincs feltöltött média"</string>
+  <string name="screen_media_browser_title">"Média és fájlok"</string>
+  <string name="screen_media_details_file_format">"Fájlformátum"</string>
+  <string name="screen_media_details_filename">"Fájlnév"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Ez a fájl el lesz távolítva a szobából, és a tagok nem férhetnek hozzá."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Törli a fájlt?"</string>
+  <string name="screen_media_details_uploaded_by">"Feltöltötte:"</string>
+  <string name="screen_media_details_uploaded_on">"Feltöltve:"</string>
+</resources>

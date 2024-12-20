@@ -101,7 +101,10 @@ fun aRoomDetailsState(
     isPublic: Boolean = true,
     heroes: List<MatrixUser> = emptyList(),
     canShowPinnedMessages: Boolean = true,
+    canShowMediaGallery: Boolean = true,
     pinnedMessagesCount: Int? = null,
+    canShowKnockRequests: Boolean = false,
+    knockRequestsCount: Int? = null,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -124,7 +127,10 @@ fun aRoomDetailsState(
     isPublic = isPublic,
     heroes = heroes.toPersistentList(),
     canShowPinnedMessages = canShowPinnedMessages,
+    canShowMediaGallery = canShowMediaGallery,
     pinnedMessagesCount = pinnedMessagesCount,
+    canShowKnockRequests = canShowKnockRequests,
+    knockRequestsCount = knockRequestsCount,
     eventSink = eventSink
 )
 

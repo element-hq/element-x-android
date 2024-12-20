@@ -88,6 +88,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -196,6 +197,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ) { syncState, networkStatus ->
                     Pair(syncState, networkStatus)
                 }
+                    .onStart {
+                        // Temporary fix to ensure that the sync is started even if the networkStatus is offline.
+                        syncService.startSync()
+                    }
                     .collect { (syncState, networkStatus) ->
                         Timber.d("Sync state: $syncState, network status: $networkStatus")
                         if (syncState != SyncState.Running && networkStatus == NetworkStatus.Online) {

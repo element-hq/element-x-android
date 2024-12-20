@@ -10,10 +10,12 @@ package io.element.android.libraries.mediaviewer.impl.local
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.local.audio.MediaAudioView
 import io.element.android.libraries.mediaviewer.impl.local.file.MediaFileView
 import io.element.android.libraries.mediaviewer.impl.local.image.MediaImageView
 import io.element.android.libraries.mediaviewer.impl.local.pdf.MediaPdfView
@@ -48,7 +50,13 @@ fun LocalMediaView(
             modifier = modifier,
             onClick = onClick,
         )
-        // TODO handle audio with exoplayer
+        mimeType.isMimeTypeAudio() -> MediaAudioView(
+            localMediaViewState = localMediaViewState,
+            bottomPaddingInPixels = bottomPaddingInPixels,
+            localMedia = localMedia,
+            info = mediaInfo,
+            modifier = modifier,
+        )
         else -> MediaFileView(
             localMediaViewState = localMediaViewState,
             uri = localMedia?.uri,

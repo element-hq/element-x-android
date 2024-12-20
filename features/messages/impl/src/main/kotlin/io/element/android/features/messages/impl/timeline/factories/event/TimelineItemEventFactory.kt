@@ -20,7 +20,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.core.bool.orTrue
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -32,14 +33,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.text.DateFormat
 import java.util.Date
 
 class TimelineItemEventFactory @AssistedInject constructor(
     @Assisted private val config: TimelineItemsFactoryConfig,
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,
-    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
+    private val dateFormatter: DateFormatter,
     private val permalinkParser: PermalinkParser,
 ) {
     @AssistedFactory
@@ -57,9 +57,10 @@ class TimelineItemEventFactory @AssistedInject constructor(
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
         val senderProfile = currentTimelineItem.event.senderProfile
-        val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
-        val sentTime = timeFormatter.format(Date(currentTimelineItem.event.timestamp))
-
+        val sentTime = dateFormatter.format(
+            timestamp = currentTimelineItem.event.timestamp,
+            mode = DateFormatterMode.TimeOnly,
+        )
         val senderAvatarData = AvatarData(
             id = currentSender.value,
             name = senderProfile.getDisambiguatedDisplayName(currentSender),
@@ -78,6 +79,7 @@ class TimelineItemEventFactory @AssistedInject constructor(
             isMine = currentTimelineItem.event.isOwn,
             isEditable = currentTimelineItem.event.isEditable,
             canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,
+            sentTimeMillis = currentTimelineItem.event.timestamp,
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
@@ -106,7 +108,6 @@ class TimelineItemEventFactory @AssistedInject constructor(
         if (!config.computeReactions) {
             return TimelineItemReactions(reactions = persistentListOf())
         }
-        val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
         var aggregatedReactions = this.event.reactions.map { reaction ->
             // Sort reactions within an aggregation by timestamp descending.
             // This puts the most recent at the top, useful in cases like the
@@ -121,7 +122,10 @@ class TimelineItemEventFactory @AssistedInject constructor(
                         AggregatedReactionSender(
                             senderId = it.senderId,
                             timestamp = date,
-                            sentTime = timeFormatter.format(date),
+                            sentTime = dateFormatter.format(
+                                it.timestamp,
+                                DateFormatterMode.TimeOrDate,
+                            ),
                         )
                     }
                     .toImmutableList()
@@ -157,7 +161,10 @@ class TimelineItemEventFactory @AssistedInject constructor(
                             url = roomMember?.avatarUrl,
                             size = AvatarSize.TimelineReadReceipt,
                         ),
-                        formattedDate = lastMessageTimestampFormatter.format(receipt.timestamp)
+                        formattedDate = dateFormatter.format(
+                            receipt.timestamp,
+                            mode = DateFormatterMode.TimeOrDate,
+                        )
                     )
                 }
                 .toImmutableList()

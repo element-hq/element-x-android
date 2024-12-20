@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"biometrinen tunnistus"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrinen tunnistus"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Avaa biometrisellä"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Vahvista biometrinen tunniste"</string>
   <string name="screen_app_lock_forgot_pin">"Unohtuiko PIN-koodi?"</string>
   <string name="screen_app_lock_settings_change_pin">"Vaihda PIN-koodi"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Salli biometrinen tunnistus"</string>

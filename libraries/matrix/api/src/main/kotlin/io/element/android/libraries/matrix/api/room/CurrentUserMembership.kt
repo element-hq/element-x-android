@@ -12,4 +12,5 @@ enum class CurrentUserMembership {
     JOINED,
     LEFT,
     KNOCKED,
+    BANNED,
 }
