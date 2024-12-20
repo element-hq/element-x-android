@@ -41,6 +41,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -106,7 +107,8 @@ fun MediaGalleryView(
             modifier = Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
@@ -150,6 +152,12 @@ fun MediaGalleryView(
                 state = bottomSheetState,
                 onViewInTimeline = { eventId ->
                     state.eventSink(MediaGalleryEvents.ViewInTimeline(eventId))
+                },
+                onShare = { eventId ->
+                    state.eventSink(MediaGalleryEvents.Share(eventId))
+                },
+                onDownload = { eventId ->
+                    state.eventSink(MediaGalleryEvents.SaveOnDisk(eventId))
                 },
                 onDelete = { eventId ->
                     state.eventSink(
@@ -274,11 +282,17 @@ private fun MediaGalleryFilesList(
                     modifier = Modifier.animateItem(),
                     file = item,
                     onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
                 )
                 is MediaItem.Audio -> AudioItemView(
                     modifier = Modifier.animateItem(),
                     audio = item,
                     onClick = { onItemClick(item) },
+                    onLongClick = {
+                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                    },
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
@@ -286,9 +300,9 @@ private fun MediaGalleryFilesList(
                         modifier = Modifier.animateItem(),
                         state = presenter.present(),
                         voice = item,
-                        onShareClick = { eventSink(MediaGalleryEvents.Share(item)) },
-                        onDownloadClick = { eventSink(MediaGalleryEvents.SaveOnDisk(item)) },
-                        onInfoClick = { eventSink(MediaGalleryEvents.OpenInfo(item)) },
+                        onLongClick = {
+                            eventSink(MediaGalleryEvents.OpenInfo(item))
+                        },
                     )
                 }
                 is MediaItem.DateSeparator -> DateItemView(
@@ -426,6 +440,7 @@ private fun EmptyContent(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
+        OnboardingBackground()
         PageTitle(
             modifier = Modifier
                 .fillMaxWidth()

@@ -66,8 +66,6 @@ class MediaViewerPresenterTest {
             assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
-            assertThat(initialState.canDownload).isTrue()
-            assertThat(initialState.canShare).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
@@ -86,48 +84,6 @@ class MediaViewerPresenterTest {
             assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isFalse()
-            assertThat(initialState.canDownload).isTrue()
-            assertThat(initialState.canShare).isTrue()
-            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-        }
-    }
-
-    @Test
-    fun `present - initial state cannot share`() = runTest {
-        val presenter = createMediaViewerPresenter(
-            canShare = false,
-            room = FakeMatrixRoom(
-                canRedactOwnResult = { Result.success(true) },
-            )
-        )
-        presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(initialState.snackbarMessage).isNull()
-            assertThat(initialState.canShowInfo).isTrue()
-            assertThat(initialState.canDownload).isTrue()
-            assertThat(initialState.canShare).isFalse()
-            assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-        }
-    }
-
-    @Test
-    fun `present - initial state cannot download`() = runTest {
-        val presenter = createMediaViewerPresenter(
-            canDownload = false,
-            room = FakeMatrixRoom(
-                canRedactOwnResult = { Result.success(true) },
-            )
-        )
-        presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(initialState.snackbarMessage).isNull()
-            assertThat(initialState.canShowInfo).isTrue()
-            assertThat(initialState.canDownload).isFalse()
-            assertThat(initialState.canShare).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
@@ -146,8 +102,6 @@ class MediaViewerPresenterTest {
             assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
-            assertThat(initialState.canDownload).isTrue()
-            assertThat(initialState.canShare).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
@@ -167,8 +121,6 @@ class MediaViewerPresenterTest {
             assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
-            assertThat(initialState.canDownload).isTrue()
-            assertThat(initialState.canShare).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
@@ -350,8 +302,6 @@ class MediaViewerPresenterTest {
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         canShowInfo: Boolean = true,
-        canShare: Boolean = true,
-        canDownload: Boolean = true,
         mediaViewerNavigator: MediaViewerNavigator = FakeMediaViewerNavigator(),
         room: MatrixRoom = FakeMatrixRoom(
             liveTimeline = FakeTimeline(),
@@ -364,8 +314,6 @@ class MediaViewerPresenterTest {
                 mediaSource = aMediaSource(),
                 thumbnailSource = null,
                 canShowInfo = canShowInfo,
-                canShare = canShare,
-                canDownload = canDownload,
             ),
             localMediaFactory = localMediaFactory,
             mediaLoader = matrixMediaLoader,

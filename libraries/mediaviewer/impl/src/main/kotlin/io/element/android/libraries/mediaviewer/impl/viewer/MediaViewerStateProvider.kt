@@ -91,8 +91,6 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     ),
                     mediaInfo = it,
                     canShowInfo = false,
-                    canDownload = false,
-                    canShare = false,
                 )
             },
             aMediaViewerState(
@@ -118,8 +116,6 @@ fun aMediaViewerState(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
     canShowInfo: Boolean = true,
-    canDownload: Boolean = true,
-    canShare: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
@@ -129,8 +125,6 @@ fun aMediaViewerState(
     downloadedMedia = downloadedMedia,
     snackbarMessage = null,
     canShowInfo = canShowInfo,
-    canDownload = canDownload,
-    canShare = canShare,
     mediaBottomSheetState = mediaBottomSheetState,
     eventSink = eventSink,
 )

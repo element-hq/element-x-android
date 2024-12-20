@@ -12,10 +12,11 @@ import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 
 fun aMediaDetailsBottomSheetState(
     dateSentFull: String = "December 6, 2024 at 12:59",
+    canDelete: Boolean = true,
 ): MediaBottomSheetState.MediaDetailsBottomSheetState {
     return MediaBottomSheetState.MediaDetailsBottomSheetState(
         eventId = EventId("\$eventId"),
-        canDelete = true,
+        canDelete = canDelete,
         mediaInfo = anImageMediaInfo(
             senderName = "Alice",
             dateSentFull = dateSentFull,

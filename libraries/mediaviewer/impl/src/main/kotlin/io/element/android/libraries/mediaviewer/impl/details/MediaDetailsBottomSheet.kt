@@ -48,6 +48,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun MediaDetailsBottomSheet(
     state: MediaBottomSheetState.MediaDetailsBottomSheetState,
     onViewInTimeline: (EventId) -> Unit,
+    onShare: (EventId) -> Unit,
+    onDownload: (EventId) -> Unit,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -90,6 +92,22 @@ fun MediaDetailsBottomSheet(
                         style = ListItemStyle.Primary,
                         onClick = {
                             onViewInTimeline(state.eventId)
+                        }
+                    )
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_share)) },
+                        style = ListItemStyle.Primary,
+                        onClick = {
+                            onShare(state.eventId)
+                        }
+                    )
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_save)) },
+                        style = ListItemStyle.Primary,
+                        onClick = {
+                            onDownload(state.eventId)
                         }
                     )
                     if (state.canDelete) {
@@ -196,6 +214,8 @@ internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
     MediaDetailsBottomSheet(
         state = aMediaDetailsBottomSheetState(),
         onViewInTimeline = {},
+        onShare = {},
+        onDownload = {},
         onDelete = {},
         onDismiss = {},
     )

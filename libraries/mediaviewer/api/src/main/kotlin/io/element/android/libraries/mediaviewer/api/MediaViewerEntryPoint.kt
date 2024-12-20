@@ -36,7 +36,5 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val canShowInfo: Boolean,
-        val canDownload: Boolean,
-        val canShare: Boolean,
     ) : NodeInputs
 }
