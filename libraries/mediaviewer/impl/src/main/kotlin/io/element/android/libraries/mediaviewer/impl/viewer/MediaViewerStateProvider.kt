@@ -41,8 +41,8 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 )
             },
             aVideoMediaInfo(
-                senderName = "Sally Sanderson",
-                dateSent = "21 NOV, 2024",
+                senderName = "A very long name so that it will be truncated and will not be displayed on multiple lines",
+                dateSent = "A very very long date that will be truncated and will not be displayed on multiple lines",
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
