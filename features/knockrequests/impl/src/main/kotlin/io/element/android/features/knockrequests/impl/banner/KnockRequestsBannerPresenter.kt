@@ -8,35 +8,85 @@
 package io.element.android.features.knockrequests.impl.banner
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.libraries.core.coroutine.mapState
+import io.element.android.libraries.core.extensions.firstIfSingle
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class KnockRequestsBannerPresenter @Inject constructor() : Presenter<KnockRequestsBannerState> {
+private const val ACCEPT_ERROR_DISPLAY_DURATION = 1500L
+
+class KnockRequestsBannerPresenter @Inject constructor(
+    private val knockRequestsService: KnockRequestsService,
+    private val appCoroutineScope: CoroutineScope,
+) : Presenter<KnockRequestsBannerState> {
     @Composable
     override fun present(): KnockRequestsBannerState {
-        var shouldShowBanner by remember { mutableStateOf(false) }
+        val knockRequests by remember {
+            knockRequestsService.knockRequestsFlow.mapState { knockRequests ->
+                knockRequests.dataOrNull().orEmpty()
+                    .filter { !it.isSeen }
+                    .toImmutableList()
+            }
+        }.collectAsState()
+
+        val permissions by knockRequestsService.permissionsFlow.collectAsState()
+        val showAcceptError = remember { mutableStateOf(false) }
+
+        val shouldShowBanner by remember {
+            derivedStateOf {
+                permissions.canHandle && knockRequests.isNotEmpty()
+            }
+        }
 
         fun handleEvents(event: KnockRequestsBannerEvents) {
             when (event) {
-                is KnockRequestsBannerEvents.AcceptSingleRequest -> Unit
+                is KnockRequestsBannerEvents.AcceptSingleRequest -> {
+                    appCoroutineScope.acceptSingleKnockRequest(
+                        knockRequests = knockRequests,
+                        displayAcceptError = showAcceptError,
+                    )
+                }
                 is KnockRequestsBannerEvents.Dismiss -> {
-                    shouldShowBanner = false
+                    appCoroutineScope.launch {
+                        knockRequestsService.markAllKnockRequestsAsSeen()
+                    }
                 }
             }
         }
 
         return KnockRequestsBannerState(
-            knockRequests = persistentListOf(),
-            acceptAction = AsyncAction.Uninitialized,
-            canAccept = false,
+            knockRequests = knockRequests,
+            displayAcceptError = showAcceptError.value,
+            canAccept = permissions.canAccept,
             isVisible = shouldShowBanner,
             eventSink = ::handleEvents,
         )
+    }
+
+    private fun CoroutineScope.acceptSingleKnockRequest(
+        knockRequests: List<KnockRequestPresentable>,
+        displayAcceptError: MutableState<Boolean>,
+    ) = launch {
+        val knockRequest = knockRequests.firstIfSingle()
+        if (knockRequest != null) {
+            knockRequestsService.acceptKnockRequest(knockRequest, optimistic = true)
+                .onFailure {
+                    displayAcceptError.value = true
+                    delay(ACCEPT_ERROR_DISPLAY_DURATION)
+                    displayAcceptError.value = false
+                }
+        }
     }
 }

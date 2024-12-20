@@ -8,8 +8,9 @@
 package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.knockrequests.impl.KnockRequest
-import io.element.android.features.knockrequests.impl.aKnockRequest
+import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
+import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
+import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -30,14 +31,14 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest(
+                        aKnockRequestPresentable(
                             reason = "A very long reason that should probably be truncated, " +
                                 "but could be also expanded so you can see it over the lines, wow," +
                                 "very amazing reason, I know, right, I'm so good at writing reasons."
@@ -48,8 +49,8 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest(),
-                        aKnockRequest(
+                        aKnockRequestPresentable(),
+                        aKnockRequestPresentable(
                             userId = UserId("@user:example.com"),
                             displayName = null,
                             avatarUrl = null,
@@ -61,59 +62,88 @@ open class KnockRequestsListStateProvider : PreviewParameterProvider<KnockReques
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
-                currentAction = KnockRequestsCurrentAction.AcceptAll(AsyncAction.Loading),
+                currentAction = KnockRequestsAction.AcceptAll,
+                asyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
-                canAccept = false,
+                currentAction = KnockRequestsAction.AcceptAll,
+                asyncAction = AsyncAction.Loading,
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
-                canDecline = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = false,
+                    canDecline = true,
+                    canBan = true,
+                ),
+                currentAction = KnockRequestsAction.AcceptAll,
+                asyncAction = AsyncAction.Failure(Throwable("Failed to accept all")),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
-                canAccept = false,
-                canDecline = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = true,
+                    canDecline = false,
+                    canBan = true,
+                ),
             ),
             aKnockRequestsListState(
                 knockRequests = AsyncData.Success(
                     persistentListOf(
-                        aKnockRequest()
+                        aKnockRequestPresentable()
                     )
                 ),
-                canBan = false,
+                permissions = KnockRequestPermissions(
+                    canAccept = false,
+                    canDecline = false,
+                    canBan = true,
+                ),
+            ),
+            aKnockRequestsListState(
+                knockRequests = AsyncData.Success(
+                    persistentListOf(
+                        aKnockRequestPresentable()
+                    )
+                ),
+                permissions = KnockRequestPermissions(
+                    canAccept = true,
+                    canDecline = true,
+                    canBan = false,
+                ),
             ),
         )
 }
 
 fun aKnockRequestsListState(
-    knockRequests: AsyncData<ImmutableList<KnockRequest>> = AsyncData.Success(persistentListOf()),
-    currentAction: KnockRequestsCurrentAction = KnockRequestsCurrentAction.None,
-    canAccept: Boolean = true,
-    canDecline: Boolean = true,
-    canBan: Boolean = true,
+    knockRequests: AsyncData<ImmutableList<KnockRequestPresentable>> = AsyncData.Success(persistentListOf()),
+    currentAction: KnockRequestsAction = KnockRequestsAction.None,
+    asyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    permissions: KnockRequestPermissions = KnockRequestPermissions(
+        canAccept = true,
+        canDecline = true,
+        canBan = true,
+    ),
     eventSink: (KnockRequestsListEvents) -> Unit = {},
 ) = KnockRequestsListState(
     knockRequests = knockRequests,
     currentAction = currentAction,
-    canAccept = canAccept,
-    canDecline = canDecline,
-    canBan = canBan,
+    asyncAction = asyncAction,
+    permissions = permissions,
     eventSink = eventSink,
 )

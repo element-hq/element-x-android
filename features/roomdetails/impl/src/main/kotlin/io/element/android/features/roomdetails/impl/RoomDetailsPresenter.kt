@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
@@ -77,7 +78,7 @@ class RoomDetailsPresenter @Inject constructor(
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
-        val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
+        val joinRule by remember { derivedStateOf { roomInfo?.joinRule } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
         var canShowMediaGallery by remember { mutableStateOf(false) }
@@ -106,11 +107,8 @@ class RoomDetailsPresenter @Inject constructor(
         val roomType by getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
 
-        val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
-
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
-
             when {
                 !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
                 canEditTopic && roomType is RoomDetailsType.Room -> RoomTopicState.CanAddTopic
@@ -118,10 +116,13 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
         val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
-        val knockRequestsCount by remember { mutableStateOf(null) }
+        val knockRequestsCount by produceState<Int?>(null) {
+            room.knockRequestsFlow.collect { value = it.size }
+        }
         val canShowKnockRequests by remember {
-            derivedStateOf { isKnockRequestsEnabled && canHandleKnockRequests }
+            derivedStateOf { isKnockRequestsEnabled && canHandleKnockRequests && joinRule == JoinRule.Knock }
         }
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
@@ -164,7 +165,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
-            isPublic = isPublic,
+            isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
             canShowMediaGallery = canShowMediaGallery,
