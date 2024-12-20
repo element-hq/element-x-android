@@ -84,6 +84,27 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                 mode = MediaGalleryMode.Files,
                 groupedMediaItems = AsyncData.Failure(Exception("Failed to load media")),
             ),
+            // Timeline is loaded but does not have relevant content yet for images and videos
+            aMediaGalleryState(
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        imageAndVideoItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
+            ),
+            // Timeline is loaded but does not have relevant content yet for files
+            aMediaGalleryState(
+                mode = MediaGalleryMode.Files,
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        fileItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
+            ),
         )
 }
 

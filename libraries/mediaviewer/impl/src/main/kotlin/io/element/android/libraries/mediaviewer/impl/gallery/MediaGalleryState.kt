@@ -25,7 +25,14 @@ data class MediaGalleryState(
 data class GroupedMediaItems(
     val imageAndVideoItems: ImmutableList<MediaItem>,
     val fileItems: ImmutableList<MediaItem>,
-)
+) {
+    fun getItems(mode: MediaGalleryMode): ImmutableList<MediaItem> {
+        return when (mode) {
+            MediaGalleryMode.Images -> imageAndVideoItems
+            MediaGalleryMode.Files -> fileItems
+        }
+    }
+}
 
 enum class MediaGalleryMode(val stringResource: Int) {
     Images(R.string.screen_media_browser_list_mode_media),
