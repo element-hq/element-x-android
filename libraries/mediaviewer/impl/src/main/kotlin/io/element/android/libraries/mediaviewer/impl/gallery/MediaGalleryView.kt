@@ -460,23 +460,28 @@ private fun EmptyContent(
 private fun LoadingContent(
     mode: MediaGalleryMode,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 48.dp)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        CircularProgressIndicator()
-        val res = when (mode) {
-            MediaGalleryMode.Images -> R.string.screen_media_browser_list_loading_media
-            MediaGalleryMode.Files -> R.string.screen_media_browser_list_loading_files
+        OnboardingBackground()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 48.dp)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            CircularProgressIndicator()
+            val res = when (mode) {
+                MediaGalleryMode.Images -> R.string.screen_media_browser_list_loading_media
+                MediaGalleryMode.Files -> R.string.screen_media_browser_list_loading_files
+            }
+            Text(
+                text = stringResource(res),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
         }
-        Text(
-            text = stringResource(res),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
     }
 }
 
