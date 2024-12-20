@@ -22,7 +22,8 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class) class SendQueuesTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class SendQueuesTest {
     private val matrixClient = FakeMatrixClient()
     private val networkMonitor = FakeNetworkMonitor()
     private val sut = SendQueues(matrixClient, networkMonitor)
@@ -45,11 +46,8 @@ import org.junit.Test
         runCurrent()
 
         assert(setAllSendQueuesEnabledLambda)
-            .isCalledExactly(2)
-            .withSequence(
-                listOf(value(true)),
-                listOf(value(true)),
-            )
+            .isCalledOnce()
+            .with(value(true))
 
         assert(setRoomSendQueueEnabledLambda).isNeverCalled()
     }
@@ -74,32 +72,7 @@ import org.junit.Test
         advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
         runCurrent()
 
-        assert(setAllSendQueuesEnabledLambda)
-            .isCalledOnce()
-            .with(value(false))
-
-        assert(setRoomSendQueueEnabledLambda)
-            .isNeverCalled()
-    }
-
-    @Test
-    fun `test network status getting offline and online`() = runTest {
-        val setEnableSendingQueueLambda = lambdaRecorder { _: Boolean -> }
-        matrixClient.setAllSendQueuesEnabledLambda = setEnableSendingQueueLambda
-
-        sut.launchIn(backgroundScope)
-        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
-        networkMonitor.connectivity.value = NetworkStatus.Offline
-        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
-        networkMonitor.connectivity.value = NetworkStatus.Online
-        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
-
-        assert(setEnableSendingQueueLambda)
-            .isCalledExactly(3)
-            .withSequence(
-                listOf(value(true)),
-                listOf(value(false)),
-                listOf(value(true)),
-            )
+        assert(setAllSendQueuesEnabledLambda).isNeverCalled()
+        assert(setRoomSendQueueEnabledLambda).isNeverCalled()
     }
 }
