@@ -92,7 +92,7 @@ private fun Throwable.getReason(): String? {
         is PusherRegistrationFailure.AccountNotVerified -> null
         is PusherRegistrationFailure.NoDistributorsAvailable -> "No distributors available"
         is PusherRegistrationFailure.NoProvidersAvailable -> "No providers available"
-        else -> "Other error"
+        else -> "Other error: $message"
     }
 }
 
