@@ -204,8 +204,8 @@ class RustMatrixRoom(
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> {
-        return runCatching {
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.timelineFocusedOnEvent(
                 eventId = eventId.value,
                 numContextEvents = 50u,
@@ -222,8 +222,8 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun pinnedEventsTimeline(): Result<Timeline> {
-        return runCatching {
+    override suspend fun pinnedEventsTimeline(): Result<Timeline> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.pinnedEventsTimeline(
                 internalIdPrefix = "pinned_events",
                 maxEventsToLoad = 100u,
@@ -238,8 +238,8 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun mediaTimeline(): Result<Timeline> {
-        return runCatching {
+    override suspend fun mediaTimeline(): Result<Timeline> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.messageFilteredTimeline(
                 internalIdPrefix = "MediaGallery_",
                 allowedMessageTypes = listOf(
