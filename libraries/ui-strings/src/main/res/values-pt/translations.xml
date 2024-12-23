@@ -278,6 +278,8 @@ Razão: %1$s."</string>
   <string name="error_missing_location_auth_android">"A %1$s não tem permissão para aceder à tua localização. Podes ativar o acesso nas Definições."</string>
   <string name="error_missing_location_rationale_android">"A %1$s não tem permissão para aceder à tua localização. Continua para ativares o acesso."</string>
   <string name="error_missing_microphone_voice_rationale_android">"A %1$s não tem permissão para aceder ao teu microfone. Permite o acesso para gravar uma mensagem de voz."</string>
+  <string name="error_room_address_already_exists">"Este endereço de sala já existe, tente editar o campo de endereço da sala ou altere o nome da sala"</string>
+  <string name="error_room_address_invalid_symbols">"Alguns caracteres não são permitidos. Apenas letras, dígitos e os seguintes símbolos são suportados! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Desculpe, ocorreu um erro"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>

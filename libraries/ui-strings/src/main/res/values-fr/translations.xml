@@ -289,6 +289,8 @@ Raison : %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
   <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’utiliser le microphone. Autorisez l’utilisation pour enregistrer un message vocal."</string>
+  <string name="error_room_address_already_exists">"Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d’adresse de salon ou de modifier le nom du salon"</string>
+  <string name="error_room_address_invalid_symbols">"Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L’authenticité de ce message chiffré ne peut être garantie sur cet appareil."</string>
@@ -338,13 +340,13 @@ Personne d’autre que les membres du salon ne pourra lire les messages. Cela pe
 Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le monde peut trouver et rejoindre."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Activer le chiffrement ?"</string>
   <string name="screen_security_and_privacy_encryption_section_footer">"Une fois activé, le chiffrement ne peut pas être désactivé."</string>
-  <string name="screen_security_and_privacy_encryption_section_title">"Chiffrement"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Chiffrement"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activer le chiffrement de bout en bout"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Tout le monde peut le trouver et le rejoindre"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Tout le monde"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Le salon ne peut être joint que par les personnes invitées"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Sur invitation uniquement"</string>
-  <string name="screen_security_and_privacy_room_access_section_title">"Accès au salon"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Accès au salon"</string>
   <string name="screen_security_and_privacy_title">"Sécurité &amp; confidentialité"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
@@ -359,6 +361,7 @@ Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le 
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"fr"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Les anciens messages ne sont pas disponibles sur cet appareil"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Vous devez vérifier cet appareil pour accéder à l’historique des messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Vous n’avez pas accès à ce message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossible de déchiffrer le message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ce message a été bloqué soit parce que vous n’avez pas vérifié votre session, soit parce que l’expéditeur doit vérifier votre identité."</string>
