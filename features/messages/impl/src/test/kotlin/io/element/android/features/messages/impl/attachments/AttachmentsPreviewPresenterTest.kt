@@ -49,6 +49,7 @@ import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -400,7 +401,7 @@ class AttachmentsPreviewPresenterTest {
     }
 
     @Test
-    fun `present - send media failure scenario`() = runTest {
+    fun `present - send media failure scenario without media queue`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
         val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.failure(failure)
@@ -408,7 +409,7 @@ class AttachmentsPreviewPresenterTest {
         val room = FakeMatrixRoom(
             sendFileResult = sendFileResult,
         )
-        val presenter = createAttachmentsPreviewPresenter(room = room)
+        val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -428,8 +429,41 @@ class AttachmentsPreviewPresenterTest {
     }
 
     @Test
-    fun `present - dismissing the progress dialog stops media upload`() = runTest {
-        val presenter = createAttachmentsPreviewPresenter()
+    fun `present - send media failure scenario with media queue`() = runTest {
+        val failure = MediaPreProcessor.Failure(null)
+        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+            Result.failure(failure)
+        }
+        val onDoneListenerResult = lambdaRecorder<Unit> {}
+        val room = FakeMatrixRoom(
+            sendFileResult = sendFileResult,
+        )
+        val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = true, onDoneListener = onDoneListenerResult)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+
+            // Check that the onDoneListener is called so the screen would be dismissed
+            onDoneListenerResult.assertions().isCalledOnce()
+
+            val failureState = awaitItem()
+            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
+            sendFileResult.assertions().isCalledOnce()
+            failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
+            val clearedState = awaitItem()
+            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
+        }
+    }
+
+    @Test
+    fun `present - dismissing the progress dialog stops media upload without media queue`() = runTest {
+        val presenter = createAttachmentsPreviewPresenter(mediaUploadOnSendQueueEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -444,7 +478,28 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
-    private fun createAttachmentsPreviewPresenter(
+    @Test
+    fun `present - dismissing the progress dialog stops media upload with media queue`() = runTest {
+        val onDoneListenerResult = lambdaRecorder<Unit> {}
+        val presenter = createAttachmentsPreviewPresenter(mediaUploadOnSendQueueEnabled = true, onDoneListener = onDoneListenerResult)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            initialState.eventSink(AttachmentsPreviewEvents.ClearSendState)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+
+            // Check that the onDoneListener is called so the screen would be dismissed
+            onDoneListenerResult.assertions().isCalledOnce()
+        }
+    }
+
+    private fun TestScope.createAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
@@ -469,7 +524,8 @@ class AttachmentsPreviewPresenterTest {
                     FeatureFlags.MediaCaptionCreation.key to allowCaption,
                     FeatureFlags.MediaCaptionWarning.key to showCaptionCompatibilityWarning,
                 ),
-            )
+            ),
+            sessionCoroutineScope = this,
         )
     }
 }

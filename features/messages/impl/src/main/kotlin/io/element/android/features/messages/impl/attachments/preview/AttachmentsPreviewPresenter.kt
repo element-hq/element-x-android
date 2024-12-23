@@ -24,6 +24,7 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -48,6 +49,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val featureFlagService: FeatureFlagService,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -92,12 +94,21 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                         // Pre-processing is done, send the attachment
                         val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
                             .takeIf { it.isNotEmpty() }
-                        ongoingSendAttachmentJob.value = coroutineScope.launch {
+
+                        // Send it using the session coroutine scope so it doesn't matter if this screen or the chat one is closed
+                        val sendOnBackground = featureFlagService.isFeatureEnabled(FeatureFlags.MediaUploadOnSendQueue)
+                        val sendMediaScope = if (sendOnBackground) sessionCoroutineScope else coroutineScope
+                        ongoingSendAttachmentJob.value = sendMediaScope.launch {
                             sendPreProcessedMedia(
                                 mediaUploadInfo = mediaUploadInfo.data,
                                 caption = caption,
                                 sendActionState = sendActionState,
                             )
+                        }
+
+                        // If we're supposed to send the media as a background job, we can dismiss this screen already
+                        if (sendOnBackground) {
+                            onDoneListener()
                         }
                     }
                     is AsyncData.Failure -> {
@@ -240,7 +251,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             cleanUp(mediaUploadInfo)
             // Reset the sendActionState to ensure that dialog is closed before the screen
             sendActionState.value = SendActionState.Done
-            onDoneListener()
         },
         onFailure = { error ->
             Timber.e(error, "Failed to send attachment")
