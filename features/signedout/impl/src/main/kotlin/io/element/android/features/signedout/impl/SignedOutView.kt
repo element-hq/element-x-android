@@ -33,7 +33,6 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
@@ -94,7 +93,6 @@ private fun SignedOutContent() {
             ),
             textStyle = ElementTheme.typography.fontBodyMdMedium,
             iconTint = ElementTheme.colors.iconSecondary,
-            backgroundColor = ElementTheme.colors.temporaryColorBgSpecial
         )
     }
 }

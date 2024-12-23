@@ -34,8 +34,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun InfoListOrganism(
     items: ImmutableList<InfoListItem>,
-    backgroundColor: Color,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = ElementTheme.colors.bgSubtleSecondary,
     iconTint: Color = LocalContentColor.current,
     iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,

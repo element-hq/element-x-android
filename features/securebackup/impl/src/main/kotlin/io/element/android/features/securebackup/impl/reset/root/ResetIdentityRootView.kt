@@ -115,7 +115,6 @@ private fun Content() {
                     },
                 ),
             ),
-            backgroundColor = ElementTheme.colors.bgActionSecondaryHovered,
         )
 
         Text(
