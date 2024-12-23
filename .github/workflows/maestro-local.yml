@@ -1,0 +1,125 @@
+name: Maestro (local)
+
+# Run this flow only when APK Build workflow completes
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [APK Build]
+    types:
+      - completed
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
+  ARCH: x86_64
+  DEVICE: Nexus 6
+  API_LEVEL: 35
+  TARGET: google_apis
+
+jobs:
+  build-apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    # Allow one per PR.
+    concurrency:
+      group: ${{ format('maestro-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.ref }}
+      - uses: actions/setup-java@v4
+        name: Use JDK 21
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Assemble debug APK
+        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-apk-maestro
+          path: |
+            app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
+          retention-days: 5
+          overwrite: true
+          if-no-files-found: error
+
+  maestro-cloud:
+    name: Maestro test suite
+    runs-on: ubuntu-latest
+    needs: [build-apk]
+    # Only if the APKs were built successfully.
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # Allow one per PR.
+    concurrency:
+      group: ${{ format('maestro-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.ref }}
+      - name: Download APK artifact from 'Build APKs' flow
+        uses: actions/download-artifact@v4
+        if: github.event.workflow_run.conclusion == 'success'
+        with:
+          name: elementx-apk-maestro
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download APK artifact from previous job
+        uses: actions/download-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: elementx-apk-maestro
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install maestro
+        run: curl -fsSL "https://get.maestro.mobile.dev" | bash
+      - name: Run Maestro tests in emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          MAESTRO_USERNAME: maestroelement
+          MAESTRO_PASSWORD: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+          MAESTRO_RECOVERY_KEY: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
+          MAESTRO_ROOM_NAME: MyRoom
+          MAESTRO_INVITEE1_MXID: "@maestroelement2:matrix.org"
+          MAESTRO_INVITEE2_MXID: "@maestroelement3:matrix.org"
+          MAESTRO_APP_ID: io.element.android.x.debug
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          arch: ${{ env.ARCH }}
+          profile: ${{ env.DEVICE }}
+          target: ${{ env.TARGET }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          disk-size: 3G
+          script: |
+            chmod +x .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh
+            .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh app-gplay-x86_64-debug.apk
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            ~/.maestro/tests/**
+          retention-days: 5
+          overwrite: true
+          if-no-files-found: error

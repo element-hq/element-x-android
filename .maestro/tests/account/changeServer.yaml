@@ -11,6 +11,9 @@ appId: ${MAESTRO_APP_ID}
     id: "change_server-server"
 - inputText: "element"
 - hideKeyboard
+- extendedWaitUntil:
+    visible: "element.io"
+    timeout: 10000
 - tapOn: "element.io"
 # Revert to matrix.org
 - tapOn:
