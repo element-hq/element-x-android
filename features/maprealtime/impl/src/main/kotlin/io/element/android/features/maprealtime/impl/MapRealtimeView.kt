@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
@@ -59,6 +60,8 @@ fun MapRealtimeView(
     val cameraPositionState = rememberCameraPositionState {
         cameraMode = CameraMode.TRACKING
     }
+
+    KeepScreenOn()
 
     LaunchedEffect(Unit) {
         state.eventSink(MapRealtimeEvents.RequestPermissions)
