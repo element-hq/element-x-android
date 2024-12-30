@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Sim, aceitar todos"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Tens a certeza de que queres aceitar todos os pedidos de entrada?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Aceitar todos os pedidos"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Aceitar todos"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Sim, recusar e proibir"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Tens a certeza de que queres recusar e banir %1$s? Este utilizador não poderá voltar a pedir para entrar nesta sala."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Recusar e banir"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Sim, recusar"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Tens a certeza que queres recusar o pedido de entrada de %1$s?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Recusar entrada"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Recusar e banir"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Quando alguém pedir para entrar na sala, irás poder rever o pedido aqui."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Sem pedidos de entrada"</string>
+  <string name="screen_knock_requests_list_title">"Pedidos de entrada"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d outro querem entrar nesta sala"</item>
+    <item quantity="other">"%1$s +%2$d outros querem entrar nesta sala"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Ver todos"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Aceitar"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s quer entrar nesta sala"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Ver"</string>
+</resources>
