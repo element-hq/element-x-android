@@ -34,40 +34,38 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : UnifiedPushGatewayResolver {
-    private val logger = Timber.tag("DefaultUnifiedPushGatewayResolver")
-
     override suspend fun getGateway(endpoint: String): UnifiedPushGatewayResolverResult {
         val url = tryOrNull(
-            onError = { logger.d(it, "Cannot parse endpoint as an URL") }
+            onError = { Timber.tag("DefaultUnifiedPushGatewayResolver").d(it, "Cannot parse endpoint as an URL") }
         ) {
             URL(endpoint)
         }
         return if (url == null) {
-            logger.d("Using default gateway")
+            Timber.tag("DefaultUnifiedPushGatewayResolver").d("ErrorInvalidUrl")
             UnifiedPushGatewayResolverResult.ErrorInvalidUrl
         } else {
             val port = if (url.port != -1) ":${url.port}" else ""
             val customBase = "${url.protocol}://${url.host}$port"
             val customUrl = "$customBase/_matrix/push/v1/notify"
-            logger.i("Testing $customUrl")
+            Timber.tag("DefaultUnifiedPushGatewayResolver").i("Testing $customUrl")
             return withContext(coroutineDispatchers.io) {
                 val api = unifiedPushApiFactory.create(customBase)
                 try {
                     val discoveryResponse = api.discover()
                     if (discoveryResponse.unifiedpush.gateway == "matrix") {
-                        logger.d("The endpoint seems to be a valid UnifiedPush gateway")
+                        Timber.tag("DefaultUnifiedPushGatewayResolver").d("The endpoint seems to be a valid UnifiedPush gateway")
                         UnifiedPushGatewayResolverResult.Success(customUrl)
                     } else {
                         // The endpoint returned a 200 OK but didn't promote an actual matrix gateway, which means it doesn't have any
-                        logger.w("The endpoint does not seem to be a valid UnifiedPush gateway, using fallback")
+                        Timber.tag("DefaultUnifiedPushGatewayResolver").w("The endpoint does not seem to be a valid UnifiedPush gateway, using fallback")
                         UnifiedPushGatewayResolverResult.NoMatrixGateway
                     }
                 } catch (throwable: Throwable) {
                     if ((throwable as? HttpException)?.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                        logger.i("Checking for UnifiedPush endpoint yielded 404, using fallback")
+                        Timber.tag("DefaultUnifiedPushGatewayResolver").i("Checking for UnifiedPush endpoint yielded 404, using fallback")
                         UnifiedPushGatewayResolverResult.NoMatrixGateway
                     } else {
-                        logger.e(throwable, "Error checking for UnifiedPush endpoint")
+                        Timber.tag("DefaultUnifiedPushGatewayResolver").e(throwable, "Error checking for UnifiedPush endpoint")
                         UnifiedPushGatewayResolverResult.Error(customUrl)
                     }
                 }
