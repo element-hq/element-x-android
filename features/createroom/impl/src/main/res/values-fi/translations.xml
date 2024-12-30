@@ -13,8 +13,6 @@ Voit muuttaa tämän milloin tahansa huoneen asetuksista."</string>
   <string name="screen_create_room_room_access_section_header">"Huoneeseen Pääsy"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Pyydä liittymistä"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä"</string>
   <string name="screen_create_room_room_address_section_footer">"Jotta tämä huone näkyisi julkisessa huonehakemistossa, tarvitset huoneen osoitteen."</string>
   <string name="screen_create_room_room_address_section_title">"Huoneen osoite"</string>
   <string name="screen_create_room_room_name_label">"Huoneen nimi"</string>

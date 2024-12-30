@@ -289,6 +289,8 @@ Ok: %1$s."</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Ezt a beállításokban engedélyezheti."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
+  <string name="error_room_address_already_exists">"Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét."</string>
+  <string name="error_room_address_invalid_symbols">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
@@ -338,13 +340,13 @@ A szobatagokon kívül senki sem tudja olvasni az üzeneteket. Ez megakadályozh
 Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket bárki megtalálhat és csatlakozhat."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Engedélyezi a titkosítást?"</string>
   <string name="screen_security_and_privacy_encryption_section_footer">"Engedélyezés után a titkosítás nem tiltható le."</string>
-  <string name="screen_security_and_privacy_encryption_section_title">"Titkosítás"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki megtalálhatja és csatlakozhat"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Az emberek csak akkor csatlakozhatnak, ha meghívást kapnak"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívással"</string>
-  <string name="screen_security_and_privacy_room_access_section_title">"Szobahozzáférés"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Szobahozzáférés"</string>
   <string name="screen_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>
@@ -359,6 +361,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="settings_version_number">"Verzió: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"hu"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"A korábbi üzenetek nem érhetők el ezen az eszközön"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nem sikerült visszafejteni az üzenetet"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön személyazonosságát."</string>

@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_delete_confirmation_subtitle">"Tento soubor bude odstraněn z místnosti a členové k němu nebudou mít přístup."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Smazat soubor?"</string>
+  <string name="screen_media_browser_download_error_message">"Zkontrolujte připojení k internetu a zkuste to znovu."</string>
   <string name="screen_media_browser_files_empty_state_subtitle">"Zde se zobrazí dokumenty, zvukové soubory a hlasové zprávy nahrané do této místnosti."</string>
   <string name="screen_media_browser_files_empty_state_title">"Zatím nebyly nahrány žádné soubory"</string>
   <string name="screen_media_browser_list_loading_files">"Načítání souborů…"</string>

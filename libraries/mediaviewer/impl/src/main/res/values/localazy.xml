@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_delete_confirmation_subtitle">"This file will be removed from the room and members won’t have access to it."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Delete file?"</string>
+  <string name="screen_media_browser_download_error_message">"Check your internet connection and try again."</string>
   <string name="screen_media_browser_files_empty_state_subtitle">"Documents, audio files, and voice messages uploaded to this room will be shown here."</string>
   <string name="screen_media_browser_files_empty_state_title">"No files uploaded yet"</string>
   <string name="screen_media_browser_list_loading_files">"Loading files…"</string>

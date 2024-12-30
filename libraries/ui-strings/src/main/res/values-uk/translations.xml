@@ -282,6 +282,8 @@
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкніть доступ нижче."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не має доступу до вашого мікрофона. Надайте доступ, щоб записати голосове повідомлення."</string>
+  <string name="error_room_address_already_exists">"Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати"</string>
+  <string name="error_room_address_invalid_symbols">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Деякі повідомлення не були надіслані"</string>
   <string name="error_unknown">"Вибачте, сталася помилка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>

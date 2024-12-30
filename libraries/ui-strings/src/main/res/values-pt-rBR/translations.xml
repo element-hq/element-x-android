@@ -236,6 +236,7 @@
   <string name="common_voice_message">"Mensagem de voz"</string>
   <string name="common_waiting">"Esperando…"</string>
   <string name="common_waiting_for_decryption_key">"Aguardando esta mensagem"</string>
+  <string name="common_you">"Você"</string>
   <string name="dialog_title_confirmation">"Confirmação"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
