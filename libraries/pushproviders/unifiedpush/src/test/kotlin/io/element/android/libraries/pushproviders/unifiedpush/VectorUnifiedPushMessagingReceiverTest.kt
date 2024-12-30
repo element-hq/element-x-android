@@ -104,7 +104,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             unifiedPushStore = unifiedPushStore,
             unifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(
-                getGatewayResult = { "aGateway" }
+                getGatewayResult = { UnifiedPushGatewayResolverResult.Success("aGateway") }
             ),
             endpointRegistrationHandler = endpointRegistrationHandler,
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,
@@ -144,7 +144,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             unifiedPushStore = unifiedPushStore,
             unifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(
-                getGatewayResult = { "aGateway" }
+                getGatewayResult = { UnifiedPushGatewayResolverResult.Success("aGateway") }
             ),
             endpointRegistrationHandler = endpointRegistrationHandler,
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,

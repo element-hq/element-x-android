@@ -64,6 +64,21 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
         coroutineScope.launch {
             val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+                .let { gatewayResult ->
+                    when (gatewayResult) {
+                        is UnifiedPushGatewayResolverResult.Error -> {
+                            // Use previous gateway if any, or the provided one
+                            unifiedPushStore.getPushGateway(instance) ?: gatewayResult.gateway
+                        }
+                        UnifiedPushGatewayResolverResult.ErrorInvalidUrl,
+                        UnifiedPushGatewayResolverResult.NoMatrixGateway -> {
+                            UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
+                        }
+                        is UnifiedPushGatewayResolverResult.Success -> {
+                            gatewayResult.gateway
+                        }
+                    }
+                }
             unifiedPushStore.storePushGateway(instance, gateway)
             val result = newGatewayHandler.handle(endpoint, gateway, instance)
                 .onFailure {
