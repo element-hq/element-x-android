@@ -346,10 +346,10 @@ private fun RoomAddressField(
         },
         supportingText = when (addressValidity) {
             RoomAddressValidity.InvalidSymbols -> {
-                stringResource(R.string.screen_create_room_room_address_invalid_symbols_error_description)
+                stringResource(CommonStrings.error_room_address_invalid_symbols)
             }
             RoomAddressValidity.NotAvailable -> {
-                stringResource(R.string.screen_create_room_room_address_not_available_error_description)
+                stringResource(CommonStrings.error_room_address_already_exists)
             }
             else -> stringResource(R.string.screen_create_room_room_address_section_footer)
         },

@@ -21,6 +21,7 @@
     <item quantity="other">"%d convites"</item>
   </plurals>
   <string name="notification_invite_body">"Convidou você para conversar"</string>
+  <string name="notification_invite_body_with_sender">"%1$s te convidou para conversar"</string>
   <string name="notification_mentioned_you_body">"Mencionou você: %1$s"</string>
   <string name="notification_new_messages">"Novas mensagens"</string>
   <plurals name="notification_new_messages_for_room">
@@ -31,6 +32,7 @@
   <string name="notification_room_action_mark_as_read">"Marcar como lido"</string>
   <string name="notification_room_action_quick_reply">"Resposta rápida"</string>
   <string name="notification_room_invite_body">"Convidou você para entrar na sala"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s te convidou para entrar na sala"</string>
   <string name="notification_sender_me">"Eu"</string>
   <string name="notification_test_push_notification_content">"Você está visualizando a notificação! Clique em mim!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

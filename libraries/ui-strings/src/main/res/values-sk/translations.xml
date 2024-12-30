@@ -288,6 +288,8 @@ Dôvod: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
+  <string name="error_room_address_already_exists">"Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti"</string>
+  <string name="error_room_address_invalid_symbols">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>

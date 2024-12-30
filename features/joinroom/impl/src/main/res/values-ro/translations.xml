@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Anulați solicitarea"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Da, anulați"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Sunteți sigur că doriți să anulați solicitarea de a vă alătura acestei camere?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Anulați cererea de alăturare"</string>
   <string name="screen_join_room_join_action">"Alăturați-vă camerei"</string>
   <string name="screen_join_room_knock_action">"Bateți pentru a vă alătura"</string>
+  <string name="screen_join_room_knock_message_description">"Mesaj (opțional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Veți primi o invitație de a vă alătura camerei dacă cererea dumneavoastră este acceptată."</string>
+  <string name="screen_join_room_knock_sent_title">"Cererea de alăturare a fost trimisă"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s nu suporta încă spații. Puteți accesa spațiile pe web."</string>
   <string name="screen_join_room_space_not_supported_title">"Spațiile nu sunt încă suportate"</string>
   <string name="screen_join_room_subtitle_knock">"Faceți clic pe butonul de mai jos și un administrator de cameră va fi notificat. Veți putea să vă alăturați conversației odată aprobată."</string>

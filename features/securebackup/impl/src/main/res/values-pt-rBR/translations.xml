@@ -25,6 +25,7 @@
   <string name="screen_recovery_key_confirm_error_title">"Chave de recuperação incorreta"</string>
   <string name="screen_recovery_key_confirm_key_description">"Se você tiver uma chave de segurança ou frase de segurança, isso também funcionará."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserir…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Perdeu sua chave de recuperação?"</string>
   <string name="screen_recovery_key_confirm_success">"Chave de recuperação confirmada"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Chave de recuperação copiada"</string>
   <string name="screen_recovery_key_generating_key">"Gerando…"</string>

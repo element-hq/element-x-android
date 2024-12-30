@@ -127,6 +127,7 @@
   <string name="action_view_in_timeline">"Vaata ajajoonel"</string>
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>
+  <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
@@ -148,6 +149,7 @@
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
   <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
+  <string name="common_download_failed">"Allaladimine ei õnnestunud"</string>
   <string name="common_downloading">"Laadime alla"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
   <string name="common_editing">"Muutmine"</string>
@@ -165,6 +167,8 @@ Põhjus: %1$s."</string>
   <string name="common_favourite">"Lemmik"</string>
   <string name="common_favourited">"Lemmikuks määratud"</string>
   <string name="common_file">"Fail"</string>
+  <string name="common_file_deleted">"Fail on kustutatud"</string>
+  <string name="common_file_saved">"Fail on salvestatud"</string>
   <string name="common_file_saved_on_disk_android">"Fail on salvestatud kausta Allalaadimised"</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
@@ -288,6 +292,8 @@ Põhjus: %1$s."</string>
   <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
   <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
+  <string name="error_room_address_already_exists">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
+  <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
   <string name="error_unknown">"Vabandust, ilmnes viga"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
@@ -300,6 +306,8 @@ Põhjus: %1$s."</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi."</string>
+  <string name="screen_edit_room_address_title">"Jututoa aadress"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -329,6 +337,39 @@ Põhjus: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Liitumispäring on saadetud"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Lisa jututoa aadress"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist, kuid peakasutaja või moderaator peavad sellega nõustuma."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Palu võimalust liituda"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
+Keegi teine peale jututoa liikmete ei saa sõnumeid lugeda. See võib takistada suhtlusrobotite ja/või võrgusildade toimimist.
+Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega kõik võivad liituda."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Kas võtame krüptimise kasutusele?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Kui krüptimine on kasutusel, siis seda enam väljalülitada ei saa."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Krüptimine"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututuba leida ja sellega liituda"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Huvilised võivad liituda vaid kutse olemasolul"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Vaid kutse alusel"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Ligipääs jututuppa"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Kogukondade tugi veel puudub"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Kogukonna liikmed"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Jututoa aadress"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Võimalda leida seda jututuba avalikust kataloogist otsides „%1$s“"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Nähtav jututubade avalikus kataloogis"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kõik"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Kes võivad lugeda jututoa ajalugu"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Liikmed peale kutse saamist"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Liikmed peale selle valiku sisselülitamist"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
+Lisaks võid sa jututoa avaldada oma koduserveri avalikus jututubade kataloogis."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Jututoa avaldamine"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
+Lisaks on aadress vajalik, et jututuba oleks %1$s serveri avalikus jututubade kataloogis nähtav."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Jututoa nähtavus"</string>
+  <string name="screen_security_and_privacy_title">"Turvalisus ja privaatsus"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
   <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>
@@ -342,6 +383,7 @@ Põhjus: %1$s."</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul puudub ligipääs sellele sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
