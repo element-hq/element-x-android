@@ -46,8 +46,8 @@ class WebViewWidgetMessageInterceptor(
                 // objects in log lines.
                 view?.evaluateJavascript(
                     """
-                        function logFn(logFn, ...args) {
-                            logFn(
+                        function logFn(consoleLogFn, ...args) {
+                            consoleLogFn(
                                 args.map(
                                     a => typeof a === "string" ? a : JSON.stringify(a)
                                 ).join(' ')
