@@ -14,7 +14,11 @@ import io.element.android.libraries.pushproviders.unifiedpush.network.DiscoveryU
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
+import retrofit2.HttpException
+import retrofit2.Response
+import java.net.HttpURLConnection
 
 internal val matrixDiscoveryResponse = {
     DiscoveryResponse(
@@ -89,6 +93,36 @@ class DefaultUnifiedPushGatewayResolverTest {
     fun `when a custom url is not reachable, the custom url is still returned`() = runTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = { throw AN_EXCEPTION }
+        )
+        val sut = createDefaultUnifiedPushGatewayResolver(
+            unifiedPushApiFactory = unifiedPushApiFactory
+        )
+        val result = sut.getGateway("http://custom.url")
+        assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url")
+        assertThat(result).isEqualTo(UnifiedPushGatewayResolverResult.Error("http://custom.url/_matrix/push/v1/notify"))
+    }
+
+    @Test
+    fun `when a custom url is not found (404), NoMatrixGateway is returned`() = runTest {
+        val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
+            discoveryResponse = {
+                throw HttpException(Response.error<Unit>(HttpURLConnection.HTTP_NOT_FOUND, "".toResponseBody()))
+            }
+        )
+        val sut = createDefaultUnifiedPushGatewayResolver(
+            unifiedPushApiFactory = unifiedPushApiFactory
+        )
+        val result = sut.getGateway("http://custom.url")
+        assertThat(unifiedPushApiFactory.baseUrlParameter).isEqualTo("http://custom.url")
+        assertThat(result).isEqualTo(UnifiedPushGatewayResolverResult.NoMatrixGateway)
+    }
+
+    @Test
+    fun `when a custom url is forbidden (403), Error is returned`() = runTest {
+        val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
+            discoveryResponse = {
+                throw HttpException(Response.error<Unit>(HttpURLConnection.HTTP_FORBIDDEN, "".toResponseBody()))
+            }
         )
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
