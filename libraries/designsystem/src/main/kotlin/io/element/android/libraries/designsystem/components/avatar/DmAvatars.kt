@@ -48,10 +48,11 @@ fun DmAvatars(
     val boxSize = userAvatarData.size.dp * SIZE_RATIO
     val boxSizePx = boxSize.toPx()
     val otherAvatarRadius = otherUserAvatarData.size.dp.toPx() / 2
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
         modifier = modifier.size(boxSize),
     ) {
-        // Draw user avatar and cut top right corner
+        // Draw user avatar and cut top end corner
         Avatar(
             avatarData = userAvatarData,
             modifier = Modifier
@@ -61,10 +62,15 @@ fun DmAvatars(
                 }
                 .drawWithContent {
                     drawContent()
+                    val xOffset = if (isRtl) {
+                        size.width - boxSizePx + otherAvatarRadius
+                    } else {
+                        boxSizePx - otherAvatarRadius
+                    }
                     drawCircle(
                         color = Color.Black,
                         center = Offset(
-                            x = boxSizePx - otherAvatarRadius,
+                            x = xOffset,
                             y = size.height - (boxSizePx - otherAvatarRadius),
                         ),
                         radius = otherAvatarRadius / 0.9f,
