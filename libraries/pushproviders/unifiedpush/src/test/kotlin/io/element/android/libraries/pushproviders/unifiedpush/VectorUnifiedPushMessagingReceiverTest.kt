@@ -9,6 +9,7 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -27,12 +28,23 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUnifiedPushMessagingReceiverTest {
+    @Test
+    fun `onReceive does the binding`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
+        // The binding is not found in the test env.
+        assertThrows(IllegalStateException::class.java) {
+            vectorUnifiedPushMessagingReceiver.onReceive(context, Intent())
+        }
+    }
+
     @Test
     fun `onUnregistered does nothing`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
