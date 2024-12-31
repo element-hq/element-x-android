@@ -21,6 +21,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 fun AvatarRow(
@@ -62,4 +65,20 @@ fun AvatarRow(
                 )
             }
     }
+}
+
+@Composable
+@PreviewsDayNight
+internal fun AvatarRowPreview() = ElementPreview {
+    AvatarRow(
+        avatarDataList = listOf(
+            "A", "B", "C"
+        ).map {
+            AvatarData(
+                id = it,
+                name = it,
+                size = AvatarSize.RoomListItem,
+            )
+        }
+    )
 }
