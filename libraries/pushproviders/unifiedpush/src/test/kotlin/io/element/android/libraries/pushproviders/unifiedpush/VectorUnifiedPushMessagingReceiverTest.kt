@@ -118,6 +118,9 @@ class VectorUnifiedPushMessagingReceiverTest {
             unifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(
                 getGatewayResult = { UnifiedPushGatewayResolverResult.Success("aGateway") }
             ),
+            unifiedPushGatewayUrlResolver = FakeUnifiedPushGatewayUrlResolver(
+                resolveResult = { _, _ -> "aGatewayUrl" }
+            ),
             endpointRegistrationHandler = endpointRegistrationHandler,
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,
         )
@@ -133,7 +136,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         }
         storePushGatewayResult.assertions()
             .isCalledOnce()
-            .with(value(A_SECRET), value("aGateway"))
+            .with(value(A_SECRET), value("aGatewayUrl"))
         storeUpEndpointResult.assertions()
             .isCalledOnce()
             .with(value(A_SECRET), value("anEndpoint"))
@@ -158,6 +161,9 @@ class VectorUnifiedPushMessagingReceiverTest {
             unifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(
                 getGatewayResult = { UnifiedPushGatewayResolverResult.Success("aGateway") }
             ),
+            unifiedPushGatewayUrlResolver = FakeUnifiedPushGatewayUrlResolver(
+                resolveResult = { _, _ -> "aGatewayUrl" }
+            ),
             endpointRegistrationHandler = endpointRegistrationHandler,
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,
         )
@@ -173,7 +179,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         }
         storePushGatewayResult.assertions()
             .isCalledOnce()
-            .with(value(A_SECRET), value("aGateway"))
+            .with(value(A_SECRET), value("aGatewayUrl"))
         storeUpEndpointResult.assertions()
             .isNeverCalled()
     }
@@ -182,6 +188,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         pushHandler: PushHandler = FakePushHandler(),
         unifiedPushStore: UnifiedPushStore = FakeUnifiedPushStore(),
         unifiedPushGatewayResolver: UnifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(),
+        unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver = FakeUnifiedPushGatewayUrlResolver(),
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
     ): VectorUnifiedPushMessagingReceiver {
@@ -191,6 +198,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.guardServiceStarter = NoopGuardServiceStarter()
             this.unifiedPushStore = unifiedPushStore
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
+            this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver
             this.newGatewayHandler = unifiedPushNewGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
