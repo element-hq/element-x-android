@@ -28,6 +28,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
+    @Inject lateinit var unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
     @Inject lateinit var endpointRegistrationHandler: EndpointRegistrationHandler
     @Inject lateinit var coroutineScope: CoroutineScope
@@ -64,6 +65,9 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
         coroutineScope.launch {
             val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+                .let { gatewayResult ->
+                    unifiedPushGatewayUrlResolver.resolve(gatewayResult, instance)
+                }
             unifiedPushStore.storePushGateway(instance, gateway)
             val result = newGatewayHandler.handle(endpoint, gateway, instance)
                 .onFailure {

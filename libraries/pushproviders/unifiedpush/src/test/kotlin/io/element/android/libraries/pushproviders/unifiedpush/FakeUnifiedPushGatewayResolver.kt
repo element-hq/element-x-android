@@ -10,9 +10,9 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeUnifiedPushGatewayResolver(
-    private val getGatewayResult: (String) -> String = { lambdaError() },
+    private val getGatewayResult: (String) -> UnifiedPushGatewayResolverResult = { lambdaError() },
 ) : UnifiedPushGatewayResolver {
-    override suspend fun getGateway(endpoint: String): String {
+    override suspend fun getGateway(endpoint: String): UnifiedPushGatewayResolverResult {
         return getGatewayResult(endpoint)
     }
 }
