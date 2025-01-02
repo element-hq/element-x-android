@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -18,6 +19,8 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -30,6 +33,7 @@ fun AvatarRow(
     avatarDataList: List<AvatarData>,
     modifier: Modifier = Modifier,
 ) {
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
         modifier = modifier,
     ) {
@@ -45,13 +49,13 @@ fun AvatarRow(
                             compositingStrategy = CompositingStrategy.Offscreen
                         }
                         .drawWithContent {
-                            // Draw content and clear the pixels for the avatar on the left.
+                            // Draw content and clear the pixels for the avatar on the left (right in RTL).
                             drawContent()
                             if (index < lastItemIndex) {
                                 drawCircle(
                                     color = Color.Black,
                                     center = Offset(
-                                        x = 0f,
+                                        x = if (isRtl) size.width else 0f,
                                         y = size.height / 2,
                                     ),
                                     radius = avatarSize.toPx() / 2,
@@ -81,4 +85,14 @@ internal fun AvatarRowPreview() = ElementPreview {
             )
         }
     )
+}
+
+@Composable
+@PreviewsDayNight
+internal fun AvatarRowRtlPreview() {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+    ) {
+        AvatarRowPreview()
+    }
 }
