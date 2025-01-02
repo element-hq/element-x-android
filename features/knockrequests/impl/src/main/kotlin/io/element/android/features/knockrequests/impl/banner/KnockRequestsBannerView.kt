@@ -19,19 +19,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 private const val MAX_AVATAR_COUNT = 3
 
@@ -120,9 +114,9 @@ private fun KnockRequestsBannerContent(
     }
 
     Column(
-            modifier
-                    .fillMaxWidth()
-                    .padding(all = 16.dp)
+        modifier
+            .fillMaxWidth()
+            .padding(all = 16.dp)
     ) {
         Row {
             KnockRequestAvatarView(
@@ -212,44 +206,16 @@ private fun KnockRequestAvatarListView(
     knockRequests: ImmutableList<KnockRequestPresentable>,
     modifier: Modifier = Modifier,
 ) {
-    val avatarSize = AvatarSize.KnockRequestBanner.dp
-    Box(
+    val avatars = knockRequests
+        .take(MAX_AVATAR_COUNT)
+        .map { knockRequest ->
+            knockRequest.getAvatarData(AvatarSize.KnockRequestBanner)
+        }
+        .toImmutableList()
+    AvatarRow(
+        avatarDataList = avatars,
         modifier = modifier,
-    ) {
-        knockRequests
-            .take(MAX_AVATAR_COUNT)
-            .reversed()
-            .let { smallReversedList ->
-                val lastItemIndex = smallReversedList.size - 1
-                smallReversedList.forEachIndexed { index, knockRequest ->
-                    Avatar(
-                        modifier = Modifier
-                                .padding(start = avatarSize / 2 * (lastItemIndex - index))
-                                .graphicsLayer {
-                                    compositingStrategy = CompositingStrategy.Offscreen
-                                }
-                                .drawWithContent {
-                                    // Draw content and clear the pixels for the avatar on the left.
-                                    drawContent()
-                                    if (index < lastItemIndex) {
-                                        drawCircle(
-                                                color = Color.Black,
-                                                center = Offset(
-                                                        x = 0f,
-                                                        y = size.height / 2,
-                                                ),
-                                                radius = avatarSize.toPx() / 2,
-                                                blendMode = BlendMode.Clear,
-                                        )
-                                    }
-                                }
-                                .size(size = avatarSize)
-                                .padding(2.dp),
-                        avatarData = knockRequest.getAvatarData(AvatarSize.KnockRequestBanner),
-                    )
-                }
-            }
-    }
+    )
 }
 
 @Composable

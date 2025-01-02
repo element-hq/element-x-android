@@ -50,6 +50,7 @@ class KonsistClassNameTest {
             .withAllParentsOf(PreviewParameterProvider::class)
             .withoutName(
                 "AspectRatioProvider",
+                "OverlapRatioProvider",
             )
             .also {
                 // Check that classes are actually found
