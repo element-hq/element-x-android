@@ -422,6 +422,7 @@ private fun MessagesViewComposerBottomSheetContents(
             if (state.composerState.suggestions.isEmpty() &&
                 state.composerState.textEditorState is TextEditorState.Markdown) {
                 IdentityChangeStateView(
+                    isDebugBuild = state.isDebugBuild,
                     state = state.identityChangeState,
                     onLinkClick = onLinkClick,
                 )

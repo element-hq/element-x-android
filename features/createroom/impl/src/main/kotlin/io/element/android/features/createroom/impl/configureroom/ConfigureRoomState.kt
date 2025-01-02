@@ -25,5 +25,7 @@ data class ConfigureRoomState(
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {
     val isValid: Boolean = config.roomName?.isNotEmpty() == true &&
-        (config.roomVisibility is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid)
+        (config.roomVisibility is RoomVisibilityState.Private ||
+            config.roomVisibility is RoomVisibilityState.PrivateNotEncrypted || // TCHAP room type
+            roomAddressValidity == RoomAddressValidity.Valid)
 }

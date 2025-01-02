@@ -25,6 +25,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun IdentityChangeStateView(
+    isDebugBuild: Boolean,
     state: IdentityChangeState,
     onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -45,21 +46,31 @@ fun IdentityChangeStateView(
                     CommonStrings.crypto_identity_change_pin_violation_new_user_id,
                     pinViolationIdentityChange.identityRoomMember.userId,
                 )
-                val fullText = stringResource(
-                    id = CommonStrings.crypto_identity_change_pin_violation_new,
-                    displayName,
-                    userIdStr,
-                    learnMoreStr,
-                )
+                val fullText = if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+                    stringResource(
+                        id = CommonStrings.crypto_identity_change_pin_violation_new,
+                        displayName,
+                        userIdStr,
+                        learnMoreStr,
+                    )
+                } else {
+                    stringResource(
+                        id = CommonStrings.crypto_identity_change_pin_violation,
+                        displayName,
+                        learnMoreStr,
+                    )
+                }
                 append(fullText)
-                val userIdStartIndex = fullText.indexOf(userIdStr)
-                addStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    start = userIdStartIndex,
-                    end = userIdStartIndex + userIdStr.length,
-                )
+                if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+                    val userIdStartIndex = fullText.indexOf(userIdStr)
+                    addStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                        start = userIdStartIndex,
+                        end = userIdStartIndex + userIdStr.length,
+                    )
+                }
                 val learnMoreStartIndex = fullText.lastIndexOf(learnMoreStr)
                 addStyle(
                     style = SpanStyle(
@@ -92,6 +103,7 @@ internal fun IdentityChangeStateViewPreview(
     @PreviewParameter(IdentityChangeStateProvider::class) state: IdentityChangeState,
 ) = ElementPreview {
     IdentityChangeStateView(
+        isDebugBuild = false,
         state = state,
         onLinkClick = {},
     )

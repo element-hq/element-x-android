@@ -122,6 +122,7 @@ fun ConfigureRoomView(
             RoomVisibilityOptions(
                 selected = when (state.config.roomVisibility) {
                     is RoomVisibilityState.Private -> RoomVisibilityItem.Private
+                    is RoomVisibilityState.PrivateNotEncrypted -> RoomVisibilityItem.PrivateNotEncrypted // TCHAP room type
                     is RoomVisibilityState.Public -> RoomVisibilityItem.Public
                 },
                 onOptionClick = {
@@ -275,7 +276,7 @@ private fun RoomVisibilityOptions(
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
-        title = stringResource(R.string.screen_create_room_room_visibility_section_title),
+        title = stringResource(R.string.tchap_screen_create_room_room_access_encryption_section_title),
         modifier = modifier,
     ) {
         RoomVisibilityItem.entries.forEach { item ->
