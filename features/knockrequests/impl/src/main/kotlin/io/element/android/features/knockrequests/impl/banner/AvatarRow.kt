@@ -29,9 +29,11 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
- * Draw a row of avatars (they must all have the same size), from start to end
+ * Draw a row of avatars (they must all have the same size), from start to end.
  * @param avatarDataList the avatars to render. Note: they will all be rendered, the caller may
  * want to limit the list size
  * @param modifier Jetpack Compose modifier
@@ -40,7 +42,7 @@ import io.element.android.libraries.designsystem.text.toPx
  */
 @Composable
 fun AvatarRow(
-    avatarDataList: List<AvatarData>,
+    avatarDataList: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier,
     overlapRatio: Float = 0.5f,
 ) {
@@ -56,34 +58,34 @@ fun AvatarRow(
             .forEachIndexed { index, avatarData ->
                 Avatar(
                     modifier = Modifier
-                        .padding(start = avatarSize * (1 - overlapRatio) * (lastItemIndex - index))
-                        .graphicsLayer {
-                            compositingStrategy = CompositingStrategy.Offscreen
-                        }
-                        .drawWithContent {
-                            // Draw content and clear the pixels for the avatar on the left (right in RTL).
-                            drawContent()
-                            val xOffset = if (isRtl) {
-                                size.width - avatarSizePx * (overlapRatio - 0.5f)
-                            } else {
-                                0f + avatarSizePx * (overlapRatio - 0.5f)
+                            .padding(start = avatarSize * (1 - overlapRatio) * (lastItemIndex - index))
+                            .graphicsLayer {
+                                compositingStrategy = CompositingStrategy.Offscreen
                             }
-                            if (index < lastItemIndex) {
-                                drawCircle(
-                                    color = Color.Black,
-                                    center = Offset(
-                                        x = xOffset,
-                                        y = size.height / 2,
-                                    ),
-                                    radius = avatarSizePx / 2,
-                                    blendMode = BlendMode.Clear,
-                                )
+                            .drawWithContent {
+                                // Draw content and clear the pixels for the avatar on the left (right in RTL).
+                                drawContent()
+                                val xOffset = if (isRtl) {
+                                    size.width - avatarSizePx * (overlapRatio - 0.5f)
+                                } else {
+                                    0f + avatarSizePx * (overlapRatio - 0.5f)
+                                }
+                                if (index < lastItemIndex) {
+                                    drawCircle(
+                                            color = Color.Black,
+                                            center = Offset(
+                                                    x = xOffset,
+                                                    y = size.height / 2,
+                                            ),
+                                            radius = avatarSizePx / 2,
+                                            blendMode = BlendMode.Clear,
+                                    )
+                                }
                             }
-                        }
-                        .size(size = avatarSize)
-                        // Keep internal padding, it has the advantage to not reduce the size of the Avatar image,
-                        // which is already small in our use case.
-                        .padding(2.dp),
+                            .size(size = avatarSize)
+                            // Keep internal padding, it has the advantage to not reduce the size of the Avatar image,
+                            // which is already small in our use case.
+                            .padding(2.dp),
                     avatarData = avatarData,
                 )
             }
@@ -113,15 +115,13 @@ internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioProvider::class) 
 @Composable
 private fun ContentToPreview(overlapRatio: Float) {
     AvatarRow(
-        avatarDataList = listOf(
-            "A", "B", "C"
-        ).map {
+        avatarDataList = listOf("A", "B", "C").map {
             AvatarData(
                 id = it,
                 name = it,
                 size = AvatarSize.RoomListItem,
             )
-        },
+        }.toImmutableList(),
         overlapRatio = overlapRatio,
     )
 }

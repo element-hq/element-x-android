@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 private const val MAX_AVATAR_COUNT = 3
 
@@ -210,6 +211,7 @@ private fun KnockRequestAvatarListView(
         .map { knockRequest ->
             knockRequest.getAvatarData(AvatarSize.KnockRequestBanner)
         }
+        .toImmutableList()
     AvatarRow(
         avatarDataList = avatars,
         modifier = modifier,
