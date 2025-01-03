@@ -251,7 +251,7 @@ private fun KnockRequestsItem(knockRequestsCount: Int?, onKnockRequestsClick: ()
         trailingContent = if (knockRequestsCount == null || knockRequestsCount == 0) {
             null
         } else {
-            ListItemContent.Text(knockRequestsCount.toString())
+            ListItemContent.Counter(knockRequestsCount)
         },
         onClick = onKnockRequestsClick,
     )
