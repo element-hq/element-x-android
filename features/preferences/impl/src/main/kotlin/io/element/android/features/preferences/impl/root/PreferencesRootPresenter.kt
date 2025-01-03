@@ -9,7 +9,6 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +27,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
@@ -44,6 +41,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
+    private val accountManagementUrlDataSource: AccountManagementUrlDataSource,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -70,12 +68,12 @@ class PreferencesRootPresenter @Inject constructor(
 
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 
-        val accountManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
-        val devicesManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
+        val accountManagementUrl by remember {
+            accountManagementUrlDataSource.getAccountManagementUrl(AccountManagementAction.Profile)
+        }.collectAsState(null)
+        val devicesManagementUrl by remember {
+            accountManagementUrlDataSource.getAccountManagementUrl(AccountManagementAction.SessionsList)
+        }.collectAsState(null)
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
@@ -90,10 +88,6 @@ class PreferencesRootPresenter @Inject constructor(
         }
 
         val directLogoutState = directLogoutPresenter.present()
-
-        LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
-        }
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
@@ -111,8 +105,8 @@ class PreferencesRootPresenter @Inject constructor(
             deviceId = matrixClient.deviceId,
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
-            accountManagementUrl = accountManagementUrl.value,
-            devicesManagementUrl = devicesManagementUrl.value,
+            accountManagementUrl = accountManagementUrl,
+            devicesManagementUrl = devicesManagementUrl,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             canDeactivateAccount = canDeactivateAccount,
@@ -123,13 +117,5 @@ class PreferencesRootPresenter @Inject constructor(
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,
         )
-    }
-
-    private fun CoroutineScope.initAccountManagementUrl(
-        accountManagementUrl: MutableState<String?>,
-        devicesManagementUrl: MutableState<String?>,
-    ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
-        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
     }
 }

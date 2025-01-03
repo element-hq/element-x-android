@@ -18,6 +18,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -62,8 +63,8 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.version).isEqualTo("A Version")
             assertThat(loadedState.showSecureBackup).isFalse()
             assertThat(loadedState.showSecureBackupBadge).isTrue()
-            assertThat(loadedState.accountManagementUrl).isNull()
-            assertThat(loadedState.devicesManagementUrl).isNull()
+            assertThat(loadedState.accountManagementUrl).isEqualTo(AccountManagementAction.Profile.toString())
+            assertThat(loadedState.devicesManagementUrl).isEqualTo(AccountManagementAction.SessionsList.toString())
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showLockScreenSettings).isTrue()
@@ -141,5 +142,6 @@ class PreferencesRootPresenterTest {
         ),
         directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
+        accountManagementUrlDataSource = FakeAccountManagementUrlDataSource(),
     )
 }

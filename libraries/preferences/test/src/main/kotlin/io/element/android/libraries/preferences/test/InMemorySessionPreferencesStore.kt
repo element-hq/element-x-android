@@ -27,6 +27,7 @@ class InMemorySessionPreferencesStore(
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
+    private val stringStores = mutableMapOf<String, MutableStateFlow<String?>>()
     var clearCallCount = 0
         private set
 
@@ -71,6 +72,15 @@ class InMemorySessionPreferencesStore(
     override suspend fun setCompressMedia(compress: Boolean) = doesCompressMedia.emit(compress)
 
     override fun doesCompressMedia(): Flow<Boolean> = doesCompressMedia
+
+    override suspend fun setString(key: String, value: String?) {
+        val flow = stringStores.getOrPut(key) { MutableStateFlow("") }
+        flow.emit(value)
+    }
+
+    override fun getString(key: String): Flow<String?> {
+        return stringStores.getOrPut(key) { MutableStateFlow(null) }
+    }
 
     override suspend fun clear() {
         clearCallCount++

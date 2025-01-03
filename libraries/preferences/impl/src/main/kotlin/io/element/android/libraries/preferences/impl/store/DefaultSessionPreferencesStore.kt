@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -84,6 +85,20 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setCompressMedia(compress: Boolean) = update(compressMedia, compress)
     override fun doesCompressMedia(): Flow<Boolean> = get(compressMedia) { true }
+
+    override suspend fun setString(key: String, value: String?) {
+        store.edit { prefs ->
+            if (value == null) {
+                prefs.remove(stringPreferencesKey(key))
+            } else {
+                prefs[stringPreferencesKey(key)] = value
+            }
+        }
+    }
+
+    override fun getString(key: String): Flow<String?> {
+        return store.data.map { prefs -> prefs[stringPreferencesKey(key)] }
+    }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()
