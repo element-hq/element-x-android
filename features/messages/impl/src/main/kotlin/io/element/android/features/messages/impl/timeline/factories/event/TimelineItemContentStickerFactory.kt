@@ -39,7 +39,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
             isEdited = false,
             mediaSource = content.source,
             thumbnailSource = content.info.thumbnailSource,
-            mimeType = content.info.mimetype ?: MimeTypes.OctetStream,
+            mimeType = content.info.mimetype ?: MimeTypes.Images,
             blurhash = content.info.blurhash,
             width = content.info.width?.toInt(),
             height = content.info.height?.toInt(),
