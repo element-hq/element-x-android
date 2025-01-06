@@ -48,6 +48,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isPublic = false),
             aRoomDetailsState(heroes = aMatrixUserList()),
             aRoomDetailsState(pinnedMessagesCount = 3),
+            aRoomDetailsState(knockRequestsCount = null, canShowKnockRequests = true),
+            aRoomDetailsState(knockRequestsCount = 4, canShowKnockRequests = true),
             // Add other state here
         )
 }
