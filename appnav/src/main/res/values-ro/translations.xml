@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Deconectați-vă și faceți upgrade"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Serverul dvs. de acasă nu mai acceptă vechiul protocol. Vă rugăm să vă deconectați și să vă conectați din nou pentru a continua să utilizați aplicația."</string>
+</resources>

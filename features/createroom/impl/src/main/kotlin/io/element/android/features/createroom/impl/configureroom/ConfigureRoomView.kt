@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.createroom.impl.configureroom
@@ -346,10 +346,10 @@ private fun RoomAddressField(
         },
         supportingText = when (addressValidity) {
             RoomAddressValidity.InvalidSymbols -> {
-                stringResource(R.string.screen_create_room_room_address_invalid_symbols_error_description)
+                stringResource(CommonStrings.error_room_address_invalid_symbols)
             }
             RoomAddressValidity.NotAvailable -> {
-                stringResource(R.string.screen_create_room_room_address_not_available_error_description)
+                stringResource(CommonStrings.error_room_address_already_exists)
             }
             else -> stringResource(R.string.screen_create_room_room_address_section_footer)
         },

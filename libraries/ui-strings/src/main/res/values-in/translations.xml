@@ -30,6 +30,7 @@
   <string name="a11y_voice_message_record">"Rekam pesan suara."</string>
   <string name="a11y_voice_message_stop_recording">"Berhenti merekam"</string>
   <string name="action_accept">"Terima"</string>
+  <string name="action_add_caption">"Tambahkan keterangan"</string>
   <string name="action_add_to_timeline">"Tambahkan ke lini masa"</string>
   <string name="action_back">"Kembali"</string>
   <string name="action_call">"Panggil"</string>
@@ -43,8 +44,10 @@
   <string name="action_confirm_password">"Konfirmasi kata sandi"</string>
   <string name="action_continue">"Lanjutkan"</string>
   <string name="action_copy">"Salin"</string>
+  <string name="action_copy_caption">"Salin keterangan"</string>
   <string name="action_copy_link">"Salin tautan"</string>
   <string name="action_copy_link_to_message">"Salin tautan ke pesan"</string>
+  <string name="action_copy_text">"Salin teks"</string>
   <string name="action_create">"Buat"</string>
   <string name="action_create_a_room">"Buat ruangan"</string>
   <string name="action_deactivate">"Nonaktifkan"</string>
@@ -55,6 +58,7 @@
   <string name="action_discard">"Abaikan"</string>
   <string name="action_done">"Selesai"</string>
   <string name="action_edit">"Sunting"</string>
+  <string name="action_edit_caption">"Sunting keterangan"</string>
   <string name="action_edit_poll">"Sunting pemungutan suara"</string>
   <string name="action_enable">"Aktifkan"</string>
   <string name="action_end_poll">"Akhiri pemungutan suara"</string>
@@ -89,6 +93,8 @@
   <string name="action_react">"Bereaksi"</string>
   <string name="action_reject">"Tolak"</string>
   <string name="action_remove">"Hapus"</string>
+  <string name="action_remove_caption">"Hapus keterangan"</string>
+  <string name="action_remove_message">"Hapus pesan"</string>
   <string name="action_reply">"Balas"</string>
   <string name="action_reply_in_thread">"Balas dalam utas"</string>
   <string name="action_report_bug">"Laporkan kutu"</string>
@@ -121,6 +127,7 @@
   <string name="action_yes">"Ya"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
+  <string name="common_adding_caption">"Menambahkan keterangan"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
   <string name="common_analytics">"Analitik"</string>
   <string name="common_appearance">"Penampilan"</string>
@@ -139,8 +146,10 @@
   <string name="common_device_id">"ID Perangkat"</string>
   <string name="common_direct_chat">"Obrolan langsung"</string>
   <string name="common_do_not_show_this_again">"Jangan tampilkan ini lagi"</string>
+  <string name="common_downloading">"Mengunduh"</string>
   <string name="common_edited_suffix">"(disunting)"</string>
   <string name="common_editing">"Penyuntingan"</string>
+  <string name="common_editing_caption">"Menyunting keterangan"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Enkripsi"</string>
   <string name="common_encryption_enabled">"Enkripsi diaktifkan"</string>
@@ -242,6 +251,7 @@ Alasan: %1$s."</string>
   <string name="common_unable_to_invite_title">"Tidak dapat mengirim undangan"</string>
   <string name="common_unlock">"Buka kunci"</string>
   <string name="common_unmute">"Bunyikan"</string>
+  <string name="common_unsupported_call">"Panggilan tidak didukung"</string>
   <string name="common_unsupported_event">"Peristiwa tidak didukung"</string>
   <string name="common_username">"Nama pengguna"</string>
   <string name="common_verification_cancelled">"Verifikasi dibatalkan"</string>
@@ -274,6 +284,8 @@ Alasan: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Anda dapat mengaktifkan akses di Pengaturan."</string>
   <string name="error_missing_location_rationale_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Aktifkan akses di bawah ini."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s tidak memiliki izin untuk mengakses mikrofon. Aktifkan akses untuk merekam pesan suara."</string>
+  <string name="error_room_address_already_exists">"Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan"</string>
+  <string name="error_room_address_invalid_symbols">"Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Beberapa pesan belum terkirim"</string>
   <string name="error_unknown">"Maaf, terjadi kesalahan"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini."</string>
@@ -287,6 +299,7 @@ Alasan: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Keterangan mungkin tidak terlihat oleh orang yang menggunakan aplikasi lama."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tekan pesan dan pilih “%1$s” untuk disertakan di sini."</string>
@@ -325,4 +338,8 @@ Alasan: %1$s."</string>
   <string name="screen_view_location_title">"Lokasi"</string>
   <string name="settings_version_number">"Versi: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"id"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Riwayat pesan tidak tersedia di perangkat ini"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Anda tidak memiliki akses ke pesan ini"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Tidak dapat mendekripsi pesan"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Pesan ini diblokir karena Anda tidak memverifikasi perangkat Anda atau karena pengirim perlu memverifikasi identitas Anda."</string>
 </resources>
