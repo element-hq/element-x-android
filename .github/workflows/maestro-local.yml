@@ -72,7 +72,7 @@ jobs:
   maestro-cloud:
     name: Maestro test suite
     runs-on: ubuntu-latest
-    needs: [build-apk, skip]
+#    needs: [build-apk, skip]
     # Always run the job, we should always either build or download the APK in a previous job/flow.
     if: ${{ always() }}
     # Allow one per PR.
@@ -80,6 +80,7 @@ jobs:
       group: ${{ format('maestro-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - run: echo "THIS SHOULD NOT APPEAR"
       - uses: actions/checkout@v4
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
