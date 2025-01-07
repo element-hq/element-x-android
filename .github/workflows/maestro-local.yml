@@ -112,7 +112,6 @@ jobs:
           disable-animations: true
           disk-size: 3G
           script: |
-            chmod +x .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh
             .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh app-gplay-x86_64-debug.apk
       - name: Upload test results
         uses: actions/upload-artifact@v4
