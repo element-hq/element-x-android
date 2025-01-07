@@ -144,7 +144,6 @@ private fun AnalyticsOptInContent() {
             ),
             textStyle = ElementTheme.typography.fontBodyLgMedium,
             iconTint = ElementTheme.colors.iconSuccessPrimary,
-            backgroundColor = ElementTheme.colors.bgActionSecondaryHovered,
         )
     }
 }
