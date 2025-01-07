@@ -15,6 +15,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.di.RoomScope
 
 // CHANGE THE SCOPE
@@ -33,7 +34,7 @@ class MapRealtimePresenterNode @AssistedInject constructor(
             onBackPressed = ::navigateUp,
             onMessagesPressed = TODO(),
             onJoinCallClick = TODO(), // TODO(tb): This isnt used since we are using the view directly in MessagesView and not creating a new screen
-            isCallOngoing = false,
+            roomCallState = RoomCallState.StandBy(canStartCall = true),
         )
     }
 }

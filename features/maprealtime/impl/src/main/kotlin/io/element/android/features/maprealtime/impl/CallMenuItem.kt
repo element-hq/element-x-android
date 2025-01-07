@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components
+package io.element.android.features.maprealtime.impl
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,10 +33,11 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-internal fun CallMenuItem(
+fun CallMenuItem(
     roomCallState: RoomCallState,
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isUsedInMapToolbar: Boolean = true,
 ) {
     when (roomCallState) {
         is RoomCallState.StandBy -> {
@@ -43,6 +45,7 @@ internal fun CallMenuItem(
                 roomCallState = roomCallState,
                 onJoinCallClick = onJoinCallClick,
                 modifier = modifier,
+                isUsedInMapToolbar = isUsedInMapToolbar,
             )
         }
         is RoomCallState.OnGoing -> {
@@ -60,10 +63,20 @@ private fun StandByCallMenuItem(
     roomCallState: RoomCallState.StandBy,
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isUsedInMapToolbar: Boolean,
 ) {
     IconButton(
         modifier = modifier,
         onClick = onJoinCallClick,
+        colors = if (isUsedInMapToolbar) {
+            IconButtonDefaults.iconButtonColors(
+                contentColor = ElementTheme.colors.bgCanvasDefault,
+                containerColor = ElementTheme.colors.iconAccentTertiary,
+                disabledContentColor = ElementTheme.colors.iconDisabled,
+            )
+        } else {
+            IconButtonDefaults.iconButtonColors()
+        },
         enabled = roomCallState.canStartCall,
     ) {
         Icon(

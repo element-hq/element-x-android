@@ -17,6 +17,7 @@ core = "1.15.0"
 # due to the DefaultMigrationStore not behaving as expected.
 # Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
 datastore = "1.0.0"
+datastorePreferencesVersion = "1.1.1"
 constraintlayout = "2.2.0"
 constraintlayout_compose = "1.1.0"
 lifecycle = "2.8.7"
@@ -66,6 +67,7 @@ kover = "0.9.0"
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+androidx-datastore-preferences-v111 = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
 compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.4"

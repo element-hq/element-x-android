@@ -29,7 +29,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerRenderer
-
 import io.element.android.features.maprealtime.impl.MapRealtimePresenterPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
@@ -235,13 +234,19 @@ class MessagesNode @AssistedInject constructor(
                     else -> Unit
                 }
             }
+
+            val mapRealtimeState = mapRealtimePresenterPresenter.present()
+
             MessagesView(
                 state = state,
+                mapRealtimeState = mapRealtimeState,
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
+                onLinkClick = { url ->
+                    onLinkClick(activity, isDark, url, state.timelineState.eventSink)
+                },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
@@ -253,8 +258,6 @@ class MessagesNode @AssistedInject constructor(
                     )
                 },
                 modifier = modifier,
-                onShowMapClick = this::onShowMapClick,
-                mapRealtimeState = mapRealtimePresenterPresenter.present(),
             )
 
             var focusedEventId by rememberSaveable {

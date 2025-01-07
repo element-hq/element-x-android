@@ -179,9 +179,7 @@ class MessagesPresenter @AssistedInject constructor(
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
         }
 
-        var isMessagesCollapsed by remember {
-            mutableStateOf(false)
-        }
+        var showMapView by remember { mutableStateOf(false) }
 
         fun handleEvents(event: MessagesEvents) {
             when (event) {
@@ -206,9 +204,8 @@ class MessagesPresenter @AssistedInject constructor(
                     }
                 }
                 is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
-                is MessagesEvents.ShowMapClicked -> {
-                    isMessagesCollapsed = !isMessagesCollapsed
-                }
+                is MessagesEvents.ShowMap -> showMapView = true
+                MessagesEvents.HideMap -> showMapView = false
             }
         }
 
@@ -237,7 +234,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomCallState = roomCallState,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             eventSink = { handleEvents(it) },
-            isMessagesCollapsed = isMessagesCollapsed,
+            showMapView = showMapView,
         )
     }
 
@@ -451,6 +448,7 @@ class MessagesPresenter @AssistedInject constructor(
                 replyToDetails = replyToDetails,
                 hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
             )
+
             composerState.eventSink(
                 MessageComposerEvents.SetMode(composerMode)
             )

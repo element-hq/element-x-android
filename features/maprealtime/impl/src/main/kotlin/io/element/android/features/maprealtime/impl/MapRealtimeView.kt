@@ -32,10 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.location.impl.all.composables.MapToolbar
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.maprealtime.impl.common.PermissionDeniedDialog
 import io.element.android.features.maprealtime.impl.common.PermissionRationaleDialog
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -51,10 +51,9 @@ import org.maplibre.android.camera.CameraPosition
 fun MapRealtimeView(
     state: MapRealtimePresenterState,
     onBackPressed: () -> Unit,
-    modifer: Modifier = Modifier,
     onMessagesPressed: () -> Unit,
     onJoinCallClick: () -> Unit,
-    isCallOngoing: Boolean
+    roomCallState: RoomCallState,
 ) {
 
     val cameraPositionState = rememberCameraPositionState {
@@ -124,7 +123,7 @@ fun MapRealtimeView(
                 title = state.roomName,
                 onMessagesPressed = onMessagesPressed,
                 onJoinCallClicked = onJoinCallClick,
-                isCallOngoing = isCallOngoing
+                roomCallState = roomCallState,
             )
             LocationButton(
                 state = state,
@@ -222,10 +221,9 @@ internal fun MapRealtimeViewPreview(
     MapRealtimeView(
         state = state,
         onBackPressed = TODO(),
-        modifer = TODO(),
         onMessagesPressed = TODO(),
         onJoinCallClick = TODO(),
-        isCallOngoing = false
+        roomCallState = RoomCallState.StandBy(canStartCall = true)
     )
 }
 

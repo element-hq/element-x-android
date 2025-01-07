@@ -135,6 +135,7 @@ fun aMessagesState(
     appName = "Element",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     eventSink = eventSink,
+    showMapView = false,
 )
 
 fun aUserEventPermissions(

@@ -29,6 +29,7 @@ dependencies {
     implementation(projects.libraries.maplibreCompose)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.features.roomcall.api)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.androidutils)
@@ -40,10 +41,9 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
     implementation(libs.playServicesLocation)
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences.v111)
     implementation(libs.accompanist.permission)
     implementation(project(":features:location:impl"))
-
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
