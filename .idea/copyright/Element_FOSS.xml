@@ -1,6 +1,6 @@
 <component name="CopyrightManager">
   <copyright>
-    <option name="notice" value="Copyright &amp;#36;today.year New Vector Ltd.&#10;&#10;SPDX-License-Identifier: AGPL-3.0-only&#10;Please see LICENSE in the repository root for full details." />
+    <option name="notice" value="Copyright &amp;#36;today.year New Vector Ltd.&#10;&#10;SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial&#10;Please see LICENSE files in the repository root for full details." />
     <option name="myName" value="Element FOSS" />
   </copyright>
 </component>
