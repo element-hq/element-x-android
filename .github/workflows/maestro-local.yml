@@ -13,7 +13,7 @@ env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
   ARCH: x86_64
-  DEVICE: Nexus 6
+  DEVICE: Nexus 9
   API_LEVEL: 35
   TARGET: google_apis
 
