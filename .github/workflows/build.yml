@@ -13,7 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
-  debug:
+  build:
     name: Build APKs
     runs-on: ubuntu-latest
     strategy:
