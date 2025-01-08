@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
+import android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC
 import android.media.ThumbnailUtils
 import android.os.Build
 import android.os.CancellationSignal
@@ -18,6 +19,7 @@ import android.provider.MediaStore
 import android.util.Size
 import androidx.core.net.toUri
 import com.vanniktech.blurhash.BlurHash
+import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -89,7 +91,11 @@ class ThumbnailFactory @Inject constructor(
         return createThumbnail(mimeType = MimeTypes.Jpeg) {
             MediaMetadataRetriever().runAndRelease {
                 setDataSource(context, file.toUri())
-                getFrameAtTime(VIDEO_THUMB_FRAME)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    getScaledFrameAtTime(VIDEO_THUMB_FRAME, OPTION_CLOSEST_SYNC, THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT)
+                } else {
+                    getFrameAtTime(VIDEO_THUMB_FRAME)?.resizeToMax(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT)
+                }
             }
         }
     }
