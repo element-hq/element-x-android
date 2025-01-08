@@ -106,12 +106,14 @@ private fun AttachmentSendStateView(
 ) {
     when (sendActionState) {
         is SendActionState.Sending.Processing -> {
-            ProgressDialog(
-                type = ProgressDialogType.Indeterminate,
-                text = stringResource(id = CommonStrings.common_sending),
-                showCancelButton = true,
-                onDismissRequest = onDismissClick,
-            )
+            if (sendActionState.displayProgress) {
+                ProgressDialog(
+                    type = ProgressDialogType.Indeterminate,
+                    text = stringResource(id = CommonStrings.common_sending),
+                    showCancelButton = true,
+                    onDismissRequest = onDismissClick,
+                )
+            }
         }
         is SendActionState.Sending.Uploading -> {
             ProgressDialog(

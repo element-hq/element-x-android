@@ -20,6 +20,7 @@ import io.element.android.features.messages.impl.attachments.preview.OnDoneListe
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
@@ -124,14 +126,14 @@ class AttachmentsPreviewPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f, mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f, mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f, mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -163,11 +165,10 @@ class AttachmentsPreviewPresenterTest {
             // Pre-processing finishes
             processLatch.complete(Unit)
             advanceUntilIdle()
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.InstantSending)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -196,13 +197,13 @@ class AttachmentsPreviewPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             // Pre-processing finishes
             processLatch.complete(Unit)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -228,9 +229,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             // Pre-processing finishes
             processLatch.complete(Unit)
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Failure::class.java)
@@ -259,9 +258,7 @@ class AttachmentsPreviewPresenterTest {
             advanceUntilIdle()
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.InstantSending)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Failure::class.java)
         }
     }
@@ -313,9 +310,8 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendImageResult.assertions().isCalledOnce().with(
                 any(),
@@ -355,9 +351,8 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendVideoResult.assertions().isCalledOnce().with(
                 any(),
@@ -395,9 +390,8 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendAudioResult.assertions().isCalledOnce().with(
                 any(),
@@ -427,15 +421,14 @@ class AttachmentsPreviewPresenterTest {
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             val failureState = awaitItem()
-            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
+            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure, mediaUploadInfo))
             sendFileResult.assertions().isCalledOnce()
             failureState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
             val clearedState = awaitLastSequentialItem()
-            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
         }
     }
 
@@ -457,19 +450,18 @@ class AttachmentsPreviewPresenterTest {
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
 
             // Check that the onDoneListener is called so the screen would be dismissed
             onDoneListenerResult.assertions().isCalledOnce()
 
             val failureState = awaitItem()
-            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
+            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure, mediaUploadInfo))
             sendFileResult.assertions().isCalledOnce()
             failureState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
             val clearedState = awaitLastSequentialItem()
-            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
         }
     }
 
@@ -481,12 +473,13 @@ class AttachmentsPreviewPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
-            assertThat(awaitLastSequentialItem().sendActionState).isEqualTo(SendActionState.Idle)
+            // The sending is cancelled and the state is kept at ReadyToUpload
+            ensureAllEventsConsumed()
         }
     }
 
@@ -501,11 +494,11 @@ class AttachmentsPreviewPresenterTest {
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
             initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
-            assertThat(awaitLastSequentialItem().sendActionState).isEqualTo(SendActionState.Idle)
+            // The sending is cancelled and the state is kept at ReadyToUpload
+            ensureAllEventsConsumed()
 
             // Check that the onDoneListener is called so the screen would be dismissed
             onDoneListenerResult.assertions().isCalledOnce()
@@ -542,4 +535,14 @@ class AttachmentsPreviewPresenterTest {
             dispatchers = testCoroutineDispatchers(),
         )
     }
+
+    private val mediaUploadInfo = MediaUploadInfo.AnyFile(
+        File("test"),
+        FileInfo(
+            mimetype = MimeTypes.Any,
+            size = 999L,
+            thumbnailInfo = null,
+            thumbnailSource = null,
+        )
+    )
 }
