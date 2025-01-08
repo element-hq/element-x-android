@@ -59,11 +59,11 @@ fun AttachmentsPreviewView(
     }
 
     fun postCancel() {
-        state.eventSink(AttachmentsPreviewEvents.Cancel)
+        state.eventSink(AttachmentsPreviewEvents.CancelAndDismiss)
     }
 
     fun postClearSendState() {
-        state.eventSink(AttachmentsPreviewEvents.ClearSendState)
+        state.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
     }
 
     BackHandler(enabled = state.sendActionState !is SendActionState.Sending) {

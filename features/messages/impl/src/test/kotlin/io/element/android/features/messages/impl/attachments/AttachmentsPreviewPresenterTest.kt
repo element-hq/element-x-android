@@ -40,12 +40,14 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -126,6 +128,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(0.5f))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(1f))
@@ -163,6 +166,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.InstantSending)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
@@ -195,6 +199,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             // Pre-processing finishes
             processLatch.complete(Unit)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
@@ -223,6 +228,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             // Pre-processing finishes
@@ -254,6 +260,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.InstantSending)
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Failure::class.java)
         }
@@ -272,7 +279,7 @@ class AttachmentsPreviewPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.Cancel)
+            initialState.eventSink(AttachmentsPreviewEvents.CancelAndDismiss)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             deleteCallback.assertions().isCalledOnce()
@@ -306,6 +313,7 @@ class AttachmentsPreviewPresenterTest {
             initialState.textEditorState.setMarkdown(A_CAPTION)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
@@ -349,6 +357,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendVideoResult.assertions().isCalledOnce().with(
                 any(),
@@ -388,6 +397,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendAudioResult.assertions().isCalledOnce().with(
                 any(),
@@ -419,11 +429,12 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
             sendFileResult.assertions().isCalledOnce()
-            failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
-            val clearedState = awaitItem()
+            failureState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            val clearedState = awaitLastSequentialItem()
             assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
         }
     }
@@ -448,6 +459,7 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
 
             // Check that the onDoneListener is called so the screen would be dismissed
             onDoneListenerResult.assertions().isCalledOnce()
@@ -455,8 +467,8 @@ class AttachmentsPreviewPresenterTest {
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure))
             sendFileResult.assertions().isCalledOnce()
-            failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
-            val clearedState = awaitItem()
+            failureState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            val clearedState = awaitLastSequentialItem()
             assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Idle)
         }
     }
@@ -473,8 +485,8 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            initialState.eventSink(AttachmentsPreviewEvents.ClearSendState)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            assertThat(awaitLastSequentialItem().sendActionState).isEqualTo(SendActionState.Idle)
         }
     }
 
@@ -491,8 +503,9 @@ class AttachmentsPreviewPresenterTest {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
-            initialState.eventSink(AttachmentsPreviewEvents.ClearSendState)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Idle)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing)
+            initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            assertThat(awaitLastSequentialItem().sendActionState).isEqualTo(SendActionState.Idle)
 
             // Check that the onDoneListener is called so the screen would be dismissed
             onDoneListenerResult.assertions().isCalledOnce()
@@ -526,6 +539,7 @@ class AttachmentsPreviewPresenterTest {
                 ),
             ),
             sessionCoroutineScope = this,
+            dispatchers = testCoroutineDispatchers(),
         )
     }
 }
