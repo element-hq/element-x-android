@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.impl.di.SessionMatrixModule
 
 @SingleIn(RoomScope::class)
-@MergeSubcomponent(RoomScope::class, modules = [SessionMatrixModule::class])
+@MergeSubcomponent(RoomScope::class)
 interface RoomComponent : NodeFactoriesBindings {
     @MergeSubcomponent.Builder
     interface Builder {
