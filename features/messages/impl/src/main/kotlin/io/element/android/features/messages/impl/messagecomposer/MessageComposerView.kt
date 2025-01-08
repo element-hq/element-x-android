@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
@@ -37,6 +38,14 @@ internal fun MessageComposerView(
     enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val verificationViolation = state.roomMemberIdentityStateChanges.firstOrNull {
+        it.identityState == IdentityState.VerificationViolation
+    }
+    if (verificationViolation != null) {
+        DisabledComposerView(modifier = modifier)
+        return
+    }
+
     val view = LocalView.current
     fun sendMessage() {
         state.eventSink(MessageComposerEvents.SendMessage)
@@ -139,6 +148,7 @@ internal fun MessageComposerViewPreview(
             enableVoiceMessages = true,
             subcomposing = false,
         )
+        DisabledComposerView()
     }
 }
 

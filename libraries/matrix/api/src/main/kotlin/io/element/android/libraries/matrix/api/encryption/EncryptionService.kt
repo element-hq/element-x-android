@@ -66,6 +66,7 @@ interface EncryptionService {
      * Remember this identity, ensuring it does not result in a pin violation.
      */
     suspend fun pinUserIdentity(userId: UserId): Result<Unit>
+    suspend fun withdrawVerificationRequirement(userId: UserId): Result<Unit>
 }
 
 /**

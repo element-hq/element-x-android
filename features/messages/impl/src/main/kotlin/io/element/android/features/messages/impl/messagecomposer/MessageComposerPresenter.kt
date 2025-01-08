@@ -14,10 +14,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -33,6 +35,9 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
+import io.element.android.features.messages.impl.crypto.identity.createDefaultRoomMemberForIdentityChange
+import io.element.android.features.messages.impl.crypto.identity.toIdentityRoomMember
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
@@ -52,6 +57,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -76,18 +82,24 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
@@ -389,6 +401,11 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
             }
         }
+
+        val roomMemberIdentityStateChange by produceState(persistentListOf()) {
+            observeRoomMemberIdentityStateChange()
+        }
+
         return MessageComposerState(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
@@ -398,6 +415,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
+            roomMemberIdentityStateChanges = roomMemberIdentityStateChange,
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
         )
@@ -704,5 +722,34 @@ class MessageComposerPresenter @AssistedInject constructor(
                 markdownTextEditorState.requestFocusAction()
             }
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange() {
+        room.syncUpdateFlow
+            .filter {
+                // Room cannot become unencrypted, so we can just apply a filter here.
+                room.isEncrypted
+            }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
+                    identityStateChanges.map { identityStateChange ->
+                        val member = membersState.roomMembers()
+                            ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
+                            ?.toIdentityRoomMember()
+                            ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
+                        RoomMemberIdentityStateChange(
+                            identityRoomMember = member,
+                            identityState = identityStateChange.identityState,
+                        )
+                    }
+                }
+                    .distinctUntilChanged()
+                    .onEach { roomMemberIdentityStateChanges ->
+                        value = roomMemberIdentityStateChanges.toPersistentList()
+                    }
+            }
+            .launchIn(this)
     }
 }

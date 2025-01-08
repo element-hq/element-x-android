@@ -209,6 +209,10 @@ internal class RustEncryptionService(
         getUserIdentity(userId).pin()
     }
 
+    override suspend fun withdrawVerificationRequirement(userId: UserId): Result<Unit> = runCatching {
+        getUserIdentity(userId).withdrawVerification()
+    }
+
     private suspend fun getUserIdentity(userId: UserId): UserIdentity {
         return service.userIdentity(
             userId = userId.value,

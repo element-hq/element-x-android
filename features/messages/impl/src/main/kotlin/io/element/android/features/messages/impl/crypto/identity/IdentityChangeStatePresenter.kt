@@ -49,7 +49,12 @@ class IdentityChangeStatePresenter @Inject constructor(
 
         fun handleEvent(event: IdentityChangeEvent) {
             when (event) {
-                is IdentityChangeEvent.Submit -> coroutineScope.pinUserIdentity(event.userId)
+                is IdentityChangeEvent.VerificationViolation -> {
+                    coroutineScope.withdrawVerificationRequirement(event.userId)
+                }
+                is IdentityChangeEvent.PinViolation -> {
+                    coroutineScope.pinUserIdentity(event.userId)
+                }
             }
         }
 
@@ -94,15 +99,22 @@ class IdentityChangeStatePresenter @Inject constructor(
                 Timber.e(it, "Failed to pin identity for user $userId")
             }
     }
+
+    private fun CoroutineScope.withdrawVerificationRequirement(userId: UserId) = launch {
+        encryptionService.withdrawVerificationRequirement(userId)
+            .onFailure {
+                Timber.e(it, "Failed to withdraw verification for user $userId")
+            }
+    }
 }
 
-private fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
+fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
     userId = userId,
     displayNameOrDefault = displayNameOrDefault,
     avatarData = getAvatarData(AvatarSize.ComposerAlert),
 )
 
-private fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
+fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
     userId = userId,
     displayNameOrDefault = userId.extractedDisplayName,
     avatarData = AvatarData(

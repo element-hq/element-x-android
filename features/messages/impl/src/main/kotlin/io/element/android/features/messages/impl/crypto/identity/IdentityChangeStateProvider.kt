@@ -30,7 +30,7 @@ class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState
                 roomMemberIdentityStateChanges = listOf(
                     aRoomMemberIdentityStateChange(
                         identityRoomMember = anIdentityRoomMember(displayNameOrDefault = "Alice"),
-                        identityState = IdentityState.PinViolation,
+                        identityState = IdentityState.VerificationViolation,
                     ),
                 ),
             ),

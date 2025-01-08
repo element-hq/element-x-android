@@ -10,5 +10,6 @@ package io.element.android.features.messages.impl.crypto.identity
 import io.element.android.libraries.matrix.api.core.UserId
 
 sealed interface IdentityChangeEvent {
-    data class Submit(val userId: UserId) : IdentityChangeEvent
+    data class PinViolation(val userId: UserId) : IdentityChangeEvent
+    data class VerificationViolation(val userId: UserId) : IdentityChangeEvent
 }
