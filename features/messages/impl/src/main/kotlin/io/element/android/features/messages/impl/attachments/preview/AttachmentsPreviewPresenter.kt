@@ -103,6 +103,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 mediaUploadInfo = mediaUploadInfo.data,
                                 caption = caption,
                                 sendActionState = sendActionState,
+                                dismissAfterSend = !sendOnBackground,
                             )
                         }
 
@@ -230,6 +231,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         mediaUploadInfo: MediaUploadInfo,
         caption: String?,
         sendActionState: MutableState<SendActionState>,
+        dismissAfterSend: Boolean,
     ) = runCatching {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
@@ -251,6 +253,10 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             cleanUp(mediaUploadInfo)
             // Reset the sendActionState to ensure that dialog is closed before the screen
             sendActionState.value = SendActionState.Done
+
+            if (dismissAfterSend) {
+                onDoneListener()
+            }
         },
         onFailure = { error ->
             Timber.e(error, "Failed to send attachment")
