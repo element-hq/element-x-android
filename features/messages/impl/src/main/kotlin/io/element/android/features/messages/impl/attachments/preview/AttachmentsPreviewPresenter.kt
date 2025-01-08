@@ -26,6 +26,7 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.firstInstanceOf
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -39,7 +40,6 @@ import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEdito
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -104,7 +104,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                         }
 
                         // Wait until the media is ready to be uploaded
-                        val mediaUploadInfo = (observableSendState.first { it is SendActionState.Sending.ReadyToUpload } as SendActionState.Sending.ReadyToUpload).mediaInfo
+                        val mediaUploadInfo = observableSendState.firstInstanceOf<SendActionState.Sending.ReadyToUpload>().mediaInfo
 
                         // Pre-processing is done, send the attachment
                         val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
@@ -115,7 +115,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                             onDoneListener()
                         }
 
-                        // Send it using the session coroutine scope so it doesn't matter if this screen or the chat one is closed
+                        // If using the send queue, send it using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
                         val sendMediaCoroutineScope = if (useSendQueue) sessionCoroutineScope else coroutineScope
                         sendMediaCoroutineScope.launch(dispatchers.io) {
                             sendPreProcessedMedia(

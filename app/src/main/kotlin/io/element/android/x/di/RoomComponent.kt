@@ -15,7 +15,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.impl.di.SessionMatrixModule
 
 @SingleIn(RoomScope::class)
 @MergeSubcomponent(RoomScope::class)
