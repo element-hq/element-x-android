@@ -13,9 +13,9 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,18 +29,19 @@ class SendQueues @Inject constructor(
     private val matrixClient: MatrixClient,
     private val networkMonitor: NetworkMonitor,
 ) {
+    /**
+     * Launches the send queues retry mechanism in the given [coroutineScope].
+     * Makes sure to re-enable all send queues when the network status is [NetworkStatus.Online].
+     */
+    @OptIn(FlowPreview::class)
     fun launchIn(coroutineScope: CoroutineScope) {
-        networkMonitor.connectivity
-            .onEach { networkStatus ->
-                matrixClient.setAllSendQueuesEnabled(enabled = networkStatus == NetworkStatus.Online)
-            }
-            .launchIn(coroutineScope)
-
-        @OptIn(FlowPreview::class)
-        matrixClient.sendQueueDisabledFlow()
+        combine(
+            networkMonitor.connectivity,
+            matrixClient.sendQueueDisabledFlow(),
+        ) { networkStatus, _ -> networkStatus }
             .debounce(SEND_QUEUES_RETRY_DELAY_MILLIS)
-            .onEach { _: RoomId ->
-                if (networkMonitor.connectivity.value == NetworkStatus.Online) {
+            .onEach { networkStatus ->
+                if (networkStatus == NetworkStatus.Online) {
                     matrixClient.setAllSendQueuesEnabled(enabled = true)
                 }
             }
