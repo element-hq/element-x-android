@@ -43,6 +43,7 @@ class JoinRoomNode @AssistedInject constructor(
             state = state,
             onBackClick = ::navigateUp,
             onJoinSuccess = ::navigateUp,
+            onForgetSuccess = ::navigateUp,
             onCancelKnockSuccess = {},
             onKnockSuccess = {},
             modifier = modifier

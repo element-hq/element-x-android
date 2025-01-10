@@ -123,6 +123,7 @@ internal fun anInviteSender(
     userId = userId,
     displayName = displayName,
     avatarData = avatarData,
+    membershipChangeReason = null,
 )
 
 internal fun aRoomListRoomSummary(

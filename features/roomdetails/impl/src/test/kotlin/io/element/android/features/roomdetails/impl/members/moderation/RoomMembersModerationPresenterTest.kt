@@ -42,7 +42,7 @@ class RoomMembersModerationPresenterTest {
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
         ).apply {
-            givenRoomInfo(aRoomInfo(isDirect = true, isPublic = false, activeMembersCount = 2))
+            givenRoomInfo(aRoomInfo(isDirect = true, activeMembersCount = 2))
         }
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room)
         presenter.test {

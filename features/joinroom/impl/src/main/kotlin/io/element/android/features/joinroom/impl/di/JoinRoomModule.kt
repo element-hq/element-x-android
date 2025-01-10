@@ -32,6 +32,7 @@ object JoinRoomModule {
         joinRoom: JoinRoom,
         knockRoom: KnockRoom,
         cancelKnockRoom: CancelKnockRoom,
+        forgetRoom: ForgetRoom,
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
         buildMeta: BuildMeta,
     ): JoinRoomPresenter.Factory {
@@ -52,6 +53,7 @@ object JoinRoomModule {
                     matrixClient = client,
                     joinRoom = joinRoom,
                     knockRoom = knockRoom,
+                    forgetRoom = forgetRoom,
                     cancelKnockRoom = cancelKnockRoom,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                     buildMeta = buildMeta,

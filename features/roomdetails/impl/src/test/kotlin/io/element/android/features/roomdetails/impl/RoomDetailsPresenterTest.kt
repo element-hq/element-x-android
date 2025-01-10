@@ -145,7 +145,6 @@ class RoomDetailsPresenterTest {
     fun `present - initial state is updated with roomInfo if it exists`() = runTest {
         val roomInfo = aRoomInfo(
             name = A_ROOM_NAME,
-            isPublic = true,
             topic = A_ROOM_TOPIC,
             avatarUrl = AN_AVATAR_URL,
             pinnedEventIds = listOf(AN_EVENT_ID),

@@ -17,6 +17,8 @@
   <string name="screen_join_room_knock_message_description">"Message (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"You will receive an invite to join the room if your request is accepted."</string>
   <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
+  <string name="screen_join_room_loading_alert_message">"We could not display the room preview. This may be due to network or server issues."</string>
+  <string name="screen_join_room_loading_alert_title">"We couldn’t display this room preview"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s does not support spaces yet. You can access spaces on web."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces are not supported yet"</string>
   <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>
