@@ -137,7 +137,11 @@ class RustMatrixClient(
 
     private val innerRoomListService = innerSyncService.roomListService()
 
-    private val rustSyncService = RustSyncService(innerSyncService, sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(
+        innerSyncService = innerSyncService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        syncServiceDispatcher = sessionDispatcher
+    )
     private val pushersService = RustPushersService(
         client = innerClient,
         dispatchers = dispatchers,

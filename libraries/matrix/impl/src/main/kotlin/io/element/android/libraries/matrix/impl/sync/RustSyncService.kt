@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +26,8 @@ import org.matrix.rustcomponents.sdk.SyncService as InnerSyncService
 
 class RustSyncService(
     private val innerSyncService: InnerSyncService,
-    sessionCoroutineScope: CoroutineScope
+    sessionCoroutineScope: CoroutineScope,
+    private val syncServiceDispatcher: CoroutineDispatcher,
 ) : SyncService {
     private val isServiceReady = AtomicBoolean(true)
 
@@ -35,7 +37,9 @@ class RustSyncService(
             return@runCatching
         }
         Timber.i("Start sync")
-        innerSyncService.start()
+        withContext(syncServiceDispatcher) {
+            innerSyncService.start()
+        }
     }.onFailure {
         Timber.d("Start sync failed: $it")
     }
@@ -46,7 +50,9 @@ class RustSyncService(
             return@runCatching
         }
         Timber.i("Stop sync")
-        innerSyncService.stop()
+        withContext(syncServiceDispatcher) {
+            innerSyncService.stop()
+        }
     }.onFailure {
         Timber.d("Stop sync failed: $it")
     }
