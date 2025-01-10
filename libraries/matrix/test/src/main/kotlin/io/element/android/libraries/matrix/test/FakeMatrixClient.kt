@@ -23,8 +23,8 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -105,7 +105,7 @@ class FakeMatrixClient(
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
-    val getPendingRoomResults = mutableMapOf<RoomId, PendingRoom>()
+    val getRoomPreviewResults = mutableMapOf<RoomId, RoomPreview>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -132,8 +132,8 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): PendingRoom? {
-        return getPendingRoomResults[roomId]
+    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? {
+        return getRoomPreviewResults[roomId]
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {

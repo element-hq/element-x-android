@@ -22,30 +22,49 @@ internal const val MAX_KNOCK_MESSAGE_LENGTH = 500
 
 @Immutable
 data class JoinRoomState(
+    val roomIdOrAlias: RoomIdOrAlias,
     val contentState: ContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val joinAction: AsyncAction<Unit>,
     val knockAction: AsyncAction<Unit>,
+    val forgetAction: AsyncAction<Unit>,
     val cancelKnockAction: AsyncAction<Unit>,
-    val applicationName: String,
+    private val applicationName: String,
     val knockMessage: String,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
+    val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoomFailures.UnauthorizedJoin
     val joinAuthorisationStatus = when (contentState) {
-        // Use the join authorisation status from the loaded content state
-        is ContentState.Loaded -> contentState.joinAuthorisationStatus
-        // Assume that if the room is unknown, the user can join it
-        is ContentState.UnknownRoom -> JoinAuthorisationStatus.CanJoin
-        // Otherwise assume that the user can't join the room
-        else -> JoinAuthorisationStatus.Unknown
+        is ContentState.Loaded -> {
+            when {
+                contentState.roomType == RoomType.Space -> {
+                    JoinAuthorisationStatus.IsSpace(applicationName)
+                }
+                isJoinActionUnauthorized -> {
+                    JoinAuthorisationStatus.Unauthorized
+                }
+                else -> {
+                    contentState.joinAuthorisationStatus
+                }
+            }
+        }
+        is ContentState.UnknownRoom -> {
+            if (isJoinActionUnauthorized) {
+                JoinAuthorisationStatus.Unauthorized
+            } else {
+                JoinAuthorisationStatus.Unknown
+            }
+        }
+        else -> JoinAuthorisationStatus.None
     }
 }
 
 @Immutable
 sealed interface ContentState {
-    data class Loading(val roomIdOrAlias: RoomIdOrAlias) : ContentState
-    data class Failure(val roomIdOrAlias: RoomIdOrAlias, val error: Throwable) : ContentState
-    data class UnknownRoom(val roomIdOrAlias: RoomIdOrAlias) : ContentState
+    data object Dismissing : ContentState
+    data object Loading : ContentState
+    data class Failure(val error: Throwable) : ContentState
+    data object UnknownRoom : ContentState
     data class Loaded(
         val roomId: RoomId,
         val name: String?,
@@ -71,9 +90,19 @@ sealed interface ContentState {
 }
 
 sealed interface JoinAuthorisationStatus {
+    data object None : JoinAuthorisationStatus
+    data class IsSpace(val applicationName: String) : JoinAuthorisationStatus
     data class IsInvited(val inviteSender: InviteSender?) : JoinAuthorisationStatus
+    data class IsBanned(val banSender: InviteSender?) : JoinAuthorisationStatus
     data object IsKnocked : JoinAuthorisationStatus
     data object CanKnock : JoinAuthorisationStatus
     data object CanJoin : JoinAuthorisationStatus
+    data object NeedInvite : JoinAuthorisationStatus
+    data object Restricted : JoinAuthorisationStatus
     data object Unknown : JoinAuthorisationStatus
+    data object Unauthorized : JoinAuthorisationStatus
+}
+
+sealed class JoinRoomFailures : Exception() {
+    data object UnauthorizedJoin : JoinRoomFailures()
 }

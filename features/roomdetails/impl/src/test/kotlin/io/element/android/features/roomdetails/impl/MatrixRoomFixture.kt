@@ -73,7 +73,6 @@ fun aMatrixRoom(
                 topic = topic,
                 avatarUrl = avatarUrl,
                 isDirect = isDirect,
-                isPublic = isPublic,
                 joinRule = joinRule,
             )
         )

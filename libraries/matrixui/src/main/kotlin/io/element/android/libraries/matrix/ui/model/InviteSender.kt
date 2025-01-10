@@ -26,6 +26,7 @@ data class InviteSender(
     val userId: UserId,
     val displayName: String,
     val avatarData: AvatarData,
+    val membershipChangeReason: String?,
 ) {
     @Composable
     fun annotatedString(): AnnotatedString {
@@ -52,4 +53,5 @@ fun RoomMember.toInviteSender() = InviteSender(
     userId = userId,
     displayName = displayName ?: "",
     avatarData = getAvatarData(size = AvatarSize.InviteSender),
+    membershipChangeReason = membershipChangeReason
 )

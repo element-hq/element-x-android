@@ -7,12 +7,11 @@
 
 package io.element.android.features.roomaliasresolver.impl
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,25 +20,22 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.background.LightGradientBackground
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -50,66 +46,72 @@ fun RoomAliasResolverView(
     onSuccess: (ResolvedRoomAlias) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val latestOnSuccess by rememberUpdatedState(onSuccess)
-    LaunchedEffect(state.resolveState) {
-        if (state.resolveState is AsyncData.Success) {
-            latestOnSuccess(state.resolveState.data)
-        }
-    }
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        LightGradientBackground()
         HeaderFooterPage(
             containerColor = Color.Transparent,
-            paddingValues = PaddingValues(16.dp),
+            paddingValues = PaddingValues(
+                horizontal = 16.dp,
+                vertical = 32.dp
+            ),
             topBar = {
                 RoomAliasResolverTopBar(onBackClick = onBackClick)
             },
             content = {
-                RoomAliasResolverContent(state = state)
+                RoomAliasResolverContent(roomAlias = state.roomAlias, isLoading = state.resolveState.isLoading())
             },
-            footer = {
-                RoomAliasResolverFooter(
-                    state = state,
-                )
+        )
+        ResolvedRoomAliasView(
+            resolvedRoomAlias = state.resolveState,
+            onSuccess = onSuccess,
+            onRetry = { state.eventSink(RoomAliasResolverEvents.Retry) },
+            onDismissError = {
+                state.eventSink(RoomAliasResolverEvents.DismissError)
+                onBackClick()
             }
         )
     }
 }
 
 @Composable
-private fun RoomAliasResolverFooter(
-    state: RoomAliasResolverState,
-    modifier: Modifier = Modifier,
+private fun ResolvedRoomAliasView(
+    resolvedRoomAlias: AsyncData<ResolvedRoomAlias>,
+    onSuccess: (ResolvedRoomAlias) -> Unit,
+    onRetry: () -> Unit,
+    onDismissError: () -> Unit,
 ) {
-    when (state.resolveState) {
-        is AsyncData.Failure -> {
-            Button(
-                text = stringResource(CommonStrings.action_retry),
-                onClick = {
-                    state.eventSink(RoomAliasResolverEvents.Retry)
-                },
-                modifier = modifier.fillMaxWidth(),
-                size = ButtonSize.Large,
-            )
-        }
-        is AsyncData.Loading -> {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                CircularProgressIndicator()
+    when (resolvedRoomAlias) {
+        is AsyncData.Success -> {
+            val latestOnSuccess by rememberUpdatedState(onSuccess)
+            LaunchedEffect(Unit) {
+                latestOnSuccess(resolvedRoomAlias.data)
             }
         }
-        AsyncData.Uninitialized,
-        is AsyncData.Success -> Unit
+        is AsyncData.Failure -> {
+            if (resolvedRoomAlias.error is RoomAliasResolverFailures.UnknownAlias) {
+                ErrorDialog(
+                    title = stringResource(id = R.string.screen_join_room_loading_alert_title),
+                    content = stringResource(id = R.string.screen_room_alias_resolver_resolve_alias_failure),
+                    onSubmit = onDismissError
+                )
+            } else {
+                RetryDialog(
+                    title = stringResource(id = R.string.screen_join_room_loading_alert_title),
+                    content = stringResource(id = CommonStrings.error_network_or_server_issue),
+                    onRetry = onRetry,
+                    onDismiss = onDismissError
+                )
+            }
+        }
+        else -> Unit
     }
 }
 
 @Composable
 private fun RoomAliasResolverContent(
-    state: RoomAliasResolverState,
+    roomAlias: RoomAlias,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
     RoomPreviewOrganism(
@@ -118,20 +120,13 @@ private fun RoomAliasResolverContent(
             PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
         },
         title = {
-            RoomPreviewTitleAtom(state.roomAlias.value)
+            RoomPreviewSubtitleAtom(roomAlias.value)
         },
         subtitle = {
-        },
-        description = {
-            if (state.resolveState.isFailure()) {
-                Text(
-                    text = stringResource(id = R.string.screen_room_alias_resolver_resolve_alias_failure),
-                    textAlign = TextAlign.Center,
-                    color = ElementTheme.colors.textCriticalPrimary,
-                )
+            if (isLoading) {
+                Spacer(Modifier.height(8.dp))
+                CircularProgressIndicator()
             }
-        },
-        memberCount = {
         }
     )
 }

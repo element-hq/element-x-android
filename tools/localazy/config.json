@@ -36,7 +36,8 @@
     {
       "name" : ":features:roomaliasresolver:impl",
       "includeRegex" : [
-        "screen_room_alias_resolver_.*"
+        "screen_room_alias_resolver_.*",
+        "screen.join_room.loading_alert_title"
       ]
     },
     {

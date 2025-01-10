@@ -16,8 +16,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
@@ -28,7 +28,6 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -36,7 +35,6 @@ import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 private const val CACHE_SIZE = 16
-private val PENDING_MEMBERSHIPS = setOf(Membership.INVITED, Membership.KNOCKED)
 
 class RustRoomFactory(
     private val sessionId: SessionId,
@@ -125,7 +123,7 @@ class RustRoomFactory(
         }
     }
 
-    suspend fun createPendingRoom(roomId: RoomId): PendingRoom? = withContext(dispatcher) {
+    suspend fun createRoomPreview(roomId: RoomId): RoomPreview? = withContext(dispatcher) {
         if (isDestroyed) {
             Timber.d("Room factory is destroyed, returning null for $roomId")
             return@withContext null
@@ -135,17 +133,17 @@ class RustRoomFactory(
             Timber.d("Room not found for $roomId")
             return@withContext null
         }
-        if (roomListItem.membership() !in PENDING_MEMBERSHIPS) {
-            Timber.d("Room $roomId is not in pending state")
+        if (roomListItem.membership() !in RustRoomPreview.ALLOWED_MEMBERSHIPS) {
+            Timber.d("Room $roomId is not in allowed membership")
             return@withContext null
         }
         val innerRoom = try {
             roomListItem.previewRoom(via = emptyList())
         } catch (e: Exception) {
-            Timber.e(e, "Failed to get pending room for $roomId")
+            Timber.e(e, "Failed to get room preview for $roomId")
             return@withContext null
         }
-        RustPendingRoom(
+        RustRoomPreview(
             sessionId = sessionId,
             roomId = roomId,
             inner = innerRoom,
