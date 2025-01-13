@@ -276,6 +276,8 @@ Põhjus: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet tundub olema muutunud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet tundub olema muutunud. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on muutunud. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Võta verifitseerimine tagasi"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
