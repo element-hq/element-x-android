@@ -8,7 +8,6 @@
 #
 
 adb install -r $1
-set -x
 echo "Starting the screen recording..."
 adb push .github/workflows/scripts/maestro/local-recording.sh /data/local/tmp/
 adb shell "chmod +x /data/local/tmp/local-recording.sh"
