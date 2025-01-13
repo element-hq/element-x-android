@@ -276,6 +276,8 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity appears to have changed. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity appears to have changed. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s verified identity has changed.  %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>

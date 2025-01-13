@@ -280,6 +280,8 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Zdá se, že identita %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Ověřená identita uživatele %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
@@ -310,6 +312,8 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"Budete potřebovat adresu místnosti, aby byla viditelná v adresáři."</string>
+  <string name="screen_edit_room_address_title">"Adresa místnosti"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
