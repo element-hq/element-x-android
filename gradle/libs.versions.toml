@@ -54,7 +54,7 @@ dependencyAnalysis = "2.7.0"
 
 # DI
 dagger = "2.55"
-anvil = "0.4.0"
+anvil = "0.4.1"
 
 # Auto service
 autoservice = "1.1.1"
