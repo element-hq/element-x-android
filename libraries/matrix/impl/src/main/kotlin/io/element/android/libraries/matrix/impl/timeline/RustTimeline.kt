@@ -158,8 +158,8 @@ class RustTimeline(
 
     override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
 
-    override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> {
-        return runCatching {
+    override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
+        runCatching {
             inner.sendReadReceipt(receiptType.toRustReceiptType(), eventId.value)
         }
     }
@@ -590,8 +590,8 @@ class RustTimeline(
         }
     }
 
-    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
-        return runCatching {
+    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(dispatcher) {
+        runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
     }
