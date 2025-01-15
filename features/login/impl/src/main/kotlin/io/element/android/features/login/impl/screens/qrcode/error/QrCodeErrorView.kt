@@ -7,6 +7,7 @@
 
 package io.element.android.features.login.impl.screens.qrcode.error
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -44,6 +45,7 @@ fun QrCodeErrorView(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler(onBack = onRetry)
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
@@ -51,7 +53,6 @@ fun QrCodeErrorView(
         subTitle = subtitleText(errorScreenType, appName),
         content = { Content(errorScreenType) },
         buttons = { Buttons(onRetry) },
-        onBackClick = onRetry,
     )
 }
 
