@@ -137,7 +137,11 @@ class RustMatrixClient(
 
     private val innerRoomListService = innerSyncService.roomListService()
 
-    private val rustSyncService = RustSyncService(innerSyncService, sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(
+        inner = innerSyncService,
+        dispatcher = sessionDispatcher,
+        sessionCoroutineScope = sessionCoroutineScope
+    )
     private val pushersService = RustPushersService(
         client = innerClient,
         dispatchers = dispatchers,
@@ -283,8 +287,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? {
-        return innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+    override suspend fun findDM(userId: UserId): RoomId? = withContext(sessionDispatcher) {
+        innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
