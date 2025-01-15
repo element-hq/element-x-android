@@ -7,32 +7,19 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import io.element.android.libraries.architecture.AsyncData
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class MediaItemsPostProcessor @Inject constructor() {
     fun process(
-        mediaItems: AsyncData<ImmutableList<MediaItem>>,
-    ): AsyncData<GroupedMediaItems> {
-        return when (mediaItems) {
-            is AsyncData.Uninitialized -> AsyncData.Uninitialized
-            is AsyncData.Loading -> AsyncData.Loading()
-            is AsyncData.Failure -> AsyncData.Failure(mediaItems.error)
-            is AsyncData.Success -> AsyncData.Success(
-                mediaItems.data.process()
-            )
-        }
-    }
-
-    private fun List<MediaItem>.process(): GroupedMediaItems {
+        mediaItems: List<MediaItem>,
+    ): GroupedMediaItems {
         val imageAndVideoItems = mutableListOf<MediaItem>()
         val fileItems = mutableListOf<MediaItem>()
 
         val imageAndVideoItemsSubList = mutableListOf<MediaItem.Event>()
         val fileItemsSublist = mutableListOf<MediaItem.Event>()
-        forEach { item ->
+        mediaItems.forEach { item ->
             when (item) {
                 is MediaItem.DateSeparator -> {
                     if (imageAndVideoItemsSubList.isNotEmpty()) {
