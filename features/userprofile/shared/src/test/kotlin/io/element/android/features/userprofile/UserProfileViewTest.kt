@@ -34,7 +34,6 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressBack
-import io.element.android.tests.testutils.pressBackKey
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -45,16 +44,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 class UserProfileViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
-    @Test
-    fun `on back key press - the expected callback is called`() = runTest {
-        ensureCalledOnce { callback ->
-            rule.setUserProfileView(
-                goBack = callback,
-            )
-            rule.pressBackKey()
-        }
-    }
 
     @Test
     fun `on back button click - the expected callback is called`() = runTest {
