@@ -35,6 +35,9 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Announcement component following design system https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2002-2154.
+ */
 @Composable
 fun Announcement(
     title: String,
@@ -46,7 +49,7 @@ fun Announcement(
         is AnnouncementType.Informative -> InformativeAnnouncement(
             title = title,
             description = description,
-            isError = type.isError,
+            isError = type.isCritical,
             modifier = modifier,
         )
         is AnnouncementType.Actionable -> ActionableAnnouncement(
@@ -62,7 +65,7 @@ fun Announcement(
 
 @Immutable
 sealed interface AnnouncementType {
-    data class Informative(val isError: Boolean = false) : AnnouncementType
+    data class Informative(val isCritical: Boolean = false) : AnnouncementType
     data class Actionable(
         val actionText: String,
         val onActionClick: () -> Unit,
@@ -188,12 +191,12 @@ internal fun AnnouncementPreview() = ElementPreview {
         Announcement(
             title = "Headline",
             description = "Text description goes here.",
-            type = AnnouncementType.Informative(isError = false),
+            type = AnnouncementType.Informative(isCritical = false),
         )
         Announcement(
             title = "Headline",
             description = "Text description goes here.",
-            type = AnnouncementType.Informative(isError = true),
+            type = AnnouncementType.Informative(isCritical = true),
         )
         Announcement(
             title = "Headline",
