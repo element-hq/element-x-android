@@ -11,7 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.roomlist.impl.R
-import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
+import io.element.android.libraries.designsystem.components.Announcement
+import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
@@ -21,13 +22,15 @@ internal fun SetUpRecoveryKeyBanner(
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    DialogLikeBannerMolecule(
-        modifier = modifier,
+    Announcement(
+        modifier = modifier.roomListBannerPadding(),
         title = stringResource(R.string.banner_set_up_recovery_title),
-        content = stringResource(R.string.banner_set_up_recovery_content),
-        actionText = stringResource(R.string.banner_set_up_recovery_submit),
-        onSubmitClick = onContinueClick,
-        onDismissClick = onDismissClick,
+        description = stringResource(R.string.banner_set_up_recovery_content),
+        type = AnnouncementType.Actionable(
+            actionText = stringResource(R.string.banner_set_up_recovery_submit),
+            onActionClick = onContinueClick,
+            onDismissClick = onDismissClick,
+        ),
     )
 }
 
