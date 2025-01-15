@@ -7,7 +7,6 @@
 
 package io.element.android.features.userprofile.shared
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -51,7 +50,6 @@ fun UserProfileView(
     openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler { goBack() }
     Scaffold(
         modifier = modifier,
         topBar = {

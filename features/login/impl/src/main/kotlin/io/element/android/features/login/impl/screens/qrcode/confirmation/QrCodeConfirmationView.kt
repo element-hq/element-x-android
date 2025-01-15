@@ -45,9 +45,8 @@ fun QrCodeConfirmationView(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler {
-        onCancel()
-    }
+    BackHandler(onBack = onCancel)
+
     val icon = when (step) {
         is QrCodeConfirmationStep.DisplayCheckCode -> CompoundIcons.Computer()
         is QrCodeConfirmationStep.DisplayVerificationCode -> CompoundIcons.LockSolid()

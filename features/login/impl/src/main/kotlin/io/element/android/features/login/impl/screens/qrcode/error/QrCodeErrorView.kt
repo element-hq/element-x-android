@@ -45,16 +45,14 @@ fun QrCodeErrorView(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler {
-        onRetry()
-    }
+    BackHandler(onBack = onRetry)
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
         title = titleText(errorScreenType, appName),
         subTitle = subtitleText(errorScreenType, appName),
         content = { Content(errorScreenType) },
-        buttons = { Buttons(onRetry) }
+        buttons = { Buttons(onRetry) },
     )
 }
 

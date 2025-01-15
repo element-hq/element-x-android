@@ -31,7 +31,7 @@ fun SetupBiometricView(
     state: SetupBiometricState,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler(true) {
+    BackHandler {
         state.eventSink(SetupBiometricEvents.UsePin)
     }
     HeaderFooterPage(
