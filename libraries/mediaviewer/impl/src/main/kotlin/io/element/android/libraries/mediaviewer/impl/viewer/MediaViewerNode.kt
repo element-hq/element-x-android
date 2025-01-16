@@ -21,12 +21,15 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
+import io.element.android.libraries.mediaviewer.impl.gallery.SingleMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.gallery.TimelineMediaGalleryDataSource
 
 @ContributesNode(RoomScope::class)
 class MediaViewerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaViewerPresenter.Factory,
+    timelineMediaGalleryDataSource: TimelineMediaGalleryDataSource,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val inputs = inputs<MediaViewerEntryPoint.Params>()
@@ -50,6 +53,11 @@ class MediaViewerNode @AssistedInject constructor(
     private val presenter = presenterFactory.create(
         inputs = inputs,
         navigator = this,
+        mediaGalleryDataSource = if (inputs.eventId != null) {
+            timelineMediaGalleryDataSource
+        } else {
+            SingleMediaGalleryDataSource.createFrom(inputs)
+        },
     )
 
     @Composable

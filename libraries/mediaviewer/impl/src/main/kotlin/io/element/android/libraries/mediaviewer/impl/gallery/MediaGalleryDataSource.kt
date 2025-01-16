@@ -26,22 +26,32 @@ import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
+interface MediaGalleryDataSource {
+    fun start()
+    fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>>
+    fun getLastData(): AsyncData<GroupedMediaItems>
+    suspend fun loadMore(direction: Timeline.PaginationDirection)
+    suspend fun deleteItem(eventId: EventId)
+}
+
 @SingleIn(RoomScope::class)
-class MediaGalleryDataSource @Inject constructor(
+class TimelineMediaGalleryDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,
-) {
+) : MediaGalleryDataSource {
     private var timeline: Timeline? = null
 
     private val groupedMediaItemsFlow = MutableSharedFlow<AsyncData<GroupedMediaItems>>(replay = 1)
 
-    fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
+    override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
+
+    override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull() ?: AsyncData.Uninitialized
 
     private val isStarted = AtomicBoolean(false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun start() {
+    override fun start() {
         if (!isStarted.compareAndSet(false, true)) {
             return
         }
@@ -73,11 +83,11 @@ class MediaGalleryDataSource @Inject constructor(
             .launchIn(room.roomCoroutineScope)
     }
 
-    suspend fun loadMore(direction: Timeline.PaginationDirection) {
+    override suspend fun loadMore(direction: Timeline.PaginationDirection) {
         timeline?.paginate(direction)
     }
 
-    suspend fun deleteItem(eventId: EventId) {
+    override suspend fun deleteItem(eventId: EventId) {
         timeline?.redactEvent(
             eventOrTransactionId = eventId.toEventOrTransactionId(),
             reason = null,
