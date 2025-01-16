@@ -24,7 +24,6 @@ interface OnBoardingEntryPoint : FeatureEntryPoint {
         fun onSignUp()
         fun onSignIn()
         fun onSignInWithQrCode()
-        fun onOpenDeveloperSettings()
         fun onReportProblem()
     }
 }

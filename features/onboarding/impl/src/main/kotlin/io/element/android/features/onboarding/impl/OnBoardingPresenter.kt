@@ -13,7 +13,6 @@ import androidx.compose.runtime.produceState
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import javax.inject.Inject
@@ -31,8 +30,7 @@ class OnBoardingPresenter @Inject constructor(
         val canLoginWithQrCode by produceState(initialValue = false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.QrCodeLogin)
         }
-         return OnBoardingState(
-            isDebugBuild = buildMeta.buildType != BuildType.RELEASE,
+        return OnBoardingState(
             productionApplicationName = buildMeta.productionApplicationName,
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = OnBoardingConfig.CAN_CREATE_ACCOUNT,
