@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomHero
+import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
@@ -49,6 +50,7 @@ fun aRustRoomInfo(
     pinnedEventIds: List<String> = listOf(),
     roomCreator: UserId? = null,
     joinRule: JoinRule? = null,
+    historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -81,4 +83,5 @@ fun aRustRoomInfo(
     pinnedEventIds = pinnedEventIds,
     creator = roomCreator?.value,
     joinRule = joinRule,
+    historyVisibility = historyVisibility
 )

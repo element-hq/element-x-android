@@ -28,4 +28,5 @@ fun ImageInfo.map(): RustImageInfo = RustImageInfo(
     thumbnailInfo = thumbnailInfo?.map(),
     thumbnailSource = null,
     blurhash = blurhash,
+    isAnimated = null
 )

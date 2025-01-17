@@ -79,7 +79,7 @@ class DefaultBugReporter @Inject constructor(
     }
 
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
-    private var currentTracingFilter: String? = null
+    private var currentTracingLogLevel: String? = null
 
     private val logCatErrFile = File(logDirectory().absolutePath, LOG_CAT_FILENAME)
 
@@ -156,8 +156,8 @@ class DefaultBugReporter @Inject constructor(
                 if (crashCallStack.isNotEmpty() && withCrashLogs) {
                     builder.addFormDataPart("label", "crash")
                 }
-                currentTracingFilter?.let {
-                    builder.addFormDataPart("tracing_filter", it)
+                currentTracingLogLevel?.let {
+                    builder.addFormDataPart("tracing_log_level", it)
                 }
                 if (buildMeta.isEnterpriseBuild) {
                     builder.addFormDataPart("label", "Enterprise")
@@ -299,8 +299,8 @@ class DefaultBugReporter @Inject constructor(
         }
     }
 
-    override fun setCurrentTracingFilter(tracingFilter: String) {
-        currentTracingFilter = tracingFilter
+    override fun setCurrentTracingLogLevel(logLevel: String) {
+        currentTracingLogLevel = logLevel
     }
 
     /**

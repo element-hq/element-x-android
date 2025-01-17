@@ -311,8 +311,8 @@ class RustMatrixClient(
                 isEncrypted = createRoomParams.isEncrypted,
                 isDirect = createRoomParams.isDirect,
                 visibility = when (createRoomParams.visibility) {
-                    RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
-                    RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
+                    RoomVisibility.PUBLIC -> RustRoomVisibility.Public
+                    RoomVisibility.PRIVATE -> RustRoomVisibility.Private
                 },
                 preset = when (createRoomParams.visibility) {
                     RoomVisibility.PRIVATE -> {

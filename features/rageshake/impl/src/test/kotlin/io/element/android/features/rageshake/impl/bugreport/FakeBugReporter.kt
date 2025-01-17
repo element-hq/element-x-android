@@ -53,7 +53,7 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         return File("fake")
     }
 
-    override fun setCurrentTracingFilter(tracingFilter: String) {
+    override fun setCurrentTracingLogLevel(logLevel: String) {
         // No op
     }
 

@@ -24,7 +24,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginFlowType
 import io.element.android.features.onboarding.api.OnBoardingEntryPoint
-import io.element.android.features.preferences.api.ConfigureTracingEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
@@ -38,7 +37,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val onBoardingEntryPoint: OnBoardingEntryPoint,
-    private val configureTracingEntryPoint: ConfigureTracingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
     private val notLoggedInImageLoaderFactory: NotLoggedInImageLoaderFactory,
 ) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
@@ -68,9 +66,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class LoginFlow(val type: LoginFlowType) : NavTarget
-
-        @Parcelize
-        data object ConfigureTracing : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -89,10 +84,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.LoginFlow(type = LoginFlowType.SIGN_IN_QR_CODE))
                     }
 
-                    override fun onOpenDeveloperSettings() {
-                        backstack.push(NavTarget.ConfigureTracing)
-                    }
-
                     override fun onReportProblem() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
@@ -106,9 +97,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
                 loginEntryPoint.nodeBuilder(this, buildContext)
                     .params(LoginEntryPoint.Params(flowType = navTarget.type))
                     .build()
-            }
-            NavTarget.ConfigureTracing -> {
-                configureTracingEntryPoint.createNode(this, buildContext)
             }
         }
     }

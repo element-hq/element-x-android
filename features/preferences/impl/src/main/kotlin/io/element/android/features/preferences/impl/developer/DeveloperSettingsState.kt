@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -21,6 +22,7 @@ data class DeveloperSettingsState(
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val isSimpleSlidingSyncEnabled: Boolean,
     val hideImagesAndVideos: Boolean,
+    val tracingLogLevel: AsyncData<LogLevelItem>,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
 

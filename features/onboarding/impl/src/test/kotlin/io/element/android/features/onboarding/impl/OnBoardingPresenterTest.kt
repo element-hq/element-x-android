@@ -12,7 +12,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.OnBoardingConfig
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -44,27 +43,10 @@ class OnBoardingPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.isDebugBuild).isTrue()
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
-
             assertThat(awaitItem().canLoginWithQrCode).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - initial state release`() = runTest {
-        val presenter = OnBoardingPresenter(
-            buildMeta = aBuildMeta(buildType = BuildType.RELEASE),
-            featureFlagService = FakeFeatureFlagService(),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.isDebugBuild).isFalse()
-            cancelAndIgnoreRemainingEvents()
         }
     }
 }
