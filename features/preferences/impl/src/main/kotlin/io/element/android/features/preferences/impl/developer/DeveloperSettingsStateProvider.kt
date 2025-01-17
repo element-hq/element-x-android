@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -42,6 +43,7 @@ fun aDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
     hideImagesAndVideos = hideImagesAndVideos,
+    tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
     eventSink = eventSink,
 )
 

@@ -19,6 +19,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,6 +32,7 @@ private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseU
 private val themeKey = stringPreferencesKey("theme")
 private val simplifiedSlidingSyncKey = booleanPreferencesKey("useSimplifiedSlidingSync")
 private val hideImagesAndVideosKey = booleanPreferencesKey("hideImagesAndVideos")
+private val logLevelKey = stringPreferencesKey("logLevel")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -104,7 +106,27 @@ class DefaultAppPreferencesStore @Inject constructor(
         }
     }
 
+    override suspend fun setTracingLogLevel(logLevel: LogLevel) {
+        store.edit { prefs ->
+            prefs[logLevelKey] = logLevel.name
+        }
+    }
+
+    override fun getTracingLogLevelFlow(): Flow<LogLevel> {
+        return store.data.map { prefs ->
+            prefs[logLevelKey]?.let { LogLevel.valueOf(it) } ?: buildMeta.defaultLogLevel()
+        }
+    }
+
     override suspend fun reset() {
         store.edit { it.clear() }
+    }
+}
+
+private fun BuildMeta.defaultLogLevel(): LogLevel {
+    return when (buildType) {
+        BuildType.DEBUG -> LogLevel.TRACE
+        BuildType.NIGHTLY -> LogLevel.DEBUG
+        BuildType.RELEASE -> LogLevel.INFO
     }
 }

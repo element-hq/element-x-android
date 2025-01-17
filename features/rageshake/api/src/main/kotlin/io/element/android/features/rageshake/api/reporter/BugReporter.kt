@@ -35,9 +35,9 @@ interface BugReporter {
     fun logDirectory(): File
 
     /**
-     * Set the current tracing filter.
+     * Set the current tracing log level.
      */
-    fun setCurrentTracingFilter(tracingFilter: String)
+    fun setCurrentTracingLogLevel(logLevel: String)
 
     /**
      * Save the logcat.

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.preferences.api.store
 
+import io.element.android.libraries.matrix.api.tracing.LogLevel
 import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesStore {
@@ -24,6 +25,9 @@ interface AppPreferencesStore {
 
     suspend fun setHideImagesAndVideos(value: Boolean)
     fun doesHideImagesAndVideosFlow(): Flow<Boolean>
+
+    suspend fun setTracingLogLevel(logLevel: LogLevel)
+    fun getTracingLogLevelFlow(): Flow<LogLevel>
 
     suspend fun reset()
 }

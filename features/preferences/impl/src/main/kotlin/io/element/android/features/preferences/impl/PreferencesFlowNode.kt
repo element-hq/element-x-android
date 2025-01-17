@@ -30,7 +30,6 @@ import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNod
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
-import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
@@ -71,9 +70,6 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object AdvancedSettings : NavTarget
-
-        @Parcelize
-        data object ConfigureTracing : NavTarget
 
         @Parcelize
         data object AnalyticsSettings : NavTarget
@@ -164,15 +160,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.DeveloperSettings -> {
-                val callback = object : DeveloperSettingsNode.Callback {
-                    override fun openConfigureTracing() {
-                        backstack.push(NavTarget.ConfigureTracing)
-                    }
-                }
-                createNode<DeveloperSettingsNode>(buildContext, listOf(callback))
-            }
-            NavTarget.ConfigureTracing -> {
-                createNode<ConfigureTracingNode>(buildContext)
+                createNode<DeveloperSettingsNode>(buildContext)
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {

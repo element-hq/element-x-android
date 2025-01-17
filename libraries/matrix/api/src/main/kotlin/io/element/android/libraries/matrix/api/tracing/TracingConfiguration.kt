@@ -8,7 +8,8 @@
 package io.element.android.libraries.matrix.api.tracing
 
 data class TracingConfiguration(
-    val filterConfiguration: TracingFilterConfiguration,
+    val logLevel: LogLevel,
+    val extraTargets: List<String>,
     val writesToLogcat: Boolean,
     val writesToFilesConfiguration: WriteToFilesConfiguration,
 )
