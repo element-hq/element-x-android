@@ -53,10 +53,10 @@ class MediaViewerNode @AssistedInject constructor(
     private val presenter = presenterFactory.create(
         inputs = inputs,
         navigator = this,
-        mediaGalleryDataSource = if (inputs.eventId != null) {
-            timelineMediaGalleryDataSource
-        } else {
+        mediaGalleryDataSource = if (inputs.mode == MediaViewerEntryPoint.MediaViewerMode.SingleMedia) {
             SingleMediaGalleryDataSource.createFrom(inputs)
+        } else {
+            timelineMediaGalleryDataSource
         },
     )
 
