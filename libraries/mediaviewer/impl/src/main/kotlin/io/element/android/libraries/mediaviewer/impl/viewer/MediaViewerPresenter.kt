@@ -127,12 +127,18 @@ class MediaViewerPresenter @AssistedInject constructor(
 
         fun handleEvents(event: MediaViewerEvents) {
             when (event) {
-                is MediaViewerEvents.LoadMedia -> coroutineScope.downloadMedia(
-                    data = event.data,
-                    mediaFile = mediaFile.getOrPut(event.data.eventId) { mutableStateOf(null) },
-                    localMedia = localMedia.getOrPut(event.data.eventId) { mutableStateOf(AsyncData.Uninitialized) },
-                )
+                is MediaViewerEvents.LoadMedia -> {
+                    // It's OK to suppress the warning since mediaFile and localMedia are remembered
+                    @Suppress("RememberMissing")
+                    coroutineScope.downloadMedia(
+                        data = event.data,
+                        mediaFile = mediaFile.getOrPut(event.data.eventId) { mutableStateOf(null) },
+                        localMedia = localMedia.getOrPut(event.data.eventId) { mutableStateOf(AsyncData.Uninitialized) },
+                    )
+                }
                 is MediaViewerEvents.ClearLoadingError -> {
+                    // It's OK to suppress the warning since localMedia is remembered
+                    @Suppress("RememberMissing")
                     localMedia.getOrPut(event.eventId) { mutableStateOf(AsyncData.Uninitialized) }.value = AsyncData.Uninitialized
                 }
                 is MediaViewerEvents.SaveOnDisk -> {
