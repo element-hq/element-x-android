@@ -157,7 +157,7 @@ class DefaultBugReporter @Inject constructor(
                     builder.addFormDataPart("label", "crash")
                 }
                 currentTracingLogLevel?.let {
-                    builder.addFormDataPart("tracing_filter", it)
+                    builder.addFormDataPart("tracing_log_level", it)
                 }
                 if (buildMeta.isEnterpriseBuild) {
                     builder.addFormDataPart("label", "Enterprise")
