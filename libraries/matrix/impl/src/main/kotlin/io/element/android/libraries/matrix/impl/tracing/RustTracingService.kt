@@ -20,6 +20,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
     override fun setupTracing(tracingConfiguration: TracingConfiguration) {
+        /*
         val filter = tracingConfiguration.filterConfiguration
         val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
             filter = tracingConfiguration.filterConfiguration.filter,
@@ -28,6 +29,8 @@ class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) :
         )
         org.matrix.rustcomponents.sdk.setupTracing(rustTracingConfiguration)
         Timber.v("Tracing config filter = $filter: ${filter.filter}")
+        
+         */
     }
 
     override fun createTimberTree(): Timber.Tree {

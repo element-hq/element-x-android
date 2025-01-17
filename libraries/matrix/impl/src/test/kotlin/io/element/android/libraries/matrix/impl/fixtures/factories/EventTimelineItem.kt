@@ -37,6 +37,7 @@ fun aRustEventTimelineItem(
     origin: EventItemOrigin? = EventItemOrigin.SYNC,
     canBeRepliedTo: Boolean = true,
     shieldsState: ShieldState? = null,
+    localCreatedAt: ULong? = null,
 ) = EventTimelineItem(
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
@@ -51,6 +52,7 @@ fun aRustEventTimelineItem(
     reactions = reactions,
     readReceipts = readReceipts,
     origin = origin,
+    localCreatedAt = localCreatedAt,
     lazyProvider = FakeRustLazyTimelineItemProvider(
         debugInfo = debugInfo,
         shieldsState = shieldsState,
