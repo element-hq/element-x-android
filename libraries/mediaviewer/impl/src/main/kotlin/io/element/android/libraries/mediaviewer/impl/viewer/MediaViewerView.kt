@@ -135,6 +135,7 @@ fun MediaViewerView(
                         state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
                     }
                     MediaViewerPage(
+                        isDisplayed = page == pagerState.settledPage,
                         showOverlay = showOverlay,
                         bottomPaddingInPixels = bottomPaddingInPixels,
                         data = dataForPage,
@@ -246,6 +247,7 @@ fun MediaViewerView(
 
 @Composable
 private fun MediaViewerPage(
+    isDisplayed: Boolean,
     showOverlay: Boolean,
     bottomPaddingInPixels: Int,
     state: MediaViewerState,
@@ -307,6 +309,7 @@ private fun MediaViewerPage(
 
                 LocalMediaView(
                     modifier = Modifier.fillMaxSize(),
+                    isDisplayed = isDisplayed,
                     bottomPaddingInPixels = bottomPaddingInPixels,
                     localMediaViewState = localMediaViewState,
                     localMedia = data.downloadedMedia.dataOrNull(),
