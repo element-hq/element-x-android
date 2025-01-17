@@ -12,19 +12,27 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class DefaultAppForegroundStateService : AppForegroundStateService {
-    private val state = MutableStateFlow(false)
-    override val isInForeground: StateFlow<Boolean> = state
+    override val isInForeground = MutableStateFlow(false)
+    override val isInCall = MutableStateFlow(false)
+    override val isSyncingNotificationEvent = MutableStateFlow(false)
 
     private val appLifecycle: Lifecycle by lazy { ProcessLifecycleOwner.get().lifecycle }
 
-    override fun start() {
+    override fun startObservingForeground() {
         appLifecycle.addObserver(lifecycleObserver)
     }
 
-    private val lifecycleObserver = LifecycleEventObserver { _, _ -> state.value = getCurrentState() }
+    override fun updateIsInCallState(isInCall: Boolean) {
+        this.isInCall.value = isInCall
+    }
+
+    override fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean) {
+        this.isSyncingNotificationEvent.value = isSyncingNotificationEvent
+    }
+
+    private val lifecycleObserver = LifecycleEventObserver { _, _ -> isInForeground.value = getCurrentState() }
 
     private fun getCurrentState(): Boolean = appLifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
 }

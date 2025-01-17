@@ -79,10 +79,10 @@ class DeveloperSettingsPresenter @Inject constructor(
             .doesHideImagesAndVideosFlow()
             .collectAsState(initial = false)
 
-        val tracingLogLevel by appPreferencesStore
-            .getTracingLogLevelFlow()
-            .map { AsyncData.Success(it.toLogLevelItem()) }
-            .collectAsState(initial = AsyncData.Uninitialized)
+        val tracingLogLevelFlow = remember {
+            appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
+        }
+        val tracingLogLevel by tracingLogLevelFlow.collectAsState(initial = AsyncData.Uninitialized)
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries

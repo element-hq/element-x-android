@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
+import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -58,9 +59,9 @@ class CallScreenPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val matrixClientsProvider: MatrixClientProvider,
     private val screenTracker: ScreenTracker,
-    private val appCoroutineScope: CoroutineScope,
     private val activeCallManager: ActiveCallManager,
     private val languageTagProvider: LanguageTagProvider,
+    private val appForegroundStateService: AppForegroundStateService,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -226,18 +227,14 @@ class CallScreenPresenter @AssistedInject constructor(
                         if (state == SyncState.Running) {
                             client.notifyCallStartIfNeeded(callType.roomId)
                         } else {
-                            client.syncService().startSync()
+                            appForegroundStateService.updateIsInCallState(true)
                         }
                     }
             }
             onDispose {
-                // We can't use the local coroutine scope here because it will be disposed before this effect
-                appCoroutineScope.launch {
-                    client.syncService().run {
-                        if (syncState.value == SyncState.Running) {
-                            stopSync()
-                        }
-                    }
+                // Make sure we mark the call as ended in the app state
+                if (appForegroundStateService.isInCall.value) {
+                    appForegroundStateService.updateIsInCallState(false)
                 }
             }
         }

@@ -94,7 +94,7 @@ class DefaultLockScreenService @Inject constructor(
      */
     private fun observeAppForegroundState() {
         coroutineScope.launch {
-            appForegroundStateService.start()
+            appForegroundStateService.startObservingForeground()
             appForegroundStateService.isInForeground.collect { isInForeground ->
                 if (isInForeground) {
                     lockJob?.cancel()

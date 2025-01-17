@@ -8,9 +8,9 @@
 package io.element.android.features.createroom.impl.root
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -55,7 +55,7 @@ class CreateRoomRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = LocalContext.current as Activity
+        val activity = requireNotNull(LocalActivity.current)
         CreateRoomRootView(
             state = state,
             modifier = modifier,

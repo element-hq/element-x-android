@@ -13,46 +13,50 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
+import io.element.android.services.appnavstate.api.SyncOrchestratorProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class SyncOnNotifiableEvent @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
+    private val syncOrchestratorProvider: SyncOrchestratorProvider,
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
 ) {
-    private var syncCounter = AtomicInteger(0)
-
     suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
         val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush) && !isRingingCallEvent) {
             return@withContext
         }
         val client = matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull() ?: return@withContext
+
+        // Start the sync if it wasn't already started
+        syncOrchestratorProvider.getSyncOrchestrator(notifiableEvent.sessionId)?.start() ?: return@withContext
+
         client.getRoom(notifiableEvent.roomId)?.use { room ->
             room.subscribeToSync()
 
-            // If the app is in foreground, sync is already running, so just add the subscription.
+            // If the app is in foreground, sync is already running, so we just add the subscription above.
             if (!appForegroundStateService.isInForeground.value) {
-                val syncService = client.syncService()
-                syncService.startSyncIfNeeded()
                 if (isRingingCallEvent) {
                     room.waitsUntilUserIsInTheCall(timeout = 60.seconds)
                 } else {
-                    room.waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
+                    try {
+                        appForegroundStateService.updateIsSyncingNotificationEvent(true)
+                        room.waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
+                    } finally {
+                        appForegroundStateService.updateIsSyncingNotificationEvent(false)
+                    }
                 }
-                syncService.stopSyncIfNeeded()
             }
         }
     }
@@ -79,18 +83,6 @@ class SyncOnNotifiableEvent @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun SyncService.startSyncIfNeeded() {
-        if (syncCounter.getAndIncrement() == 0) {
-            startSync()
-        }
-    }
-
-    private suspend fun SyncService.stopSyncIfNeeded() {
-        if (syncCounter.decrementAndGet() == 0 && !appForegroundStateService.isInForeground.value) {
-            stopSync()
         }
     }
 }

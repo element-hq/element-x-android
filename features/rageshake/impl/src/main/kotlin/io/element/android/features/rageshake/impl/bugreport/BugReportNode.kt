@@ -7,10 +7,9 @@
 
 package io.element.android.features.rageshake.impl.bugreport
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -38,7 +37,7 @@ class BugReportNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = LocalContext.current as? Activity
+        val activity = LocalActivity.current
         BugReportView(
             state = state,
             modifier = modifier,
