@@ -33,7 +33,7 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNode
+import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -299,7 +299,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 knockRequestsListEntryPoint.createNode(this, buildContext)
             }
             NavTarget.SecurityAndPrivacy -> {
-                createNode<SecurityAndPrivacyNode>(buildContext)
+                createNode<SecurityAndPrivacyFlowNode>(buildContext)
             }
         }
     }
