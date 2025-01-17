@@ -11,7 +11,6 @@ import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -81,7 +80,6 @@ class MediaViewerPresenter @AssistedInject constructor(
         val groupedMediaItem by remember { mediaGalleryDataSource.groupedMediaItemsFlow() }
             .collectAsState(mediaGalleryDataSource.getLastData())
 
-        val loadMediaTrigger: MutableMap<EventId?, MutableIntState> = remember { mutableMapOf() }
         val mediaFile: MutableMap<EventId?, MutableState<MediaFile?>> = remember { mutableMapOf() }
         val localMedia: MutableMap<EventId?, MutableState<AsyncData<LocalMedia>>> = remember { mutableMapOf() }
         DisposableEffect(Unit) {
@@ -134,9 +132,6 @@ class MediaViewerPresenter @AssistedInject constructor(
                     mediaFile = mediaFile.getOrPut(event.data.eventId) { mutableStateOf(null) },
                     localMedia = localMedia.getOrPut(event.data.eventId) { mutableStateOf(AsyncData.Uninitialized) },
                 )
-                is MediaViewerEvents.RetryLoading -> {
-                    loadMediaTrigger.getOrPut(event.eventId) { mutableIntStateOf(0) }.intValue++
-                }
                 is MediaViewerEvents.ClearLoadingError -> {
                     localMedia.getOrPut(event.eventId) { mutableStateOf(AsyncData.Uninitialized) }.value = AsyncData.Uninitialized
                 }

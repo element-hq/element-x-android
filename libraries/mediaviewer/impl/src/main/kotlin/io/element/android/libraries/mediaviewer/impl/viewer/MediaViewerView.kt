@@ -150,8 +150,8 @@ fun MediaViewerView(
                     AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
                         Box(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .navigationBarsPadding()
+                                    .fillMaxSize()
+                                    .navigationBarsPadding()
                         ) {
                             MediaViewerBottomBar(
                                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -168,8 +168,8 @@ fun MediaViewerView(
         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
+                        .fillMaxSize()
+                        .navigationBarsPadding()
             ) {
                 when (currentData) {
                     is MediaViewerPageData.Loading -> {
@@ -255,9 +255,7 @@ private fun MediaViewerPage(
     modifier: Modifier = Modifier,
 ) {
     fun onRetry() {
-        data.eventId?.let {
-            state.eventSink(MediaViewerEvents.RetryLoading(it))
-        }
+        state.eventSink(MediaViewerEvents.LoadMedia(data))
     }
 
     fun onDismissError() {
@@ -289,8 +287,8 @@ private fun MediaViewerPage(
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
+                    .fillMaxSize()
+                    .navigationBarsPadding()
         ) {
             Box(contentAlignment = Alignment.Center) {
                 val zoomableState = rememberZoomableState(
@@ -335,8 +333,8 @@ private fun MediaViewerPage(
             if (showProgress) {
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
+                            .fillMaxWidth()
+                            .height(2.dp)
                 )
             }
         }
@@ -365,8 +363,8 @@ private fun MediaViewerLoadingPage(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
             AsyncLoading()
@@ -502,11 +500,11 @@ private fun MediaViewerBottomBar(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .background(Color(0x99101317))
-            .onSizeChanged {
-                onHeightChange(it.height)
-            },
+                .fillMaxWidth()
+                .background(Color(0x99101317))
+                .onSizeChanged {
+                    onHeightChange(it.height)
+                },
     ) {
         if (caption != null) {
             if (showDivider) {
@@ -514,8 +512,8 @@ private fun MediaViewerBottomBar(
             }
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 text = caption,
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis,
