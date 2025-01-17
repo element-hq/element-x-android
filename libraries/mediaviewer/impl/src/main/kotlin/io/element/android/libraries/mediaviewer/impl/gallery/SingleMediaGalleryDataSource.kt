@@ -18,9 +18,8 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
-class SingleMediaGalleryDataSource @Inject constructor(
+class SingleMediaGalleryDataSource(
     private val data: GroupedMediaItems,
 ) : MediaGalleryDataSource {
     override fun start() = Unit
@@ -91,9 +90,9 @@ class SingleMediaGalleryDataSource @Inject constructor(
                     }
                 }
                 else -> {
+                    // Always use imageAndVideoItems, in Single mode, this is the data that will be used
                     GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(),
-                        fileItems = persistentListOf(
+                        imageAndVideoItems = persistentListOf(
                             MediaItem.File(
                                 id = UniqueId("dummy"),
                                 eventId = params.eventId,
@@ -101,6 +100,7 @@ class SingleMediaGalleryDataSource @Inject constructor(
                                 mediaSource = params.mediaSource,
                             )
                         ),
+                        fileItems = persistentListOf(),
                     )
                 }
             }

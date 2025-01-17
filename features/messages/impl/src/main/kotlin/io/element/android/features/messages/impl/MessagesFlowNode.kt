@@ -246,6 +246,8 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
+                    // TODO When we will be able to load a media timeline from a EventId, change mode here (and use a mixed mode?)
+                    mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
                     eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,

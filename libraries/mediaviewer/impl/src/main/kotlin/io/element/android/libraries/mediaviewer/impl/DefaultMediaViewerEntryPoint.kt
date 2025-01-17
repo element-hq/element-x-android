@@ -42,6 +42,7 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                 val mimeType = MimeTypes.Images
                 return params(
                     MediaViewerEntryPoint.Params(
+                        mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
                         eventId = null,
                         mediaInfo = MediaInfo(
                             filename = filename,

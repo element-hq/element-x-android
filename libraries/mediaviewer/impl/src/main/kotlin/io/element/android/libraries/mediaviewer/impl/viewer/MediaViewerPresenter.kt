@@ -41,6 +41,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 import io.element.android.libraries.mediaviewer.impl.gallery.eventId
 import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
@@ -71,6 +72,12 @@ class MediaViewerPresenter @AssistedInject constructor(
         ): MediaViewerPresenter
     }
 
+    private val galleryMode = when (inputs.mode) {
+        MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+        MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
+        MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+    }
+
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
@@ -93,10 +100,10 @@ class MediaViewerPresenter @AssistedInject constructor(
                 buildList {
                     val data = groupedMediaItem.dataOrNull()
                     if (data != null) {
-                        if (data.imageAndVideoItems.firstOrNull() is MediaItem.LoadingIndicator) {
+                        if (data.getItems(galleryMode).firstOrNull() is MediaItem.LoadingIndicator) {
                             add(MediaViewerPageData.Loading(Timeline.PaginationDirection.FORWARDS))
                         }
-                        data.imageAndVideoItems.filterIsInstance<MediaItem.Event>().forEach { mediaItem ->
+                        data.getItems(galleryMode).filterIsInstance<MediaItem.Event>().forEach { mediaItem ->
                             val eventId = mediaItem.eventId()
                             add(
                                 MediaViewerPageData.MediaViewerData(
@@ -110,7 +117,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                                 )
                             )
                         }
-                        if (data.imageAndVideoItems.lastOrNull() is MediaItem.LoadingIndicator) {
+                        if (data.getItems(galleryMode).lastOrNull() is MediaItem.LoadingIndicator) {
                             add(MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS))
                         }
                     }

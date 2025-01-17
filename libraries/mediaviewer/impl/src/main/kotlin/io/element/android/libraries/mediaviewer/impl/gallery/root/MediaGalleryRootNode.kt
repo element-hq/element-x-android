@@ -60,6 +60,7 @@ class MediaGalleryRootNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val mode: MediaViewerEntryPoint.MediaViewerMode,
             val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
@@ -92,8 +93,16 @@ class MediaGalleryRootNode @AssistedInject constructor(
                     }
 
                     override fun onItemClick(item: MediaItem.Event) {
+                        val mode = when (item) {
+                            is MediaItem.Audio,
+                            is MediaItem.Voice,
+                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios
+                            is MediaItem.Image,
+                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos
+                        }
                         overlay.show(
                             NavTarget.MediaViewer(
+                                mode = mode,
                                 eventId = item.eventId(),
                                 mediaInfo = item.mediaInfo(),
                                 mediaSource = item.mediaSource(),
@@ -117,6 +126,7 @@ class MediaGalleryRootNode @AssistedInject constructor(
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
                     .params(
                         MediaViewerEntryPoint.Params(
+                            mode = navTarget.mode,
                             eventId = navTarget.eventId,
                             mediaInfo = navTarget.mediaInfo,
                             mediaSource = navTarget.mediaSource,
