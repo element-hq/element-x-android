@@ -16,7 +16,6 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 
 class SingleMediaGalleryDataSource(
@@ -32,77 +31,54 @@ class SingleMediaGalleryDataSource(
         fun createFrom(params: MediaViewerEntryPoint.Params) = SingleMediaGalleryDataSource(
             data = when {
                 params.mediaInfo.mimeType.isMimeTypeImage() -> {
-                    GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(
-                            MediaItem.Image(
-                                id = UniqueId("dummy"),
-                                eventId = params.eventId,
-                                mediaInfo = params.mediaInfo,
-                                mediaSource = params.mediaSource,
-                                thumbnailSource = params.thumbnailSource,
-                            )
-                        ),
-                        fileItems = persistentListOf(),
+                    MediaItem.Image(
+                        id = UniqueId("dummy"),
+                        eventId = params.eventId,
+                        mediaInfo = params.mediaInfo,
+                        mediaSource = params.mediaSource,
+                        thumbnailSource = params.thumbnailSource,
                     )
                 }
                 params.mediaInfo.mimeType.isMimeTypeVideo() -> {
-                    GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(
-                            MediaItem.Video(
-                                id = UniqueId("dummy"),
-                                eventId = params.eventId,
-                                mediaInfo = params.mediaInfo,
-                                mediaSource = params.mediaSource,
-                                thumbnailSource = params.thumbnailSource,
-                                duration = "TODO", // TODO Duration
-                            )
-                        ),
-                        fileItems = persistentListOf(),
+                    MediaItem.Video(
+                        id = UniqueId("dummy"),
+                        eventId = params.eventId,
+                        mediaInfo = params.mediaInfo,
+                        mediaSource = params.mediaSource,
+                        thumbnailSource = params.thumbnailSource,
                     )
                 }
                 params.mediaInfo.mimeType.isMimeTypeAudio() -> {
                     if (params.mediaInfo.waveform == null) {
-                        GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(
-                                MediaItem.Audio(
-                                    id = UniqueId("dummy"),
-                                    eventId = params.eventId,
-                                    mediaInfo = params.mediaInfo,
-                                    mediaSource = params.mediaSource,
-                                )
-                            ),
-                            fileItems = persistentListOf(),
+                        MediaItem.Audio(
+                            id = UniqueId("dummy"),
+                            eventId = params.eventId,
+                            mediaInfo = params.mediaInfo,
+                            mediaSource = params.mediaSource,
                         )
                     } else {
-                        GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(
-                                MediaItem.Voice(
-                                    id = UniqueId("dummy"),
-                                    eventId = params.eventId,
-                                    mediaInfo = params.mediaInfo,
-                                    mediaSource = params.mediaSource,
-                                    duration = "TODO", // TODO Duration
-                                    waveform = params.mediaInfo.waveform.orEmpty().toImmutableList(),
-                                )
-                            ),
-                            fileItems = persistentListOf(),
+                        MediaItem.Voice(
+                            id = UniqueId("dummy"),
+                            eventId = params.eventId,
+                            mediaInfo = params.mediaInfo,
+                            mediaSource = params.mediaSource,
                         )
                     }
                 }
                 else -> {
-                    // Always use imageAndVideoItems, in Single mode, this is the data that will be used
-                    GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(
-                            MediaItem.File(
-                                id = UniqueId("dummy"),
-                                eventId = params.eventId,
-                                mediaInfo = params.mediaInfo,
-                                mediaSource = params.mediaSource,
-                            )
-                        ),
-                        fileItems = persistentListOf(),
+                    MediaItem.File(
+                        id = UniqueId("dummy"),
+                        eventId = params.eventId,
+                        mediaInfo = params.mediaInfo,
+                        mediaSource = params.mediaSource,
                     )
                 }
+            }.let { mediaItem ->
+                GroupedMediaItems(
+                    // Always use imageAndVideoItems, in Single mode, this is the data that will be used
+                    imageAndVideoItems = persistentListOf(mediaItem),
+                    fileItems = persistentListOf(),
+                )
             }
         )
     }

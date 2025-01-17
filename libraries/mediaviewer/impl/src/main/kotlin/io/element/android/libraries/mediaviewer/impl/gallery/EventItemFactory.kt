@@ -102,6 +102,7 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -120,6 +121,7 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -138,6 +140,7 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -157,6 +160,7 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
                         thumbnailSource = null,
@@ -176,10 +180,10 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
-                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
                     is VoiceMessageType -> MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
@@ -196,10 +200,9 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = type.details?.waveform.orEmpty(),
+                            duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
-                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
-                        waveform = type.details?.waveform ?: persistentListOf(),
                     )
                 }
             }

@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.aVoiceMediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import kotlinx.collections.immutable.toImmutableList
 
 class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
     override val values: Sequence<MediaItem.Voice>
@@ -46,9 +45,9 @@ fun aMediaItemVoice(
         mediaInfo = aVoiceMediaInfo(
             filename = filename,
             caption = caption,
+            duration = duration,
+            waveForm = waveform,
         ),
         mediaSource = MediaSource(""),
-        duration = duration,
-        waveform = waveform.toImmutableList(),
     )
 }

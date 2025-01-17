@@ -31,9 +31,10 @@ fun aMediaItemVideo(
     return MediaItem.Video(
         id = id,
         eventId = null,
-        mediaInfo = aVideoMediaInfo(),
+        mediaInfo = aVideoMediaInfo(
+            duration = duration
+        ),
         mediaSource = mediaSource,
         thumbnailSource = null,
-        duration = duration,
     )
 }
