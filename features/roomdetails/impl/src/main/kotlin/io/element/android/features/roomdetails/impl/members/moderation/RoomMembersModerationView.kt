@@ -214,7 +214,8 @@ private fun RoomMemberActionsBottomSheet(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = roomMember.getBestName(), // TCHAP display a value generated from userId if displayname does not exist
+                // TCHAP display a value generated from userId if displayname does not exist
+                text = roomMember.getBestName(),
                 style = ElementTheme.typography.fontHeadingLgBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
