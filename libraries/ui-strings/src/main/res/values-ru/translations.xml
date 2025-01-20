@@ -280,6 +280,8 @@
   <string name="crypto_identity_change_pin_violation">"Судя по всему, идентификатор %1$s изменился. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Пользователь %1$s сменил имя пользователя на %2$s. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s подтвержденная личность изменилась. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Вывод верификации"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>

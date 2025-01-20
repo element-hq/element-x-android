@@ -244,6 +244,7 @@ Anledning:%1$s."</string>
   <string name="common_username">"Användarnamn"</string>
   <string name="common_verification_cancelled">"Verifiering avbruten"</string>
   <string name="common_verification_complete">"Verifieringen slutförd"</string>
+  <string name="common_verified">"Verifierad"</string>
   <string name="common_verify_device">"Verifiera enheten"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Röstmeddelande"</string>
@@ -251,6 +252,8 @@ Anledning:%1$s."</string>
   <string name="common_waiting_for_decryption_key">"Väntar på detta meddelande"</string>
   <string name="common_you">"Du"</string>
   <string name="crypto_identity_change_pin_violation">"Identitet för %1$s verkar ha ändrats. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identitet för %1$s %2$s verkar ha förändrats. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>

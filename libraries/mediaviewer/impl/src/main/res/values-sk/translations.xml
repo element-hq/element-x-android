@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_mode_files">"Súbory"</string>
+  <string name="screen_media_browser_list_mode_media">"Médiá"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Tu sa zobrazia obrázky a videá nahrané do tejto miestnosti."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Žiadne médiá zatiaľ neboli nahrané"</string>
+  <string name="screen_media_browser_title">"Médiá a súbory"</string>
+</resources>
