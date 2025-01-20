@@ -20,6 +20,7 @@ import io.element.android.features.roomdetails.impl.members.moderation.RoomMembe
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -329,12 +330,13 @@ class RoomMembersModerationPresenterTest {
     }
 
     private fun TestScope.createRoomMembersModerationPresenter(
+        buildMeta: BuildMeta = aBuildMeta(),
         matrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): RoomMembersModerationPresenter {
         return RoomMembersModerationPresenter(
-            buildMeta = aBuildMeta(),
+            buildMeta = buildMeta,
             room = matrixRoom,
             dispatchers = dispatchers,
             analyticsService = analyticsService,
