@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
-import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 import javax.inject.Inject
 
