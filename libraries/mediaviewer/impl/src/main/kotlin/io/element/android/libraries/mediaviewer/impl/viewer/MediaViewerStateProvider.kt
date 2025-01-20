@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.aWaveForm
@@ -22,6 +23,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import kotlinx.collections.immutable.toPersistentList
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -158,7 +160,7 @@ fun aMediaViewerPageData(
     mediaInfo = mediaInfo,
     mediaSource = mediaSource,
     thumbnailSource = null,
-    downloadedMedia = downloadedMedia,
+    downloadedMedia = mutableStateOf(downloadedMedia),
 )
 
 fun aMediaViewerState(
@@ -168,7 +170,7 @@ fun aMediaViewerState(
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
-    listData = listData,
+    listData = listData.toPersistentList(),
     currentIndex = currentIndex,
     snackbarMessage = null,
     canShowInfo = canShowInfo,
