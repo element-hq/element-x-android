@@ -24,7 +24,7 @@
   </plurals>
   <string name="notification_invite_body">"Vous a invité(e) à discuter"</string>
   <string name="notification_invite_body_with_sender">"%1$s vous a invité à discuter"</string>
-  <string name="notification_mentioned_you_body">"Mentionné(e): %1$s"</string>
+  <string name="notification_mentioned_you_body">"Mentionné(e) : %1$s"</string>
   <string name="notification_new_messages">"Nouveaux messages"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nouveau message"</item>
@@ -68,7 +68,7 @@
   <string name="troubleshoot_notifications_test_display_notification_description">"Vérifier que l’application peut afficher des notifications."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Vous n’avez pas cliqué sur la notification."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Impossible d’afficher la notification."</string>
-  <string name="troubleshoot_notifications_test_display_notification_success">"Vous avez cliqué sur la notification!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Vous avez cliqué sur la notification !"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Affichage des notifications"</string>
   <string name="troubleshoot_notifications_test_display_notification_waiting">"Veuillez cliquer sur la notification pour continuer le test."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Vérifier que l’application reçoit les Push."</string>

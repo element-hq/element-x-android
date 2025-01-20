@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ναι, αποδοχή όλων"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Σίγουρα θες να αποδεχτείς όλα τα αιτήματα συμμετοχής;"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Αποδοχή όλων των αιτημάτων"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Αποδοχή όλων"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Αποδοχή όλων των αιτημάτων συμμετοχής"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Γίνεται αποδοχή αιτήματος συμμετοχής"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ναι, απόρριψη και αποκλεισμός"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Σίγουρα θες να απορρίψειε και να αποκλείσεις τον χρήστη %1$s; Αυτός ο χρήστης δεν θα μπορεί να ζητήσει πρόσβαση για να συμμετάσχει ξανά σε αυτό το δωμάτιο."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Απόρριψη και αποκλεισμός πρόσβασης"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Γίνεται απόρριψη και αποκλεισμός πρόσβασης"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ναι, απόρριψη"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Σίγουρα θες να απορρίψεις το αίτημα του χρήστη %1$s να συμμετάσχει στο δωμάτιο;"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Απόρριψη πρόσβασης"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Απόρριψη και αποκλεισμός"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Γίνεται απόρριψη αιτήματος συμμετοχής"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Όταν κάποιος θα ζητήσει να συμμετάσχει στο δωμάτιο, θα μπορείς να δεις το αίτημά του εδώ."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Δεν υπάρχει εκκρεμές αίτημα συμμετοχής"</string>
+  <string name="screen_knock_requests_list_title">"Αιτήματα συμμετοχής"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+    <item quantity="other">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Προβολή όλων"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Αποδοχή"</string>
+  <string name="screen_room_single_knock_request_title">"Ο χρήστης %1$s θέλει να μπει σε αυτό το δωμάτιο"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Προβολή"</string>
+</resources>

@@ -148,6 +148,7 @@
   <string name="common_device_id">"ID συσκευής"</string>
   <string name="common_direct_chat">"Άμεση συνομιλία"</string>
   <string name="common_do_not_show_this_again">"Να μην εμφανιστεί ξανά"</string>
+  <string name="common_downloading">"Γίνεται λήψη"</string>
   <string name="common_edited_suffix">"(επεξεργάστηκε)"</string>
   <string name="common_editing">"Επεξεργάζεται"</string>
   <string name="common_editing_caption">"Η λεζάντα επεξεργάζεται"</string>
@@ -299,20 +300,6 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ναι, αποδοχή όλων"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_description">"Σίγουρα θες να αποδεχτείς όλα τα αιτήματα συμμετοχής;"</string>
-  <string name="screen_knock_requests_list_accept_all_alert_title">"Αποδοχή όλων των αιτημάτων"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Αποδοχή όλων"</string>
-  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ναι, απόρριψη και αποκλεισμός"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Σίγουρα θες να απορρίψειε και να αποκλείσεις τον χρήστη %1$s; Αυτός ο χρήστης δεν θα μπορεί να ζητήσει πρόσβαση για να συμμετάσχει ξανά σε αυτό το δωμάτιο."</string>
-  <string name="screen_knock_requests_list_ban_alert_title">"Απόρριψη και αποκλεισμός πρόσβασης"</string>
-  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ναι, απόρριψη"</string>
-  <string name="screen_knock_requests_list_decline_alert_description">"Σίγουρα θες να απορρίψεις το αίτημα του χρήστη %1$s να συμμετάσχει στο δωμάτιο;"</string>
-  <string name="screen_knock_requests_list_decline_alert_title">"Απόρριψη πρόσβασης"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Απόρριψη και αποκλεισμός"</string>
-  <string name="screen_knock_requests_list_empty_state_description">"Όταν κάποιος θα ζητήσει να συμμετάσχει στο δωμάτιο, θα μπορείς να δεις το αίτημά του εδώ."</string>
-  <string name="screen_knock_requests_list_empty_state_title">"Δεν υπάρχει εκκρεμές αίτημα συμμετοχής"</string>
-  <string name="screen_knock_requests_list_title">"Αιτήματα συμμετοχής"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
@@ -334,24 +321,30 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Μία ή περισσότερες από τις συσκευές σου δεν έχουν επαληθευτεί. Μπορείς να στείλεις το μήνυμα ούτως ή άλλως, ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα αφού επαληθεύσεις όλες τις συσκευές σου."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Καρφιτσωμένα μηνύματα"</string>
-  <string name="screen_room_details_requests_to_join_title">"Αιτήματα συμμετοχής"</string>
   <string name="screen_room_error_failed_processing_media">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Δεν ήταν δυνατή η ανάκτηση στοιχείων χρήστη"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
-    <item quantity="other">"Οι χρήστες %1$s +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Προβολή όλων"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Αποδοχή"</string>
-  <string name="screen_room_single_knock_request_title">"Ο χρήστης %1$s θέλει να μπει σε αυτό το δωμάτιο"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Προβολή"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Το αίτημα συμμετοχής στάλθηκε"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά κάποιος διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Αίτημα συμμετοχής"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ναι, ενεργοποιήστε την κρυπτογράφηση"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Μόλις ενεργοποιηθεί, η κρυπτογράφηση για ένα δωμάτιο δεν μπορεί να απενεργοποιηθεί. Το ιστορικό μηνυμάτων θα είναι ορατό μόνο για τα μέλη του δωματίου από τότε που προσκλήθηκαν ή από τότε που εντάχθηκαν στην αίθουσα.
+Κανείς εκτός από τα μέλη του δωματίου δεν θα μπορεί να διαβάσει μηνύματα. Αυτό μπορεί να αποτρέψει τη σωστή λειτουργία των bots και των γεφυρών.
+Δεν συνιστούμε να ενεργοποιήσεις την κρυπτογράφηση για δωμάτια στα οποία μπορεί κανείς να βρει και να συμμετάσχει."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Ενεργοποίηση κρυπτογράφησης;"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Μόλις ενεργοποιηθεί, η κρυπτογράφηση δεν μπορεί να απενεργοποιηθεί."</string>
+  <string name="screen_security_and_privacy_encryption_section_title">"Κρυπτογράφηση"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Ενεργοποίηση κρυπτογράφησης από άκρο σε άκρο"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Οποιοσδήποτε μπορεί να βρει και να συμμετάσχει"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Οποιοσδήποτε"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Τα άτομα μπορούν να συμμετάσχουν μόνο εάν έχουν προσκληθεί"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Μόνο πρόσκληση"</string>
+  <string name="screen_security_and_privacy_room_access_section_title">"Πρόσβαση δωματίου"</string>
+  <string name="screen_security_and_privacy_title">"Ασφάλεια &amp; απόρρητο"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_share_my_location_action">"Κοινή χρήση της τοποθεσίας μου"</string>
   <string name="screen_share_open_apple_maps">"Άνοιγμα στο Apple Maps"</string>
@@ -364,4 +357,8 @@
   <string name="screen_view_location_title">"Τοποθεσία"</string>
   <string name="settings_version_number">"Έκδοση: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"el"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Τα ιστορικά μηνύματα δεν είναι διαθέσιμα σε αυτήν τη συσκευή"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση μηνύματος"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Αυτό το μήνυμα αποκλείστηκε είτε επειδή δεν επαλήθευσες τη συσκευή σου είτε επειδή ο αποστολέας πρέπει να επαληθεύσει την ταυτότητά σου."</string>
 </resources>

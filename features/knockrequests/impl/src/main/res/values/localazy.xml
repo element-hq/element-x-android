@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Yes, accept all"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Are you sure you want to accept all requests to join?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Accept all requests"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Accept all"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"We couldn’t accept all requests. Would you like to try again?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Failed to accept all requests"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Accepting all requests to join"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"We couldn’t accept this request. Would you like to try again?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Failed to accept request"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Accepting request to join"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Yes, decline and ban"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Are you sure you want to decline and ban %1$s? This user won’t be able to request access to join this room again."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Decline and ban from accessing"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Declining and banning access"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Yes, decline"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Are you sure you want to decline %1$s request to join this room?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Decline access"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Decline and ban"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"We couldn’t decline this request. Would you like to try again?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Failed to decline request"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Declining request to join"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"When somebody will ask to join the room, you’ll be able to see their request here."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"No pending request to join"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Loading requests to join…"</string>
+  <string name="screen_knock_requests_list_title">"Requests to join"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d other want to join this room"</item>
+    <item quantity="other">"%1$s +%2$d others want to join this room"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"View all"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accept"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s wants to join this room"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"View"</string>
+</resources>

@@ -48,6 +48,7 @@
   <string name="screen_room_details_notification_mode_custom">"سفارشی"</string>
   <string name="screen_room_details_notification_mode_default">"پیش‌گزیده"</string>
   <string name="screen_room_details_notification_title">"آگاهی‌ها"</string>
+  <string name="screen_room_details_pinned_events_row_title">"پیام‌های سنجاق شده"</string>
   <string name="screen_room_details_roles_and_permissions">"نقش‌ها و اجازه‌ها"</string>
   <string name="screen_room_details_room_name_label">"نام اتاق"</string>
   <string name="screen_room_details_security_title">"امنیت"</string>

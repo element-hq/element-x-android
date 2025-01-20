@@ -33,7 +33,7 @@ jobs:
           sudo swapon /mnt/swapfile
           sudo swapon --show
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@v1.2.2
+        uses: nschloe/action-cached-lfs-checkout@v1.2.3
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881

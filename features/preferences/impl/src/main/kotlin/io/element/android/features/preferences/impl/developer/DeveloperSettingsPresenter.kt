@@ -23,6 +23,7 @@ import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -63,7 +64,7 @@ class DeveloperSettingsPresenter @Inject constructor(
             mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized)
         }
         val clearCacheAction = remember {
-            mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)
+            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         val customElementCallBaseUrl by appPreferencesStore
             .getCustomElementCallBaseUrlFlow()
@@ -94,7 +95,7 @@ class DeveloperSettingsPresenter @Inject constructor(
         val featureUiModels = createUiModels(features, enabledFeatures)
         val coroutineScope = rememberCoroutineScope()
         // Compute cache size each time the clear cache action value is changed
-        LaunchedEffect(clearCacheAction.value) {
+        LaunchedEffect(clearCacheAction.value.isSuccess()) {
             computeCacheSize(cacheSize)
         }
 
@@ -180,7 +181,7 @@ class DeveloperSettingsPresenter @Inject constructor(
         }.runCatchingUpdatingState(cacheSize)
     }
 
-    private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncData<Unit>>) = launch {
+    private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             clearCacheUseCase()
         }.runCatchingUpdatingState(clearCacheAction)

@@ -52,6 +52,7 @@
   <string name="screen_room_details_notification_mode_custom">"Aangepast"</string>
   <string name="screen_room_details_notification_mode_default">"Standaard"</string>
   <string name="screen_room_details_notification_title">"Meldingen"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Vastgezette berichten"</string>
   <string name="screen_room_details_roles_and_permissions">"Rollen en rechten"</string>
   <string name="screen_room_details_room_name_label">"Naam van de kamer"</string>
   <string name="screen_room_details_security_title">"Beveiliging"</string>

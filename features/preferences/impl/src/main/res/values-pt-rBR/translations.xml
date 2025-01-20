@@ -3,6 +3,8 @@
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Escolha como receber notificações"</string>
   <string name="screen_advanced_settings_developer_mode">"Modo de desenvolvedor"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Habilite para ter acesso a recursos e funcionalidades para desenvolvedores."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"URL base do Element Call personalizado"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Defina um URL base personalizado para Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desative o editor de rich text para digitar Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Confirmações de leitura"</string>

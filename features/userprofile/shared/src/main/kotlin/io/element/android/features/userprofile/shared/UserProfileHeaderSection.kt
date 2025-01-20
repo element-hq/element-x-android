@@ -75,6 +75,9 @@ fun UserProfileHeaderSection(
                 text = userId.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 textAlign = TextAlign.Center,
             )
         }

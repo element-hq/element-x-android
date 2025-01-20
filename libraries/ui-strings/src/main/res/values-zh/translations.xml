@@ -305,7 +305,6 @@
   <string name="screen_resolve_send_failure_unsigned_device_title">"您的消息未发送，因为%1$s尚未验证所有设备"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"您有未验证的设备。您仍然可以发送消息；也可以暂时取消，并在验证所有设备后稍后重试。"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"您的消息未发送，因为您有尚未验证的设备。"</string>
-  <string name="screen_room_details_pinned_events_row_title">"置顶消息"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>

@@ -102,8 +102,8 @@ From these kotlin bindings we can generate native libs (.so files) and kotlin cl
 
 #### Matrix Rust Component Kotlin
 
-To use these bindings in an android project, we need to wrap this up into an android library (as the form of an .aar file).  
-This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin. 
+To use these bindings in an android project, we need to wrap this up into an android library (as the form of an .aar file).
+This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin.
 This repository is used for distributing kotlin releases of the Matrix Rust SDK.
 It'll provide the corresponding aar and also publish them on maven.
 
@@ -117,41 +117,43 @@ You can also have access to the aars through the [release](https://github.com/ma
 
 #### Build the SDK locally
 
-Easiest way: run the script [../tools/sdk/build_rust_sdk.sh](../tools/sdk/build_rust_sdk.sh) and just answer the questions.
+Prerequisites:
+* Install the Android NDK (Native Development Kit). To do this from within
+  Android Studio:
+    1. **Tools > SDK Manager**
+    2. Click the **SDK Tools** tab.
+    3. Select the **NDK (Side by side)** checkbox
+    4. Click **OK**.
+    5. Click **OK**.
+    6. When the installation is complete, click **Finish**.
+* Install `cargo-ndk`:
+  ```
+  cargo install cargo-ndk
+  ```
+* Install the Android Rust toolchain for your machine's hardware:
+  ```
+  rustup target add aarch64-linux-android x86_64-linux-android
+  ```
+* Depending on the location of the Android SDK, you may need to set
+  `ANDROID_HOME`:
+  ```
+  export ANDROID_HOME=$HOME/android/sdk
+  ```
 
-Legacy way:
+You can then build the Rust SDK by running the script
+[`tools/sdk/build_rust_sdk.sh`](../tools/sdk/build_rust_sdk.sh) and just answering
+the questions.
 
-If you need to locally build the sdk-android you can use
-the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/scripts/build.sh) script.
-
-For this please check the [prerequisites](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/README.md#prerequisites) from the repo.
-
-Checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
-```shell
-git clone git@github.com:matrix-org/matrix-rust-sdk.git
-git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
-```
-
-Then you can launch the build script from the matrix-rust-components-kotlin repository with the following params:
-
-- `-p` Local path to the rust-sdk repository
-- `-o` Optional output path with the expected name of the aar file. By default the aar will be located in the corresponding build/outputs/aar directory.
-- `-r` Flag to build in release mode
-- `-m` Option to select the gradle module to build. Default is sdk.
-- `-t` Option to to select an android target to build against. Default will build for all targets.
-
-So for example to build the sdk against aarch64-linux-android target and copy the generated aar to Element X project:
-
-```shell
-./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
-```
+This will prompt you for the path to the Rust SDK, then build it and
+`matrix-rust-components-kotlin`, eventually producing an aar file at
+`./libraries/rustsdk/matrix-rust-sdk.aar`, which will be picked up
+automatically by the Element X Android build.
 
 Troubleshooting:
  - You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
  - If you get the error `thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', .cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-ndk-2.11.0/src/cli.rs:345:18` try updating your Cargo NDK version. In this case, 2.11.0 is too old so `cargo install cargo-ndk` to install a newer version.
- - If you get the error `Unsupported class file major version 64` try changing your JVM version. In this case, Java 20 is not supported in Gradle yet, so downgrade to an earlier version (Java 17 worked in this case).
-
-You are good to test your local rust development now!
+ - If you get the error `Unsupported class file major version <n>`, try changing your JVM version by setting
+   `JAVA_HOME` and, if building via Android Studio, "File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Gradle JDK".
 
 ### The Android project
 
@@ -262,7 +264,7 @@ Here are the main points:
 
 #### Template and naming
 
-This documentation provides you with the steps to install and use the AS plugin for generating modules in your project. 
+This documentation provides you with the steps to install and use the AS plugin for generating modules in your project.
 The plugin and templates will help you quickly create new features with a standardized structure.
 
 A. Installation
@@ -276,7 +278,7 @@ Follow these steps to install and configure the plugin and templates:
    - Navigate to File/Manage IDE Settings/Import Settings
    - Pick the `tmp/file_templates.zip` files
    - Click on OK
-4. Configure generate-module-from-template plugin : 
+4. Configure generate-module-from-template plugin :
    - Navigate to AS/Settings/Tools/Module Template Settings
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`
@@ -296,9 +298,9 @@ Example for a new feature called RoomDetails:
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
 7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
-   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`. 
+   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`.
    Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
-   
+
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
 suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.

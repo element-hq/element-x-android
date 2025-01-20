@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"Biometrické ověřování"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrické odemknutí"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Odemkněte pomocí biometrie"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Potvrďte biometrické údaje"</string>
   <string name="screen_app_lock_forgot_pin">"Zapomněli jste PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"Změnit PIN kód"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Povolit biometrické odemykání"</string>

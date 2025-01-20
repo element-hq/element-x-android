@@ -17,10 +17,12 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -158,6 +160,7 @@ class RoomMemberDetailsPresenterTest {
     }
 
     private fun createRoomMemberDetailsPresenter(
+        buildMeta: BuildMeta = aBuildMeta(),
         room: MatrixRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory = UserProfilePresenterFactory {
             Presenter {
@@ -170,6 +173,7 @@ class RoomMemberDetailsPresenterTest {
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
             roomMemberId = UserId("@alice:server.org"),
+            buildMeta = buildMeta,
             room = room,
             userProfilePresenterFactory = userProfilePresenterFactory
         )

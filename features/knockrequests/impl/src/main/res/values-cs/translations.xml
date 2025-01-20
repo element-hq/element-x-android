@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ano, přijmout všechny"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Opravdu chcete přijmout všechny žádosti o vstup?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Přijmout všechny požadavky"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Přijmout vše"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Nemohli jsme přijmout všechny žádosti. Chcete to zkusit znovu?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Nepodařilo se přijmout všechny žádosti"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Přijímání všech žádostí o vstup"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Tuto žádost jsme nemohli přijmout. Chcete to zkusit znovu?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Žádost se nepodařilo přijmout"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Přijímání žádosti o vstup"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ano, odmítnout a vykázat"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Opravdu chcete odmítnout a vykázat %1$s? Tento uživatel nebude moci znovu požádat o vstup do této místnosti."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Odmítnout a zakázat vstup"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Odmítání vstupu a vykázání"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ano, odmítnout"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Opravdu chcete odmítnout %1$s žádost o vstup do této místnosti?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Odmítnout vstup"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmítnout a vykázat"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Tuto žádost jsme nemohli odmítnout. Chcete to zkusit znovu?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Žádost se nepodařilo odmítnout"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Odmítání žádosti o vstup"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Když někdo požádá o vstup do místnosti, uvidíte jeho žádost zde."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Žádná čekající žádost o vstup"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Načítání žádostí o vstup…"</string>
+  <string name="screen_knock_requests_list_title">"Žádosti o vstup"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d další chce vstoupit do této místnosti"</item>
+    <item quantity="few">"%1$s +%2$d další chtějí vstoupit do této místnosti"</item>
+    <item quantity="other">"%1$s +%2$d dalších chce vstoupit do této místnosti"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobrazit vše"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Přijmout"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s chce vstoupit do této místnosti"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Zobrazit"</string>
+</resources>

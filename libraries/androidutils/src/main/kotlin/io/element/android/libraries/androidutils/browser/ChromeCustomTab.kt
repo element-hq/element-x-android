@@ -10,10 +10,13 @@ package io.element.android.libraries.androidutils.browser
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.net.Uri
+import android.os.Bundle
+import android.provider.Browser
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import java.util.Locale
 
 /**
  * Open url in custom tab or, if not available, in the default browser.
@@ -51,6 +54,9 @@ fun Activity.openUrlInChromeCustomTab(
                 intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_DOWNLOAD_BUTTON", true)
                 // Disable bookmark button
                 intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_START_BUTTON", true)
+                intent.putExtra(Browser.EXTRA_HEADERS, Bundle().apply {
+                    putString("Accept-Language", Locale.getDefault().toLanguageTag())
+                })
             }
             .launchUrl(this, Uri.parse(url))
     } catch (activityNotFoundException: ActivityNotFoundException) {

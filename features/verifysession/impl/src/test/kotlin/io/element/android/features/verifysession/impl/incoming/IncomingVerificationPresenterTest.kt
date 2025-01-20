@@ -9,9 +9,8 @@ package io.element.android.features.verifysession.impl.incoming
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
-import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.FlowId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -56,7 +55,7 @@ class IncomingVerificationPresenterTest {
                 IncomingVerificationState.Step.Initial(
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
-                    formattedSignInTime = A_FORMATTED_DATE,
+                    formattedSignInTime = "567 TimeOrDate false",
                     isWaiting = false,
                 )
             )
@@ -119,7 +118,7 @@ class IncomingVerificationPresenterTest {
                 IncomingVerificationState.Step.Initial(
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
-                    formattedSignInTime = A_FORMATTED_DATE,
+                    formattedSignInTime = "567 TimeOrDate false",
                     isWaiting = false,
                 )
             )
@@ -178,7 +177,7 @@ class IncomingVerificationPresenterTest {
                 IncomingVerificationState.Step.Initial(
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
-                    formattedSignInTime = A_FORMATTED_DATE,
+                    formattedSignInTime = "567 TimeOrDate false",
                     isWaiting = false,
                 )
             )
@@ -210,7 +209,7 @@ class IncomingVerificationPresenterTest {
                 IncomingVerificationState.Step.Initial(
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
-                    formattedSignInTime = A_FORMATTED_DATE,
+                    formattedSignInTime = "567 TimeOrDate false",
                     isWaiting = false,
                 )
             )
@@ -281,7 +280,7 @@ class IncomingVerificationPresenterTest {
         sessionVerificationRequestDetails: SessionVerificationRequestDetails = aSessionVerificationRequestDetails,
         navigator: IncomingVerificationNavigator = IncomingVerificationNavigator { lambdaError() },
         service: SessionVerificationService = FakeSessionVerificationService(),
-        dateFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(A_FORMATTED_DATE),
+        dateFormatter: DateFormatter = FakeDateFormatter(),
     ) = IncomingVerificationPresenter(
         sessionVerificationRequestDetails = sessionVerificationRequestDetails,
         navigator = navigator,

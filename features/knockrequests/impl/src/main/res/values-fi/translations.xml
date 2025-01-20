@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Kyllä, hyväksy kaikki"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Haluatko varmasti hyväksyä kaikki liittymispyynnöt?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Hyväksy kaikki pyynnöt"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Hyväksy kaikki"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Kyllä, hylkää ja anna porttikielto"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Haluatko varmasti hylätä käyttäjän %1$s pyynnön liittyä huoneeseen ja antaa hänelle porttikiellon? Hän ei voi enää pyytää lupaa liittyä tähän huoneeseen."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Hylkää ja anna porttikielto"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Kyllä, hylkää"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Haluatko varmasti hylätä käyttäjän %1$s pyynnön liittyä tähän huoneeseen?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Hylkää pyyntö"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Hylkää ja anna porttikielto"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Kun joku pyytää liittyä huoneeseen, näet hänen pyyntönsä täällä."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Ei odottavia liittymispyyntöjä"</string>
+  <string name="screen_knock_requests_list_title">"Liittymispyynnöt"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d muu haluavat liittyä tähän huoneeseen"</item>
+    <item quantity="other">"%1$s +%2$d muuta haluavat liittyä tähän huoneeseen"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Näytä kaikki"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Hyväksy"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s haluaa liittyä tähän huoneeseen"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Näytä"</string>
+</resources>

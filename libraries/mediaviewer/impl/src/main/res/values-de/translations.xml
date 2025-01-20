@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_loading_files">"Dateien werden geladen…"</string>
+  <string name="screen_media_browser_list_loading_media">"Medien werden geladen…"</string>
+  <string name="screen_media_browser_list_mode_files">"Dateien"</string>
+  <string name="screen_media_browser_list_mode_media">"Medien"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"In diesen Chatroom hochgeladene Bilder und Videos werden hier angezeigt."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Noch keine Medien hochgeladen"</string>
+  <string name="screen_media_browser_title">"Medien und Dateien"</string>
+  <string name="screen_media_details_file_format">"Dateiformat"</string>
+  <string name="screen_media_details_filename">"Dateiname"</string>
+  <string name="screen_media_details_uploaded_by">"Hochgeladen von"</string>
+  <string name="screen_media_details_uploaded_on">"Hochgeladen am"</string>
+</resources>

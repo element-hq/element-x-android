@@ -20,7 +20,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -37,7 +38,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
     @Assisted private val navigator: IncomingVerificationNavigator,
     private val sessionVerificationService: SessionVerificationService,
     private val stateMachine: IncomingVerificationStateMachine,
-    private val dateFormatter: LastMessageTimestampFormatter,
+    private val dateFormatter: DateFormatter,
 ) : Presenter<IncomingVerificationState> {
     @AssistedFactory
     interface Factory {
@@ -59,7 +60,10 @@ class IncomingVerificationPresenter @AssistedInject constructor(
         }
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
         val formattedSignInTime = remember {
-            dateFormatter.format(sessionVerificationRequestDetails.firstSeenTimestamp)
+            dateFormatter.format(
+                timestamp = sessionVerificationRequestDetails.firstSeenTimestamp,
+                mode = DateFormatterMode.TimeOrDate,
+            )
         }
         val step by remember {
             derivedStateOf {

@@ -3,11 +3,22 @@
   <string name="screen_create_room_action_create_room">"Nuova stanza"</string>
   <string name="screen_create_room_add_people_title">"Invita persone"</string>
   <string name="screen_create_room_error_creating_room">"Si è verificato un errore durante la creazione della stanza"</string>
-  <string name="screen_create_room_private_option_description">"I messaggi in questa stanza sono cifrati. La crittografia non può essere disattivata in seguito."</string>
-  <string name="screen_create_room_private_option_title">"Stanza privata (solo su invito)"</string>
-  <string name="screen_create_room_public_option_description">"I messaggi non sono cifrati e chiunque può leggerli. Puoi attivare la crittografia in un secondo momento."</string>
-  <string name="screen_create_room_public_option_title">"Stanza pubblica (chiunque)"</string>
+  <string name="screen_create_room_private_option_description">"Solo le persone invitate possono accedere a questa stanza. Tutti i messaggi sono cifrati end-to-end."</string>
+  <string name="screen_create_room_private_option_title">"Stanza privata"</string>
+  <string name="screen_create_room_public_option_description">"Chiunque può trovare questa stanza.
+Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
+  <string name="screen_create_room_public_option_title">"Stanza pubblica"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Chiunque può entrare in questa stanza"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_title">"Chiunque"</string>
+  <string name="screen_create_room_room_access_section_header">"Accesso alla stanza"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Chiunque può chiedere di entrare nella stanza, ma un amministratore o un moderatore dovrà accettare la richiesta"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Chiedi di entrare"</string>
+  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ &amp; \'() * +/; =? @ [] - . _"</string>
+  <string name="screen_create_room_room_address_not_available_error_description">"L\'indirizzo di questa stanza esiste già. Prova a modificare il campo dell\'indirizzo o a cambiare il nome della stanza"</string>
+  <string name="screen_create_room_room_address_section_footer">"Affinché questa stanza sia visibile nell\'elenco delle stanze pubbliche, è necessario un indirizzo della stanza."</string>
+  <string name="screen_create_room_room_address_section_title">"Indirizzo della stanza"</string>
   <string name="screen_create_room_room_name_label">"Nome stanza"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Visibilità della stanza"</string>
   <string name="screen_create_room_title">"Crea una stanza"</string>
   <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>

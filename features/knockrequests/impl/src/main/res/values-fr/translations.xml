@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Oui, tout accepter"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Êtes-vous sûr de vouloir accepter toutes les demandes pour rejoindre le salon ?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Tout accepter"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Tout accepter"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Toutes les demandes n’ont pas pu être acceptées. Voulez-vous réessayer ?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Toutes les demandes n’ont pas été acceptées"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Accepter toutes les demandes à rejoindre"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"La demande n’a pas pu être acceptée. Voulez-vous réessayer ?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Impossible d’accepter la demande"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Accepter la demande à rejoindre"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Oui, rejeter et bannir"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Êtes-vous sûr de vouloir rejeter la demande et bannir %1$s ? Cet utilisateur ne pourra pas demander à nouveau à rejoindre ce salon."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Refuser et interdire l’accès"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"En cours de traitement…"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Oui, refuser"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Êtes-vous sûr de vouloir refuser la demande de %1$s à rejoindre le salon ?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Refuser l’accès"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Refuser et bannir"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Nous n’avons pas pu refuser cette demande. Voulez-vous réessayer ?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Echec"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Traitement en cours…"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Lorsque quelqu’un demandera à rejoindre le salon, vous pourrez voir sa demande ici."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Personne ne demande à rejoindre le salon"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Chargement…"</string>
+  <string name="screen_knock_requests_list_title">"Demandes en attente"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s et %2$d autre personne souhaitent rejoindre ce salon"</item>
+    <item quantity="other">"%1$s et %2$d autres personnes souhaitent rejoindre ce salon"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Tout afficher"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accepter"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s souhaite rejoindre ce salon"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Voir"</string>
+</resources>

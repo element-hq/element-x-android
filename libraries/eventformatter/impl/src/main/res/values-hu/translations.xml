@@ -28,8 +28,8 @@
   <string name="state_event_room_invite_you">"%1$s meghívta"</string>
   <string name="state_event_room_join">"%1$s csatlakozott a szobához"</string>
   <string name="state_event_room_join_by_you">"Csatlakozott a szobához"</string>
-  <string name="state_event_room_knock">"%1$s kérte, hogy csatlakozhasson"</string>
-  <string name="state_event_room_knock_accepted">"%1$s engedélyezte, hogy %2$s csatlakozhasson"</string>
+  <string name="state_event_room_knock">"%1$s kéri, hogy csatlakozhasson"</string>
+  <string name="state_event_room_knock_accepted">"%1$s hozzáférést kapott a következőhöz: %2$s"</string>
   <string name="state_event_room_knock_accepted_by_you">"Engedélyezte, hogy %1$s csatlakozhasson"</string>
   <string name="state_event_room_knock_by_you">"Kérte, hogy csatlakozhasson"</string>
   <string name="state_event_room_knock_denied">"%1$s elutasította %2$s kérését, hogy csatlakozhasson"</string>

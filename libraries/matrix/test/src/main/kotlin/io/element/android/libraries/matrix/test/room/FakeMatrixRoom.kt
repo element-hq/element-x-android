@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -48,12 +49,14 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.test.TestScope
 import java.io.File
 
 class FakeMatrixRoom(
@@ -72,6 +75,7 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     override val liveTimeline: Timeline = FakeTimeline(),
+    override val roomCoroutineScope: CoroutineScope = TestScope(),
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
     private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },
@@ -133,6 +137,7 @@ class FakeMatrixRoom(
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
     private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
     private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
+    private val mediaTimelineResult: () -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -160,6 +165,13 @@ class FakeMatrixRoom(
 
     fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
         _identityStateChangesFlow.tryEmit(identityStateChanges)
+    }
+
+    private val _knockRequestsFlow: MutableSharedFlow<List<KnockRequest>> = MutableSharedFlow(replay = 1)
+    override val knockRequestsFlow: Flow<List<KnockRequest>> = _knockRequestsFlow
+
+    fun emitKnockRequests(knockRequests: List<KnockRequest>) {
+        _knockRequestsFlow.tryEmit(knockRequests)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
@@ -201,6 +213,10 @@ class FakeMatrixRoom(
 
     override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
         pinnedEventsTimelineResult()
+    }
+
+    override suspend fun mediaTimeline(): Result<Timeline> = simulateLongTask {
+        mediaTimelineResult()
     }
 
     override suspend fun subscribeToSync() {
@@ -568,6 +584,10 @@ class FakeMatrixRoom(
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
+    }
+
+    override suspend fun clearEventCacheStorage(): Result<Unit> {
+        return Result.success(Unit)
     }
 }
 

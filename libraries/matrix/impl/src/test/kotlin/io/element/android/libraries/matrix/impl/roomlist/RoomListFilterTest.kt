@@ -34,6 +34,9 @@ class RoomListFilterTest {
     private val roomToSearch = aRoomSummary(
         name = "Room to search"
     )
+    private val roomWithAccent = aRoomSummary(
+        name = "Frédéric"
+    )
     private val invitedRoom = aRoomSummary(
         currentUserMembership = CurrentUserMembership.INVITED
     )
@@ -45,6 +48,7 @@ class RoomListFilterTest {
         markedAsUnreadRoom,
         unreadNotificationRoom,
         roomToSearch,
+        roomWithAccent,
         invitedRoom
     )
 
@@ -69,7 +73,14 @@ class RoomListFilterTest {
     @Test
     fun `Room list filter group`() = runTest {
         val filter = RoomListFilter.Category.Group
-        assertThat(roomSummaries.filter(filter)).containsExactly(regularRoom, favoriteRoom, markedAsUnreadRoom, unreadNotificationRoom, roomToSearch)
+        assertThat(roomSummaries.filter(filter)).containsExactly(
+            regularRoom,
+            favoriteRoom,
+            markedAsUnreadRoom,
+            unreadNotificationRoom,
+            roomToSearch,
+            roomWithAccent,
+        )
     }
 
     @Test
@@ -94,6 +105,18 @@ class RoomListFilterTest {
     fun `Room list filter normalized match room name`() = runTest {
         val filter = RoomListFilter.NormalizedMatchRoomName("search")
         assertThat(roomSummaries.filter(filter)).containsExactly(roomToSearch)
+    }
+
+    @Test
+    fun `Room list filter normalized match room name with accent`() = runTest {
+        val filter = RoomListFilter.NormalizedMatchRoomName("Fred")
+        assertThat(roomSummaries.filter(filter)).containsExactly(roomWithAccent)
+    }
+
+    @Test
+    fun `Room list filter normalized match room name with accent when searching with accent`() = runTest {
+        val filter = RoomListFilter.NormalizedMatchRoomName("Fréd")
+        assertThat(roomSummaries.filter(filter)).containsExactly(roomWithAccent)
     }
 
     @Test

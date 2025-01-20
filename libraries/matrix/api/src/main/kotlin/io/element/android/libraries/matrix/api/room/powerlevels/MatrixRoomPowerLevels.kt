@@ -58,6 +58,13 @@ suspend fun MatrixRoom.canRedactOwn(): Result<Boolean> = canUserRedactOwn(sessio
 suspend fun MatrixRoom.canRedactOther(): Result<Boolean> = canUserRedactOther(sessionId)
 
 /**
+ * Shortcut for checking if current user can handle knock requests.
+ */
+suspend fun MatrixRoom.canHandleKnockRequests(): Result<Boolean> = runCatching {
+    canInvite().getOrThrow() || canBan().getOrThrow() || canKick().getOrThrow()
+}
+
+/**
  * Shortcut for calling [MatrixRoom.canUserPinUnpin] with our own user.
  */
 suspend fun MatrixRoom.canPinUnpin(): Result<Boolean> = canUserPinUnpin(sessionId)

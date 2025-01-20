@@ -52,6 +52,7 @@
   <string name="screen_room_details_notification_mode_custom">"自定义"</string>
   <string name="screen_room_details_notification_mode_default">"默认"</string>
   <string name="screen_room_details_notification_title">"通知"</string>
+  <string name="screen_room_details_pinned_events_row_title">"置顶消息"</string>
   <string name="screen_room_details_roles_and_permissions">"角色与权限"</string>
   <string name="screen_room_details_room_name_label">"聊天室名称"</string>
   <string name="screen_room_details_security_title">"安全"</string>

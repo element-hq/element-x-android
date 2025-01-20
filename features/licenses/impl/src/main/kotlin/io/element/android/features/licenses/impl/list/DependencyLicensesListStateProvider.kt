@@ -11,26 +11,47 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.licenses.impl.model.DependencyLicenseItem
 import io.element.android.features.licenses.impl.model.License
 import io.element.android.libraries.architecture.AsyncData
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 open class DependencyLicensesListStateProvider : PreviewParameterProvider<DependencyLicensesListState> {
     override val values: Sequence<DependencyLicensesListState>
         get() = sequenceOf(
-            DependencyLicensesListState(
+            aDependencyLicensesListState(
                 licenses = AsyncData.Loading()
             ),
-            DependencyLicensesListState(
+            aDependencyLicensesListState(
                 licenses = AsyncData.Failure(Exception("Failed to load licenses"))
             ),
-            DependencyLicensesListState(
+            aDependencyLicensesListState(
                 licenses = AsyncData.Success(
                     persistentListOf(
                         aDependencyLicenseItem(),
                         aDependencyLicenseItem(name = null),
                     )
                 )
-            )
+            ),
+            aDependencyLicensesListState(
+                licenses = AsyncData.Success(
+                    persistentListOf(
+                        aDependencyLicenseItem(),
+                        aDependencyLicenseItem(name = null),
+                    )
+                ),
+                filter = "a filter",
+            ),
         )
+}
+
+private fun aDependencyLicensesListState(
+    licenses: AsyncData<ImmutableList<DependencyLicenseItem>>,
+    filter: String = "",
+): DependencyLicensesListState {
+    return DependencyLicensesListState(
+        licenses = licenses,
+        filter = filter,
+        eventSink = {},
+    )
 }
 
 internal fun aDependencyLicenseItem(

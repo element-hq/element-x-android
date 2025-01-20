@@ -16,6 +16,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
@@ -26,6 +27,7 @@ import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
  */
 class RoomMemberDetailsPresenter @AssistedInject constructor(
     @Assisted private val roomMemberId: UserId,
+    private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
     userProfilePresenterFactory: UserProfilePresenterFactory,
 ) : Presenter<UserProfileState> {
@@ -61,6 +63,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val userProfileState = userProfilePresenter.present()
 
         return userProfileState.copy(
+            isDebugBuild = buildMeta.isDebuggable,
             userName = roomUserName ?: userProfileState.userName,
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
         )

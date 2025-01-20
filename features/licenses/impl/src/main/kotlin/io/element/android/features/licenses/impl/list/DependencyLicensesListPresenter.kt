@@ -29,6 +29,10 @@ class DependencyLicensesListPresenter @Inject constructor(
         var licenses by remember {
             mutableStateOf<AsyncData<ImmutableList<DependencyLicenseItem>>>(AsyncData.Loading())
         }
+        var filteredLicenses by remember {
+            mutableStateOf<AsyncData<ImmutableList<DependencyLicenseItem>>>(AsyncData.Loading())
+        }
+        var filter by remember { mutableStateOf("") }
         LaunchedEffect(Unit) {
             runCatching {
                 licenses = AsyncData.Success(licensesProvider.provides().toPersistentList())
@@ -36,6 +40,32 @@ class DependencyLicensesListPresenter @Inject constructor(
                 licenses = AsyncData.Failure(it)
             }
         }
-        return DependencyLicensesListState(licenses = licenses)
+        LaunchedEffect(filter, licenses.dataOrNull()) {
+            val data = licenses.dataOrNull()
+            val safeFilter = filter.trim()
+            if (data != null && safeFilter.isNotEmpty()) {
+                filteredLicenses = AsyncData.Success(data.filter {
+                    it.safeName.contains(safeFilter, ignoreCase = true) ||
+                        it.groupId.contains(safeFilter, ignoreCase = true) ||
+                        it.artifactId.contains(safeFilter, ignoreCase = true)
+                }.toPersistentList())
+            } else {
+                filteredLicenses = licenses
+            }
+        }
+
+        fun handleEvent(dependencyLicensesListEvent: DependencyLicensesListEvent) {
+            when (dependencyLicensesListEvent) {
+                is DependencyLicensesListEvent.SetFilter -> {
+                    filter = dependencyLicensesListEvent.filter
+                }
+            }
+        }
+
+        return DependencyLicensesListState(
+            licenses = filteredLicenses,
+            filter = filter,
+            eventSink = ::handleEvent,
+        )
     }
 }

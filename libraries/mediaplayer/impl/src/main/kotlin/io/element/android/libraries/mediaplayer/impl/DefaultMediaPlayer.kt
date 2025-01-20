@@ -15,7 +15,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -36,6 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 @SingleIn(RoomScope::class)
 class DefaultMediaPlayer @Inject constructor(
     private val player: SimplePlayer,
+    private val coroutineScope: CoroutineScope,
 ) : MediaPlayer {
     private val listener = object : SimplePlayer.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -47,7 +47,7 @@ class DefaultMediaPlayer @Inject constructor(
                 )
             }
             if (isPlaying) {
-                job = scope.launch { updateCurrentPosition() }
+                job = coroutineScope.launch { updateCurrentPosition() }
             } else {
                 job?.cancel()
             }
@@ -79,7 +79,6 @@ class DefaultMediaPlayer @Inject constructor(
         player.addListener(listener)
     }
 
-    private val scope = CoroutineScope(Job() + Dispatchers.Main)
     private var job: Job? = null
 
     private val _state = MutableStateFlow(
@@ -102,7 +101,8 @@ class DefaultMediaPlayer @Inject constructor(
         mimeType: String,
         startPositionMs: Long,
     ): MediaPlayer.State {
-        player.pause() // Must pause here otherwise if the player was playing it would keep on playing the new media item.
+        // Must pause here otherwise if the player was playing it would keep on playing the new media item.
+        player.pause()
         player.clearMediaItems()
         player.setMediaItem(
             MediaItem.Builder()
@@ -129,11 +129,9 @@ class DefaultMediaPlayer @Inject constructor(
             player.getCurrentMediaItem()?.let {
                 player.setMediaItem(it, 0)
                 player.prepare()
-                player.play()
             }
-        } else {
-            player.play()
         }
+        player.play()
     }
 
     override fun pause() {

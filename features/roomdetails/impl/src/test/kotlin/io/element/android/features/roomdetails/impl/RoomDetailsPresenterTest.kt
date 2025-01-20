@@ -84,6 +84,7 @@ class RoomDetailsPresenterTest {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(
                     roomMemberId = roomMemberId,
+                    buildMeta = buildMeta,
                     room = room,
                     userProfilePresenterFactory = {
                         Presenter { aUserProfileState() }

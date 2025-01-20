@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Ce fichier sera supprimé du salon et les membres n’y auront plus accès."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Supprimer le fichier ?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Les documents, les fichiers audio et les messages vocaux envoyés dans ce salon seront affichés ici."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Aucun fichier n’a encore été envoyé"</string>
+  <string name="screen_media_browser_list_loading_files">"Chargement des fichiers…"</string>
+  <string name="screen_media_browser_list_loading_media">"Chargement des médias…"</string>
+  <string name="screen_media_browser_list_mode_files">"Fichiers"</string>
+  <string name="screen_media_browser_list_mode_media">"Média"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Les images et vidéos envoyées dans ce salon seront affichées ici."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Aucun média n’a encore été envoyé dans ce salon"</string>
+  <string name="screen_media_browser_title">"Médias et fichiers"</string>
+  <string name="screen_media_details_file_format">"Format du fichier"</string>
+  <string name="screen_media_details_filename">"Nom du fichier"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Ce fichier sera supprimé du salon et les membres n’y auront plus accès."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Supprimer le fichier ?"</string>
+  <string name="screen_media_details_uploaded_by">"Envoyé par"</string>
+  <string name="screen_media_details_uploaded_on">"Envoyé le"</string>
+</resources>

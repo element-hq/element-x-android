@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
+import io.element.android.libraries.core.extensions.withoutAccents
+
 sealed interface RoomListFilter {
     companion object {
         /**
@@ -73,5 +75,7 @@ sealed interface RoomListFilter {
      */
     data class NormalizedMatchRoomName(
         val pattern: String
-    ) : RoomListFilter
+    ) : RoomListFilter {
+        val normalizedPattern: String = pattern.withoutAccents()
+    }
 }

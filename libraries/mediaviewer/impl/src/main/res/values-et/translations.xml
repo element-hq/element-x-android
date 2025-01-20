@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Järgnevaga eemaldame selle faili jututoast ka tema liikmed enam ei pääse failile ligi."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Kas kustutame faili?"</string>
+  <string name="screen_media_browser_list_loading_files">"Laadime faile…"</string>
+  <string name="screen_media_browser_list_loading_media">"Laadime meediat…"</string>
+  <string name="screen_media_browser_list_mode_files">"Failid"</string>
+  <string name="screen_media_browser_list_mode_media">"Meedia"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Antud jututuppa üleslaaditud pildid ja videod kuvatakse siin."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Mitte keegi pole veel meediat üles laadinud"</string>
+  <string name="screen_media_browser_title">"Meedia ja failid"</string>
+  <string name="screen_media_details_file_format">"Failivorming"</string>
+  <string name="screen_media_details_filename">"Failinimi"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Järgnevaga eemaldame selle faili jututoast ja tema liikmed enam ei pääse failile ligi."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Kas kustutame faili?"</string>
+  <string name="screen_media_details_uploaded_by">"Üleslaadija"</string>
+  <string name="screen_media_details_uploaded_on">"Üleslaaditud"</string>
+</resources>

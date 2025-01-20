@@ -48,8 +48,10 @@
   <string name="action_confirm_password">"Potvrdit heslo"</string>
   <string name="action_continue">"Pokračovat"</string>
   <string name="action_copy">"Kopírovat"</string>
+  <string name="action_copy_caption">"Kopírovat titulek"</string>
   <string name="action_copy_link">"Kopírovat odkaz"</string>
   <string name="action_copy_link_to_message">"Kopírovat odkaz na zprávu"</string>
+  <string name="action_copy_text">"Kopírovat text"</string>
   <string name="action_create">"Vytvořit"</string>
   <string name="action_create_a_room">"Vytvořit místnost"</string>
   <string name="action_deactivate">"Deaktivovat"</string>
@@ -96,6 +98,7 @@
   <string name="action_reject">"Odmítnout"</string>
   <string name="action_remove">"Odstranit"</string>
   <string name="action_remove_caption">"Odstranit titulek"</string>
+  <string name="action_remove_message">"Odstranit zprávu"</string>
   <string name="action_reply">"Odpovědět"</string>
   <string name="action_reply_in_thread">"Odpovědět ve vlákně"</string>
   <string name="action_report_bug">"Nahlásit chybu"</string>
@@ -126,6 +129,7 @@
   <string name="action_view_in_timeline">"Zobrazit na časové ose"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
+  <string name="action_yes_try_again">"Ano, zkusit znovu"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_adding_caption">"Přidání titulku"</string>
@@ -147,6 +151,7 @@
   <string name="common_device_id">"ID zařízení"</string>
   <string name="common_direct_chat">"Přímý chat"</string>
   <string name="common_do_not_show_this_again">"Znovu nezobrazovat"</string>
+  <string name="common_downloading">"Stahování"</string>
   <string name="common_edited_suffix">"(upraveno)"</string>
   <string name="common_editing">"Úpravy"</string>
   <string name="common_editing_caption">"Úprava titulku"</string>
@@ -300,12 +305,8 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Přijmout vše"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmítnout a vykázat"</string>
-  <string name="screen_knock_requests_list_empty_state_description">"Když někdo požádá o vstup do místnosti, uvidíte jeho žádost zde."</string>
-  <string name="screen_knock_requests_list_empty_state_title">"Žádná čekající žádost o vstup"</string>
-  <string name="screen_knock_requests_list_title">"Žádosti o vstup"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
@@ -326,25 +327,30 @@ Důvod: %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
-  <string name="screen_room_details_requests_to_join_title">"Žádosti o vstup"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
-  <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="one">"%1$s +%2$d další chce vstoupit do této místnosti"</item>
-    <item quantity="few">"%1$s +%2$d další chtějí vstoupit do této místnosti"</item>
-    <item quantity="other">"%1$s +%2$d dalších chce vstoupit do této místnosti"</item>
-  </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
-  <string name="screen_room_single_knock_request_accept_button_title">"Přijmout"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s chce vstoupit do této místnosti"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Zobrazit"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Požádat o vstup"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ano, povolit šifrování"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Po aktivaci nelze šifrování místnosti deaktivovat. Historie zpráv bude viditelná pouze pro členy místnosti od doby, kdy byli pozváni nebo od té doby, co do místnosti vstoupili.
+Nikdo kromě členů místnosti nebude moci číst zprávy. To může bránit správnému fungování robotů a propojení.
+Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli najít a vstoupit do nich."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Povolit šifrování?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Jakmile je povoleno, šifrování nelze zakázat."</string>
+  <string name="screen_security_and_privacy_encryption_section_title">"Šifrování"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Povolit koncové šifrování"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Každý může najít a vstoupit"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kdokoliv"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Lidé mohou vstoupit, pouze pokud jsou pozváni"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Pouze pro zvané"</string>
+  <string name="screen_security_and_privacy_room_access_section_title">"Přístup do místnosti"</string>
+  <string name="screen_security_and_privacy_title">"Zabezpečení a soukromí"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
@@ -357,4 +363,8 @@ Důvod: %1$s."</string>
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historické zprávy nejsou na tomto zařízení k dispozici"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemáte přístup k této zprávě"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nelze dešifrovat zprávu"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši totožnost."</string>
 </resources>

@@ -275,7 +275,8 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
-            TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
+            TimelineItemAction.Edit,
+            TimelineItemAction.EditPoll -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
             TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)

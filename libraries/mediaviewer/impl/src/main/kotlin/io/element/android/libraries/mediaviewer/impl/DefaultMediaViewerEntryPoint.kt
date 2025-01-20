@@ -14,6 +14,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -41,19 +42,23 @@ class DefaultMediaViewerEntryPoint @Inject constructor() : MediaViewerEntryPoint
                 val mimeType = MimeTypes.Images
                 return params(
                     MediaViewerEntryPoint.Params(
+                        eventId = null,
                         mediaInfo = MediaInfo(
                             filename = filename,
                             caption = null,
                             mimeType = mimeType,
                             formattedFileSize = "",
                             fileExtension = "",
+                            senderId = UserId("@dummy:server.org"),
                             senderName = null,
+                            senderAvatar = null,
                             dateSent = null,
+                            dateSentFull = null,
+                            waveform = null,
                         ),
                         mediaSource = MediaSource(url = avatarUrl),
                         thumbnailSource = null,
-                        canDownload = false,
-                        canShare = false,
+                        canShowInfo = false,
                     )
                 )
             }
