@@ -60,6 +60,7 @@ Prova att logga in manuellt eller skanna QR-koden med en annan enhet."</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Välj %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"”Länka ny enhet”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Skanna QR-koden med den här enheten"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Endast tillgängligt om din kontoleverantör stöder det."</string>
   <string name="screen_qr_code_login_initial_state_title">"Öppna %1$s på en annan enhet för att få QR-koden"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Använd QR-koden som visas på den andra enheten."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Försök igen"</string>

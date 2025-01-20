@@ -17,6 +17,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Avböj chatt"</string>
   <string name="screen_invites_empty_list">"Inga inbjudningar"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) bjöd in dig"</string>
+  <string name="screen_join_room_knock_sent_title">"Begäran om att gå med skickad"</string>
   <string name="screen_migration_message">"Detta är en engångsprocess, tack för att du väntar."</string>
   <string name="screen_migration_title">"Konfigurerar ditt konto"</string>
   <string name="screen_roomlist_a11y_create_message">"Skapa en ny konversation eller ett nytt rum"</string>
