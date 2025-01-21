@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
@@ -35,6 +36,7 @@ interface MediaGalleryDataSource {
 }
 
 @SingleIn(RoomScope::class)
+@ContributesBinding(RoomScope::class)
 class TimelineMediaGalleryDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
@@ -62,7 +64,9 @@ class TimelineMediaGalleryDataSource @Inject constructor(
                     timeline = it
                     emit(it)
                 },
-                { groupedMediaItemsFlow.emit(AsyncData.Failure(it)) },
+                {
+                    groupedMediaItemsFlow.emit(AsyncData.Failure(it))
+                },
             )
         }.flatMapLatest { timeline ->
             timeline.timelineItems.onEach {

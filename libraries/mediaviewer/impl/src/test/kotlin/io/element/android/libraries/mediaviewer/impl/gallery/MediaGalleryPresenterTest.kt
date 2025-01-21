@@ -8,12 +8,12 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.net.Uri
+import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
-import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -25,15 +25,11 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
-import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -47,49 +43,37 @@ class MediaGalleryPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
-        val navigator = FakeMediaGalleryNavigator(
-            onViewInTimelineClickLambda = onViewInTimelineClickLambda,
-        )
+        val startLambda = lambdaRecorder<Unit> { }
         val presenter = createMediaGalleryPresenter(
-            navigator = navigator,
+            mediaGalleryDataSource = FakeMediaGalleryDataSource(
+                startLambda = startLambda,
+            ),
             room = FakeMatrixRoom(
                 displayName = A_ROOM_NAME,
                 mediaTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             assertThat(initialState.roomName).isEqualTo(A_ROOM_NAME)
-            assertThat(initialState.groupedMediaItems.dataOrNull()).isEqualTo(
-                GroupedMediaItems(
-                    imageAndVideoItems = persistentListOf(),
-                    fileItems = persistentListOf(),
-                )
-            )
+            assertThat(initialState.groupedMediaItems.isUninitialized()).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
         }
+        startLambda.assertions().isCalledOnce()
     }
 
     @Test
     fun `present - change mode`() = runTest {
-        val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
-        val navigator = FakeMediaGalleryNavigator(
-            onViewInTimelineClickLambda = onViewInTimelineClickLambda,
-        )
         val presenter = createMediaGalleryPresenter(
-            navigator = navigator,
             room = FakeMatrixRoom(
                 displayName = A_ROOM_NAME,
                 mediaTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
             initialState.eventSink(MediaGalleryEvents.ChangeMode(MediaGalleryMode.Files))
             val state = awaitItem()
@@ -110,7 +94,7 @@ class MediaGalleryPresenterTest {
         `present - bottom sheet state - own message`(canDeleteOwn = false)
     }
 
-    private suspend fun TestScope.`present - bottom sheet state - own message`(canDeleteOwn: Boolean) {
+    private suspend fun `present - bottom sheet state - own message`(canDeleteOwn: Boolean) {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
@@ -120,8 +104,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = aMediaItemImage(
                 eventId = AN_EVENT_ID,
@@ -154,7 +137,7 @@ class MediaGalleryPresenterTest {
         `present - bottom sheet state - other message`(canDeleteOther = false)
     }
 
-    private suspend fun TestScope.`present - bottom sheet state - other message`(canDeleteOther: Boolean) {
+    private suspend fun `present - bottom sheet state - other message`(canDeleteOther: Boolean) {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
@@ -164,8 +147,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             val item = aMediaItemImage(
                 eventId = AN_EVENT_ID,
@@ -197,8 +179,7 @@ class MediaGalleryPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             // Delete bottom sheet
             val item = aMediaItemImage()
             initialState.eventSink(MediaGalleryEvents.ConfirmDelete(AN_EVENT_ID, item.mediaInfo, item.thumbnailSource))
@@ -218,6 +199,42 @@ class MediaGalleryPresenterTest {
     }
 
     @Test
+    fun `present - delete item`() = runTest {
+        val deleteItemLambda = lambdaRecorder<EventId, Unit> { }
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = FakeMediaGalleryDataSource(
+                startLambda = { },
+                deleteItemLambda = deleteItemLambda,
+            ),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.Delete(AN_EVENT_ID))
+            deleteItemLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
+        }
+    }
+
+    @Test
+    fun `present - share item`() = runTest {
+        val presenter = createMediaGalleryPresenter()
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+        }
+        // TODO Add more test on this part
+    }
+
+    @Test
+    fun `present - save on disk`() = runTest {
+        val presenter = createMediaGalleryPresenter()
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+        }
+        // TODO Add more test on this part
+    }
+
+    @Test
     fun `present - view in timeline invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaGalleryNavigator(
@@ -230,15 +247,37 @@ class MediaGalleryPresenterTest {
             navigator = navigator,
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink(MediaGalleryEvents.ViewInTimeline(AN_EVENT_ID))
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 
-    private fun TestScope.createMediaGalleryPresenter(
+    @Test
+    fun `present - load more`() = runTest {
+        val loadMoreLambda = lambdaRecorder<Timeline.PaginationDirection, Unit> { }
+        val presenter = createMediaGalleryPresenter(
+            mediaGalleryDataSource = FakeMediaGalleryDataSource(
+                startLambda = { },
+                loadMoreLambda = loadMoreLambda,
+            ),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+            loadMoreLambda.assertions().isCalledOnce().with(value(Timeline.PaginationDirection.BACKWARDS))
+        }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        return awaitItem()
+    }
+
+    private fun createMediaGalleryPresenter(
         matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
+        mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        ),
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         navigator: MediaGalleryNavigator = FakeMediaGalleryNavigator(),
@@ -249,22 +288,11 @@ class MediaGalleryPresenterTest {
         return MediaGalleryPresenter(
             navigator = navigator,
             room = room,
-            timelineMediaItemsFactory = TimelineMediaItemsFactory(
-                dispatchers = testCoroutineDispatchers(),
-                virtualItemFactory = VirtualItemFactory(
-                    dateFormatter = FakeDateFormatter(),
-                ),
-                eventItemFactory = EventItemFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    dateFormatter = FakeDateFormatter(),
-                ),
-            ),
+            mediaGalleryDataSource = mediaGalleryDataSource,
             localMediaFactory = localMediaFactory,
             mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
-            mediaItemsPostProcessor = MediaItemsPostProcessor(),
         )
     }
 }

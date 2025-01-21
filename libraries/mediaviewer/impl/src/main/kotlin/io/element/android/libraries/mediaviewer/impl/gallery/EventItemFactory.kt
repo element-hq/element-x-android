@@ -123,6 +123,7 @@ class EventItemFactory @Inject constructor(
                             duration = null,
                         ),
                         mediaSource = type.source,
+                        // TODO We may want to add a thumbnailSource and set it to type.info?.thumbnailSource
                     )
                     is ImageMessageType -> MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -142,7 +143,7 @@ class EventItemFactory @Inject constructor(
                             duration = null,
                         ),
                         mediaSource = type.source,
-                        thumbnailSource = null,
+                        thumbnailSource = type.info?.thumbnailSource,
                     )
                     is StickerMessageType -> MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -162,7 +163,7 @@ class EventItemFactory @Inject constructor(
                             duration = null,
                         ),
                         mediaSource = type.source,
-                        thumbnailSource = null,
+                        thumbnailSource = type.info?.thumbnailSource,
                     )
                     is VideoMessageType -> MediaItem.Video(
                         id = currentTimelineItem.uniqueId,

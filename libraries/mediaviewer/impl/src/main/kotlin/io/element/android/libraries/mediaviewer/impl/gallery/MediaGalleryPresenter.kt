@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 class MediaGalleryPresenter @AssistedInject constructor(
     @Assisted private val navigator: MediaGalleryNavigator,
     private val room: MatrixRoom,
-    private val mediaGalleryDataSource: TimelineMediaGalleryDataSource,
+    private val mediaGalleryDataSource: MediaGalleryDataSource,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,

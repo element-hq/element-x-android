@@ -41,7 +41,6 @@ class MediaViewerDataSource(
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaFactory: LocalMediaFactory,
 ) {
-
     // List of media files that are currently being loaded
     private val mediaFiles: MutableList<MediaFile> = mutableListOf()
 
@@ -145,6 +144,4 @@ class MediaViewerDataSource(
                 localMediaState.value = AsyncData.Failure(it)
             }
     }
-
-
 }

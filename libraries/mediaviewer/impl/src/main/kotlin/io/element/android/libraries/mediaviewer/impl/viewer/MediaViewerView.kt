@@ -266,7 +266,6 @@ private fun MediaViewerPage(
     onShowOverlayChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val currentShowOverlay by rememberUpdatedState(showOverlay)
     val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
     val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
@@ -489,7 +488,7 @@ private fun MediaViewerTopBar(
                 ) {
                     Icon(
                         imageVector = CompoundIcons.Info(),
-                        contentDescription = null,
+                        contentDescription = stringResource(id = CommonStrings.a11y_view_details),
                     )
                 }
             }

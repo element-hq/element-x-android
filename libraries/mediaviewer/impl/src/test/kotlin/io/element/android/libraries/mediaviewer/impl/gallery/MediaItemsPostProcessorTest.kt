@@ -8,9 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemAudio
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
@@ -41,27 +39,6 @@ class MediaItemsPostProcessorTest {
     private val date2 = aMediaItemDateSeparator(id = UniqueId("2"))
     private val date3 = aMediaItemDateSeparator(id = UniqueId("3"))
     private val loading1 = aMediaItemLoadingIndicator(id = UniqueId("1"))
-
-    @Test
-    fun `process Uninitialized`() {
-        val sut = MediaItemsPostProcessor()
-        val result = sut.process(AsyncData.Uninitialized)
-        assertThat(result).isEqualTo(AsyncData.Uninitialized)
-    }
-
-    @Test
-    fun `process Loading`() {
-        val sut = MediaItemsPostProcessor()
-        val result = sut.process(AsyncData.Loading())
-        assertThat(result).isEqualTo(AsyncData.Loading<GroupedMediaItems>())
-    }
-
-    @Test
-    fun `process Failure`() {
-        val sut = MediaItemsPostProcessor()
-        val result = sut.process(AsyncData.Failure(AN_EXCEPTION))
-        assertThat(result).isEqualTo(AsyncData.Failure<GroupedMediaItems>(AN_EXCEPTION))
-    }
 
     @Test
     fun `process Empty`() {
@@ -215,19 +192,16 @@ class MediaItemsPostProcessorTest {
         expectedFileItems: List<MediaItem>,
     ) {
         val sut = MediaItemsPostProcessor()
-        val result = sut.process(AsyncData.Success(mediaItems.toImmutableList()))
-        val data = result.dataOrNull()!!
+        val result = sut.process(mediaItems.toImmutableList())
 
         // Compare the lists to have better failure info
-        assertThat(data.imageAndVideoItems.toList()).isEqualTo(expectedImageAndVideoItems)
-        assertThat(data.fileItems.toList()).isEqualTo(expectedFileItems)
+        assertThat(result.imageAndVideoItems.toList()).isEqualTo(expectedImageAndVideoItems)
+        assertThat(result.fileItems.toList()).isEqualTo(expectedFileItems)
 
         assertThat(result).isEqualTo(
-            AsyncData.Success(
-                GroupedMediaItems(
-                    imageAndVideoItems = expectedImageAndVideoItems.toImmutableList(),
-                    fileItems = expectedFileItems.toImmutableList(),
-                )
+            GroupedMediaItems(
+                imageAndVideoItems = expectedImageAndVideoItems.toImmutableList(),
+                fileItems = expectedFileItems.toImmutableList(),
             )
         )
     }
