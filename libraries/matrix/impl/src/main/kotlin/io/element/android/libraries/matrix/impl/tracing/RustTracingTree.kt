@@ -1,14 +1,13 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.tracing
 
 import android.util.Log
-import io.element.android.libraries.matrix.api.tracing.Target
 import org.matrix.rustcomponents.sdk.LogLevel
 import org.matrix.rustcomponents.sdk.logEvent
 import timber.log.Timber
@@ -26,7 +25,10 @@ private val fqcnIgnore = listOf(
 /**
  * A Timber tree that passes logs to the Rust SDK.
  */
-internal class RustTracingTree(private val retrieveFromStackTrace: Boolean) : Timber.Tree() {
+internal class RustTracingTree(
+    private val target: String,
+    private val retrieveFromStackTrace: Boolean,
+) : Timber.Tree() {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         val location = if (retrieveFromStackTrace) {
             getLogEventLocationFromStackTrace()
@@ -38,7 +40,7 @@ internal class RustTracingTree(private val retrieveFromStackTrace: Boolean) : Ti
             file = location.file,
             line = location.line,
             level = logLevel,
-            target = Target.ELEMENT.filter,
+            target = target,
             message = if (tag != null) "[$tag] $message" else message,
         )
     }

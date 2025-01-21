@@ -13,5 +13,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Deblocați"</string>
   <string name="screen_room_member_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_room_member_details_unblock_user">"Deblocați utilizatorul"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"Utilizați aplicația web pentru a verifica acest utilizator."</string>
+  <string name="screen_room_member_details_verify_button_title">"Verificare %1$s"</string>
   <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
 </resources>

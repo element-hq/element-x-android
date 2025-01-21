@@ -13,8 +13,6 @@ Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
   <string name="screen_create_room_room_access_section_header">"Accesso alla stanza"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Chiunque può chiedere di entrare nella stanza, ma un amministratore o un moderatore dovrà accettare la richiesta"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Chiedi di entrare"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ &amp; \'() * +/; =? @ [] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"L\'indirizzo di questa stanza esiste già. Prova a modificare il campo dell\'indirizzo o a cambiare il nome della stanza"</string>
   <string name="screen_create_room_room_address_section_footer">"Affinché questa stanza sia visibile nell\'elenco delle stanze pubbliche, è necessario un indirizzo della stanza."</string>
   <string name="screen_create_room_room_address_section_title">"Indirizzo della stanza"</string>
   <string name="screen_create_room_room_name_label">"Nome stanza"</string>

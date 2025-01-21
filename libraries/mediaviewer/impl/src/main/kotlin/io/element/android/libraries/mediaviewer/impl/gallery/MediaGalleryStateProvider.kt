@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery
@@ -83,6 +83,27 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
             aMediaGalleryState(
                 mode = MediaGalleryMode.Files,
                 groupedMediaItems = AsyncData.Failure(Exception("Failed to load media")),
+            ),
+            // Timeline is loaded but does not have relevant content yet for images and videos
+            aMediaGalleryState(
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        imageAndVideoItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
+            ),
+            // Timeline is loaded but does not have relevant content yet for files
+            aMediaGalleryState(
+                mode = MediaGalleryMode.Files,
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        fileItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
             ),
         )
 }

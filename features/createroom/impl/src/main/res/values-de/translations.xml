@@ -13,8 +13,6 @@ Sie können dies aber jederzeit in den Chatroomeinstellungen ändern."</string>
   <string name="screen_create_room_room_access_section_header">"Chatroom Zugang"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann darum bitten, dem Chatroom beizutreten, aber ein Administrator oder ein Moderator muss die Anfrage akzeptieren."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"Diese Chatroomadresse existiert bereits. Bitte versuchen Sie, das Adressenfeld des Chatrooms zu bearbeiten oder den Namen des Chatrooms zu ändern"</string>
   <string name="screen_create_room_room_address_section_footer">"Damit dieser Chatroom im öffentlichen Chatroomverzeichnis sichtbar ist, benötigen Sie eine Chatroomadresse."</string>
   <string name="screen_create_room_room_address_section_title">"Chatroom Adresse"</string>
   <string name="screen_create_room_room_name_label">"Raumname"</string>

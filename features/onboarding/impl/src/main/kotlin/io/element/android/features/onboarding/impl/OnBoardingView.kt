@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.onboarding.impl
@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -36,8 +34,6 @@ import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -56,17 +52,13 @@ fun OnBoardingView(
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
-    onOpenDeveloperSettings: () -> Unit,
     onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
         modifier = modifier,
         content = {
-            OnBoardingContent(
-                state = state,
-                onOpenDeveloperSettings = onOpenDeveloperSettings
-            )
+            OnBoardingContent(state = state)
         },
         footer = {
             OnBoardingButtons(
@@ -81,10 +73,7 @@ fun OnBoardingView(
 }
 
 @Composable
-private fun OnBoardingContent(
-    state: OnBoardingState,
-    onOpenDeveloperSettings: () -> Unit,
-) {
+private fun OnBoardingContent(state: OnBoardingState) {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -127,17 +116,6 @@ private fun OnBoardingContent(
                 )
             }
         }
-        if (state.isDebugBuild) {
-            IconButton(
-                modifier = Modifier.align(Alignment.TopEnd),
-                onClick = onOpenDeveloperSettings,
-            ) {
-                Icon(
-                    imageVector = CompoundIcons.SettingsSolid(),
-                    contentDescription = stringResource(CommonStrings.common_settings)
-                )
-            }
-        }
     }
 }
 
@@ -167,8 +145,8 @@ private fun OnBoardingButtons(
             text = stringResource(id = signInButtonStringRes),
             onClick = onSignIn,
             modifier = Modifier
-                .fillMaxWidth()
-                .testTag(TestTags.onBoardingSignIn)
+                    .fillMaxWidth()
+                    .testTag(TestTags.onBoardingSignIn)
         )
         if (state.canCreateAccount) {
             TextButton(
@@ -181,8 +159,8 @@ private fun OnBoardingButtons(
         // Add a report problem text button. Use a Text since we need a special theme here.
         Text(
             modifier = Modifier
-                .padding(16.dp)
-                .clickable(onClick = onReportProblem),
+                    .padding(16.dp)
+                    .clickable(onClick = onReportProblem),
             text = stringResource(id = CommonStrings.common_report_a_problem),
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.colors.textSecondary,
@@ -200,7 +178,6 @@ internal fun OnBoardingViewPreview(
         onSignInWithQrCode = {},
         onSignIn = {},
         onCreateAccount = {},
-        onOpenDeveloperSettings = {},
         onReportProblem = {},
     )
 }

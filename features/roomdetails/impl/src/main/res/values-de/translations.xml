@@ -57,6 +57,7 @@
   <string name="screen_room_details_requests_to_join_title">"Beitrittsanfragen"</string>
   <string name="screen_room_details_roles_and_permissions">"Rollen und Berechtigungen"</string>
   <string name="screen_room_details_room_name_label">"Raumname"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Sicherheit &amp; Datenschutz"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_share_room_title">"Teilen"</string>
   <string name="screen_room_details_title">"Informationen"</string>

@@ -149,6 +149,7 @@
   <string name="common_device_id">"Eszközazonosító"</string>
   <string name="common_direct_chat">"Közvetlen csevegés"</string>
   <string name="common_do_not_show_this_again">"Ne jelenjen meg többé"</string>
+  <string name="common_download_failed">"Letöltés sikertelen"</string>
   <string name="common_downloading">"Letöltés"</string>
   <string name="common_edited_suffix">"(szerkesztve)"</string>
   <string name="common_editing">"Szerkesztés"</string>
@@ -166,6 +167,8 @@ Ok: %1$s."</string>
   <string name="common_favourite">"Kedvenc"</string>
   <string name="common_favourited">"Kedvencnek jelölve"</string>
   <string name="common_file">"Fájl"</string>
+  <string name="common_file_deleted">"Fájl törölve"</string>
+  <string name="common_file_saved">"A fájl mentve"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
   <string name="common_frequently_used">"Gyakran használt"</string>
@@ -289,6 +292,8 @@ Ok: %1$s."</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Ezt a beállításokban engedélyezheti."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
+  <string name="error_room_address_already_exists">"Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét."</string>
+  <string name="error_room_address_invalid_symbols">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
@@ -301,6 +306,8 @@ Ok: %1$s."</string>
   <string name="invite_friends_text">"Beszélgessünk itt: %1$s, %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
+  <string name="screen_edit_room_address_title">"A szoba címe"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
@@ -330,6 +337,7 @@ Ok: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
   <string name="screen_room_title">"Csevegés"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Csatlakozási kérés elküldve"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Szobacím hozzáadása"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Csatlakozás kérése"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Igen, engedélyezze a titkosítást"</string>
@@ -338,13 +346,29 @@ A szobatagokon kívül senki sem tudja olvasni az üzeneteket. Ez megakadályozh
 Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket bárki megtalálhat és csatlakozhat."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Engedélyezi a titkosítást?"</string>
   <string name="screen_security_and_privacy_encryption_section_footer">"Engedélyezés után a titkosítás nem tiltható le."</string>
-  <string name="screen_security_and_privacy_encryption_section_title">"Titkosítás"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki megtalálhatja és csatlakozhat"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Az emberek csak akkor csatlakozhatnak, ha meghívást kapnak"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívással"</string>
-  <string name="screen_security_and_privacy_room_access_section_title">"Szobahozzáférés"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Szobahozzáférés"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"A terek jelenleg nem támogatottak"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá váljon a szobakatalógusban."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Szoba címe"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"A szoba megtalálhatóvá tétele a(z) %1$s nyilvános szobakatalógusában való kereséssel."</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Látható a nyilvános szobakatalógusban"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Bárki"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Ki olvashatja az előzményeket"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Csak a tagok, a meghívásuktól kezdődően"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Csak a tagok, a beállítás választásától kezdődően"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
+Kiválaszthatja, hogy szobáját közzéteszi-e a Matrix-kiszolgáló nyilvános szobakatalógusában."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Szoba közzététele"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
+A cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$s kiszolgáló nyilvános szobakatalógusában."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Szoba láthatósága"</string>
   <string name="screen_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>
@@ -359,6 +383,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="settings_version_number">"Verzió: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"hu"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"A korábbi üzenetek nem érhetők el ezen az eszközön"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nem sikerült visszafejteni az üzenetet"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön személyazonosságát."</string>

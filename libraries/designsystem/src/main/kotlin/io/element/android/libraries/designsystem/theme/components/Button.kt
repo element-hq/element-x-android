@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.theme.components
@@ -27,7 +27,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
@@ -202,14 +201,6 @@ private fun ButtonInternal(
         ButtonStyle.Text -> null
     }
 
-    val textStyle = when (size) {
-        ButtonSize.Small,
-        ButtonSize.Medium,
-        ButtonSize.MediumLowPadding -> MaterialTheme.typography.labelLarge
-        ButtonSize.Large,
-        ButtonSize.LargeLowPadding -> ElementTheme.typography.fontBodyLgMedium
-    }
-
     androidx.compose.material3.Button(
         onClick = {
             if (!showProgress) {
@@ -248,7 +239,7 @@ private fun ButtonInternal(
         }
         Text(
             text = text,
-            style = textStyle,
+            style = ElementTheme.typography.fontBodyLgMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )

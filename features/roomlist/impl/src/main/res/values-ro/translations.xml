@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Deconectați-vă și faceți upgrade"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Serverul dvs. de acasă nu mai acceptă vechiul protocol. Vă rugăm să vă deconectați și să vă conectați din nou pentru a continua să utilizați aplicația."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade disponibil"</string>
+  <string name="banner_set_up_recovery_content">"Recuperați-vă identitatea criptografică și istoricul mesajelor cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
   <string name="banner_set_up_recovery_submit">"Configurați recuperarea"</string>
+  <string name="banner_set_up_recovery_title">"Configurați recuperarea pentru a vă proteja contul"</string>
   <string name="confirm_recovery_key_banner_message">"Backup-ul pentru chat nu este sincronizat în prezent. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup."</string>
-  <string name="confirm_recovery_key_banner_title">"Confirmați cheia de recuperare"</string>
+  <string name="confirm_recovery_key_banner_title">"Backup-ul nu este sincronizat"</string>
   <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, vă rugăm să modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
   <string name="full_screen_intent_banner_title">"Îmbunătățiți-vă experiența in timpul unui apel"</string>
   <string name="screen_invites_decline_chat_message">"Sigur doriți să refuzați alăturarea la %1$s?"</string>
@@ -11,6 +17,7 @@
   <string name="screen_invites_decline_direct_chat_title">"Refuzați conversația"</string>
   <string name="screen_invites_empty_list">"Nicio invitație"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) v-a invitat."</string>
+  <string name="screen_join_room_knock_sent_title">"Cererea de alăturare a fost trimisă"</string>
   <string name="screen_migration_message">"Acesta este un proces care se desfășoară o singură dată, vă mulțumim pentru așteptare."</string>
   <string name="screen_migration_title">"Contul dumneavoastră se configurează"</string>
   <string name="screen_roomlist_a11y_create_message">"Creați o conversație sau o cameră nouă"</string>

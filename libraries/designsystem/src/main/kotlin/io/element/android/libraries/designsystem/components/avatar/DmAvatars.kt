@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.components.avatar
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +22,9 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toPx
@@ -45,10 +48,11 @@ fun DmAvatars(
     val boxSize = userAvatarData.size.dp * SIZE_RATIO
     val boxSizePx = boxSize.toPx()
     val otherAvatarRadius = otherUserAvatarData.size.dp.toPx() / 2
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
         modifier = modifier.size(boxSize),
     ) {
-        // Draw user avatar and cut top right corner
+        // Draw user avatar and cut top end corner
         Avatar(
             avatarData = userAvatarData,
             modifier = Modifier
@@ -58,10 +62,15 @@ fun DmAvatars(
                 }
                 .drawWithContent {
                     drawContent()
+                    val xOffset = if (isRtl) {
+                        size.width - boxSizePx + otherAvatarRadius
+                    } else {
+                        boxSizePx - otherAvatarRadius
+                    }
                     drawCircle(
                         color = Color.Black,
                         center = Offset(
-                            x = boxSizePx - otherAvatarRadius,
+                            x = xOffset,
                             y = size.height - (boxSizePx - otherAvatarRadius),
                         ),
                         radius = otherAvatarRadius / 0.9f,
@@ -105,4 +114,14 @@ internal fun DmAvatarsPreview() = ElementThemedPreview {
         openAvatarPreview = {},
         openOtherAvatarPreview = {},
     )
+}
+
+@Preview(group = PreviewGroup.Avatars)
+@Composable
+internal fun DmAvatarsRtlPreview() {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+    ) {
+        DmAvatarsPreview()
+    }
 }

@@ -13,8 +13,6 @@ You can change this anytime in room settings."</string>
   <string name="screen_create_room_room_access_section_header">"Room Access"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Anyone can ask to join the room but an administrator or a moderator will have to accept the request"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Ask to join"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"This room address already exists. Please try editing the room address field or change the room name"</string>
   <string name="screen_create_room_room_address_section_footer">"In order for this room to be visible in the public room directory, you will need a room address."</string>
   <string name="screen_create_room_room_address_section_title">"Room address"</string>
   <string name="screen_create_room_room_name_label">"Room name"</string>

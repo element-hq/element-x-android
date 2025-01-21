@@ -1,8 +1,8 @@
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import org.gradle.api.JavaVersion
@@ -47,7 +47,7 @@ private const val versionMinor = 7
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-private const val versionPatch = 6
+private const val versionPatch = 7
 
 object Versions {
     const val VERSION_CODE = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch

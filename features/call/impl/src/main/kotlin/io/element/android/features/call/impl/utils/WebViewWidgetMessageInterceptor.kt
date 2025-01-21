@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.call.impl.utils
@@ -40,6 +40,27 @@ class WebViewWidgetMessageInterceptor(
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+
+                // Due to https://github.com/element-hq/element-x-android/issues/4097
+                // we need to supply a logging implementation that correctly includes
+                // objects in log lines.
+                view?.evaluateJavascript(
+                    """
+                        function logFn(consoleLogFn, ...args) {
+                            consoleLogFn(
+                                args.map(
+                                    a => typeof a === "string" ? a : JSON.stringify(a)
+                                ).join(' ')
+                            );
+                        };
+                        globalThis.console.debug = logFn.bind(null, console.debug);
+                        globalThis.console.log = logFn.bind(null, console.log);
+                        globalThis.console.info = logFn.bind(null, console.info);
+                        globalThis.console.warn = logFn.bind(null, console.warn);
+                        globalThis.console.error = logFn.bind(null, console.error);
+                    """.trimIndent(),
+                    null
+                )
 
                 // We inject this JS code when the page starts loading to attach a message listener to the window.
                 // This listener will receive both messages:

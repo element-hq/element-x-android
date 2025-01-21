@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.attachments.preview
@@ -59,11 +59,11 @@ fun AttachmentsPreviewView(
     }
 
     fun postCancel() {
-        state.eventSink(AttachmentsPreviewEvents.Cancel)
+        state.eventSink(AttachmentsPreviewEvents.CancelAndDismiss)
     }
 
     fun postClearSendState() {
-        state.eventSink(AttachmentsPreviewEvents.ClearSendState)
+        state.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
     }
 
     BackHandler(enabled = state.sendActionState !is SendActionState.Sending) {
@@ -106,12 +106,14 @@ private fun AttachmentSendStateView(
 ) {
     when (sendActionState) {
         is SendActionState.Sending.Processing -> {
-            ProgressDialog(
-                type = ProgressDialogType.Indeterminate,
-                text = stringResource(id = CommonStrings.common_sending),
-                showCancelButton = true,
-                onDismissRequest = onDismissClick,
-            )
+            if (sendActionState.displayProgress) {
+                ProgressDialog(
+                    type = ProgressDialogType.Indeterminate,
+                    text = stringResource(id = CommonStrings.common_sending),
+                    showCancelButton = true,
+                    onDismissRequest = onDismissClick,
+                )
+            }
         }
         is SendActionState.Sending.Uploading -> {
             ProgressDialog(

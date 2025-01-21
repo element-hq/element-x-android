@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.atomic.organisms
@@ -34,8 +34,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun InfoListOrganism(
     items: ImmutableList<InfoListItem>,
-    backgroundColor: Color,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = ElementTheme.colors.bgSubtleSecondary,
     iconTint: Color = LocalContentColor.current,
     iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,

@@ -2,8 +2,8 @@
 
 # Copyright 2023-2024 New Vector Ltd.
 #
-# SPDX-License-Identifier: AGPL-3.0-only
-# Please see LICENSE in the repository root for full details.
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+# Please see LICENSE files in the repository root for full details.
 
 # List of tasks to run before creating a PR, to limit the risk of getting rejected by the CI.
 # Can be used as a git hook if you want.

@@ -287,6 +287,8 @@ Motivo:. %1$s"</string>
   <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
   <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s non ha l\'autorizzazione di accedere al microfono. Attiva l\'accesso per registrare un messaggio vocale."</string>
+  <string name="error_room_address_already_exists">"L\'indirizzo di questa stanza esiste già. Prova a modificare il campo dell\'indirizzo o a cambiare il nome della stanza"</string>
+  <string name="error_room_address_invalid_symbols">"Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L\'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo."</string>

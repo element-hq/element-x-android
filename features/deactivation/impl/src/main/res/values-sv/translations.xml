@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Vänligen bekräfta att du vill avaktivera ditt konto. Denna åtgärd kan inte ångras."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Radera alla mina meddelanden"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Varning: Framtida användare kan se ofullständiga konversationer."</string>
+  <string name="screen_deactivate_account_description">"Att inaktivera ditt konto är %1$s, det kommer att:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"oåterkallelig"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s ditt konto (du kan inte logga in igen och ditt ID kan inte återanvändas)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Permanent avaktivera"</string>
+  <string name="screen_deactivate_account_list_item_2">"Ta bort dig från alla chattrum."</string>
+  <string name="screen_deactivate_account_list_item_3">"Radera din kontoinformation från vår identitetsserver."</string>
+  <string name="screen_deactivate_account_list_item_4">"Dina meddelanden kommer fortfarande att vara synliga för registrerade användare men kommer inte att vara tillgängliga för nya eller oregistrerade användare om du väljer att radera dem."</string>
+  <string name="screen_deactivate_account_title">"Inaktivera konto"</string>
+</resources>

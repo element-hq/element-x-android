@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org is a large, free server on the public Matrix network for secure, decentralized communication, run by the Matrix.org Foundation."</string>
+  <string name="screen_login_subtitle">"Matrix is an open network for secure, decentralized communication."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"If you encounter the same problem, try a different Wi-Fi network or use your mobile data instead of Wi-Fi"</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is an open network for secure, decentralized communication."</string>
+</resources>

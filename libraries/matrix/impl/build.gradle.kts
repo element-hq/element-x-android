@@ -3,8 +3,8 @@ import extension.setupAnvil
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 plugins {
@@ -37,7 +37,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.15.0@aar")
+    implementation("net.java.dev.jna:jna:5.16.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)

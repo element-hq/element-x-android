@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Tambahkan emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ini adalah awal dari %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ini adalah awal dari percakapan ini."</string>
+  <string name="screen_room_timeline_legacy_call">"Panggilan tidak didukung. Tanyakan apakah penelepon dapat menggunakan aplikasi Element X yang baru."</string>
   <string name="screen_room_timeline_less_reactions">"Tampilkan lebih sedikit"</string>
   <string name="screen_room_timeline_message_copied">"Pesan disalin"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Anda tidak memiliki izin untuk mengirim di ruangan ini"</string>

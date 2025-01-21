@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.components.list
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.atomic.atoms.CounterAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -91,6 +92,9 @@ sealed interface ListItemContent {
     /** Displays a badge. */
     data object Badge : ListItemContent
 
+    /** Displays a counter. */
+    data class Counter(val count: Int) : ListItemContent
+
     @Composable
     fun View() {
         when (this) {
@@ -124,6 +128,9 @@ sealed interface ListItemContent {
                 contentAlignment = Alignment.Center,
             ) {
                 RedIndicatorAtom()
+            }
+            is Counter -> {
+                CounterAtom(count = count)
             }
             is Custom -> content()
         }
