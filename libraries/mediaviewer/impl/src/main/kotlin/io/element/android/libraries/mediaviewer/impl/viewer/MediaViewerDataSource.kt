@@ -7,10 +7,13 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -56,31 +59,25 @@ class MediaViewerDataSource(
         localMediaStates.clear()
     }
 
-    fun initialPageIndex(eventId: EventId?): Int {
-        if (eventId == null) {
-            return 0
-        }
-        val mediaItems =
-            galleryDataSource.getLastData().dataOrNull()?.getItems(galleryMode).orEmpty()
-        val pageList = buildMediaViewerPageList(mediaItems)
-        return pageList.indexOfFirst { data ->
-            when (data) {
-                is MediaViewerPageData.MediaViewerData -> data.eventId == eventId
-                else -> false
-            }
-        }
-            .takeIf { it != -1 }
-            ?: 0
+    @Composable
+    fun collectAsState(): State<PersistentList<MediaViewerPageData>> {
+        return remember { dataFlow() }.collectAsState(initialData())
     }
 
-    fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
+    private fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
-            .map {
-                val groupedItems = it.dataOrNull()?.getItems(galleryMode).orEmpty()
+            .map { groupedItems ->
+                val mediaItems = groupedItems.dataOrNull()?.getItems(galleryMode).orEmpty()
                 withContext(dispatcher) {
-                    buildMediaViewerPageList(groupedItems)
+                    buildMediaViewerPageList(mediaItems)
                 }
             }
+    }
+
+    private fun initialData(): PersistentList<MediaViewerPageData> {
+        val initialMediaItems =
+            galleryDataSource.getLastData().dataOrNull()?.getItems(galleryMode).orEmpty()
+        return buildMediaViewerPageList(initialMediaItems)
     }
 
     private fun buildMediaViewerPageList(groupedItems: List<MediaItem>) = buildList {
@@ -112,6 +109,14 @@ class MediaViewerDataSource(
         }
     }.toPersistentList()
 
+    fun clearLoadingError(data: MediaViewerPageData.MediaViewerData) {
+        localMediaStates[data.mediaSource.url]?.value = AsyncData.Uninitialized
+    }
+
+    suspend fun loadMore(direction: Timeline.PaginationDirection) {
+        galleryDataSource.loadMore(direction)
+    }
+
     suspend fun loadMedia(data: MediaViewerPageData.MediaViewerData) {
         Timber.d("loadMedia for ${data.eventId}")
         val localMediaState = localMediaStates.getOrPut(data.mediaSource.url) {
@@ -141,11 +146,5 @@ class MediaViewerDataSource(
             }
     }
 
-    fun clearLoadingError(data: MediaViewerPageData.MediaViewerData) {
-        localMediaStates[data.mediaSource.url]?.value = AsyncData.Uninitialized
-    }
 
-    suspend fun loadMore(direction: Timeline.PaginationDirection) {
-        galleryDataSource.loadMore(direction)
-    }
 }

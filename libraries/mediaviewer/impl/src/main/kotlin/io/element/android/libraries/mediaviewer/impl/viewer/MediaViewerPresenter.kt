@@ -10,7 +10,6 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,8 +34,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
@@ -61,8 +58,8 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val data: ImmutableList<MediaViewerPageData> by dataSource.dataFlow().collectAsState(persistentListOf())
-        var currentIndex by remember { mutableIntStateOf(dataSource.initialPageIndex(inputs.eventId)) }
+        val data by dataSource.collectAsState()
+        var currentIndex by remember { mutableIntStateOf(searchIndex(data, inputs.eventId)) }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
@@ -201,5 +198,16 @@ class MediaViewerPresenter @AssistedInject constructor(
         } else {
             CommonStrings.error_unknown
         }
+    }
+
+    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
+        if (eventId == null) {
+            return 0
+        }
+        return data.indexOfFirst {
+            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
+        }
+            .takeIf { it != -1 }
+            ?: 0
     }
 }
