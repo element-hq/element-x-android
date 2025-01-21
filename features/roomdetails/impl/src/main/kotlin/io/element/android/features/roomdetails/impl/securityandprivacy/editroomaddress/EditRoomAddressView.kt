@@ -8,30 +8,98 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun EditRoomAddressView(
     state: EditRoomAddressState,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            "EditRoomAddress feature view",
-            color = MaterialTheme.colorScheme.primary,
-        )
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            EditRoomAddressTopBar(
+                isSaveActionEnabled = state.canBeSaved,
+                onBackClick = onBackClick,
+                onSaveClick = {
+                    state.eventSink(EditRoomAddressEvents.Save)
+                },
+            )
+        }
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
+        ) {
+            RoomAddressField(
+                address = state.roomAddress,
+                homeserverName = state.homeserverName,
+                addressValidity = state.roomAddressValidity,
+                onAddressChange = {
+                    state.eventSink(EditRoomAddressEvents.RoomAddressChanged(it))
+                },
+                label = stringResource(CommonStrings.screen_edit_room_address_title),
+                supportingText = stringResource(CommonStrings.screen_edit_room_address_room_address_section_footer),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 16.dp)
+            )
+
+        }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditRoomAddressTopBar(
+    isSaveActionEnabled: Boolean,
+    onBackClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TopAppBar(
+        modifier = modifier,
+        title = {
+            Text(
+                text = stringResource(CommonStrings.screen_edit_room_address_title),
+                style = ElementTheme.typography.aliasScreenTitle,
+            )
+        },
+        navigationIcon = { BackButton(onClick = onBackClick) },
+        actions = {
+            TextButton(
+                text = stringResource(CommonStrings.action_save),
+                enabled = isSaveActionEnabled,
+                onClick = onSaveClick,
+            )
+        }
+    )
 }
 
 @PreviewsDayNight
@@ -41,5 +109,6 @@ internal fun EditRoomAddressViewPreview(
 ) = ElementPreview {
     EditRoomAddressView(
         state = state,
+        onBackClick = {},
     )
 }

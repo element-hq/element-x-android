@@ -9,4 +9,5 @@ package io.element.android.features.roomdetails.impl.securityandprivacy.editroom
 
 sealed interface EditRoomAddressEvents {
     data object Save : EditRoomAddressEvents
+    data class RoomAddressChanged(val roomAddress: String) : EditRoomAddressEvents
 }

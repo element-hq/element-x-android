@@ -7,6 +7,13 @@
 
 package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
+import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
+
 data class EditRoomAddressState(
+    val homeserverName: String,
+    val roomAddress: String,
+    val roomAddressValidity: RoomAddressValidity,
     val eventSink: (EditRoomAddressEvents) -> Unit
-)
+) {
+    val canBeSaved = roomAddressValidity == RoomAddressValidity.Valid
+}

@@ -29,6 +29,7 @@ class EditRoomAddressNode @AssistedInject constructor(
         val state = presenter.present()
         EditRoomAddressView(
             state = state,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }
