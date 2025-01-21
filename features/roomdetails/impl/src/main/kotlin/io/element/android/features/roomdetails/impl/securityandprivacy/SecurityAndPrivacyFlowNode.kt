@@ -45,13 +45,15 @@ class SecurityAndPrivacyFlowNode @AssistedInject constructor(
         data object EditRoomAddress : NavTarget
     }
 
+    private val navigator = BackstackSecurityAndPrivacyNavigator(backstack)
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.SecurityAndPrivacy -> {
-                createNode<SecurityAndPrivacyNode>(buildContext)
+                createNode<SecurityAndPrivacyNode>(buildContext, plugins = listOf(navigator))
             }
             NavTarget.EditRoomAddress -> {
-                createNode<EditRoomAddressNode>(buildContext)
+                createNode<EditRoomAddressNode>(buildContext, plugins = listOf(navigator))
             }
         }
     }

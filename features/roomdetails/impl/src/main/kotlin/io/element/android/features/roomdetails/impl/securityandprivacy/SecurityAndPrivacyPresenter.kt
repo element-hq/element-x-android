@@ -14,6 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -21,12 +24,16 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import java.util.Optional
-import javax.inject.Inject
 
-class SecurityAndPrivacyPresenter @Inject constructor() : Presenter<SecurityAndPrivacyState> {
+class SecurityAndPrivacyPresenter @AssistedInject constructor(
+    @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,
     private val room: MatrixRoom,
 ) : Presenter<SecurityAndPrivacyState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: SecurityAndPrivacyNavigator): SecurityAndPrivacyPresenter
+    }
 
     @Composable
     override fun present(): SecurityAndPrivacyState {
@@ -85,6 +92,7 @@ class SecurityAndPrivacyPresenter @Inject constructor() : Presenter<SecurityAndP
                 is SecurityAndPrivacyEvents.ChangeRoomVisibility -> {
                     currentVisibleInRoomDirectory = Optional.of(AsyncData.Success(event.isVisibleInRoomDirectory))
                 }
+                SecurityAndPrivacyEvents.EditRoomAddress -> navigator.openEditRoomAddress()
             }
         }
         return SecurityAndPrivacyState(

@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
 sealed interface SecurityAndPrivacyEvents {
+    data object EditRoomAddress : SecurityAndPrivacyEvents
     data object Save : SecurityAndPrivacyEvents
     data class ChangeRoomAccess(val roomAccess: SecurityAndPrivacyRoomAccess) : SecurityAndPrivacyEvents
     data object EnableEncryption: SecurityAndPrivacyEvents
