@@ -31,9 +31,9 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
-import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.api.roomAliasFromName
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -191,7 +191,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     topic = config.topic,
                     isEncrypted = false,
                     isDirect = false,
-                    visibility = RoomVisibility.PUBLIC,
+                    visibility = RoomVisibility.Public,
                     joinRuleOverride = config.roomVisibility.roomAccess.toJoinRule(),
                     preset = RoomPreset.PUBLIC_CHAT,
                     invite = config.invites.map { it.userId },
@@ -204,7 +204,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     topic = config.topic,
                     isEncrypted = config.roomVisibility is RoomVisibilityState.Private,
                     isDirect = false,
-                    visibility = RoomVisibility.PRIVATE,
+                    visibility = RoomVisibility.Private,
                     preset = RoomPreset.PRIVATE_CHAT,
                     invite = config.invites.map { it.userId },
                     avatar = avatarUrl,

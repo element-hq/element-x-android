@@ -7,16 +7,16 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import io.element.android.libraries.matrix.api.createroom.JoinRuleOverride
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 
 enum class RoomAccess {
     Anyone,
     Knocking
 }
 
-fun RoomAccess.toJoinRule(): JoinRuleOverride {
+fun RoomAccess.toJoinRule(): JoinRule? {
     return when (this) {
-        RoomAccess.Anyone -> JoinRuleOverride.None
-        RoomAccess.Knocking -> JoinRuleOverride.Knock
+        RoomAccess.Anyone -> null
+        RoomAccess.Knocking -> JoinRule.Knock
     }
 }

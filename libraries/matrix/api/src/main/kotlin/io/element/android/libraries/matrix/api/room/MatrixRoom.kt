@@ -24,10 +24,12 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -402,4 +404,32 @@ interface MatrixRoom : Closeable {
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit>
 
     override fun close() = destroy()
+
+    /**
+     * Update the canonical alias of the room.
+     *
+     * Note that publishing the alias in the room directory is done separately.
+     */
+    suspend fun updateCanonicalAlias(
+        canonicalAlias: RoomAlias?,
+        alternativeAliases: List<RoomAlias>
+    ): Result<Unit>
+
+    /**
+     * Update the room's visibility in the room directory.
+     */
+    suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit>
+
+    /**
+     * Update room history visibility for this room.
+     */
+    suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit>
+
+    /**
+     * Returns the visibility for this room in the room directory.
+     *
+     * [Public](`RoomVisibility::Public`) rooms are listed in the room
+     * directory and can be found using it.
+     */
+    suspend fun getRoomVisibility(): Result<RoomVisibility>
 }

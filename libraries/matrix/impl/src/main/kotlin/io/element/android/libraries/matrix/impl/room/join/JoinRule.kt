@@ -21,3 +21,15 @@ fun RustJoinRule.map(): JoinRule {
         is RustJoinRule.KnockRestricted -> JoinRule.KnockRestricted(rules.map { it.map() })
     }
 }
+
+fun JoinRule.map(): RustJoinRule {
+    return when (this) {
+        JoinRule.Public -> RustJoinRule.Public
+        JoinRule.Private -> RustJoinRule.Private
+        JoinRule.Knock -> RustJoinRule.Knock
+        JoinRule.Invite -> RustJoinRule.Invite
+        is JoinRule.Restricted -> RustJoinRule.Restricted(rules.map { it.map() })
+        is JoinRule.Custom -> RustJoinRule.Custom(value)
+        is JoinRule.KnockRestricted -> RustJoinRule.KnockRestricted(rules.map { it.map() })
+    }
+}
