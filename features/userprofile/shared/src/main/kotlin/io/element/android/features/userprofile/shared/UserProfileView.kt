@@ -1,13 +1,12 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.userprofile.shared
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -51,7 +50,6 @@ fun UserProfileView(
     openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler { goBack() }
     Scaffold(
         modifier = modifier,
         topBar = {

@@ -13,8 +13,6 @@
   <string name="screen_create_room_room_access_section_header">"Доступ до кімнати"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Будь-хто може попросити приєднатися до кімнати, але адміністратор або модератор повинен буде прийняти запит"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Запросити приєднатися"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати"</string>
   <string name="screen_create_room_room_address_section_footer">"Щоб цю кімнату було видно в каталозі загальнодоступних кімнат, вам знадобиться її адреса."</string>
   <string name="screen_create_room_room_address_section_title">"Адреса кімнати"</string>
   <string name="screen_create_room_room_name_label">"Назва кімнати"</string>

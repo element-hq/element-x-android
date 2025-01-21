@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery
@@ -25,7 +25,14 @@ data class MediaGalleryState(
 data class GroupedMediaItems(
     val imageAndVideoItems: ImmutableList<MediaItem>,
     val fileItems: ImmutableList<MediaItem>,
-)
+) {
+    fun getItems(mode: MediaGalleryMode): ImmutableList<MediaItem> {
+        return when (mode) {
+            MediaGalleryMode.Images -> imageAndVideoItems
+            MediaGalleryMode.Files -> fileItems
+        }
+    }
+}
 
 enum class MediaGalleryMode(val stringResource: Int) {
     Images(R.string.screen_media_browser_list_mode_media),

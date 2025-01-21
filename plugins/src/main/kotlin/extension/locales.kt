@@ -9,6 +9,7 @@ val locales = setOf(
     "de",
     "el",
     "en",
+    "en_US",
     "es",
     "et",
     "fa",

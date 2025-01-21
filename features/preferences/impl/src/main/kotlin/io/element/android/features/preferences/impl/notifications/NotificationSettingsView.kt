@@ -1,12 +1,13 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.notifications
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
@@ -20,7 +21,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
+import io.element.android.libraries.designsystem.components.Announcement
+import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ListOption
@@ -132,7 +134,7 @@ private fun NotificationSettingsContentView(
                 PreferenceText(
                     icon = CompoundIcons.VoiceCall(),
                     title = stringResource(id = R.string.full_screen_intent_banner_title),
-                    subtitle = stringResource(R.string.full_screen_intent_banner_message,),
+                    subtitle = stringResource(R.string.full_screen_intent_banner_message),
                     onClick = {
                         state.fullScreenIntentPermissionsState.openFullScreenIntentSettings()
                     }
@@ -247,12 +249,17 @@ private fun InvalidNotificationSettingsView(
     showError: Boolean,
     onContinueClick: () -> Unit,
     onDismissError: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    DialogLikeBannerMolecule(
+    Announcement(
         title = stringResource(R.string.screen_notification_settings_configuration_mismatch),
-        content = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
-        onSubmitClick = onContinueClick,
-        onDismissClick = null,
+        description = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
+        type = AnnouncementType.Actionable(
+            onActionClick = onContinueClick,
+            actionText = stringResource(CommonStrings.action_continue),
+            onDismissClick = null,
+        ),
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     )
 
     if (showError) {

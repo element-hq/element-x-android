@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.developer
@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
+import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -76,17 +77,16 @@ class DeveloperSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on configure tracing invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
-        ensureCalledOnce {
-            rule.setDeveloperSettingsView(
-                state = aDeveloperSettingsState(
-                    eventSink = eventsRecorder
-                ),
-                onOpenConfigureTracing = it
-            )
-            rule.onNodeWithText("Configure tracing").performClick()
-        }
+    fun `clicking on log level emits the expected event`() {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
+        rule.setDeveloperSettingsView(
+            state = aDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.onNodeWithText("Tracing log level").performClick()
+        rule.onNodeWithText("Debug").performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.DEBUG))
     }
 
     @Config(qualifiers = "h1500dp")
@@ -131,14 +131,12 @@ class DeveloperSettingsViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDeveloperSettingsView(
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit = EnsureNeverCalled(),
-    onOpenConfigureTracing: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled()
 ) {
     setContent {
         DeveloperSettingsView(
             state = state,
             onOpenShowkase = onOpenShowkase,
-            onOpenConfigureTracing = onOpenConfigureTracing,
             onBackClick = onBackClick,
         )
     }

@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
@@ -37,6 +37,7 @@ fun aRustEventTimelineItem(
     origin: EventItemOrigin? = EventItemOrigin.SYNC,
     canBeRepliedTo: Boolean = true,
     shieldsState: ShieldState? = null,
+    localCreatedAt: ULong? = null,
 ) = EventTimelineItem(
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
@@ -51,6 +52,7 @@ fun aRustEventTimelineItem(
     reactions = reactions,
     readReceipts = readReceipts,
     origin = origin,
+    localCreatedAt = localCreatedAt,
     lazyProvider = FakeRustLazyTimelineItemProvider(
         debugInfo = debugInfo,
         shieldsState = shieldsState,

@@ -1,14 +1,15 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.model.TextEditorState
 
 data class AttachmentsPreviewState(
@@ -26,11 +27,18 @@ sealed interface SendActionState {
 
     @Immutable
     sealed interface Sending : SendActionState {
-        data object InstantSending : Sending
-        data object Processing : Sending
-        data class Uploading(val progress: Float) : Sending
+        data class Processing(val displayProgress: Boolean) : Sending
+        data class ReadyToUpload(val mediaInfo: MediaUploadInfo) : Sending
+        data class Uploading(val progress: Float, val mediaUploadInfo: MediaUploadInfo) : Sending
     }
 
-    data class Failure(val error: Throwable) : SendActionState
+    data class Failure(val error: Throwable, val mediaUploadInfo: MediaUploadInfo?) : SendActionState
     data object Done : SendActionState
+
+    fun mediaUploadInfo(): MediaUploadInfo? = when (this) {
+        is Sending.ReadyToUpload -> mediaInfo
+        is Sending.Uploading -> mediaUploadInfo
+        is Failure -> mediaUploadInfo
+        else -> null
+    }
 }

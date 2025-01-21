@@ -2,8 +2,8 @@
 
 # Copyright 2024 New Vector Ltd.
 #
-# SPDX-License-Identifier: AGPL-3.0-only
-# Please see LICENSE in the repository root for full details.
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+# Please see LICENSE files in the repository root for full details.
 
 import json
 import sys
@@ -52,7 +52,7 @@ for entry in config["modules"]:
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
         "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
         "conditions": [
-            "equals: ${languageCode}, en | equals: ${file}, content.json"
+            "equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
         ]
     }
     # print(action)
@@ -64,7 +64,7 @@ for entry in config["modules"]:
             "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
             "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
             "conditions": [
-                "!equals: ${languageCode}, en | equals: ${file}, content.json"
+                "!equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
             ]
         }
         allActions.append(actionTranslation)
@@ -75,7 +75,7 @@ mainAction = baseAction | {
     "output": "libraries/ui-strings/src/main/res/values/localazy.xml",
     "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
     "conditions": [
-        "equals: ${languageCode}, en | equals: ${file}, content.json"
+        "equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
     ]
 }
 # print(mainAction)
@@ -87,7 +87,7 @@ if allFiles:
         "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
         "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
         "conditions": [
-            "!equals: ${languageCode}, en | equals: ${file}, content.json"
+            "!equals: ${langAndroidResNoScript}, en | equals: ${file}, content.json"
         ]
     }
     allActions.append(mainActionTranslation)

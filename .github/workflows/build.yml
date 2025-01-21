@@ -13,7 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
-  debug:
+  build:
     name: Build APKs
     runs-on: ubuntu-latest
     strategy:
@@ -54,6 +54,16 @@ jobs:
           path: |
             app/build/outputs/apk/gplay/debug/*-universal-debug.apk
             app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
+      - name: Upload x86_64 APK for Maestro
+        if: ${{ matrix.variant == 'debug' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-apk-maestro
+          path: |
+            app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
+          retention-days: 5
+          overwrite: true
+          if-no-files-found: error
       - uses: rnkdsh/action-upload-diawi@v1.5.5
         id: diawi
         # Do not fail the whole build if Diawi upload fails

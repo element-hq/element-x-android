@@ -50,6 +50,7 @@
   <string name="action_copy">"Kopírovať"</string>
   <string name="action_copy_link">"Kopírovať odkaz"</string>
   <string name="action_copy_link_to_message">"Kopírovať odkaz do správy"</string>
+  <string name="action_copy_text">"Kopírovať text"</string>
   <string name="action_create">"Vytvoriť"</string>
   <string name="action_create_a_room">"Vytvoriť miestnosť"</string>
   <string name="action_deactivate">"Deaktivovať"</string>
@@ -96,6 +97,7 @@
   <string name="action_reject">"Odmietnuť"</string>
   <string name="action_remove">"Odstrániť"</string>
   <string name="action_remove_caption">"Odstrániť titulok"</string>
+  <string name="action_remove_message">"Odstrániť správu"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
@@ -288,6 +290,8 @@ Dôvod: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
+  <string name="error_room_address_already_exists">"Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti"</string>
+  <string name="error_room_address_invalid_symbols">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>
@@ -301,6 +305,7 @@ Dôvod: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
@@ -341,4 +346,5 @@ Dôvod: %1$s."</string>
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sk"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historické správy nie sú na tomto zariadení k dispozícii"</string>
 </resources>

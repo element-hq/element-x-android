@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"You were banned from this room by %1$s."</string>
+  <string name="screen_join_room_ban_message">"You were banned from this room"</string>
+  <string name="screen_join_room_ban_reason">"Reason: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Cancel request"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Yes, cancel"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Are you sure that you want to cancel your request to join this room?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Cancel request to join"</string>
+  <string name="screen_join_room_fail_message">"Joining the room failed."</string>
+  <string name="screen_join_room_fail_reason">"This room is either invite-only or there might be restrictions to access at space level."</string>
+  <string name="screen_join_room_forget_action">"Forget this room"</string>
+  <string name="screen_join_room_invite_required_message">"You need an invite in order to join this room"</string>
   <string name="screen_join_room_join_action">"Join room"</string>
+  <string name="screen_join_room_join_restricted_message">"You may need to be invited or be a member of a space in order to join."</string>
   <string name="screen_join_room_knock_action">"Send request to join"</string>
   <string name="screen_join_room_knock_message_description">"Message (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"You will receive an invite to join the room if your request is accepted."</string>

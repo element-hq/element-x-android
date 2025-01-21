@@ -288,6 +288,8 @@
   <string name="error_missing_location_auth_android">"Το %1$s δεν έχει άδεια πρόσβασης στην τοποθεσία σου. Μπορείς να ενεργοποιήσεις την πρόσβαση στις Ρυθμίσεις."</string>
   <string name="error_missing_location_rationale_android">"Ο χρήστης %1$s δεν έχει άδεια πρόσβασης στην τοποθεσία σου. Ενεργοποίησε την πρόσβαση παρακάτω."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Το %1$s δεν έχει άδεια πρόσβασης στο μικρόφωνό σου. Ενεργοποίησε την πρόσβαση για εγγραφή φωνητικού μηνύματος."</string>
+  <string name="error_room_address_already_exists">"Αυτή η διεύθυνση δωματίου υπάρχει ήδη, δοκίμασε να επεξεργαστείς το πεδίο διεύθυνσης δωματίου ή να αλλάξεις το όνομα δωματίου"</string>
+  <string name="error_room_address_invalid_symbols">"Ορισμένοι χαρακτήρες δεν επιτρέπονται. Υποστηρίζονται μόνο γράμματα, ψηφία και τα ακόλουθα σύμβολα ! $ &amp; \'() * +/; = ? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Ορισμένα μηνύματα δεν έχουν σταλεί"</string>
   <string name="error_unknown">"Λυπούμαστε, παρουσιάστηκε σφάλμα"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Η αυθεντικότητα αυτού του κρυπτογραφημένου μηνύματος δεν είναι εγγυημένη σε αυτήν τη συσκευή."</string>
@@ -337,13 +339,13 @@
 Δεν συνιστούμε να ενεργοποιήσεις την κρυπτογράφηση για δωμάτια στα οποία μπορεί κανείς να βρει και να συμμετάσχει."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Ενεργοποίηση κρυπτογράφησης;"</string>
   <string name="screen_security_and_privacy_encryption_section_footer">"Μόλις ενεργοποιηθεί, η κρυπτογράφηση δεν μπορεί να απενεργοποιηθεί."</string>
-  <string name="screen_security_and_privacy_encryption_section_title">"Κρυπτογράφηση"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Κρυπτογράφηση"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ενεργοποίηση κρυπτογράφησης από άκρο σε άκρο"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Οποιοσδήποτε μπορεί να βρει και να συμμετάσχει"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Οποιοσδήποτε"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Τα άτομα μπορούν να συμμετάσχουν μόνο εάν έχουν προσκληθεί"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Μόνο πρόσκληση"</string>
-  <string name="screen_security_and_privacy_room_access_section_title">"Πρόσβαση δωματίου"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Πρόσβαση δωματίου"</string>
   <string name="screen_security_and_privacy_title">"Ασφάλεια &amp; απόρρητο"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_share_my_location_action">"Κοινή χρήση της τοποθεσίας μου"</string>

@@ -2,6 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_delete_confirmation_subtitle">"Этот файл будет удален из комнаты и участники не будут иметь к нему доступ."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Удалить файл?"</string>
+  <string name="screen_media_browser_download_error_message">"Проверьте соединение с Интернетом и повторите попытку."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Здесь будут отображаться документы, аудиофайлы и голосовые сообщения, загруженные в комнату."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Нет загруженных файлов."</string>
   <string name="screen_media_browser_list_loading_files">"Загрузка файлов…"</string>
   <string name="screen_media_browser_list_loading_media">"Загрузка медиа…"</string>
   <string name="screen_media_browser_list_mode_files">"Файлы"</string>

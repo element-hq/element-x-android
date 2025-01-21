@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"autentikasi biometrik"</string>
   <string name="screen_app_lock_biometric_unlock">"pembukaan biometrik"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Buka kunci dengan biometrik"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Konfirmasi biometrik"</string>
   <string name="screen_app_lock_forgot_pin">"Lupa PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"Ubah kode PIN"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Perbolehkan pembukaan biometrik"</string>

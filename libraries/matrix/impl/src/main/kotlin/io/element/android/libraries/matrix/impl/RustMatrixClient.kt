@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl
@@ -137,7 +137,11 @@ class RustMatrixClient(
 
     private val innerRoomListService = innerSyncService.roomListService()
 
-    private val rustSyncService = RustSyncService(innerSyncService, sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(
+        inner = innerSyncService,
+        dispatcher = sessionDispatcher,
+        sessionCoroutineScope = sessionCoroutineScope
+    )
     private val pushersService = RustPushersService(
         client = innerClient,
         dispatchers = dispatchers,
@@ -283,8 +287,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? {
-        return innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+    override suspend fun findDM(userId: UserId): RoomId? = withContext(sessionDispatcher) {
+        innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
@@ -307,8 +311,8 @@ class RustMatrixClient(
                 isEncrypted = createRoomParams.isEncrypted,
                 isDirect = createRoomParams.isDirect,
                 visibility = when (createRoomParams.visibility) {
-                    RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
-                    RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
+                    RoomVisibility.PUBLIC -> RustRoomVisibility.Public
+                    RoomVisibility.PRIVATE -> RustRoomVisibility.Private
                 },
                 preset = when (createRoomParams.visibility) {
                     RoomVisibility.PRIVATE -> {

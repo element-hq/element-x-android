@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
@@ -21,6 +21,7 @@ fun aRustRoomMember(
     powerLevel: Long = 0L,
     isIgnored: Boolean = false,
     role: RoomMemberRole = RoomMemberRole.USER,
+    membershipChangeReason: String? = null,
 ) = RoomMember(
     userId = userId.value,
     displayName = displayName,
@@ -31,4 +32,5 @@ fun aRustRoomMember(
     normalizedPowerLevel = powerLevel,
     isIgnored = isIgnored,
     suggestedRoleForPowerLevel = role,
+    membershipChangeReason = membershipChangeReason,
 )

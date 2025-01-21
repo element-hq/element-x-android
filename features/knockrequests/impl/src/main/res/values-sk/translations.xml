@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Áno, prijať všetky"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Ste si istí, že chcete prijať všetky žiadosti o pripojenie?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Prijať všetky žiadosti"</string>
   <string name="screen_knock_requests_list_accept_all_button_title">"Prijať všetky"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Áno, odmietnuť a zakázať"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Ste si istí, že chcete odmietnuť a zakázať používateľa %1$s? Tento používateľ nebude môcť znova požiadať o prístup k tejto miestnosti."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Odmietnuť a zakázať prístup"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Áno, odmietnuť"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Ste si istí, že chcete odmietnuť používateľovi %1$s žiadosť o vstup do tejto miestnosti?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Odmietnuť prístup"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odmietnuť a zakázať"</string>
   <string name="screen_knock_requests_list_empty_state_description">"Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Žiadna čakajúca žiadosť o pripojenie"</string>

@@ -1,13 +1,14 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -42,6 +43,7 @@ fun aDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
     hideImagesAndVideos = hideImagesAndVideos,
+    tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
     eventSink = eventSink,
 )
 
