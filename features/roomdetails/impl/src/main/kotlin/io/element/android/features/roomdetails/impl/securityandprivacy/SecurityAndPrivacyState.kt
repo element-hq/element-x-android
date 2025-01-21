@@ -15,9 +15,11 @@ data class SecurityAndPrivacyState(
     val savedSettings: SecurityAndPrivacySettings,
     val currentSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
-    val canBeSaved: Boolean,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
+
+    val canBeSaved = savedSettings != currentSettings
+
     val showRoomVisibilitySections = currentSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly && currentSettings.historyVisibility.isPresent
 
     val availableHistoryVisibilities = buildSet {

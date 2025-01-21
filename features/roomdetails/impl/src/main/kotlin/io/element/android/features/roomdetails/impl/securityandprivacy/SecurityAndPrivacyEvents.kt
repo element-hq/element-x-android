@@ -12,5 +12,5 @@ sealed interface SecurityAndPrivacyEvents {
     data class ChangeRoomAccess(val roomAccess: SecurityAndPrivacyRoomAccess) : SecurityAndPrivacyEvents
     data object EnableEncryption: SecurityAndPrivacyEvents
     data class ChangeHistoryVisibility(val historyVisibility: SecurityAndPrivacyHistoryVisibility) : SecurityAndPrivacyEvents
-    data class ChangeVisibleInRoomDirectory(val isVisibleInRoomDirectory: Boolean) : SecurityAndPrivacyEvents
+    data class ChangeRoomVisibility(val isVisibleInRoomDirectory: Boolean) : SecurityAndPrivacyEvents
 }

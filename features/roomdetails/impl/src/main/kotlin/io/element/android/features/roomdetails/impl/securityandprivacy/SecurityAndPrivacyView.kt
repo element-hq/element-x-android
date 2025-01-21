@@ -69,10 +69,10 @@ fun SecurityAndPrivacyView(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+                    .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             RoomAccessSection(
@@ -87,11 +87,14 @@ fun SecurityAndPrivacyView(
                     homeserverName = state.homeserverName,
                     onRoomAddressClick = { },
                     isVisibleInPublicDirectory = state.currentSettings.isVisibleInRoomDirectory,
-                    onVisibilityChange = { },
+                    onVisibilityChange = { isVisible ->
+                        state.eventSink(SecurityAndPrivacyEvents.ChangeRoomVisibility(isVisible))
+                    },
                 )
             }
             EncryptionSection(
                 isEncryptionEnabled = state.currentSettings.isEncrypted,
+                isSectionEnabled = !state.savedSettings.isEncrypted,
                 onEnableEncryption = { state.eventSink(SecurityAndPrivacyEvents.EnableEncryption) },
             )
             if (state.showRoomHistoryVisibilitySection) {
@@ -243,8 +246,8 @@ private fun RoomAddressSection(
                         ListItemContent.Custom {
                             CircularProgressIndicator(
                                 modifier = Modifier
-                                    .progressSemantics()
-                                    .size(20.dp),
+                                        .progressSemantics()
+                                        .size(20.dp),
                                 strokeWidth = 2.dp
                             )
                         }
@@ -270,6 +273,7 @@ private fun RoomAddressSection(
 @Composable
 private fun EncryptionSection(
     isEncryptionEnabled: Boolean,
+    isSectionEnabled: Boolean,
     onEnableEncryption: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -282,7 +286,7 @@ private fun EncryptionSection(
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_section_footer)) },
             trailingContent = ListItemContent.Switch(
                 checked = isEncryptionEnabled,
-                enabled = !isEncryptionEnabled,
+                enabled = isSectionEnabled,
                 onChange = { onEnableEncryption() }
             ),
         )

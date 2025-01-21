@@ -41,7 +41,6 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
                     isVisibleInRoomDirectory = Optional.of(AsyncData.Success(true))
                 )
             ),
-            aSecurityAndPrivacyState(canBeSaved = false)
         )
 }
 
@@ -62,13 +61,11 @@ fun aSecurityAndPrivacySettings(
 fun aSecurityAndPrivacyState(
     currentSettings: SecurityAndPrivacySettings = aSecurityAndPrivacySettings(),
     savedSettings: SecurityAndPrivacySettings = currentSettings,
-    canBeSaved: Boolean = true,
     homeserverName: String = "myserver.xyz",
     eventSink: (SecurityAndPrivacyEvents) -> Unit = {}
 ) = SecurityAndPrivacyState(
     currentSettings = currentSettings,
     savedSettings = savedSettings,
     homeserverName = homeserverName,
-    canBeSaved = canBeSaved,
     eventSink = eventSink
 )
