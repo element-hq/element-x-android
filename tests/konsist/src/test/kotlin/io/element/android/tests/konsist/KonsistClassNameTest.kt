@@ -122,6 +122,7 @@ class KonsistClassNameTest {
             .withoutName(
                 "Factory",
                 "TimelineController",
+                "TimelineMediaGalleryDataSource",
             )
             .withoutNameStartingWith(
                 "Accompanist",
