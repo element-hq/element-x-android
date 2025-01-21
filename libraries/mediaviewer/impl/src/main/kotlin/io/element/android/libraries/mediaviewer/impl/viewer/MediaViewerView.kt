@@ -195,7 +195,13 @@ fun MediaViewerView(
                     }
                     else -> {
                         TopAppBar(
-                            title = {},
+                            title = {
+                                Text(
+                                    text = stringResource(id = CommonStrings.common_loading_more),
+                                    style = ElementTheme.typography.fontBodyMdMedium,
+                                    color = ElementTheme.colors.textPrimary,
+                                )
+                            },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = Color.Transparent.copy(0.6f),
                             ),
