@@ -71,6 +71,9 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         var currentIsEncrypted by remember(savedSettings.isEncrypted) {
             mutableStateOf(savedSettings.isEncrypted)
         }
+
+        var showEncryptionConfirmation by remember { mutableStateOf(false) }
+
         val currentSettings = SecurityAndPrivacySettings(
             roomAccess = currentRoomAccess,
             isEncrypted = currentIsEncrypted,
@@ -86,8 +89,12 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                 is SecurityAndPrivacyEvents.ChangeRoomAccess -> {
                     currentRoomAccess = event.roomAccess
                 }
-                is SecurityAndPrivacyEvents.EnableEncryption -> {
-                    currentIsEncrypted = true
+                is SecurityAndPrivacyEvents.ToggleEncryptionState -> {
+                    if(currentSettings.isEncrypted) {
+                        currentIsEncrypted = false
+                    } else {
+                        showEncryptionConfirmation = true
+                    }
                 }
                 is SecurityAndPrivacyEvents.ChangeHistoryVisibility -> {
                     currentHistoryVisibility = Optional.of(event.historyVisibility)
@@ -96,12 +103,20 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                     currentVisibleInRoomDirectory = Optional.of(AsyncData.Success(event.isVisibleInRoomDirectory))
                 }
                 SecurityAndPrivacyEvents.EditRoomAddress -> navigator.openEditRoomAddress()
+                SecurityAndPrivacyEvents.CancelEnableEncryption -> {
+                    showEncryptionConfirmation = false
+                }
+                SecurityAndPrivacyEvents.ConfirmEnableEncryption -> {
+                    showEncryptionConfirmation = false
+                    currentIsEncrypted = true
+                }
             }
         }
         return SecurityAndPrivacyState(
             savedSettings = savedSettings,
             currentSettings = currentSettings,
             homeserverName = homeserverName,
+            showEncryptionConfirmation = showEncryptionConfirmation,
             eventSink = ::handleEvents
         )
     }

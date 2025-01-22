@@ -15,6 +15,7 @@ data class SecurityAndPrivacyState(
     val savedSettings: SecurityAndPrivacySettings,
     val currentSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
+    val showEncryptionConfirmation: Boolean,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
 

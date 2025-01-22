@@ -33,6 +33,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -69,10 +70,10 @@ fun SecurityAndPrivacyView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .imePadding()
-                    .verticalScroll(rememberScrollState())
-                    .consumeWindowInsets(padding),
+                .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             RoomAccessSection(
@@ -93,9 +94,12 @@ fun SecurityAndPrivacyView(
                 )
             }
             EncryptionSection(
-                isEncryptionEnabled = state.currentSettings.isEncrypted,
+                isRoomEncrypted = state.currentSettings.isEncrypted,
                 isSectionEnabled = !state.savedSettings.isEncrypted,
-                onEnableEncryption = { state.eventSink(SecurityAndPrivacyEvents.EnableEncryption) },
+                onToggleEncryption = { state.eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState) },
+                showConfirmation = state.showEncryptionConfirmation,
+                onDismissConfirmation = { state.eventSink(SecurityAndPrivacyEvents.CancelEnableEncryption) },
+                onConfirmEncryption = { state.eventSink(SecurityAndPrivacyEvents.ConfirmEnableEncryption) },
             )
             if (state.showRoomHistoryVisibilitySection) {
                 RoomHistorySection(
@@ -246,8 +250,8 @@ private fun RoomAddressSection(
                         ListItemContent.Custom {
                             CircularProgressIndicator(
                                 modifier = Modifier
-                                        .progressSemantics()
-                                        .size(20.dp),
+                                    .progressSemantics()
+                                    .size(20.dp),
                                 strokeWidth = 2.dp
                             )
                         }
@@ -272,9 +276,12 @@ private fun RoomAddressSection(
 
 @Composable
 private fun EncryptionSection(
-    isEncryptionEnabled: Boolean,
+    isRoomEncrypted: Boolean,
     isSectionEnabled: Boolean,
-    onEnableEncryption: () -> Unit,
+    showConfirmation: Boolean,
+    onToggleEncryption: () -> Unit,
+    onConfirmEncryption: () -> Unit,
+    onDismissConfirmation: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
@@ -285,10 +292,20 @@ private fun EncryptionSection(
             headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_toggle_title)) },
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_section_footer)) },
             trailingContent = ListItemContent.Switch(
-                checked = isEncryptionEnabled,
+                checked = isRoomEncrypted,
                 enabled = isSectionEnabled,
-                onChange = { onEnableEncryption() }
+                onChange = { onToggleEncryption() },
             ),
+            onClick = onToggleEncryption,
+        )
+    }
+    if (showConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_title),
+            content = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_description),
+            submitText = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_confirm_button_title),
+            onSubmitClick = onConfirmEncryption,
+            onDismiss = onDismissConfirmation,
         )
     }
 }

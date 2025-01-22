@@ -41,6 +41,9 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
                     isVisibleInRoomDirectory = Optional.of(AsyncData.Success(true))
                 )
             ),
+            aSecurityAndPrivacyState(
+                showEncryptionConfirmation = true
+            ),
         )
 }
 
@@ -62,10 +65,12 @@ fun aSecurityAndPrivacyState(
     currentSettings: SecurityAndPrivacySettings = aSecurityAndPrivacySettings(),
     savedSettings: SecurityAndPrivacySettings = currentSettings,
     homeserverName: String = "myserver.xyz",
+    showEncryptionConfirmation: Boolean = false,
     eventSink: (SecurityAndPrivacyEvents) -> Unit = {}
 ) = SecurityAndPrivacyState(
     currentSettings = currentSettings,
     savedSettings = savedSettings,
     homeserverName = homeserverName,
+    showEncryptionConfirmation = showEncryptionConfirmation,
     eventSink = eventSink
 )
