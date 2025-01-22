@@ -72,7 +72,7 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.listData.singleOrNull()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
@@ -90,7 +90,7 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.listData.singleOrNull()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isFalse()
@@ -108,7 +108,7 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.listData.singleOrNull()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
@@ -127,7 +127,7 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.listData.singleOrNull()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
@@ -146,7 +146,7 @@ class MediaViewerPresenterTest {
         val anImage = aMediaItemImage()
         presenter.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.listData.singleOrNull()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     GroupedMediaItems(
