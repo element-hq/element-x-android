@@ -107,15 +107,24 @@ class EditRoomAddressPresenter @AssistedInject constructor(
             if (savedAliasFromHomeserver != null) {
                 room.removeRoomAliasFromRoomDirectory(savedAliasFromHomeserver).getOrThrow()
             }
-            // Finally update the canonical alias state..
+
+            // Finally update the canonical alias state
             when {
                 // Allow to update the canonical alias only if the saved canonical alias matches the homeserver or if there is no canonical alias
                 savedCanonicalAlias == null || savedCanonicalAlias.matchesServer(serverName) -> {
-                    room.updateCanonicalAlias(newRoomAlias, room.alternativeAliases).getOrThrow()
+                    val newAlternativeAliases = room.alternativeAliases.filter { it != savedAliasFromHomeserver }
+                    room.updateCanonicalAlias(newRoomAlias, newAlternativeAliases).getOrThrow()
                 }
-                // Otherwise, update the alternative aliases and keep the current canonical alias
+                // Otherwise, only update the alternative aliases and keep the current canonical alias
                 else -> {
-                    val newAlternativeAliases = listOf(newRoomAlias) + room.alternativeAliases
+                    val newAlternativeAliases = buildList {
+                        add(newRoomAlias)
+                        for (alias in room.alternativeAliases) {
+                            if (alias != savedAliasFromHomeserver) {
+                                add(alias)
+                            }
+                        }
+                    }
                     room.updateCanonicalAlias(savedCanonicalAlias, newAlternativeAliases).getOrThrow()
                 }
             }
