@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -63,7 +64,8 @@ class MediaViewerDataSource(
         return remember { dataFlow() }.collectAsState(initialData())
     }
 
-    private fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
+    @VisibleForTesting
+    fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
                 val mediaItems = groupedItems.dataOrNull()?.getItems(galleryMode).orEmpty()
@@ -104,7 +106,7 @@ class MediaViewerDataSource(
             }
         }
         if (isEmpty()) {
-            MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS)
+            add(MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS))
         }
     }.toPersistentList()
 

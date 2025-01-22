@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.preview.loremIpsum
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
@@ -30,12 +31,13 @@ class MediaItemFileProvider : PreviewParameterProvider<MediaItem.File> {
 
 fun aMediaItemFile(
     id: UniqueId = UniqueId("fileId"),
+    eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
 ): MediaItem.File {
     return MediaItem.File(
         id = id,
-        eventId = null,
+        eventId = eventId,
         mediaInfo = aPdfMediaInfo(
             filename = filename,
             caption = caption,

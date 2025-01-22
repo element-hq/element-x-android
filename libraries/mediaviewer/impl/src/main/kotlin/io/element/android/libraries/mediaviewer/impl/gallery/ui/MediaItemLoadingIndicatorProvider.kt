@@ -13,10 +13,11 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 
 fun aMediaItemLoadingIndicator(
     id: UniqueId = UniqueId("loadingId"),
+    direction: Timeline.PaginationDirection = Timeline.PaginationDirection.BACKWARDS,
 ): MediaItem.LoadingIndicator {
     return MediaItem.LoadingIndicator(
         id = id,
-        direction = Timeline.PaginationDirection.BACKWARDS,
+        direction = direction,
         timestamp = 123,
     )
 }
