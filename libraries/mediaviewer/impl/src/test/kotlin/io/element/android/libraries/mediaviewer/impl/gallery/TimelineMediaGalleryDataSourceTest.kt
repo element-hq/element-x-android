@@ -51,21 +51,19 @@ class TimelineMediaGalleryDataSourceTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `test - not started TimelineMediaGalleryDataSource emits no events`() {
+    fun `test - not started TimelineMediaGalleryDataSource emits no events`() = runTest {
         val fakeTimeline = FakeTimeline()
-        runTest {
-            val sut = createTimelineMediaGalleryDataSource(
-                room = FakeMatrixRoom(
-                    mediaTimelineResult = { Result.success(fakeTimeline) },
-                    roomCoroutineScope = backgroundScope,
-                )
+        val sut = createTimelineMediaGalleryDataSource(
+            room = FakeMatrixRoom(
+                mediaTimelineResult = { Result.success(fakeTimeline) },
+                roomCoroutineScope = backgroundScope,
             )
-            sut.groupedMediaItemsFlow().test {
-                // Also, loadMore and deleteItem should be no-op
-                sut.loadMore(Timeline.PaginationDirection.BACKWARDS)
-                sut.deleteItem(AN_EVENT_ID)
-                expectNoEvents()
-            }
+        )
+        sut.groupedMediaItemsFlow().test {
+            // Also, loadMore and deleteItem should be no-op
+            sut.loadMore(Timeline.PaginationDirection.BACKWARDS)
+            sut.deleteItem(AN_EVENT_ID)
+            expectNoEvents()
         }
     }
 
