@@ -40,7 +40,7 @@ data class SecurityAndPrivacySettings(
     val roomAccess: SecurityAndPrivacyRoomAccess,
     val isEncrypted: Boolean,
     val historyVisibility: Optional<SecurityAndPrivacyHistoryVisibility>,
-    val formattedAddress: Optional<String>,
+    val addressName: Optional<String>,
     val isVisibleInRoomDirectory: Optional<AsyncData<Boolean>>
 )
 

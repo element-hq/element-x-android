@@ -83,7 +83,7 @@ fun SecurityAndPrivacyView(
             if (state.showRoomVisibilitySections) {
                 RoomVisibilitySection(state.homeserverName)
                 RoomAddressSection(
-                    roomAddress = state.currentSettings.formattedAddress,
+                    roomAddress = state.currentSettings.addressName,
                     homeserverName = state.homeserverName,
                     onRoomAddressClick = { state.eventSink(SecurityAndPrivacyEvents.EditRoomAddress) },
                     isVisibleInPublicDirectory = state.currentSettings.isVisibleInRoomDirectory,

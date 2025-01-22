@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class EditRoomAddressPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
@@ -50,9 +49,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
         val roomAddressValidity = remember {
             mutableStateOf<RoomAddressValidity>(RoomAddressValidity.Unknown)
         }
-        val savedRoomAddress = remember {
-            room.firstAliasMatching(homeserverName)?.roomAddress()
-        }
+        val savedRoomAddress = remember { room.firstAliasMatching(homeserverName)?.addressName() }
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         var newRoomAddress by remember {
             mutableStateOf(
@@ -127,18 +124,13 @@ class EditRoomAddressPresenter @AssistedInject constructor(
     }
 }
 
+/**
+ * Returns the first alias that matches the given server name, or null if none match.
+ */
 private fun MatrixRoom.firstAliasMatching(serverName: String): RoomAlias? {
     // Check if the canonical alias matches the homeserver
     if (canonicalAlias?.matchesServer(serverName) == true) {
         return canonicalAlias
     }
     return alternativeAliases.firstOrNull { it.value.contains(serverName) }
-}
-
-private fun RoomAlias.roomAddress(): String {
-    return value.drop(1).split(":").first()
-}
-
-private fun RoomAlias.matchesServer(serverName: String): Boolean {
-    return value.contains(serverName)
 }

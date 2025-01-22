@@ -17,10 +17,13 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.matchesServer
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import java.util.Optional
@@ -51,7 +54,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                     isEncrypted = room.isEncrypted,
                     isVisibleInRoomDirectory = Optional.ofNullable(isVisibleInRoomDirectory.value),
                     historyVisibility = Optional.ofNullable(roomInfo?.historyVisibility?.map()),
-                    formattedAddress = Optional.ofNullable(roomInfo?.canonicalAlias?.value),
+                    addressName = Optional.ofNullable(roomInfo?.firstDisplayableAlias(homeserverName)?.value),
                 )
             }
         }
@@ -73,7 +76,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             isEncrypted = currentIsEncrypted,
             isVisibleInRoomDirectory = currentVisibleInRoomDirectory,
             historyVisibility = currentHistoryVisibility,
-            formattedAddress = savedSettings.formattedAddress,
+            addressName = savedSettings.addressName,
         )
 
         fun handleEvents(event: SecurityAndPrivacyEvents) {
@@ -142,3 +145,8 @@ private fun SecurityAndPrivacyHistoryVisibility.map(): RoomHistoryVisibility {
         SecurityAndPrivacyHistoryVisibility.Anyone -> RoomHistoryVisibility.WorldReadable
     }
 }
+
+private fun MatrixRoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
+    return aliases.firstOrNull { it.matchesServer(serverName)} ?: aliases.firstOrNull()
+}
+
