@@ -27,6 +27,7 @@ fun MediaViewerFlickToDismiss(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     onDragging: () -> Unit = {},
+    onResetting: () -> Unit = {},
     content: @Composable BoxScope.() -> Unit,
 ) {
     val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
@@ -37,6 +38,7 @@ fun MediaViewerFlickToDismiss(
             onDismiss()
         },
         onDragging = onDragging,
+        onResetting = onResetting,
     )
     FlickToDismiss(
         state = flickState,
@@ -50,9 +52,11 @@ private fun DismissFlickEffects(
     flickState: FlickToDismissState,
     onDismissing: suspend (Duration) -> Unit,
     onDragging: suspend () -> Unit,
+    onResetting: suspend () -> Unit,
 ) {
     val currentOnDismissing by rememberUpdatedState(onDismissing)
     val currentOnDragging by rememberUpdatedState(onDragging)
+    val currentOnResetting by rememberUpdatedState(onResetting)
 
     when (val gestureState = flickState.gestureState) {
         is FlickToDismissState.GestureState.Dismissing -> {
@@ -63,6 +67,11 @@ private fun DismissFlickEffects(
         is FlickToDismissState.GestureState.Dragging -> {
             LaunchedEffect(Unit) {
                 currentOnDragging()
+            }
+        }
+        is FlickToDismissState.GestureState.Resetting -> {
+            LaunchedEffect(Unit) {
+                currentOnResetting()
             }
         }
         else -> Unit

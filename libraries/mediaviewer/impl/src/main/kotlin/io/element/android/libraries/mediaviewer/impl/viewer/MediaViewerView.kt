@@ -290,6 +290,9 @@ private fun MediaViewerPage(
         onDragging = {
             currentOnShowOverlayChange(false)
         },
+        onResetting = {
+            currentOnShowOverlayChange(true)
+        },
         modifier = modifier,
     ) {
         val downloadedMedia by data.downloadedMedia
