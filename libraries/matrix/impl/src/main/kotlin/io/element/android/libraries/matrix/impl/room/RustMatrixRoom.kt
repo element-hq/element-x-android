@@ -76,6 +76,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.AllowedMessageTypes
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
@@ -83,6 +84,8 @@ import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
+import org.matrix.rustcomponents.sdk.TimelineConfiguration
+import org.matrix.rustcomponents.sdk.TimelineFocus
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -206,10 +209,16 @@ class RustMatrixRoom(
 
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.timelineFocusedOnEvent(
-                eventId = eventId.value,
-                numContextEvents = 50u,
-                internalIdPrefix = "focus_$eventId",
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = TimelineFocus.Event(
+                        eventId = eventId.value,
+                        numContextEvents = 50u,
+                    ),
+                    allowedMessageTypes = AllowedMessageTypes.All,
+                    internalIdPrefix = "focus_$eventId",
+                    dateDividerMode = DateDividerMode.DAILY,
+                )
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
             }
@@ -224,10 +233,16 @@ class RustMatrixRoom(
 
     override suspend fun pinnedEventsTimeline(): Result<Timeline> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.pinnedEventsTimeline(
-                internalIdPrefix = "pinned_events",
-                maxEventsToLoad = 100u,
-                maxConcurrentRequests = 10u,
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = TimelineFocus.PinnedEvents(
+                        maxEventsToLoad = 100u,
+                        maxConcurrentRequests = 10u,
+                    ),
+                    allowedMessageTypes = AllowedMessageTypes.All,
+                    internalIdPrefix = "pinned_events",
+                    dateDividerMode = DateDividerMode.DAILY,
+                )
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
@@ -240,15 +255,20 @@ class RustMatrixRoom(
 
     override suspend fun mediaTimeline(): Result<Timeline> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.messageFilteredTimeline(
-                internalIdPrefix = "MediaGallery_",
-                allowedMessageTypes = listOf(
-                    RoomMessageEventMessageType.FILE,
-                    RoomMessageEventMessageType.IMAGE,
-                    RoomMessageEventMessageType.VIDEO,
-                    RoomMessageEventMessageType.AUDIO,
-                ),
-                dateDividerMode = DateDividerMode.MONTHLY,
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = TimelineFocus.Live,
+                    allowedMessageTypes = AllowedMessageTypes.Only(
+                        types = listOf(
+                            RoomMessageEventMessageType.FILE,
+                            RoomMessageEventMessageType.IMAGE,
+                            RoomMessageEventMessageType.VIDEO,
+                            RoomMessageEventMessageType.AUDIO,
+                        )
+                    ),
+                    internalIdPrefix = "MediaGallery_",
+                    dateDividerMode = DateDividerMode.MONTHLY,
+                )
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.MEDIA)
             }
