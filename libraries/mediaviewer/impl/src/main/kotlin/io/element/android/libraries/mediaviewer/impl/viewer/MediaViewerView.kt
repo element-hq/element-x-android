@@ -98,7 +98,6 @@ fun MediaViewerView(
     var showOverlay by remember { mutableStateOf(true) }
 
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
-    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
     val currentData = state.listData.getOrNull(state.currentIndex)
     BackHandler { onBackClick() }
     Scaffold(
@@ -135,40 +134,45 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
+                    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
                     LaunchedEffect(Unit) {
                         state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
                     }
-                    MediaViewerPage(
-                        isDisplayed = page == pagerState.settledPage,
-                        showOverlay = showOverlay,
-                        bottomPaddingInPixels = bottomPaddingInPixels,
-                        data = dataForPage,
-                        onDismiss = {
-                            onBackClick()
-                        },
-                        onRetry = {
-                            state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
-                        },
-                        onDismissError = {
-                            state.eventSink(MediaViewerEvents.ClearLoadingError(dataForPage))
-                        },
-                        onShowOverlayChange = {
-                            showOverlay = it
-                        }
-                    )
-                    // Bottom bar
-                    AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .navigationBarsPadding()
-                        ) {
-                            MediaViewerBottomBar(
-                                modifier = Modifier.align(Alignment.BottomCenter),
-                                showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
-                                caption = dataForPage.mediaInfo.caption,
-                                onHeightChange = { bottomPaddingInPixels = it },
-                            )
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        MediaViewerPage(
+                            isDisplayed = page == pagerState.settledPage,
+                            showOverlay = showOverlay,
+                            bottomPaddingInPixels = bottomPaddingInPixels,
+                            data = dataForPage,
+                            onDismiss = {
+                                onBackClick()
+                            },
+                            onRetry = {
+                                state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                            },
+                            onDismissError = {
+                                state.eventSink(MediaViewerEvents.ClearLoadingError(dataForPage))
+                            },
+                            onShowOverlayChange = {
+                                showOverlay = it
+                            }
+                        )
+                        // Bottom bar
+                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .navigationBarsPadding()
+                            ) {
+                                MediaViewerBottomBar(
+                                    modifier = Modifier.align(Alignment.BottomCenter),
+                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                    caption = dataForPage.mediaInfo.caption,
+                                    onHeightChange = { bottomPaddingInPixels = it },
+                                )
+                            }
                         }
                     }
                 }
