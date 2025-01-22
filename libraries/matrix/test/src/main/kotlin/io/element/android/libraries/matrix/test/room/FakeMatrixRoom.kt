@@ -68,7 +68,7 @@ class FakeMatrixRoom(
     override val topic: String? = null,
     override val avatarUrl: String? = null,
     override var isEncrypted: Boolean = false,
-    override val alias: RoomAlias? = null,
+    override val canonicalAlias: RoomAlias? = null,
     override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
     override val isSpace: Boolean = false,
@@ -151,6 +151,8 @@ class FakeMatrixRoom(
     private val updateRoomVisibilityResult: (RoomVisibility) -> Result<Unit> = { lambdaError() },
     private val updateRoomHistoryVisibilityResult: (RoomHistoryVisibility) -> Result<Unit> = { lambdaError() },
     private val roomVisibilityResult: () -> Result<RoomVisibility> = { lambdaError() },
+    private val publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
+    private val removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -602,6 +604,14 @@ class FakeMatrixRoom(
 
     override suspend fun getRoomVisibility(): Result<RoomVisibility> = simulateLongTask {
         roomVisibilityResult()
+    }
+
+    override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
+        publishRoomAliasInRoomDirectoryResult(roomAlias)
+    }
+
+    override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
+        removeRoomAliasFromRoomDirectoryResult(roomAlias)
     }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {

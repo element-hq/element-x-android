@@ -72,10 +72,10 @@ class EditRoomAddressPresenter @Inject constructor(
 
 private fun MatrixRoom.firstAliasMatching(serverName: String): RoomAlias? {
     // Check if the canonical alias matches the homeserver
-    if (this.alias?.matchesServer(serverName) == true) {
-        return this.alias
+    if (canonicalAlias?.matchesServer(serverName) == true) {
+        return canonicalAlias
     }
-    return this.alternativeAliases.firstOrNull { it.value.contains(serverName) }
+    return alternativeAliases.firstOrNull { it.value.contains(serverName) }
 }
 
 private fun RoomAlias.roomAddress(): String {

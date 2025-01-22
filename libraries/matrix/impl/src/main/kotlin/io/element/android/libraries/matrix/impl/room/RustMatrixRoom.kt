@@ -280,7 +280,7 @@ class RustMatrixRoom(
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
-    override val alias: RoomAlias?
+    override val canonicalAlias: RoomAlias?
         get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
 
     override val alternativeAliases: List<RoomAlias>
@@ -784,6 +784,20 @@ class RustMatrixRoom(
             innerRoom.updateCanonicalAlias(canonicalAlias?.value, alternativeAliases.map { it.value })
         }
     }
+
+    override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.publishRoomAliasInRoomDirectory(roomAlias.value)
+        }
+    }
+
+    override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.removeRoomAliasFromRoomDirectory(roomAlias.value)
+        }
+    }
+
+
 
     override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = withContext(roomDispatcher) {
         runCatching {

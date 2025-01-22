@@ -150,7 +150,7 @@ class RoomDetailsPresenter @Inject constructor(
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
-            roomAlias = room.alias,
+            roomAlias = room.canonicalAlias,
             roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,

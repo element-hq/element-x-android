@@ -45,7 +45,7 @@ interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
     val displayName: String
-    val alias: RoomAlias?
+    val canonicalAlias: RoomAlias?
     val alternativeAliases: List<RoomAlias>
     val topic: String?
     val avatarUrl: String?
@@ -432,4 +432,22 @@ interface MatrixRoom : Closeable {
      * directory and can be found using it.
      */
     suspend fun getRoomVisibility(): Result<RoomVisibility>
+    /**
+     * Publish a new room alias for this room in the room directory.
+     *
+     * Returns:
+     * - `true` if the room alias didn't exist and it's now published.
+     * - `false` if the room alias was already present so it couldn't be
+     * published.
+     */
+    suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
+    /**
+     * Remove an existing room alias for this room in the room directory.
+     *
+     * Returns:
+     * - `true` if the room alias was present and it's now removed from the
+     * room directory.
+     * - `false` if the room alias didn't exist so it couldn't be removed.
+     */
+    suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
 }
