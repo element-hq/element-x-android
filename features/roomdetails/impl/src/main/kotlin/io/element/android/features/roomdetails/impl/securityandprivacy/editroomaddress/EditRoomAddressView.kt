@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -70,8 +72,20 @@ fun EditRoomAddressView(
                     .fillMaxWidth()
                     .padding(all = 16.dp)
             )
-
         }
+        AsyncActionView(
+            async = state.saveAction,
+            progressDialog = {
+                AsyncActionViewDefaults.ProgressDialog(
+                    progressText = stringResource(CommonStrings.common_saving),
+                )
+            },
+            onSuccess = {},
+            errorMessage = { stringResource(CommonStrings.error_unknown) },
+            onRetry = { state.eventSink(EditRoomAddressEvents.Save) },
+            onErrorDismiss = { state.eventSink(EditRoomAddressEvents.DismissError) },
+        )
+
     }
 }
 

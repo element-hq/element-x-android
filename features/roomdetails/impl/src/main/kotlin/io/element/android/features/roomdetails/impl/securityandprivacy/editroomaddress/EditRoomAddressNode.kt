@@ -12,17 +12,22 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
 class EditRoomAddressNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: EditRoomAddressPresenter,
+    presenterFactory: EditRoomAddressPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
+
+    private val navigator = plugins<SecurityAndPrivacyNavigator>().first()
+    private val presenter = presenterFactory.create(navigator)
 
     @Composable
     override fun View(modifier: Modifier) {

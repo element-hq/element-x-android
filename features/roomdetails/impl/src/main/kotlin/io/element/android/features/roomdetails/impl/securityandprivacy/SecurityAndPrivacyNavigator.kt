@@ -9,10 +9,12 @@ package io.element.android.features.roomdetails.impl.securityandprivacy
 
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 
 interface SecurityAndPrivacyNavigator : Plugin {
     fun openEditRoomAddress()
+    fun closeEditorRoomAddress()
 }
 
 class BackstackSecurityAndPrivacyNavigator(
@@ -20,5 +22,9 @@ class BackstackSecurityAndPrivacyNavigator(
 ) : SecurityAndPrivacyNavigator {
     override fun openEditRoomAddress() {
         backStack.push(SecurityAndPrivacyFlowNode.NavTarget.EditRoomAddress)
+    }
+
+    override fun closeEditorRoomAddress() {
+        backStack.pop()
     }
 }
