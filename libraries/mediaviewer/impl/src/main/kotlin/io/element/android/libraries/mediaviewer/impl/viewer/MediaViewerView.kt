@@ -128,7 +128,7 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.Loading -> {
-                    LaunchedEffect(Unit) {
+                    LaunchedEffect(dataForPage.timestamp) {
                         state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
                     }
                     MediaViewerLoadingPage(

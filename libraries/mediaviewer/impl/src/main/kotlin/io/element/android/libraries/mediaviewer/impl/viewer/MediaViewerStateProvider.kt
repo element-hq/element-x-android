@@ -151,7 +151,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             },
             aMediaViewerState(
                 listOf(
-                    MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS)
+                    aMediaViewerPageDataLoading()
                 ),
             ),
             aMediaViewerState(
@@ -160,6 +160,16 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 ),
             ),
         )
+}
+
+fun aMediaViewerPageDataLoading(
+    direction: Timeline.PaginationDirection = Timeline.PaginationDirection.BACKWARDS,
+    timestamp: Long = 0L,
+): MediaViewerPageData {
+    return MediaViewerPageData.Loading(
+        direction = direction,
+        timestamp = timestamp,
+    )
 }
 
 fun aMediaViewerPageData(

@@ -27,6 +27,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.eventId
 import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.mediaSource
 import io.element.android.libraries.mediaviewer.impl.gallery.thumbnailSource
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -42,6 +43,7 @@ class MediaViewerDataSource(
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaFactory: LocalMediaFactory,
+    private val systemClock: SystemClock,
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: MutableList<MediaFile> = mutableListOf()
@@ -108,12 +110,20 @@ class MediaViewerDataSource(
                     )
                 }
                 is MediaItem.LoadingIndicator -> add(
-                    MediaViewerPageData.Loading(mediaItem.direction)
+                    MediaViewerPageData.Loading(
+                        direction = mediaItem.direction,
+                        timestamp = systemClock.epochMillis(),
+                    )
                 )
             }
         }
         if (isEmpty()) {
-            add(MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS))
+            add(
+                MediaViewerPageData.Loading(
+                    direction = Timeline.PaginationDirection.BACKWARDS,
+                    timestamp = systemClock.epochMillis(),
+                )
+            )
         }
     }.toPersistentList()
 

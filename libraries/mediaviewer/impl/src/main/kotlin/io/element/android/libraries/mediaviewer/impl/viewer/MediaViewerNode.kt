@@ -27,6 +27,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.SingleMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.TimelineMediaGalleryDataSource
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesNode(RoomScope::class)
 class MediaViewerNode @AssistedInject constructor(
@@ -37,6 +38,7 @@ class MediaViewerNode @AssistedInject constructor(
     mediaLoader: MatrixMediaLoader,
     localMediaFactory: LocalMediaFactory,
     coroutineDispatchers: CoroutineDispatchers,
+    systemClock: SystemClock,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val inputs = inputs<MediaViewerEntryPoint.Params>()
@@ -77,7 +79,8 @@ class MediaViewerNode @AssistedInject constructor(
             galleryMode = galleryMode,
             galleryDataSource = mediaGallerySource,
             mediaLoader = mediaLoader,
-            localMediaFactory = localMediaFactory
+            localMediaFactory = localMediaFactory,
+            systemClock = systemClock,
         )
     )
 

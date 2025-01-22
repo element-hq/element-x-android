@@ -34,6 +34,7 @@ sealed interface MediaViewerPageData {
 
     data class Loading(
         val direction: Timeline.PaginationDirection,
+        val timestamp: Long,
     ) : MediaViewerPageData
 
     data class MediaViewerData(

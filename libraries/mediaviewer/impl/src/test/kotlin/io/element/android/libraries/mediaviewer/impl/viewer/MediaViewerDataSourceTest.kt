@@ -27,6 +27,8 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
+import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -90,7 +92,12 @@ class MediaViewerDataSourceTest {
             )
             val result = awaitItem()
             assertThat(result).hasSize(1)
-            assertThat(result.first()).isEqualTo(MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS))
+            assertThat(result.first()).isEqualTo(
+                MediaViewerPageData.Loading(
+                    direction = Timeline.PaginationDirection.BACKWARDS,
+                    timestamp = A_FAKE_TIMESTAMP,
+                )
+            )
         }
     }
 
@@ -118,8 +125,14 @@ class MediaViewerDataSourceTest {
             )
             val result = awaitItem()
             assertThat(result).containsExactly(
-                MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS),
-                MediaViewerPageData.Loading(Timeline.PaginationDirection.FORWARDS),
+                MediaViewerPageData.Loading(
+                    direction = Timeline.PaginationDirection.BACKWARDS,
+                    timestamp = A_FAKE_TIMESTAMP,
+                ),
+                MediaViewerPageData.Loading(
+                    direction = Timeline.PaginationDirection.FORWARDS,
+                    timestamp = A_FAKE_TIMESTAMP,
+                ),
             )
         }
     }
@@ -255,10 +268,6 @@ class MediaViewerDataSourceTest {
         }
     }
 
-    @Test
-    fun clearLoadingError() {
-    }
-
     private fun TestScope.createMediaViewerDataSource(
         galleryMode: MediaGalleryMode = MediaGalleryMode.Images,
         galleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(),
@@ -270,5 +279,6 @@ class MediaViewerDataSourceTest {
         galleryDataSource = galleryDataSource,
         mediaLoader = mediaLoader,
         localMediaFactory = localMediaFactory,
+        systemClock = FakeSystemClock(),
     )
 }

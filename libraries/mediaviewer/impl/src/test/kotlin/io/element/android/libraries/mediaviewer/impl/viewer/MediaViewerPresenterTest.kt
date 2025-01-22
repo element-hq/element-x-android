@@ -37,6 +37,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -593,6 +594,7 @@ class MediaViewerPresenterTest {
                 galleryDataSource = mediaGalleryDataSource,
                 mediaLoader = matrixMediaLoader,
                 localMediaFactory = localMediaFactory,
+                systemClock = FakeSystemClock(),
             ),
             room = room,
             localMediaActions = localMediaActions,
