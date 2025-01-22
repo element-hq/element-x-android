@@ -11,7 +11,6 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -81,13 +80,9 @@ import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
-import me.saket.telephoto.flick.FlickToDismiss
-import me.saket.telephoto.flick.FlickToDismissState
-import me.saket.telephoto.flick.rememberFlickToDismissState
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 import timber.log.Timber
-import kotlin.time.Duration
 
 @Composable
 fun MediaViewerView(
@@ -289,22 +284,13 @@ private fun MediaViewerPage(
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
     val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
-    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
 
-    DismissFlickEffects(
-        flickState = flickState,
-        onDismissing = { animationDuration ->
-            delay(animationDuration / 3)
-            onDismiss()
-        },
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
         onDragging = {
             currentOnShowOverlayChange(false)
-        }
-    )
-
-    FlickToDismiss(
-        state = flickState,
-        modifier = modifier.background(backgroundColorFor(flickState))
+        },
+        modifier = modifier,
     ) {
         val downloadedMedia by data.downloadedMedia
         val showProgress = rememberShowProgress(downloadedMedia)
@@ -371,20 +357,9 @@ private fun MediaViewerLoadingPage(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
-
-    DismissFlickEffects(
-        flickState = flickState,
-        onDismissing = { animationDuration ->
-            delay(animationDuration / 3)
-            onDismiss()
-        },
-        onDragging = {},
-    )
-
-    FlickToDismiss(
-        state = flickState,
-        modifier = modifier.background(backgroundColorFor(flickState))
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
@@ -403,20 +378,9 @@ private fun MediaViewerErrorPage(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
-
-    DismissFlickEffects(
-        flickState = flickState,
-        onDismissing = { animationDuration ->
-            delay(animationDuration / 3)
-            onDismiss()
-        },
-        onDragging = {},
-    )
-
-    FlickToDismiss(
-        state = flickState,
-        modifier = modifier.background(backgroundColorFor(flickState))
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
@@ -429,30 +393,6 @@ private fun MediaViewerErrorPage(
                 onRetry = null
             )
         }
-    }
-}
-
-@Composable
-private fun DismissFlickEffects(
-    flickState: FlickToDismissState,
-    onDismissing: suspend (Duration) -> Unit,
-    onDragging: suspend () -> Unit,
-) {
-    val currentOnDismissing by rememberUpdatedState(onDismissing)
-    val currentOnDragging by rememberUpdatedState(onDragging)
-
-    when (val gestureState = flickState.gestureState) {
-        is FlickToDismissState.GestureState.Dismissing -> {
-            LaunchedEffect(Unit) {
-                currentOnDismissing(gestureState.animationDuration)
-            }
-        }
-        is FlickToDismissState.GestureState.Dragging -> {
-            LaunchedEffect(Unit) {
-                currentOnDragging()
-            }
-        }
-        else -> Unit
     }
 }
 
@@ -621,21 +561,6 @@ private fun ErrorView(
         onRetry = onRetry,
         onDismiss = onDismiss
     )
-}
-
-@Composable
-private fun backgroundColorFor(flickState: FlickToDismissState): Color {
-    val animatedAlpha by animateFloatAsState(
-        targetValue = when (flickState.gestureState) {
-            is FlickToDismissState.GestureState.Dismissed,
-            is FlickToDismissState.GestureState.Dismissing -> 0f
-            is FlickToDismissState.GestureState.Dragging,
-            is FlickToDismissState.GestureState.Idle,
-            is FlickToDismissState.GestureState.Resetting -> 1f - flickState.offsetFraction
-        },
-        label = "Background alpha",
-    )
-    return Color.Black.copy(alpha = animatedAlpha)
 }
 
 // Only preview in dark, dark theme is forced on the Node.
