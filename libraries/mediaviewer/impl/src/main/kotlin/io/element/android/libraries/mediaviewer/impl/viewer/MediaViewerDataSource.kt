@@ -28,6 +28,7 @@ import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.gallery.mediaSource
 import io.element.android.libraries.mediaviewer.impl.gallery.thumbnailSource
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -68,9 +69,15 @@ class MediaViewerDataSource(
     fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
-                val mediaItems = groupedItems.dataOrNull()?.getItems(galleryMode).orEmpty()
-                withContext(dispatcher) {
-                    buildMediaViewerPageList(mediaItems)
+                if (groupedItems is AsyncData.Failure) {
+                    persistentListOf(
+                        MediaViewerPageData.Failure(groupedItems.error),
+                    )
+                } else {
+                    val mediaItems = groupedItems.dataOrNull()?.getItems(galleryMode).orEmpty()
+                    withContext(dispatcher) {
+                        buildMediaViewerPageList(mediaItems)
+                    }
                 }
             }
     }

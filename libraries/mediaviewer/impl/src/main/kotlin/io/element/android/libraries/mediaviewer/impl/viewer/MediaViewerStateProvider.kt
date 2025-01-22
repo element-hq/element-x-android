@@ -154,6 +154,11 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     MediaViewerPageData.Loading(Timeline.PaginationDirection.BACKWARDS)
                 ),
             ),
+            aMediaViewerState(
+                listOf(
+                    MediaViewerPageData.Failure(Exception("error"))
+                ),
+            ),
         )
 }
 

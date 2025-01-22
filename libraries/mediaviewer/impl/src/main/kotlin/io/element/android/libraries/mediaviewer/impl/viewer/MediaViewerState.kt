@@ -28,6 +28,10 @@ data class MediaViewerState(
 )
 
 sealed interface MediaViewerPageData {
+    data class Failure(
+        val throwable: Throwable,
+    ) : MediaViewerPageData
+
     data class Loading(
         val direction: Timeline.PaginationDirection,
     ) : MediaViewerPageData

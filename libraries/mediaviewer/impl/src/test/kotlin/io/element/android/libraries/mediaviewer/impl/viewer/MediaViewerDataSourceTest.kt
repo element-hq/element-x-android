@@ -69,8 +69,7 @@ class MediaViewerDataSourceTest {
             galleryDataSource.emitGroupedMediaItems(AsyncData.Loading())
             assertThat(awaitItem().first()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             galleryDataSource.emitGroupedMediaItems(AsyncData.Failure(AN_EXCEPTION))
-            // TODO Add an error screen in the ui
-            assertThat(awaitItem().first()).isInstanceOf(MediaViewerPageData.Loading::class.java)
+            assertThat(awaitItem().first()).isEqualTo(MediaViewerPageData.Failure(AN_EXCEPTION))
         }
     }
 

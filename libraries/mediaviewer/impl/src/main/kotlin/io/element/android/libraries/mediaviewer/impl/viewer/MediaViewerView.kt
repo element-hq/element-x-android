@@ -55,6 +55,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -123,6 +124,14 @@ fun MediaViewerView(
             beyondViewportPageCount = 1,
         ) { page ->
             when (val dataForPage = state.listData[page]) {
+                is MediaViewerPageData.Failure -> {
+                    MediaViewerErrorPage(
+                        throwable = dataForPage.throwable,
+                        onDismiss = {
+                            onBackClick()
+                        },
+                    )
+                }
                 is MediaViewerPageData.Loading -> {
                     LaunchedEffect(Unit) {
                         state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
@@ -200,11 +209,13 @@ fun MediaViewerView(
                     else -> {
                         TopAppBar(
                             title = {
-                                Text(
-                                    text = stringResource(id = CommonStrings.common_loading_more),
-                                    style = ElementTheme.typography.fontBodyMdMedium,
-                                    color = ElementTheme.colors.textPrimary,
-                                )
+                                if (currentData is MediaViewerPageData.Loading) {
+                                    Text(
+                                        text = stringResource(id = CommonStrings.common_loading_more),
+                                        style = ElementTheme.typography.fontBodyMdMedium,
+                                        color = ElementTheme.colors.textPrimary,
+                                    )
+                                }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = Color.Transparent.copy(0.6f),
@@ -382,6 +393,41 @@ private fun MediaViewerLoadingPage(
             contentAlignment = Alignment.Center
         ) {
             AsyncLoading()
+        }
+    }
+}
+
+@Composable
+private fun MediaViewerErrorPage(
+    throwable: Throwable,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
+
+    DismissFlickEffects(
+        flickState = flickState,
+        onDismissing = { animationDuration ->
+            delay(animationDuration / 3)
+            onDismiss()
+        },
+        onDragging = {},
+    )
+
+    FlickToDismiss(
+        state = flickState,
+        modifier = modifier.background(backgroundColorFor(flickState))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncFailure(
+                throwable = throwable,
+                onRetry = null
+            )
         }
     }
 }
