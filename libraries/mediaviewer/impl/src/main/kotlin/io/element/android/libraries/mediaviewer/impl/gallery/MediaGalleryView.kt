@@ -108,15 +108,15 @@ fun MediaGalleryView(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
-                .consumeWindowInsets(paddingValues)
-                .fillMaxSize(),
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 MediaGalleryMode.entries.forEach { mode ->
                     SegmentedButton(
@@ -137,7 +137,6 @@ fun MediaGalleryView(
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false,
-                modifier = Modifier,
             ) { page ->
                 val mode = MediaGalleryMode.entries[page]
                 MediaGalleryPage(
@@ -355,8 +354,8 @@ private fun MediaGalleryImageGrid(
 ) {
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
         columns = GridCells.Adaptive(80.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -427,9 +426,9 @@ private fun LoadingMoreIndicator(
             Timeline.PaginationDirection.FORWARDS -> {
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 2.dp)
-                        .height(1.dp)
+                            .fillMaxWidth()
+                            .padding(top = 2.dp)
+                            .height(1.dp)
                 )
             }
             Timeline.PaginationDirection.BACKWARDS -> {
@@ -467,9 +466,9 @@ private fun EmptyContent(
         OnboardingBackground()
         PageTitle(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 44.dp)
-                .padding(24.dp),
+                    .fillMaxWidth()
+                    .padding(top = 44.dp)
+                    .padding(24.dp),
             title = stringResource(titleRes),
             iconStyle = BigIcon.Style.Default(icon),
             subtitle = stringResource(subtitleRes),
@@ -487,9 +486,9 @@ private fun LoadingContent(
         OnboardingBackground()
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 48.dp)
-                .padding(24.dp),
+                    .fillMaxSize()
+                    .padding(top = 48.dp)
+                    .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
