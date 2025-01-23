@@ -11,8 +11,8 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 const val A_FAKE_TIMESTAMP = 123L
 
-class FakeSystemClock : SystemClock {
-    override fun epochMillis(): Long {
-        return A_FAKE_TIMESTAMP
-    }
+class FakeSystemClock(
+    var epochMillisResult: Long = A_FAKE_TIMESTAMP
+) : SystemClock {
+    override fun epochMillis() = epochMillisResult
 }
