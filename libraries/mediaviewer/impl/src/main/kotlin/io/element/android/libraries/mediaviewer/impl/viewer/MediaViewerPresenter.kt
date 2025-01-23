@@ -206,8 +206,6 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
         return data.indexOfFirst {
             (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
-        }
-            .takeIf { it != -1 }
-            ?: 0
+        }.coerceAtLeast(0)
     }
 }
