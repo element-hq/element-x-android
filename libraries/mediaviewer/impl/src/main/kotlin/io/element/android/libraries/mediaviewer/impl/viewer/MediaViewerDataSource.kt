@@ -71,14 +71,26 @@ class MediaViewerDataSource(
     fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
-                if (groupedItems is AsyncData.Failure) {
-                    persistentListOf(
-                        MediaViewerPageData.Failure(groupedItems.error),
-                    )
-                } else {
-                    val mediaItems = groupedItems.dataOrNull()?.getItems(galleryMode).orEmpty()
-                    withContext(dispatcher) {
-                        buildMediaViewerPageList(mediaItems)
+                when (groupedItems) {
+                    AsyncData.Uninitialized,
+                    is AsyncData.Loading -> {
+                        persistentListOf(
+                            MediaViewerPageData.Loading(
+                                direction = Timeline.PaginationDirection.BACKWARDS,
+                                timestamp = systemClock.epochMillis(),
+                            )
+                        )
+                    }
+                    is AsyncData.Failure -> {
+                        persistentListOf(
+                            MediaViewerPageData.Failure(groupedItems.error),
+                        )
+                    }
+                    is AsyncData.Success -> {
+                        withContext(dispatcher) {
+                            val mediaItems = groupedItems.data.getItems(galleryMode)
+                            buildMediaViewerPageList(mediaItems)
+                        }
                     }
                 }
             }
@@ -116,14 +128,6 @@ class MediaViewerDataSource(
                     )
                 )
             }
-        }
-        if (isEmpty()) {
-            add(
-                MediaViewerPageData.Loading(
-                    direction = Timeline.PaginationDirection.BACKWARDS,
-                    timestamp = systemClock.epochMillis(),
-                )
-            )
         }
     }.toPersistentList()
 

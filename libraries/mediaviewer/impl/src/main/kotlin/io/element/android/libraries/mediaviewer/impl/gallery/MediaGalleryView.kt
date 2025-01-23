@@ -198,6 +198,13 @@ private fun MediaGalleryPage(
 ) {
     val groupedMediaItems = state.groupedMediaItems
     if (groupedMediaItems.isLoadingItems(mode)) {
+        // Need to trigger a pagination now if there is only one LoadingIndicator.
+        (groupedMediaItems.dataOrNull()
+            ?.getItems(mode)?.singleOrNull() as? MediaItem.LoadingIndicator)?.let { item ->
+            LaunchedEffect(item.timestamp) {
+                state.eventSink(MediaGalleryEvents.LoadMore(item.direction))
+            }
+        }
         LoadingContent(mode)
     } else {
         when (groupedMediaItems) {

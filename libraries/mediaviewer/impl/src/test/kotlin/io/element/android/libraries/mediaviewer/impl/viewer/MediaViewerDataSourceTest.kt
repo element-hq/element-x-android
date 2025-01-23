@@ -91,13 +91,7 @@ class MediaViewerDataSourceTest {
                 )
             )
             val result = awaitItem()
-            assertThat(result).hasSize(1)
-            assertThat(result.first()).isEqualTo(
-                MediaViewerPageData.Loading(
-                    direction = Timeline.PaginationDirection.BACKWARDS,
-                    timestamp = A_FAKE_TIMESTAMP,
-                )
-            )
+            assertThat(result).isEmpty()
         }
     }
 
