@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
@@ -54,6 +55,7 @@ import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.history.map
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
@@ -797,8 +799,6 @@ class RustMatrixRoom(
         }
     }
 
-
-
     override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.updateRoomVisibility(roomVisibility.map())
@@ -814,6 +814,18 @@ class RustMatrixRoom(
     override suspend fun getRoomVisibility(): Result<RoomVisibility> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.getRoomVisibility().map()
+        }
+    }
+
+    override suspend fun enableEncryption(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.enableEncryption()
+        }
+    }
+
+    override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateJoinRules(joinRule.map())
         }
     }
 

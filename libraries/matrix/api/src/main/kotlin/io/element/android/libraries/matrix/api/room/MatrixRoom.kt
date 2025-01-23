@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
@@ -450,4 +451,14 @@ interface MatrixRoom : Closeable {
      * - `false` if the room alias didn't exist so it couldn't be removed.
      */
     suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
+
+    /**
+     * Enable End-to-end encryption in this room.
+     */
+    suspend fun enableEncryption(): Result<Unit>
+
+    /**
+     * Update the join rule for this room.
+     */
+    suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
 }

@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
@@ -153,6 +154,8 @@ class FakeMatrixRoom(
     private val roomVisibilityResult: () -> Result<RoomVisibility> = { lambdaError() },
     private val publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     private val removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
+    private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
+    private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -203,9 +206,11 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    fun enableEncryption() {
-        isEncrypted = true
-        emitSyncUpdate()
+    override suspend fun enableEncryption(): Result<Unit> = simulateLongTask {
+        enableEncryptionResult().onSuccess {
+            isEncrypted = true
+            emitSyncUpdate()
+        }
     }
 
     private val _syncUpdateFlow = MutableStateFlow(0L)
@@ -612,6 +617,10 @@ class FakeMatrixRoom(
 
     override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
         removeRoomAliasFromRoomDirectoryResult(roomAlias)
+    }
+
+    override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = simulateLongTask {
+        updateJoinRuleResult(joinRule)
     }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
