@@ -122,9 +122,7 @@ fun MediaViewerView(
                 is MediaViewerPageData.Failure -> {
                     MediaViewerErrorPage(
                         throwable = dataForPage.throwable,
-                        onDismiss = {
-                            onBackClick()
-                        },
+                        onDismiss = onBackClick,
                     )
                 }
                 is MediaViewerPageData.Loading -> {
@@ -132,9 +130,7 @@ fun MediaViewerView(
                         state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
                     }
                     MediaViewerLoadingPage(
-                        onDismiss = {
-                            onBackClick()
-                        },
+                        onDismiss = onBackClick,
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
