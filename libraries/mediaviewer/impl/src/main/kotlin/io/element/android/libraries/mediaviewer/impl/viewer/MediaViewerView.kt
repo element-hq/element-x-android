@@ -78,6 +78,7 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomS
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -209,7 +210,7 @@ fun MediaViewerView(
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = Color.Black.copy(alpha = 0.6f),
+                                containerColor = bgCanvasWithTransparency,
                             ),
                             navigationIcon = { BackButton(onClick = onBackClick) },
                         )
@@ -455,7 +456,7 @@ private fun MediaViewerTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black.copy(alpha = 0.6f),
+            containerColor = bgCanvasWithTransparency,
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
@@ -501,7 +502,7 @@ private fun MediaViewerBottomBar(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0x99101317))
+            .background(bgCanvasWithTransparency)
             .onSizeChanged {
                 onHeightChange(it.height)
             },

@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import io.element.android.compound.theme.ElementTheme
 import kotlinx.coroutines.delay
 import me.saket.telephoto.flick.FlickToDismiss
 import me.saket.telephoto.flick.FlickToDismissState
@@ -90,5 +91,5 @@ private fun backgroundColorFor(flickState: FlickToDismissState): Color {
         },
         label = "Background alpha",
     )
-    return Color.Black.copy(alpha = animatedAlpha)
+    return ElementTheme.colors.bgCanvasDefault.copy(alpha = animatedAlpha)
 }
