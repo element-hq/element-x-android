@@ -32,6 +32,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -47,8 +49,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 @Composable
 fun SecurityAndPrivacyView(
@@ -76,40 +76,58 @@ fun SecurityAndPrivacyView(
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
-            RoomAccessSection(
-                modifier = Modifier.padding(top = 24.dp),
-                selected = state.currentSettings.roomAccess,
-                onSelected = { state.eventSink(SecurityAndPrivacyEvents.ChangeRoomAccess(it)) },
-            )
+            if (state.showRoomAccessSection) {
+                RoomAccessSection(
+                    modifier = Modifier.padding(top = 24.dp),
+                    edited = state.editedSettings.roomAccess,
+                    saved = state.savedSettings.roomAccess,
+                    onSelected = { state.eventSink(SecurityAndPrivacyEvents.ChangeRoomAccess(it)) },
+                )
+            }
             if (state.showRoomVisibilitySections) {
                 RoomVisibilitySection(state.homeserverName)
                 RoomAddressSection(
-                    roomAddress = state.currentSettings.addressName,
+                    roomAddress = state.editedSettings.addressName,
                     homeserverName = state.homeserverName,
                     onRoomAddressClick = { state.eventSink(SecurityAndPrivacyEvents.EditRoomAddress) },
-                    isVisibleInPublicDirectory = state.currentSettings.isVisibleInRoomDirectory,
+                    isVisibleInRoomDirectory = state.editedSettings.isVisibleInRoomDirectory,
                     onVisibilityChange = { isVisible ->
                         state.eventSink(SecurityAndPrivacyEvents.ChangeRoomVisibility(isVisible))
                     },
                 )
             }
-            EncryptionSection(
-                isRoomEncrypted = state.currentSettings.isEncrypted,
-                isSectionEnabled = !state.savedSettings.isEncrypted,
-                onToggleEncryption = { state.eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState) },
-                showConfirmation = state.showEncryptionConfirmation,
-                onDismissConfirmation = { state.eventSink(SecurityAndPrivacyEvents.CancelEnableEncryption) },
-                onConfirmEncryption = { state.eventSink(SecurityAndPrivacyEvents.ConfirmEnableEncryption) },
-            )
-            if (state.showRoomHistoryVisibilitySection) {
-                RoomHistorySection(
-                    selectedOption = state.currentSettings.historyVisibility.get(),
+            if (state.showEncryptionSection) {
+                EncryptionSection(
+                    isRoomEncrypted = state.editedSettings.isEncrypted,
+                    canToggleEncryption = !state.savedSettings.isEncrypted,
+                    onToggleEncryption = { state.eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState) },
+                    showConfirmation = state.showEncryptionConfirmation,
+                    onDismissConfirmation = { state.eventSink(SecurityAndPrivacyEvents.CancelEnableEncryption) },
+                    onConfirmEncryption = { state.eventSink(SecurityAndPrivacyEvents.ConfirmEnableEncryption) },
+                )
+            }
+            if (state.showHistoryVisibilitySection) {
+                HistoryVisibilitySection(
+                    editedOption = state.editedSettings.historyVisibility,
+                    savedOptions = state.savedSettings.historyVisibility,
                     availableOptions = state.availableHistoryVisibilities,
                     onSelected = { state.eventSink(SecurityAndPrivacyEvents.ChangeHistoryVisibility(it)) },
                 )
             }
         }
     }
+    AsyncActionView(
+        async = state.saveAction,
+        onSuccess = { },
+        onErrorDismiss = { state.eventSink(SecurityAndPrivacyEvents.DismissSaveError) },
+        errorMessage = { stringResource(CommonStrings.error_unknown) },
+        progressDialog = {
+            AsyncActionViewDefaults.ProgressDialog(
+                progressText = stringResource(CommonStrings.common_saving),
+            )
+        },
+        onRetry = { state.eventSink(SecurityAndPrivacyEvents.Save) },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,7 +178,8 @@ private fun SecurityAndPrivacySection(
 
 @Composable
 private fun RoomAccessSection(
-    selected: SecurityAndPrivacyRoomAccess,
+    edited: SecurityAndPrivacyRoomAccess,
+    saved: SecurityAndPrivacyRoomAccess,
     onSelected: (SecurityAndPrivacyRoomAccess) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -171,26 +190,27 @@ private fun RoomAccessSection(
         ListItem(
             headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_invite_only_option_title)) },
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_invite_only_option_description)) },
-            trailingContent = ListItemContent.RadioButton(selected = selected == SecurityAndPrivacyRoomAccess.InviteOnly),
+            trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.InviteOnly),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.InviteOnly) },
         )
         ListItem(
             headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_ask_to_join_option_title)) },
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_ask_to_join_option_description)) },
-            trailingContent = ListItemContent.RadioButton(selected = selected == SecurityAndPrivacyRoomAccess.AskToJoin),
+            trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.AskToJoin),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.AskToJoin) },
         )
         ListItem(
             headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_anyone_option_title)) },
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_anyone_option_description)) },
-            trailingContent = ListItemContent.RadioButton(selected = selected == SecurityAndPrivacyRoomAccess.Anyone),
+            trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.Anyone) },
         )
-        if (selected == SecurityAndPrivacyRoomAccess.SpaceMember) {
+        if (saved == SecurityAndPrivacyRoomAccess.SpaceMember) {
             ListItem(
                 headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_space_members_option_title)) },
                 supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_space_members_option_description)) },
                 trailingContent = ListItemContent.RadioButton(selected = true, enabled = false),
+                enabled = false,
             )
         }
     }
@@ -217,9 +237,9 @@ private fun RoomVisibilitySection(
 
 @Composable
 private fun RoomAddressSection(
-    roomAddress: Optional<String>,
+    roomAddress: String?,
     homeserverName: String,
-    isVisibleInPublicDirectory: Optional<AsyncData<Boolean>>,
+    isVisibleInRoomDirectory: AsyncData<Boolean>,
     onRoomAddressClick: () -> Unit,
     onVisibilityChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -230,54 +250,53 @@ private fun RoomAddressSection(
     ) {
         ListItem(
             headlineContent = {
-                Text(text = roomAddress.getOrNull() ?: stringResource(CommonStrings.screen_security_and_privacy_add_room_address_action))
+                Text(text = roomAddress ?: stringResource(CommonStrings.screen_security_and_privacy_add_room_address_action))
             },
-            trailingContent = if (roomAddress.isEmpty) ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())) else null,
+            trailingContent = if (roomAddress.isNullOrEmpty()) ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())) else null,
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_address_section_footer)) },
             onClick = onRoomAddressClick,
             colors = ListItemDefaults.colors(trailingIconColor = ElementTheme.colors.iconAccentPrimary),
             alwaysClickable = true
         )
-        if (isVisibleInPublicDirectory.isPresent) {
-            ListItem(
-                headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
-                supportingContent = {
-                    Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
-                },
-                trailingContent =
-                when (val isVisible = isVisibleInPublicDirectory.get()) {
-                    is AsyncData.Uninitialized, is AsyncData.Loading -> {
-                        ListItemContent.Custom {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .progressSemantics()
-                                    .size(20.dp),
-                                strokeWidth = 2.dp
-                            )
-                        }
-                    }
-                    is AsyncData.Failure -> {
-                        ListItemContent.Switch(
-                            checked = false,
-                            enabled = false,
-                        )
-                    }
-                    is AsyncData.Success -> {
-                        ListItemContent.Switch(
-                            checked = isVisible.data,
-                            onChange = onVisibilityChange
+
+        ListItem(
+            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
+            supportingContent = {
+                Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
+            },
+            trailingContent =
+            when (isVisibleInRoomDirectory) {
+                is AsyncData.Uninitialized, is AsyncData.Loading -> {
+                    ListItemContent.Custom {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .progressSemantics()
+                                .size(20.dp),
+                            strokeWidth = 2.dp
                         )
                     }
                 }
-            )
-        }
+                is AsyncData.Failure -> {
+                    ListItemContent.Switch(
+                        checked = false,
+                        enabled = false,
+                    )
+                }
+                is AsyncData.Success -> {
+                    ListItemContent.Switch(
+                        checked = isVisibleInRoomDirectory.data,
+                        onChange = onVisibilityChange,
+                    )
+                }
+            }
+        )
     }
 }
 
 @Composable
 private fun EncryptionSection(
     isRoomEncrypted: Boolean,
-    isSectionEnabled: Boolean,
+    canToggleEncryption: Boolean,
     showConfirmation: Boolean,
     onToggleEncryption: () -> Unit,
     onConfirmEncryption: () -> Unit,
@@ -293,10 +312,10 @@ private fun EncryptionSection(
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_section_footer)) },
             trailingContent = ListItemContent.Switch(
                 checked = isRoomEncrypted,
-                enabled = isSectionEnabled,
+                enabled = canToggleEncryption,
                 onChange = { onToggleEncryption() },
             ),
-            onClick = onToggleEncryption,
+            onClick = if (canToggleEncryption) onToggleEncryption else null
         )
     }
     if (showConfirmation) {
@@ -311,8 +330,9 @@ private fun EncryptionSection(
 }
 
 @Composable
-private fun RoomHistorySection(
-    selectedOption: SecurityAndPrivacyHistoryVisibility,
+private fun HistoryVisibilitySection(
+    editedOption: SecurityAndPrivacyHistoryVisibility?,
+    savedOptions: SecurityAndPrivacyHistoryVisibility?,
     availableOptions: Set<SecurityAndPrivacyHistoryVisibility>,
     onSelected: (SecurityAndPrivacyHistoryVisibility) -> Unit,
     modifier: Modifier = Modifier,
@@ -323,32 +343,44 @@ private fun RoomHistorySection(
     ) {
         Spacer(Modifier.height(16.dp))
         for (availableOption in availableOptions) {
-            val isSelected = availableOption == selectedOption
-            when (availableOption) {
-                SecurityAndPrivacyHistoryVisibility.SinceSelection -> {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_history_since_selecting_option_title)) },
-                        trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                        onClick = { onSelected(availableOption) },
-                    )
-                }
-                SecurityAndPrivacyHistoryVisibility.SinceInvite -> {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_history_since_invite_option_title)) },
-                        trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                        onClick = { onSelected(availableOption) },
-                    )
-                }
-                SecurityAndPrivacyHistoryVisibility.Anyone -> {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_history_anyone_option_title)) },
-                        trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                        onClick = { onSelected(availableOption) },
-                    )
-                }
-            }
+            val isSelected = availableOption == editedOption
+            HistoryVisibilityItem(
+                option = availableOption,
+                isSelected = isSelected,
+                onSelected = onSelected,
+            )
+        }
+        if (savedOptions != null && !availableOptions.contains(savedOptions)) {
+            HistoryVisibilityItem(
+                option = savedOptions,
+                isSelected = true,
+                isEnabled = false,
+                onSelected = {},
+            )
         }
     }
+}
+
+@Composable
+private fun HistoryVisibilityItem(
+    option: SecurityAndPrivacyHistoryVisibility,
+    isSelected: Boolean,
+    onSelected: (SecurityAndPrivacyHistoryVisibility) -> Unit,
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
+) {
+    val headlineText = when (option) {
+        SecurityAndPrivacyHistoryVisibility.SinceSelection -> stringResource(CommonStrings.screen_security_and_privacy_room_history_since_selecting_option_title)
+        SecurityAndPrivacyHistoryVisibility.SinceInvite -> stringResource(CommonStrings.screen_security_and_privacy_room_history_since_invite_option_title)
+        SecurityAndPrivacyHistoryVisibility.Anyone -> stringResource(CommonStrings.screen_security_and_privacy_room_history_anyone_option_title)
+    }
+    ListItem(
+        headlineContent = { Text(text = headlineText) },
+        trailingContent = ListItemContent.RadioButton(selected = isSelected, enabled = isEnabled),
+        onClick = { onSelected(option) },
+        enabled = isEnabled,
+        modifier = modifier,
+    )
 }
 
 @PreviewWithLargeHeight

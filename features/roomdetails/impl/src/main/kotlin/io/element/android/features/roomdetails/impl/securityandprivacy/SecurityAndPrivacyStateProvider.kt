@@ -8,37 +8,37 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import java.util.Optional
 
 open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAndPrivacyState> {
     override val values: Sequence<SecurityAndPrivacyState>
         get() = sequenceOf(
             aSecurityAndPrivacyState(),
             aSecurityAndPrivacyState(
-                currentSettings = aSecurityAndPrivacySettings(
+                editedSettings = aSecurityAndPrivacySettings(
                     roomAccess = SecurityAndPrivacyRoomAccess.AskToJoin
                 )
             ),
             aSecurityAndPrivacyState(
-                currentSettings = aSecurityAndPrivacySettings(
+                editedSettings = aSecurityAndPrivacySettings(
                     roomAccess = SecurityAndPrivacyRoomAccess.Anyone,
                     isEncrypted = false,
                 )
             ),
             aSecurityAndPrivacyState(
-                currentSettings = aSecurityAndPrivacySettings(
+                editedSettings = aSecurityAndPrivacySettings(
                     roomAccess = SecurityAndPrivacyRoomAccess.SpaceMember
                 )
             ),
             aSecurityAndPrivacyState(
-                currentSettings = aSecurityAndPrivacySettings(
-                    isVisibleInRoomDirectory = Optional.of(AsyncData.Loading())
+                editedSettings = aSecurityAndPrivacySettings(
+                    isVisibleInRoomDirectory = AsyncData.Loading()
                 )
             ),
             aSecurityAndPrivacyState(
-                currentSettings = aSecurityAndPrivacySettings(
-                    isVisibleInRoomDirectory = Optional.of(AsyncData.Success(true))
+                editedSettings = aSecurityAndPrivacySettings(
+                    isVisibleInRoomDirectory = AsyncData.Success(true)
                 )
             ),
             aSecurityAndPrivacyState(
@@ -50,9 +50,9 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
 fun aSecurityAndPrivacySettings(
     roomAccess: SecurityAndPrivacyRoomAccess = SecurityAndPrivacyRoomAccess.InviteOnly,
     isEncrypted: Boolean = true,
-    formattedAddress: Optional<String> = Optional.empty(),
-    historyVisibility: Optional<SecurityAndPrivacyHistoryVisibility> = Optional.of(SecurityAndPrivacyHistoryVisibility.SinceSelection),
-    isVisibleInRoomDirectory: Optional<AsyncData<Boolean>> = Optional.empty()
+    formattedAddress: String? = null,
+    historyVisibility: SecurityAndPrivacyHistoryVisibility? = null,
+    isVisibleInRoomDirectory: AsyncData<Boolean> = AsyncData.Uninitialized,
 ) = SecurityAndPrivacySettings(
     roomAccess = roomAccess,
     isEncrypted = isEncrypted,
@@ -62,15 +62,17 @@ fun aSecurityAndPrivacySettings(
 )
 
 fun aSecurityAndPrivacyState(
-    currentSettings: SecurityAndPrivacySettings = aSecurityAndPrivacySettings(),
-    savedSettings: SecurityAndPrivacySettings = currentSettings,
+    savedSettings: SecurityAndPrivacySettings = aSecurityAndPrivacySettings(),
+    editedSettings: SecurityAndPrivacySettings = savedSettings,
     homeserverName: String = "myserver.xyz",
     showEncryptionConfirmation: Boolean = false,
+    saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (SecurityAndPrivacyEvents) -> Unit = {}
 ) = SecurityAndPrivacyState(
-    currentSettings = currentSettings,
+    editedSettings = editedSettings,
     savedSettings = savedSettings,
     homeserverName = homeserverName,
     showEncryptionConfirmation = showEncryptionConfirmation,
+    saveAction = saveAction,
     eventSink = eventSink
 )

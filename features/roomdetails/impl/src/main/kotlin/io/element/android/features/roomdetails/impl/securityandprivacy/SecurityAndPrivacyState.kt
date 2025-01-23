@@ -7,46 +7,58 @@
 
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 data class SecurityAndPrivacyState(
+    // the settings that are currently applied on the room.
     val savedSettings: SecurityAndPrivacySettings,
-    val currentSettings: SecurityAndPrivacySettings,
+    // the settings the user wants to apply.
+    val editedSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
     val showEncryptionConfirmation: Boolean,
+    val saveAction: AsyncAction<Unit>,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
 
-    val canBeSaved = savedSettings != currentSettings
+    val canBeSaved = savedSettings != editedSettings
 
-    val showRoomVisibilitySections = currentSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly && currentSettings.historyVisibility.isPresent
 
     val availableHistoryVisibilities = buildSet {
         add(SecurityAndPrivacyHistoryVisibility.SinceSelection)
-        if (currentSettings.roomAccess == SecurityAndPrivacyRoomAccess.Anyone && !currentSettings.isEncrypted) {
+        if (editedSettings.roomAccess == SecurityAndPrivacyRoomAccess.Anyone && !editedSettings.isEncrypted) {
             add(SecurityAndPrivacyHistoryVisibility.Anyone)
         } else {
             add(SecurityAndPrivacyHistoryVisibility.SinceInvite)
         }
-        if (savedSettings.historyVisibility.getOrNull() == SecurityAndPrivacyHistoryVisibility.SinceInvite) {
-            add(SecurityAndPrivacyHistoryVisibility.SinceInvite)
-        }
     }
-    val showRoomHistoryVisibilitySection = availableHistoryVisibilities.isNotEmpty() && currentSettings.historyVisibility.isPresent
+    val showRoomAccessSection: Boolean = true
+    val showRoomVisibilitySections = editedSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly
+    val showHistoryVisibilitySection = editedSettings.historyVisibility != null
+    val showEncryptionSection = true
 }
 
 data class SecurityAndPrivacySettings(
     val roomAccess: SecurityAndPrivacyRoomAccess,
     val isEncrypted: Boolean,
-    val historyVisibility: Optional<SecurityAndPrivacyHistoryVisibility>,
-    val addressName: Optional<String>,
-    val isVisibleInRoomDirectory: Optional<AsyncData<Boolean>>
+    val historyVisibility: SecurityAndPrivacyHistoryVisibility?,
+    val addressName: String?,
+    val isVisibleInRoomDirectory: AsyncData<Boolean>
 )
 
 enum class SecurityAndPrivacyHistoryVisibility {
-    SinceSelection, SinceInvite, Anyone
+    SinceSelection, SinceInvite, Anyone;
+
+    /**
+     * Returns the fallback visibility when the current visibility is not available.
+     */
+    fun fallback(): SecurityAndPrivacyHistoryVisibility {
+        return when (this) {
+            SinceSelection -> SinceSelection
+            SinceInvite -> Anyone
+            Anyone -> SinceInvite
+        }
+    }
 }
 
 enum class SecurityAndPrivacyRoomAccess {
