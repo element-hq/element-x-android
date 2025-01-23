@@ -101,10 +101,10 @@ private fun VideoInfoRow(
             imageVector = CompoundIcons.VideoCallSolid(),
             contentDescription = null
         )
-        if (video.duration != null) {
+        video.mediaInfo.duration?.let { duration ->
             Spacer(Modifier.weight(1f))
             Text(
-                text = video.duration,
+                text = duration,
                 style = ElementTheme.typography.fontBodySmMedium,
                 color = ElementTheme.colors.textPrimary,
             )

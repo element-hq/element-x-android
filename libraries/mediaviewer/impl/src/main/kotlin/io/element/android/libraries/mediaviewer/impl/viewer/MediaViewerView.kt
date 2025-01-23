@@ -11,7 +11,6 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -22,6 +21,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +54,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -74,14 +78,12 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomS
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
-import me.saket.telephoto.flick.FlickToDismiss
-import me.saket.telephoto.flick.FlickToDismissState
-import me.saket.telephoto.flick.rememberFlickToDismissState
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
-import kotlin.time.Duration
+import timber.log.Timber
 
 @Composable
 fun MediaViewerView(
@@ -93,51 +95,129 @@ fun MediaViewerView(
     var showOverlay by remember { mutableStateOf(true) }
 
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
-    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
+    val currentData = state.listData.getOrNull(state.currentIndex)
     BackHandler { onBackClick() }
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
-        MediaViewerPage(
-            showOverlay = showOverlay,
-            bottomPaddingInPixels = bottomPaddingInPixels,
-            state = state,
-            onDismiss = {
-                onBackClick()
-            },
-            onShowOverlayChange = {
-                showOverlay = it
+        val pagerState = rememberPagerState(state.currentIndex, 0f) {
+            state.listData.size
+        }
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.currentPage }.collect { page ->
+                state.eventSink(MediaViewerEvents.OnNavigateTo(page))
             }
-        )
+        }
+        LaunchedEffect(state.listData) {
+            Timber.d("MediaViewerView: state.listData: ${state.listData}")
+        }
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier,
+            // Pre-load previous and next pages
+            beyondViewportPageCount = 1,
+        ) { page ->
+            when (val dataForPage = state.listData[page]) {
+                is MediaViewerPageData.Failure -> {
+                    MediaViewerErrorPage(
+                        throwable = dataForPage.throwable,
+                        onDismiss = onBackClick,
+                    )
+                }
+                is MediaViewerPageData.Loading -> {
+                    LaunchedEffect(dataForPage.timestamp) {
+                        state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
+                    }
+                    MediaViewerLoadingPage(
+                        onDismiss = onBackClick,
+                    )
+                }
+                is MediaViewerPageData.MediaViewerData -> {
+                    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
+                    LaunchedEffect(Unit) {
+                        state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        MediaViewerPage(
+                            isDisplayed = page == pagerState.settledPage,
+                            showOverlay = showOverlay,
+                            bottomPaddingInPixels = bottomPaddingInPixels,
+                            data = dataForPage,
+                            onDismiss = onBackClick,
+                            onRetry = {
+                                state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                            },
+                            onDismissError = {
+                                state.eventSink(MediaViewerEvents.ClearLoadingError(dataForPage))
+                            },
+                            onShowOverlayChange = {
+                                showOverlay = it
+                            }
+                        )
+                        // Bottom bar
+                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .navigationBarsPadding()
+                            ) {
+                                MediaViewerBottomBar(
+                                    modifier = Modifier.align(Alignment.BottomCenter),
+                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                    caption = dataForPage.mediaInfo.caption,
+                                    onHeightChange = { bottomPaddingInPixels = it },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Top bar
         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .navigationBarsPadding()
             ) {
-                MediaViewerTopBar(
-                    actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                    mimeType = state.mediaInfo.mimeType,
-                    senderName = state.mediaInfo.senderName,
-                    dateSent = state.mediaInfo.dateSent,
-                    canShowInfo = state.canShowInfo,
-                    onBackClick = onBackClick,
-                    onInfoClick = {
-                        state.eventSink(MediaViewerEvents.OpenInfo)
-                    },
-                    eventSink = state.eventSink
-                )
-                MediaViewerBottomBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    showDivider = state.mediaInfo.mimeType.isMimeTypeVideo(),
-                    caption = state.mediaInfo.caption,
-                    onHeightChange = { bottomPaddingInPixels = it },
-                )
+                when (currentData) {
+                    is MediaViewerPageData.MediaViewerData -> {
+                        MediaViewerTopBar(
+                            data = currentData,
+                            canShowInfo = state.canShowInfo,
+                            onBackClick = onBackClick,
+                            onInfoClick = {
+                                state.eventSink(MediaViewerEvents.OpenInfo(currentData))
+                            },
+                            eventSink = state.eventSink
+                        )
+                    }
+                    else -> {
+                        TopAppBar(
+                            title = {
+                                if (currentData is MediaViewerPageData.Loading) {
+                                    Text(
+                                        text = stringResource(id = CommonStrings.common_loading_more),
+                                        style = ElementTheme.typography.fontBodyMdMedium,
+                                        color = ElementTheme.colors.textPrimary,
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = bgCanvasWithTransparency,
+                            ),
+                            navigationIcon = { BackButton(onClick = onBackClick) },
+                        )
+                    }
+                }
             }
         }
     }
+
     when (val bottomSheetState = state.mediaBottomSheetState) {
         MediaBottomSheetState.Hidden -> Unit
         is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
@@ -147,13 +227,24 @@ fun MediaViewerView(
                     state.eventSink(MediaViewerEvents.ViewInTimeline(it))
                 },
                 onShare = {
-                    state.eventSink(MediaViewerEvents.Share)
+                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                        state.eventSink(MediaViewerEvents.Share(currentData))
+                    }
                 },
                 onDownload = {
-                    state.eventSink(MediaViewerEvents.SaveOnDisk)
+                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                        state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))
+                    }
                 },
                 onDelete = { eventId ->
-                    state.eventSink(MediaViewerEvents.ConfirmDelete(eventId))
+                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                        state.eventSink(
+                            MediaViewerEvents.ConfirmDelete(
+                                eventId,
+                                currentData,
+                            )
+                        )
+                    }
                 },
                 onDismiss = {
                     state.eventSink(MediaViewerEvents.CloseBottomSheet)
@@ -176,41 +267,31 @@ fun MediaViewerView(
 
 @Composable
 private fun MediaViewerPage(
+    isDisplayed: Boolean,
     showOverlay: Boolean,
     bottomPaddingInPixels: Int,
-    state: MediaViewerState,
+    data: MediaViewerPageData.MediaViewerData,
     onDismiss: () -> Unit,
+    onRetry: () -> Unit,
+    onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onRetry() {
-        state.eventSink(MediaViewerEvents.RetryLoading)
-    }
-
-    fun onDismissError() {
-        state.eventSink(MediaViewerEvents.ClearLoadingError)
-    }
-
     val currentShowOverlay by rememberUpdatedState(showOverlay)
     val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
-    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
 
-    DismissFlickEffects(
-        flickState = flickState,
-        onDismissing = { animationDuration ->
-            delay(animationDuration / 3)
-            onDismiss()
-        },
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
         onDragging = {
             currentOnShowOverlayChange(false)
-        }
-    )
-
-    FlickToDismiss(
-        state = flickState,
-        modifier = modifier.background(backgroundColorFor(flickState))
+        },
+        onResetting = {
+            currentOnShowOverlayChange(true)
+        },
+        modifier = modifier,
     ) {
-        val showProgress = rememberShowProgress(state.downloadedMedia)
+        val downloadedMedia by data.downloadedMedia
+        val showProgress = rememberShowProgress(downloadedMedia)
 
         Box(
             modifier = Modifier
@@ -224,7 +305,7 @@ private fun MediaViewerPage(
                 val localMediaViewState = rememberLocalMediaViewState(zoomableState)
                 val showThumbnail = !localMediaViewState.isReady
                 val playableState = localMediaViewState.playableState
-                val showError = state.downloadedMedia is AsyncData.Failure
+                val showError = downloadedMedia.isFailure()
 
                 LaunchedEffect(playableState) {
                     if (playableState is PlayableState.Playable) {
@@ -234,10 +315,11 @@ private fun MediaViewerPage(
 
                 LocalMediaView(
                     modifier = Modifier.fillMaxSize(),
+                    isDisplayed = isDisplayed,
                     bottomPaddingInPixels = bottomPaddingInPixels,
                     localMediaViewState = localMediaViewState,
-                    localMedia = state.downloadedMedia.dataOrNull(),
-                    mediaInfo = state.mediaInfo,
+                    localMedia = downloadedMedia.dataOrNull(),
+                    mediaInfo = data.mediaInfo,
                     onClick = {
                         if (playableState is PlayableState.NotPlayable) {
                             currentOnShowOverlayChange(!currentShowOverlay)
@@ -245,15 +327,15 @@ private fun MediaViewerPage(
                     },
                 )
                 ThumbnailView(
-                    mediaInfo = state.mediaInfo,
-                    thumbnailSource = state.thumbnailSource,
+                    mediaInfo = data.mediaInfo,
+                    thumbnailSource = data.thumbnailSource,
                     isVisible = showThumbnail,
                 )
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
-                        onRetry = ::onRetry,
-                        onDismiss = ::onDismissError
+                        onRetry = onRetry,
+                        onDismiss = onDismissError
                     )
                 }
             }
@@ -269,26 +351,46 @@ private fun MediaViewerPage(
 }
 
 @Composable
-private fun DismissFlickEffects(
-    flickState: FlickToDismissState,
-    onDismissing: suspend (Duration) -> Unit,
-    onDragging: suspend () -> Unit,
+private fun MediaViewerLoadingPage(
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val currentOnDismissing by rememberUpdatedState(onDismissing)
-    val currentOnDragging by rememberUpdatedState(onDragging)
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
+        modifier = modifier,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncLoading()
+        }
+    }
+}
 
-    when (val gestureState = flickState.gestureState) {
-        is FlickToDismissState.GestureState.Dismissing -> {
-            LaunchedEffect(Unit) {
-                currentOnDismissing(gestureState.animationDuration)
-            }
+@Composable
+private fun MediaViewerErrorPage(
+    throwable: Throwable,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    MediaViewerFlickToDismiss(
+        onDismiss = onDismiss,
+        modifier = modifier,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncFailure(
+                throwable = throwable,
+                onRetry = null
+            )
         }
-        is FlickToDismissState.GestureState.Dragging -> {
-            LaunchedEffect(Unit) {
-                currentOnDragging()
-            }
-        }
-        else -> Unit
     }
 }
 
@@ -316,15 +418,17 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaViewerTopBar(
-    actionsEnabled: Boolean,
-    mimeType: String,
-    senderName: String?,
-    dateSent: String?,
+    data: MediaViewerPageData.MediaViewerData,
     canShowInfo: Boolean,
     onBackClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
+    val downloadedMedia by data.downloadedMedia
+    val actionsEnabled = downloadedMedia.isSuccess()
+    val mimeType = data.mediaInfo.mimeType
+    val senderName = data.mediaInfo.senderName
+    val dateSent = data.mediaInfo.dateSent
     TopAppBar(
         title = {
             if (senderName != null && dateSent != null) {
@@ -350,14 +454,14 @@ private fun MediaViewerTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent.copy(0.6f),
+            containerColor = bgCanvasWithTransparency,
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
-                    eventSink(MediaViewerEvents.OpenWith)
+                    eventSink(MediaViewerEvents.OpenWith(data))
                 },
             ) {
                 when (mimeType) {
@@ -378,7 +482,7 @@ private fun MediaViewerTopBar(
                 ) {
                     Icon(
                         imageVector = CompoundIcons.Info(),
-                        contentDescription = null,
+                        contentDescription = stringResource(id = CommonStrings.a11y_view_details),
                     )
                 }
             }
@@ -396,7 +500,7 @@ private fun MediaViewerBottomBar(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0x99101317))
+            .background(bgCanvasWithTransparency)
             .onSizeChanged {
                 onHeightChange(it.height)
             },
@@ -455,21 +559,6 @@ private fun ErrorView(
         onRetry = onRetry,
         onDismiss = onDismiss
     )
-}
-
-@Composable
-private fun backgroundColorFor(flickState: FlickToDismissState): Color {
-    val animatedAlpha by animateFloatAsState(
-        targetValue = when (flickState.gestureState) {
-            is FlickToDismissState.GestureState.Dismissed,
-            is FlickToDismissState.GestureState.Dismissing -> 0f
-            is FlickToDismissState.GestureState.Dragging,
-            is FlickToDismissState.GestureState.Idle,
-            is FlickToDismissState.GestureState.Resetting -> 1f - flickState.offsetFraction
-        },
-        label = "Background alpha",
-    )
-    return Color.Black.copy(alpha = animatedAlpha)
 }
 
 // Only preview in dark, dark theme is forced on the Node.

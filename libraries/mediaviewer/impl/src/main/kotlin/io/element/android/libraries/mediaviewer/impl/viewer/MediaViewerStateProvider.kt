@@ -8,9 +8,12 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.aWaveForm
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
@@ -21,23 +24,28 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import kotlinx.collections.immutable.toPersistentList
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
         get() = sequenceOf(
             aMediaViewerState(),
-            aMediaViewerState(AsyncData.Loading()),
-            aMediaViewerState(AsyncData.Failure(IllegalStateException("error"))),
+            aMediaViewerState(listOf(aMediaViewerPageData(AsyncData.Loading()))),
+            aMediaViewerState(listOf(aMediaViewerPageData(AsyncData.Failure(IllegalStateException("error"))))),
             anImageMediaInfo(
                 senderName = "Sally Sanderson",
                 dateSent = "21 NOV, 2024",
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
             aVideoMediaInfo(
@@ -46,50 +54,78 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 caption = "A caption",
             ).let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
             aPdfMediaInfo().let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
             aMediaViewerState(
-                downloadedMedia = AsyncData.Loading(),
-                mediaInfo = anApkMediaInfo(),
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Loading(),
+                        mediaInfo = anApkMediaInfo(),
+                    )
+                )
             ),
             anApkMediaInfo().let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
             aMediaViewerState(
-                downloadedMedia = AsyncData.Loading(),
-                mediaInfo = anAudioMediaInfo(),
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Loading(),
+                        mediaInfo = anAudioMediaInfo(),
+                    )
+                )
             ),
             anAudioMediaInfo().let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
             anImageMediaInfo().let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
                     ),
-                    mediaInfo = it,
                     canShowInfo = false,
                 )
             },
@@ -103,26 +139,60 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 waveForm = aWaveForm(),
             ).let {
                 aMediaViewerState(
-                    downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, it)
-                    ),
-                    mediaInfo = it,
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
                 )
             },
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageDataLoading()
+                ),
+            ),
+            aMediaViewerState(
+                listOf(
+                    MediaViewerPageData.Failure(Exception("error"))
+                ),
+            ),
         )
 }
 
-fun aMediaViewerState(
+fun aMediaViewerPageDataLoading(
+    direction: Timeline.PaginationDirection = Timeline.PaginationDirection.BACKWARDS,
+    timestamp: Long = 0L,
+): MediaViewerPageData {
+    return MediaViewerPageData.Loading(
+        direction = direction,
+        timestamp = timestamp,
+    )
+}
+
+fun aMediaViewerPageData(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
+    mediaSource: MediaSource = MediaSource(""),
+): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
+    eventId = null,
+    mediaInfo = mediaInfo,
+    mediaSource = mediaSource,
+    thumbnailSource = null,
+    downloadedMedia = mutableStateOf(downloadedMedia),
+)
+
+fun aMediaViewerState(
+    listData: List<MediaViewerPageData> = listOf(aMediaViewerPageData()),
+    currentIndex: Int = 0,
     canShowInfo: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
-    eventId = null,
-    mediaInfo = mediaInfo,
-    thumbnailSource = null,
-    downloadedMedia = downloadedMedia,
+    listData = listData.toPersistentList(),
+    currentIndex = currentIndex,
     snackbarMessage = null,
     canShowInfo = canShowInfo,
     mediaBottomSheetState = mediaBottomSheetState,

@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
-import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -102,6 +101,7 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
                     )
@@ -120,8 +120,10 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
+                        // TODO We may want to add a thumbnailSource and set it to type.info?.thumbnailSource
                     )
                     is ImageMessageType -> MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -138,9 +140,10 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
-                        thumbnailSource = null,
+                        thumbnailSource = type.info?.thumbnailSource,
                     )
                     is StickerMessageType -> MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -157,9 +160,10 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = null,
                         ),
                         mediaSource = type.source,
-                        thumbnailSource = null,
+                        thumbnailSource = type.info?.thumbnailSource,
                     )
                     is VideoMessageType -> MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
@@ -176,10 +180,10 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = null,
+                            duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
-                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                     )
                     is VoiceMessageType -> MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
@@ -196,10 +200,9 @@ class EventItemFactory @Inject constructor(
                             dateSent = dateSent,
                             dateSentFull = dateSentFull,
                             waveform = type.details?.waveform.orEmpty(),
+                            duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
-                        duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
-                        waveform = type.details?.waveform ?: persistentListOf(),
                     )
                 }
             }

@@ -18,6 +18,7 @@ fun aMediaItemImage(
     id: UniqueId = UniqueId("imageId"),
     eventId: EventId? = null,
     senderId: UserId? = null,
+    mediaSourceUrl: String = "",
 ): MediaItem.Image {
     return MediaItem.Image(
         id = id,
@@ -25,7 +26,7 @@ fun aMediaItemImage(
         mediaInfo = anImageMediaInfo(
             senderId = senderId,
         ),
-        mediaSource = MediaSource(""),
+        mediaSource = MediaSource(mediaSourceUrl),
         thumbnailSource = null,
     )
 }

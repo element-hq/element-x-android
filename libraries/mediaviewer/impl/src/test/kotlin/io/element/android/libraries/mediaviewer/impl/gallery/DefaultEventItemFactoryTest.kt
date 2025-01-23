@@ -165,6 +165,7 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = null,
+                    duration = null,
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -214,6 +215,7 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = null,
+                    duration = null,
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
@@ -260,6 +262,7 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = null,
+                    duration = null,
                 ),
                 mediaSource = MediaSource(""),
             )
@@ -310,10 +313,10 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = null,
+                    duration = "2:03",
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
-                duration = "2:03",
             )
         )
     }
@@ -361,10 +364,9 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = listOf(1f, 2f).toImmutableList(),
+                    duration = "7:36",
                 ),
                 mediaSource = MediaSource(""),
-                duration = "7:36",
-                waveform = listOf(1f, 2f).toImmutableList(),
             )
         )
     }
@@ -412,6 +414,7 @@ class DefaultEventItemFactoryTest {
                     dateSent = "0 Day false",
                     dateSentFull = "0 Full false",
                     waveform = null,
+                    duration = null,
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,

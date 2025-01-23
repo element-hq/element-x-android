@@ -122,7 +122,7 @@ private fun aMediaGalleryState(
     eventSink = {}
 )
 
-private fun aGroupedMediaItems(
+fun aGroupedMediaItems(
     imageAndVideoItems: List<MediaItem> = emptyList(),
     fileItems: List<MediaItem> = emptyList(),
 ) = GroupedMediaItems(

@@ -10,7 +10,6 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,15 +25,12 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -45,9 +41,8 @@ import io.element.android.libraries.androidutils.R as UtilsR
 class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerEntryPoint.Params,
     @Assisted private val navigator: MediaViewerNavigator,
+    @Assisted private val dataSource: MediaViewerDataSource,
     private val room: MatrixRoom,
-    private val localMediaFactory: LocalMediaFactory,
-    private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
@@ -56,83 +51,89 @@ class MediaViewerPresenter @AssistedInject constructor(
         fun create(
             inputs: MediaViewerEntryPoint.Params,
             navigator: MediaViewerNavigator,
+            dataSource: MediaViewerDataSource,
         ): MediaViewerPresenter
     }
 
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        var loadMediaTrigger by remember { mutableIntStateOf(0) }
-        val mediaFile: MutableState<MediaFile?> = remember {
-            mutableStateOf(null)
-        }
-        val localMedia: MutableState<AsyncData<LocalMedia>> = remember {
-            mutableStateOf(AsyncData.Uninitialized)
-        }
+        val data by dataSource.collectAsState()
+        var currentIndex by remember { mutableIntStateOf(searchIndex(data, inputs.eventId)) }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
-        localMediaActions.Configure()
-        DisposableEffect(loadMediaTrigger) {
-            coroutineScope.downloadMedia(mediaFile, localMedia)
-            onDispose {
-                mediaFile.value?.close()
-            }
-        }
+
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
-        fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
-            when (mediaViewerEvents) {
-                MediaViewerEvents.RetryLoading -> loadMediaTrigger++
-                MediaViewerEvents.ClearLoadingError -> localMedia.value = AsyncData.Uninitialized
-                MediaViewerEvents.SaveOnDisk -> {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    coroutineScope.saveOnDisk(localMedia.value)
+        DisposableEffect(Unit) {
+            dataSource.setup()
+            onDispose {
+                dataSource.dispose()
+            }
+        }
+        localMediaActions.Configure()
+
+        fun handleEvents(event: MediaViewerEvents) {
+            when (event) {
+                is MediaViewerEvents.LoadMedia -> {
+                    coroutineScope.downloadMedia(data = event.data)
                 }
-                MediaViewerEvents.Share -> {
-                    mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    coroutineScope.share(localMedia.value)
+                is MediaViewerEvents.ClearLoadingError -> {
+                    dataSource.clearLoadingError(event.data)
                 }
-                MediaViewerEvents.OpenWith -> {
+                is MediaViewerEvents.SaveOnDisk -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    coroutineScope.open(localMedia.value)
+                    coroutineScope.saveOnDisk(event.data.downloadedMedia.value)
+                }
+                is MediaViewerEvents.Share -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.share(event.data.downloadedMedia.value)
+                }
+                is MediaViewerEvents.OpenWith -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    coroutineScope.open(event.data.downloadedMedia.value)
                 }
                 is MediaViewerEvents.Delete -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    coroutineScope.delete(mediaViewerEvents.eventId)
+                    coroutineScope.delete(event.eventId)
                 }
                 is MediaViewerEvents.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    navigator.onViewInTimelineClick(mediaViewerEvents.eventId)
+                    navigator.onViewInTimelineClick(event.eventId)
                 }
-                MediaViewerEvents.OpenInfo -> coroutineScope.launch {
+                is MediaViewerEvents.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
-                        eventId = inputs.eventId,
-                        canDelete = when (inputs.mediaInfo.senderId) {
+                        eventId = event.data.eventId,
+                        canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
-                            room.sessionId -> room.canRedactOwn().getOrElse { false } && inputs.eventId != null
-                            else -> room.canRedactOther().getOrElse { false } && inputs.eventId != null
+                            room.sessionId -> room.canRedactOwn().getOrElse { false } && event.data.eventId != null
+                            else -> room.canRedactOther().getOrElse { false } && event.data.eventId != null
                         },
-                        mediaInfo = inputs.mediaInfo,
-                        thumbnailSource = inputs.thumbnailSource,
+                        mediaInfo = event.data.mediaInfo,
+                        thumbnailSource = event.data.thumbnailSource,
                     )
                 }
                 is MediaViewerEvents.ConfirmDelete -> {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
-                        eventId = mediaViewerEvents.eventId,
-                        mediaInfo = inputs.mediaInfo,
-                        thumbnailSource = inputs.thumbnailSource ?: inputs.mediaSource,
+                        eventId = event.eventId,
+                        mediaInfo = event.data.mediaInfo,
+                        thumbnailSource = event.data.thumbnailSource ?: event.data.mediaSource,
                     )
                 }
                 MediaViewerEvents.CloseBottomSheet -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
+                is MediaViewerEvents.OnNavigateTo -> {
+                    currentIndex = event.index
+                }
+                is MediaViewerEvents.LoadMore -> coroutineScope.launch {
+                    dataSource.loadMore(event.direction)
+                }
             }
         }
 
         return MediaViewerState(
-            eventId = inputs.eventId,
-            mediaInfo = inputs.mediaInfo,
-            thumbnailSource = inputs.thumbnailSource,
-            downloadedMedia = localMedia.value,
+            listData = data,
+            currentIndex = currentIndex,
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
@@ -140,28 +141,10 @@ class MediaViewerPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.downloadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<AsyncData<LocalMedia>>) = launch {
-        localMedia.value = AsyncData.Loading()
-        mediaLoader.downloadMediaFile(
-            source = inputs.mediaSource,
-            mimeType = inputs.mediaInfo.mimeType,
-            filename = inputs.mediaInfo.filename
-        )
-            .onSuccess {
-                mediaFile.value = it
-            }
-            .mapCatching { mediaFile ->
-                localMediaFactory.createFromMediaFile(
-                    mediaFile = mediaFile,
-                    mediaInfo = inputs.mediaInfo
-                )
-            }
-            .onSuccess {
-                localMedia.value = AsyncData.Success(it)
-            }
-            .onFailure {
-                localMedia.value = AsyncData.Failure(it)
-            }
+    private fun CoroutineScope.downloadMedia(
+        data: MediaViewerPageData.MediaViewerData,
+    ) = launch {
+        dataSource.loadMedia(data)
     }
 
     private fun CoroutineScope.saveOnDisk(localMedia: AsyncData<LocalMedia>) = launch {
@@ -215,5 +198,14 @@ class MediaViewerPresenter @AssistedInject constructor(
         } else {
             CommonStrings.error_unknown
         }
+    }
+
+    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
+        if (eventId == null) {
+            return 0
+        }
+        return data.indexOfFirst {
+            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
+        }.coerceAtLeast(0)
     }
 }

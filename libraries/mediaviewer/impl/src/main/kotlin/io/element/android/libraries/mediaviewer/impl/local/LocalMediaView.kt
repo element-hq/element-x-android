@@ -27,6 +27,7 @@ fun LocalMediaView(
     bottomPaddingInPixels: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isDisplayed: Boolean = true,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
     mediaInfo: MediaInfo? = localMedia?.info,
 ) {
@@ -39,6 +40,7 @@ fun LocalMediaView(
             onClick = onClick,
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
+            isDisplayed = isDisplayed,
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
@@ -51,6 +53,7 @@ fun LocalMediaView(
             onClick = onClick,
         )
         mimeType.isMimeTypeAudio() -> MediaAudioView(
+            isDisplayed = isDisplayed,
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,

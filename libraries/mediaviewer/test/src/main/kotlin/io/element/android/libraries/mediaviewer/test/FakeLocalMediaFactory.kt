@@ -43,6 +43,7 @@ class FakeLocalMediaFactory(
             dateSent = null,
             dateSentFull = null,
             waveform = null,
+            duration = null,
         )
         return aLocalMedia(uri, mediaInfo)
     }

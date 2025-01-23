@@ -10,14 +10,14 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
+import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -30,14 +30,23 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.gallery.FakeMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.gallery.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +61,7 @@ class MediaViewerPresenterTest {
 
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
+    private val aUrl = "aUrl"
 
     @Test
     fun `present - initial state null Event`() = runTest {
@@ -61,9 +71,9 @@ class MediaViewerPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
+            val initialState = awaitFirstItem()
+            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -79,9 +89,9 @@ class MediaViewerPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
+            val initialState = awaitFirstItem()
+            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isFalse()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -97,9 +107,9 @@ class MediaViewerPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
+            val initialState = awaitFirstItem()
+            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -116,9 +126,9 @@ class MediaViewerPresenterTest {
             )
         )
         presenter.test {
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
+            val initialState = awaitFirstItem()
+            assertThat(initialState.listData).isEmpty()
+            assertThat(initialState.currentIndex).isEqualTo(0)
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -126,114 +136,280 @@ class MediaViewerPresenterTest {
     }
 
     @Test
-    fun `present - download media success scenario`() = runTest {
-        val presenter = createMediaViewerPresenter(
-            room = FakeMatrixRoom(
-                canRedactOwnResult = { Result.success(true) },
-            )
+    fun `present - data source update`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            var state = awaitItem()
-            assertThat(state.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
-            assertThat(state.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
-            state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            state = awaitItem()
-            val successData = state.downloadedMedia.dataOrNull()
-            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successData).isNotNull()
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage()
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.listData).isEmpty()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitFirstItem()
+            assertThat(updatedState.listData).hasSize(1)
+            val item = updatedState.listData.first() as MediaViewerPageData.MediaViewerData
+            assertThat(item.eventId).isNull()
+            assertThat(item.mediaInfo).isEqualTo(anImage.mediaInfo)
+            assertThat(item.mediaSource).isEqualTo(anImage.mediaSource)
+            assertThat(item.thumbnailSource).isEqualTo(anImage.thumbnailSource)
+            assertThat(item.downloadedMedia.value).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
     @Test
-    fun `present - check all actions`() = runTest {
-        val mediaActions = FakeLocalMediaActions()
-        val snackbarDispatcher = SnackbarDispatcher()
-        val presenter = createMediaViewerPresenter(
-            localMediaActions = mediaActions,
-            snackbarDispatcher = snackbarDispatcher,
-            room = FakeMatrixRoom(
-                canRedactOwnResult = { Result.success(true) },
-            )
+    fun `present - load media`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            var state = awaitItem()
-            assertThat(state.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
-            state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            // no state changes while media is loading
-            state.eventSink(MediaViewerEvents.OpenWith)
-            state.eventSink(MediaViewerEvents.Share)
-            state.eventSink(MediaViewerEvents.SaveOnDisk)
-            state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            // Should succeed without change of state
-            state.eventSink(MediaViewerEvents.OpenWith)
-            // Should succeed without change of state
-            state.eventSink(MediaViewerEvents.Share)
-            state.eventSink(MediaViewerEvents.SaveOnDisk)
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNotNull()
-            snackbarDispatcher.clear()
-            assertThat(awaitItem().snackbarMessage).isNull()
-
-            // Check failures
-            mediaActions.shouldFail = true
-            state.eventSink(MediaViewerEvents.OpenWith)
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNotNull()
-            snackbarDispatcher.clear()
-            assertThat(awaitItem().snackbarMessage).isNull()
-            state.eventSink(MediaViewerEvents.Share)
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNotNull()
-            snackbarDispatcher.clear()
-            assertThat(awaitItem().snackbarMessage).isNull()
-            state.eventSink(MediaViewerEvents.SaveOnDisk)
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNotNull()
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.LoadMedia(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
         }
     }
 
     @Test
-    fun `present - download media failure then retry with success scenario`() = runTest {
-        val matrixMediaLoader = FakeMatrixMediaLoader()
+    fun `present - open info`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
         val presenter = createMediaViewerPresenter(
-            matrixMediaLoader = matrixMediaLoader,
+            mediaGalleryDataSource = mediaGalleryDataSource,
             room = FakeMatrixRoom(
                 canRedactOwnResult = { Result.success(true) },
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            matrixMediaLoader.shouldFail = true
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
-            assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
-            val loadingState = awaitItem()
-            assertThat(loadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            val failureState = awaitItem()
-            assertThat(failureState.downloadedMedia).isInstanceOf(AsyncData.Failure::class.java)
-            matrixMediaLoader.shouldFail = false
-            failureState.eventSink(MediaViewerEvents.RetryLoading)
-            // There is one recomposition because of the retry mechanism
-            skipItems(1)
-            val retryLoadingState = awaitItem()
-            assertThat(retryLoadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            val successState = awaitItem()
-            val successData = successState.downloadedMedia.dataOrNull()
-            assertThat(successState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successData).isNotNull()
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.OpenInfo(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+            val withInfoState = awaitItem()
+            assertThat(withInfoState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            withInfoState.eventSink(
+                MediaViewerEvents.CloseBottomSheet
+            )
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
     }
 
     @Test
-    fun `present - delete media success scenario`() = runTest {
+    fun `present - clear loading error`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.ClearLoadingError(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - share`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.Share(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - save on disk`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.SaveOnDisk(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - open with`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.OpenWith(
+                    aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - delete and cancel`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.ConfirmDelete(
+                    eventId = AN_EVENT_ID,
+                    data = aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDeleteConfirmationState::class.java)
+            withBottomSheetState.eventSink(
+                MediaViewerEvents.CloseBottomSheet
+            )
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - delete`() = runTest {
         val redactEventLambda = lambdaRecorder<EventOrTransactionId, String?, Result<Unit>> { _, _ ->
             Result.success(Unit)
         }
@@ -241,26 +417,51 @@ class MediaViewerPresenterTest {
             this.redactEventLambda = redactEventLambda
         }
         val onItemDeletedLambda = lambdaRecorder<Unit> { }
-        val navigator = FakeMediaViewerNavigator(
-            onItemDeletedLambda = onItemDeletedLambda,
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
         )
-
         val presenter = createMediaViewerPresenter(
             room = FakeMatrixRoom(
                 liveTimeline = timeline,
                 canRedactOwnResult = { Result.success(true) },
             ),
-            mediaViewerNavigator = navigator,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            mediaViewerNavigator = FakeMediaViewerNavigator(
+                onItemDeletedLambda = onItemDeletedLambda
+            )
+        )
+        val anImage = aMediaItemImage(
+            eventId = AN_EVENT_ID,
+            mediaSourceUrl = aUrl,
         )
         presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
-            assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
-            val loadingState = awaitItem()
-            assertThat(loadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            val successState = awaitItem()
-            assertThat(successState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            successState.eventSink(MediaViewerEvents.Delete(AN_EVENT_ID))
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.ConfirmDelete(
+                    eventId = AN_EVENT_ID,
+                    data = aMediaViewerPageData(
+                        mediaSource = MediaSource(aUrl)
+                    )
+                )
+            )
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDeleteConfirmationState::class.java)
+            updatedState.eventSink(
+                MediaViewerEvents.Delete(
+                    eventId = AN_EVENT_ID,
+                )
+            )
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             redactEventLambda.assertions()
                 .isCalledOnce()
                 .with(
@@ -272,7 +473,71 @@ class MediaViewerPresenterTest {
     }
 
     @Test
-    fun `present - view in timeline invokes the navigator`() = runTest {
+    fun `present - on navigate to`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        val anImage2 = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage, anImage2),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.OnNavigateTo(1)
+            )
+            val finalState = awaitItem()
+            assertThat(finalState.currentIndex).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `present - load more`() = runTest {
+        val loadMoreLambda = lambdaRecorder<Timeline.PaginationDirection, Unit> { }
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+            loadMoreLambda = loadMoreLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            updatedState.eventSink(
+                MediaViewerEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS)
+            )
+            loadMoreLambda.assertions().isCalledOnce().with(value(Timeline.PaginationDirection.BACKWARDS))
+        }
+    }
+
+    @Test
+    fun `present - view in timeline hide the bottom sheet and invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
             onViewInTimelineClickLambda = onViewInTimelineClickLambda,
@@ -285,22 +550,28 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
-            assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
-            val loadingState = awaitItem()
-            assertThat(loadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
-            val successState = awaitItem()
-            assertThat(successState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
-            successState.eventSink(MediaViewerEvents.ViewInTimeline(AN_EVENT_ID))
+            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            initialState.eventSink(MediaViewerEvents.ViewInTimeline(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
 
-    private fun createMediaViewerPresenter(
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        return awaitItem()
+    }
+
+    private fun TestScope.createMediaViewerPresenter(
         eventId: EventId? = null,
         matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
+        mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        ),
         canShowInfo: Boolean = true,
         mediaViewerNavigator: MediaViewerNavigator = FakeMediaViewerNavigator(),
         room: MatrixRoom = FakeMatrixRoom(
@@ -309,18 +580,25 @@ class MediaViewerPresenterTest {
     ): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerEntryPoint.Params(
+                mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
                 eventId = eventId,
                 mediaInfo = TESTED_MEDIA_INFO,
                 mediaSource = aMediaSource(),
                 thumbnailSource = null,
                 canShowInfo = canShowInfo,
             ),
-            localMediaFactory = localMediaFactory,
-            mediaLoader = matrixMediaLoader,
+            navigator = mediaViewerNavigator,
+            dataSource = MediaViewerDataSource(
+                galleryMode = MediaGalleryMode.Images,
+                dispatcher = testCoroutineDispatchers().computation,
+                galleryDataSource = mediaGalleryDataSource,
+                mediaLoader = matrixMediaLoader,
+                localMediaFactory = localMediaFactory,
+                systemClock = FakeSystemClock(),
+            ),
+            room = room,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
-            navigator = mediaViewerNavigator,
-            room = room,
         )
     }
 }

@@ -48,6 +48,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
@@ -58,6 +59,7 @@ import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -246,6 +248,8 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
+                    // TODO When we will be able to load a media timeline from a EventId, change mode here (and use a mixed mode?)
+                    mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
                     eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
@@ -447,6 +451,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     mode = DateFormatterMode.Full,
                 ),
                 waveform = (content as? TimelineItemVoiceContent)?.waveform,
+                duration = content.duration()?.toHumanReadableDuration(),
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,

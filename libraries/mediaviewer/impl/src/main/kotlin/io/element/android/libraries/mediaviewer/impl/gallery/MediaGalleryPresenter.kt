@@ -9,15 +9,12 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,30 +30,21 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
-import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MediaGalleryPresenter @AssistedInject constructor(
     @Assisted private val navigator: MediaGalleryNavigator,
     private val room: MatrixRoom,
-    private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
+    private val mediaGalleryDataSource: MediaGalleryDataSource,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val mediaItemsPostProcessor: MediaItemsPostProcessor,
 ) : Presenter<MediaGalleryState> {
     @AssistedFactory
     interface Factory {
@@ -74,39 +62,17 @@ class MediaGalleryPresenter @AssistedInject constructor(
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
-        var mediaItems by remember {
-            mutableStateOf<AsyncData<ImmutableList<MediaItem>>>(AsyncData.Uninitialized)
-        }
         val groupedMediaItems by remember {
-            derivedStateOf {
-                mediaItemsPostProcessor.process(
-                    mediaItems = mediaItems,
-                )
-            }
+            mediaGalleryDataSource.groupedMediaItemsFlow()
         }
+            .collectAsState(AsyncData.Uninitialized)
+
+        LaunchedEffect(Unit) {
+            mediaGalleryDataSource.start()
+        }
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
-
-        var timeline by remember { mutableStateOf<AsyncData<Timeline>>(AsyncData.Uninitialized) }
-        LaunchedEffect(Unit) {
-            room.mediaTimeline()
-                .fold(
-                    { timeline = AsyncData.Success(it) },
-                    { timeline = AsyncData.Failure(it) },
-                )
-        }
-        DisposableEffect(Unit) {
-            onDispose {
-                timeline.dataOrNull()?.close()
-            }
-        }
-
-        MediaListEffect(
-            timeline = timeline,
-            onItemsChange = { newItems ->
-                mediaItems = newItems
-            }
-        )
 
         fun handleEvents(event: MediaGalleryEvents) {
             when (event) {
@@ -114,16 +80,18 @@ class MediaGalleryPresenter @AssistedInject constructor(
                     mode = event.mode
                 }
                 is MediaGalleryEvents.LoadMore -> coroutineScope.launch {
-                    timeline.dataOrNull()?.paginate(event.direction)
+                    mediaGalleryDataSource.loadMore(event.direction)
                 }
-                is MediaGalleryEvents.Delete -> coroutineScope.delete(timeline, event.eventId)
+                is MediaGalleryEvents.Delete -> coroutineScope.launch {
+                    mediaGalleryDataSource.deleteItem(event.eventId)
+                }
                 is MediaGalleryEvents.SaveOnDisk -> coroutineScope.launch {
-                    mediaItems.dataOrNull().find(event.eventId)?.let {
+                    groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         saveOnDisk(it)
                     }
                 }
                 is MediaGalleryEvents.Share -> coroutineScope.launch {
-                    mediaItems.dataOrNull().find(event.eventId)?.let {
+                    groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         share(it)
                     }
                 }
@@ -169,49 +137,6 @@ class MediaGalleryPresenter @AssistedInject constructor(
             mediaBottomSheetState = mediaBottomSheetState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents
-        )
-    }
-
-    @Composable
-    private fun MediaListEffect(
-        timeline: AsyncData<Timeline>,
-        onItemsChange: (AsyncData<ImmutableList<MediaItem>>) -> Unit,
-    ) {
-        val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
-
-        LaunchedEffect(timeline) {
-            when (timeline) {
-                AsyncData.Uninitialized -> flowOf(AsyncData.Uninitialized)
-                is AsyncData.Failure -> flowOf(AsyncData.Failure(timeline.error))
-                is AsyncData.Loading -> flowOf(AsyncData.Loading())
-                is AsyncData.Success -> {
-                    timeline.data.timelineItems
-                        .onEach { items ->
-                            timelineMediaItemsFactory.replaceWith(
-                                timelineItems = items,
-                            )
-                        }
-                        .launchIn(this)
-
-                    timelineMediaItemsFactory.timelineItems.map { timelineItems ->
-                        AsyncData.Success(timelineItems)
-                    }
-                }
-            }
-                .onEach { items ->
-                    updatedOnItemsChange(items)
-                }
-                .launchIn(this)
-        }
-    }
-
-    private fun CoroutineScope.delete(
-        timeline: AsyncData<Timeline>,
-        eventId: EventId,
-    ) = launch {
-        timeline.dataOrNull()?.redactEvent(
-            eventOrTransactionId = eventId.toEventOrTransactionId(),
-            reason = null,
         )
     }
 
@@ -264,10 +189,10 @@ class MediaGalleryPresenter @AssistedInject constructor(
     }
 }
 
-private fun List<MediaItem>?.find(eventId: EventId?): MediaItem.Event? {
+private fun GroupedMediaItems?.find(eventId: EventId?): MediaItem.Event? {
     if (this == null || eventId == null) {
         return null
     }
-    return filterIsInstance<MediaItem.Event>()
+    return (imageAndVideoItems + fileItems).filterIsInstance<MediaItem.Event>()
         .firstOrNull { it.eventId() == eventId }
 }
