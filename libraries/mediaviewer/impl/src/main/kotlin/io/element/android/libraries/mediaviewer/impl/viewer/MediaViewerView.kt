@@ -209,7 +209,7 @@ fun MediaViewerView(
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = Color.Transparent.copy(alpha = 0.6f),
+                                containerColor = Color.Black.copy(alpha = 0.6f),
                             ),
                             navigationIcon = { BackButton(onClick = onBackClick) },
                         )
@@ -455,7 +455,7 @@ private fun MediaViewerTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent.copy(alpha = 0.6f),
+            containerColor = Color.Black.copy(alpha = 0.6f),
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
