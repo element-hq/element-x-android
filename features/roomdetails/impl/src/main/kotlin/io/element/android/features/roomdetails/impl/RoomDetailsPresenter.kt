@@ -24,6 +24,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -147,6 +148,8 @@ class RoomDetailsPresenter @Inject constructor(
 
         val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
 
+        val securityAndPrivacyPermissions by room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
+
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
@@ -172,6 +175,7 @@ class RoomDetailsPresenter @Inject constructor(
             pinnedMessagesCount = pinnedMessagesCount,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
+            canShowSecurityAndPrivacy = securityAndPrivacyPermissions.hasAny,
             eventSink = ::handleEvents,
         )
     }

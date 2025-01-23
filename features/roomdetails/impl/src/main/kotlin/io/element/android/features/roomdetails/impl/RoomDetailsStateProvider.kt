@@ -107,6 +107,7 @@ fun aRoomDetailsState(
     pinnedMessagesCount: Int? = null,
     canShowKnockRequests: Boolean = false,
     knockRequestsCount: Int? = null,
+    canShowSecurityAndPrivacy: Boolean = true,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -133,6 +134,7 @@ fun aRoomDetailsState(
     pinnedMessagesCount = pinnedMessagesCount,
     canShowKnockRequests = canShowKnockRequests,
     knockRequestsCount = knockRequestsCount,
+    canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
     eventSink = eventSink
 )
 
