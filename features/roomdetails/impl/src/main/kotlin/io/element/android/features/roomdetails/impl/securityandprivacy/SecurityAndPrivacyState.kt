@@ -7,6 +7,7 @@
 
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
+import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.SecurityAndPrivacyPermissions
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 
@@ -18,11 +19,11 @@ data class SecurityAndPrivacyState(
     val homeserverName: String,
     val showEncryptionConfirmation: Boolean,
     val saveAction: AsyncAction<Unit>,
+    private val permissions: SecurityAndPrivacyPermissions,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
 
     val canBeSaved = savedSettings != editedSettings
-
 
     val availableHistoryVisibilities = buildSet {
         add(SecurityAndPrivacyHistoryVisibility.SinceSelection)
@@ -32,16 +33,17 @@ data class SecurityAndPrivacyState(
             add(SecurityAndPrivacyHistoryVisibility.SinceInvite)
         }
     }
-    val showRoomAccessSection: Boolean = true
-    val showRoomVisibilitySections = editedSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly
-    val showHistoryVisibilitySection = editedSettings.historyVisibility != null
-    val showEncryptionSection = true
+
+    val showRoomAccessSection = permissions.canChangeRoomAccess
+    val showRoomVisibilitySections = permissions.canChangeRoomVisibility && editedSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly
+    val showHistoryVisibilitySection = permissions.canChangeHistoryVisibility
+    val showEncryptionSection = permissions.canChangeEncryption
 }
 
 data class SecurityAndPrivacySettings(
     val roomAccess: SecurityAndPrivacyRoomAccess,
     val isEncrypted: Boolean,
-    val historyVisibility: SecurityAndPrivacyHistoryVisibility?,
+    val historyVisibility: SecurityAndPrivacyHistoryVisibility,
     val addressName: String?,
     val isVisibleInRoomDirectory: AsyncData<Boolean>
 )
@@ -54,8 +56,8 @@ enum class SecurityAndPrivacyHistoryVisibility {
      */
     fun fallback(): SecurityAndPrivacyHistoryVisibility {
         return when (this) {
-            SinceSelection -> SinceSelection
-            SinceInvite -> Anyone
+            SinceSelection,
+            SinceInvite -> SinceSelection
             Anyone -> SinceInvite
         }
     }
@@ -63,4 +65,8 @@ enum class SecurityAndPrivacyHistoryVisibility {
 
 enum class SecurityAndPrivacyRoomAccess {
     InviteOnly, AskToJoin, Anyone, SpaceMember
+}
+
+sealed class SecurityAndPrivacyFailures : Exception() {
+    data object SaveFailed : SecurityAndPrivacyFailures()
 }

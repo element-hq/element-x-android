@@ -10,7 +10,6 @@ package io.element.android.features.roomdetails.impl.securityandprivacy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.matchesServer
+import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -35,8 +35,10 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SecurityAndPrivacyPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
@@ -51,17 +53,22 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
     @Composable
     override fun present(): SecurityAndPrivacyState {
         val coroutineScope = rememberCoroutineScope()
+
+        val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val homeserverName = remember { matrixClient.userIdServerName() }
-        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
-        val isVisibleInRoomDirectory by isRoomVisibleInRoomDirectory()
+        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
+        val roomInfo by room.roomInfoFlow.collectAsState(null)
+
+        val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
+        IsRoomVisibleInRoomDirectoryEffect(savedIsVisibleInRoomDirectory)
 
         val savedSettings by remember {
             derivedStateOf {
                 SecurityAndPrivacySettings(
                     roomAccess = roomInfo?.joinRule.map(),
                     isEncrypted = room.isEncrypted,
-                    isVisibleInRoomDirectory = isVisibleInRoomDirectory,
-                    historyVisibility = roomInfo?.historyVisibility?.map(),
+                    isVisibleInRoomDirectory = savedIsVisibleInRoomDirectory.value,
+                    historyVisibility = roomInfo?.historyVisibility.map(),
                     addressName = roomInfo?.firstDisplayableAlias(homeserverName)?.value
                 )
             }
@@ -73,15 +80,12 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         var editedHistoryVisibility by remember(savedSettings.historyVisibility) {
             mutableStateOf(savedSettings.historyVisibility)
         }
-        var editedVisibleInRoomDirectory by remember(savedSettings.isVisibleInRoomDirectory) {
-            mutableStateOf(savedSettings.isVisibleInRoomDirectory)
-        }
         var editedIsEncrypted by remember(savedSettings.isEncrypted) {
             mutableStateOf(savedSettings.isEncrypted)
         }
-
-        var showEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }
-
+        var editedVisibleInRoomDirectory by remember(savedIsVisibleInRoomDirectory.value) {
+            mutableStateOf(savedIsVisibleInRoomDirectory.value)
+        }
         val editedSettings = SecurityAndPrivacySettings(
             roomAccess = editedRoomAccess,
             isEncrypted = editedIsEncrypted,
@@ -90,18 +94,24 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             addressName = savedSettings.addressName,
         )
 
-        val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        var showEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }
+        val permissions by room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
 
         fun handleEvents(event: SecurityAndPrivacyEvents) {
             when (event) {
                 SecurityAndPrivacyEvents.Save -> {
-                    coroutineScope.save(saveAction, savedSettings, editedSettings)
+                    coroutineScope.save(
+                        saveAction = saveAction,
+                        isVisibleInRoomDirectory = savedIsVisibleInRoomDirectory,
+                        savedSettings = savedSettings,
+                        editedSettings = editedSettings
+                    )
                 }
                 is SecurityAndPrivacyEvents.ChangeRoomAccess -> {
                     editedRoomAccess = event.roomAccess
                 }
                 is SecurityAndPrivacyEvents.ToggleEncryptionState -> {
-                    if (editedSettings.isEncrypted) {
+                    if (editedIsEncrypted) {
                         editedIsEncrypted = false
                     } else {
                         showEncryptionConfirmation = true
@@ -133,123 +143,137 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             homeserverName = homeserverName,
             showEncryptionConfirmation = showEncryptionConfirmation,
             saveAction = saveAction.value,
+            permissions = permissions,
             eventSink = ::handleEvents
         )
+
+        // If the history visibility is not available for the current access, use the fallback.
         LaunchedEffect(state.availableHistoryVisibilities) {
-            editedSettings.historyVisibility?.also {
-                if (it !in state.availableHistoryVisibilities) {
-                    editedHistoryVisibility = it.fallback()
-                }
+            if (editedSettings.historyVisibility !in state.availableHistoryVisibilities) {
+                editedHistoryVisibility = editedSettings.historyVisibility.fallback()
             }
         }
         return state
     }
 
     @Composable
-    private fun isRoomVisibleInRoomDirectory(): State<AsyncData<Boolean>> {
-        val result = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
+    private fun IsRoomVisibleInRoomDirectoryEffect(isRoomVisible: MutableState<AsyncData<Boolean>>) {
         LaunchedEffect(Unit) {
-            result.runUpdatingState {
+            isRoomVisible.runUpdatingState {
                 room.getRoomVisibility().map { it == RoomVisibility.Public }
             }
         }
-        return result
     }
 
     private fun CoroutineScope.save(
         saveAction: MutableState<AsyncAction<Unit>>,
+        isVisibleInRoomDirectory: MutableState<AsyncData<Boolean>>,
         savedSettings: SecurityAndPrivacySettings,
         editedSettings: SecurityAndPrivacySettings,
     ) = launch {
         suspend {
-            var somethingWentWrong = false
-            if (editedSettings.isEncrypted && !savedSettings.isEncrypted) {
-                room
-                    .enableEncryption()
-                    .onFailure {
-                        Timber.d("Failed to enable encryption")
-                        somethingWentWrong = true
-                    }
+            val enableEncryption = async {
+                if (editedSettings.isEncrypted && !savedSettings.isEncrypted) {
+                    room.enableEncryption()
+                } else {
+                    Result.success(Unit)
+                }
             }
-            if (editedSettings.historyVisibility != null && editedSettings.historyVisibility != savedSettings.historyVisibility) {
-                room
-                    .updateHistoryVisibility(editedSettings.historyVisibility.map())
-                    .onFailure {
-                        Timber.d("Failed to update history visibility")
-                        somethingWentWrong = true
-                    }
+            val updateHistoryVisibility = async {
+                if (editedSettings.historyVisibility != savedSettings.historyVisibility) {
+                    room.updateHistoryVisibility(editedSettings.historyVisibility.map())
+                } else {
+                    Result.success(Unit)
+                }
             }
-            if (editedSettings.roomAccess != savedSettings.roomAccess) {
-                room
-                    .updateJoinRule(editedSettings.roomAccess.map())
-                    .onFailure {
-                        Timber.d("Failed to update join rule")
-                        somethingWentWrong = true
-                    }
+            val updateJoinRule = async {
+                if (editedSettings.roomAccess != savedSettings.roomAccess) {
+                    room.updateJoinRule(editedSettings.roomAccess.map())
+                } else {
+                    Result.success(Unit)
+                }
             }
-
-            val editedIsVisibleInRoomDirectory = when (editedSettings.roomAccess) {
-                SecurityAndPrivacyRoomAccess.AskToJoin,
-                SecurityAndPrivacyRoomAccess.Anyone -> editedSettings.isVisibleInRoomDirectory.dataOrNull()
-                else -> false
+            val updateRoomVisibility = async {
+                // When a user changes join rules to something other than knock or public,
+                // the room should be automatically made invisible (private) in the room directory.
+                val editedIsVisibleInRoomDirectory = when (editedSettings.roomAccess) {
+                    SecurityAndPrivacyRoomAccess.AskToJoin,
+                    SecurityAndPrivacyRoomAccess.Anyone -> editedSettings.isVisibleInRoomDirectory.dataOrNull()
+                    else -> false
+                }
+                val savedIsVisibleInRoomDirectory = savedSettings.isVisibleInRoomDirectory.dataOrNull()
+                if (editedIsVisibleInRoomDirectory != null && editedIsVisibleInRoomDirectory != savedIsVisibleInRoomDirectory) {
+                    val roomVisibility = if (editedIsVisibleInRoomDirectory) RoomVisibility.Public else RoomVisibility.Private
+                    room
+                        .updateRoomVisibility(roomVisibility)
+                        .onSuccess {
+                            isVisibleInRoomDirectory.value = AsyncData.Success(editedIsVisibleInRoomDirectory)
+                        }
+                } else {
+                    Result.success(Unit)
+                }
             }
-            val savedIsVisibleInRoomDirectory = savedSettings.isVisibleInRoomDirectory.dataOrNull()
-            if (editedIsVisibleInRoomDirectory != null && editedIsVisibleInRoomDirectory != savedIsVisibleInRoomDirectory) {
-                val roomVisibility = if (editedIsVisibleInRoomDirectory) RoomVisibility.Public else RoomVisibility.Private
-                room
-                    .updateRoomVisibility(roomVisibility)
-                    .onFailure {
-                        Timber.d("Failed to update room visibility")
-                        somethingWentWrong = true
-                    }
+            val artificialDelay = async {
+                // Artificial delay to make sure the user sees the loading state
+                delay(500)
+                Result.success(Unit)
             }
-            if (somethingWentWrong) {
-                error("")
+            val results = awaitAll(
+                enableEncryption,
+                updateHistoryVisibility,
+                updateJoinRule,
+                updateRoomVisibility,
+                artificialDelay
+            )
+            if (results.any { it.isFailure }) {
+                throw SecurityAndPrivacyFailures.SaveFailed
             }
         }.runCatchingUpdatingState(saveAction)
     }
+}
 
-    private fun JoinRule?.map(): SecurityAndPrivacyRoomAccess {
-        return when (this) {
-            JoinRule.Public -> SecurityAndPrivacyRoomAccess.Anyone
-            JoinRule.Knock, is JoinRule.KnockRestricted -> SecurityAndPrivacyRoomAccess.AskToJoin
-            is JoinRule.Restricted -> SecurityAndPrivacyRoomAccess.SpaceMember
-            is JoinRule.Custom,
-            JoinRule.Invite,
-            JoinRule.Private,
-            null -> SecurityAndPrivacyRoomAccess.InviteOnly
-        }
+private fun JoinRule?.map(): SecurityAndPrivacyRoomAccess {
+    return when (this) {
+        JoinRule.Public -> SecurityAndPrivacyRoomAccess.Anyone
+        JoinRule.Knock, is JoinRule.KnockRestricted -> SecurityAndPrivacyRoomAccess.AskToJoin
+        is JoinRule.Restricted -> SecurityAndPrivacyRoomAccess.SpaceMember
+        is JoinRule.Custom,
+        JoinRule.Invite,
+        JoinRule.Private,
+        null -> SecurityAndPrivacyRoomAccess.InviteOnly
     }
+}
 
-    private fun SecurityAndPrivacyRoomAccess.map(): JoinRule {
-        return when (this) {
-            SecurityAndPrivacyRoomAccess.Anyone -> JoinRule.Public
-            SecurityAndPrivacyRoomAccess.AskToJoin -> JoinRule.Knock
-            SecurityAndPrivacyRoomAccess.InviteOnly -> JoinRule.Private
-            SecurityAndPrivacyRoomAccess.SpaceMember -> error("Unsupported")
-        }
+private fun SecurityAndPrivacyRoomAccess.map(): JoinRule {
+    return when (this) {
+        SecurityAndPrivacyRoomAccess.Anyone -> JoinRule.Public
+        SecurityAndPrivacyRoomAccess.AskToJoin -> JoinRule.Knock
+        SecurityAndPrivacyRoomAccess.InviteOnly -> JoinRule.Private
+        SecurityAndPrivacyRoomAccess.SpaceMember -> error("Unsupported")
     }
+}
 
-    private fun RoomHistoryVisibility.map(): SecurityAndPrivacyHistoryVisibility {
-        return when (this) {
-            RoomHistoryVisibility.Joined,
-            RoomHistoryVisibility.Invited -> SecurityAndPrivacyHistoryVisibility.SinceInvite
-            RoomHistoryVisibility.Shared,
-            is RoomHistoryVisibility.Custom -> SecurityAndPrivacyHistoryVisibility.SinceSelection
-            RoomHistoryVisibility.WorldReadable -> SecurityAndPrivacyHistoryVisibility.Anyone
-        }
-    }
+private fun RoomHistoryVisibility?.map(): SecurityAndPrivacyHistoryVisibility {
+    return when (this) {
+        RoomHistoryVisibility.WorldReadable -> SecurityAndPrivacyHistoryVisibility.Anyone
+        RoomHistoryVisibility.Joined,
+        RoomHistoryVisibility.Invited -> SecurityAndPrivacyHistoryVisibility.SinceInvite
+        RoomHistoryVisibility.Shared,
+        is RoomHistoryVisibility.Custom,
+        null -> SecurityAndPrivacyHistoryVisibility.SinceSelection
 
-    private fun SecurityAndPrivacyHistoryVisibility.map(): RoomHistoryVisibility {
-        return when (this) {
-            SecurityAndPrivacyHistoryVisibility.SinceSelection -> RoomHistoryVisibility.Shared
-            SecurityAndPrivacyHistoryVisibility.SinceInvite -> RoomHistoryVisibility.Invited
-            SecurityAndPrivacyHistoryVisibility.Anyone -> RoomHistoryVisibility.WorldReadable
-        }
     }
+}
 
-    private fun MatrixRoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
-        return aliases.firstOrNull { it.matchesServer(serverName) } ?: aliases.firstOrNull()
+private fun SecurityAndPrivacyHistoryVisibility.map(): RoomHistoryVisibility {
+    return when (this) {
+        SecurityAndPrivacyHistoryVisibility.SinceSelection -> RoomHistoryVisibility.Shared
+        SecurityAndPrivacyHistoryVisibility.SinceInvite -> RoomHistoryVisibility.Invited
+        SecurityAndPrivacyHistoryVisibility.Anyone -> RoomHistoryVisibility.WorldReadable
     }
+}
+
+private fun MatrixRoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
+    return aliases.firstOrNull { it.matchesServer(serverName) } ?: aliases.firstOrNull()
 }
 

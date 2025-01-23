@@ -256,7 +256,6 @@ private fun RoomAddressSection(
             supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_address_section_footer)) },
             onClick = onRoomAddressClick,
             colors = ListItemDefaults.colors(trailingIconColor = ElementTheme.colors.iconAccentPrimary),
-            alwaysClickable = true
         )
 
         ListItem(

@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.SecurityAndPrivacyPermissions
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 
@@ -27,7 +28,7 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
                 )
             ),
             aSecurityAndPrivacyState(
-                editedSettings = aSecurityAndPrivacySettings(
+                savedSettings = aSecurityAndPrivacySettings(
                     roomAccess = SecurityAndPrivacyRoomAccess.SpaceMember
                 )
             ),
@@ -51,7 +52,7 @@ fun aSecurityAndPrivacySettings(
     roomAccess: SecurityAndPrivacyRoomAccess = SecurityAndPrivacyRoomAccess.InviteOnly,
     isEncrypted: Boolean = true,
     formattedAddress: String? = null,
-    historyVisibility: SecurityAndPrivacyHistoryVisibility? = null,
+    historyVisibility: SecurityAndPrivacyHistoryVisibility = SecurityAndPrivacyHistoryVisibility.SinceSelection,
     isVisibleInRoomDirectory: AsyncData<Boolean> = AsyncData.Uninitialized,
 ) = SecurityAndPrivacySettings(
     roomAccess = roomAccess,
@@ -67,6 +68,12 @@ fun aSecurityAndPrivacyState(
     homeserverName: String = "myserver.xyz",
     showEncryptionConfirmation: Boolean = false,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    permissions: SecurityAndPrivacyPermissions = SecurityAndPrivacyPermissions(
+        canChangeRoomAccess = true,
+        canChangeHistoryVisibility = true,
+        canChangeEncryption = true,
+        canChangeRoomVisibility = true
+    ),
     eventSink: (SecurityAndPrivacyEvents) -> Unit = {}
 ) = SecurityAndPrivacyState(
     editedSettings = editedSettings,
@@ -74,5 +81,6 @@ fun aSecurityAndPrivacyState(
     homeserverName = homeserverName,
     showEncryptionConfirmation = showEncryptionConfirmation,
     saveAction = saveAction,
+    permissions = permissions,
     eventSink = eventSink
 )
