@@ -147,9 +147,7 @@ fun MediaViewerView(
                             showOverlay = showOverlay,
                             bottomPaddingInPixels = bottomPaddingInPixels,
                             data = dataForPage,
-                            onDismiss = {
-                                onBackClick()
-                            },
+                            onDismiss = onBackClick,
                             onRetry = {
                                 state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
                             },
