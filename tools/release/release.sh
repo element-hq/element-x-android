@@ -94,24 +94,28 @@ git pull
 printf "\n================================================================================\n"
 # Guessing version to propose a default version
 versionsFile="./plugins/src/main/kotlin/Versions.kt"
-versionYearCandidate=$(date +%Y)
+# Get current year on 2 digits
+versionYearCandidate=$(date +%y)
 currentVersionMonth=$(grep "val versionMonth" ${versionsFile} | cut  -d " " -f6)
-versionMonthCandidate=$(date +%-m)
+# Get current month on 2 digits
+versionMonthCandidate=$(date +%m)
+versionMonthCandidateNoLeadingZero=$(echo ${versionMonthCandidate} | sed 's/^0//')
 currentVersionReleaseNumber=$(grep "val versionReleaseNumber" ${versionsFile} | cut  -d " " -f6)
 # if the current month is the same as the current version, we increment the release number, else we reset it to 0
-if [[ ${currentVersionMonth} -eq ${versionMonthCandidate} ]]; then
+if [[ ${currentVersionMonth} -eq ${versionMonthCandidateNoLeadingZero} ]]; then
   versionReleaseNumberCandidate=$((currentVersionReleaseNumber + 1))
 else
   versionReleaseNumberCandidate=0
 fi
 versionCandidate="${versionYearCandidate}.${versionMonthCandidate}.${versionReleaseNumberCandidate}"
 
-read -p "Please enter the release version (example: ${versionCandidate}). Just press enter if ${versionCandidate} is correct. " version
+read -p "Please enter the release version (example: ${versionCandidate}). Format must be 'YY.MM.x' or 'YY.MM.xy'. Just press enter if ${versionCandidate} is correct. " version
 version=${version:-${versionCandidate}}
 
-# extract major, minor and patch for future use
+# extract year, month and release number for future use
 versionYear=$(echo "${version}" | cut  -d "." -f1)
 versionMonth=$(echo "${version}" | cut  -d "." -f2)
+versionMonthNoLeadingZero=$(echo ${versionMonth} | sed 's/^0//')
 versionReleaseNumber=$(echo "${version}" | cut  -d "." -f3)
 
 printf "\n================================================================================\n"
@@ -129,7 +133,7 @@ fi
 versionsFileBak="${versionsFile}.bak"
 cp ${versionsFile} ${versionsFileBak}
 sed "s/private const val versionYear = .*/private const val versionYear = ${versionYear}/" ${versionsFileBak} > ${versionsFile}
-sed "s/private const val versionMonth = .*/private const val versionMonth = ${versionMonth}/" ${versionsFile}    > ${versionsFileBak}
+sed "s/private const val versionMonth = .*/private const val versionMonth = ${versionMonthNoLeadingZero}/" ${versionsFile}    > ${versionsFileBak}
 sed "s/private const val versionReleaseNumber = .*/private const val versionReleaseNumber = ${versionReleaseNumber}/" ${versionsFileBak} > ${versionsFile}
 rm ${versionsFileBak}
 
@@ -137,9 +141,8 @@ git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Creating fastlane file...\n"
-printf -v versionMonth2Digits "%02d" "${versionMonth}"
 printf -v versionReleaseNumber2Digits "%02d" "${versionReleaseNumber}"
-fastlaneFile="${versionYear}${versionMonth2Digits}${versionReleaseNumber2Digits}0.txt"
+fastlaneFile="20${versionYear}${versionMonth}${versionReleaseNumber2Digits}0.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: TODO.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > "${fastlanePathFile}"
 
