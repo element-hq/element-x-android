@@ -102,6 +102,11 @@ class MediaViewerDataSource(
         return buildMediaViewerPageList(initialMediaItems)
     }
 
+    /**
+     * Build a list of [MediaViewerPageData] from a list of [MediaItem].
+     * In particular, create a mutable state of AsyncData<LocalMedia> for each media item, which
+     * will be used to render the downloaded media (see [loadMedia] which will update this value).
+     */
     private fun buildMediaViewerPageList(groupedItems: List<MediaItem>) = buildList {
         groupedItems.forEach { mediaItem ->
             when (mediaItem) {
