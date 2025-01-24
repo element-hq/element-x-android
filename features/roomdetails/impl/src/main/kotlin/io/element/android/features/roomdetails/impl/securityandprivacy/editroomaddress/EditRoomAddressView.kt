@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -66,8 +67,8 @@ fun EditRoomAddressView(
                 onAddressChange = {
                     state.eventSink(EditRoomAddressEvents.RoomAddressChanged(it))
                 },
-                label = stringResource(CommonStrings.screen_edit_room_address_title),
-                supportingText = stringResource(CommonStrings.screen_edit_room_address_room_address_section_footer),
+                label = stringResource(R.string.screen_edit_room_address_title),
+                supportingText = stringResource(R.string.screen_edit_room_address_room_address_section_footer),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = 16.dp)
@@ -101,7 +102,7 @@ private fun EditRoomAddressTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(CommonStrings.screen_edit_room_address_title),
+                text = stringResource(R.string.screen_edit_room_address_title),
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },

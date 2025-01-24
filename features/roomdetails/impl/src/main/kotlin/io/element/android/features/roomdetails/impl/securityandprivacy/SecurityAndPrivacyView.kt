@@ -184,31 +184,31 @@ private fun RoomAccessSection(
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
-        title = stringResource(CommonStrings.screen_security_and_privacy_room_access_section_header),
+        title = stringResource(R.string.screen_security_and_privacy_room_access_section_header),
         modifier = modifier,
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_invite_only_option_title)) },
-            supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_invite_only_option_description)) },
+            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_title)) },
+            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.InviteOnly),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.InviteOnly) },
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_ask_to_join_option_title)) },
-            supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_ask_to_join_option_description)) },
+            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
+            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.AskToJoin),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.AskToJoin) },
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_anyone_option_title)) },
-            supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_anyone_option_description)) },
+            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
+            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
             onClick = { onSelected(SecurityAndPrivacyRoomAccess.Anyone) },
         )
         if (saved == SecurityAndPrivacyRoomAccess.SpaceMember) {
             ListItem(
-                headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_space_members_option_title)) },
-                supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_access_space_members_option_description)) },
+                headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_title)) },
+                supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_description)) },
                 trailingContent = ListItemContent.RadioButton(selected = true, enabled = false),
                 enabled = false,
             )
@@ -222,12 +222,12 @@ private fun RoomVisibilitySection(
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
-        title = stringResource(CommonStrings.screen_security_and_privacy_room_visibility_section_header),
+        title = stringResource(R.string.screen_security_and_privacy_room_visibility_section_header),
         modifier = modifier,
     ) {
         Spacer(Modifier.height(12.dp))
         Text(
-            text = stringResource(CommonStrings.screen_security_and_privacy_room_visibility_section_footer, homeserverName),
+            text = stringResource(R.string.screen_security_and_privacy_room_visibility_section_footer, homeserverName),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary,
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -245,23 +245,23 @@ private fun RoomAddressSection(
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
-        title = stringResource(CommonStrings.screen_security_and_privacy_room_address_section_header),
+        title = stringResource(R.string.screen_security_and_privacy_room_address_section_header),
         modifier = modifier,
     ) {
         ListItem(
             headlineContent = {
-                Text(text = roomAddress ?: stringResource(CommonStrings.screen_security_and_privacy_add_room_address_action))
+                Text(text = roomAddress ?: stringResource(R.string.screen_security_and_privacy_add_room_address_action))
             },
             trailingContent = if (roomAddress.isNullOrEmpty()) ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())) else null,
-            supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_address_section_footer)) },
+            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_address_section_footer)) },
             onClick = onRoomAddressClick,
             colors = ListItemDefaults.colors(trailingIconColor = ElementTheme.colors.iconAccentPrimary),
         )
 
         ListItem(
-            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
+            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
             supportingContent = {
-                Text(text = stringResource(CommonStrings.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
+                Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
             },
             trailingContent =
             when (isVisibleInRoomDirectory) {
@@ -303,12 +303,12 @@ private fun EncryptionSection(
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
-        title = stringResource(CommonStrings.screen_security_and_privacy_encryption_section_header),
+        title = stringResource(R.string.screen_security_and_privacy_encryption_section_header),
         modifier = modifier,
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_toggle_title)) },
-            supportingContent = { Text(text = stringResource(CommonStrings.screen_security_and_privacy_encryption_section_footer)) },
+            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_encryption_toggle_title)) },
+            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_encryption_section_footer)) },
             trailingContent = ListItemContent.Switch(
                 checked = isRoomEncrypted,
                 enabled = canToggleEncryption,
@@ -319,9 +319,9 @@ private fun EncryptionSection(
     }
     if (showConfirmation) {
         ConfirmationDialog(
-            title = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_title),
-            content = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_description),
-            submitText = stringResource(CommonStrings.screen_security_and_privacy_enable_encryption_alert_confirm_button_title),
+            title = stringResource(R.string.screen_security_and_privacy_enable_encryption_alert_title),
+            content = stringResource(R.string.screen_security_and_privacy_enable_encryption_alert_description),
+            submitText = stringResource(R.string.screen_security_and_privacy_enable_encryption_alert_confirm_button_title),
             onSubmitClick = onConfirmEncryption,
             onDismiss = onDismissConfirmation,
         )
@@ -337,7 +337,7 @@ private fun HistoryVisibilitySection(
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
-        title = stringResource(CommonStrings.screen_security_and_privacy_room_history_section_header),
+        title = stringResource(R.string.screen_security_and_privacy_room_history_section_header),
         modifier = modifier,
     ) {
         Spacer(Modifier.height(16.dp))
@@ -369,9 +369,9 @@ private fun HistoryVisibilityItem(
     isEnabled: Boolean = true,
 ) {
     val headlineText = when (option) {
-        SecurityAndPrivacyHistoryVisibility.SinceSelection -> stringResource(CommonStrings.screen_security_and_privacy_room_history_since_selecting_option_title)
-        SecurityAndPrivacyHistoryVisibility.SinceInvite -> stringResource(CommonStrings.screen_security_and_privacy_room_history_since_invite_option_title)
-        SecurityAndPrivacyHistoryVisibility.Anyone -> stringResource(CommonStrings.screen_security_and_privacy_room_history_anyone_option_title)
+        SecurityAndPrivacyHistoryVisibility.SinceSelection -> stringResource(R.string.screen_security_and_privacy_room_history_since_selecting_option_title)
+        SecurityAndPrivacyHistoryVisibility.SinceInvite -> stringResource(R.string.screen_security_and_privacy_room_history_since_invite_option_title)
+        SecurityAndPrivacyHistoryVisibility.Anyone -> stringResource(R.string.screen_security_and_privacy_room_history_anyone_option_title)
     }
     ListItem(
         headlineContent = { Text(text = headlineText) },

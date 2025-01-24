@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"You’ll need a room address in order to make it visible in the directory."</string>
+  <string name="screen_edit_room_address_title">"Room address"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
   <string name="screen_polls_history_title">"Polls"</string>
@@ -54,6 +56,7 @@
   <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
   <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
+  <string name="screen_room_details_profile_row_title">"Profile"</string>
   <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles and permissions"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>
@@ -117,4 +120,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles and permissions"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Add room address"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Anyone can ask to join the room but an administrator or moderator will have to accept the request."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Yes, enable encryption"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.
+No one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.
+We do not recommend enabling encryption for rooms that anyone can find and join."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Enable encryption?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Once enabled, encryption cannot be disabled."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Encryption"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can find and join"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"People can only join if they are invited"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Room access"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spaces are not currently supported"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space members"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"You’ll need a room address in order to make it visible in the room directory."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Room address"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Allow for this room to be found by searching %1$s public room directory"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visible in public room directory"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Anyone"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Who can read history"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Members only since they were invited"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Members only since selecting this option"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
+You can choose to publish your room in your homeserver public room directory."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Room publishing"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
+The address is also required to make the room visible in %1$s public room directory."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Room visibility"</string>
+  <string name="screen_security_and_privacy_title">"Security &amp; privacy"</string>
 </resources>
