@@ -125,7 +125,7 @@ class FakeEncryptionService(
         return pinUserIdentityResult(userId)
     }
 
-    override suspend fun withdrawVerificationRequirement(userId: UserId): Result<Unit> {
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> {
         return withdrawVerificationResult(userId)
     }
 

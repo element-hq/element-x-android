@@ -30,25 +30,24 @@ fun IdentityChangeStateView(
     onLinkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Pick the first identity change to PinViolation
-    val pinViolationIdentityChange = state.roomMemberIdentityStateChanges.firstOrNull {
-        // For now only render PinViolation
+    // Pick the first identity change that is in Pin or Verification violation
+    val maybeIdentityChangeViolation = state.roomMemberIdentityStateChanges.firstOrNull {
         it.identityState == IdentityState.PinViolation ||
             it.identityState == IdentityState.VerificationViolation
     }
-    if (pinViolationIdentityChange != null) {
+    if (maybeIdentityChangeViolation != null) {
         ComposerAlertMolecule(
             modifier = modifier,
-            avatar = pinViolationIdentityChange.identityRoomMember.avatarData,
+            avatar = maybeIdentityChangeViolation.identityRoomMember.avatarData,
             content = buildAnnotatedString {
                 val learnMoreStr = stringResource(CommonStrings.action_learn_more)
-                val displayName = pinViolationIdentityChange.identityRoomMember.displayNameOrDefault
+                val displayName = maybeIdentityChangeViolation.identityRoomMember.displayNameOrDefault
                 val userIdStr = stringResource(
                     CommonStrings.crypto_identity_change_pin_violation_new_user_id,
-                    pinViolationIdentityChange.identityRoomMember.userId,
+                    maybeIdentityChangeViolation.identityRoomMember.userId,
                 )
 
-                val fullText = if (pinViolationIdentityChange.identityState == IdentityState.PinViolation) {
+                val fullText = if (maybeIdentityChangeViolation.identityState == IdentityState.PinViolation) {
                     stringResource(
                         id = CommonStrings.crypto_identity_change_pin_violation_new,
                         displayName,
@@ -93,19 +92,19 @@ fun IdentityChangeStateView(
                     end = learnMoreStartIndex + learnMoreStr.length,
                 )
             },
-            submitText = if (pinViolationIdentityChange.identityState == IdentityState.VerificationViolation) {
+            submitText = if (maybeIdentityChangeViolation.identityState == IdentityState.VerificationViolation) {
                 stringResource(CommonStrings.crypto_identity_change_withdraw_verification_action)
             } else {
                 stringResource(CommonStrings.action_ok)
             },
             onSubmitClick = {
-                if (pinViolationIdentityChange.identityState == IdentityState.VerificationViolation) {
-                    state.eventSink(IdentityChangeEvent.VerificationViolation(pinViolationIdentityChange.identityRoomMember.userId))
+                if (maybeIdentityChangeViolation.identityState == IdentityState.VerificationViolation) {
+                    state.eventSink(IdentityChangeEvent.WithdrawVerification(maybeIdentityChangeViolation.identityRoomMember.userId))
                 } else {
-                    state.eventSink(IdentityChangeEvent.PinViolation(pinViolationIdentityChange.identityRoomMember.userId))
+                    state.eventSink(IdentityChangeEvent.PinIdentity(maybeIdentityChangeViolation.identityRoomMember.userId))
                 }
             },
-            isCritical = pinViolationIdentityChange.identityState == IdentityState.VerificationViolation,
+            isCritical = maybeIdentityChangeViolation.identityState == IdentityState.VerificationViolation,
         )
     }
 }

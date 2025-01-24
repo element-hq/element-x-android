@@ -8,10 +8,10 @@
 package io.element.android.features.messages.impl.crypto.identity
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.features.messages.impl.messagecomposer.observeRoomMemberIdentityStateChange
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -19,19 +19,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -44,15 +34,15 @@ class IdentityChangeStatePresenter @Inject constructor(
     override fun present(): IdentityChangeState {
         val coroutineScope = rememberCoroutineScope()
         val roomMemberIdentityStateChange by produceState(persistentListOf()) {
-            observeRoomMemberIdentityStateChange()
+            observeRoomMemberIdentityStateChange(room)
         }
 
         fun handleEvent(event: IdentityChangeEvent) {
             when (event) {
-                is IdentityChangeEvent.VerificationViolation -> {
-                    coroutineScope.withdrawVerificationRequirement(event.userId)
+                is IdentityChangeEvent.WithdrawVerification -> {
+                    coroutineScope.withdrawVerification(event.userId)
                 }
-                is IdentityChangeEvent.PinViolation -> {
+                is IdentityChangeEvent.PinIdentity -> {
                     coroutineScope.pinUserIdentity(event.userId)
                 }
             }
@@ -64,35 +54,6 @@ class IdentityChangeStatePresenter @Inject constructor(
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange() {
-        room.syncUpdateFlow
-            .filter {
-                // Room cannot become unencrypted, so we can just apply a filter here.
-                room.isEncrypted
-            }
-            .distinctUntilChanged()
-            .flatMapLatest {
-                combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
-                    identityStateChanges.map { identityStateChange ->
-                        val member = membersState.roomMembers()
-                            ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
-                            ?.toIdentityRoomMember()
-                            ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
-                        RoomMemberIdentityStateChange(
-                            identityRoomMember = member,
-                            identityState = identityStateChange.identityState,
-                        )
-                    }
-                }
-                    .distinctUntilChanged()
-                    .onEach { roomMemberIdentityStateChanges ->
-                        value = roomMemberIdentityStateChanges.toPersistentList()
-                    }
-            }
-            .launchIn(this)
-    }
-
     private fun CoroutineScope.pinUserIdentity(userId: UserId) = launch {
         encryptionService.pinUserIdentity(userId)
             .onFailure {
@@ -100,8 +61,8 @@ class IdentityChangeStatePresenter @Inject constructor(
             }
     }
 
-    private fun CoroutineScope.withdrawVerificationRequirement(userId: UserId) = launch {
-        encryptionService.withdrawVerificationRequirement(userId)
+    private fun CoroutineScope.withdrawVerification(userId: UserId) = launch {
+        encryptionService.withdrawVerification(userId)
             .onFailure {
                 Timber.e(it, "Failed to withdraw verification for user $userId")
             }

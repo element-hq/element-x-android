@@ -403,7 +403,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
 
         val roomMemberIdentityStateChange by produceState(persistentListOf()) {
-            observeRoomMemberIdentityStateChange()
+            observeRoomMemberIdentityStateChange(room)
         }
 
         return MessageComposerState(

@@ -47,7 +47,7 @@ class IdentityChangeStateViewTest {
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
         rule.clickOn(res = CommonStrings.action_ok)
-        eventsRecorder.assertSingle(IdentityChangeEvent.PinViolation(UserId("@alice:localhost")))
+        eventsRecorder.assertSingle(IdentityChangeEvent.PinIdentity(UserId("@alice:localhost")))
     }
 
     @Test
@@ -70,7 +70,7 @@ class IdentityChangeStateViewTest {
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
         rule.clickOn(res = CommonStrings.crypto_identity_change_withdraw_verification_action)
-        eventsRecorder.assertSingle(IdentityChangeEvent.VerificationViolation(UserId("@alice:localhost")))
+        eventsRecorder.assertSingle(IdentityChangeEvent.WithdrawVerification(UserId("@alice:localhost")))
     }
 
     @Test
