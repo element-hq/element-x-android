@@ -44,7 +44,6 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val dataSource: MediaViewerDataSource,
     private val room: MatrixRoom,
     private val localMediaActions: LocalMediaActions,
-    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     interface Factory {
@@ -54,6 +53,9 @@ class MediaViewerPresenter @AssistedInject constructor(
             dataSource: MediaViewerDataSource,
         ): MediaViewerPresenter
     }
+
+    // Use a local snackbarDispatcher because this presenter is used in an Overlay Node
+    private val snackbarDispatcher = SnackbarDispatcher()
 
     @Composable
     override fun present(): MediaViewerState {
