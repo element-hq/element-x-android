@@ -91,8 +91,8 @@ fun SecurityAndPrivacyView(
                     homeserverName = state.homeserverName,
                     onRoomAddressClick = { state.eventSink(SecurityAndPrivacyEvents.EditRoomAddress) },
                     isVisibleInRoomDirectory = state.editedSettings.isVisibleInRoomDirectory,
-                    onVisibilityChange = { isVisible ->
-                        state.eventSink(SecurityAndPrivacyEvents.ChangeRoomVisibility(isVisible))
+                    onVisibilityChange = {
+                        state.eventSink(SecurityAndPrivacyEvents.ToggleRoomVisibility)
                     },
                 )
             }
@@ -241,7 +241,7 @@ private fun RoomAddressSection(
     homeserverName: String,
     isVisibleInRoomDirectory: AsyncData<Boolean>,
     onRoomAddressClick: () -> Unit,
-    onVisibilityChange: (Boolean) -> Unit,
+    onVisibilityChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
@@ -263,6 +263,7 @@ private fun RoomAddressSection(
             supportingContent = {
                 Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
             },
+            onClick = if (isVisibleInRoomDirectory.isSuccess()) onVisibilityChange else null,
             trailingContent =
             when (isVisibleInRoomDirectory) {
                 is AsyncData.Uninitialized, is AsyncData.Loading -> {
@@ -284,7 +285,7 @@ private fun RoomAddressSection(
                 is AsyncData.Success -> {
                     ListItemContent.Switch(
                         checked = isVisibleInRoomDirectory.data,
-                        onChange = onVisibilityChange,
+                        onChange = { onVisibilityChange() },
                     )
                 }
             }

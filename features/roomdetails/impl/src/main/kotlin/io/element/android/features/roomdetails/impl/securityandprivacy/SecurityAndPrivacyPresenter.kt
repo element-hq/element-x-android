@@ -120,8 +120,11 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                 is SecurityAndPrivacyEvents.ChangeHistoryVisibility -> {
                     editedHistoryVisibility = event.historyVisibility
                 }
-                is SecurityAndPrivacyEvents.ChangeRoomVisibility -> {
-                    editedVisibleInRoomDirectory = AsyncData.Success(event.isVisibleInRoomDirectory)
+                SecurityAndPrivacyEvents.ToggleRoomVisibility -> {
+                    editedVisibleInRoomDirectory = when (val edited = editedVisibleInRoomDirectory) {
+                        is AsyncData.Success -> AsyncData.Success(!edited.data)
+                        else -> edited
+                    }
                 }
                 SecurityAndPrivacyEvents.EditRoomAddress -> navigator.openEditRoomAddress()
                 SecurityAndPrivacyEvents.CancelEnableEncryption -> {
