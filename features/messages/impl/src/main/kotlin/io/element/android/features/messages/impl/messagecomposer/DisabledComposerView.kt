@@ -75,7 +75,7 @@ internal fun DisabledComposerView(
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(
             modifier = Modifier
-                .padding(start= 2.dp)
+                .padding(start = 2.dp)
                 .size(48.dp),
             enabled = false,
             onClick = {},
