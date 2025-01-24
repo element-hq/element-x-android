@@ -36,7 +36,7 @@ class SnackbarDispatcher {
         }
     }
 
-    suspend fun post(message: SnackbarMessage) {
+    fun post(message: SnackbarMessage) {
         if (snackBarMessageQueue.isEmpty()) {
             snackBarMessageQueue.add(message)
             if (queueMutex.isLocked) queueMutex.unlock()
