@@ -54,7 +54,7 @@ class SnackbarDispatcher {
 }
 
 /** Used to provide a [SnackbarDispatcher] to composable functions, it's needed for [rememberSnackbarHostState]. */
-val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> { SnackbarDispatcher() }
+val LocalSnackbarDispatcher = compositionLocalOf { SnackbarDispatcher() }
 
 @Composable
 fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> {
@@ -75,7 +75,7 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
     LaunchedEffect(snackbarMessage.id) {
         // If the message wasn't already displayed, do it now, and mark it as displayed
         // This will prevent the message from appearing in any other active SnackbarHosts
-        if (snackbarMessage.isDisplayed.getAndSet(true) == false) {
+        if (snackbarMessage.isDisplayed.getAndSet(true).not()) {
             try {
                 snackbarHostState.showSnackbar(
                     message = snackbarMessageText,
