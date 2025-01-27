@@ -56,6 +56,7 @@ private val TESTED_MEDIA_INFO = anApkMediaInfo(
     senderId = A_USER_ID,
 )
 
+@Suppress("LargeClass")
 class MediaViewerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
