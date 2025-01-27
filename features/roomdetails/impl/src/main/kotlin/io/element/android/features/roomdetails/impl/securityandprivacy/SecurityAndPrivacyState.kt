@@ -23,6 +23,8 @@ data class SecurityAndPrivacyState(
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
 
+
+
     val canBeSaved = savedSettings != editedSettings
 
     val availableHistoryVisibilities = buildSet {
@@ -38,13 +40,16 @@ data class SecurityAndPrivacyState(
     val showRoomVisibilitySections = permissions.canChangeRoomVisibility && editedSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly
     val showHistoryVisibilitySection = permissions.canChangeHistoryVisibility
     val showEncryptionSection = permissions.canChangeEncryption
+    override fun toString(): String {
+        return "SecurityAndPrivacyState(savedSettings=$savedSettings, editedSettings=$editedSettings, homeserverName='$homeserverName', showEncryptionConfirmation=$showEncryptionConfirmation, saveAction=$saveAction, canBeSaved=$canBeSaved)"
+    }
 }
 
 data class SecurityAndPrivacySettings(
     val roomAccess: SecurityAndPrivacyRoomAccess,
     val isEncrypted: Boolean,
     val historyVisibility: SecurityAndPrivacyHistoryVisibility,
-    val addressName: String?,
+    val address: String?,
     val isVisibleInRoomDirectory: AsyncData<Boolean>
 )
 

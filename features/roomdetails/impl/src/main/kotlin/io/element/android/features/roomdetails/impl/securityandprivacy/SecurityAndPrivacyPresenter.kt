@@ -69,7 +69,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                     isEncrypted = room.isEncrypted,
                     isVisibleInRoomDirectory = savedIsVisibleInRoomDirectory.value,
                     historyVisibility = roomInfo?.historyVisibility.map(),
-                    addressName = roomInfo?.firstDisplayableAlias(homeserverName)?.value
+                    address = roomInfo?.firstDisplayableAlias(homeserverName)?.value
                 )
             }
         }
@@ -91,7 +91,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             isEncrypted = editedIsEncrypted,
             isVisibleInRoomDirectory = editedVisibleInRoomDirectory,
             historyVisibility = editedHistoryVisibility,
-            addressName = savedSettings.addressName,
+            address = savedSettings.address,
         )
 
         var showEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }

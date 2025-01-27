@@ -57,7 +57,7 @@ fun aSecurityAndPrivacySettings(
 ) = SecurityAndPrivacySettings(
     roomAccess = roomAccess,
     isEncrypted = isEncrypted,
-    addressName = formattedAddress,
+    address = formattedAddress,
     historyVisibility = historyVisibility,
     isVisibleInRoomDirectory = isVisibleInRoomDirectory
 )
