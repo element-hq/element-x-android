@@ -28,12 +28,14 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.gallery.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -61,6 +63,16 @@ class MediaViewerPresenterTest {
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
     private val aUrl = "aUrl"
+
+    private val anImage = aMediaItemImage(
+        mediaSourceUrl = aUrl,
+    )
+    private val aBackwardLoadingIndicator = aMediaItemLoadingIndicator(
+        direction = Timeline.PaginationDirection.BACKWARDS
+    )
+    private val aForwardLoadingIndicator = aMediaItemLoadingIndicator(
+        direction = Timeline.PaginationDirection.FORWARDS
+    )
 
     @Test
     fun `present - initial state null Event`() = runTest {
@@ -505,6 +517,187 @@ class MediaViewerPresenterTest {
     }
 
     @Test
+    fun `present - snackbar displayed when there is no more items forward images and videos`() {
+        `present - snackbar displayed when there is no more items forward`(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+            expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
+        )
+    }
+
+    @Test
+    fun `present - snackbar displayed when there is no more items forward files and audio`() {
+        `present - snackbar displayed when there is no more items forward`(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+            expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
+        )
+    }
+
+    private fun `present - snackbar displayed when there is no more items forward`(
+        mode: MediaViewerEntryPoint.MediaViewerMode,
+        expectedSnackbarResId: Int,
+    ) = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mode = mode,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(),
+                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        )
+                    } else {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(),
+                        )
+                    }
+                )
+            )
+            val updatedState = awaitItem()
+            // User navigate to the first item (forward loading indicator)
+            updatedState.eventSink(
+                MediaViewerEvents.OnNavigateTo(0)
+            )
+            // data source claims that there is no more items to load forward
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(),
+                            fileItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                        )
+                    } else {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(),
+                        )
+                    }
+                )
+            )
+            skipItems(1)
+            val stateWithSnackbar = awaitItem()
+            assertThat(stateWithSnackbar.snackbarMessage!!.messageResId).isEqualTo(expectedSnackbarResId)
+        }
+    }
+
+    @Test
+    fun `present - snackbar displayed when there is no more items backward images and videos`() {
+        `present - snackbar displayed when there is no more items backward`(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+            expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
+        )
+    }
+
+    @Test
+    fun `present - snackbar displayed when there is no more items backward files and audio`() {
+        `present - snackbar displayed when there is no more items backward`(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+            expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
+        )
+    }
+
+    private fun `present - snackbar displayed when there is no more items backward`(
+        mode: MediaViewerEntryPoint.MediaViewerMode,
+        expectedSnackbarResId: Int,
+    ) = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mode = mode,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(),
+                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        )
+                    } else {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(),
+                        )
+                    }
+                )
+            )
+            val updatedState = awaitItem()
+            // User navigate to the last item (backward loading indicator)
+            updatedState.eventSink(
+                MediaViewerEvents.OnNavigateTo(2)
+            )
+            skipItems(1)
+            // data source claims that there is no more items to load backward
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(),
+                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage),
+                        )
+                    } else {
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage),
+                            fileItems = persistentListOf(),
+                        )
+                    }
+                )
+            )
+            skipItems(1)
+            val stateWithSnackbar = awaitItem()
+            assertThat(stateWithSnackbar.snackbarMessage!!.messageResId).isEqualTo(expectedSnackbarResId)
+        }
+    }
+
+    @Test
+    fun `present - no snackbar displayed when there is no more items but not displaying a loading item`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+            // User navigate to the media
+            updatedState.eventSink(
+                MediaViewerEvents.OnNavigateTo(1)
+            )
+            skipItems(1)
+            // data source claims that there is no more items to load at all
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val finalState = awaitItem()
+            assertThat(finalState.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
     fun `present - load more`() = runTest {
         val loadMoreLambda = lambdaRecorder<Timeline.PaginationDirection, Unit> { }
         val mediaGalleryDataSource = FakeMediaGalleryDataSource(
@@ -565,6 +758,7 @@ class MediaViewerPresenterTest {
 
     private fun TestScope.createMediaViewerPresenter(
         eventId: EventId? = null,
+        mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
         matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
@@ -578,7 +772,7 @@ class MediaViewerPresenterTest {
     ): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerEntryPoint.Params(
-                mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+                mode = mode,
                 eventId = eventId,
                 mediaInfo = TESTED_MEDIA_INFO,
                 mediaSource = aMediaSource(),
@@ -587,7 +781,11 @@ class MediaViewerPresenterTest {
             ),
             navigator = mediaViewerNavigator,
             dataSource = MediaViewerDataSource(
-                galleryMode = MediaGalleryMode.Images,
+                galleryMode = when (mode) {
+                    MediaViewerEntryPoint.MediaViewerMode.SingleMedia -> MediaGalleryMode.Images
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+                },
                 dispatcher = testCoroutineDispatchers().computation,
                 galleryDataSource = mediaGalleryDataSource,
                 mediaLoader = matrixMediaLoader,
