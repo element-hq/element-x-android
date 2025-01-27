@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
+  <string name="a11y_view_details">"Vaata üksikasju"</string>
   <string name="a11y_voice_message_record">"Salvesta häälsõnum"</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
   <string name="action_accept">"Nõustu"</string>
@@ -181,6 +182,7 @@ Põhjus: %1$s."</string>
   <string name="common_light">"Hele"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_loading">"Laadime…"</string>
+  <string name="common_loading_more">"Laadime veel…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d liige"</item>
     <item quantity="other">"%1$d liiget"</item>

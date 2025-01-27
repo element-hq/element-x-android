@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Vous avez été banni de ce salon par %1$s."</string>
+  <string name="screen_join_room_ban_message">"Vous avez été banni de ce salon"</string>
+  <string name="screen_join_room_ban_reason">"Motif: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Annuler la demande"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Oui, annuler"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Êtes-vous sûr de vouloir annuler votre demande d’accès à ce salon ?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Annuler la demande d’adhésion"</string>
+  <string name="screen_join_room_fail_message">"Rejoindre le salon a échoué."</string>
+  <string name="screen_join_room_fail_reason">"Ce salon est accessible uniquement sur invitation ou il peut y avoir des restrictions d’accès au niveau du Space."</string>
+  <string name="screen_join_room_forget_action">"Oublier ce salon"</string>
+  <string name="screen_join_room_invite_required_message">"Vous avez besoin d’une invitation pour rejoindre ce salon"</string>
   <string name="screen_join_room_join_action">"Rejoindre"</string>
+  <string name="screen_join_room_join_restricted_message">"Il est possible que vous deviez être invité ou être membre d’un Space pour pouvoir rejoindre le salon."</string>
   <string name="screen_join_room_knock_action">"Demander à joindre"</string>
   <string name="screen_join_room_knock_message_description">"Message (facultatif)"</string>
   <string name="screen_join_room_knock_sent_description">"Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée."</string>

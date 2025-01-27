@@ -7,11 +7,11 @@
   <string name="screen_room_change_permissions_ban_people">"Ban people"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remove messages"</string>
   <string name="screen_room_change_permissions_everyone">"Everyone"</string>
-  <string name="screen_room_change_permissions_invite_people">"Invite people"</string>
+  <string name="screen_room_change_permissions_invite_people">"Invite people and accept requests to join"</string>
   <string name="screen_room_change_permissions_member_moderation">"Member moderation"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messages and content"</string>
   <string name="screen_room_change_permissions_moderators">"Admins and moderators"</string>
-  <string name="screen_room_change_permissions_remove_people">"Remove people"</string>
+  <string name="screen_room_change_permissions_remove_people">"Remove people and decline requests to join"</string>
   <string name="screen_room_change_permissions_room_avatar">"Change room avatar"</string>
   <string name="screen_room_change_permissions_room_details">"Room details"</string>
   <string name="screen_room_change_permissions_room_name">"Change room name"</string>
@@ -54,6 +54,7 @@
   <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
   <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
+  <string name="screen_room_details_profile_row_title">"Profile"</string>
   <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles and permissions"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>

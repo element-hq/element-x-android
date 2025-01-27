@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Používateľ %1$s vám zakázal prístup do tejto miestnosti."</string>
+  <string name="screen_join_room_ban_message">"Bol vám zakázaný vstup do tejto miestnosti"</string>
+  <string name="screen_join_room_ban_reason">"Dôvod: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Zrušiť žiadosť"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Áno, zrušiť"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Ste si istí, že chcete zrušiť svoju žiadosť o vstup do tejto miestnosti?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Zrušiť žiadosť o pripojenie"</string>
+  <string name="screen_join_room_fail_message">"Pripojenie do miestnosti zlyhalo."</string>
+  <string name="screen_join_room_fail_reason">"Táto miestnosť je buď len pre pozvaných, alebo môžu existovať obmedzenia na prístup na úrovni priestoru."</string>
+  <string name="screen_join_room_forget_action">"Zabudnúť túto miestnosť"</string>
+  <string name="screen_join_room_invite_required_message">"Potrebujete pozvanie, aby ste sa mohli pripojiť k tejto miestnosti"</string>
   <string name="screen_join_room_join_action">"Pripojiť sa do miestnosti"</string>
+  <string name="screen_join_room_join_restricted_message">"Možno budete musieť byť pozvaní alebo byť členom priestoru, aby ste sa mohli pripojiť."</string>
   <string name="screen_join_room_knock_action">"Zaklopaním sa pripojíte"</string>
   <string name="screen_join_room_knock_message_description">"Správa (voliteľné)"</string>
   <string name="screen_join_room_knock_sent_description">"Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti."</string>

@@ -14,6 +14,8 @@
   <string name="screen_media_browser_title">"Médias et fichiers"</string>
   <string name="screen_media_details_file_format">"Format du fichier"</string>
   <string name="screen_media_details_filename">"Nom du fichier"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Il n’y a plus de fichiers à montrer"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Il n’y a plus de médias à montrer"</string>
   <string name="screen_media_details_redact_confirmation_message">"Ce fichier sera supprimé du salon et les membres n’y auront plus accès."</string>
   <string name="screen_media_details_redact_confirmation_title">"Supprimer le fichier ?"</string>
   <string name="screen_media_details_uploaded_by">"Envoyé par"</string>

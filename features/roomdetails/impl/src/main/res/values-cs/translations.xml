@@ -54,6 +54,7 @@
   <string name="screen_room_details_notification_mode_default">"Výchozí"</string>
   <string name="screen_room_details_notification_title">"Oznámení"</string>
   <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
+  <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Žádosti o vstup"</string>
   <string name="screen_room_details_roles_and_permissions">"Role a oprávnění"</string>
   <string name="screen_room_details_room_name_label">"Název místnosti"</string>

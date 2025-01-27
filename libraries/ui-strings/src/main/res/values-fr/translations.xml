@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
+  <string name="a11y_view_details">"Afficher les détails"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
   <string name="action_accept">"Accepter"</string>
@@ -181,6 +182,7 @@ Raison : %1$s."</string>
   <string name="common_light">"Clair"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
   <string name="common_loading">"Chargement…"</string>
+  <string name="common_loading_more">"Chargement…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membre"</item>
     <item quantity="other">"%1$d membres"</item>

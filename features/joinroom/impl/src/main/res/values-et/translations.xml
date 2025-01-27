@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"%1$s keelas sinu ligipääsu siia jututuppa."</string>
+  <string name="screen_join_room_ban_message">"Sinul on ligipääsukeeld siia jututuppa"</string>
+  <string name="screen_join_room_ban_reason">"Põhjus: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Tühista liitumispalve"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Jah, tühista"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Kas sa oled kindel, et soovid tühistada oma palve jututoaga liitumiseks?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Tühista liitumispalve"</string>
+  <string name="screen_join_room_fail_message">"Jututoaga liitumine ei õnnestunud."</string>
+  <string name="screen_join_room_fail_reason">"Ligipääs siia jututuppa on võimalik vaid kutse alusel või kehtivad siin kogukonnakohased piirangud."</string>
+  <string name="screen_join_room_forget_action">"Unusta see jututuba"</string>
+  <string name="screen_join_room_invite_required_message">"Selle jututoaga liitumiseks vajad sa kutset"</string>
   <string name="screen_join_room_join_action">"Liitu jututoaga"</string>
+  <string name="screen_join_room_join_restricted_message">"Selle jututoaga liitumiseks sa vajad kutset või pead juba olema kogukonna liige."</string>
   <string name="screen_join_room_knock_action">"Liitumiseks koputa jututoa uksele"</string>
   <string name="screen_join_room_knock_message_description">"Selgitus (kui soovid lisada)"</string>
   <string name="screen_join_room_knock_sent_description">"Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks."</string>
