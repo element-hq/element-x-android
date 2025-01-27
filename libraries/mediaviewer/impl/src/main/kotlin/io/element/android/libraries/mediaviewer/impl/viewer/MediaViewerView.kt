@@ -83,7 +83,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
-import timber.log.Timber
 
 @Composable
 fun MediaViewerView(
@@ -109,9 +108,6 @@ fun MediaViewerView(
             snapshotFlow { pagerState.currentPage }.collect { page ->
                 state.eventSink(MediaViewerEvents.OnNavigateTo(page))
             }
-        }
-        LaunchedEffect(state.listData) {
-            Timber.d("MediaViewerView: state.listData: ${state.listData}")
         }
         HorizontalPager(
             state = pagerState,
