@@ -15,6 +15,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -28,7 +30,7 @@ fun RoomAddressField(
     modifier: Modifier = Modifier,
 ) {
     TextField(
-        modifier = modifier,
+        modifier = modifier.testTag(TestTags.roomAddressField),
         value = address,
         label = label,
         leadingIcon = {

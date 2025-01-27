@@ -128,7 +128,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
                     room.updateCanonicalAlias(savedCanonicalAlias, newAlternativeAliases).getOrThrow()
                 }
             }
-            navigator.closeEditorRoomAddress()
+            navigator.closeEditRoomAddress()
         }.runCatchingUpdatingState(saveAction)
     }
 }

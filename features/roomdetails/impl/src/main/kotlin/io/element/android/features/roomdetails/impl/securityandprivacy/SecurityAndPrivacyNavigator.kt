@@ -14,7 +14,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 
 interface SecurityAndPrivacyNavigator : Plugin {
     fun openEditRoomAddress()
-    fun closeEditorRoomAddress()
+    fun closeEditRoomAddress()
 }
 
 class BackstackSecurityAndPrivacyNavigator(
@@ -24,7 +24,7 @@ class BackstackSecurityAndPrivacyNavigator(
         backStack.push(SecurityAndPrivacyFlowNode.NavTarget.EditRoomAddress)
     }
 
-    override fun closeEditorRoomAddress() {
+    override fun closeEditRoomAddress() {
         backStack.pop()
     }
 }

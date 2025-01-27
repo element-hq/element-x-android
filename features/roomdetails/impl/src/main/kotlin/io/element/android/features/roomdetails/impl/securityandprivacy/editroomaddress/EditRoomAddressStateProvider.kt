@@ -14,15 +14,15 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 open class EditRoomAddressStateProvider : PreviewParameterProvider<EditRoomAddressState> {
     override val values: Sequence<EditRoomAddressState>
         get() = sequenceOf(
-            aEditRoomAddressState(),
-            aEditRoomAddressState(roomAddressValidity = RoomAddressValidity.NotAvailable),
-            aEditRoomAddressState(roomAddressValidity = RoomAddressValidity.InvalidSymbols),
-            aEditRoomAddressState(roomAddressValidity = RoomAddressValidity.Valid),
-            aEditRoomAddressState(roomAddressValidity = RoomAddressValidity.Valid, saveAction = AsyncAction.Loading),
+            anEditRoomAddressState(),
+            anEditRoomAddressState(roomAddressValidity = RoomAddressValidity.NotAvailable),
+            anEditRoomAddressState(roomAddressValidity = RoomAddressValidity.InvalidSymbols),
+            anEditRoomAddressState(roomAddressValidity = RoomAddressValidity.Valid),
+            anEditRoomAddressState(roomAddressValidity = RoomAddressValidity.Valid, saveAction = AsyncAction.Loading),
         )
 }
 
-fun aEditRoomAddressState(
+fun anEditRoomAddressState(
     roomAddress: String = "therapy",
     roomAddressValidity: RoomAddressValidity = RoomAddressValidity.Unknown,
     homeserverName: String = ":myserver.org",

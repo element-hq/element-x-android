@@ -193,6 +193,20 @@ class SecurityAndPrivacyPresenterTest {
     }
 
     @Test
+    fun `present - edit room address`() = runTest {
+        val openEditRoomAddressLambda = lambdaRecorder<Unit> { }
+        val navigator = FakeSecurityAndPrivacyNavigator(openEditRoomAddressLambda)
+        val presenter = createSecurityAndPrivacyPresenter(navigator = navigator)
+        presenter.test {
+            skipItems(1)
+            with(awaitItem()) {
+                eventSink(SecurityAndPrivacyEvents.EditRoomAddress)
+            }
+            assert(openEditRoomAddressLambda).isCalledOnce()
+        }
+    }
+
+    @Test
     fun `present - save success`() = runTest {
         val enableEncryptionLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val updateJoinRuleLambda = lambdaRecorder<JoinRule, Result<Unit>> { Result.success(Unit) }

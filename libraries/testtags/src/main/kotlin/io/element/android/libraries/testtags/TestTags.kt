@@ -111,4 +111,11 @@ object TestTags {
      * Generic call to action.
      */
     val callToAction = TestTag("call_to_action")
+
+    /**
+     * Room address field.
+     *
+     */
+    val roomAddressField = TestTag("room_address_field")
+
 }

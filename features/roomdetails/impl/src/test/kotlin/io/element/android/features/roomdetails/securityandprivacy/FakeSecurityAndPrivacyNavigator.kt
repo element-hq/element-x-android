@@ -12,13 +12,13 @@ import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeSecurityAndPrivacyNavigator(
     private val openEditRoomAddressLambda: () -> Unit = { lambdaError() },
-    private val closeEditorRoomAddressLambda: () -> Unit = { lambdaError() },
+    private val closeEditRoomAddressLambda: () -> Unit = { lambdaError() },
 ) : SecurityAndPrivacyNavigator {
     override fun openEditRoomAddress() {
         openEditRoomAddressLambda()
     }
 
-    override fun closeEditorRoomAddress() {
-        closeEditorRoomAddressLambda()
+    override fun closeEditRoomAddress() {
+        closeEditRoomAddressLambda()
     }
 }
