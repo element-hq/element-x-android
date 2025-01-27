@@ -10,12 +10,15 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,10 +34,15 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
@@ -63,6 +71,37 @@ class MediaViewerPresenter @AssistedInject constructor(
         val data by dataSource.collectAsState()
         var currentIndex by remember { mutableIntStateOf(searchIndex(data, inputs.eventId)) }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
+
+        val isRenderingLoadingBackward by remember {
+            derivedStateOf {
+                currentIndex == data.lastIndex && data.lastOrNull() is MediaViewerPageData.Loading
+            }
+        }
+        if (isRenderingLoadingBackward) {
+            LaunchedEffect(Unit) {
+                // Observe the loading data vanishing
+                snapshotFlow { data.lastOrNull() is MediaViewerPageData.Loading }
+                    .distinctUntilChanged()
+                    .filter { !it }
+                    .onEach { showNoMoreItemsSnackbar() }
+                    .launchIn(this)
+            }
+        }
+        val isRenderingLoadingForward by remember {
+            derivedStateOf {
+                currentIndex == 0 && data.firstOrNull() is MediaViewerPageData.Loading
+            }
+        }
+        if (isRenderingLoadingForward) {
+            LaunchedEffect(Unit) {
+                // Observe the loading data vanishing
+                snapshotFlow { data.firstOrNull() is MediaViewerPageData.Loading }
+                    .distinctUntilChanged()
+                    .filter { !it }
+                    .onEach { showNoMoreItemsSnackbar() }
+                    .launchIn(this)
+            }
+        }
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
@@ -141,6 +180,16 @@ class MediaViewerPresenter @AssistedInject constructor(
             mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun showNoMoreItemsSnackbar() {
+        val messageResId = when (inputs.mode) {
+            MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+            MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
+            MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+        }
+        val message = SnackbarMessage(messageResId)
+        snackbarDispatcher.post(message)
     }
 
     private fun CoroutineScope.downloadMedia(
