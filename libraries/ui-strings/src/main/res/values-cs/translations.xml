@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
+  <string name="a11y_view_details">"Zobrazit podrobnosti"</string>
   <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
   <string name="action_accept">"Přijmout"</string>
@@ -183,6 +184,7 @@ Důvod: %1$s."</string>
   <string name="common_light">"Světlý"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
+  <string name="common_loading_more">"Načítání dalších…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d člen"</item>
     <item quantity="few">"%1$d členové"</item>

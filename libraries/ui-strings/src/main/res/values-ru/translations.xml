@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_view_details">"Подробнее"</string>
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
   <string name="action_accept">"Разрешить"</string>
@@ -183,6 +184,7 @@
   <string name="common_light">"Светлое"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <string name="common_loading_more">"Загрузить больше…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>
     <item quantity="few">"%1$d участников"</item>
