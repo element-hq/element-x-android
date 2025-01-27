@@ -10,12 +10,17 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.IntState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,10 +36,16 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
@@ -60,9 +71,12 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val data by dataSource.collectAsState()
-        var currentIndex by remember { mutableIntStateOf(searchIndex(data, inputs.eventId)) }
+        val data = dataSource.collectAsState()
+        val currentIndex = remember { mutableIntStateOf(searchIndex(data.value, inputs.eventId)) }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
+
+        NoMoreItemsBackwardSnackBarDisplayer(currentIndex, data)
+        NoMoreItemsForwardSnackBarDisplayer(currentIndex, data)
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
@@ -125,7 +139,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
                 is MediaViewerEvents.OnNavigateTo -> {
-                    currentIndex = event.index
+                    currentIndex.intValue = event.index
                 }
                 is MediaViewerEvents.LoadMore -> coroutineScope.launch {
                     dataSource.loadMore(event.direction)
@@ -134,13 +148,67 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
 
         return MediaViewerState(
-            listData = data,
-            currentIndex = currentIndex,
+            listData = data.value,
+            currentIndex = currentIndex.intValue,
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvents
         )
+    }
+
+    @Composable
+    private fun NoMoreItemsBackwardSnackBarDisplayer(
+        currentIndex: IntState,
+        data: State<PersistentList<MediaViewerPageData>>,
+    ) {
+        val isRenderingLoadingBackward by remember {
+            derivedStateOf {
+                currentIndex.intValue == data.value.lastIndex && data.value.lastOrNull() is MediaViewerPageData.Loading
+            }
+        }
+        if (isRenderingLoadingBackward) {
+            LaunchedEffect(Unit) {
+                // Observe the loading data vanishing
+                snapshotFlow { data.value.lastOrNull() is MediaViewerPageData.Loading }
+                    .distinctUntilChanged()
+                    .filter { !it }
+                    .onEach { showNoMoreItemsSnackbar() }
+                    .launchIn(this)
+            }
+        }
+    }
+
+    @Composable
+    private fun NoMoreItemsForwardSnackBarDisplayer(
+        currentIndex: IntState,
+        data: State<PersistentList<MediaViewerPageData>>,
+    ) {
+        val isRenderingLoadingForward by remember {
+            derivedStateOf {
+                currentIndex.intValue == 0 && data.value.firstOrNull() is MediaViewerPageData.Loading
+            }
+        }
+        if (isRenderingLoadingForward) {
+            LaunchedEffect(Unit) {
+                // Observe the loading data vanishing
+                snapshotFlow { data.value.firstOrNull() is MediaViewerPageData.Loading }
+                    .distinctUntilChanged()
+                    .filter { !it }
+                    .onEach { showNoMoreItemsSnackbar() }
+                    .launchIn(this)
+            }
+        }
+    }
+
+    private fun showNoMoreItemsSnackbar() {
+        val messageResId = when (inputs.mode) {
+            MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+            MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
+            MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+        }
+        val message = SnackbarMessage(messageResId)
+        snackbarDispatcher.post(message)
     }
 
     private fun CoroutineScope.downloadMedia(
