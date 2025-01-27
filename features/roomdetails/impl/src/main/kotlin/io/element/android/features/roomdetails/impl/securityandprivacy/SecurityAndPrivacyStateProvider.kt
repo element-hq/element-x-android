@@ -51,13 +51,13 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
 fun aSecurityAndPrivacySettings(
     roomAccess: SecurityAndPrivacyRoomAccess = SecurityAndPrivacyRoomAccess.InviteOnly,
     isEncrypted: Boolean = true,
-    formattedAddress: String? = null,
+    address: String? = null,
     historyVisibility: SecurityAndPrivacyHistoryVisibility = SecurityAndPrivacyHistoryVisibility.SinceSelection,
     isVisibleInRoomDirectory: AsyncData<Boolean> = AsyncData.Uninitialized,
 ) = SecurityAndPrivacySettings(
     roomAccess = roomAccess,
     isEncrypted = isEncrypted,
-    address = formattedAddress,
+    address = address,
     historyVisibility = historyVisibility,
     isVisibleInRoomDirectory = isVisibleInRoomDirectory
 )
