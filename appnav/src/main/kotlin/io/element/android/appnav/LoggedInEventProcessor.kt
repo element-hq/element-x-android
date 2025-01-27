@@ -45,7 +45,7 @@ class LoggedInEventProcessor @Inject constructor(
         observingJob = null
     }
 
-    private suspend fun displayMessage(message: Int) {
+    private fun displayMessage(message: Int) {
         snackbarDispatcher.post(SnackbarMessage(message))
     }
 }

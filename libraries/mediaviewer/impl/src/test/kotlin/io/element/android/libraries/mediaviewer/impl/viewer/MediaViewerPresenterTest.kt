@@ -13,7 +13,6 @@ import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -568,7 +567,6 @@ class MediaViewerPresenterTest {
         eventId: EventId? = null,
         matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
-        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
             startLambda = { },
         ),
@@ -598,7 +596,6 @@ class MediaViewerPresenterTest {
             ),
             room = room,
             localMediaActions = localMediaActions,
-            snackbarDispatcher = snackbarDispatcher,
         )
     }
 }

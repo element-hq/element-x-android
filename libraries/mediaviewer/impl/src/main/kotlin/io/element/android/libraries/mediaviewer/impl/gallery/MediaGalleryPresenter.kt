@@ -86,11 +86,13 @@ class MediaGalleryPresenter @AssistedInject constructor(
                     mediaGalleryDataSource.deleteItem(event.eventId)
                 }
                 is MediaGalleryEvents.SaveOnDisk -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         saveOnDisk(it)
                     }
                 }
                 is MediaGalleryEvents.Share -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         share(it)
                     }
