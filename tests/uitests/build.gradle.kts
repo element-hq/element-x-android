@@ -43,6 +43,7 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(project)
+    implementation(projects.appicon.tchap)
     implementation(projects.appicon.element)
     implementation(projects.appicon.enterprise)
 

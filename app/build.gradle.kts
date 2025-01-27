@@ -243,7 +243,7 @@ dependencies {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
-        implementation(projects.appicon.element)
+        implementation(projects.appicon.tchap)
     }
     allFeaturesImpl(project)
     implementation(projects.features.migration.api)

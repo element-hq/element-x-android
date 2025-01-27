@@ -62,6 +62,7 @@ rootProject.name = "TchapX"
 include(":app")
 include(":appnav")
 include(":appconfig")
+include(":appicon:tchap")
 include(":appicon:element")
 include(":appicon:enterprise")
 include(":tests:konsist")
