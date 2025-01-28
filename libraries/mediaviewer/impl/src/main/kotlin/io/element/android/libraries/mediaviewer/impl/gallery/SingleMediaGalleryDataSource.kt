@@ -29,57 +29,57 @@ class SingleMediaGalleryDataSource(
 
     companion object {
         fun createFrom(params: MediaViewerEntryPoint.Params) = SingleMediaGalleryDataSource(
-            data = when {
-                params.mediaInfo.mimeType.isMimeTypeImage() -> {
-                    MediaItem.Image(
-                        id = UniqueId("dummy"),
-                        eventId = params.eventId,
-                        mediaInfo = params.mediaInfo,
-                        mediaSource = params.mediaSource,
-                        thumbnailSource = params.thumbnailSource,
-                    )
-                }
-                params.mediaInfo.mimeType.isMimeTypeVideo() -> {
-                    MediaItem.Video(
-                        id = UniqueId("dummy"),
-                        eventId = params.eventId,
-                        mediaInfo = params.mediaInfo,
-                        mediaSource = params.mediaSource,
-                        thumbnailSource = params.thumbnailSource,
-                    )
-                }
-                params.mediaInfo.mimeType.isMimeTypeAudio() -> {
-                    if (params.mediaInfo.waveform == null) {
-                        MediaItem.Audio(
-                            id = UniqueId("dummy"),
-                            eventId = params.eventId,
-                            mediaInfo = params.mediaInfo,
-                            mediaSource = params.mediaSource,
-                        )
-                    } else {
-                        MediaItem.Voice(
-                            id = UniqueId("dummy"),
-                            eventId = params.eventId,
-                            mediaInfo = params.mediaInfo,
-                            mediaSource = params.mediaSource,
-                        )
-                    }
-                }
-                else -> {
-                    MediaItem.File(
-                        id = UniqueId("dummy"),
-                        eventId = params.eventId,
-                        mediaInfo = params.mediaInfo,
-                        mediaSource = params.mediaSource,
-                    )
-                }
-            }.let { mediaItem ->
-                GroupedMediaItems(
-                    // Always use imageAndVideoItems, in Single mode, this is the data that will be used
-                    imageAndVideoItems = persistentListOf(mediaItem),
-                    fileItems = persistentListOf(),
-                )
-            }
+            data = GroupedMediaItems(
+                // Always use imageAndVideoItems, in Single mode, this is the data that will be used
+                imageAndVideoItems = persistentListOf(params.toMediaItem()),
+                fileItems = persistentListOf(),
+            )
+        )
+    }
+}
+
+fun MediaViewerEntryPoint.Params.toMediaItem() = when {
+    mediaInfo.mimeType.isMimeTypeImage() -> {
+        MediaItem.Image(
+            id = UniqueId("dummy"),
+            eventId = eventId,
+            mediaInfo = mediaInfo,
+            mediaSource = mediaSource,
+            thumbnailSource = thumbnailSource,
+        )
+    }
+    mediaInfo.mimeType.isMimeTypeVideo() -> {
+        MediaItem.Video(
+            id = UniqueId("dummy"),
+            eventId = eventId,
+            mediaInfo = mediaInfo,
+            mediaSource = mediaSource,
+            thumbnailSource = thumbnailSource,
+        )
+    }
+    mediaInfo.mimeType.isMimeTypeAudio() -> {
+        if (mediaInfo.waveform == null) {
+            MediaItem.Audio(
+                id = UniqueId("dummy"),
+                eventId = eventId,
+                mediaInfo = mediaInfo,
+                mediaSource = mediaSource,
+            )
+        } else {
+            MediaItem.Voice(
+                id = UniqueId("dummy"),
+                eventId = eventId,
+                mediaInfo = mediaInfo,
+                mediaSource = mediaSource,
+            )
+        }
+    }
+    else -> {
+        MediaItem.File(
+            id = UniqueId("dummy"),
+            eventId = eventId,
+            mediaInfo = mediaInfo,
+            mediaSource = mediaSource,
         )
     }
 }

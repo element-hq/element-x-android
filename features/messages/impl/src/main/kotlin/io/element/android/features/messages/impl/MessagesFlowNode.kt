@@ -123,6 +123,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val mode: MediaViewerEntryPoint.MediaViewerMode,
             val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
@@ -248,8 +249,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
-                    // TODO When we will be able to load a media timeline from a EventId, change mode here (and use a mixed mode?)
-                    mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+                    mode = navTarget.mode,
                     eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
@@ -362,6 +362,7 @@ class MessagesFlowNode @AssistedInject constructor(
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -373,6 +374,7 @@ class MessagesFlowNode @AssistedInject constructor(
                    if encrypted on certain bridges */
                 event.content.preferredMediaSource?.let { preferredMediaSource ->
                     buildMediaViewerNavTarget(
+                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                         event = event,
                         content = event.content,
                         mediaSource = preferredMediaSource,
@@ -382,6 +384,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemVideoContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -390,6 +393,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemFileContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -398,6 +402,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemAudioContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -426,12 +431,14 @@ class MessagesFlowNode @AssistedInject constructor(
     }
 
     private fun buildMediaViewerNavTarget(
+        mode: MediaViewerEntryPoint.MediaViewerMode,
         event: TimelineItem.Event,
         content: TimelineItemEventContentWithAttachment,
         mediaSource: MediaSource,
         thumbnailSource: MediaSource?,
     ): NavTarget {
         return NavTarget.MediaViewer(
+            mode = mode,
             eventId = event.eventId,
             mediaInfo = MediaInfo(
                 filename = content.filename,

@@ -39,6 +39,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
         val canShowInfo: Boolean,
     ) : NodeInputs
 
+    // TODO convert to sealed class and add eventId to the 2nd and 3rd items
     enum class MediaViewerMode {
         SingleMedia,
         TimelineImagesAndVideos,

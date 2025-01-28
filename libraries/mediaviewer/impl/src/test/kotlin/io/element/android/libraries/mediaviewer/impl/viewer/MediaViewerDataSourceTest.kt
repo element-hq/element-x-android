@@ -122,10 +122,12 @@ class MediaViewerDataSourceTest {
                 MediaViewerPageData.Loading(
                     direction = Timeline.PaginationDirection.BACKWARDS,
                     timestamp = A_FAKE_TIMESTAMP,
+                    pagerKey = 0L,
                 ),
                 MediaViewerPageData.Loading(
                     direction = Timeline.PaginationDirection.FORWARDS,
                     timestamp = A_FAKE_TIMESTAMP,
+                    pagerKey = 1L,
                 ),
             )
         }
@@ -274,5 +276,6 @@ class MediaViewerDataSourceTest {
         mediaLoader = mediaLoader,
         localMediaFactory = localMediaFactory,
         systemClock = FakeSystemClock(),
+        pagerKeysHandler = PagerKeysHandler(),
     )
 }

@@ -260,6 +260,7 @@ class TimelineMediaGalleryDataSourceTest {
     ): TimelineMediaGalleryDataSource {
         return TimelineMediaGalleryDataSource(
             room = room,
+            mediaTimeline = LiveMediaTimeline(room),
             timelineMediaItemsFactory = TimelineMediaItemsFactory(
                 dispatchers = testCoroutineDispatchers(),
                 virtualItemFactory = VirtualItemFactory(

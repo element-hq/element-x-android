@@ -792,6 +792,7 @@ class MediaViewerPresenterTest {
                 mediaLoader = matrixMediaLoader,
                 localMediaFactory = localMediaFactory,
                 systemClock = FakeSystemClock(),
+                pagerKeysHandler = PagerKeysHandler(),
             ),
             room = room,
             localMediaActions = localMediaActions,

@@ -39,6 +39,7 @@ interface MediaGalleryDataSource {
 @ContributesBinding(RoomScope::class)
 class TimelineMediaGalleryDataSource @Inject constructor(
     private val room: MatrixRoom,
+    private val mediaTimeline: MediaTimeline,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,
 ) : MediaGalleryDataSource {
@@ -48,7 +49,9 @@ class TimelineMediaGalleryDataSource @Inject constructor(
 
     override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
 
-    override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull() ?: AsyncData.Uninitialized
+    override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull()
+        ?: mediaTimeline.getCache()?.let { AsyncData.Success(it) }
+        ?: AsyncData.Uninitialized
 
     private val isStarted = AtomicBoolean(false)
 
@@ -58,8 +61,13 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             return
         }
         flow {
-            groupedMediaItemsFlow.emit(AsyncData.Loading())
-            room.mediaTimeline().fold(
+            val cache = mediaTimeline.getCache()
+            if (cache != null) {
+                groupedMediaItemsFlow.emit(AsyncData.Success(cache))
+            } else {
+                groupedMediaItemsFlow.emit(AsyncData.Loading())
+            }
+            mediaTimeline.getTimeline().fold(
                 {
                     timeline = it
                     emit(it)
@@ -78,6 +86,8 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             timelineMediaItemsFactory.timelineItems
         }.map { timelineItems ->
             mediaItemsPostProcessor.process(mediaItems = timelineItems)
+        }.map {
+            mediaTimeline.orCache(it)
         }.onEach { groupedMediaItems ->
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }

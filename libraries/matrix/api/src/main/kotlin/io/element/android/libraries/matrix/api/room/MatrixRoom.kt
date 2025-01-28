@@ -118,8 +118,9 @@ interface MatrixRoom : Closeable {
 
     /**
      * Create a new timeline for the media events of the room.
+     * @param eventId The event to focus on, if any.
      */
-    suspend fun mediaTimeline(): Result<Timeline>
+    suspend fun mediaTimeline(eventId: EventId?): Result<Timeline>
 
     fun destroy()
 

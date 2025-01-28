@@ -24,9 +24,12 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
+import io.element.android.libraries.mediaviewer.impl.gallery.FocusedTimelineMediaGalleryDataSourceFactory
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.SingleMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.TimelineMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.gallery.hasEvent
+import io.element.android.libraries.mediaviewer.impl.gallery.toMediaItem
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesNode(RoomScope::class)
@@ -35,10 +38,12 @@ class MediaViewerNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaViewerPresenter.Factory,
     timelineMediaGalleryDataSource: TimelineMediaGalleryDataSource,
+    focusedTimelineMediaGalleryDataSourceFactory: FocusedTimelineMediaGalleryDataSourceFactory,
     mediaLoader: MatrixMediaLoader,
     localMediaFactory: LocalMediaFactory,
     coroutineDispatchers: CoroutineDispatchers,
     systemClock: SystemClock,
+    pagerKeysHandler: PagerKeysHandler,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val inputs = inputs<MediaViewerEntryPoint.Params>()
@@ -62,7 +67,23 @@ class MediaViewerNode @AssistedInject constructor(
     private val mediaGallerySource = if (inputs.mode == MediaViewerEntryPoint.MediaViewerMode.SingleMedia) {
         SingleMediaGalleryDataSource.createFrom(inputs)
     } else {
-        timelineMediaGalleryDataSource
+        val eventId = inputs.eventId
+        if (eventId == null) {
+            // Should not happen
+            timelineMediaGalleryDataSource
+        } else {
+            // Does timelineMediaGalleryDataSource knows the eventId?
+            val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
+            val isEventKnown = lastData?.hasEvent(eventId) == true
+            if (isEventKnown) {
+                timelineMediaGalleryDataSource
+            } else {
+                focusedTimelineMediaGalleryDataSourceFactory.createFor(
+                    eventId = eventId,
+                    mediaItem = inputs.toMediaItem(),
+                )
+            }
+        }
     }
 
     private val galleryMode = when (inputs.mode) {
@@ -81,6 +102,7 @@ class MediaViewerNode @AssistedInject constructor(
             mediaLoader = mediaLoader,
             localMediaFactory = localMediaFactory,
             systemClock = systemClock,
+            pagerKeysHandler = pagerKeysHandler,
         )
     )
 

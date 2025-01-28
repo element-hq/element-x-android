@@ -44,6 +44,7 @@ class MediaViewerDataSource(
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaFactory: LocalMediaFactory,
     private val systemClock: SystemClock,
+    private val pagerKeysHandler: PagerKeysHandler,
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: MutableList<MediaFile> = mutableListOf()
@@ -78,6 +79,7 @@ class MediaViewerDataSource(
                             MediaViewerPageData.Loading(
                                 direction = Timeline.PaginationDirection.BACKWARDS,
                                 timestamp = systemClock.epochMillis(),
+                                pagerKey = Long.MIN_VALUE,
                             )
                         )
                     }
@@ -108,7 +110,10 @@ class MediaViewerDataSource(
      * will be used to render the downloaded media (see [loadMedia] which will update this value).
      */
     private fun buildMediaViewerPageList(groupedItems: List<MediaItem>) = buildList {
-        groupedItems.forEach { mediaItem ->
+        // Filter out DateSeparator items, we do not need them for the media viewer
+        val groupedItemsNoDateSeparator = groupedItems.filterNot { it is MediaItem.DateSeparator }
+        pagerKeysHandler.accept(groupedItemsNoDateSeparator)
+        groupedItemsNoDateSeparator.forEach { mediaItem ->
             when (mediaItem) {
                 is MediaItem.DateSeparator -> Unit
                 is MediaItem.Event -> {
@@ -123,6 +128,7 @@ class MediaViewerDataSource(
                             mediaSource = mediaItem.mediaSource(),
                             thumbnailSource = mediaItem.thumbnailSource(),
                             downloadedMedia = localMedia,
+                            pagerKey = pagerKeysHandler.getKey(mediaItem),
                         )
                     )
                 }
@@ -130,6 +136,7 @@ class MediaViewerDataSource(
                     MediaViewerPageData.Loading(
                         direction = mediaItem.direction,
                         timestamp = systemClock.epochMillis(),
+                        pagerKey = pagerKeysHandler.getKey(mediaItem),
                     )
                 )
             }
