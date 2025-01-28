@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 
 @Composable
@@ -45,7 +44,7 @@ fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): St
         derivedStateOf {
             roomMembers
                 ?.filter { it.membership.isActive() }
-                ?.takeIf { isDm }
+                ?.takeIf { it.size == 2 && isDirect }
                 ?.find { it.userId != sessionId }
         }
     }
