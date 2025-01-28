@@ -50,7 +50,7 @@ class TimelineMediaGalleryDataSource @Inject constructor(
     override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
 
     override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull()
-        ?: mediaTimeline.getCache()?.let { AsyncData.Success(it) }
+        ?: mediaTimeline.cache?.let { AsyncData.Success(it) }
         ?: AsyncData.Uninitialized
 
     private val isStarted = AtomicBoolean(false)
@@ -61,7 +61,7 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             return
         }
         flow {
-            val cache = mediaTimeline.getCache()
+            val cache = mediaTimeline.cache
             if (cache != null) {
                 groupedMediaItemsFlow.emit(AsyncData.Success(cache))
             } else {

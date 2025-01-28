@@ -136,6 +136,7 @@ class KonsistClassNameTest {
                 "Enterprise",
                 "Fdroid",
                 "FileExtensionExtractor",
+                "LiveMediaTimeline",
                 "KeyStore",
                 "Matrix",
                 "Noop",

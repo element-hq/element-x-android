@@ -50,11 +50,3 @@ sealed interface MediaViewerPageData {
         override val pagerKey: Long,
     ) : MediaViewerPageData
 }
-
-fun MediaViewerPageData.toKey(): String {
-    return when (this) {
-        is MediaViewerPageData.Failure -> "Failure"
-        is MediaViewerPageData.Loading -> "Loading_${direction}"
-        is MediaViewerPageData.MediaViewerData -> eventId?.value ?: mediaSource.url
-    }
-}

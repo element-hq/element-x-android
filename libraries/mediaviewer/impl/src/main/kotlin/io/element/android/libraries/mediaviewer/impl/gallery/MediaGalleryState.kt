@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import kotlinx.collections.immutable.ImmutableList
@@ -32,6 +33,12 @@ data class GroupedMediaItems(
             MediaGalleryMode.Files -> fileItems
         }
     }
+}
+
+fun GroupedMediaItems.hasEvent(eventId: EventId): Boolean {
+    return (fileItems + imageAndVideoItems)
+        .filterIsInstance<MediaItem.Event>()
+        .any { it.eventId() == eventId }
 }
 
 enum class MediaGalleryMode(val stringResource: Int) {

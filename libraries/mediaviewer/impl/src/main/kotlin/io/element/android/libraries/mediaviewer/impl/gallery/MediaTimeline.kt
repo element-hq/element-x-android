@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 interface MediaTimeline {
     suspend fun getTimeline(): Result<Timeline>
-    fun getCache(): GroupedMediaItems?
+    val cache: GroupedMediaItems?
     fun orCache(data: GroupedMediaItems): GroupedMediaItems
 }
 
@@ -51,7 +51,7 @@ class LiveMediaTimeline @Inject constructor(
     }
 
     // No cache for LiveMediaTimeline
-    override fun getCache(): GroupedMediaItems? = null
+    override val cache = null
     override fun orCache(data: GroupedMediaItems) = data
 }
 
@@ -61,41 +61,28 @@ class LiveMediaTimeline @Inject constructor(
 class FocusedMediaTimeline(
     private val room: MatrixRoom,
     private val eventId: EventId,
-    private val initialMediaItem: MediaItem.Event,
+    initialMediaItem: MediaItem.Event,
 ) : MediaTimeline {
     override suspend fun getTimeline(): Result<Timeline> {
         return room.mediaTimeline(eventId)
     }
 
-    override fun getCache(): GroupedMediaItems {
-        // TODO Cleanup
-        return GroupedMediaItems(
-            fileItems = persistentListOf(
-                MediaItem.LoadingIndicator(
-                    id = UniqueId("loading_forwards"),
-                    direction = Timeline.PaginationDirection.FORWARDS,
-                    timestamp = -1L,
-                ),
-                initialMediaItem,
-                MediaItem.LoadingIndicator(
-                    id = UniqueId("loading_backwards"),
-                    direction = Timeline.PaginationDirection.BACKWARDS,
-                    timestamp = -1L,
-                ),
-            ),
-            imageAndVideoItems = persistentListOf(
-                MediaItem.LoadingIndicator(
-                    id = UniqueId("loading_forwards"),
-                    direction = Timeline.PaginationDirection.FORWARDS,
-                    timestamp = -1L,
-                ),
-                initialMediaItem,
-                MediaItem.LoadingIndicator(
-                    id = UniqueId("loading_backwards"),
-                    direction = Timeline.PaginationDirection.BACKWARDS,
-                    timestamp = -1L,
-                ),
-            ),
+    override val cache = persistentListOf(
+        MediaItem.LoadingIndicator(
+            id = UniqueId("loading_forwards"),
+            direction = Timeline.PaginationDirection.FORWARDS,
+            timestamp = 0L,
+        ),
+        initialMediaItem,
+        MediaItem.LoadingIndicator(
+            id = UniqueId("loading_backwards"),
+            direction = Timeline.PaginationDirection.BACKWARDS,
+            timestamp = 0L,
+        ),
+    ).let {
+        GroupedMediaItems(
+            fileItems = it,
+            imageAndVideoItems = it,
         )
     }
 
@@ -103,13 +90,7 @@ class FocusedMediaTimeline(
         return if (data.hasEvent(eventId)) {
             data
         } else {
-            getCache()
+            cache
         }
     }
-}
-
-fun GroupedMediaItems.hasEvent(eventId: EventId): Boolean {
-    return (fileItems + imageAndVideoItems)
-        .filterIsInstance<MediaItem.Event>()
-        .any { it.eventId() == eventId }
 }

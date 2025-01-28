@@ -440,10 +440,7 @@ private fun LoadingMoreIndicator(
         }
         val latestEventSink by rememberUpdatedState(eventSink)
         LaunchedEffect(item.timestamp) {
-            // TODO Add isFake to the model instead of using -1 for timestamp
-            if (item.timestamp != -1L) {
-                latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
-            }
+            latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
         }
     }
 }
