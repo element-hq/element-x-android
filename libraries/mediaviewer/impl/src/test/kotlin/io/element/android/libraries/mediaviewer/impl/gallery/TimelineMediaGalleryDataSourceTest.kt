@@ -261,18 +261,20 @@ class TimelineMediaGalleryDataSourceTest {
         return TimelineMediaGalleryDataSource(
             room = room,
             mediaTimeline = LiveMediaTimeline(room),
-            timelineMediaItemsFactory = TimelineMediaItemsFactory(
-                dispatchers = testCoroutineDispatchers(),
-                virtualItemFactory = VirtualItemFactory(
-                    dateFormatter = FakeDateFormatter(),
-                ),
-                eventItemFactory = EventItemFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    dateFormatter = FakeDateFormatter(),
-                ),
-            ),
+            timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
             mediaItemsPostProcessor = MediaItemsPostProcessor(),
         )
     }
 }
+
+fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(
+    dispatchers = testCoroutineDispatchers(),
+    virtualItemFactory = VirtualItemFactory(
+        dateFormatter = FakeDateFormatter(),
+    ),
+    eventItemFactory = EventItemFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+        dateFormatter = FakeDateFormatter(),
+    ),
+)
