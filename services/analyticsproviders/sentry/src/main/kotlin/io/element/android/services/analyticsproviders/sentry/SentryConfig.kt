@@ -9,7 +9,7 @@ package io.element.android.services.analyticsproviders.sentry
 
 object SentryConfig {
     const val NAME = "Sentry"
-    const val DNS = BuildConfig.SENTRY_DSN
+    const val DSN = BuildConfig.SENTRY_DSN
     const val ENV_DEBUG = "DEBUG"
     const val ENV_RELEASE = "RELEASE"
 }

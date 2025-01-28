@@ -36,8 +36,16 @@ class SentryAnalyticsProvider @Inject constructor(
     override fun init() {
         Timber.tag(analyticsTag.value).d("Initializing Sentry")
         if (Sentry.isEnabled()) return
+
+        val dsn = if (SentryConfig.DSN.isNotBlank()) {
+            SentryConfig.DSN
+        } else {
+            Timber.w("No Sentry DSN provided, Sentry will not be initialized")
+            return
+        }
+
         SentryAndroid.init(context) { options ->
-            options.dsn = SentryConfig.DNS
+            options.dsn = dsn
             options.beforeSend = SentryOptions.BeforeSendCallback { event, _ -> event }
             options.tracesSampleRate = 1.0
             options.isEnableUserInteractionTracing = true
