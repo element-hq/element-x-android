@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun IconPreview() {
     Box {
-        Image(painter = painterResource(id = R.drawable.ic_launcher_monochrome), contentDescription = null)
-        Image(painter = painterResource(id = R.drawable.ic_launcher_monochrome), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription = null)
     }
 }
 
@@ -53,8 +53,8 @@ internal fun IconPreview() {
 @Composable
 internal fun RoundIconPreview() {
     Box(modifier = Modifier.clip(shape = CircleShape)) {
-        Image(painter = painterResource(id = R.drawable.ic_launcher_monochrome), contentDescription = null)
-        Image(painter = painterResource(id = R.drawable.ic_launcher_monochrome), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription = null)
     }
 }
 
