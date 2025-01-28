@@ -9,7 +9,6 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -105,7 +104,7 @@ class RoomDetailsPresenter @Inject constructor(
         val dmMember by room.getDirectRoomMember(membersState)
         val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType by getRoomType(dmMember, currentMember)
+        val roomType = getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
@@ -196,16 +195,14 @@ class RoomDetailsPresenter @Inject constructor(
     private fun getRoomType(
         dmMember: RoomMember?,
         currentMember: RoomMember?,
-    ): State<RoomDetailsType> = remember(dmMember, currentMember) {
-        derivedStateOf {
-            if (dmMember != null && currentMember != null) {
-                RoomDetailsType.Dm(
-                    me = currentMember,
-                    otherMember = dmMember,
-                )
-            } else {
-                RoomDetailsType.Room
-            }
+    ): RoomDetailsType = remember(dmMember, currentMember) {
+        if (dmMember != null && currentMember != null) {
+            RoomDetailsType.Dm(
+                me = currentMember,
+                otherMember = dmMember,
+            )
+        } else {
+            RoomDetailsType.Room
         }
     }
 
