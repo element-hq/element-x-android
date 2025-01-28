@@ -13,6 +13,7 @@ import org.gradle.api.provider.ValueSourceParameters
 import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.util.Properties
 import javax.inject.Inject
 
 abstract class GitRevisionValueSource : ValueSource<String, ValueSourceParameters.None> {
@@ -47,3 +48,10 @@ private fun ExecOperations.runCommand(cmd: String): String {
     }
     return String(outputStream.toByteArray()).trim()
 }
+
+fun Project.readLocalProperty(name: String): String? = Properties().apply {
+    try {
+        load(rootProject.file("local.properties").reader())
+    } catch (ignored: IOException) {
+    }
+}.getProperty(name)

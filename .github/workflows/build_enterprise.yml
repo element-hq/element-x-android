@@ -53,6 +53,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+          ELEMENT_ANDROID_SENTRY_DSN: ${{ secrets.ELEMENT_ANDROID_SENTRY_DSN }}
         run: ./gradlew :app:assembleGplayDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug Enterprise APKs
         if: ${{ matrix.variant == 'debug' }}
