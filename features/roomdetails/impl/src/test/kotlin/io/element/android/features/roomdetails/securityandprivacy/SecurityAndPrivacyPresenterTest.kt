@@ -30,7 +30,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class SecurityAndPrivacyPresenterTest {
-
     @Test
     fun `present - initial states`() = runTest {
         val presenter = createSecurityAndPrivacyPresenter()

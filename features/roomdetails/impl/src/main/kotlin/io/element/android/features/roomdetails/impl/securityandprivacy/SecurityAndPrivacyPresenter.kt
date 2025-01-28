@@ -60,7 +60,9 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         val roomInfo by room.roomInfoFlow.collectAsState(null)
 
         val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
-        IsRoomVisibleInRoomDirectoryEffect(savedIsVisibleInRoomDirectory)
+        LaunchedEffect(Unit) {
+            isRoomVisibleInRoomDirectory(savedIsVisibleInRoomDirectory)
+        }
 
         val savedSettings by remember {
             derivedStateOf {
@@ -159,12 +161,9 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         return state
     }
 
-    @Composable
-    private fun IsRoomVisibleInRoomDirectoryEffect(isRoomVisible: MutableState<AsyncData<Boolean>>) {
-        LaunchedEffect(Unit) {
-            isRoomVisible.runUpdatingState {
-                room.getRoomVisibility().map { it == RoomVisibility.Public }
-            }
+    private fun CoroutineScope.isRoomVisibleInRoomDirectory(isRoomVisible: MutableState<AsyncData<Boolean>>) = launch {
+        isRoomVisible.runUpdatingState {
+            room.getRoomVisibility().map { it == RoomVisibility.Public }
         }
     }
 
@@ -264,7 +263,6 @@ private fun RoomHistoryVisibility?.map(): SecurityAndPrivacyHistoryVisibility {
         RoomHistoryVisibility.Shared,
         is RoomHistoryVisibility.Custom,
         null -> SecurityAndPrivacyHistoryVisibility.SinceSelection
-
     }
 }
 
@@ -279,4 +277,3 @@ private fun SecurityAndPrivacyHistoryVisibility.map(): RoomHistoryVisibility {
 private fun MatrixRoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
     return aliases.firstOrNull { it.matchesServer(serverName) } ?: aliases.firstOrNull()
 }
-

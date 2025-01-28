@@ -104,6 +104,7 @@ import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
+@Suppress("LargeClass")
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,

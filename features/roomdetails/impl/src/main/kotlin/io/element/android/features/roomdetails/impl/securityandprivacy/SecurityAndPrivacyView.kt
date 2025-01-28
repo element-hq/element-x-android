@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableSet
 
 @Composable
 fun SecurityAndPrivacyView(
@@ -81,7 +82,7 @@ fun SecurityAndPrivacyView(
                     modifier = Modifier.padding(top = 24.dp),
                     edited = state.editedSettings.roomAccess,
                     saved = state.savedSettings.roomAccess,
-                    onSelected = { state.eventSink(SecurityAndPrivacyEvents.ChangeRoomAccess(it)) },
+                    onSelectOption = { state.eventSink(SecurityAndPrivacyEvents.ChangeRoomAccess(it)) },
                 )
             }
             if (state.showRoomVisibilitySections) {
@@ -111,7 +112,7 @@ fun SecurityAndPrivacyView(
                     editedOption = state.editedSettings.historyVisibility,
                     savedOptions = state.savedSettings.historyVisibility,
                     availableOptions = state.availableHistoryVisibilities,
-                    onSelected = { state.eventSink(SecurityAndPrivacyEvents.ChangeHistoryVisibility(it)) },
+                    onSelectOption = { state.eventSink(SecurityAndPrivacyEvents.ChangeHistoryVisibility(it)) },
                 )
             }
         }
@@ -180,7 +181,7 @@ private fun SecurityAndPrivacySection(
 private fun RoomAccessSection(
     edited: SecurityAndPrivacyRoomAccess,
     saved: SecurityAndPrivacyRoomAccess,
-    onSelected: (SecurityAndPrivacyRoomAccess) -> Unit,
+    onSelectOption: (SecurityAndPrivacyRoomAccess) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
@@ -191,19 +192,19 @@ private fun RoomAccessSection(
             headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.InviteOnly),
-            onClick = { onSelected(SecurityAndPrivacyRoomAccess.InviteOnly) },
+            onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.InviteOnly) },
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.AskToJoin),
-            onClick = { onSelected(SecurityAndPrivacyRoomAccess.AskToJoin) },
+            onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.AskToJoin) },
         )
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
-            onClick = { onSelected(SecurityAndPrivacyRoomAccess.Anyone) },
+            onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.Anyone) },
         )
         if (saved == SecurityAndPrivacyRoomAccess.SpaceMember) {
             ListItem(
@@ -333,8 +334,8 @@ private fun EncryptionSection(
 private fun HistoryVisibilitySection(
     editedOption: SecurityAndPrivacyHistoryVisibility?,
     savedOptions: SecurityAndPrivacyHistoryVisibility?,
-    availableOptions: Set<SecurityAndPrivacyHistoryVisibility>,
-    onSelected: (SecurityAndPrivacyHistoryVisibility) -> Unit,
+    availableOptions: ImmutableSet<SecurityAndPrivacyHistoryVisibility>,
+    onSelectOption: (SecurityAndPrivacyHistoryVisibility) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SecurityAndPrivacySection(
@@ -347,7 +348,7 @@ private fun HistoryVisibilitySection(
             HistoryVisibilityItem(
                 option = availableOption,
                 isSelected = isSelected,
-                onSelected = onSelected,
+                onSelectOption = onSelectOption,
             )
         }
         if (savedOptions != null && !availableOptions.contains(savedOptions)) {
@@ -355,7 +356,7 @@ private fun HistoryVisibilitySection(
                 option = savedOptions,
                 isSelected = true,
                 isEnabled = false,
-                onSelected = {},
+                onSelectOption = {},
             )
         }
     }
@@ -365,7 +366,7 @@ private fun HistoryVisibilitySection(
 private fun HistoryVisibilityItem(
     option: SecurityAndPrivacyHistoryVisibility,
     isSelected: Boolean,
-    onSelected: (SecurityAndPrivacyHistoryVisibility) -> Unit,
+    onSelectOption: (SecurityAndPrivacyHistoryVisibility) -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
@@ -377,7 +378,7 @@ private fun HistoryVisibilityItem(
     ListItem(
         headlineContent = { Text(text = headlineText) },
         trailingContent = ListItemContent.RadioButton(selected = isSelected, enabled = isEnabled),
-        onClick = { onSelected(option) },
+        onClick = { onSelectOption(option) },
         enabled = isEnabled,
         modifier = modifier,
     )
@@ -401,4 +402,3 @@ private fun ContentToPreview(state: SecurityAndPrivacyState) {
         onBackClick = {},
     )
 }
-

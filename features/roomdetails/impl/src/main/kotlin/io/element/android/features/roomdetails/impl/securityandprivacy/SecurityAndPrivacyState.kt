@@ -10,6 +10,7 @@ package io.element.android.features.roomdetails.impl.securityandprivacy
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.SecurityAndPrivacyPermissions
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import kotlinx.collections.immutable.toImmutableSet
 
 data class SecurityAndPrivacyState(
     // the settings that are currently applied on the room.
@@ -22,9 +23,6 @@ data class SecurityAndPrivacyState(
     private val permissions: SecurityAndPrivacyPermissions,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit
 ) {
-
-
-
     val canBeSaved = savedSettings != editedSettings
 
     val availableHistoryVisibilities = buildSet {
@@ -34,15 +32,12 @@ data class SecurityAndPrivacyState(
         } else {
             add(SecurityAndPrivacyHistoryVisibility.SinceInvite)
         }
-    }
+    }.toImmutableSet()
 
     val showRoomAccessSection = permissions.canChangeRoomAccess
     val showRoomVisibilitySections = permissions.canChangeRoomVisibility && editedSettings.roomAccess != SecurityAndPrivacyRoomAccess.InviteOnly
     val showHistoryVisibilitySection = permissions.canChangeHistoryVisibility
     val showEncryptionSection = permissions.canChangeEncryption
-    override fun toString(): String {
-        return "SecurityAndPrivacyState(savedSettings=$savedSettings, editedSettings=$editedSettings, homeserverName='$homeserverName', showEncryptionConfirmation=$showEncryptionConfirmation, saveAction=$saveAction, canBeSaved=$canBeSaved)"
-    }
 }
 
 data class SecurityAndPrivacySettings(
@@ -54,7 +49,9 @@ data class SecurityAndPrivacySettings(
 )
 
 enum class SecurityAndPrivacyHistoryVisibility {
-    SinceSelection, SinceInvite, Anyone;
+    SinceSelection,
+    SinceInvite,
+    Anyone;
 
     /**
      * Returns the fallback visibility when the current visibility is not available.
@@ -69,7 +66,10 @@ enum class SecurityAndPrivacyHistoryVisibility {
 }
 
 enum class SecurityAndPrivacyRoomAccess {
-    InviteOnly, AskToJoin, Anyone, SpaceMember
+    InviteOnly,
+    AskToJoin,
+    Anyone,
+    SpaceMember
 }
 
 sealed class SecurityAndPrivacyFailures : Exception() {

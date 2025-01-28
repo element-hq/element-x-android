@@ -433,6 +433,7 @@ interface MatrixRoom : Closeable {
      * directory and can be found using it.
      */
     suspend fun getRoomVisibility(): Result<RoomVisibility>
+
     /**
      * Publish a new room alias for this room in the room directory.
      *
@@ -442,6 +443,7 @@ interface MatrixRoom : Closeable {
      * published.
      */
     suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
+
     /**
      * Remove an existing room alias for this room in the room directory.
      *

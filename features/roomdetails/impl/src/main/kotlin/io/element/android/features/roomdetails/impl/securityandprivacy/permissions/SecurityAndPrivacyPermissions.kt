@@ -47,4 +47,3 @@ fun MatrixRoom.securityAndPrivacyPermissionsAsState(updateKey: Long): State<Secu
         )
     }
 }
-

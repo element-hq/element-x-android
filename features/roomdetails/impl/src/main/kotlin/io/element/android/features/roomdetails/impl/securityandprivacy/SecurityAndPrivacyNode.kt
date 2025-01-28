@@ -24,7 +24,6 @@ class SecurityAndPrivacyNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: SecurityAndPrivacyPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     private val navigator = plugins<SecurityAndPrivacyNavigator>().first()
     private val presenter = presenterFactory.create(navigator)
 

@@ -86,7 +86,6 @@ fun EditRoomAddressView(
             onRetry = { state.eventSink(EditRoomAddressEvents.Save) },
             onErrorDismiss = { state.eventSink(EditRoomAddressEvents.DismissError) },
         )
-
     }
 }
 

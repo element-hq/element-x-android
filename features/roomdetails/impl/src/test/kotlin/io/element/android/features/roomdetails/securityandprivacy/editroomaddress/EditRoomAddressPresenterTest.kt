@@ -31,7 +31,6 @@ import org.junit.Test
 import java.util.Optional
 
 class EditRoomAddressPresenterTest {
-
     @Test
     fun `present - initial state no address`() = runTest {
         val presenter = createEditRoomAddressPresenter()

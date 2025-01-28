@@ -10,7 +10,6 @@ package io.element.android.features.roomdetails.securityandprivacy.editroomaddre
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -104,8 +103,6 @@ class EditRoomAddressViewTest {
         rule.clickOn(CommonStrings.action_retry)
         recorder.assertSingle(EditRoomAddressEvents.Save)
     }
-
-
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setEditRoomAddressView(

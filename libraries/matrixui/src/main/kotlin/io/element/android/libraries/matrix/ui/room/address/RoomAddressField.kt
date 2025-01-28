@@ -64,7 +64,7 @@ fun RoomAddressField(
 
 @PreviewsDayNight
 @Composable
-fun RoomAddressFieldPreview()  = ElementPreview {
+internal fun RoomAddressFieldPreview() = ElementPreview {
     RoomAddressField(
         address = "room",
         homeserverName = "element.io",

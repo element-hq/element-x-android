@@ -36,7 +36,6 @@ class SecurityAndPrivacyFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object SecurityAndPrivacy : NavTarget

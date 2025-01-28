@@ -34,8 +34,8 @@ import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
-import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility as RustRoomHistoryVisibility
+import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 
 class MatrixRoomInfoMapperTest {
     @Test
