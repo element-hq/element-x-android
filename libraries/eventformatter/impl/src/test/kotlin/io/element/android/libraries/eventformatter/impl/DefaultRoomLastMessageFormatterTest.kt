@@ -662,6 +662,7 @@ class DefaultRoomLastMessageFormatterTest {
         val roomTopic = "New topic"
         val changedContent = StateContent("", OtherState.RoomTopic(roomTopic))
         val removedContent = StateContent("", OtherState.RoomTopic(null))
+        val blankContent = StateContent("", OtherState.RoomTopic(""))
 
         val youChangedRoomTopicEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
         val youChangedRoomTopic = formatter.format(youChangedRoomTopicEvent, false)
@@ -678,6 +679,14 @@ class DefaultRoomLastMessageFormatterTest {
         val someoneRemovedRoomTopicEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
         val someoneRemovedRoomTopic = formatter.format(someoneRemovedRoomTopicEvent, false)
         assertThat(someoneRemovedRoomTopic).isEqualTo("$otherName removed the room topic")
+
+        val youSetBlankRoomTopicEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = blankContent)
+        val youSetBlankRoomTopic = formatter.format(youSetBlankRoomTopicEvent, false)
+        assertThat(youSetBlankRoomTopic).isEqualTo("You removed the room topic")
+
+        val someoneSetBlankRoomTopicEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = blankContent)
+        val someoneSetBlankRoomTopic = formatter.format(someoneSetBlankRoomTopicEvent, false)
+        assertThat(someoneSetBlankRoomTopic).isEqualTo("$otherName removed the room topic")
     }
 
     @Test
