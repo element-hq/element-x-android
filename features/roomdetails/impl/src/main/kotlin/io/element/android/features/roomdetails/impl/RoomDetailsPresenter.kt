@@ -148,7 +148,12 @@ class RoomDetailsPresenter @Inject constructor(
 
         val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
 
-        val securityAndPrivacyPermissions by room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
+        val securityAndPrivacyPermissions = room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
+        val canShowSecurityAndPrivacy by remember {
+            derivedStateOf {
+                isKnockRequestsEnabled && roomType is RoomDetailsType.Room && securityAndPrivacyPermissions.value.hasAny
+            }
+        }
 
         return RoomDetailsState(
             roomId = room.roomId,
@@ -175,7 +180,7 @@ class RoomDetailsPresenter @Inject constructor(
             pinnedMessagesCount = pinnedMessagesCount,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
-            canShowSecurityAndPrivacy = securityAndPrivacyPermissions.hasAny,
+            canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             eventSink = ::handleEvents,
         )
     }
