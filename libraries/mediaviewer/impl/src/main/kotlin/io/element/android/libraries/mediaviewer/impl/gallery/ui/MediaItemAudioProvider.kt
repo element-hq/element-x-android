@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.preview.loremIpsum
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
@@ -30,12 +31,13 @@ class MediaItemAudioProvider : PreviewParameterProvider<MediaItem.Audio> {
 
 fun aMediaItemAudio(
     id: UniqueId = UniqueId("fileId"),
+    eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
 ): MediaItem.Audio {
     return MediaItem.Audio(
         id = id,
-        eventId = null,
+        eventId = eventId,
         mediaInfo = anAudioMediaInfo(
             filename = filename,
             caption = caption,
