@@ -139,6 +139,7 @@ class MessagesNode @AssistedInject constructor(
         darkTheme: Boolean,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
+        customTab: Boolean
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
@@ -150,7 +151,11 @@ class MessagesNode @AssistedInject constructor(
                 handleRoomLinkClick(activity, permalink, eventSink)
             }
             is PermalinkData.FallbackLink -> {
-                activity.openUrlInExternalApp(url)
+                if (customTab) {
+                    activity.openUrlInChromeCustomTab(null, darkTheme, url)
+                } else {
+                    activity.openUrlInExternalApp(url)
+                }
             }
             is PermalinkData.RoomEmailInviteLink -> {
                 activity.openUrlInChromeCustomTab(null, darkTheme, url)
@@ -236,7 +241,7 @@ class MessagesNode @AssistedInject constructor(
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
+                onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,

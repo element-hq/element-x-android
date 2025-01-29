@@ -111,7 +111,7 @@ fun MessagesView(
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -273,7 +273,7 @@ private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (String, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -347,7 +347,7 @@ private fun MessagesViewContent(
                         state = state.timelineState,
                         timelineProtectionState = state.timelineProtectionState,
                         onUserDataClick = onUserDataClick,
-                        onLinkClick = onLinkClick,
+                        onLinkClick = { url -> onLinkClick(url, false) },
                         onContentClick = onContentClick,
                         onMessageLongClick = onMessageLongClick,
                         onSwipeToReply = onSwipeToReply,
@@ -396,7 +396,7 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (String, Boolean) -> Unit,
 ) {
     if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -537,7 +537,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onRoomDetailsClick = {},
         onEventContentClick = { false },
         onUserDataClick = {},
-        onLinkClick = {},
+        onLinkClick = { _, _ -> },
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
