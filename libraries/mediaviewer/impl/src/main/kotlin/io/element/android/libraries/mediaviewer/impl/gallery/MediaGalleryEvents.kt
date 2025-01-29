@@ -11,6 +11,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 sealed interface MediaGalleryEvents {
     data class ChangeMode(val mode: MediaGalleryMode) : MediaGalleryEvents

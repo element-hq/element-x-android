@@ -28,13 +28,17 @@ data class MediaViewerState(
 )
 
 sealed interface MediaViewerPageData {
+    val pagerKey: Long
+
     data class Failure(
         val throwable: Throwable,
+        override val pagerKey: Long = 0,
     ) : MediaViewerPageData
 
     data class Loading(
         val direction: Timeline.PaginationDirection,
         val timestamp: Long,
+        override val pagerKey: Long,
     ) : MediaViewerPageData
 
     data class MediaViewerData(
@@ -43,5 +47,6 @@ sealed interface MediaViewerPageData {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val downloadedMedia: State<AsyncData<LocalMedia>>,
+        override val pagerKey: Long,
     ) : MediaViewerPageData
 }

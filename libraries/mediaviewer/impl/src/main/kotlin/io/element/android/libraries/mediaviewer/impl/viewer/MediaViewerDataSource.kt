@@ -18,15 +18,16 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import io.element.android.libraries.mediaviewer.impl.gallery.eventId
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaSource
-import io.element.android.libraries.mediaviewer.impl.gallery.thumbnailSource
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.eventId
+import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.mediaSource
+import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -38,15 +39,22 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MediaViewerDataSource(
-    private val galleryMode: MediaGalleryMode,
+    mode: MediaViewerMode,
     private val dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaFactory: LocalMediaFactory,
     private val systemClock: SystemClock,
+    private val pagerKeysHandler: PagerKeysHandler,
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: MutableList<MediaFile> = mutableListOf()
+
+    private val galleryMode = when (mode) {
+        MediaViewerMode.SingleMedia,
+        MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
+        MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+    }
 
     // Map of sourceUrl to local media state
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
@@ -78,6 +86,7 @@ class MediaViewerDataSource(
                             MediaViewerPageData.Loading(
                                 direction = Timeline.PaginationDirection.BACKWARDS,
                                 timestamp = systemClock.epochMillis(),
+                                pagerKey = Long.MIN_VALUE,
                             )
                         )
                     }
@@ -108,7 +117,10 @@ class MediaViewerDataSource(
      * will be used to render the downloaded media (see [loadMedia] which will update this value).
      */
     private fun buildMediaViewerPageList(groupedItems: List<MediaItem>) = buildList {
-        groupedItems.forEach { mediaItem ->
+        // Filter out DateSeparator items, we do not need them for the media viewer
+        val groupedItemsNoDateSeparator = groupedItems.filterNot { it is MediaItem.DateSeparator }
+        pagerKeysHandler.accept(groupedItemsNoDateSeparator)
+        groupedItemsNoDateSeparator.forEach { mediaItem ->
             when (mediaItem) {
                 is MediaItem.DateSeparator -> Unit
                 is MediaItem.Event -> {
@@ -123,6 +135,7 @@ class MediaViewerDataSource(
                             mediaSource = mediaItem.mediaSource(),
                             thumbnailSource = mediaItem.thumbnailSource(),
                             downloadedMedia = localMedia,
+                            pagerKey = pagerKeysHandler.getKey(mediaItem),
                         )
                     )
                 }
@@ -130,6 +143,7 @@ class MediaViewerDataSource(
                     MediaViewerPageData.Loading(
                         direction = mediaItem.direction,
                         timestamp = systemClock.epochMillis(),
+                        pagerKey = pagerKeysHandler.getKey(mediaItem),
                     )
                 )
             }

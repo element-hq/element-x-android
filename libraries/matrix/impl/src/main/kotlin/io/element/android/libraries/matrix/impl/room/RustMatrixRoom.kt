@@ -253,11 +253,21 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun mediaTimeline(): Result<Timeline> = withContext(roomDispatcher) {
+    override suspend fun mediaTimeline(
+        eventId: EventId?,
+    ): Result<Timeline> = withContext(roomDispatcher) {
+        val focus = if (eventId != null) {
+            TimelineFocus.Event(
+                eventId = eventId.value,
+                numContextEvents = 50u,
+            )
+        } else {
+            TimelineFocus.Live
+        }
         runCatching {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
-                    focus = TimelineFocus.Live,
+                    focus = focus,
                     allowedMessageTypes = AllowedMessageTypes.Only(
                         types = listOf(
                             RoomMessageEventMessageType.FILE,
@@ -270,7 +280,7 @@ class RustMatrixRoom(
                     dateDividerMode = DateDividerMode.MONTHLY,
                 )
             ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.MEDIA)
+                createTimeline(inner, mode = if (eventId != null) Timeline.Mode.FOCUSED_ON_EVENT else Timeline.Mode.MEDIA)
             }
         }.onFailure {
             if (it is CancellationException) {

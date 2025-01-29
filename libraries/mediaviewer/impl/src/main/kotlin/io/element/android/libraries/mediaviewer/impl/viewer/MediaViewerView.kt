@@ -114,6 +114,7 @@ fun MediaViewerView(
             modifier = Modifier,
             // Pre-load previous and next pages
             beyondViewportPageCount = 1,
+            key = { index -> state.listData[index].pagerKey },
         ) { page ->
             when (val dataForPage = state.listData[page]) {
                 is MediaViewerPageData.Failure -> {

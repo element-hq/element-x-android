@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.gallery
+package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.architecture.AsyncData
@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -39,6 +40,7 @@ interface MediaGalleryDataSource {
 @ContributesBinding(RoomScope::class)
 class TimelineMediaGalleryDataSource @Inject constructor(
     private val room: MatrixRoom,
+    private val mediaTimeline: MediaTimeline,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,
 ) : MediaGalleryDataSource {
@@ -48,7 +50,9 @@ class TimelineMediaGalleryDataSource @Inject constructor(
 
     override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
 
-    override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull() ?: AsyncData.Uninitialized
+    override fun getLastData(): AsyncData<GroupedMediaItems> = groupedMediaItemsFlow.replayCache.firstOrNull()
+        ?: mediaTimeline.cache?.let { AsyncData.Success(it) }
+        ?: AsyncData.Uninitialized
 
     private val isStarted = AtomicBoolean(false)
 
@@ -58,8 +62,13 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             return
         }
         flow {
-            groupedMediaItemsFlow.emit(AsyncData.Loading())
-            room.mediaTimeline().fold(
+            val cache = mediaTimeline.cache
+            if (cache != null) {
+                groupedMediaItemsFlow.emit(AsyncData.Success(cache))
+            } else {
+                groupedMediaItemsFlow.emit(AsyncData.Loading())
+            }
+            mediaTimeline.getTimeline().fold(
                 {
                     timeline = it
                     emit(it)
@@ -78,6 +87,8 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             timelineMediaItemsFactory.timelineItems
         }.map { timelineItems ->
             mediaItemsPostProcessor.process(mediaItems = timelineItems)
+        }.map {
+            mediaTimeline.orCache(it)
         }.onEach { groupedMediaItems ->
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }

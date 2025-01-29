@@ -169,6 +169,7 @@ fun aMediaViewerPageDataLoading(
     return MediaViewerPageData.Loading(
         direction = direction,
         timestamp = timestamp,
+        pagerKey = 0L,
     )
 }
 
@@ -182,6 +183,7 @@ fun aMediaViewerPageData(
     mediaSource = mediaSource,
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
+    pagerKey = 0L,
 )
 
 fun aMediaViewerState(

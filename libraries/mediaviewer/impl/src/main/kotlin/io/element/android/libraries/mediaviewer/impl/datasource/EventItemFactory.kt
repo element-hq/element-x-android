@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.gallery
+package io.element.android.libraries.mediaviewer.impl.datasource
 
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import timber.log.Timber
 import javax.inject.Inject
 

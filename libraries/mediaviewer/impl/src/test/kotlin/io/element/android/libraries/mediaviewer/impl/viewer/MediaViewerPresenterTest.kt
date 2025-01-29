@@ -29,13 +29,12 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
+import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.gallery.FakeMediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.GroupedMediaItems
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -782,16 +781,13 @@ class MediaViewerPresenterTest {
             ),
             navigator = mediaViewerNavigator,
             dataSource = MediaViewerDataSource(
-                galleryMode = when (mode) {
-                    MediaViewerEntryPoint.MediaViewerMode.SingleMedia -> MediaGalleryMode.Images
-                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
-                    MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
-                },
+                mode = mode,
                 dispatcher = testCoroutineDispatchers().computation,
                 galleryDataSource = mediaGalleryDataSource,
                 mediaLoader = matrixMediaLoader,
                 localMediaFactory = localMediaFactory,
                 systemClock = FakeSystemClock(),
+                pagerKeysHandler = PagerKeysHandler(),
             ),
             room = room,
             localMediaActions = localMediaActions,

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.gallery
+package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageCo
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

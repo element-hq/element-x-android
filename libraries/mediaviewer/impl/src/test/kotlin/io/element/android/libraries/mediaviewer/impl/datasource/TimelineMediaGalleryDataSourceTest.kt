@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.gallery
+package io.element.android.libraries.mediaviewer.impl.datasource
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -34,6 +34,8 @@ import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -260,18 +262,21 @@ class TimelineMediaGalleryDataSourceTest {
     ): TimelineMediaGalleryDataSource {
         return TimelineMediaGalleryDataSource(
             room = room,
-            timelineMediaItemsFactory = TimelineMediaItemsFactory(
-                dispatchers = testCoroutineDispatchers(),
-                virtualItemFactory = VirtualItemFactory(
-                    dateFormatter = FakeDateFormatter(),
-                ),
-                eventItemFactory = EventItemFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    dateFormatter = FakeDateFormatter(),
-                ),
-            ),
+            mediaTimeline = LiveMediaTimeline(room),
+            timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
             mediaItemsPostProcessor = MediaItemsPostProcessor(),
         )
     }
 }
+
+fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(
+    dispatchers = testCoroutineDispatchers(),
+    virtualItemFactory = VirtualItemFactory(
+        dateFormatter = FakeDateFormatter(),
+    ),
+    eventItemFactory = EventItemFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+        dateFormatter = FakeDateFormatter(),
+    ),
+)
