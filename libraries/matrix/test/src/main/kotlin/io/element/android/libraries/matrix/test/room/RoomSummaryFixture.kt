@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -71,6 +72,7 @@ fun aRoomSummary(
     numUnreadMessages: Long = 0,
     numUnreadNotifications: Long = 0,
     numUnreadMentions: Long = 0,
+    historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     lastMessage: RoomMessage? = aRoomMessage(),
 ) = RoomSummary(
     info = MatrixRoomInfo(
@@ -105,6 +107,7 @@ fun aRoomSummary(
         numUnreadMessages = numUnreadMessages,
         numUnreadNotifications = numUnreadNotifications,
         numUnreadMentions = numUnreadMentions,
+        historyVisibility = historyVisibility,
     ),
     lastMessage = lastMessage,
 )

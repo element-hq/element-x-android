@@ -185,7 +185,9 @@
         "screen_polls_history_title",
         "screen_notification_settings_mentions_only_disclaimer",
         "screen_room_change_.*",
-        "screen_room_roles_.*"
+        "screen_room_roles_.*",
+        "screen\\.edit_room_address\\..*",
+        "screen\\.security_and_privacy\\..*"
       ]
     },
     {

@@ -38,11 +38,14 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -51,10 +54,13 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
+import io.element.android.libraries.matrix.impl.room.history.map
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
+import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
@@ -101,6 +107,7 @@ import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
+@Suppress("LargeClass")
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,
@@ -306,7 +313,7 @@ class RustMatrixRoom(
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
-    override val alias: RoomAlias?
+    override val canonicalAlias: RoomAlias?
         get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
 
     override val alternativeAliases: List<RoomAlias>
@@ -802,6 +809,54 @@ class RustMatrixRoom(
                 userIds = userIds.map { it.value },
                 sendHandle = (sendHandle as RustSendHandle).inner,
             )
+        }
+    }
+
+    override suspend fun updateCanonicalAlias(canonicalAlias: RoomAlias?, alternativeAliases: List<RoomAlias>): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateCanonicalAlias(canonicalAlias?.value, alternativeAliases.map { it.value })
+        }
+    }
+
+    override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.publishRoomAliasInRoomDirectory(roomAlias.value)
+        }
+    }
+
+    override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.removeRoomAliasFromRoomDirectory(roomAlias.value)
+        }
+    }
+
+    override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateRoomVisibility(roomVisibility.map())
+        }
+    }
+
+    override suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateHistoryVisibility(historyVisibility.map())
+        }
+    }
+
+    override suspend fun getRoomVisibility(): Result<RoomVisibility> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.getRoomVisibility().map()
+        }
+    }
+
+    override suspend fun enableEncryption(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.enableEncryption()
+        }
+    }
+
+    override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateJoinRules(joinRule.map())
         }
     }
 

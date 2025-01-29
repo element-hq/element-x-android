@@ -24,10 +24,13 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -43,7 +46,7 @@ interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
     val displayName: String
-    val alias: RoomAlias?
+    val canonicalAlias: RoomAlias?
     val alternativeAliases: List<RoomAlias>
     val topic: String?
     val avatarUrl: String?
@@ -403,4 +406,60 @@ interface MatrixRoom : Closeable {
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit>
 
     override fun close() = destroy()
+
+    /**
+     * Update the canonical alias of the room.
+     *
+     * Note that publishing the alias in the room directory is done separately.
+     */
+    suspend fun updateCanonicalAlias(
+        canonicalAlias: RoomAlias?,
+        alternativeAliases: List<RoomAlias>
+    ): Result<Unit>
+
+    /**
+     * Update the room's visibility in the room directory.
+     */
+    suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit>
+
+    /**
+     * Update room history visibility for this room.
+     */
+    suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit>
+
+    /**
+     * Returns the visibility for this room in the room directory.
+     * If the room is not published, the result will be [RoomVisibility.Private].
+     */
+    suspend fun getRoomVisibility(): Result<RoomVisibility>
+
+    /**
+     * Publish a new room alias for this room in the room directory.
+     *
+     * Returns:
+     * - `true` if the room alias didn't exist and it's now published.
+     * - `false` if the room alias was already present so it couldn't be
+     * published.
+     */
+    suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
+
+    /**
+     * Remove an existing room alias for this room in the room directory.
+     *
+     * Returns:
+     * - `true` if the room alias was present and it's now removed from the
+     * room directory.
+     * - `false` if the room alias didn't exist so it couldn't be removed.
+     */
+    suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
+
+    /**
+     * Enable End-to-end encryption in this room.
+     */
+    suspend fun enableEncryption(): Result<Unit>
+
+    /**
+     * Update the join rule for this room.
+     */
+    suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
 }

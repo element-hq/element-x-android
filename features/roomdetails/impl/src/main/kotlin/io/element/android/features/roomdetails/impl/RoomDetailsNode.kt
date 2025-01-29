@@ -49,6 +49,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openAdminSettings()
         fun openPinnedMessagesList()
         fun openKnockRequestsList()
+        fun openSecurityAndPrivacy()
         fun onJoinCall()
     }
 
@@ -121,6 +122,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openKnockRequestsList() }
     }
 
+    private fun openSecurityAndPrivacy() {
+        callbacks.forEach { it.openSecurityAndPrivacy() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -153,6 +158,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onJoinCallClick = ::onJoinCall,
             onPinnedMessagesClick = ::openPinnedMessages,
             onKnockRequestsClick = ::openKnockRequestsLists,
+            onSecurityAndPrivacyClick = ::openSecurityAndPrivacy
         )
     }
 }

@@ -9,7 +9,6 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -24,6 +23,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -104,7 +104,7 @@ class RoomDetailsPresenter @Inject constructor(
         val dmMember by room.getDirectRoomMember(membersState)
         val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType by getRoomType(dmMember, currentMember)
+        val roomType = getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
@@ -147,10 +147,17 @@ class RoomDetailsPresenter @Inject constructor(
 
         val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
 
+        val securityAndPrivacyPermissions = room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
+        val canShowSecurityAndPrivacy by remember {
+            derivedStateOf {
+                isKnockRequestsEnabled && roomType is RoomDetailsType.Room && securityAndPrivacyPermissions.value.hasAny
+            }
+        }
+
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
-            roomAlias = room.alias,
+            roomAlias = room.canonicalAlias,
             roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,
@@ -172,6 +179,7 @@ class RoomDetailsPresenter @Inject constructor(
             pinnedMessagesCount = pinnedMessagesCount,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
+            canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             eventSink = ::handleEvents,
         )
     }
@@ -187,16 +195,14 @@ class RoomDetailsPresenter @Inject constructor(
     private fun getRoomType(
         dmMember: RoomMember?,
         currentMember: RoomMember?,
-    ): State<RoomDetailsType> = remember(dmMember, currentMember) {
-        derivedStateOf {
-            if (dmMember != null && currentMember != null) {
-                RoomDetailsType.Dm(
-                    me = currentMember,
-                    otherMember = dmMember,
-                )
-            } else {
-                RoomDetailsType.Room
-            }
+    ): RoomDetailsType = remember(dmMember, currentMember) {
+        if (dmMember != null && currentMember != null) {
+            RoomDetailsType.Dm(
+                me = currentMember,
+                otherMember = dmMember,
+            )
+        } else {
+            RoomDetailsType.Room
         }
     }
 

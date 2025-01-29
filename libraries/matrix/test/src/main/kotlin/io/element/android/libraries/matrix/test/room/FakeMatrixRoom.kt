@@ -33,10 +33,13 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -66,7 +69,7 @@ class FakeMatrixRoom(
     override val topic: String? = null,
     override val avatarUrl: String? = null,
     override var isEncrypted: Boolean = false,
-    override val alias: RoomAlias? = null,
+    override val canonicalAlias: RoomAlias? = null,
     override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
     override val isSpace: Boolean = false,
@@ -145,6 +148,14 @@ class FakeMatrixRoom(
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
     private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, SendHandle) -> Result<Unit> = { _, _ -> lambdaError() },
     private val withdrawVerificationAndResendResult: (List<UserId>, SendHandle) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val updateCanonicalAliasResult: (RoomAlias?, List<RoomAlias>) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val updateRoomVisibilityResult: (RoomVisibility) -> Result<Unit> = { lambdaError() },
+    private val updateRoomHistoryVisibilityResult: (RoomHistoryVisibility) -> Result<Unit> = { lambdaError() },
+    private val roomVisibilityResult: () -> Result<RoomVisibility> = { lambdaError() },
+    private val publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
+    private val removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
+    private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
+    private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -195,9 +206,11 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    fun enableEncryption() {
-        isEncrypted = true
-        emitSyncUpdate()
+    override suspend fun enableEncryption(): Result<Unit> = simulateLongTask {
+        enableEncryptionResult().onSuccess {
+            isEncrypted = true
+            emitSyncUpdate()
+        }
     }
 
     private val _syncUpdateFlow = MutableStateFlow(0L)
@@ -580,6 +593,34 @@ class FakeMatrixRoom(
 
     override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit> = simulateLongTask {
         return withdrawVerificationAndResendResult(userIds, sendHandle)
+    }
+
+    override suspend fun updateCanonicalAlias(canonicalAlias: RoomAlias?, alternativeAliases: List<RoomAlias>): Result<Unit> = simulateLongTask {
+        updateCanonicalAliasResult(canonicalAlias, alternativeAliases)
+    }
+
+    override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = simulateLongTask {
+        updateRoomVisibilityResult(roomVisibility)
+    }
+
+    override suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit> = simulateLongTask {
+        updateRoomHistoryVisibilityResult(historyVisibility)
+    }
+
+    override suspend fun getRoomVisibility(): Result<RoomVisibility> = simulateLongTask {
+        roomVisibilityResult()
+    }
+
+    override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
+        publishRoomAliasInRoomDirectoryResult(roomAlias)
+    }
+
+    override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
+        removeRoomAliasFromRoomDirectoryResult(roomAlias)
+    }
+
+    override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = simulateLongTask {
+        updateJoinRuleResult(joinRule)
     }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {

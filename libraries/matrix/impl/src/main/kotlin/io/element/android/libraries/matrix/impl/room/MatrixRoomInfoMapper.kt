@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import kotlinx.collections.immutable.ImmutableMap
@@ -60,6 +61,7 @@ class MatrixRoomInfoMapper {
             numUnreadMessages = it.numUnreadMessages.toLong(),
             numUnreadMentions = it.numUnreadMentions.toLong(),
             numUnreadNotifications = it.numUnreadNotifications.toLong(),
+            historyVisibility = it.historyVisibility.map(),
         )
     }
 }
