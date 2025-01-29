@@ -144,6 +144,7 @@ class TimelineItemContentMessageFactoryTest {
             plainText = "body",
             isEdited = false,
             formattedBody = null,
+            pillifiedBody = SpannableString("body"),
         )
         assertThat(result).isEqualTo(expected)
     }
