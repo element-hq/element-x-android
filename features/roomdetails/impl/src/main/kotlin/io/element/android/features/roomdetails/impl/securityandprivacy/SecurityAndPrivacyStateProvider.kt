@@ -34,6 +34,12 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
             ),
             aSecurityAndPrivacyState(
                 editedSettings = aSecurityAndPrivacySettings(
+                    roomAccess = SecurityAndPrivacyRoomAccess.Anyone,
+                    address = "#therapy:myserver.xyz"
+                )
+            ),
+            aSecurityAndPrivacyState(
+                editedSettings = aSecurityAndPrivacySettings(
                     isVisibleInRoomDirectory = AsyncData.Loading()
                 )
             ),
@@ -44,6 +50,9 @@ open class SecurityAndPrivacyStateProvider : PreviewParameterProvider<SecurityAn
             ),
             aSecurityAndPrivacyState(
                 showEncryptionConfirmation = true
+            ),
+            aSecurityAndPrivacyState(
+                saveAction = AsyncAction.Loading
             ),
         )
 }
