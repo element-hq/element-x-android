@@ -17,10 +17,10 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.aGroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
@@ -137,7 +137,7 @@ class MediaViewerDataSourceTest {
     fun `test dataFlow with data galleryMode image`() = runTest {
         val galleryDataSource = FakeMediaGalleryDataSource()
         val sut = createMediaViewerDataSource(
-            galleryMode = MediaGalleryMode.Images,
+            mode = MediaViewerMode.TimelineImagesAndVideos,
             galleryDataSource = galleryDataSource,
         )
         sut.dataFlow().test {
@@ -159,7 +159,7 @@ class MediaViewerDataSourceTest {
     fun `test dataFlow with data galleryMode files`() = runTest {
         val galleryDataSource = FakeMediaGalleryDataSource()
         val sut = createMediaViewerDataSource(
-            galleryMode = MediaGalleryMode.Files,
+            mode = MediaViewerMode.TimelineFilesAndAudios,
             galleryDataSource = galleryDataSource,
         )
         sut.dataFlow().test {
@@ -265,12 +265,12 @@ class MediaViewerDataSourceTest {
     }
 
     private fun TestScope.createMediaViewerDataSource(
-        galleryMode: MediaGalleryMode = MediaGalleryMode.Images,
+        mode: MediaViewerMode = MediaViewerMode.TimelineImagesAndVideos,
         galleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(),
         mediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaFactory: LocalMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
     ) = MediaViewerDataSource(
-        galleryMode = galleryMode,
+        mode = mode,
         dispatcher = testCoroutineDispatchers().computation,
         galleryDataSource = galleryDataSource,
         mediaLoader = mediaLoader,

@@ -26,7 +26,6 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.TimelineMediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
@@ -84,18 +83,12 @@ class MediaViewerNode @AssistedInject constructor(
         }
     }
 
-    private val galleryMode = when (inputs.mode) {
-        MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-        MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
-        MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
-    }
-
     private val presenter = presenterFactory.create(
         inputs = inputs,
         navigator = this,
         dataSource = MediaViewerDataSource(
+            mode = inputs.mode,
             dispatcher = coroutineDispatchers.computation,
-            galleryMode = galleryMode,
             galleryDataSource = mediaGallerySource,
             mediaLoader = mediaLoader,
             localMediaFactory = localMediaFactory,

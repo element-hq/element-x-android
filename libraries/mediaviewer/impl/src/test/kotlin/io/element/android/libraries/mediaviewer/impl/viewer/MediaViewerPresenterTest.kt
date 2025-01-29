@@ -32,7 +32,6 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -782,11 +781,7 @@ class MediaViewerPresenterTest {
             ),
             navigator = mediaViewerNavigator,
             dataSource = MediaViewerDataSource(
-                galleryMode = when (mode) {
-                    MediaViewerEntryPoint.MediaViewerMode.SingleMedia -> MediaGalleryMode.Images
-                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
-                    MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
-                },
+                mode = mode,
                 dispatcher = testCoroutineDispatchers().computation,
                 galleryDataSource = mediaGalleryDataSource,
                 mediaLoader = matrixMediaLoader,

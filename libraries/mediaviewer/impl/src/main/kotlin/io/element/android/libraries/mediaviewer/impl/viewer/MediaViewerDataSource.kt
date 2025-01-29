@@ -18,6 +18,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
@@ -38,7 +39,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MediaViewerDataSource(
-    private val galleryMode: MediaGalleryMode,
+    mode: MediaViewerMode,
     private val dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
@@ -48,6 +49,12 @@ class MediaViewerDataSource(
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: MutableList<MediaFile> = mutableListOf()
+
+    private val galleryMode = when (mode) {
+        MediaViewerMode.SingleMedia,
+        MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
+        MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+    }
 
     // Map of sourceUrl to local media state
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
