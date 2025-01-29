@@ -16,5 +16,6 @@ internal fun SyncServiceState.toSyncState(): SyncState {
         SyncServiceState.RUNNING -> SyncState.Running
         SyncServiceState.TERMINATED -> SyncState.Terminated
         SyncServiceState.ERROR -> SyncState.Error
+        SyncServiceState.OFFLINE -> SyncState.Offline
     }
 }
