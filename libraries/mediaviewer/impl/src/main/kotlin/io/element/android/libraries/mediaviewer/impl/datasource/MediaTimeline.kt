@@ -18,6 +18,8 @@ import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 interface MediaTimeline {
@@ -37,19 +39,15 @@ class LiveMediaTimeline @Inject constructor(
     private val room: MatrixRoom,
 ) : MediaTimeline {
     private var timeline: Timeline? = null
-    override suspend fun getTimeline(): Result<Timeline> {
-        return if (timeline == null) {
-            room.mediaTimeline(null).fold(
-                {
-                    timeline = it
-                    Result.success(it)
-                },
-                {
-                    Result.failure(it)
-                },
-            )
+    private val mutex = Mutex()
+
+    override suspend fun getTimeline(): Result<Timeline> = mutex.withLock {
+        val currentTimeline = timeline
+        if (currentTimeline == null) {
+            room.mediaTimeline(null)
+                .onSuccess { timeline = it }
         } else {
-            Result.success(timeline!!)
+            Result.success(currentTimeline)
         }
     }
 
