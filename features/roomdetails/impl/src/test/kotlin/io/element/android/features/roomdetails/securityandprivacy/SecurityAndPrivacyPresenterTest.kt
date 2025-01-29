@@ -37,7 +37,7 @@ class SecurityAndPrivacyPresenterTest {
             with(awaitItem()) {
                 assertThat(editedSettings).isEqualTo(savedSettings)
                 assertThat(canBeSaved).isFalse()
-                assertThat(showEncryptionConfirmation).isFalse()
+                assertThat(showEnableEncryptionConfirmation).isFalse()
                 assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(showRoomAccessSection).isFalse()
                 assertThat(showRoomVisibilitySections).isFalse()
@@ -47,7 +47,7 @@ class SecurityAndPrivacyPresenterTest {
             with(awaitItem()) {
                 assertThat(editedSettings).isEqualTo(savedSettings)
                 assertThat(canBeSaved).isFalse()
-                assertThat(showEncryptionConfirmation).isFalse()
+                assertThat(showEnableEncryptionConfirmation).isFalse()
                 assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(showRoomAccessSection).isTrue()
                 assertThat(showRoomVisibilitySections).isFalse()
@@ -138,21 +138,21 @@ class SecurityAndPrivacyPresenterTest {
                 eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState)
             }
             with(awaitItem()) {
-                assertThat(showEncryptionConfirmation).isTrue()
+                assertThat(showEnableEncryptionConfirmation).isTrue()
                 eventSink(SecurityAndPrivacyEvents.CancelEnableEncryption)
             }
             with(awaitItem()) {
-                assertThat(showEncryptionConfirmation).isFalse()
+                assertThat(showEnableEncryptionConfirmation).isFalse()
                 eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState)
             }
             with(awaitItem()) {
-                assertThat(showEncryptionConfirmation).isTrue()
+                assertThat(showEnableEncryptionConfirmation).isTrue()
                 eventSink(SecurityAndPrivacyEvents.ConfirmEnableEncryption)
             }
             skipItems(1)
             with(awaitItem()) {
                 assertThat(editedSettings.isEncrypted).isTrue()
-                assertThat(showEncryptionConfirmation).isFalse()
+                assertThat(showEnableEncryptionConfirmation).isFalse()
                 assertThat(canBeSaved).isTrue()
                 eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState)
             }

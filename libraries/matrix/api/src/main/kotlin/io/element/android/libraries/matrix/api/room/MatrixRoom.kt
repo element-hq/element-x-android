@@ -428,9 +428,7 @@ interface MatrixRoom : Closeable {
 
     /**
      * Returns the visibility for this room in the room directory.
-     *
-     * [Public](`RoomVisibility::Public`) rooms are listed in the room
-     * directory and can be found using it.
+     * If the room is not published, the result will be [RoomVisibility.Private].
      */
     suspend fun getRoomVisibility(): Result<RoomVisibility>
 

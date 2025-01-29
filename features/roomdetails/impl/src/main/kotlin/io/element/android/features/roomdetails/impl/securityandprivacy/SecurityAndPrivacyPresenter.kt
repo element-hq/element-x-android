@@ -96,7 +96,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             address = savedSettings.address,
         )
 
-        var showEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }
+        var showEnableEncryptionConfirmation by remember(savedSettings.isEncrypted) { mutableStateOf(false) }
         val permissions by room.securityAndPrivacyPermissionsAsState(syncUpdateFlow.value)
 
         fun handleEvents(event: SecurityAndPrivacyEvents) {
@@ -116,7 +116,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                     if (editedIsEncrypted) {
                         editedIsEncrypted = false
                     } else {
-                        showEncryptionConfirmation = true
+                        showEnableEncryptionConfirmation = true
                     }
                 }
                 is SecurityAndPrivacyEvents.ChangeHistoryVisibility -> {
@@ -130,10 +130,10 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                 }
                 SecurityAndPrivacyEvents.EditRoomAddress -> navigator.openEditRoomAddress()
                 SecurityAndPrivacyEvents.CancelEnableEncryption -> {
-                    showEncryptionConfirmation = false
+                    showEnableEncryptionConfirmation = false
                 }
                 SecurityAndPrivacyEvents.ConfirmEnableEncryption -> {
-                    showEncryptionConfirmation = false
+                    showEnableEncryptionConfirmation = false
                     editedIsEncrypted = true
                 }
                 SecurityAndPrivacyEvents.DismissSaveError -> {
@@ -146,7 +146,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
             savedSettings = savedSettings,
             editedSettings = editedSettings,
             homeserverName = homeserverName,
-            showEncryptionConfirmation = showEncryptionConfirmation,
+            showEnableEncryptionConfirmation = showEnableEncryptionConfirmation,
             saveAction = saveAction.value,
             permissions = permissions,
             eventSink = ::handleEvents
@@ -189,8 +189,9 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
                 }
             }
             val updateJoinRule = async {
-                if (editedSettings.roomAccess != savedSettings.roomAccess) {
-                    room.updateJoinRule(editedSettings.roomAccess.map())
+                val joinRule = editedSettings.roomAccess.map()
+                if (editedSettings.roomAccess != savedSettings.roomAccess && joinRule != null) {
+                    room.updateJoinRule(joinRule)
                 } else {
                     Result.success(Unit)
                 }
@@ -239,19 +240,21 @@ private fun JoinRule?.map(): SecurityAndPrivacyRoomAccess {
         JoinRule.Public -> SecurityAndPrivacyRoomAccess.Anyone
         JoinRule.Knock, is JoinRule.KnockRestricted -> SecurityAndPrivacyRoomAccess.AskToJoin
         is JoinRule.Restricted -> SecurityAndPrivacyRoomAccess.SpaceMember
+        JoinRule.Invite -> SecurityAndPrivacyRoomAccess.InviteOnly
+        // All other cases are not supported so we default to InviteOnly
         is JoinRule.Custom,
-        JoinRule.Invite,
         JoinRule.Private,
         null -> SecurityAndPrivacyRoomAccess.InviteOnly
     }
 }
 
-private fun SecurityAndPrivacyRoomAccess.map(): JoinRule {
+private fun SecurityAndPrivacyRoomAccess.map(): JoinRule? {
     return when (this) {
         SecurityAndPrivacyRoomAccess.Anyone -> JoinRule.Public
         SecurityAndPrivacyRoomAccess.AskToJoin -> JoinRule.Knock
         SecurityAndPrivacyRoomAccess.InviteOnly -> JoinRule.Private
-        SecurityAndPrivacyRoomAccess.SpaceMember -> error("Unsupported")
+        // SpaceMember can't be selected in the ui
+        SecurityAndPrivacyRoomAccess.SpaceMember -> null
     }
 }
 
@@ -260,7 +263,8 @@ private fun RoomHistoryVisibility?.map(): SecurityAndPrivacyHistoryVisibility {
         RoomHistoryVisibility.WorldReadable -> SecurityAndPrivacyHistoryVisibility.Anyone
         RoomHistoryVisibility.Joined,
         RoomHistoryVisibility.Invited -> SecurityAndPrivacyHistoryVisibility.SinceInvite
-        RoomHistoryVisibility.Shared,
+        RoomHistoryVisibility.Shared -> SecurityAndPrivacyHistoryVisibility.SinceSelection
+        // All other cases are not supported so we default to SinceSelection
         is RoomHistoryVisibility.Custom,
         null -> SecurityAndPrivacyHistoryVisibility.SinceSelection
     }

@@ -100,9 +100,10 @@ fun SecurityAndPrivacyView(
             if (state.showEncryptionSection) {
                 EncryptionSection(
                     isRoomEncrypted = state.editedSettings.isEncrypted,
+                    // encryption can't be disabled once enabled
                     canToggleEncryption = !state.savedSettings.isEncrypted,
                     onToggleEncryption = { state.eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState) },
-                    showConfirmation = state.showEncryptionConfirmation,
+                    showConfirmation = state.showEnableEncryptionConfirmation,
                     onDismissConfirmation = { state.eventSink(SecurityAndPrivacyEvents.CancelEnableEncryption) },
                     onConfirmEncryption = { state.eventSink(SecurityAndPrivacyEvents.ConfirmEnableEncryption) },
                 )
@@ -206,6 +207,7 @@ private fun RoomAccessSection(
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
             onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.Anyone) },
         )
+        // Show space member option, but disabled as we don't support this option for now.
         if (saved == SecurityAndPrivacyRoomAccess.SpaceMember) {
             ListItem(
                 headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_title)) },
@@ -342,7 +344,6 @@ private fun HistoryVisibilitySection(
         title = stringResource(R.string.screen_security_and_privacy_room_history_section_header),
         modifier = modifier,
     ) {
-        Spacer(Modifier.height(16.dp))
         for (availableOption in availableOptions) {
             val isSelected = availableOption == editedOption
             HistoryVisibilityItem(
@@ -351,6 +352,7 @@ private fun HistoryVisibilitySection(
                 onSelectOption = onSelectOption,
             )
         }
+        // Also show the saved option if it's not in the available options, but disabled
         if (savedOptions != null && !availableOptions.contains(savedOptions)) {
             HistoryVisibilityItem(
                 option = savedOptions,

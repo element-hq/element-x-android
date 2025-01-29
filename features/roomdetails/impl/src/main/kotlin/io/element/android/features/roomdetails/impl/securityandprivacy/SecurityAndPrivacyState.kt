@@ -18,7 +18,7 @@ data class SecurityAndPrivacyState(
     // the settings the user wants to apply.
     val editedSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
-    val showEncryptionConfirmation: Boolean,
+    val showEnableEncryptionConfirmation: Boolean,
     val saveAction: AsyncAction<Unit>,
     private val permissions: SecurityAndPrivacyPermissions,
     val eventSink: (SecurityAndPrivacyEvents) -> Unit

@@ -118,12 +118,10 @@ class EditRoomAddressPresenter @AssistedInject constructor(
                 // Otherwise, only update the alternative aliases and keep the current canonical alias
                 else -> {
                     val newAlternativeAliases = buildList {
+                        // New alias is added first, so we make sure we pick it first
                         add(newRoomAlias)
-                        for (alias in room.alternativeAliases) {
-                            if (alias != savedAliasFromHomeserver) {
-                                add(alias)
-                            }
-                        }
+                        // Add all other aliases, except the one we just removed from the room directory
+                        addAll(room.alternativeAliases.filter { it != savedAliasFromHomeserver })
                     }
                     room.updateCanonicalAlias(savedCanonicalAlias, newAlternativeAliases).getOrThrow()
                 }
@@ -141,5 +139,5 @@ private fun MatrixRoom.firstAliasMatching(serverName: String): RoomAlias? {
     if (canonicalAlias?.matchesServer(serverName) == true) {
         return canonicalAlias
     }
-    return alternativeAliases.firstOrNull { it.value.contains(serverName) }
+    return alternativeAliases.firstOrNull { it.matchesServer(serverName) }
 }

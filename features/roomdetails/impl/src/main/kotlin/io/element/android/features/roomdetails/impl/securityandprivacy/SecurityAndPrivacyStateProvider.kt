@@ -79,7 +79,7 @@ fun aSecurityAndPrivacyState(
     editedSettings = editedSettings,
     savedSettings = savedSettings,
     homeserverName = homeserverName,
-    showEncryptionConfirmation = showEncryptionConfirmation,
+    showEnableEncryptionConfirmation = showEncryptionConfirmation,
     saveAction = saveAction,
     permissions = permissions,
     eventSink = eventSink
