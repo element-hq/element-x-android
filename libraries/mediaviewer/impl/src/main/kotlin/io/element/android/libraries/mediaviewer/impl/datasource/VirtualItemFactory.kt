@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediaviewer.impl.gallery
+package io.element.android.libraries.mediaviewer.impl.datasource
 
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import javax.inject.Inject
 
 class VirtualItemFactory @Inject constructor(

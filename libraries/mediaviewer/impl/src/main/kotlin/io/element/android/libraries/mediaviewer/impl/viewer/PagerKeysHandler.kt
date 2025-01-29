@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import io.element.android.libraries.mediaviewer.impl.gallery.eventId
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.eventId
 import javax.inject.Inject
 
 /**

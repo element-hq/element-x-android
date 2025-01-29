@@ -9,7 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 class MediaItemDateSeparatorProvider : PreviewParameterProvider<MediaItem.DateSeparator> {
     override val values: Sequence<MediaItem.DateSeparator>

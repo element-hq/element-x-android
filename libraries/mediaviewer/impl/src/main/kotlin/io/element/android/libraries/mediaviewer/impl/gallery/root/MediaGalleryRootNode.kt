@@ -31,11 +31,11 @@ import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryNode
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import io.element.android.libraries.mediaviewer.impl.gallery.eventId
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaSource
-import io.element.android.libraries.mediaviewer.impl.gallery.thumbnailSource
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.eventId
+import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.mediaSource
+import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)

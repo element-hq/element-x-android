@@ -9,7 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 fun aMediaItemLoadingIndicator(
     id: UniqueId = UniqueId("loadingId"),

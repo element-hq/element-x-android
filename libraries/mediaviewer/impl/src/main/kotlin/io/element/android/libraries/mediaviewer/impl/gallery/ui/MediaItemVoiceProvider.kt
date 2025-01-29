@@ -13,7 +13,7 @@ import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.aVoiceMediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
     override val values: Sequence<MediaItem.Voice>

@@ -21,6 +21,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
 import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 @ContributesNode(RoomScope::class)
 class MediaGalleryNode @AssistedInject constructor(

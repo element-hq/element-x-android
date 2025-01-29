@@ -18,8 +18,8 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
-import io.element.android.libraries.mediaviewer.impl.gallery.FakeMediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
 import io.element.android.libraries.mediaviewer.impl.gallery.aGroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator

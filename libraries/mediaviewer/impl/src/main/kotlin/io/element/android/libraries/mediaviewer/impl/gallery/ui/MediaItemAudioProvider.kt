@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 class MediaItemAudioProvider : PreviewParameterProvider<MediaItem.Audio> {
     override val values: Sequence<MediaItem.Audio>

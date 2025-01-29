@@ -24,12 +24,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
-import io.element.android.libraries.mediaviewer.impl.gallery.FocusedTimelineMediaGalleryDataSourceFactory
+import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
+import io.element.android.libraries.mediaviewer.impl.datasource.TimelineMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryMode
-import io.element.android.libraries.mediaviewer.impl.gallery.SingleMediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.TimelineMediaGalleryDataSource
-import io.element.android.libraries.mediaviewer.impl.gallery.hasEvent
-import io.element.android.libraries.mediaviewer.impl.gallery.toMediaItem
+import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesNode(RoomScope::class)
