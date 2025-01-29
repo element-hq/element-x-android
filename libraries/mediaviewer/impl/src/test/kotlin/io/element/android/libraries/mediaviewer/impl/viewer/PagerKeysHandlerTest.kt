@@ -11,8 +11,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemLoadingIndicator
 import org.junit.Test
 
 class PagerKeysHandlerTest {

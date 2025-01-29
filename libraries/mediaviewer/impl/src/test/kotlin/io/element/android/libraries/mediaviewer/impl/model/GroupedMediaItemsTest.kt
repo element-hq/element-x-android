@@ -11,8 +11,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_3
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemAudio
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 

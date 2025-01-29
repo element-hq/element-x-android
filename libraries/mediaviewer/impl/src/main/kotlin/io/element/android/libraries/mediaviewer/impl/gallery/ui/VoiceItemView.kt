@@ -47,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState

@@ -22,10 +22,10 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.gallery.aGroupedMediaItems
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemDateSeparator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemFile
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemLoadingIndicator
 import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock

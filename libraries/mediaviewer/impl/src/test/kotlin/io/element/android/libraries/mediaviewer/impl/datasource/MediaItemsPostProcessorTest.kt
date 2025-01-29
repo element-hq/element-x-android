@@ -9,15 +9,15 @@ package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemAudio
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVoice
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemAudio
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemDateSeparator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemFile
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVideo
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
