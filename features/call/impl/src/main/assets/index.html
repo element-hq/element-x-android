@@ -1,15 +1,9 @@
-<!--
-  ~ Copyright 2024 New Vector Ltd.
-  ~
-  ~ SPDX-License-Identifier: AGPL-3.0-only
-  ~ Please see LICENSE in the repository root for full details.
-  -->
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.png" />
+    <link rel="preload" href="/config.json" as="fetch" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
@@ -18,8 +12,9 @@
     <script>
       window.global = window;
     </script>
-    <script type="module" crossorigin src="./assets/index-B63wl5pC.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-fLtK-scL.css">
+    <script type="module" crossorigin src="/assets/index-CLDJFe_s.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/matrix-sdk-crypto-wasm-COx1Ym5k.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DfTaTLSE.css">
   </head>
 
   <!-- The default class is: .no-theme {display: none}. It will be overwritten once the app is loaded. -->

@@ -1,0 +1,127 @@
+{
+  "a11y": {
+    "user_menu": "使用者選單"
+  },
+  "action": {
+    "close": "關閉",
+    "copy_link": "複製連結",
+    "go": "前往",
+    "invite": "邀請",
+    "no": "否",
+    "register": "註冊",
+    "remove": "移除",
+    "sign_in": "登入",
+    "sign_out": "登出",
+    "submit": "遞交"
+  },
+  "analytics_notice": "參與此測試版即表示您同意蒐集匿名資料，我們使用這些資料來改進產品。您可以在我們的<2>隱私政策</2>與我們的 <5>Cookie 政策</5> 中找到關於我們追蹤哪些資料的更多資訊。",
+  "app_selection_modal": {
+    "continue_in_browser": "在瀏覽器中繼續",
+    "open_in_app": "在應用程式中開啟",
+    "text": "準備好加入了？",
+    "title": "選取應用程式"
+  },
+  "browser_media_e2ee_unsupported": "您的網路瀏覽器不支援媒體端到端加密。支援的瀏覽器包含了 Chrome、Safari、Firefox >=117",
+  "call_ended_view": {
+    "body": "您已從通話斷線",
+    "create_account_button": "建立帳號",
+    "create_account_prompt": "<0>何不設定密碼以保留此帳號？</0><1>您可以保留暱稱並設定頭像，以便未來通話時使用</1>",
+    "feedback_done": "<0>感謝您的回饋！</0>",
+    "feedback_prompt": "<0>我們想要聽到您的回饋，如此我們才能改善您的體驗。</0>",
+    "headline": "{{displayName}}，您的通話已結束。",
+    "not_now_button": "現在不行，回到首頁",
+    "reconnect_button": "重新連線",
+    "survey_prompt": "進展如何？"
+  },
+  "call_name": "通話名稱",
+  "common": {
+    "audio": "語音",
+    "avatar": "大頭照",
+    "camera": "相機",
+    "display_name": "顯示名稱",
+    "encrypted": "已加密",
+    "home": "首頁",
+    "loading": "載入中…",
+    "microphone": "麥克風",
+    "password": "密碼",
+    "profile": "個人檔案",
+    "settings": "設定",
+    "unencrypted": "未加密",
+    "username": "使用者名稱",
+    "video": "視訊"
+  },
+  "disconnected_banner": "到伺服器的連線已遺失。",
+  "full_screen_view_description": "<0>送出除錯紀錄，可幫助我們修正問題。</0>",
+  "full_screen_view_h1": "<0>喔喔，有些地方怪怪的。</0>",
+  "hangup_button_label": "結束通話",
+  "header_label": "Element Call 首頁",
+  "header_participants_label": "參與者",
+  "invite_modal": {
+    "link_copied_toast": "連結已複製到剪貼簿",
+    "title": "邀請到此通話"
+  },
+  "join_existing_call_modal": {
+    "join_button": "是，加入對話",
+    "text": "通話已經開始，請問您要加入嗎？",
+    "title": "加入已開始的通話嗎？"
+  },
+  "layout_grid_label": "網格",
+  "layout_spotlight_label": "聚焦",
+  "lobby": {
+    "join_button": "加入通話",
+    "leave_button": "回到最近的通話"
+  },
+  "logging_in": "登入中…",
+  "login_auth_links": "<0>建立帳號</0> 或<2>以訪客身份登入</2>",
+  "login_title": "登入",
+  "microphone_off": "麥克風關閉",
+  "microphone_on": "麥克風開啟",
+  "mute_microphone_button_label": "將麥克風靜音",
+  "rageshake_button_error_caption": "重試傳送紀錄檔",
+  "rageshake_request_modal": {
+    "body": "這通對話中的另一位使用者遇到了某些問題。為了診斷問題，我們將會建立除錯紀錄。",
+    "title": "請求偵錯報告"
+  },
+  "rageshake_send_logs": "傳送除錯紀錄",
+  "rageshake_sending": "傳送中…",
+  "rageshake_sending_logs": "傳送除錯記錄檔中…",
+  "rageshake_sent": "感謝！",
+  "recaptcha_caption": "此網站被 ReCAPTCHA 保護，並適用 Google 的<2>隱私權政策</2>與<6>服務條款</6>。<9></9>點擊「註冊」即表示您同意我們的<12>終端使用者授權協議 (EULA)</12>",
+  "recaptcha_dismissed": "略過驗證碼",
+  "recaptcha_not_loaded": "驗證碼未載入",
+  "register": {
+    "passwords_must_match": "密碼必須相符",
+    "registering": "註冊中…"
+  },
+  "register_auth_links": "<0>已經有帳號?</0><1><0>登入</0> 或<2>以訪客身份登入</2></1>",
+  "register_confirm_password_label": "確認密碼",
+  "return_home_button": "回到首頁",
+  "room_auth_view_eula_caption": "點擊「立刻加入通話」即表示您同意我們的<2>終端使用者授權協議 (EULA)</2>",
+  "screenshare_button_label": "分享畫面",
+  "settings": {
+    "developer_settings_label": "開發者設定",
+    "developer_settings_label_description": "在設定視窗中顯示開發者設定。",
+    "developer_tab_title": "開發者",
+    "feedback_tab_body": "若您遇到問題或只是想提供一些回饋，請在下方傳送簡短說明給我們。",
+    "feedback_tab_description_label": "您的回饋",
+    "feedback_tab_h4": "遞交回覆",
+    "feedback_tab_send_logs_label": "包含除錯紀錄",
+    "feedback_tab_thank_you": "感謝，我們已經收到您的回饋了！",
+    "feedback_tab_title": "回饋",
+    "more_tab_title": "更多",
+    "opt_in_description": "<0></0><1></1>您可以透過取消核取此方塊來撤回同意。若您目前正在通話中，此設定將在通話結束時生效。",
+    "speaker_device_selection_label": "發言者"
+  },
+  "star_rating_input_label_one": "{{count}} 個星星",
+  "star_rating_input_label_other": "{{count}} 個星星",
+  "start_new_call": "開始新通話",
+  "start_video_button_label": "開始影片",
+  "stop_screenshare_button_label": "分享畫面",
+  "stop_video_button_label": "停止影片",
+  "submitting": "正在遞交……",
+  "unauthenticated_view_body": "還沒註冊嗎？<2>建立帳號</2>",
+  "unauthenticated_view_eula_caption": "點擊「前往」即表示您同意我們的<2>終端使用者授權協議 (EULA)</2>",
+  "unauthenticated_view_login_button": "登入您的帳號",
+  "unmute_microphone_button_label": "將麥克風取消靜音",
+  "version": "版本： {{version}}"
+}

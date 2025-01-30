@@ -1,0 +1,125 @@
+{
+  "a11y": {
+    "user_menu": "Kasutajamenüü"
+  },
+  "action": {
+    "close": "Sulge",
+    "copy_link": "Kopeeri link",
+    "go": "Jätka",
+    "invite": "Kutsu",
+    "no": "Ei",
+    "register": "Registreeru",
+    "remove": "Eemalda",
+    "sign_in": "Logi sisse",
+    "sign_out": "Logi välja",
+    "submit": "Saada"
+  },
+  "analytics_notice": "Nõustudes selle beetaversiooni kasutamisega sa nõustud ka toote arendamiseks kasutatavate anonüümsete andmete kogumisega. Täpsemat teavet kogutavate andmete kohta leiad meie <2>Privaatsuspoliitikast</2> ja meie <5>Küpsiste kasutamise reeglitest</5>.",
+  "app_selection_modal": {
+    "continue_in_browser": "Jätka veebibrauseris",
+    "open_in_app": "Ava rakenduses",
+    "text": "Oled valmis liituma?",
+    "title": "Vali rakendus"
+  },
+  "browser_media_e2ee_unsupported": "Sinu veebibrauser ei toeta meedia läbivat krüptimist. Toetatud brauserid on Chrome, Chromium, Safari ja Firefox >=117",
+  "call_ended_view": {
+    "body": "Sinu ühendus kõnega katkes",
+    "create_account_button": "Loo konto",
+    "create_account_prompt": "<0>Kas soovid salasõna seadistada ja sellega oma kasutajakonto alles jätta?</0><1>Nii saad säilitada oma nime ja määrata profiilipildi, mida saad kasutada tulevastes kõnedes</1>",
+    "feedback_done": "<0>Täname Sind tagasiside eest!</0>",
+    "feedback_prompt": "<0>Meie rakenduse paremaks muutmiseks me hea meelega ootame Sinu arvamusi.</0>",
+    "headline": "{{displayName}}, sinu kõne on lõppenud.",
+    "not_now_button": "Mitte praegu, mine tagasi avalehele",
+    "reconnect_button": "Ühenda uuesti",
+    "survey_prompt": "Kuidas sujus?"
+  },
+  "call_name": "Kõne nimi",
+  "common": {
+    "audio": "Heli",
+    "avatar": "Tunnuspilt",
+    "camera": "Kaamera",
+    "display_name": "Kuvatav nimi",
+    "encrypted": "Krüptitud",
+    "home": "Avavaatesse",
+    "loading": "Laadimine …",
+    "microphone": "Mikrofon",
+    "password": "Salasõna",
+    "profile": "Profiil",
+    "settings": "Seadistused",
+    "unencrypted": "Krüptimata",
+    "username": "Kasutajanimi"
+  },
+  "disconnected_banner": "Võrguühendus serveriga on katkenud.",
+  "full_screen_view_description": "<0>Kui saadad meile vealogid, siis on lihtsam vea põhjust otsida.</0>",
+  "full_screen_view_h1": "<0>Ohoo, midagi on nüüd katki.</0>",
+  "hangup_button_label": "Lõpeta kõne",
+  "header_participants_label": "Osalejad",
+  "invite_modal": {
+    "link_copied_toast": "Link on kopeeritud lõikelauale",
+    "title": "Kutsu liituma selle kõnaga"
+  },
+  "join_existing_call_modal": {
+    "join_button": "Jah, liitu kõnega",
+    "text": "See kõne on juba olemas, kas soovid liituda?",
+    "title": "Liitu juba käimasoleva kõnega?"
+  },
+  "layout_grid_label": "Ruudustik",
+  "layout_spotlight_label": "Rambivalgus",
+  "lobby": {
+    "join_button": "Kõnega liitumine",
+    "leave_button": "Tagasi hiljutiste kõnede juurde"
+  },
+  "logging_in": "Sisselogimine …",
+  "login_auth_links": "<0>Loo konto</0> Või <2>Sisene külalisena</2>",
+  "login_title": "Sisselogimine",
+  "microphone_off": "Mikrofon ei tööta",
+  "microphone_on": "Mikrofon töötab",
+  "mute_microphone_button_label": "Summuta mikrofon",
+  "rageshake_button_error_caption": "Proovi uuesti logisid saata",
+  "rageshake_request_modal": {
+    "body": "Ühel teisel selles kõnes osalejal on lahenduse kasutamisel tekkinud probleem ning selle põhjuse leidmiseks me sooviksime koguda silumislogisid.",
+    "title": "Veaotsingulogi päring"
+  },
+  "rageshake_send_logs": "Saada veaotsingulogid",
+  "rageshake_sending": "Saatmine…",
+  "rageshake_sending_logs": "Veaotsingulogide saatmine…",
+  "rageshake_sent": "Tänud!",
+  "recaptcha_caption": "Selles saidis on kasutusel ReCAPTCHA ja kehtivad Google'i <2>Privaatsuspoliitika</2> ning <6>Teenusetingimused</6>.<9></9>Klõpsides „Registreeru“, sa nõustud meie <12>Lõppkasutaja litsentsilepingu (EULA) tingimustega</12>",
+  "recaptcha_dismissed": "Robotilõks on vahele jäetud",
+  "recaptcha_not_loaded": "Robotilõks pole laetud",
+  "register": {
+    "passwords_must_match": "Salasõnad ei klapi",
+    "registering": "Registreerimine…"
+  },
+  "register_auth_links": "<0>On sul juba konto?</0><1><0>Logi sisse</0> Või <2>Logi sisse külalisena</2></1>",
+  "register_confirm_password_label": "Kinnita salasõna",
+  "return_home_button": "Tagasi avalehele",
+  "room_auth_view_eula_caption": "Klõpsides „Liitu kõnega kohe“, nõustud sa meie <2>Lõppkasutaja litsentsilepinguga (EULA)</2>",
+  "screenshare_button_label": "Jaga ekraani",
+  "settings": {
+    "developer_settings_label": "Arendaja seadistused",
+    "developer_settings_label_description": "Näita seadistuste aknas arendajale vajalikke seadeid.",
+    "developer_tab_title": "Arendaja",
+    "feedback_tab_body": "Kui selle rakenduse kasutamisel tekib sul probleeme või lihtsalt soovid oma arvamust avaldada, siis palun täida alljärgnev lühike kirjeldus.",
+    "feedback_tab_description_label": "Sinu tagasiside",
+    "feedback_tab_h4": "Jaga tagasisidet",
+    "feedback_tab_send_logs_label": "Lisa veatuvastuslogid",
+    "feedback_tab_thank_you": "Tänud, me oleme sinu tagasiside kätte saanud!",
+    "feedback_tab_title": "Tagasiside",
+    "more_tab_title": "Rohkem",
+    "opt_in_description": "<0></0><1></1>Sa võid selle valiku eelmaldamisega alati oma nõusoleku tagasi võtta. Kui sul parasjagu on kõne pooleli, siis seadistuste muudatus jõustub pärast kõne lõppu.",
+    "speaker_device_selection_label": "Kõlar"
+  },
+  "star_rating_input_label_one": "{{count}} tärni",
+  "star_rating_input_label_other": "{{count}} tärni",
+  "start_new_call": "Algata uus kõne",
+  "start_video_button_label": "Lülita videovoog sisse",
+  "stop_screenshare_button_label": "Ekraanivaade on jagamisel",
+  "stop_video_button_label": "Peata videovoog",
+  "submitting": "Saadan…",
+  "unauthenticated_view_body": "Sa pole veel registreerunud? <2>Loo kasutajakonto</2>",
+  "unauthenticated_view_eula_caption": "Klõpsides „Jätka“, nõustud sa meie <2>Lõppkasutaja litsentsilepinguga (EULA)</2>",
+  "unauthenticated_view_login_button": "Logi oma kontosse sisse",
+  "unmute_microphone_button_label": "Lülita mikrofon sisse",
+  "version": "Versioon: {{version}}"
+}
