@@ -13,12 +13,14 @@ import org.junit.Test
 
 class RoomDetailsStateTest {
     @Test
-    fun `room not public not encrypted should have no badges`() {
+    fun `room not public not encrypted should have not encrypted badge`() {
         val sut = aRoomDetailsState(
             isPublic = false,
             isEncrypted = false,
         )
-        assertThat(sut.roomBadges).isEmpty()
+        assertThat(sut.roomBadges).isEqualTo(
+            persistentListOf(RoomBadge.NOT_ENCRYPTED)
+        )
     }
 
     @Test
