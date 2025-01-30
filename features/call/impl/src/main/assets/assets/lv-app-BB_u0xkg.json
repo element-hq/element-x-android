@@ -1,0 +1,98 @@
+{
+  "a11y": {
+    "user_menu": "Lietotāja izvēlne"
+  },
+  "action": {
+    "close": "Aizvērt",
+    "go": "Aiziet",
+    "no": "Nē",
+    "register": "Reģistrēties",
+    "remove": "Noņemt",
+    "sign_in": "Pieteikties",
+    "sign_out": "Atteikties",
+    "submit": "Iesniegt"
+  },
+  "analytics_notice": "Piedalīšanās šajā beta apliecina piekrišanu anonīmu datu ievākšanai, ko mēs izmantojam, lai uzlabotu izstrādājumu. Vairāk informācijas par datiem, ko mēs ievācam, var atrast mūsu <2>privātuma nosacījumos</2> un <5>sīkdatņu nosacījumos</5>.",
+  "call_ended_view": {
+    "body": "Tu tiki atvienots no zvana",
+    "create_account_button": "Izveidot kontu",
+    "create_account_prompt": "<0>Kādēļ nepabeigt ar paroles iestatīšanu, lai paturētu savu kontu?</0><1>Būs iespējams paturēt savu vārdu un iestatīt attēlu izmantošanai turpmākajos zvanos</1>",
+    "feedback_done": "<0>Paldies par atsauksmi!</0>",
+    "feedback_prompt": "<0>Mums patiktu saņemt Tavu atsauksmi, lai mēs varētu uzlabot Tavu pieredzi.</0>",
+    "headline": "{{displayName}}, Tavs zvans ir beidzies.",
+    "not_now_button": "Ne tagad, atgriezties sākuma ekrānā",
+    "reconnect_button": "Atkārtoti savienoties",
+    "survey_prompt": "Kā Tev veicās?"
+  },
+  "common": {
+    "audio": "Skaņa",
+    "avatar": "Attēls",
+    "camera": "Kamera",
+    "display_name": "Attēlojamais vārds",
+    "home": "Sākums",
+    "loading": "Lādējas…",
+    "microphone": "Mikrofons",
+    "password": "Parole",
+    "profile": "Profils",
+    "settings": "Iestatījumi",
+    "username": "Lietotājvārds"
+  },
+  "disconnected_banner": "Ir zaudēts savienojums ar serveri.",
+  "full_screen_view_description": "<0>Atkļūdošanas žurnāla ierakstu iesūtīšana palīdzēs mums atklāt nepilnību.</0>",
+  "full_screen_view_h1": "<0>Ak vai, kaut kas nogāja greizi!</0>",
+  "header_label": "Element Call sākums",
+  "join_existing_call_modal": {
+    "join_button": "Jā, pievienoties zvanam",
+    "text": "Šis zvans jau pastāv. Vai vēlies pievienoties?",
+    "title": "Pievienoties esošam zvanam?"
+  },
+  "layout_spotlight_label": "Starmešu gaisma",
+  "lobby": {
+    "join_button": "Pievienoties zvanam"
+  },
+  "logging_in": "Piesakās…",
+  "login_auth_links": "<0>Izveidot kontu</0> vai <2>Piekļūt kā viesim</2>",
+  "login_title": "Pieteikties",
+  "rageshake_button_error_caption": "Atkārtoti mēģināt žurnāla ierakstu nosūtīšanu",
+  "rageshake_request_modal": {
+    "body": "Citam lietotājam šajā zvanā ir sarežģījumi. Lai labāk atklātu šīs nepilnības, mēs gribētu iegūt atkļūdošanas žurnālu.",
+    "title": "Atkļūdošanas žurnāla pieprasījums"
+  },
+  "rageshake_send_logs": "Nosūtīt atkļūdošanas žurnāla ierakstus",
+  "rageshake_sending": "Nosūta…",
+  "rageshake_sending_logs": "Nosūta atkļūdošanas žurnāla ierakstus…",
+  "rageshake_sent": "Paldies!",
+  "recaptcha_caption": "Šo vietni aizsargā ReCAPTCHA, un ir attiecināmi Google <2>privātuma nosacījumi</2> un <6>pakalpojuma noteikumi</6>.<9></9>Klikšķināšana uz \"Reģistrēties\" sniedz piekrišanu mūsu <12>galalietotāja licencēšanas nolīgumam (GLLN)</12>",
+  "recaptcha_dismissed": "ReCaptcha atmesta",
+  "recaptcha_not_loaded": "ReCaptcha nav ielādēta",
+  "register": {
+    "passwords_must_match": "Parolēm ir jāsakrīt",
+    "registering": "Reģistrē…"
+  },
+  "register_auth_links": "<0>Jau ir konts?</0><1><0>Pieteikties</0> vai <2>Piekļūt kā viesim</2></1>",
+  "register_confirm_password_label": "Apstiprināt paroli",
+  "return_home_button": "Atgriezties sākuma ekrānā",
+  "room_auth_view_eula_caption": "Klikšķināšana uz \"Pievienoties zvanam tagad\" apliecina piekrišanu mūsu <2>galalietotāja licencēšanas nolīgumam (GLLN)</2>",
+  "screenshare_button_label": "Kopīgot ekrānu",
+  "settings": {
+    "developer_settings_label": "Izstrādātāja iestatījumi",
+    "developer_settings_label_description": "Izstādīt izstrādātāja iestatījumus iestatījumu logā.",
+    "developer_tab_title": "Izstrādātājs",
+    "feedback_tab_body": "Ja tiek piedzīvoti sarežģījumi vai vienkārši ir vēlme sniegt kādu atsauksmi, lūgums zemāk nosūtīt mums īsu aprakstu.",
+    "feedback_tab_description_label": "Tava atsauksme",
+    "feedback_tab_h4": "Iesniegt atsauksmi",
+    "feedback_tab_send_logs_label": "Iekļaut atkļūdošanas žurnāla ierakstus",
+    "feedback_tab_thank_you": "Paldies, mēs saņēmām atsauksmi!",
+    "feedback_tab_title": "Atsauksmes",
+    "more_tab_title": "Vairāk",
+    "opt_in_description": "<0></0><1></1>Savu piekrišanu var atsaukt ar atzīmes noņemšanu no šīs rūtiņas. Ja pašreiz atrodies zvanā, šis iestatījums stāsies spēkā zvana beigās.",
+    "speaker_device_selection_label": "Runātājs"
+  },
+  "star_rating_input_label_one": "{{count}} zvaigzne",
+  "star_rating_input_label_other": "{{count}} zvaigznes",
+  "submitting": "Iesniedz…",
+  "unauthenticated_view_body": "Vēl neesi reģistrējies? <2>Izveidot kontu</2>",
+  "unauthenticated_view_eula_caption": "Klikšķināšana uz \"Aiziet\" apliecina piekrišanu mūsu <2>galalietotāja licencēšanas nolīgumam (GLLN)</2>",
+  "unauthenticated_view_login_button": "Pieteikties kontā",
+  "version": "Versija: {{version}}"
+}

@@ -1,0 +1,125 @@
+{
+  "a11y": {
+    "user_menu": "Používateľské menu"
+  },
+  "action": {
+    "close": "Zatvoriť",
+    "copy_link": "Kopírovať odkaz",
+    "go": "Prejsť",
+    "invite": "Pozvať",
+    "no": "Nie",
+    "register": "Registrovať sa",
+    "remove": "Odstrániť",
+    "sign_in": "Prihlásiť sa",
+    "sign_out": "Odhlásiť sa",
+    "submit": "Odoslať"
+  },
+  "analytics_notice": "Účasťou v tejto beta verzii súhlasíte so zhromažďovaním anonymných údajov, ktoré použijeme na zlepšenie produktu. Viac informácií o tom, ktoré údaje sledujeme, nájdete v našich <2>Zásadách ochrany osobných údajov</2> a <5>Zásadách používania súborov cookie</5>.",
+  "app_selection_modal": {
+    "continue_in_browser": "Pokračovať v prehliadači",
+    "open_in_app": "Otvoriť v aplikácii",
+    "text": "Ste pripravení sa pridať?",
+    "title": "Vybrať aplikáciu"
+  },
+  "browser_media_e2ee_unsupported": "Váš webový prehliadač nepodporuje end-to-end šifrovanie médií. Podporované prehliadače sú Chrome, Safari, Firefox >=117",
+  "call_ended_view": {
+    "body": "Boli ste odpojení z hovoru",
+    "create_account_button": "Vytvoriť účet",
+    "create_account_prompt": "<0>Prečo neskončiť nastavením hesla, aby ste si zachovali svoj účet? </0><1>Budete si môcť ponechať svoje meno a nastaviť obrázok, ktorý sa bude používať pri budúcich hovoroch</1>",
+    "feedback_done": "<0> Ďakujeme za vašu spätnú väzbu!</0>",
+    "feedback_prompt": "<0> Radi si vypočujeme vašu spätnú väzbu, aby sme mohli zlepšiť vaše skúsenosti.</0>",
+    "headline": "{{displayName}}, váš hovor skončil.",
+    "not_now_button": "Teraz nie, vrátiť sa na domovskú obrazovku",
+    "reconnect_button": "Znovu pripojiť",
+    "survey_prompt": "Ako to išlo?"
+  },
+  "call_name": "Názov hovoru",
+  "common": {
+    "avatar": "Obrázok",
+    "camera": "Kamera",
+    "display_name": "Zobrazované meno",
+    "encrypted": "Šifrované",
+    "home": "Domov",
+    "loading": "Načítanie…",
+    "microphone": "Mikrofón",
+    "password": "Heslo",
+    "profile": "Profil",
+    "settings": "Nastavenia",
+    "unencrypted": "Nie je zašifrované",
+    "username": "Meno používateľa"
+  },
+  "disconnected_banner": "Spojenie so serverom sa stratilo.",
+  "full_screen_view_description": "<0>Odoslanie záznamov ladenia nám pomôže nájsť problém.</0>",
+  "full_screen_view_h1": "<0>Hups, niečo sa pokazilo.</0>",
+  "hangup_button_label": "Ukončiť hovor",
+  "header_label": "Domov Element Call",
+  "header_participants_label": "Účastníci",
+  "invite_modal": {
+    "link_copied_toast": "Odkaz skopírovaný do schránky",
+    "title": "Pozvať na tento hovor"
+  },
+  "join_existing_call_modal": {
+    "join_button": "Áno, pripojiť sa k hovoru",
+    "text": "Tento hovor už existuje, chceli by ste sa k nemu pripojiť?",
+    "title": "Pripojiť sa k existujúcemu hovoru?"
+  },
+  "layout_grid_label": "Sieť",
+  "layout_spotlight_label": "Stredobod",
+  "lobby": {
+    "join_button": "Pripojiť sa k hovoru",
+    "leave_button": "Späť k nedávnym"
+  },
+  "logging_in": "Prihlasovanie…",
+  "login_auth_links": "<0>Vytvoriť konto</0> Alebo <2>Prihlásiť sa ako hosť</2>",
+  "login_title": "Prihlásiť sa",
+  "microphone_off": "Mikrofón vypnutý",
+  "microphone_on": "Mikrofón zapnutý",
+  "mute_microphone_button_label": "Stlmiť mikrofón",
+  "rageshake_button_error_caption": "Opakovať odoslanie záznamov",
+  "rageshake_request_modal": {
+    "body": "Ďalší používateľ v tomto hovore má problém. Aby sme mohli lepšie diagnostikovať tieto problémy, chceli by sme získať záznam o ladení.",
+    "title": "Žiadosť o záznam ladenia"
+  },
+  "rageshake_send_logs": "Odoslať záznamy o ladení",
+  "rageshake_sending": "Odosielanie…",
+  "rageshake_sending_logs": "Odosielanie záznamov o ladení…",
+  "rageshake_sent": "Ďakujeme!",
+  "recaptcha_caption": "Táto stránka je chránená systémom ReCAPTCHA a platia na ňu <2>Pravidlá ochrany osobných údajov spoločnosti Google</2> a <6>Podmienky poskytovania služieb</6>.<9></9>Kliknutím na tlačidlo \"Registrovať sa\" súhlasíte s našou <12>Licenčnou zmluvou s koncovým používateľom (EULA)</12>",
+  "recaptcha_dismissed": "Recaptcha zamietnutá",
+  "recaptcha_not_loaded": "Recaptcha sa nenačítala",
+  "register": {
+    "passwords_must_match": "Heslá sa musia zhodovať",
+    "registering": "Registrácia…"
+  },
+  "register_auth_links": "<0>Už máte konto?</0><1><0>Prihláste sa</0> Alebo <2>Prihlásiť sa ako hosť</2></1>",
+  "register_confirm_password_label": "Potvrdiť heslo",
+  "return_home_button": "Návrat na domovskú obrazovku",
+  "room_auth_view_eula_caption": "Kliknutím na \"Pripojiť sa k hovoru teraz\" súhlasíte s našou <2>Licenčnou zmluvou s koncovým používateľom (EULA)</2>",
+  "screenshare_button_label": "Zdieľať obrazovku",
+  "settings": {
+    "developer_settings_label": "Nastavenia pre vývojárov",
+    "developer_settings_label_description": "Zobraziť nastavenia pre vývojárov v okne nastavení.",
+    "developer_tab_title": "Vývojár",
+    "feedback_tab_body": "Ak máte problémy alebo jednoducho chcete poskytnúť spätnú väzbu, pošlite nám krátky popis nižšie.",
+    "feedback_tab_description_label": "Vaša spätná väzba",
+    "feedback_tab_h4": "Odoslať spätnú väzbu",
+    "feedback_tab_send_logs_label": "Zahrnúť záznamy o ladení",
+    "feedback_tab_thank_you": "Ďakujeme, dostali sme vašu spätnú väzbu!",
+    "feedback_tab_title": "Spätná väzba",
+    "more_tab_title": "Viac",
+    "opt_in_description": "<0></0><1></1>Súhlas môžete odvolať zrušením označenia tohto políčka. Ak práve prebieha hovor, toto nastavenie nadobudne platnosť po skončení hovoru.",
+    "speaker_device_selection_label": "Reproduktor"
+  },
+  "star_rating_input_label_one": "{{count}} hviezdička",
+  "star_rating_input_label_other": "{{count}} hviezdičiek",
+  "start_new_call": "Spustiť nový hovor",
+  "start_video_button_label": "Spustiť video",
+  "stop_screenshare_button_label": "Zdieľanie obrazovky",
+  "stop_video_button_label": "Zastaviť video",
+  "submitting": "Odosielanie…",
+  "unauthenticated_view_body": "Ešte nie ste zaregistrovaný? <2>Vytvorte si účet</2>",
+  "unauthenticated_view_eula_caption": "Kliknutím na tlačidlo \"Prejsť\" vyjadrujete súhlas s našou <2>Licenčnou zmluvou s koncovým používateľom (EULA)</2>",
+  "unauthenticated_view_login_button": "Prihláste sa do svojho konta",
+  "unmute_microphone_button_label": "Zrušiť stlmenie mikrofónu",
+  "version": "Verzia: {{version}}"
+}

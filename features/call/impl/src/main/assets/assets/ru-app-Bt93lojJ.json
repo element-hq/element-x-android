@@ -1,0 +1,91 @@
+{
+  "a11y": {
+    "user_menu": "Меню пользователя"
+  },
+  "action": {
+    "close": "Закрыть",
+    "go": "Далее",
+    "no": "Нет",
+    "register": "Зарегистрироваться",
+    "remove": "Удалить",
+    "sign_in": "Войти",
+    "sign_out": "Выйти",
+    "submit": "Отправить"
+  },
+  "analytics_notice": "Участвуя в этой бета-версии, вы соглашаетесь на сбор анонимных данных, которые мы используем для улучшения продукта. Более подробную информацию о том, какие данные мы отслеживаем, вы можете найти в нашей <2> Политике конфиденциальности</2> и нашей <5> Политике использования файлов cookie</5>.",
+  "call_ended_view": {
+    "create_account_button": "Создать аккаунт",
+    "create_account_prompt": "<0>Почему бы не задать пароль, тем самым сохранив аккаунт?</0><1>Так вы можете оставить своё имя и задать аватар для будущих звонков.</1>",
+    "feedback_done": "<0>Спасибо за обратную связь!</0>",
+    "feedback_prompt": "<0>Мы будем рады видеть ваши отзывы, чтобы мы могли улучшить ваш опыт.</0>",
+    "headline": "{{displayName}}, ваш звонок окончен.",
+    "not_now_button": "Не сейчас, вернуться в Начало",
+    "survey_prompt": "Как всё прошло?"
+  },
+  "common": {
+    "audio": "Аудио",
+    "avatar": "Аватар",
+    "camera": "Камера",
+    "display_name": "Видимое имя",
+    "home": "Начало",
+    "loading": "Загрузка…",
+    "microphone": "Микрофон",
+    "password": "Пароль",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "username": "Имя пользователя",
+    "video": "Видео"
+  },
+  "full_screen_view_description": "<0>Отправка журналов поможет нам найти и устранить проблему.</0>",
+  "full_screen_view_h1": "<0>Упс, что-то пошло не так.</0>",
+  "header_label": "Главная Element Call",
+  "join_existing_call_modal": {
+    "join_button": "Да, присоединиться",
+    "text": "Этот звонок уже существует, хотите присоединиться?",
+    "title": "Присоединиться к существующему звонку?"
+  },
+  "layout_spotlight_label": "Внимание",
+  "lobby": {
+    "join_button": "Присоединиться"
+  },
+  "logging_in": "Вход…",
+  "login_auth_links": "<0>Создать аккаунт</0> или <2>Зайти как гость</2>",
+  "login_title": "Вход",
+  "rageshake_request_modal": {
+    "body": "У одного из участников звонка есть неполадки. Чтобы лучше диагностировать похожие проблемы, нам нужен журнал отладки.",
+    "title": "Запрос журнала отладки"
+  },
+  "rageshake_send_logs": "Отправить журнал отладки",
+  "rageshake_sending": "Отправка…",
+  "rageshake_sending_logs": "Отправка журнала отладки…",
+  "recaptcha_dismissed": "Проверка не пройдена",
+  "recaptcha_not_loaded": "Невозможно начать проверку",
+  "register": {
+    "passwords_must_match": "Пароли должны совпадать",
+    "registering": "Регистрация…"
+  },
+  "register_auth_links": "<0>Уже есть аккаунт?</0><1><0>Войти с ним</0> или <2>Зайти как гость</2></1>",
+  "register_confirm_password_label": "Подтвердите пароль",
+  "return_home_button": "Вернуться в Начало",
+  "screenshare_button_label": "Поделиться экраном",
+  "settings": {
+    "developer_settings_label": "Настройки Разработчика",
+    "developer_settings_label_description": "Раскрыть настройки разработчика в окне настроек.",
+    "developer_tab_title": "Разработчику",
+    "feedback_tab_body": "Если у вас возникли проблемы или вы просто хотите оставить отзыв, отправьте нам краткое описание ниже.",
+    "feedback_tab_description_label": "Ваш отзыв",
+    "feedback_tab_h4": "Отправить отзыв",
+    "feedback_tab_send_logs_label": "Приложить журнал отладки",
+    "feedback_tab_thank_you": "Спасибо. Мы получили ваш отзыв!",
+    "feedback_tab_title": "Отзыв",
+    "more_tab_title": "Больше",
+    "opt_in_description": "<0></0><1></1>Вы можете отозвать согласие, сняв этот флажок. Если вы в данный момент находитесь в разговоре, эта настройка вступит в силу по окончании разговора.",
+    "speaker_device_selection_label": "Динамик"
+  },
+  "star_rating_input_label_one": "{{count}} отмечен",
+  "star_rating_input_label_other": "{{count}} отмеченных",
+  "submitting": "Отправляем…",
+  "unauthenticated_view_body": "Ещё не зарегистрированы? <2>Создайте аккаунт</2>",
+  "unauthenticated_view_login_button": "Войдите в свой аккаунт",
+  "version": "Версия: {{version}}"
+}
