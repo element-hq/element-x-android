@@ -19,12 +19,16 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.sentry.log.analyticsTag
+import io.sentry.Breadcrumb
 import io.sentry.Sentry
-import io.sentry.SentryLevel
 import io.sentry.SentryOptions
 import io.sentry.android.core.SentryAndroid
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
+import kotlin.collections.orEmpty
 
 @ContributesMultibinding(AppScope::class)
 class SentryAnalyticsProvider @Inject constructor(
@@ -59,11 +63,23 @@ class SentryAnalyticsProvider @Inject constructor(
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
-        Sentry.captureMessage("Event: ${event.getName()}", SentryLevel.INFO)
+        val breadcrumb = Breadcrumb(event.getName()).apply {
+            category = "event"
+            for ((key, value) in event.getProperties().orEmpty()) {
+                setData(key, value.toString())
+            }
+        }
+        Sentry.addBreadcrumb(breadcrumb)
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
-        Sentry.captureMessage("Screen: ${screen.getName()}", SentryLevel.INFO)
+        val breadcrumb = Breadcrumb(screen.getName()).apply {
+            category = "screen"
+            for ((key, value) in screen.getProperties().orEmpty()) {
+                setData(key, value.toString())
+            }
+        }
+        Sentry.addBreadcrumb(breadcrumb)
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
