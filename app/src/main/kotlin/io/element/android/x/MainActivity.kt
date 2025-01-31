@@ -61,7 +61,10 @@ class MainActivity : NodeActivity() {
     @Composable
     private fun MainContent(appBindings: AppBindings) {
         val migrationState = appBindings.migrationEntryPoint().present()
-        ElementThemeApp(appBindings.preferencesStore()) {
+        ElementThemeApp(
+            appPreferencesStore = appBindings.preferencesStore(),
+            enterpriseService = appBindings.enterpriseService(),
+        ) {
             CompositionLocalProvider(
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
                 LocalUriHandler provides SafeUriHandler(this),
@@ -69,8 +72,8 @@ class MainActivity : NodeActivity() {
             ) {
                 Box(
                     modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.background),
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                 ) {
                     if (migrationState.migrationAction.isSuccess()) {
                         MainNodeHost()

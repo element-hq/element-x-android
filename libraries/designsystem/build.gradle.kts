@@ -31,6 +31,7 @@ android {
         implementation(libs.androidx.compose.material3.adaptive)
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
+        implementation(projects.features.enterprise.api)
         implementation(projects.libraries.architecture)
         implementation(projects.libraries.preferences.api)
         implementation(projects.libraries.testtags)
