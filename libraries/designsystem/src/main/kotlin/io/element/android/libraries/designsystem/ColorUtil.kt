@@ -7,24 +7,24 @@
 
 package io.element.android.libraries.designsystem
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun Boolean.toEnabledColor(): Color {
     return if (this) {
-        MaterialTheme.colorScheme.primary
+        ElementTheme.colors.textPrimary
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.40f)
+        ElementTheme.colors.textDisabled
     }
 }
 
 @Composable
 fun Boolean.toSecondaryEnabledColor(): Color {
     return if (this) {
-        MaterialTheme.colorScheme.secondary
+        ElementTheme.colors.textSecondary
     } else {
-        MaterialTheme.colorScheme.secondary.copy(alpha = 0.40f)
+        ElementTheme.colors.textDisabled
     }
 }

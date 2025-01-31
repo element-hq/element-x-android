@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -316,7 +315,7 @@ private fun PinUnlockHeader(
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = ElementTheme.typography.fontHeadingMdBold,
-            color = MaterialTheme.colorScheme.primary,
+            color = ElementTheme.colors.textPrimary,
         )
         Spacer(Modifier.height(8.dp))
         val remainingAttempts = state.remainingAttempts.dataOrNull()
@@ -330,9 +329,9 @@ private fun PinUnlockHeader(
             ""
         }
         val subtitleColor = if (state.showWrongPinTitle) {
-            MaterialTheme.colorScheme.error
+            ElementTheme.colors.textCriticalPrimary
         } else {
-            MaterialTheme.colorScheme.secondary
+            ElementTheme.colors.textSecondary
         }
         Text(
             text = subtitle,

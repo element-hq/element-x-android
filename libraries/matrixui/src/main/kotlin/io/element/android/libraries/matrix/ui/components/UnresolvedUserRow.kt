@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +57,7 @@ fun UnresolvedUserRow(
                 text = id,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.colors.textPrimary,
                 style = ElementTheme.typography.fontBodyLgMedium,
             )
 
@@ -75,12 +74,11 @@ fun UnresolvedUserRow(
                         .size(18.dp)
                         .align(Alignment.Top)
                         .padding(2.dp),
-                    tint = MaterialTheme.colorScheme.error,
+                    tint = ElementTheme.colors.iconCriticalPrimary,
                 )
-
                 Text(
                     text = stringResource(CommonStrings.common_invite_unknown_profile),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodySmRegular.copy(lineHeight = 16.sp),
                 )
             }

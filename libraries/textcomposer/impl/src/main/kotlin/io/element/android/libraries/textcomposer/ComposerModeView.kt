@@ -140,7 +140,7 @@ private fun ReplyToModeView(
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = ElementTheme.colors.iconSecondary,
             modifier = Modifier
                 .padding(end = 4.dp, top = 4.dp, start = 8.dp, bottom = 16.dp)
                 .size(16.dp)

@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -331,7 +330,7 @@ private fun KnockRequestItem(
                     text = knockRequest.getBestName(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyLgMedium,
                 )
                 val formattedDate = knockRequest.formattedDate
@@ -339,7 +338,7 @@ private fun KnockRequestItem(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = formattedDate,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = ElementTheme.colors.textSecondary,
                         style = ElementTheme.typography.fontBodySmRegular,
                     )
                 }
@@ -348,7 +347,7 @@ private fun KnockRequestItem(
             if (!knockRequest.displayName.isNullOrEmpty()) {
                 Text(
                     text = knockRequest.userId.value,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = ElementTheme.typography.fontBodyMdRegular,

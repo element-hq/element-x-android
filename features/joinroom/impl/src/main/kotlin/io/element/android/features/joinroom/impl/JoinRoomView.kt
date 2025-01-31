@@ -24,7 +24,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -308,7 +307,7 @@ private fun JoinRoomContent(
                         Text(
                             text = stringResource(id = CommonStrings.error_unknown),
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.error,
+                            color = ElementTheme.colors.textCriticalPrimary,
                         )
                     },
                 )
@@ -380,13 +379,13 @@ private fun DefaultLoadedContent(
                         text = stringResource(R.string.screen_join_room_space_not_supported_title),
                         textAlign = TextAlign.Center,
                         style = ElementTheme.typography.fontBodyLgMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = ElementTheme.colors.textPrimary,
                     )
                     Text(
                         text = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
                         textAlign = TextAlign.Center,
                         style = ElementTheme.typography.fontBodyMdRegular,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = ElementTheme.colors.textSecondary,
                     )
                 } else if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))
