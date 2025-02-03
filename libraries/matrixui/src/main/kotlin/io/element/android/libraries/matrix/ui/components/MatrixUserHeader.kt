@@ -77,14 +77,14 @@ private fun MatrixUserHeaderContent(
                 maxLines = 1,
                 style = ElementTheme.typography.fontHeadingSmMedium,
                 overflow = TextOverflow.Ellipsis,
-                color = ElementTheme.materialColors.primary,
+                color = ElementTheme.colors.textPrimary,
             )
             // Id
             if (matrixUser.displayName.isNullOrEmpty().not()) {
                 Text(
                     text = matrixUser.userId.value,
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    color = ElementTheme.materialColors.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

@@ -33,7 +33,7 @@ fun RedIndicatorAtom(
     Box(
         modifier = modifier
             .size(size)
-            .border(borderSize, ElementTheme.materialColors.background, CircleShape)
+            .border(borderSize, ElementTheme.colors.bgCanvasDefault, CircleShape)
             .padding(borderSize / 2)
             .clip(CircleShape)
             .background(color)

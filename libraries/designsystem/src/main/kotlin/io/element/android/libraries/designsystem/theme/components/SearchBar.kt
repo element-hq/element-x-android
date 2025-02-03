@@ -106,7 +106,7 @@ fun <T> SearchBar(
                             Icon(
                                 imageVector = CompoundIcons.Search(),
                                 contentDescription = stringResource(CommonStrings.action_search),
-                                tint = ElementTheme.materialColors.tertiary,
+                                tint = ElementTheme.colors.iconTertiary,
                             )
                         }
                     }
@@ -138,7 +138,7 @@ fun <T> SearchBar(
                     Text(
                         text = stringResource(CommonStrings.common_no_results),
                         textAlign = TextAlign.Center,
-                        color = ElementTheme.materialColors.tertiary,
+                        color = ElementTheme.colors.textSecondary,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

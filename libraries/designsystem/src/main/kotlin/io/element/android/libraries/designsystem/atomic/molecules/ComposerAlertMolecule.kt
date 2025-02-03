@@ -58,7 +58,7 @@ fun ComposerAlertMolecule(
         )
         val startColor = if (isCritical) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgInfoSubtle
         val brush = Brush.verticalGradient(
-            listOf(startColor, ElementTheme.materialColors.background),
+            listOf(startColor, ElementTheme.colors.bgCanvasDefault),
         )
         Box(
             modifier = Modifier

@@ -121,7 +121,7 @@ private fun TextContent(
         .height(REACTION_EMOJI_LINE_HEIGHT.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
-    color = ElementTheme.materialColors.primary
+    color = ElementTheme.colors.textPrimary
 )
 
 @Composable
@@ -130,7 +130,7 @@ private fun IconContent(
 ) = Icon(
     resourceId = resourceId,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
-    tint = ElementTheme.materialColors.secondary,
+    tint = ElementTheme.colors.iconSecondary,
     modifier = Modifier
         .size(ADD_EMOJI_SIZE)
 )
