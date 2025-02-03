@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_composer_placeholder">"Melding…"</string>
+  <string name="rich_text_editor_create_link">"Opprett en lenke"</string>
+  <string name="rich_text_editor_edit_link">"Rediger lenke"</string>
+  <string name="rich_text_editor_format_bold">"Bruk fet skrift"</string>
+  <string name="rich_text_editor_format_italic">"Bruk kursivformat"</string>
+  <string name="rich_text_editor_format_strikethrough">"Bruke gjennomstrekingsformat"</string>
+  <string name="rich_text_editor_format_underline">"Bruke understrekingsformat"</string>
+  <string name="rich_text_editor_indent">"Innrykk"</string>
+  <string name="rich_text_editor_inline_code">"Bruk inline-kodeformat"</string>
+  <string name="rich_text_editor_link">"Angi lenke"</string>
+  <string name="rich_text_editor_remove_link">"Fjern lenke"</string>
+  <string name="rich_text_editor_unindent">"Fjern innrykk"</string>
+  <string name="rich_text_editor_url_placeholder">"Lenke"</string>
+</resources>

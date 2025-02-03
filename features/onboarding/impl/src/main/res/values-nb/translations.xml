@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_welcome_subtitle">"Velkommen til %1$s. Supercharged, for hastighet og enkelhet."</string>
+  <string name="screen_onboarding_welcome_title">"Vær i ditt rette element"</string>
+</resources>

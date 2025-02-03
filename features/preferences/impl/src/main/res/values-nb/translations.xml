@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
+  <string name="screen_advanced_settings_developer_mode">"Utviklermodus"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Fjern blokkering"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Du vil kunne se alle meldingene fra dem igjen."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Fjern blokkering av bruker"</string>
+  <string name="screen_edit_profile_display_name">"Visningsnavn"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnavn"</string>
+  <string name="screen_edit_profile_error_title">"Kan ikke oppdatere profilen"</string>
+  <string name="screen_edit_profile_title">"Rediger profil"</string>
+  <string name="screen_edit_profile_updating_details">"Oppdaterer profilen…"</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"是的，全部接受"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"您确定要接受所有加入请求吗？"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"接受所有请求"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"全部接受"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"我们无法接受所有请求。是否要再试一次？"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"无法接受所有请求"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"接受所有加入请求"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"我们无法接受此请求。是否要再试一次？"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"无法接受请求"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"接受加入请求"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"是的，拒绝并禁止"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"您确定要拒绝并禁止吗%1$s？该用户将无法再次请求加入该房间。"</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"拒绝并禁止访问"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"拒绝并禁止访问"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"是的，拒绝"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"您确定要拒绝 %1$s 加入此房间的请求吗？"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"拒绝访问"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"拒绝和禁止"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"我们无法拒绝此请求。是否要再试一次？"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"拒绝请求失败"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"拒绝加入请求"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"当有人请求加入房间时，您将能够在这里看到他们的请求。"</string>
+  <string name="screen_knock_requests_list_empty_state_title">"没有待处理的加入请求"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"正在加载加入请求…"</string>
+  <string name="screen_knock_requests_list_title">"申请加入"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s+ %2$d 其他人想加入这个房间"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"查看全部"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"接受"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s想加入这个房间"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"查看"</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"確保 UnifiedPush 散佈者可用。"</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"找不到散佈者。"</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="other">"找到 %1$d 個散佈者：%2$s。"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"檢查 UnifiedPush"</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"是的，全部接受"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"您確定要接受所有加入請求嗎？"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"接受所有請求"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"全部接受"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"我們無法接受所有請求。您想要再試一次嗎？"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"無法接受所有請求"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"接受所有加入請求"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"我們無法接受此請求。您想要再試一次嗎？"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"無法接受請求"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"接受加入請求"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"是的，拒絕並封鎖"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"您確定要拒絕並封鎖 %1$s 嗎？此使用者將無法再次申請加入此聊天室。"</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"拒絕並禁止存取"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"拒絕並封鎖存取權"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"是的，拒絕"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"您確定您要拒絕 %1$s 加入此聊天室的請求嗎？"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"拒絕存取"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"拒絕並封鎖"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"我們無法拒絕此請求。您想要再試一次嗎？"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"拒絕請求失敗"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"拒絕加入請求"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"當有人要求加入聊天室時，您可以在這裡看到他們的請求。"</string>
+  <string name="screen_knock_requests_list_empty_state_title">"沒有待處理的加入請求"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"正在載入加入請求……"</string>
+  <string name="screen_knock_requests_list_title">"請求加入"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s 與 %2$d 個其他人想要加入此聊天室"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"檢視全部"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"接受"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s 想要加入此聊天室"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"檢視"</string>
+</resources>

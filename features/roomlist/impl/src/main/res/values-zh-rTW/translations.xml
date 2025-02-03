@@ -1,21 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_title">"輸入您的復原金鑰"</string>
+  <string name="banner_migrate_to_native_sliding_sync_action">"登出並升級"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"您的伺服器現在支援新的、更快的協定。立即登出並重新登入以進行升級。現在這樣做將協助您避免在稍後移除舊協定時被強制登出。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"您的家伺服器不再支援舊協定。請登出並重新登入以繼續使用應用程式。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"可升級"</string>
+  <string name="banner_set_up_recovery_content">"若您遺失了所有現有裝置，則請使用復原金鑰以救援您的密碼學身份與訊息歷史紀錄。"</string>
+  <string name="banner_set_up_recovery_submit">"設定復原"</string>
+  <string name="banner_set_up_recovery_title">"設定備援以保護您的帳號"</string>
+  <string name="confirm_recovery_key_banner_message">"確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"輸入您的復原金鑰"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"忘記了您的復原金鑰？"</string>
+  <string name="confirm_recovery_key_banner_title">"您的金鑰儲存空間並未同步"</string>
+  <string name="full_screen_intent_banner_message">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
   <string name="full_screen_intent_banner_title">"提升您的通話體驗"</string>
+  <string name="screen_invites_decline_chat_message">"您確定您想要拒絕加入 %1$s 的邀請嗎？"</string>
+  <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
+  <string name="screen_invites_decline_direct_chat_message">"您確定您要拒絕此與 %1$s 的私人聊天嗎？"</string>
+  <string name="screen_invites_decline_direct_chat_title">"拒絕聊天"</string>
   <string name="screen_invites_empty_list">"沒有邀請"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀請您"</string>
+  <string name="screen_join_room_knock_sent_title">"已傳送加入請求"</string>
   <string name="screen_migration_message">"這是一次性的程序，感謝您耐心等候。"</string>
   <string name="screen_migration_title">"正在設定您的帳號。"</string>
   <string name="screen_roomlist_a11y_create_message">"建立新的對話或聊天室"</string>
+  <string name="screen_roomlist_empty_message">"從向某人傳送訊息開始。"</string>
   <string name="screen_roomlist_empty_title">"尚無聊天室。"</string>
   <string name="screen_roomlist_filter_favourites">"我的最愛"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"您可以在聊天設定中將聊天新增至收藏。
+目前，您可以取消選取篩選條件以檢視其他聊天"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"您尚無收藏聊天"</string>
   <string name="screen_roomlist_filter_invites">"邀請"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"您沒有任何擱置中的邀請。"</string>
+  <string name="screen_roomlist_filter_low_priority">"低優先度"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"您可以取消選取篩選條件以檢視其他聊天"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"您並無此選擇的聊天"</string>
   <string name="screen_roomlist_filter_people">"夥伴"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"您尚無任何私人訊息"</string>
   <string name="screen_roomlist_filter_rooms">"聊天室"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"您尚未進入任何聊天室"</string>
   <string name="screen_roomlist_filter_unreads">"未讀"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
+您沒有任何未讀的訊息！"</string>
   <string name="screen_roomlist_main_space_title">"所有聊天室"</string>
   <string name="screen_roomlist_mark_as_read">"標為已讀"</string>
   <string name="screen_roomlist_mark_as_unread">"標為未讀"</string>
+  <string name="screen_roomlist_room_directory_button_title">"瀏覽所有聊天室"</string>
   <string name="session_verification_banner_message">"您似乎正在使用新的裝置。請使用另一個裝置進行驗證，以存取您的加密訊息。"</string>
   <string name="session_verification_banner_title">"驗證這是您本人"</string>
 </resources>

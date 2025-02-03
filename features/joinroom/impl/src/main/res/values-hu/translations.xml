@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"%1$s kitiltotta a szobából."</string>
+  <string name="screen_join_room_ban_message">"Kitiltották ebből a szobából"</string>
+  <string name="screen_join_room_ban_reason">"Ok: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Kérés visszavonása"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Igen, visszavonás"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Biztos, hogy visszavonja a szobához való csatlakozási kérését?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Csatlakozási kérés visszavonása"</string>
+  <string name="screen_join_room_fail_message">"A szobához való csatlakozás sikertelen."</string>
+  <string name="screen_join_room_fail_reason">"Ebbe a szobába csak meghívóval vagy tértagsággal lehet belépni."</string>
+  <string name="screen_join_room_forget_action">"Szoba elfelejtése"</string>
+  <string name="screen_join_room_invite_required_message">"Meghívóra van szüksége ahhoz, hogy csatlakozzon ehhez a szobához"</string>
   <string name="screen_join_room_join_action">"Csatlakozás a szobához"</string>
+  <string name="screen_join_room_join_restricted_message">"A csatlakozáshoz meghívásra vagy tértagságra lehet szüksége."</string>
   <string name="screen_join_room_knock_action">"Kopogtasson a csatlakozáshoz"</string>
   <string name="screen_join_room_knock_message_description">"Üzenet (nem kötelező)"</string>
   <string name="screen_join_room_knock_sent_description">"Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz."</string>

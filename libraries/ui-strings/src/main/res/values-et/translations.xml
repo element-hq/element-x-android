@@ -310,8 +310,6 @@ Põhjus: %1$s."</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
-  <string name="screen_edit_room_address_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi."</string>
-  <string name="screen_edit_room_address_title">"Jututoa aadress"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -341,39 +339,6 @@ Põhjus: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Liitumispäring on saadetud"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Lisa jututoa aadress"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist, kuid peakasutaja või moderaator peavad sellega nõustuma."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Palu võimalust liituda"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
-Keegi teine peale jututoa liikmete ei saa sõnumeid lugeda. See võib takistada suhtlusrobotite ja/või võrgusildade toimimist.
-Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega kõik võivad liituda."</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Kas võtame krüptimise kasutusele?"</string>
-  <string name="screen_security_and_privacy_encryption_section_footer">"Kui krüptimine on kasutusel, siis seda enam väljalülitada ei saa."</string>
-  <string name="screen_security_and_privacy_encryption_section_header">"Krüptimine"</string>
-  <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututuba leida ja sellega liituda"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Huvilised võivad liituda vaid kutse olemasolul"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Vaid kutse alusel"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Ligipääs jututuppa"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Kogukondade tugi veel puudub"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Kogukonna liikmed"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Jututoa aadress"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Võimalda leida seda jututuba avalikust kataloogist otsides „%1$s“"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Nähtav jututubade avalikus kataloogis"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kõik"</string>
-  <string name="screen_security_and_privacy_room_history_section_header">"Kes võivad lugeda jututoa ajalugu"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Liikmed peale kutse saamist"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Liikmed peale selle valiku sisselülitamist"</string>
-  <string name="screen_security_and_privacy_room_publishing_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
-Lisaks võid sa jututoa avaldada oma koduserveri avalikus jututubade kataloogis."</string>
-  <string name="screen_security_and_privacy_room_publishing_section_header">"Jututoa avaldamine"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
-Lisaks on aadress vajalik, et jututuba oleks %1$s serveri avalikus jututubade kataloogis nähtav."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Jututoa nähtavus"</string>
-  <string name="screen_security_and_privacy_title">"Turvalisus ja privaatsus"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
   <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>

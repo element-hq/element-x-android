@@ -34,6 +34,7 @@
   <string name="a11y_voice_message_record">"Nagraj wiadomość głosową."</string>
   <string name="a11y_voice_message_stop_recording">"Zatrzymaj nagrywanie"</string>
   <string name="action_accept">"Akceptuj"</string>
+  <string name="action_add_caption">"Dodaj opis"</string>
   <string name="action_add_to_timeline">"Dodaj do osi czasu"</string>
   <string name="action_back">"Wróć"</string>
   <string name="action_call">"Zadzwoń"</string>
@@ -47,8 +48,10 @@
   <string name="action_confirm_password">"Potwierdź hasło"</string>
   <string name="action_continue">"Kontynuuj"</string>
   <string name="action_copy">"Kopiuj"</string>
+  <string name="action_copy_caption">"Kopiuj opis"</string>
   <string name="action_copy_link">"Kopiuj link"</string>
   <string name="action_copy_link_to_message">"Kopiuj link do wiadomości"</string>
+  <string name="action_copy_text">"Kopiuj tekst"</string>
   <string name="action_create">"Utwórz"</string>
   <string name="action_create_a_room">"Utwórz pokój"</string>
   <string name="action_deactivate">"Dezaktywuj"</string>
@@ -59,6 +62,7 @@
   <string name="action_discard">"Odrzuć"</string>
   <string name="action_done">"Gotowe"</string>
   <string name="action_edit">"Edytuj"</string>
+  <string name="action_edit_caption">"Edytuj opis"</string>
   <string name="action_edit_poll">"Edytuj ankietę"</string>
   <string name="action_enable">"Włącz"</string>
   <string name="action_end_poll">"Zakończ ankietę"</string>
@@ -93,6 +97,8 @@
   <string name="action_react">"Dodaj reakcję"</string>
   <string name="action_reject">"Odrzuć"</string>
   <string name="action_remove">"Usuń"</string>
+  <string name="action_remove_caption">"Usuń opis"</string>
+  <string name="action_remove_message">"Usuń wiadomość"</string>
   <string name="action_reply">"Odpowiedz"</string>
   <string name="action_reply_in_thread">"Odpowiedz w wątku"</string>
   <string name="action_report_bug">"Zgłoś błąd"</string>
@@ -123,8 +129,10 @@
   <string name="action_view_in_timeline">"Wyświetl na osi czasu"</string>
   <string name="action_view_source">"Wyświetl źródło"</string>
   <string name="action_yes">"Tak"</string>
+  <string name="action_yes_try_again">"Tak, spróbuj ponownie"</string>
   <string name="common_about">"O programie"</string>
   <string name="common_acceptable_use_policy">"Polityka użytkowania"</string>
+  <string name="common_adding_caption">"Dodawanie opisu"</string>
   <string name="common_advanced_settings">"Ustawienia zaawansowane"</string>
   <string name="common_analytics">"Dane analityczne"</string>
   <string name="common_appearance">"Wygląd"</string>
@@ -136,15 +144,17 @@
   <string name="common_copied_to_clipboard">"Skopiowano do schowka"</string>
   <string name="common_copyright">"Prawa autorskie"</string>
   <string name="common_creating_room">"Tworzenie pokoju…"</string>
-  <string name="common_current_user_left_room">"Opuścił pokój"</string>
+  <string name="common_current_user_left_room">"Opuszczono pokój"</string>
   <string name="common_dark">"Ciemny"</string>
   <string name="common_decryption_error">"Błąd deszyfrowania"</string>
   <string name="common_developer_options">"Opcje programisty"</string>
   <string name="common_device_id">"ID urządzenia"</string>
   <string name="common_direct_chat">"Czat prywatny"</string>
   <string name="common_do_not_show_this_again">"Nie pokazuj ponownie"</string>
+  <string name="common_downloading">"Pobieram"</string>
   <string name="common_edited_suffix">"(edytowane)"</string>
   <string name="common_editing">"Edytowanie"</string>
+  <string name="common_editing_caption">"Edytowanie opisu"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Szyfrowanie"</string>
   <string name="common_encryption_enabled">"Szyfrowanie włączone"</string>
@@ -160,6 +170,7 @@ Powód: %1$s."</string>
   <string name="common_file">"Plik"</string>
   <string name="common_file_saved_on_disk_android">"Plik zapisany do folderu Pobrane"</string>
   <string name="common_forward_message">"Przekaż wiadomość"</string>
+  <string name="common_frequently_used">"Często używane"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Zdjęcie"</string>
   <string name="common_in_reply_to">"W odpowiedzi do %1$s"</string>
@@ -249,6 +260,7 @@ Powód: %1$s."</string>
   <string name="common_unable_to_invite_title">"Nie można wysłać zaproszeń"</string>
   <string name="common_unlock">"Odblokuj"</string>
   <string name="common_unmute">"Wyłącz wyciszenie"</string>
+  <string name="common_unsupported_call">"Nieobsługiwane połączenie"</string>
   <string name="common_unsupported_event">"Nieobsługiwane zdarzenie"</string>
   <string name="common_username">"Nazwa użytkownika"</string>
   <string name="common_verification_cancelled">"Weryfikacja anulowana"</string>
@@ -256,6 +268,7 @@ Powód: %1$s."</string>
   <string name="common_verification_failed">"Weryfikacja nie powiodła się"</string>
   <string name="common_verified">"Zweryfikowano"</string>
   <string name="common_verify_device">"Weryfikuj urządzenie"</string>
+  <string name="common_verify_identity">"Zweryfikuj tożsamość"</string>
   <string name="common_video">"Film"</string>
   <string name="common_voice_message">"Wiadomość głosowa"</string>
   <string name="common_waiting">"Oczekiwanie…"</string>
@@ -280,6 +293,8 @@ Powód: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nie uzyskało uprawnienia do dostępu do twojej lokalizacji. Możesz włączyć dostęp w Ustawieniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nie ma uprawnień dostępu do Twojej lokalizacji. Włącz dostęp poniżej."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nie ma uprawnień dostępu do Twojego mikrofonu. Włącz dostęp, aby nagrać wiadomość głosową."</string>
+  <string name="error_room_address_already_exists">"Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju"</string>
+  <string name="error_room_address_invalid_symbols">"Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektóre wiadomości nie zostały wysłane"</string>
   <string name="error_unknown">"Przepraszamy, wystąpił błąd"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu."</string>
@@ -293,6 +308,7 @@ Powód: %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Wstrząśnij gniewnie, aby zgłosić błąd"</string>
   <string name="screen_media_picker_error_failed_selection">"Nie udało się wybrać multimediów. Spróbuj ponownie."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Opis może być niedostępny dla osób korzystających ze starszej wersji aplikacji."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Przesyłanie multimediów nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Naciśnij wiadomość i wybierz “%1$s”, aby dołączyć tutaj."</string>
@@ -333,4 +349,9 @@ Powód: %1$s."</string>
   <string name="screen_view_location_title">"Lokalizacja"</string>
   <string name="settings_version_number">"Wersja: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"pl"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historia wiadomości nie jest dostępna na tym urządzeniu"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Musisz zweryfikować to urządzenie, aby uzyskać dostęp do historii wiadomości"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nie masz dostępu do tej wiadomości"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nie można odszyfrować wiadomości"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Wiadomość została zablokowana, ponieważ urządzenie nie zostało zweryfikowane lub nadawca musi zweryfikować Twoją tożsamość."</string>
 </resources>

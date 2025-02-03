@@ -246,6 +246,7 @@ Anledning:%1$s."</string>
   <string name="common_username">"Användarnamn"</string>
   <string name="common_verification_cancelled">"Verifiering avbruten"</string>
   <string name="common_verification_complete">"Verifieringen slutförd"</string>
+  <string name="common_verification_failed">"Verifiering misslyckades"</string>
   <string name="common_verified">"Verifierad"</string>
   <string name="common_verify_device">"Verifiera enheten"</string>
   <string name="common_video">"Video"</string>

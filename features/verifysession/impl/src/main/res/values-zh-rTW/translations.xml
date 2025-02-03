@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"無法確認？"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"建立新的復原金鑰"</string>
   <string name="screen_identity_confirmation_subtitle">"驗證這部裝置以設定安全通訊。"</string>
   <string name="screen_identity_confirmation_title">"確認這是你本人"</string>
   <string name="screen_identity_confirmation_use_another_device">"使用另一部裝置"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"使用復原金鑰"</string>
   <string name="screen_identity_confirmed_subtitle">"您可以安全地讀取和發送訊息了，與您聊天的人也可以信任這部裝置。"</string>
   <string name="screen_identity_confirmed_title">"裝置已驗證"</string>
   <string name="screen_identity_use_another_device">"使用另一部裝置"</string>
@@ -11,7 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比對表情符號"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"確認以下數字是否與其他作業階段中顯示的數字相符。"</string>
+  <string name="screen_session_verification_compare_numbers_title">"比較數字"</string>
   <string name="screen_session_verification_complete_subtitle">"新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。"</string>
+  <string name="screen_session_verification_enter_recovery_key">"輸入復原金鑰"</string>
+  <string name="screen_session_verification_failed_subtitle">"請求逾時、請求被拒或是驗證不符。"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"為了存取被加密的歷史訊息，您需要證明這是您本人。"</string>
   <string name="screen_session_verification_open_existing_session_title">"開啟一個現存的工作階段"</string>
   <string name="screen_session_verification_positive_button_canceled">"重新嘗試驗證"</string>
@@ -19,8 +25,20 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"等待比對"</string>
   <string name="screen_session_verification_ready_subtitle">"比對一組唯一的表情符號。"</string>
   <string name="screen_session_verification_request_accepted_subtitle">"表情符號是唯一的，請相互比對，確認它們的排列順序是否相同。"</string>
+  <string name="screen_session_verification_request_details_timestamp">"已登入"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"請求逾時、請求被拒或是驗證不符。"</string>
+  <string name="screen_session_verification_request_failure_title">"驗證失敗"</string>
+  <string name="screen_session_verification_request_footer">"僅當您啟動此驗證時才繼續。"</string>
+  <string name="screen_session_verification_request_subtitle">"驗證其他裝置以保護您的訊息歷史紀錄安全。"</string>
+  <string name="screen_session_verification_request_success_subtitle">"現在，您可以在其他裝置上安全地閱讀或傳送訊息。"</string>
+  <string name="screen_session_verification_request_success_title">"已驗證裝置"</string>
+  <string name="screen_session_verification_request_title">"已請求驗證"</string>
   <string name="screen_session_verification_they_dont_match">"不一樣"</string>
   <string name="screen_session_verification_they_match">"一樣"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"從這裡開始驗證之前，請確保您在其他裝置中開啟了應用程式。"</string>
+  <string name="screen_session_verification_use_another_device_title">"在另外一個已驗證的裝置上開啟應用程式"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"您應該會在其他裝置上看到一個彈出式視窗。立刻從那裡開始驗證。"</string>
+  <string name="screen_session_verification_waiting_another_device_title">"在其他裝置上開始驗證"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"準備開始驗證，請到您的其他工作階段接受請求。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受請求"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Bekreft at du vil deaktivere kontoen din. Denne handlingen kan ikke angres."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Slett alle meldingene mine"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Advarsel: Fremtidige brukere vil kunne se ufullstendige samtaler."</string>
+  <string name="screen_deactivate_account_description">"Deaktivering av kontoen din er %1$s , det vil:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irreversibel"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Deaktiver permanent"</string>
+  <string name="screen_deactivate_account_list_item_2">"Fjern deg fra alle chatterom."</string>
+  <string name="screen_deactivate_account_list_item_3">"Slett kontoinformasjonen din fra vår identitetsserver."</string>
+  <string name="screen_deactivate_account_title">"Deaktiver kontoen"</string>
+</resources>
