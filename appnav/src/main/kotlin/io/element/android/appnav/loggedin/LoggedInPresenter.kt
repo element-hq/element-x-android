@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isConnected
+import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
@@ -76,10 +76,10 @@ class LoggedInPresenter @Inject constructor(
                 .launchIn(this)
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
-        val syncState by syncService.syncState.collectAsState()
+        val isOnline by syncService.isOnline().collectAsState()
         val showSyncSpinner by remember {
             derivedStateOf {
-                syncState.isConnected() && syncIndicator == RoomListService.SyncIndicator.Show
+                isOnline && syncIndicator == RoomListService.SyncIndicator.Show
             }
         }
         var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }

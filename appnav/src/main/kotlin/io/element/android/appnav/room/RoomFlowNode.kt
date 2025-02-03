@@ -49,7 +49,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isConnected
+import io.element.android.libraries.matrix.api.sync.isOnline
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -211,10 +211,10 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->
-        val syncState by syncService.syncState.collectAsState()
+        val isOnline by syncService.isOnline().collectAsState()
         LoadingRoomNodeView(
             state = LoadingRoomState.Loading,
-            hasNetworkConnection = syncState.isConnected(),
+            hasNetworkConnection = isOnline,
             onBackClick = { navigateUp() },
             modifier = modifier,
         )

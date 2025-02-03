@@ -71,7 +71,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isConnected
+import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -170,7 +170,7 @@ class MessagesPresenter @AssistedInject constructor(
                 showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDm && room.activeMemberCount == 1L
             }
         }
-        val syncState by syncService.syncState.collectAsState()
+        val isOnline by syncService.isOnline().collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
@@ -220,7 +220,7 @@ class MessagesPresenter @AssistedInject constructor(
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
             readReceiptBottomSheetState = readReceiptBottomSheetState,
-            hasNetworkConnection = syncState.isConnected(),
+            hasNetworkConnection = isOnline,
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
