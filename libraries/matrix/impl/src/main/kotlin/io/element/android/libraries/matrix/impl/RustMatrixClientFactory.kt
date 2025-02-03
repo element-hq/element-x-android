@@ -74,6 +74,7 @@ class RustMatrixClientFactory @Inject constructor(
 
         val syncService = client.syncService()
             .withUtdHook(UtdTracker(analyticsService))
+            .withOfflineMode()
             .finish()
 
         return RustMatrixClient(

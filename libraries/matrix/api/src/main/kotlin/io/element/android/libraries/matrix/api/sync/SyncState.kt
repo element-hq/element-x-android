@@ -14,3 +14,11 @@ enum class SyncState {
     Terminated,
     Offline,
 }
+
+fun SyncState.isConnected() = when (this) {
+    SyncState.Idle,
+    SyncState.Running,
+    SyncState.Error,
+    SyncState.Terminated -> true
+    SyncState.Offline -> false
+}

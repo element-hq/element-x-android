@@ -28,8 +28,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.RoomNavigationTarget
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -37,6 +35,8 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.isConnected
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -48,7 +48,7 @@ class JoinedRoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
 ) :
     BaseFlowNode<JoinedRoomFlowNode.NavTarget>(
         backstack = BackStack(
@@ -114,10 +114,10 @@ class JoinedRoomFlowNode @AssistedInject constructor(
 
     private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
-        val networkStatus by networkMonitor.connectivity.collectAsState()
+        val syncState by syncService.syncState.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
-            hasNetworkConnection = networkStatus == NetworkStatus.Online,
+            hasNetworkConnection = syncState.isConnected(),
             modifier = modifier,
             onBackClick = onBackClick
         )

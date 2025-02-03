@@ -30,8 +30,6 @@ import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -51,6 +49,8 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.isConnected
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -76,7 +76,7 @@ private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
     private val roomListDataSource: RoomListDataSource,
@@ -98,7 +98,7 @@ class RoomListPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser = client.userProfile.collectAsState()
-        val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+        val syncState by syncService.syncState.collectAsState()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
@@ -158,7 +158,7 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             showAvatarIndicator = showAvatarIndicator,
             snackbarMessage = snackbarMessage,
-            hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
+            hasNetworkConnection = syncState.isConnected(),
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,

@@ -15,13 +15,12 @@ import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryC
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -29,6 +28,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
@@ -293,13 +293,13 @@ class PinnedMessagesListPresenterTest {
     private fun TestScope.createPinnedMessagesListPresenter(
         navigator: PinnedMessagesListNavigator = FakePinnedMessagesListNavigator(),
         room: MatrixRoom = FakeMatrixRoom(),
-        networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
+        syncService: SyncService = FakeSyncService(),
         isFeatureEnabled: Boolean = true,
         analyticsService: AnalyticsService = FakeAnalyticsService(),
     ): PinnedMessagesListPresenter {
         val timelineProvider = PinnedEventsTimelineProvider(
             room = room,
-            networkMonitor = networkMonitor,
+            syncService = syncService,
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
             )

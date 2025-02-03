@@ -30,8 +30,6 @@ import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView
 import io.element.android.appnav.room.joined.LoadingRoomState
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
@@ -50,6 +48,8 @@ import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.isConnected
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -68,7 +68,7 @@ class RoomFlowNode @AssistedInject constructor(
     private val client: MatrixClient,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
     private val membershipObserver: RoomMembershipObserver,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
@@ -211,10 +211,10 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->
-        val networkStatus by networkMonitor.connectivity.collectAsState()
+        val syncState by syncService.syncState.collectAsState()
         LoadingRoomNodeView(
             state = LoadingRoomState.Loading,
-            hasNetworkConnection = networkStatus == NetworkStatus.Online,
+            hasNetworkConnection = syncState.isConnected(),
             onBackClick = { navigateUp() },
             modifier = modifier,
         )
