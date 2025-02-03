@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"您需要聊天室地址才能在目錄中顯示它。"</string>
+  <string name="screen_edit_room_address_title">"聊天室地址"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。"</string>
   <string name="screen_polls_history_title">"所有投票"</string>
   <string name="screen_room_change_permissions_administrators">"僅限管理員"</string>
   <string name="screen_room_change_permissions_ban_people">"管理黑名單"</string>
@@ -11,12 +14,20 @@
   <string name="screen_room_change_permissions_messages_and_content">"訊息與內容"</string>
   <string name="screen_room_change_permissions_moderators">"管理員和版主"</string>
   <string name="screen_room_change_permissions_remove_people">"踢出成員"</string>
+  <string name="screen_room_change_permissions_room_avatar">"變更聊天室大頭照"</string>
   <string name="screen_room_change_permissions_room_details">"聊天室資訊"</string>
   <string name="screen_room_change_permissions_room_name">"變更聊天室名稱"</string>
   <string name="screen_room_change_permissions_room_topic">"變更聊天室主題"</string>
   <string name="screen_room_change_permissions_send_messages">"傳送訊息"</string>
   <string name="screen_room_change_role_administrators_title">"編輯管理員"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"您將無法復原此動作。您正將使用者提昇至與您相同的權力等級。"</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"要新增管理員嗎？"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"降級"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"當您自行降級時，您將無法復原此變更，若您是聊天室中的最後一位特權使用者，則無法重新獲得權限。"</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"將自己降級？"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s（擱置中）"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"（擱置中）"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"管理員自動擁有版主權限"</string>
   <string name="screen_room_change_role_moderators_title">"編輯版主"</string>
   <string name="screen_room_change_role_section_administrators">"管理員"</string>
   <string name="screen_room_change_role_section_moderators">"版主"</string>
@@ -30,7 +41,9 @@
   <string name="screen_room_details_badge_not_encrypted">"未加密"</string>
   <string name="screen_room_details_badge_public">"公開的聊天室"</string>
   <string name="screen_room_details_edit_room_title">"編輯聊天室"</string>
+  <string name="screen_room_details_edition_error">"發生未知錯誤，無法變更資訊。"</string>
   <string name="screen_room_details_edition_error_title">"無法更新聊天室"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"訊息透過鎖定保護。只有您與收件者才有解鎖它們的唯一金鑰。"</string>
   <string name="screen_room_details_encryption_enabled_title">"訊息已加密"</string>
   <string name="screen_room_details_error_loading_notification_settings">"載入通知設定時發生錯誤。"</string>
   <string name="screen_room_details_error_muting">"無法關閉聊天室通知，請再試一次。"</string>
@@ -38,11 +51,15 @@
   <string name="screen_room_details_invite_people_title">"邀請夥伴"</string>
   <string name="screen_room_details_leave_conversation_title">"離開對話"</string>
   <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
+  <string name="screen_room_details_media_gallery_title">"媒體與檔案"</string>
   <string name="screen_room_details_notification_mode_custom">"自訂"</string>
   <string name="screen_room_details_notification_mode_default">"預設"</string>
   <string name="screen_room_details_notification_title">"通知"</string>
+  <string name="screen_room_details_pinned_events_row_title">"釘選訊息"</string>
+  <string name="screen_room_details_requests_to_join_title">"請求加入"</string>
   <string name="screen_room_details_roles_and_permissions">"身份與權限"</string>
   <string name="screen_room_details_room_name_label">"聊天室名稱"</string>
+  <string name="screen_room_details_security_and_privacy_title">"安全與隱私"</string>
   <string name="screen_room_details_security_title">"安全性"</string>
   <string name="screen_room_details_share_room_title">"分享聊天室"</string>
   <string name="screen_room_details_title">"聊天室資訊"</string>
@@ -59,6 +76,8 @@
   <string name="screen_room_member_list_manage_member_ban">"踢出並加入黑名單"</string>
   <string name="screen_room_member_list_manage_member_remove">"踢出聊天室"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"踢出並加入黑名單"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"僅移除成員"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"移除成員並禁止未來再度加入？"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"解除黑名單"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"如果收到邀請，他們能再次加入聊天室。"</string>
   <string name="screen_room_member_list_manage_member_unban_title">"解除黑名單"</string>
@@ -71,12 +90,20 @@
   <string name="screen_room_member_list_role_moderator">"版主"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成員"</string>
   <string name="screen_room_member_list_unbanning_user">"正在解除黑名單 %1$s"</string>
+  <string name="screen_room_notification_settings_allow_custom">"允許自訂設定"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"啟用此功能將會覆寫您的預設設定"</string>
+  <string name="screen_room_notification_settings_custom_settings_title">"在此聊天中通知我"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"您可以在您的 %1$s 中變更它。"</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"全域設定"</string>
   <string name="screen_room_notification_settings_default_setting_title">"預設"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"移除自訂設定"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"載入通知設定時發生錯誤。"</string>
   <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"在此聊天適中，通知我"</string>
   <string name="screen_room_roles_and_permissions_admins">"管理員"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"變更我的身份"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"降級為普通成員"</string>
@@ -91,4 +118,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"身份"</string>
   <string name="screen_room_roles_and_permissions_room_details">"聊天室資訊"</string>
   <string name="screen_room_roles_and_permissions_title">"身份與權限"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"新增聊天室地址"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"任何人都可以要求加入聊天室，但管理員必須接受請求。"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"要求加入"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"是的，啟用加密"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"啟用後就無法停用聊天室的加密，只有受邀的聊天室成員或加入聊天室後才能看到訊息歷史紀錄。
+除了聊天室成員以外，任何人都不能讀取訊息。這可能會讓機器人與橋接無法正常運作。
+我們不建議對任何人都可以找到並加入的聊天室啟用加密。"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"啟用加密？"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"一旦啟用就無法停用加密。"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"啟用端到端加密"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以找到並加入"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"人們僅有受到邀請時才能加入"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"僅限邀請"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"聊天室存取權"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"目前不支援空間"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"空間成員"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"您需要聊天室地址才能在聊天室目錄中顯示。"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"聊天室地址"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允許透過搜尋 %1$s 公開聊天室目錄找到此聊天室"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公開聊天室目錄中可見"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"誰可以讀取歷史紀錄"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"僅在成員被邀請後"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"選取此選項後僅限成員"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。
+您可以選擇在家伺服器公開聊天室目錄中發佈您的聊天室。"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"聊天室發佈"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。
+若要讓聊天室在 %1$s 公開聊天室目錄中可見，地址也是必要的。"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"聊天室能見度"</string>
+  <string name="screen_security_and_privacy_title">"安全與隱私"</string>
 </resources>

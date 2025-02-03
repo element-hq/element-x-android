@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s 上次使用時當機了。您想要與我們分享當機報告嗎？"</string>
+  <string name="rageshake_detection_dialog_content">"您似乎正在沮喪地搖晃手機。您要開啟臭蟲回報畫面嗎？"</string>
+  <string name="settings_rageshake">"憤怒搖晃"</string>
+  <string name="settings_rageshake_detection_threshold">"偵測閾值"</string>
+</resources>

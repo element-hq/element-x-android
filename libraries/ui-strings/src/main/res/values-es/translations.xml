@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Mostrar contraseña"</string>
   <string name="a11y_start_call">"Iniciar llamada"</string>
   <string name="a11y_user_menu">"Menú de usuario"</string>
+  <string name="a11y_view_details">"Mostrar detalles"</string>
   <string name="a11y_voice_message_record">"Grabar mensaje de voz"</string>
   <string name="a11y_voice_message_stop_recording">"Detener grabación"</string>
   <string name="action_accept">"Aceptar"</string>
@@ -40,10 +41,12 @@
   <string name="action_close">"Cerrar"</string>
   <string name="action_complete_verification">"Completar verificación"</string>
   <string name="action_confirm">"Confirmar"</string>
+  <string name="action_confirm_password">"Confirmar contraseña"</string>
   <string name="action_continue">"Continuar"</string>
   <string name="action_copy">"Copiar"</string>
   <string name="action_copy_link">"Copiar enlace"</string>
   <string name="action_copy_link_to_message">"Copiar enlace al mensaje"</string>
+  <string name="action_copy_text">"Copiar texto"</string>
   <string name="action_create">"Crear"</string>
   <string name="action_create_a_room">"Crear una sala"</string>
   <string name="action_decline">"Rechazar"</string>
@@ -59,6 +62,7 @@
   <string name="action_forgot_password">"¿Olvidaste tu contraseña?"</string>
   <string name="action_forward">"Reenviar"</string>
   <string name="action_go_back">"Volver atrás"</string>
+  <string name="action_ignore">"Ignorar"</string>
   <string name="action_invite">"Invitar"</string>
   <string name="action_invite_friends">"Invitar personas"</string>
   <string name="action_invite_friends_to_app">"Invita a alguien a %1$s"</string>
@@ -211,6 +215,7 @@
   <string name="common_topic">"Tema"</string>
   <string name="common_topic_placeholder">"¿De qué trata esta sala?"</string>
   <string name="common_unable_to_decrypt">"No se puede descifrar"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Enviado desde un dispositivo no seguro"</string>
   <string name="common_unable_to_invite_message">"Las invitaciones no se pudieron enviar a uno o más usuarios."</string>
   <string name="common_unable_to_invite_title">"No se pudo enviar la(s) invitación(es)"</string>
   <string name="common_unlock">"Desbloquear"</string>

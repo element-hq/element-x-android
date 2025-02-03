@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"此檔案將會從聊天室中移除，成員將無法存取該檔案。"</string>
+  <string name="screen_media_browser_delete_confirmation_title">"刪除檔案？"</string>
+  <string name="screen_media_browser_download_error_message">"檢查您的網際網路連線，然後再試一次。"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"上傳此聊天室的文件、音訊檔與語音訊息將會在此顯示。"</string>
+  <string name="screen_media_browser_files_empty_state_title">"尚未上傳檔案"</string>
+  <string name="screen_media_browser_list_loading_files">"正在載入檔案……"</string>
+  <string name="screen_media_browser_list_loading_media">"正在載入媒體……"</string>
+  <string name="screen_media_browser_list_mode_files">"檔案"</string>
+  <string name="screen_media_browser_list_mode_media">"媒體"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"上傳到此聊天室的圖片與影片將在此處顯示。"</string>
+  <string name="screen_media_browser_media_empty_state_title">"尚未上傳媒體"</string>
+  <string name="screen_media_browser_title">"媒體與檔案"</string>
+  <string name="screen_media_details_file_format">"檔案格式"</string>
+  <string name="screen_media_details_filename">"檔案名稱"</string>
+  <string name="screen_media_details_redact_confirmation_message">"此檔案將會從聊天室中移除，成員將無法存取該檔案。"</string>
+  <string name="screen_media_details_redact_confirmation_title">"刪除檔案？"</string>
+  <string name="screen_media_details_uploaded_by">"上傳者："</string>
+  <string name="screen_media_details_uploaded_on">"上傳於"</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Ten plik zostanie usunięty z pokoju, a członkowie nie będą mieli do niego dostępu."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Usunąć plik?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumenty, pliki audio i wiadomości głosowe przesłane do tego pokoju będą wyświetlane tutaj."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Jeszcze nie przesłano plików"</string>
+  <string name="screen_media_browser_list_loading_files">"Wczytywanie plików…"</string>
+  <string name="screen_media_browser_list_loading_media">"Wczytywanie mediów…"</string>
+  <string name="screen_media_browser_list_mode_files">"Pliki"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Obrazy i filmy przesyłane w tym pokoju wyświetlą się tutaj."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Jeszcze nie przesłano żadnych mediów"</string>
+  <string name="screen_media_browser_title">"Media i pliki"</string>
+  <string name="screen_media_details_file_format">"Format pliku"</string>
+  <string name="screen_media_details_filename">"Nazwa pliku"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Plik zostanie usunięty z pokoju, a członkowie nie będą mieli do niego dostępu."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Usunąć plik?"</string>
+  <string name="screen_media_details_uploaded_by">"Przesłane przez"</string>
+  <string name="screen_media_details_uploaded_on">"Przesłane w dniu"</string>
+</resources>

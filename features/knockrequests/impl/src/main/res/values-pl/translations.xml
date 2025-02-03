@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Tak, akceptuj wszystkie"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Czy na pewno chcesz zaakceptować wszystkie prośby o dołączenie?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Akceptuj wszystkie prośby"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Akceptuj wszystkie"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Nie udało się zaakceptować wszystkich próśb. Czy chcesz spróbować ponownie?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Nie udało się zaakceptować wszystkich próśb"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Akceptowanie wszystkich próśb o dołączenie"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Nie udało się zaakceptować prośby. Czy chcesz spróbować ponownie?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Nie udało się zaakceptować prośby"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Akceptuję prośbę o dołączenie"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Tak, odrzuć i zbanuj"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Czy na pewno chcesz odrzucić i zbanować %1$s? Użytkownik nie będzie mógł ponownie poprosić o dostęp do tego pokoju."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Odrzuć i zbanuj dostęp"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Odrzucanie i banowanie dostępu"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Tak, odrzuć"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Czy na pewno chcesz odrzucić %1$s prośbę o dołączenie do tego pokoju?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Odrzuć dostęp"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odrzuć i zbanuj"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Nie udało się odrzucić prośby. Czy chcesz spróbować ponownie?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Nie udało się odrzucić prośby"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Odrzucanie prośby o dołączenie"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Kiedy ktoś poprosi o dołączenie do pokoju, będziesz mógł zobaczyć jego prośbę tutaj."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Brak oczekujących próśb o dołączenie"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Wczytywanie próśb o dołączenie…"</string>
+  <string name="screen_knock_requests_list_title">"Prośby o dołączenie"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d inny chce dołączyć do pokoju"</item>
+    <item quantity="few">"%1$s +%2$d innych chce dołączyć do pokoju"</item>
+    <item quantity="many">"%1$s +%2$d innych chce dołączyć do pokoju"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Wyświetl wszystkie"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Akceptuj"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s chce dołączyć do tego pokoju"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Wyświetl"</string>
+</resources>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Tämä tiedosto poistetaan huoneesta, eikä jäsenillä ole enää pääsyä siihen."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Poistetaanko tiedosto?"</string>
+  <string name="screen_media_browser_download_error_message">"Tarkista internet-yhteytesi ja yritä uudelleen."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Tähän huoneeseen ladatut asiakirjat, äänitiedostot ja ääniviestit näkyvät täällä."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ei vielä ladattuja tiedostoja"</string>
   <string name="screen_media_browser_list_loading_files">"Ladataan tiedostoja…"</string>
   <string name="screen_media_browser_list_loading_media">"Ladataan mediaa…"</string>
   <string name="screen_media_browser_list_mode_files">"Tiedostot"</string>
@@ -9,6 +14,10 @@
   <string name="screen_media_browser_title">"Media ja tiedostot"</string>
   <string name="screen_media_details_file_format">"Tiedostomuoto"</string>
   <string name="screen_media_details_filename">"Tiedostonimi"</string>
-  <string name="screen_media_details_uploaded_by">"Lähettäjä:"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Ei enää näytettäviä tiedostoja"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Ei enää näytettävää mediaa"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Tämä tiedosto poistetaan huoneesta, eikä jäsenillä ole enää pääsyä siihen."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Poistetaanko tiedosto?"</string>
+  <string name="screen_media_details_uploaded_by">"Lähettäjä"</string>
   <string name="screen_media_details_uploaded_on">"Lähetetty"</string>
 </resources>

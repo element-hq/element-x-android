@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Questo file verrà rimosso dalla stanza e i membri non ne avranno accesso."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Eliminare il file?"</string>
+  <string name="screen_media_browser_download_error_message">"Controlla la tua connessione Internet e riprova."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"I documenti, i file audio e i messaggi vocali caricati in questa stanza verranno visualizzati qui."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Nessun file ancora caricato"</string>
+  <string name="screen_media_browser_list_loading_files">"Caricamento dei file…"</string>
+  <string name="screen_media_browser_list_loading_media">"Caricamento dei file multimediali…"</string>
   <string name="screen_media_browser_list_mode_files">"File"</string>
   <string name="screen_media_browser_list_mode_media">"Contenuti multimediali"</string>
   <string name="screen_media_browser_media_empty_state_subtitle">"Le immagini e i video caricati in questa stanza verranno mostrati qui."</string>
   <string name="screen_media_browser_media_empty_state_title">"Nessun file multimediale ancora caricato"</string>
   <string name="screen_media_browser_title">"File e contenuti multimediali"</string>
+  <string name="screen_media_details_file_format">"Formato del file"</string>
+  <string name="screen_media_details_filename">"Nome del file"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Nessun altro file da mostrare"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Non ci sono più contenuti multimediali da mostrare"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Questo file verrà rimosso dalla stanza e i membri non ne avranno accesso."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Eliminare il file?"</string>
+  <string name="screen_media_details_uploaded_by">"Caricato da"</string>
+  <string name="screen_media_details_uploaded_on">"Caricato il"</string>
 </resources>

@@ -4,5 +4,15 @@
   <string name="screen_signout_confirmation_dialog_submit">"登出"</string>
   <string name="screen_signout_confirmation_dialog_title">"登出"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
+  <string name="screen_signout_key_backup_disabled_title">"您已關閉備份"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"當您離線時，您的金鑰仍在備份中。請重新連線才能在您登出前備份金鑰。"</string>
+  <string name="screen_signout_key_backup_offline_title">"您的金鑰仍在備份中"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"請等待此動作完成後再登出。"</string>
+  <string name="screen_signout_key_backup_ongoing_title">"您的金鑰仍在備份中"</string>
   <string name="screen_signout_preference_item">"登出"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
+  <string name="screen_signout_recovery_disabled_title">"未設定復原金鑰"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
+  <string name="screen_signout_save_recovery_key_title">"您儲存復原金鑰了嗎？"</string>
 </resources>

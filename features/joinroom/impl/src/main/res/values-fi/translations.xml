@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"%1$s antoi sinulle porttikiellon tästä huoneesta."</string>
+  <string name="screen_join_room_ban_message">"Sinulle on annettu porttikielto tästä huoneesta"</string>
+  <string name="screen_join_room_ban_reason">"Syy: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Peruuta pyyntö"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Kyllä, peruuta"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Haluatko varmasti peruuttaa pyyntösi liittyä tähän huoneeseen?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Peruuta liittymispyyntö"</string>
+  <string name="screen_join_room_fail_message">"Huoneeseen liittyminen epäonnistui."</string>
+  <string name="screen_join_room_fail_reason">"Tämä huone on tarkoitettu vain kutsutuille, tai siihen saattaa liittyä rajoituksia tilatasolla."</string>
+  <string name="screen_join_room_forget_action">"Unohda tämä huone"</string>
+  <string name="screen_join_room_invite_required_message">"Tarvitset kutsun liittyäksesi tähän huoneeseen"</string>
   <string name="screen_join_room_join_action">"Liity huoneeseen"</string>
+  <string name="screen_join_room_join_restricted_message">"Saatat tarvita kutsun tai olla tilan jäsen, jotta voit liittyä."</string>
   <string name="screen_join_room_knock_action">"Lähetä liittymispyyntö"</string>
   <string name="screen_join_room_knock_message_description">"Viesti (valinnainen)"</string>
   <string name="screen_join_room_knock_sent_description">"Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään."</string>
