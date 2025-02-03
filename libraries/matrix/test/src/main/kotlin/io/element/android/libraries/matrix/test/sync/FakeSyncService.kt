@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSyncService(
-    syncStateFlow: MutableStateFlow<SyncState> = MutableStateFlow(SyncState.Idle)
+    initialSyncState: SyncState = SyncState.Idle,
 ) : SyncService {
+    private val syncStateFlow: MutableStateFlow<SyncState> = MutableStateFlow(initialSyncState)
+
     var startSyncLambda: () -> Result<Unit> = { Result.success(Unit) }
     override suspend fun startSync(): Result<Unit> {
         return startSyncLambda()
@@ -26,4 +28,8 @@ class FakeSyncService(
     }
 
     override val syncState: StateFlow<SyncState> = syncStateFlow
+
+    suspend fun emitSyncState(syncState: SyncState) {
+        syncStateFlow.emit(syncState)
+    }
 }

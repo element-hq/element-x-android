@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.pinned
 
-import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.RoomScope
@@ -15,6 +14,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +31,7 @@ import javax.inject.Inject
 @SingleIn(RoomScope::class)
 class PinnedEventsTimelineProvider @Inject constructor(
     private val room: MatrixRoom,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
     private val featureFlagService: FeatureFlagService,
 ) : TimelineProvider {
     private val _timelineStateFlow: MutableStateFlow<AsyncData<Timeline>> =
@@ -63,9 +63,9 @@ class PinnedEventsTimelineProvider @Inject constructor(
     private suspend fun onActive() = coroutineScope {
         combine(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents),
-            networkMonitor.connectivity
+            syncService.syncState,
         ) { isEnabled, _ ->
-            // do not use connectivity here as data can be loaded from cache, it's just to trigger retry if needed
+            // do not use syncState here as data can be loaded from cache, it's just to trigger retry if needed
             isEnabled
         }
             .onEach { isFeatureEnabled ->

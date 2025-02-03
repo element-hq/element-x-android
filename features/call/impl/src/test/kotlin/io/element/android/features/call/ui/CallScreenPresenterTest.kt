@@ -41,7 +41,6 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestScope
@@ -82,7 +81,7 @@ class CallScreenPresenterTest {
     @Test
     fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
         val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
+        val syncService = FakeSyncService(SyncState.Running)
         val fakeRoom = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
         val client = FakeMatrixClient(syncService = syncService).apply {
             givenGetRoomResult(A_ROOM_ID, fakeRoom)
@@ -247,9 +246,8 @@ class CallScreenPresenterTest {
     fun `present - automatically starts the Matrix client sync when on RoomCall`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
-        val syncStateFlow = MutableStateFlow(SyncState.Idle)
         val startSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = syncStateFlow).apply {
+        val syncService = FakeSyncService(SyncState.Idle).apply {
             this.startSyncLambda = startSyncLambda
         }
         val matrixClient = FakeMatrixClient(syncService = syncService)
@@ -276,9 +274,8 @@ class CallScreenPresenterTest {
     fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
-        val syncStateFlow = MutableStateFlow(SyncState.Running)
         val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = syncStateFlow).apply {
+        val syncService = FakeSyncService(SyncState.Running).apply {
             this.stopSyncLambda = stopSyncLambda
         }
         val matrixClient = FakeMatrixClient(syncService = syncService)

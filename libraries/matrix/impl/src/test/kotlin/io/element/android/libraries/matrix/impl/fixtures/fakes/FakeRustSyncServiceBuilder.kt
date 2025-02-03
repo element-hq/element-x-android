@@ -14,5 +14,6 @@ import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 
 class FakeRustSyncServiceBuilder : SyncServiceBuilder(NoPointer) {
     override suspend fun withUtdHook(delegate: UnableToDecryptDelegate): SyncServiceBuilder = this
+    override fun withOfflineMode(): SyncServiceBuilder = this
     override suspend fun finish(): SyncService = FakeRustSyncService()
 }

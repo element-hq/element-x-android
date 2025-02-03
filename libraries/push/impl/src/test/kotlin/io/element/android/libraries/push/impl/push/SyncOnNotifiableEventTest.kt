@@ -36,7 +36,6 @@ import org.junit.Test
 
 class SyncOnNotifiableEventTest {
     private val timelineItems = MutableStateFlow<List<MatrixTimelineItem>>(emptyList())
-    private val syncStateFlow = MutableStateFlow(SyncState.Idle)
     private val startSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val subscribeToSyncLambda = lambdaRecorder<Unit> { }
@@ -49,7 +48,7 @@ class SyncOnNotifiableEventTest {
         liveTimeline = liveTimeline,
         subscribeToSyncLambda = subscribeToSyncLambda
     )
-    private val syncService = FakeSyncService(syncStateFlow).also {
+    private val syncService = FakeSyncService(SyncState.Idle).also {
         it.startSyncLambda = startSyncLambda
         it.stopSyncLambda = stopSyncLambda
     }
@@ -115,7 +114,7 @@ class SyncOnNotifiableEventTest {
         timelineItems.emit(
             listOf(MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()))
         )
-        syncStateFlow.emit(SyncState.Running)
+        syncService.emitSyncState(SyncState.Running)
         sut(notifiableEvent)
 
         assert(startSyncLambda).isCalledOnce()

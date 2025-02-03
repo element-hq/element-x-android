@@ -14,14 +14,13 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
-import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -29,6 +28,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
@@ -73,7 +73,7 @@ class LoggedInPresenterTest {
     @Test
     fun `present - show sync spinner`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createLoggedInPresenter(roomListService, NetworkStatus.Online)
+        val presenter = createLoggedInPresenter(roomListService, SyncState.Running)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -94,7 +94,7 @@ class LoggedInPresenterTest {
         val encryptionService = FakeEncryptionService()
         val presenter = LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService),
-            networkMonitor = FakeNetworkMonitor(NetworkStatus.Online),
+            syncService = FakeSyncService(initialSyncState = SyncState.Running),
             pushService = FakePushService(),
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
@@ -574,7 +574,7 @@ class LoggedInPresenterTest {
 
     private fun TestScope.createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
-        networkStatus: NetworkStatus = NetworkStatus.Offline,
+        syncState: SyncState = SyncState.Running,
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
         encryptionService: EncryptionService = FakeEncryptionService(),
@@ -584,7 +584,7 @@ class LoggedInPresenterTest {
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
-            networkMonitor = FakeNetworkMonitor(networkStatus),
+            syncService = FakeSyncService(initialSyncState = syncState),
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
