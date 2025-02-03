@@ -19,5 +19,6 @@ class AppStateMapperKtTest {
         assertThat(SyncServiceState.RUNNING.toSyncState()).isEqualTo(SyncState.Running)
         assertThat(SyncServiceState.TERMINATED.toSyncState()).isEqualTo(SyncState.Terminated)
         assertThat(SyncServiceState.ERROR.toSyncState()).isEqualTo(SyncState.Error)
+        assertThat(SyncServiceState.OFFLINE.toSyncState()).isEqualTo(SyncState.Offline)
     }
 }
