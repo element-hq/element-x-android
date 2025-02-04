@@ -29,7 +29,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  */
 
 private const val versionYear = 25
-private const val versionMonth = 1
+private const val versionMonth = 2
 
 // Note: must be in [0,99]
 private const val versionReleaseNumber = 0
