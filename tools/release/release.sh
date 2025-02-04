@@ -2,8 +2,8 @@
 
 # Copyright 2023-2024 New Vector Ltd.
 #
-# SPDX-License-Identifier: AGPL-3.0-only
-# Please see LICENSE in the repository root for full details.
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+# Please see LICENSE files in the repository root for full details.
 
 # do not exit when any command fails (issue with git flow)
 set +e
@@ -94,19 +94,29 @@ git pull
 printf "\n================================================================================\n"
 # Guessing version to propose a default version
 versionsFile="./plugins/src/main/kotlin/Versions.kt"
-versionMajorCandidate=$(grep "val versionMajor" ${versionsFile} | cut  -d " " -f6)
-versionMinorCandidate=$(grep "val versionMinor" ${versionsFile} | cut  -d " " -f6)
-versionPatchCandidate=$(grep "val versionPatch" ${versionsFile} | cut  -d " " -f6)
-versionCandidate="${versionMajorCandidate}.${versionMinorCandidate}.${versionPatchCandidate}"
+# Get current year on 2 digits
+versionYearCandidate=$(date +%y)
+currentVersionMonth=$(grep "val versionMonth" ${versionsFile} | cut  -d " " -f6)
+# Get current month on 2 digits
+versionMonthCandidate=$(date +%m)
+versionMonthCandidateNoLeadingZero=$(echo ${versionMonthCandidate} | sed 's/^0//')
+currentVersionReleaseNumber=$(grep "val versionReleaseNumber" ${versionsFile} | cut  -d " " -f6)
+# if the current month is the same as the current version, we increment the release number, else we reset it to 0
+if [[ ${currentVersionMonth} -eq ${versionMonthCandidateNoLeadingZero} ]]; then
+  versionReleaseNumberCandidate=$((currentVersionReleaseNumber + 1))
+else
+  versionReleaseNumberCandidate=0
+fi
+versionCandidate="${versionYearCandidate}.${versionMonthCandidate}.${versionReleaseNumberCandidate}"
 
-read -p "Please enter the release version (example: ${versionCandidate}). Just press enter if ${versionCandidate} is correct. " version
+read -p "Please enter the release version (example: ${versionCandidate}). Format must be 'YY.MM.x' or 'YY.MM.xy'. Just press enter if ${versionCandidate} is correct. " version
 version=${version:-${versionCandidate}}
 
-# extract major, minor and patch for future use
-versionMajor=$(echo "${version}" | cut  -d "." -f1)
-versionMinor=$(echo "${version}" | cut  -d "." -f2)
-versionPatch=$(echo "${version}" | cut  -d "." -f3)
-nextPatchVersion=$((versionPatch + 1))
+# extract year, month and release number for future use
+versionYear=$(echo "${version}" | cut  -d "." -f1)
+versionMonth=$(echo "${version}" | cut  -d "." -f2)
+versionMonthNoLeadingZero=$(echo ${versionMonth} | sed 's/^0//')
+versionReleaseNumber=$(echo "${version}" | cut  -d "." -f3)
 
 printf "\n================================================================================\n"
 printf "Starting the release ${version}\n"
@@ -122,20 +132,17 @@ fi
 # Ensure version is OK
 versionsFileBak="${versionsFile}.bak"
 cp ${versionsFile} ${versionsFileBak}
-sed "s/private const val versionMajor = .*/private const val versionMajor = ${versionMajor}/" ${versionsFileBak} > ${versionsFile}
-sed "s/private const val versionMinor = .*/private const val versionMinor = ${versionMinor}/" ${versionsFile}    > ${versionsFileBak}
-sed "s/private const val versionPatch = .*/private const val versionPatch = ${versionPatch}/" ${versionsFileBak} > ${versionsFile}
+sed "s/private const val versionYear = .*/private const val versionYear = ${versionYear}/" ${versionsFileBak} > ${versionsFile}
+sed "s/private const val versionMonth = .*/private const val versionMonth = ${versionMonthNoLeadingZero}/" ${versionsFile}    > ${versionsFileBak}
+sed "s/private const val versionReleaseNumber = .*/private const val versionReleaseNumber = ${versionReleaseNumber}/" ${versionsFileBak} > ${versionsFile}
 rm ${versionsFileBak}
 
-# This commit may have no effect because generally we do not change the version during the release.
 git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Creating fastlane file...\n"
-printf -v versionMajor2Digits "%02d" "${versionMajor}"
-printf -v versionMinor2Digits "%02d" "${versionMinor}"
-printf -v versionPatch2Digits "%02d" "${versionPatch}"
-fastlaneFile="4${versionMajor2Digits}${versionMinor2Digits}${versionPatch2Digits}0.txt"
+printf -v versionReleaseNumber2Digits "%02d" "${versionReleaseNumber}"
+fastlaneFile="20${versionYear}${versionMonth}${versionReleaseNumber2Digits}0.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: TODO.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > "${fastlanePathFile}"
 
@@ -162,19 +169,6 @@ fi
 printf "\n================================================================================\n"
 printf "Checking out develop...\n"
 git checkout develop
-
-# Set next version
-printf "\n================================================================================\n"
-printf "Setting next version on file '${versionsFile}'...\n"
-cp ${versionsFile} ${versionsFileBak}
-sed "s/private const val versionPatch = .*/private const val versionPatch = ${nextPatchVersion}/" ${versionsFileBak} > ${versionsFile}
-rm ${versionsFileBak}
-
-printf "\n================================================================================\n"
-read -p "I have updated the versions to prepare the next release, please check that the change are correct and press enter so I can commit. "
-
-printf "Committing...\n"
-git commit -a -m 'version++'
 
 printf "\n================================================================================\n"
 printf "The GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain should have start a new run.\n"

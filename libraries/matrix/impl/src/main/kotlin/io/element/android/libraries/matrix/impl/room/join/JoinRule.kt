@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.room.join
@@ -19,5 +19,17 @@ fun RustJoinRule.map(): JoinRule {
         is RustJoinRule.Restricted -> JoinRule.Restricted(rules.map { it.map() })
         is RustJoinRule.Custom -> JoinRule.Custom(repr)
         is RustJoinRule.KnockRestricted -> JoinRule.KnockRestricted(rules.map { it.map() })
+    }
+}
+
+fun JoinRule.map(): RustJoinRule {
+    return when (this) {
+        JoinRule.Public -> RustJoinRule.Public
+        JoinRule.Private -> RustJoinRule.Private
+        JoinRule.Knock -> RustJoinRule.Knock
+        JoinRule.Invite -> RustJoinRule.Invite
+        is JoinRule.Restricted -> RustJoinRule.Restricted(rules.map { it.map() })
+        is JoinRule.Custom -> RustJoinRule.Custom(value)
+        is JoinRule.KnockRestricted -> RustJoinRule.KnockRestricted(rules.map { it.map() })
     }
 }

@@ -13,7 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
-  debug:
+  build:
     name: Build APKs
     runs-on: ubuntu-latest
     strategy:
@@ -45,6 +45,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+          ELEMENT_ANDROID_SENTRY_DSN: ${{ secrets.ELEMENT_ANDROID_SENTRY_DSN }}
         run: ./gradlew :app:assembleGplayDebug app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         if: ${{ matrix.variant == 'debug' }}
@@ -54,7 +55,17 @@ jobs:
           path: |
             app/build/outputs/apk/gplay/debug/*-universal-debug.apk
             app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
-      - uses: rnkdsh/action-upload-diawi@v1.5.5
+      - name: Upload x86_64 APK for Maestro
+        if: ${{ matrix.variant == 'debug' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-apk-maestro
+          path: |
+            app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
+          retention-days: 5
+          overwrite: true
+          if-no-files-found: error
+      - uses: rnkdsh/action-upload-diawi@v1.5.6
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true

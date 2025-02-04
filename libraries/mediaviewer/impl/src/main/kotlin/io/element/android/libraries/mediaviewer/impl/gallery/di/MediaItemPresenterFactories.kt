@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery.di
@@ -15,7 +15,7 @@ import dagger.multibindings.Multibinds
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import javax.inject.Inject
 
 /**

@@ -26,6 +26,10 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Invite"
 - tapOn: "Back"
 - tapOn: "aRoomName"
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "People"
 - tapOn: "People"
 # assert there's 1 member and 2 invitees
 - tapOn: "Back"

@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
@@ -12,6 +12,7 @@ package io.element.android.features.preferences.impl.developer
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.logout.test.FakeLogoutUseCase
+import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
@@ -52,11 +53,13 @@ class DeveloperSettingsPresenterTest {
                 assertThat(state.rageshakeState.isEnabled).isFalse()
                 assertThat(state.rageshakeState.isSupported).isTrue()
                 assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)
+                assertThat(state.tracingLogLevel).isEqualTo(AsyncData.Uninitialized)
             }
             awaitItem().also { state ->
                 assertThat(state.features).isNotEmpty()
                 val numberOfModifiableFeatureFlags = FeatureFlags.entries.count { it.isFinished.not() }
                 assertThat(state.features).hasSize(numberOfModifiableFeatureFlags)
+                assertThat(state.tracingLogLevel.dataOrNull()).isEqualTo(LogLevelItem.INFO)
             }
             awaitItem().also { state ->
                 assertThat(state.cacheSize).isInstanceOf(AsyncData.Success::class.java)
@@ -196,6 +199,22 @@ class DeveloperSettingsPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.hideImagesAndVideos).isFalse()
                 assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - changing tracing log level`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.tracingLogLevel.dataOrNull()).isEqualTo(LogLevelItem.INFO)
+                state.eventSink(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.TRACE))
+            }
+            awaitItem().also { state ->
+                assertThat(state.tracingLogLevel.dataOrNull()).isEqualTo(LogLevelItem.TRACE)
             }
         }
     }

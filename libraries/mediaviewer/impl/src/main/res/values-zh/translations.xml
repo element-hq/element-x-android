@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"此文件将从房间中删除，并且成员将无法访问它。"</string>
+  <string name="screen_media_browser_delete_confirmation_title">"删除文件？"</string>
+  <string name="screen_media_browser_download_error_message">"检查你的互联网连接并重试。"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"上传到此房间的文档、音频文件和语音消息将在此处显示。"</string>
+  <string name="screen_media_browser_files_empty_state_title">"尚未上传任何文件"</string>
+  <string name="screen_media_browser_list_loading_files">"正在加载文件…"</string>
+  <string name="screen_media_browser_list_loading_media">"正在加载媒体…"</string>
+  <string name="screen_media_browser_list_mode_files">"文件"</string>
+  <string name="screen_media_browser_list_mode_media">"媒体"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"上传到此房间的图像和视频将在此处显示。"</string>
+  <string name="screen_media_browser_media_empty_state_title">"尚未上传任何媒体"</string>
+  <string name="screen_media_browser_title">"媒体和文件"</string>
+  <string name="screen_media_details_file_format">"文件格式"</string>
+  <string name="screen_media_details_filename">"文件名"</string>
+  <string name="screen_media_details_no_more_files_to_show">"没有更多文件可显示了"</string>
+  <string name="screen_media_details_no_more_media_to_show">"没有更多媒体可显示了"</string>
+  <string name="screen_media_details_redact_confirmation_message">"此文件将从房间中删除，并且成员将无法访问它。"</string>
+  <string name="screen_media_details_redact_confirmation_title">"删除文件？"</string>
+  <string name="screen_media_details_uploaded_by">"上传者："</string>
+  <string name="screen_media_details_uploaded_on">"上传于"</string>
+</resources>

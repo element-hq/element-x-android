@@ -31,9 +31,11 @@
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
+  <string name="a11y_view_details">"Переглянути подробиці"</string>
   <string name="a11y_voice_message_record">"Записати голосове повідомлення."</string>
   <string name="a11y_voice_message_stop_recording">"Припинити запис"</string>
   <string name="action_accept">"Прийняти"</string>
+  <string name="action_add_caption">"Додати підпис"</string>
   <string name="action_add_to_timeline">"Додати до стрічки"</string>
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Зателефонувати"</string>
@@ -47,8 +49,10 @@
   <string name="action_confirm_password">"Підтвердіть пароль"</string>
   <string name="action_continue">"Продовжити"</string>
   <string name="action_copy">"Скопіювати"</string>
+  <string name="action_copy_caption">"Копіювати підпис"</string>
   <string name="action_copy_link">"Скопіювати посилання"</string>
   <string name="action_copy_link_to_message">"Скопіювати посилання на повідомлення"</string>
+  <string name="action_copy_text">"Скопіювати текст"</string>
   <string name="action_create">"Створити"</string>
   <string name="action_create_a_room">"Створити кімнату"</string>
   <string name="action_deactivate">"Деактивувати"</string>
@@ -59,6 +63,7 @@
   <string name="action_discard">"Відкинути"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редагувати"</string>
+  <string name="action_edit_caption">"Редагувати підпис"</string>
   <string name="action_edit_poll">"Редагувати опитування"</string>
   <string name="action_enable">"Увімкнути"</string>
   <string name="action_end_poll">"Завершити опитування"</string>
@@ -93,6 +98,8 @@
   <string name="action_react">"Реакція"</string>
   <string name="action_reject">"Відхилити"</string>
   <string name="action_remove">"Вилучити"</string>
+  <string name="action_remove_caption">"Вилучити підпис"</string>
+  <string name="action_remove_message">"Вилучити повідомлення"</string>
   <string name="action_reply">"Відповісти"</string>
   <string name="action_reply_in_thread">"Відповісти в гілці"</string>
   <string name="action_report_bug">"Повідомити про помилку"</string>
@@ -123,8 +130,10 @@
   <string name="action_view_in_timeline">"Переглянути на шкалі часу"</string>
   <string name="action_view_source">"Переглянути джерело"</string>
   <string name="action_yes">"Так"</string>
+  <string name="action_yes_try_again">"Так, повторити спробу"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
+  <string name="common_adding_caption">"Додавання підпису"</string>
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
   <string name="common_analytics">"Аналітика"</string>
   <string name="common_appearance">"Тема"</string>
@@ -143,8 +152,11 @@
   <string name="common_device_id">"Ідентифікатор пристрою"</string>
   <string name="common_direct_chat">"Особиста бесіда"</string>
   <string name="common_do_not_show_this_again">"Не показувати це знову"</string>
+  <string name="common_download_failed">"Не вдалося завантажити"</string>
+  <string name="common_downloading">"Завантаження"</string>
   <string name="common_edited_suffix">"(відредаговано)"</string>
   <string name="common_editing">"Редагування"</string>
+  <string name="common_editing_caption">"Редагування підпису"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption">"Шифрування"</string>
   <string name="common_encryption_enabled">"Шифрування ввімкнено"</string>
@@ -158,6 +170,8 @@
   <string name="common_favourite">"Обране"</string>
   <string name="common_favourited">"Обране"</string>
   <string name="common_file">"Файл"</string>
+  <string name="common_file_deleted">"Файл видалено"</string>
+  <string name="common_file_saved">"Файл збережено"</string>
   <string name="common_file_saved_on_disk_android">"Файл збережений у Завантаження"</string>
   <string name="common_forward_message">"Переслати повідомлення"</string>
   <string name="common_frequently_used">"Частовживані"</string>
@@ -250,6 +264,7 @@
   <string name="common_unable_to_invite_title">"Не вдалося надіслати запрошення"</string>
   <string name="common_unlock">"Розблокувати"</string>
   <string name="common_unmute">"Увімкнути звук"</string>
+  <string name="common_unsupported_call">"Непідтриманий виклик"</string>
   <string name="common_unsupported_event">"Непідтримувана подія"</string>
   <string name="common_username">"Ім\'я користувача"</string>
   <string name="common_verification_cancelled">"Верифікацію скасовано"</string>
@@ -266,6 +281,8 @@
   <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s, схоже, змінилася. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s схоже, змінилася. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Верифіковано особистість %1$s %2$s змінилася. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Відкликати верифікацію"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>
@@ -282,6 +299,8 @@
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкніть доступ нижче."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не має доступу до вашого мікрофона. Надайте доступ, щоб записати голосове повідомлення."</string>
+  <string name="error_room_address_already_exists">"Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати"</string>
+  <string name="error_room_address_invalid_symbols">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Деякі повідомлення не були надіслані"</string>
   <string name="error_unknown">"Вибачте, сталася помилка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>
@@ -295,6 +314,7 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
@@ -335,4 +355,9 @@
   <string name="screen_view_location_title">"Розташування"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"uk"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Історичні повідомлення недоступні на цьому пристрої"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Щоб отримати доступ до історичних повідомлень, потрібно верифікувати цей пристрій"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас немає доступу до цього повідомлення"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Неможливо розшифрувати повідомлення"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Це повідомлення заблоковано оскільки ви не верифікували свій пристрій, або тому, що відправнику потрібно верифікувати вашу особистість."</string>
 </resources>

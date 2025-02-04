@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.local
@@ -27,6 +27,7 @@ fun LocalMediaView(
     bottomPaddingInPixels: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isDisplayed: Boolean = true,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
     mediaInfo: MediaInfo? = localMedia?.info,
 ) {
@@ -39,6 +40,7 @@ fun LocalMediaView(
             onClick = onClick,
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
+            isDisplayed = isDisplayed,
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
@@ -51,6 +53,7 @@ fun LocalMediaView(
             onClick = onClick,
         )
         mimeType.isMimeTypeAudio() -> MediaAudioView(
+            isDisplayed = isDisplayed,
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,

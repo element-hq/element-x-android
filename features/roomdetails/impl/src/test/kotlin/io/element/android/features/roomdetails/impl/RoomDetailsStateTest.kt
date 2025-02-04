@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -13,12 +13,14 @@ import org.junit.Test
 
 class RoomDetailsStateTest {
     @Test
-    fun `room not public not encrypted should have no badges`() {
+    fun `room not public not encrypted should have not encrypted badge`() {
         val sut = aRoomDetailsState(
             isPublic = false,
             isEncrypted = false,
         )
-        assertThat(sut.roomBadges).isEmpty()
+        assertThat(sut.roomBadges).isEqualTo(
+            persistentListOf(RoomBadge.NOT_ENCRYPTED)
+        )
     }
 
     @Test

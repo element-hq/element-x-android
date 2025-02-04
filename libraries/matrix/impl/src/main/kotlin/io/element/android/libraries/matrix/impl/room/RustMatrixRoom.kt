@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.room
@@ -38,11 +38,14 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -51,10 +54,13 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
+import io.element.android.libraries.matrix.impl.room.history.map
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
+import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
@@ -76,6 +82,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.AllowedMessageTypes
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
@@ -83,6 +90,8 @@ import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
+import org.matrix.rustcomponents.sdk.TimelineConfiguration
+import org.matrix.rustcomponents.sdk.TimelineFocus
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -98,6 +107,7 @@ import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
+@Suppress("LargeClass")
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,
@@ -206,10 +216,16 @@ class RustMatrixRoom(
 
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.timelineFocusedOnEvent(
-                eventId = eventId.value,
-                numContextEvents = 50u,
-                internalIdPrefix = "focus_$eventId",
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = TimelineFocus.Event(
+                        eventId = eventId.value,
+                        numContextEvents = 50u,
+                    ),
+                    allowedMessageTypes = AllowedMessageTypes.All,
+                    internalIdPrefix = "focus_$eventId",
+                    dateDividerMode = DateDividerMode.DAILY,
+                )
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
             }
@@ -224,10 +240,16 @@ class RustMatrixRoom(
 
     override suspend fun pinnedEventsTimeline(): Result<Timeline> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.pinnedEventsTimeline(
-                internalIdPrefix = "pinned_events",
-                maxEventsToLoad = 100u,
-                maxConcurrentRequests = 10u,
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = TimelineFocus.PinnedEvents(
+                        maxEventsToLoad = 100u,
+                        maxConcurrentRequests = 10u,
+                    ),
+                    allowedMessageTypes = AllowedMessageTypes.All,
+                    internalIdPrefix = "pinned_events",
+                    dateDividerMode = DateDividerMode.DAILY,
+                )
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
@@ -238,19 +260,34 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun mediaTimeline(): Result<Timeline> = withContext(roomDispatcher) {
+    override suspend fun mediaTimeline(
+        eventId: EventId?,
+    ): Result<Timeline> = withContext(roomDispatcher) {
+        val focus = if (eventId != null) {
+            TimelineFocus.Event(
+                eventId = eventId.value,
+                numContextEvents = 50u,
+            )
+        } else {
+            TimelineFocus.Live
+        }
         runCatching {
-            innerRoom.messageFilteredTimeline(
-                internalIdPrefix = "MediaGallery_",
-                allowedMessageTypes = listOf(
-                    RoomMessageEventMessageType.FILE,
-                    RoomMessageEventMessageType.IMAGE,
-                    RoomMessageEventMessageType.VIDEO,
-                    RoomMessageEventMessageType.AUDIO,
-                ),
-                dateDividerMode = DateDividerMode.MONTHLY,
+            innerRoom.timelineWithConfiguration(
+                configuration = TimelineConfiguration(
+                    focus = focus,
+                    allowedMessageTypes = AllowedMessageTypes.Only(
+                        types = listOf(
+                            RoomMessageEventMessageType.FILE,
+                            RoomMessageEventMessageType.IMAGE,
+                            RoomMessageEventMessageType.VIDEO,
+                            RoomMessageEventMessageType.AUDIO,
+                        )
+                    ),
+                    internalIdPrefix = "MediaGallery_",
+                    dateDividerMode = DateDividerMode.MONTHLY,
+                )
             ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.MEDIA)
+                createTimeline(inner, mode = if (eventId != null) Timeline.Mode.FOCUSED_ON_EVENT else Timeline.Mode.MEDIA)
             }
         }.onFailure {
             if (it is CancellationException) {
@@ -276,7 +313,7 @@ class RustMatrixRoom(
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
-    override val alias: RoomAlias?
+    override val canonicalAlias: RoomAlias?
         get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
 
     override val alternativeAliases: List<RoomAlias>
@@ -329,7 +366,7 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(roomDispatcher) {
         val currentState = _roomNotificationSettingsStateFlow.value
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
@@ -345,7 +382,7 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(coroutineDispatchers.io) {
+    override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(roomDispatcher) {
         runCatching {
             RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
         }
@@ -429,56 +466,56 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserInvite(userId.value)
         }
     }
 
-    override suspend fun canUserKick(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserKick(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserKick(userId.value)
         }
     }
 
-    override suspend fun canUserBan(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserBan(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserBan(userId.value)
         }
     }
 
-    override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserRedactOwn(userId.value)
         }
     }
 
-    override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserRedactOther(userId.value)
         }
     }
 
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserSendState(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserSendMessage(userId.value, type.map())
         }
     }
 
-    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserTriggerRoomNotification(userId.value)
         }
     }
 
-    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
-        return runCatching {
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
             innerRoom.canUserPinUnpin(userId.value)
         }
     }
@@ -676,8 +713,10 @@ class RustMatrixRoom(
         return liveTimeline.sendVoiceMessage(file, audioInfo, waveform, progressCallback)
     }
 
-    override suspend fun typingNotice(isTyping: Boolean) = runCatching {
-        innerRoom.typingNotice(isTyping)
+    override suspend fun typingNotice(isTyping: Boolean) = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.typingNotice(isTyping)
+        }
     }
 
     override suspend fun generateWidgetWebViewUrl(
@@ -685,32 +724,42 @@ class RustMatrixRoom(
         clientId: String,
         languageTag: String?,
         theme: String?,
-    ) = runCatching {
-        widgetSettings.generateWidgetWebViewUrl(innerRoom, clientId, languageTag, theme)
+    ) = withContext(roomDispatcher) {
+        runCatching {
+            widgetSettings.generateWidgetWebViewUrl(innerRoom, clientId, languageTag, theme)
+        }
     }
 
-    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = runCatching {
-        RustWidgetDriver(
-            widgetSettings = widgetSettings,
-            room = innerRoom,
-            widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
-                override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                    return getElementCallRequiredPermissions(sessionId.value, deviceId.value)
-                }
-            },
-        )
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> {
+        return runCatching {
+            RustWidgetDriver(
+                widgetSettings = widgetSettings,
+                room = innerRoom,
+                widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
+                    override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
+                        return getElementCallRequiredPermissions(sessionId.value, deviceId.value)
+                    }
+                },
+            )
+        }
     }
 
-    override suspend fun getPermalink(): Result<String> = runCatching {
-        innerRoom.matrixToPermalink()
+    override suspend fun getPermalink(): Result<String> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.matrixToPermalink()
+        }
     }
 
-    override suspend fun getPermalinkFor(eventId: EventId): Result<String> = runCatching {
-        innerRoom.matrixToEventPermalink(eventId.value)
+    override suspend fun getPermalinkFor(eventId: EventId): Result<String> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.matrixToEventPermalink(eventId.value)
+        }
     }
 
-    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = runCatching {
-        innerRoom.sendCallNotificationIfNeeded()
+    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.sendCallNotificationIfNeeded()
+        }
     }
 
     override suspend fun setSendQueueEnabled(enabled: Boolean) {
@@ -722,35 +771,93 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = runCatching {
-        Timber.d("saveComposerDraft: $composerDraft into $roomId")
-        innerRoom.saveComposerDraft(composerDraft.into())
+    override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            Timber.d("saveComposerDraft: $composerDraft into $roomId")
+            innerRoom.saveComposerDraft(composerDraft.into())
+        }
     }
 
-    override suspend fun loadComposerDraft(): Result<ComposerDraft?> = runCatching {
-        Timber.d("loadComposerDraft for $roomId")
-        innerRoom.loadComposerDraft()?.into()
+    override suspend fun loadComposerDraft(): Result<ComposerDraft?> = withContext(roomDispatcher) {
+        runCatching {
+            Timber.d("loadComposerDraft for $roomId")
+            innerRoom.loadComposerDraft()?.into()
+        }
     }
 
-    override suspend fun clearComposerDraft(): Result<Unit> = runCatching {
-        Timber.d("clearComposerDraft for $roomId")
-        innerRoom.clearComposerDraft()
+    override suspend fun clearComposerDraft(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            Timber.d("clearComposerDraft for $roomId")
+            innerRoom.clearComposerDraft()
+        }
     }
 
-    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle) = runCatching {
-        innerRoom.ignoreDeviceTrustAndResend(
-            devices = devices.entries.associate { entry ->
-                entry.key.value to entry.value.map { it.value }
-            },
-            sendHandle = (sendHandle as RustSendHandle).inner,
-        )
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, sendHandle: SendHandle) = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.ignoreDeviceTrustAndResend(
+                devices = devices.entries.associate { entry ->
+                    entry.key.value to entry.value.map { it.value }
+                },
+                sendHandle = (sendHandle as RustSendHandle).inner,
+            )
+        }
     }
 
-    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle) = runCatching {
-        innerRoom.withdrawVerificationAndResend(
-            userIds = userIds.map { it.value },
-            sendHandle = (sendHandle as RustSendHandle).inner,
-        )
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle) = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.withdrawVerificationAndResend(
+                userIds = userIds.map { it.value },
+                sendHandle = (sendHandle as RustSendHandle).inner,
+            )
+        }
+    }
+
+    override suspend fun updateCanonicalAlias(canonicalAlias: RoomAlias?, alternativeAliases: List<RoomAlias>): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateCanonicalAlias(canonicalAlias?.value, alternativeAliases.map { it.value })
+        }
+    }
+
+    override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.publishRoomAliasInRoomDirectory(roomAlias.value)
+        }
+    }
+
+    override suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.removeRoomAliasFromRoomDirectory(roomAlias.value)
+        }
+    }
+
+    override suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateRoomVisibility(roomVisibility.map())
+        }
+    }
+
+    override suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateHistoryVisibility(historyVisibility.map())
+        }
+    }
+
+    override suspend fun getRoomVisibility(): Result<RoomVisibility> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.getRoomVisibility().map()
+        }
+    }
+
+    override suspend fun enableEncryption(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.enableEncryption()
+        }
+    }
+
+    override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.updateJoinRules(joinRule.map())
+        }
     }
 
     private fun createTimeline(

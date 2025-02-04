@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -141,6 +141,21 @@ class RoomDetailsViewTest {
                 onPinnedMessagesClick = callback,
             )
             rule.clickOn(R.string.screen_room_details_pinned_events_row_title)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on security and privacy invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canShowSecurityAndPrivacy = true,
+                ),
+                onSecurityAndPrivacyClick = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_security_and_privacy_title)
         }
     }
 
@@ -298,6 +313,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
     onKnockRequestsClick: () -> Unit = EnsureNeverCalled(),
+    onSecurityAndPrivacyClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -315,6 +331,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             onJoinCallClick = onJoinCallClick,
             onPinnedMessagesClick = onPinnedMessagesClick,
             onKnockRequestsClick = onKnockRequestsClick,
+            onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
         )
     }
 }

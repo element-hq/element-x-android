@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -24,6 +24,7 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.UserId
@@ -31,6 +32,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -75,6 +77,12 @@ class RoomDetailsPresenterTest {
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
+            mapOf(
+                FeatureFlags.NotificationSettings.key to true,
+                FeatureFlags.Knock.key to false,
+            )
+        ),
         isPinnedMessagesFeatureEnabled: Boolean = true,
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
@@ -89,9 +97,6 @@ class RoomDetailsPresenterTest {
                 )
             }
         }
-        val featureFlagService = FakeFeatureFlagService(
-            mapOf(FeatureFlags.NotificationSettings.key to true)
-        )
         return RoomDetailsPresenter(
             client = matrixClient,
             room = room,
@@ -133,6 +138,7 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
             assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isNull()
+            assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
         }
     }
 
@@ -270,8 +276,7 @@ class RoomDetailsPresenterTest {
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC -> Result.success(true)
                     StateEventType.ROOM_NAME -> Result.success(false)
-                    StateEventType.ROOM_AVATAR -> Result.failure(Throwable("Whelp"))
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = { Result.success(false) },
@@ -297,10 +302,10 @@ class RoomDetailsPresenterTest {
             isDirect = true,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_TOPIC -> Result.success(true)
-                    StateEventType.ROOM_NAME -> Result.success(true)
+                    StateEventType.ROOM_TOPIC,
+                    StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(true)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = { Result.success(false) },
@@ -343,7 +348,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME -> Result.success(true)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = { Result.success(true) },
@@ -376,10 +381,10 @@ class RoomDetailsPresenterTest {
         val room = aMatrixRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_TOPIC -> Result.success(true)
-                    StateEventType.ROOM_NAME -> Result.success(true)
+                    StateEventType.ROOM_TOPIC,
+                    StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(true)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = {
@@ -403,10 +408,10 @@ class RoomDetailsPresenterTest {
         val room = aMatrixRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_TOPIC -> Result.success(false)
-                    StateEventType.ROOM_NAME -> Result.success(false)
+                    StateEventType.ROOM_TOPIC,
+                    StateEventType.ROOM_NAME,
                     StateEventType.ROOM_AVATAR -> Result.success(false)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = {
@@ -432,7 +437,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_NAME -> Result.success(true)
                     StateEventType.ROOM_TOPIC -> Result.success(false)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = {
@@ -458,7 +463,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.ROOM_AVATAR,
                     StateEventType.ROOM_TOPIC,
                     StateEventType.ROOM_NAME -> Result.success(true)
-                    else -> lambdaError()
+                    else -> Result.failure(Throwable("Whelp"))
                 }
             },
             canInviteResult = {
@@ -630,6 +635,59 @@ class RoomDetailsPresenterTest {
                 assertThat(state.isFavorite).isFalse()
             }
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - show knock requests`() = runTest {
+        val room = aMatrixRoom(
+            emitRoomInfo = true,
+            canInviteResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            canSendStateResult = { _, _ -> Result.success(true) },
+            joinRule = JoinRule.Knock,
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            mapOf(FeatureFlags.Knock.key to false)
+        )
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            featureFlagService = featureFlagService,
+        )
+        presenter.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(canShowKnockRequests).isFalse()
+            }
+            featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
+            with(awaitItem()) {
+                assertThat(canShowKnockRequests).isTrue()
+            }
+            room.givenRoomInfo(aRoomInfo(joinRule = JoinRule.Private))
+            with(awaitItem()) {
+                assertThat(canShowKnockRequests).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - show security and privacy`() = runTest {
+        val room = aMatrixRoom(
+            canInviteResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            canSendStateResult = { _, _ -> Result.success(true) },
+        )
+        val featureFlagService = FakeFeatureFlagService()
+        val presenter = createRoomDetailsPresenter(room = room, featureFlagService = featureFlagService)
+        presenter.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(canShowSecurityAndPrivacy).isFalse()
+            }
+            featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
+            with(awaitItem()) {
+                assertThat(canShowSecurityAndPrivacy).isTrue()
+            }
         }
     }
 }

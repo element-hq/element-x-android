@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.di
@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 
@@ -43,6 +44,11 @@ object SessionMatrixModule {
     @Provides
     fun providesRoomListService(matrixClient: MatrixClient): RoomListService {
         return matrixClient.roomListService
+    }
+
+    @Provides
+    fun providesSyncService(matrixClient: MatrixClient): SyncService {
+        return matrixClient.syncService()
     }
 
     @Provides

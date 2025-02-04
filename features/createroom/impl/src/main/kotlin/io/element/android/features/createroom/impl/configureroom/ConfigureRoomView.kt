@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.createroom.impl.configureroom
@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -58,6 +57,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -142,10 +142,12 @@ fun ConfigureRoomView(
                 )
                 RoomAddressField(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    address = state.config.roomVisibility.roomAddress,
+                    address = state.config.roomVisibility.roomAddress.value,
                     homeserverName = state.homeserverName,
                     addressValidity = state.roomAddressValidity,
                     onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
+                    label = stringResource(R.string.screen_create_room_room_address_section_title),
+                    supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
                 )
                 Spacer(Modifier)
             }
@@ -316,47 +318,6 @@ private fun RoomAccessOptions(
             )
         }
     }
-}
-
-@Composable
-private fun RoomAddressField(
-    address: RoomAddress,
-    homeserverName: String,
-    addressValidity: RoomAddressValidity,
-    onAddressChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    TextField(
-        modifier = modifier.fillMaxWidth(),
-        value = address.value,
-        label = stringResource(R.string.screen_create_room_room_address_section_title),
-        leadingIcon = {
-            Text(
-                text = "#",
-                style = ElementTheme.typography.fontBodyLgMedium,
-                color = ElementTheme.colors.textSecondary,
-            )
-        },
-        trailingIcon = {
-            Text(
-                text = homeserverName,
-                style = ElementTheme.typography.fontBodyLgMedium,
-                color = ElementTheme.colors.textSecondary,
-            )
-        },
-        supportingText = when (addressValidity) {
-            RoomAddressValidity.InvalidSymbols -> {
-                stringResource(R.string.screen_create_room_room_address_invalid_symbols_error_description)
-            }
-            RoomAddressValidity.NotAvailable -> {
-                stringResource(R.string.screen_create_room_room_address_not_available_error_description)
-            }
-            else -> stringResource(R.string.screen_create_room_room_address_section_footer)
-        },
-        isError = addressValidity.isError(),
-        onValueChange = onAddressChange,
-        singleLine = true,
-    )
 }
 
 @PreviewWithLargeHeight

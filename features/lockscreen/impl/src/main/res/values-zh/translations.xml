@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"生物识别认证"</string>
   <string name="screen_app_lock_biometric_unlock">"生物识别解锁"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"使用生物识别解锁"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"确认生物特征"</string>
   <string name="screen_app_lock_forgot_pin">"忘记 PIN 码？"</string>
   <string name="screen_app_lock_settings_change_pin">"更改 PIN 码"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"允许生物识别解锁"</string>

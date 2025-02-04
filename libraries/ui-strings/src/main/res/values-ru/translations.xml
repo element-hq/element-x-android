@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_view_details">"Подробнее"</string>
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
   <string name="action_accept">"Разрешить"</string>
@@ -129,6 +130,7 @@
   <string name="action_view_in_timeline">"Просмотр в хронологии"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
+  <string name="action_yes_try_again">"Да, попробуйте еще раз"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_adding_caption">"Добавление подписи"</string>
@@ -150,6 +152,7 @@
   <string name="common_device_id">"Идентификатор устройства"</string>
   <string name="common_direct_chat">"Личный чат"</string>
   <string name="common_do_not_show_this_again">"Не показывать больше"</string>
+  <string name="common_download_failed">"Ошибка скачивания"</string>
   <string name="common_downloading">"Загрузка"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
@@ -167,6 +170,8 @@
   <string name="common_favourite">"Избранное"</string>
   <string name="common_favourited">"Избранное"</string>
   <string name="common_file">"Файл"</string>
+  <string name="common_file_deleted">"Файл удалён"</string>
+  <string name="common_file_saved">"Файл сохранен"</string>
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>
   <string name="common_frequently_used">"Часто используемые"</string>
@@ -179,6 +184,7 @@
   <string name="common_light">"Светлое"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <string name="common_loading_more">"Загрузить больше…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>
     <item quantity="few">"%1$d участников"</item>
@@ -276,6 +282,8 @@
   <string name="crypto_identity_change_pin_violation">"Судя по всему, идентификатор %1$s изменился. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Пользователь %1$s сменил имя пользователя на %2$s. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s подтвержденная личность изменилась. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Вывод верификации"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
@@ -292,6 +300,8 @@
   <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
   <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
+  <string name="error_room_address_already_exists">"Такой адрес комнаты уже существует, попробуйте отредактировать поле адреса комнаты или изменить название комнаты"</string>
+  <string name="error_room_address_invalid_symbols">"Некоторые символы не допускаются. Поддерживаются только буквы, цифры и следующие символы! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве."</string>
@@ -347,6 +357,7 @@
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ru"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"На этом устройстве недоступна история сообщений"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Вам необходимо проверить это устройство для доступа к истории сообщений"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас нет доступа к этому сообщению"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано по причине того, что вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность."</string>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Tento súbor bude odstránený z miestnosti a členovia k nemu nebudú mať prístup."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Vymazať súbor?"</string>
+  <string name="screen_media_browser_download_error_message">"Skontrolujte svoje pripojenie k internetu a skúste to znova."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Tu sa zobrazia dokumenty, zvukové súbory a hlasové správy nahrané do tejto miestnosti."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Zatiaľ nie sú nahrané žiadne súbory"</string>
+  <string name="screen_media_browser_list_loading_files">"Načítavajú sa súbory…"</string>
+  <string name="screen_media_browser_list_loading_media">"Načítava sa médium…"</string>
+  <string name="screen_media_browser_list_mode_files">"Súbory"</string>
+  <string name="screen_media_browser_list_mode_media">"Médiá"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Tu sa zobrazia obrázky a videá nahrané do tejto miestnosti."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Žiadne médiá zatiaľ neboli nahrané"</string>
+  <string name="screen_media_browser_title">"Médiá a súbory"</string>
+  <string name="screen_media_details_file_format">"Formát súboru"</string>
+  <string name="screen_media_details_filename">"Názov súboru"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Žiadne ďalšie súbory na zobrazenie"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Žiadne ďalšie médiá na zobrazenie"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Tento súbor bude odstránený z miestnosti a členovia k nemu nebudú mať prístup."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Vymazať súbor?"</string>
+  <string name="screen_media_details_uploaded_by">"Nahrané používateľom"</string>
+  <string name="screen_media_details_uploaded_on">"Nahrané dňa"</string>
+</resources>

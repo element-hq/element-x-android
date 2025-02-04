@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_roomlist_filter_favourites">"Favorites"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"You can add a chat to your favorites in the chat settings.
+For now, you can deselect filters in order to see your other chats"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"You don’t have favorite chats yet"</string>
+</resources>

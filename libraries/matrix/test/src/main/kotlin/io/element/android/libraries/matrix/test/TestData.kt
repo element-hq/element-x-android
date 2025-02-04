@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.test
@@ -48,6 +48,7 @@ val A_THREAD_ID = ThreadId("\$aThreadId")
 val A_THREAD_ID_2 = ThreadId("\$aThreadId2")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
+val AN_EVENT_ID_3 = EventId("\$anEventId3")
 val A_ROOM_ALIAS = RoomAlias("#alias1:domain")
 val A_TRANSACTION_ID = TransactionId("aTransactionId")
 val A_DEVICE_ID = DeviceId("ILAKNDNASDLK")

@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -48,6 +48,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isPublic = false),
             aRoomDetailsState(heroes = aMatrixUserList()),
             aRoomDetailsState(pinnedMessagesCount = 3),
+            aRoomDetailsState(knockRequestsCount = null, canShowKnockRequests = true),
+            aRoomDetailsState(knockRequestsCount = 4, canShowKnockRequests = true),
             // Add other state here
         )
 }
@@ -105,6 +107,7 @@ fun aRoomDetailsState(
     pinnedMessagesCount: Int? = null,
     canShowKnockRequests: Boolean = false,
     knockRequestsCount: Int? = null,
+    canShowSecurityAndPrivacy: Boolean = true,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -131,6 +134,7 @@ fun aRoomDetailsState(
     pinnedMessagesCount = pinnedMessagesCount,
     canShowKnockRequests = canShowKnockRequests,
     knockRequestsCount = knockRequestsCount,
+    canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
     eventSink = eventSink
 )
 

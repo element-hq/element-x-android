@@ -1,21 +1,22 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.appnav.loggedin
 
 import androidx.annotation.VisibleForTesting
-import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,20 +28,21 @@ const val SEND_QUEUES_RETRY_DELAY_MILLIS = 500L
 @SingleIn(SessionScope::class)
 class SendQueues @Inject constructor(
     private val matrixClient: MatrixClient,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
 ) {
+    /**
+     * Launches the send queues retry mechanism in the given [coroutineScope].
+     * Makes sure to re-enable all send queues when the network status is [NetworkStatus.Online].
+     */
+    @OptIn(FlowPreview::class)
     fun launchIn(coroutineScope: CoroutineScope) {
-        networkMonitor.connectivity
-            .onEach { networkStatus ->
-                matrixClient.setAllSendQueuesEnabled(enabled = networkStatus == NetworkStatus.Online)
-            }
-            .launchIn(coroutineScope)
-
-        @OptIn(FlowPreview::class)
-        matrixClient.sendQueueDisabledFlow()
+        combine(
+            syncService.syncState,
+            matrixClient.sendQueueDisabledFlow(),
+        ) { syncState, _ -> syncState }
             .debounce(SEND_QUEUES_RETRY_DELAY_MILLIS)
-            .onEach { _: RoomId ->
-                if (networkMonitor.connectivity.value == NetworkStatus.Online) {
+            .onEach { syncState ->
+                if (syncState == SyncState.Running) {
                     matrixClient.setAllSendQueuesEnabled(enabled = true)
                 }
             }

@@ -1,8 +1,8 @@
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package extension
@@ -13,6 +13,7 @@ import org.gradle.api.provider.ValueSourceParameters
 import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.util.Properties
 import javax.inject.Inject
 
 abstract class GitRevisionValueSource : ValueSource<String, ValueSourceParameters.None> {
@@ -47,3 +48,10 @@ private fun ExecOperations.runCommand(cmd: String): String {
     }
     return String(outputStream.toByteArray()).trim()
 }
+
+fun Project.readLocalProperty(name: String): String? = Properties().apply {
+    try {
+        load(rootProject.file("local.properties").reader())
+    } catch (ignored: IOException) {
+    }
+}.getProperty(name)

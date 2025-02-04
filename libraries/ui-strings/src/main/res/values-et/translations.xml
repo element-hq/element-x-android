@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
+  <string name="a11y_view_details">"Vaata üksikasju"</string>
   <string name="a11y_voice_message_record">"Salvesta häälsõnum"</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
   <string name="action_accept">"Nõustu"</string>
@@ -127,6 +128,7 @@
   <string name="action_view_in_timeline">"Vaata ajajoonel"</string>
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>
+  <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
@@ -148,6 +150,7 @@
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
   <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
+  <string name="common_download_failed">"Allaladimine ei õnnestunud"</string>
   <string name="common_downloading">"Laadime alla"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
   <string name="common_editing">"Muutmine"</string>
@@ -165,6 +168,8 @@ Põhjus: %1$s."</string>
   <string name="common_favourite">"Lemmik"</string>
   <string name="common_favourited">"Lemmikuks määratud"</string>
   <string name="common_file">"Fail"</string>
+  <string name="common_file_deleted">"Fail on kustutatud"</string>
+  <string name="common_file_saved">"Fail on salvestatud"</string>
   <string name="common_file_saved_on_disk_android">"Fail on salvestatud kausta Allalaadimised"</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
@@ -177,6 +182,7 @@ Põhjus: %1$s."</string>
   <string name="common_light">"Hele"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_loading">"Laadime…"</string>
+  <string name="common_loading_more">"Laadime veel…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d liige"</item>
     <item quantity="other">"%1$d liiget"</item>
@@ -272,6 +278,8 @@ Põhjus: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet tundub olema muutunud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet tundub olema muutunud. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on muutunud. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Võta verifitseerimine tagasi"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
@@ -288,6 +296,8 @@ Põhjus: %1$s."</string>
   <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
   <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
+  <string name="error_room_address_already_exists">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
+  <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
   <string name="error_unknown">"Vabandust, ilmnes viga"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
@@ -342,6 +352,7 @@ Põhjus: %1$s."</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul puudub ligipääs sellele sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>

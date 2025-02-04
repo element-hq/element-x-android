@@ -173,7 +173,7 @@ But comment in PR from the community are always appreciated!
 4. Fork consideration. Will configuration of forks be easy? Some documentation may help in some cases.
 5. We are building long term products. "Quick and dirty" code must be avoided.
 6. The PR includes new tests for the added code, updated test for the existing code
-7. All PRs from external contributors **MUST** include a sign-off. It's in the checklist, and sometimes it's checked by the submitter, but there is actually no sign-off. In this case, ask nicely for a sign-off and request changes (do not approve the PR, even if everything else is fine).
+7. All commit authors must have signed the CLA. Please open https://cla-assistant.io/element-hq/element-x-android to agree to the CLA.
 
 ### Rules
 

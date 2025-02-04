@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -101,10 +101,10 @@ private fun VideoInfoRow(
             imageVector = CompoundIcons.VideoCallSolid(),
             contentDescription = null
         )
-        if (video.duration != null) {
+        video.mediaInfo.duration?.let { duration ->
             Spacer(Modifier.weight(1f))
             Text(
-                text = video.duration,
+                text = duration,
                 style = ElementTheme.typography.fontBodySmMedium,
                 color = ElementTheme.colors.textPrimary,
             )

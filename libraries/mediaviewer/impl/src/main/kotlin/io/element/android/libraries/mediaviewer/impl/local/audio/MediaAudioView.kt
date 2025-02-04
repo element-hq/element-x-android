@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.local.audio
@@ -83,9 +83,11 @@ fun MediaAudioView(
     localMedia: LocalMedia?,
     info: MediaInfo?,
     modifier: Modifier = Modifier,
+    isDisplayed: Boolean = true,
 ) {
     val exoPlayer = rememberExoPlayer()
     ExoPlayerMediaAudioView(
+        isDisplayed = isDisplayed,
         localMediaViewState = localMediaViewState,
         bottomPaddingInPixels = bottomPaddingInPixels,
         exoPlayer = exoPlayer,
@@ -98,6 +100,7 @@ fun MediaAudioView(
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 private fun ExoPlayerMediaAudioView(
+    isDisplayed: Boolean,
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
@@ -174,6 +177,12 @@ private fun ExoPlayerMediaAudioView(
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
                 progressInMillis = exoPlayer.currentPosition,
             )
+        }
+    }
+    LaunchedEffect(isDisplayed) {
+        // If not displayed, make sure to pause the audio
+        if (!isDisplayed) {
+            exoPlayer.pause()
         }
     }
     if (localMedia?.uri != null) {

@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery
@@ -72,6 +72,9 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.id
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
 
@@ -137,7 +140,6 @@ fun MediaGalleryView(
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false,
-                modifier = Modifier,
             ) { page ->
                 val mode = MediaGalleryMode.entries[page]
                 MediaGalleryPage(
@@ -196,30 +198,51 @@ private fun MediaGalleryPage(
     state: MediaGalleryState,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
-    when (val groupedMediaItems = state.groupedMediaItems) {
-        AsyncData.Uninitialized,
-        is AsyncData.Loading -> {
-            LoadingContent(mode)
-        }
-        is AsyncData.Success -> {
-            when (mode) {
-                MediaGalleryMode.Images -> MediaGalleryImages(
-                    imagesAndVideos = groupedMediaItems.data.imageAndVideoItems,
-                    eventSink = state.eventSink,
-                    onItemClick = onItemClick,
-                )
-                MediaGalleryMode.Files -> MediaGalleryFiles(
-                    files = groupedMediaItems.data.fileItems,
-                    eventSink = state.eventSink,
-                    onItemClick = onItemClick,
-                )
+    val groupedMediaItems = state.groupedMediaItems
+    if (groupedMediaItems.isLoadingItems(mode)) {
+        // Need to trigger a pagination now if there is only one LoadingIndicator.
+        val loadingItem = groupedMediaItems.dataOrNull()?.getItems(mode)?.singleOrNull() as? MediaItem.LoadingIndicator
+        if (loadingItem != null) {
+            LaunchedEffect(loadingItem.timestamp) {
+                state.eventSink(MediaGalleryEvents.LoadMore(loadingItem.direction))
             }
         }
-        is AsyncData.Failure -> {
-            ErrorContent(
-                error = groupedMediaItems.error,
-            )
+        LoadingContent(mode)
+    } else {
+        when (groupedMediaItems) {
+            is AsyncData.Success -> {
+                when (mode) {
+                    MediaGalleryMode.Images -> MediaGalleryImages(
+                        imagesAndVideos = groupedMediaItems.data.imageAndVideoItems,
+                        eventSink = state.eventSink,
+                        onItemClick = onItemClick,
+                    )
+                    MediaGalleryMode.Files -> MediaGalleryFiles(
+                        files = groupedMediaItems.data.fileItems,
+                        eventSink = state.eventSink,
+                        onItemClick = onItemClick,
+                    )
+                }
+            }
+            is AsyncData.Failure -> {
+                ErrorContent(
+                    error = groupedMediaItems.error,
+                )
+            }
+            else -> Unit
         }
+    }
+}
+
+/**
+ * Return true when the timeline is not loaded or if it contains only a single loading item.
+ */
+private fun AsyncData<GroupedMediaItems>.isLoadingItems(mode: MediaGalleryMode): Boolean {
+    return when (this) {
+        AsyncData.Uninitialized,
+        is AsyncData.Loading -> true
+        is AsyncData.Success -> data.getItems(mode).singleOrNull() is MediaItem.LoadingIndicator
+        is AsyncData.Failure -> false
     }
 }
 
@@ -460,23 +483,28 @@ private fun EmptyContent(
 private fun LoadingContent(
     mode: MediaGalleryMode,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 48.dp)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        CircularProgressIndicator()
-        val res = when (mode) {
-            MediaGalleryMode.Images -> R.string.screen_media_browser_list_loading_media
-            MediaGalleryMode.Files -> R.string.screen_media_browser_list_loading_files
+        OnboardingBackground()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 48.dp)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            CircularProgressIndicator()
+            val res = when (mode) {
+                MediaGalleryMode.Images -> R.string.screen_media_browser_list_loading_media
+                MediaGalleryMode.Files -> R.string.screen_media_browser_list_loading_files
+            }
+            Text(
+                text = stringResource(res),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
         }
-        Text(
-            text = stringResource(res),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
     }
 }
 

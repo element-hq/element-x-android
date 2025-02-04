@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery.root
@@ -31,11 +31,11 @@ import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryNode
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import io.element.android.libraries.mediaviewer.impl.gallery.eventId
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.mediaSource
-import io.element.android.libraries.mediaviewer.impl.gallery.thumbnailSource
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.eventId
+import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.mediaSource
+import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -60,6 +60,7 @@ class MediaGalleryRootNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val mode: MediaViewerEntryPoint.MediaViewerMode,
             val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
@@ -92,8 +93,16 @@ class MediaGalleryRootNode @AssistedInject constructor(
                     }
 
                     override fun onItemClick(item: MediaItem.Event) {
+                        val mode = when (item) {
+                            is MediaItem.Audio,
+                            is MediaItem.Voice,
+                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios
+                            is MediaItem.Image,
+                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos
+                        }
                         overlay.show(
                             NavTarget.MediaViewer(
+                                mode = mode,
                                 eventId = item.eventId(),
                                 mediaInfo = item.mediaInfo(),
                                 mediaSource = item.mediaSource(),
@@ -117,6 +126,7 @@ class MediaGalleryRootNode @AssistedInject constructor(
                 mediaViewerEntryPoint.nodeBuilder(this, buildContext)
                     .params(
                         MediaViewerEntryPoint.Params(
+                            mode = navTarget.mode,
                             eventId = navTarget.eventId,
                             mediaInfo = navTarget.mediaInfo,
                             mediaSource = navTarget.mediaSource,

@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl
@@ -23,9 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
-import io.element.android.libraries.matrix.api.createroom.JoinRuleOverride
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
-import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
@@ -38,8 +36,10 @@ import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
@@ -59,8 +59,10 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
+import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -112,9 +114,7 @@ import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
-import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
-import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 class RustMatrixClient(
@@ -137,7 +137,11 @@ class RustMatrixClient(
 
     private val innerRoomListService = innerSyncService.roomListService()
 
-    private val rustSyncService = RustSyncService(innerSyncService, sessionCoroutineScope)
+    private val rustSyncService = RustSyncService(
+        inner = innerSyncService,
+        dispatcher = sessionDispatcher,
+        sessionCoroutineScope = sessionCoroutineScope
+    )
     private val pushersService = RustPushersService(
         client = innerClient,
         dispatchers = dispatchers,
@@ -283,8 +287,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun findDM(userId: UserId): RoomId? {
-        return innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+    override suspend fun findDM(userId: UserId): RoomId? = withContext(sessionDispatcher) {
+        innerClient.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
@@ -306,36 +310,23 @@ class RustMatrixClient(
                 topic = createRoomParams.topic,
                 isEncrypted = createRoomParams.isEncrypted,
                 isDirect = createRoomParams.isDirect,
-                visibility = when (createRoomParams.visibility) {
-                    RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
-                    RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
-                },
-                preset = when (createRoomParams.visibility) {
-                    RoomVisibility.PRIVATE -> {
-                        if (createRoomParams.isDirect) {
-                            RustRoomPreset.TRUSTED_PRIVATE_CHAT
-                        } else {
-                            RustRoomPreset.PRIVATE_CHAT
-                        }
-                    }
-                    RoomVisibility.PUBLIC -> {
-                        RustRoomPreset.PUBLIC_CHAT
-                    }
+                visibility = createRoomParams.visibility.map(),
+                preset = when (createRoomParams.preset) {
+                    RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
+                    RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                    RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
                 powerLevelContentOverride = defaultRoomCreationPowerLevels.copy(
-                    invite = if (createRoomParams.joinRuleOverride == JoinRuleOverride.Knock) {
+                    invite = if (createRoomParams.joinRuleOverride == JoinRule.Knock) {
                         // override the invite power level so it's the same as kick.
                         RoomMember.Role.MODERATOR.powerLevel.toInt()
                     } else {
                         null
                     }
                 ),
-                joinRuleOverride = when (createRoomParams.joinRuleOverride) {
-                    JoinRuleOverride.Knock -> RustJoinRule.Knock
-                    JoinRuleOverride.None -> null
-                },
+                joinRuleOverride = createRoomParams.joinRuleOverride?.map(),
                 canonicalAlias = createRoomParams.roomAliasName.getOrNull(),
             )
             val roomId = RoomId(innerClient.createRoom(rustParams))
@@ -354,7 +345,7 @@ class RustMatrixClient(
             name = null,
             isEncrypted = true,
             isDirect = true,
-            visibility = RoomVisibility.PRIVATE,
+            visibility = RoomVisibility.Private,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
             invite = listOf(userId),
         )

@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Mostra password"</string>
   <string name="a11y_start_call">"Avvia una chiamata"</string>
   <string name="a11y_user_menu">"Menu utente"</string>
+  <string name="a11y_view_details">"Visualizza dettagli"</string>
   <string name="a11y_voice_message_record">"Registra un messaggio vocale."</string>
   <string name="a11y_voice_message_stop_recording">"Ferma la registrazione"</string>
   <string name="action_accept">"Accetta"</string>
@@ -127,6 +128,7 @@
   <string name="action_view_in_timeline">"Visualizza nella conversazione"</string>
   <string name="action_view_source">"Vedi codice sorgente"</string>
   <string name="action_yes">"Sì"</string>
+  <string name="action_yes_try_again">"Sì, riprova"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
   <string name="common_adding_caption">"Aggiunta didascalia"</string>
@@ -148,6 +150,8 @@
   <string name="common_device_id">"ID dispositivo"</string>
   <string name="common_direct_chat">"Conversazione diretta"</string>
   <string name="common_do_not_show_this_again">"Non mostrarlo più"</string>
+  <string name="common_download_failed">"Download non riuscito"</string>
+  <string name="common_downloading">"Scaricamento"</string>
   <string name="common_edited_suffix">"(modificato)"</string>
   <string name="common_editing">"Modifica in corso"</string>
   <string name="common_editing_caption">"Modifica didascalia"</string>
@@ -164,6 +168,8 @@ Motivo:. %1$s"</string>
   <string name="common_favourite">"Preferiti"</string>
   <string name="common_favourited">"Preferita"</string>
   <string name="common_file">"File"</string>
+  <string name="common_file_deleted">"File eliminato"</string>
+  <string name="common_file_saved">"File salvato"</string>
   <string name="common_file_saved_on_disk_android">"File salvato"</string>
   <string name="common_forward_message">"Inoltra messaggio"</string>
   <string name="common_frequently_used">"Usati di frequente"</string>
@@ -176,6 +182,7 @@ Motivo:. %1$s"</string>
   <string name="common_light">"Chiaro"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_loading">"Caricamento…"</string>
+  <string name="common_loading_more">"Caricamento in corso…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membri"</item>
@@ -271,6 +278,8 @@ Motivo:. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s sembra essere cambiata. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L\'identità di %1$s %2$s sembra essere cambiata. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"L\'identità %2$s verificata di %1$s è cambiata. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Ritira verifica"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
   <string name="dialog_title_error">"Errore"</string>
   <string name="dialog_title_success">"Operazione riuscita"</string>
@@ -287,6 +296,8 @@ Motivo:. %1$s"</string>
   <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
   <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s non ha l\'autorizzazione di accedere al microfono. Attiva l\'accesso per registrare un messaggio vocale."</string>
+  <string name="error_room_address_already_exists">"L\'indirizzo di questa stanza esiste già. Prova a modificare il campo dell\'indirizzo o a cambiare il nome della stanza"</string>
+  <string name="error_room_address_invalid_symbols">"Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L\'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo."</string>
@@ -341,6 +352,8 @@ Motivo:. %1$s"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"La cronologia messaggi non è disponibile su questo dispositivo"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"È necessario verificare questo dispositivo per accedere alla cronologia messaggi"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Non hai accesso a questo messaggio"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossibile decifrare il messaggio"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Questo messaggio è stato bloccato perché il dispositivo non è verificato o perché il mittente deve verificare la tua identità."</string>
 </resources>

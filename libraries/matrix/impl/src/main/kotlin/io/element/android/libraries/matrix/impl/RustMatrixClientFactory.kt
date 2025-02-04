@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl
@@ -74,6 +74,7 @@ class RustMatrixClientFactory @Inject constructor(
 
         val syncService = client.syncService()
             .withUtdHook(UtdTracker(analyticsService))
+            .withOfflineMode()
             .finish()
 
         return RustMatrixClient(
@@ -112,9 +113,9 @@ class RustMatrixClientFactory @Inject constructor(
             .useEventCachePersistentStorage(featureFlagService.isFeatureEnabled(FeatureFlags.EventCache))
             .roomKeyRecipientStrategy(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
-                    CollectStrategy.IdentityBasedStrategy
+                    CollectStrategy.IDENTITY_BASED_STRATEGY
                 } else {
-                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = true)
+                    CollectStrategy.ERROR_ON_VERIFIED_USER_PROBLEM
                 }
             )
             .roomDecryptionTrustRequirement(

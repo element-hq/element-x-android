@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.test.room
@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -71,6 +72,7 @@ fun aRoomSummary(
     numUnreadMessages: Long = 0,
     numUnreadNotifications: Long = 0,
     numUnreadMentions: Long = 0,
+    historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     lastMessage: RoomMessage? = aRoomMessage(),
 ) = RoomSummary(
     info = MatrixRoomInfo(
@@ -105,6 +107,7 @@ fun aRoomSummary(
         numUnreadMessages = numUnreadMessages,
         numUnreadNotifications = numUnreadNotifications,
         numUnreadMentions = numUnreadMentions,
+        historyVisibility = historyVisibility,
     ),
     lastMessage = lastMessage,
 )

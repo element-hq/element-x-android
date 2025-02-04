@@ -1,23 +1,16 @@
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
-import java.util.Properties
+import extension.readLocalProperty
 
 plugins {
     id("io.element.android-compose-library")
     id("kotlin-parcelize")
 }
-
-fun readLocalProperty(name: String): String? = Properties().apply {
-    try {
-        load(rootProject.file("local.properties").reader())
-    } catch (ignored: java.io.IOException) {
-    }
-}.getProperty(name)
 
 android {
     namespace = "io.element.android.features.location.api"

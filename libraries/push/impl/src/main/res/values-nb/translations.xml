@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Anrop"</string>
+  <string name="notification_channel_noisy">"Støyende varsler"</string>
+  <string name="notification_channel_silent">"Stille varsler"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d melding"</item>
+    <item quantity="other">"%1$s: %2$d meldinger"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d varsel"</item>
+    <item quantity="other">"%d varsler"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Varsel"</string>
+  <string name="notification_incoming_call">"Innkommende anrop"</string>
+  <string name="notification_inline_reply_failed">"** Kunne ikke sende - vennligst åpne rommet"</string>
+  <string name="notification_invitation_action_join">"Bli med"</string>
+  <string name="notification_invitation_action_reject">"Avvis"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d invitasjon"</item>
+    <item quantity="other">"%d invitasjoner"</item>
+  </plurals>
+  <string name="notification_invite_body">"Inviterte deg til å chatte"</string>
+  <string name="notification_invite_body_with_sender">"%1$s inviterte deg til å chatte"</string>
+  <string name="notification_new_messages">"Nye meldinger"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d ny melding"</item>
+    <item quantity="other">"%d nye meldinger"</item>
+  </plurals>
+  <string name="notification_room_action_mark_as_read">"Marker som lest"</string>
+  <string name="notification_room_action_quick_reply">"Raskt svar"</string>
+  <string name="notification_room_invite_body">"Invitert deg til å bli med i rommet"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s inviterte deg til å bli med i rommet"</string>
+  <string name="notification_sender_me">"Meg"</string>
+  <string name="notification_sender_mention_reply">"%1$s nevnt eller besvart"</string>
+  <string name="notification_test_push_notification_content">"Du ser på varselet! Klikk på meg!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d ulest varslet melding"</item>
+    <item quantity="other">"%d uleste varslede meldinger"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s og %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s i %2$s og %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d rom"</item>
+    <item quantity="other">"%d rom"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Bakgrunnssynkronisering"</string>
+  <string name="push_distributor_firebase_android">"Google Services"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Ingen gyldige Google Play-tjenester funnet. Det kan hende at varsler ikke fungerer som de skal."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ingen push-leverandører er valgt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Gjeldende push-leverandør: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Nåværende push-leverandør"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-leverandører funnet."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Feil: %1$s."</string>
+</resources>

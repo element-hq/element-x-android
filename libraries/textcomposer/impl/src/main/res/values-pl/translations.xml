@@ -4,6 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Przełącz listę punktową"</string>
   <string name="rich_text_editor_close_formatting_options">"Zamknij opcje formatowania"</string>
   <string name="rich_text_editor_code_block">"Przełącz blok kodu"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Dodaj opis"</string>
   <string name="rich_text_editor_composer_placeholder">"Wiadomość…"</string>
   <string name="rich_text_editor_create_link">"Utwórz link"</string>
   <string name="rich_text_editor_edit_link">"Edytuj link"</string>

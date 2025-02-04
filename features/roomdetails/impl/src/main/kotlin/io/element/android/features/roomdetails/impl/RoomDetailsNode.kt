@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -49,6 +49,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openAdminSettings()
         fun openPinnedMessagesList()
         fun openKnockRequestsList()
+        fun openSecurityAndPrivacy()
         fun onJoinCall()
     }
 
@@ -121,6 +122,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openKnockRequestsList() }
     }
 
+    private fun openSecurityAndPrivacy() {
+        callbacks.forEach { it.openSecurityAndPrivacy() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -153,6 +158,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onJoinCallClick = ::onJoinCall,
             onPinnedMessagesClick = ::openPinnedMessages,
             onKnockRequestsClick = ::openKnockRequestsLists,
+            onSecurityAndPrivacyClick = ::openSecurityAndPrivacy
         )
     }
 }

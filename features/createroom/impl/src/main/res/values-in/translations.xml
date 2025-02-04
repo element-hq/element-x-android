@@ -13,8 +13,6 @@ Anda dapat mengubah ini kapan pun dalam pengaturan ruangan."</string>
   <string name="screen_create_room_room_access_section_header">"Akses Ruangan"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Minta untuk bergabung"</string>
-  <string name="screen_create_room_room_address_invalid_symbols_error_description">"Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
-  <string name="screen_create_room_room_address_not_available_error_description">"Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan"</string>
   <string name="screen_create_room_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
   <string name="screen_create_room_room_address_section_title">"Alamat ruangan"</string>
   <string name="screen_create_room_room_name_label">"Nama ruangan"</string>

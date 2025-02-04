@@ -1,14 +1,15 @@
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlin.time.Duration
 
 @Immutable
 sealed interface TimelineItemEventContent {
@@ -89,4 +90,13 @@ fun TimelineItemEventContent.canReact(): Boolean =
 fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
     is TimelineItemEventMutableContent -> isEdited
     else -> false
+}
+
+fun TimelineItemEventContentWithAttachment.duration(): Duration? {
+    return when (this) {
+        is TimelineItemAudioContent -> duration
+        is TimelineItemVideoContent -> duration
+        is TimelineItemVoiceContent -> duration
+        else -> null
+    }
 }

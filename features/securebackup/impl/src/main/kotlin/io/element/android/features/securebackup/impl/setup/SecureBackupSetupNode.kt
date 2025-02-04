@@ -1,14 +1,13 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.securebackup.impl.setup
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -22,8 +21,6 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.SessionScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @ContributesNode(SessionScope::class)
 class SecureBackupSetupNode @AssistedInject constructor(
@@ -42,12 +39,11 @@ class SecureBackupSetupNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val coroutineScope = rememberCoroutineScope()
         val state = presenter.present()
         SecureBackupSetupView(
             state = state,
             onSuccess = {
-                coroutineScope.postSuccessSnackbar()
+                postSuccessSnackbar()
                 navigateUp()
             },
             onBackClick = ::navigateUp,
@@ -55,7 +51,7 @@ class SecureBackupSetupNode @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.postSuccessSnackbar() = launch {
+    private fun postSuccessSnackbar() {
         snackbarDispatcher.post(
             SnackbarMessage(
                 messageResId = if (inputs.isChangeRecoveryKeyUserStory) {

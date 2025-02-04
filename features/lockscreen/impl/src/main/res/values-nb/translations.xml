@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_setup_pin_context">"Lås %1$s for å legge til ekstra sikkerhet til chattene dine.
+
+Velg noe som du husker. Hvis du glemmer denne PIN-koden, blir du logget ut av appen."</string>
+  <string name="screen_signout_in_progress_dialog_content">"Logger ut…"</string>
+</resources>

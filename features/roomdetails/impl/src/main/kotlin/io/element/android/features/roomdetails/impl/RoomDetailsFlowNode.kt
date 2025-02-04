@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -33,6 +33,7 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
+import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -114,6 +115,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object KnockRequestsList : NavTarget
+
+        @Parcelize
+        data object SecurityAndPrivacy : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -158,6 +162,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openKnockRequestsList() {
                         backstack.push(NavTarget.KnockRequestsList)
+                    }
+
+                    override fun openSecurityAndPrivacy() {
+                        backstack.push(NavTarget.SecurityAndPrivacy)
                     }
 
                     override fun onJoinCall() {
@@ -289,6 +297,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.SecurityAndPrivacy -> {
+                createNode<SecurityAndPrivacyFlowNode>(buildContext)
             }
         }
     }

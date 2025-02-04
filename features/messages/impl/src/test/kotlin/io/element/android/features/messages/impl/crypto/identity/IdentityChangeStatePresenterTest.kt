@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.crypto.identity
@@ -67,7 +67,10 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the clear room emits identity change, the presenter does not emit new state`() = runTest {
-        val room = FakeMatrixRoom(isEncrypted = false)
+        val room = FakeMatrixRoom(
+            isEncrypted = false,
+            enableEncryptionResult = { Result.success(Unit) }
+        )
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()

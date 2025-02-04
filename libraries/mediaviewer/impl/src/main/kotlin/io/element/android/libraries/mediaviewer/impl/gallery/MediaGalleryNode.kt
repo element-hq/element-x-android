@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery
@@ -21,6 +21,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
 import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresenterFactories
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 @ContributesNode(RoomScope::class)
 class MediaGalleryNode @AssistedInject constructor(

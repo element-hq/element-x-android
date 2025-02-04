@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.eventformatter.impl
@@ -63,7 +63,7 @@ class StateContentFormatter @Inject constructor(
                 }
             }
             is OtherState.RoomTopic -> {
-                val hasRoomTopic = content.topic != null
+                val hasRoomTopic = content.topic?.isNotBlank() == true
                 when {
                     senderIsYou && hasRoomTopic -> sp.getString(R.string.state_event_room_topic_changed_by_you, content.topic)
                     senderIsYou && !hasRoomTopic -> sp.getString(R.string.state_event_room_topic_removed_by_you)

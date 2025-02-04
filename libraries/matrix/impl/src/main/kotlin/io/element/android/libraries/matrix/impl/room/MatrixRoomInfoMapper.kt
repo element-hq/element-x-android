@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.room
@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import kotlinx.collections.immutable.ImmutableMap
@@ -60,6 +61,7 @@ class MatrixRoomInfoMapper {
             numUnreadMessages = it.numUnreadMessages.toLong(),
             numUnreadMentions = it.numUnreadMentions.toLong(),
             numUnreadNotifications = it.numUnreadNotifications.toLong(),
+            historyVisibility = it.historyVisibility.map(),
         )
     }
 }

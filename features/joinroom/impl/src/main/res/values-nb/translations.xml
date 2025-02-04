@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Bli med i rommet"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s støtter ikke områder ennå. Du kan få tilgang til områder på nett."</string>
+  <string name="screen_join_room_space_not_supported_title">"Områder støttes ikke ennå"</string>
+</resources>

@@ -1,13 +1,15 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.api.createroom
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.join.JoinRule
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import java.util.Optional
 
 data class CreateRoomParameters(
@@ -19,6 +21,6 @@ data class CreateRoomParameters(
     val preset: RoomPreset,
     val invite: List<UserId>? = null,
     val avatar: String? = null,
-    val joinRuleOverride: JoinRuleOverride = JoinRuleOverride.None,
+    val joinRuleOverride: JoinRule? = null,
     val roomAliasName: Optional<String> = Optional.empty(),
 )

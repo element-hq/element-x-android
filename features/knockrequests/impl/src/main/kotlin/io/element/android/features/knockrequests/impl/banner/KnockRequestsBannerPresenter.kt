@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.knockrequests.impl.banner
@@ -18,7 +18,6 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestPresentab
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
-import io.element.android.libraries.core.extensions.firstIfSingle
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -79,7 +78,7 @@ class KnockRequestsBannerPresenter @Inject constructor(
         knockRequests: List<KnockRequestPresentable>,
         displayAcceptError: MutableState<Boolean>,
     ) = launch {
-        val knockRequest = knockRequests.firstIfSingle()
+        val knockRequest = knockRequests.singleOrNull()
         if (knockRequest != null) {
             knockRequestsService.acceptKnockRequest(knockRequest, optimistic = true)
                 .onFailure {

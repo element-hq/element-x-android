@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -44,15 +44,14 @@ data class RoomDetailsState(
     val pinnedMessagesCount: Int?,
     val canShowKnockRequests: Boolean,
     val knockRequestsCount: Int?,
+    val canShowSecurityAndPrivacy: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
-        if (isEncrypted || isPublic) {
-            if (isEncrypted) {
-                add(RoomBadge.ENCRYPTED)
-            } else {
-                add(RoomBadge.NOT_ENCRYPTED)
-            }
+        if (isEncrypted) {
+            add(RoomBadge.ENCRYPTED)
+        } else {
+            add(RoomBadge.NOT_ENCRYPTED)
         }
         if (isPublic) {
             add(RoomBadge.PUBLIC)

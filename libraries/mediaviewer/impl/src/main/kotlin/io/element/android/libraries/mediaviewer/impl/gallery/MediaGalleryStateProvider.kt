@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.gallery
@@ -13,13 +13,15 @@ import io.element.android.libraries.designsystem.components.media.aWaveForm
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemAudio
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemDateSeparator
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemFile
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemImage
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemLoadingIndicator
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVideo
-import io.element.android.libraries.mediaviewer.impl.gallery.ui.aMediaItemVoice
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemAudio
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemDateSeparator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemFile
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemLoadingIndicator
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVideo
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import kotlinx.collections.immutable.toImmutableList
 
 open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryState> {
@@ -84,6 +86,27 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                 mode = MediaGalleryMode.Files,
                 groupedMediaItems = AsyncData.Failure(Exception("Failed to load media")),
             ),
+            // Timeline is loaded but does not have relevant content yet for images and videos
+            aMediaGalleryState(
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        imageAndVideoItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
+            ),
+            // Timeline is loaded but does not have relevant content yet for files
+            aMediaGalleryState(
+                mode = MediaGalleryMode.Files,
+                groupedMediaItems = AsyncData.Success(
+                    aGroupedMediaItems(
+                        fileItems = listOf(
+                            aMediaItemLoadingIndicator(),
+                        ),
+                    )
+                )
+            ),
         )
 }
 
@@ -101,7 +124,7 @@ private fun aMediaGalleryState(
     eventSink = {}
 )
 
-private fun aGroupedMediaItems(
+fun aGroupedMediaItems(
     imageAndVideoItems: List<MediaItem> = emptyList(),
     fileItems: List<MediaItem> = emptyList(),
 ) = GroupedMediaItems(

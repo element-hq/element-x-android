@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Sie wurden aus diesem Chatroom ausgeschlossen %1$s."</string>
+  <string name="screen_join_room_ban_message">"Sie wurden aus diesem Chatroom verbannt"</string>
+  <string name="screen_join_room_ban_reason">"Grund:%1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Anfrage abbrechen"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, abbrechen"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Möchten Sie Ihre Beitrittsanfrage für diesen Chatroom wirklich stornieren?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Beitrittsanfrage stornieren"</string>
+  <string name="screen_join_room_fail_message">"Der Beitritt zum Chatroom schlug fehl."</string>
+  <string name="screen_join_room_fail_reason">"Dieser Chatroom ist entweder nur auf Einladung zugänglich oder es kann zu Zugangsbeschränkungen auf Spaceebene kommen."</string>
+  <string name="screen_join_room_forget_action">"Vergessen Sie diesen Raum"</string>
+  <string name="screen_join_room_invite_required_message">"Sie benötigen eine Einladung, um diesem Raum beizutreten"</string>
   <string name="screen_join_room_join_action">"Raum beitreten"</string>
+  <string name="screen_join_room_join_restricted_message">"Möglicherweise müssen Sie eingeladen sein oder Mitglied eines Spaces sein, um beitreten zu können."</string>
   <string name="screen_join_room_knock_action">"Anklopfen"</string>
   <string name="screen_join_room_knock_message_description">"Nachricht (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"Falls Ihre Anfrage, dem Raum beizutreten, akzeptiert wird, werden Sie eine Einladung erhalten."</string>

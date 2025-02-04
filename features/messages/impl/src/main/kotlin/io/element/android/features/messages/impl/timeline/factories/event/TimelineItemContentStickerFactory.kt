@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.factories.event
@@ -39,7 +39,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
             isEdited = false,
             mediaSource = content.source,
             thumbnailSource = content.info.thumbnailSource,
-            mimeType = content.info.mimetype ?: MimeTypes.OctetStream,
+            mimeType = content.info.mimetype ?: MimeTypes.Images,
             blurhash = content.info.blurhash,
             width = content.info.width?.toInt(),
             height = content.info.height?.toInt(),

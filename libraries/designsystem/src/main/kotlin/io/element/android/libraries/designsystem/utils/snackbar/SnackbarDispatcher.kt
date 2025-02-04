@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.utils.snackbar
@@ -36,7 +36,7 @@ class SnackbarDispatcher {
         }
     }
 
-    suspend fun post(message: SnackbarMessage) {
+    fun post(message: SnackbarMessage) {
         if (snackBarMessageQueue.isEmpty()) {
             snackBarMessageQueue.add(message)
             if (queueMutex.isLocked) queueMutex.unlock()
@@ -54,7 +54,7 @@ class SnackbarDispatcher {
 }
 
 /** Used to provide a [SnackbarDispatcher] to composable functions, it's needed for [rememberSnackbarHostState]. */
-val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> { SnackbarDispatcher() }
+val LocalSnackbarDispatcher = compositionLocalOf { SnackbarDispatcher() }
 
 @Composable
 fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> {
@@ -72,10 +72,10 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
     } ?: return snackbarHostState
 
     val dispatcher = LocalSnackbarDispatcher.current
-    LaunchedEffect(snackbarMessageText) {
+    LaunchedEffect(snackbarMessage.id) {
         // If the message wasn't already displayed, do it now, and mark it as displayed
         // This will prevent the message from appearing in any other active SnackbarHosts
-        if (snackbarMessage.isDisplayed.getAndSet(true) == false) {
+        if (snackbarMessage.isDisplayed.getAndSet(true).not()) {
             try {
                 snackbarHostState.showSnackbar(
                     message = snackbarMessageText,

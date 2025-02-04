@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Sei stato bandito da questa stanza da %1$s."</string>
+  <string name="screen_join_room_ban_message">"Sei stato bandito da questa stanza"</string>
+  <string name="screen_join_room_ban_reason">"Motivo: %1$s"</string>
   <string name="screen_join_room_cancel_knock_action">"Cancella richiesta"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Sì, annulla"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Sei sicuro di voler annullare la tua richiesta di accesso a questa stanza?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Annulla la richiesta di accesso"</string>
+  <string name="screen_join_room_fail_message">"L\'accesso alla stanza non è riuscito."</string>
+  <string name="screen_join_room_fail_reason">"Questa stanza è solo su invito o potrebbero esserci delle restrizioni all\'accesso al livello dello spazio."</string>
+  <string name="screen_join_room_forget_action">"Dimentica questa stanza"</string>
+  <string name="screen_join_room_invite_required_message">"Hai bisogno di un invito per entrare in questa stanza"</string>
   <string name="screen_join_room_join_action">"Entra nella stanza"</string>
+  <string name="screen_join_room_join_restricted_message">"Potrebbe essere necessario essere invitati o essere membro di uno spazio per partecipare."</string>
   <string name="screen_join_room_knock_action">"Bussa per partecipare"</string>
   <string name="screen_join_room_knock_message_description">"Messaggio (opzionale)"</string>
   <string name="screen_join_room_knock_sent_description">"Riceverai un invito a entrare nella stanza se la tua richiesta viene accettata."</string>

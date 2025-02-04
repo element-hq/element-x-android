@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
   <string name="a11y_user_menu">"Käyttäjävalikko"</string>
+  <string name="a11y_view_details">"Näytä tiedot"</string>
   <string name="a11y_voice_message_record">"Nauhoita ääniviesti."</string>
   <string name="a11y_voice_message_stop_recording">"Lopeta nauhoittaminen"</string>
   <string name="action_accept">"Hyväksy"</string>
@@ -127,6 +128,7 @@
   <string name="action_view_in_timeline">"Näytä aikajanalla"</string>
   <string name="action_view_source">"Näytä lähde"</string>
   <string name="action_yes">"Kyllä"</string>
+  <string name="action_yes_try_again">"Kyllä, yritä uudelleen"</string>
   <string name="common_about">"Tietoa"</string>
   <string name="common_acceptable_use_policy">"Hyväksyttävän käytön käytäntö"</string>
   <string name="common_adding_caption">"Lisätään kuvatekstiä"</string>
@@ -148,6 +150,8 @@
   <string name="common_device_id">"Laitteen tunnus"</string>
   <string name="common_direct_chat">"Yksityinen keskustelu"</string>
   <string name="common_do_not_show_this_again">"Älä näytä tätä uudelleen"</string>
+  <string name="common_download_failed">"Lataus epäonnistui"</string>
+  <string name="common_downloading">"Ladataan"</string>
   <string name="common_edited_suffix">"(muokattu)"</string>
   <string name="common_editing">"Muokataan viestiä"</string>
   <string name="common_editing_caption">"Muokataan kuvatekstiä"</string>
@@ -164,6 +168,8 @@ Syy: %1$s."</string>
   <string name="common_favourite">"Lisää suosikkeihin"</string>
   <string name="common_favourited">"Lisätty suosikkeihin"</string>
   <string name="common_file">"Tiedosto"</string>
+  <string name="common_file_deleted">"Tiedosto poistettu"</string>
+  <string name="common_file_saved">"Tiedosto tallennettu"</string>
   <string name="common_file_saved_on_disk_android">"Tiedosto tallennettu Lataukset-kansioon"</string>
   <string name="common_forward_message">"Välitä viesti"</string>
   <string name="common_frequently_used">"Usein käytetyt"</string>
@@ -176,6 +182,7 @@ Syy: %1$s."</string>
   <string name="common_light">"Vaalea"</string>
   <string name="common_link_copied_to_clipboard">"Linkki kopioitu leikepöydälle"</string>
   <string name="common_loading">"Ladataan…"</string>
+  <string name="common_loading_more">"Ladataan lisää…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d jäsen"</item>
     <item quantity="other">"%1$d jäsentä"</item>
@@ -271,6 +278,8 @@ Syy: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Käyttäjän %1$s identiteetti näyttää muuttuneen. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Käyttäjän %1$s %2$s identiteetti näyttää muuttuneen. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Käyttäjän %1$s %2$s vahvistettu identiteetti on muuttunut. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Peruuta vahvistus"</string>
   <string name="dialog_title_confirmation">"Vahvistus"</string>
   <string name="dialog_title_error">"Virhe"</string>
   <string name="dialog_title_success">"Onnistui"</string>
@@ -287,6 +296,8 @@ Syy: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen asetuksista."</string>
   <string name="error_missing_location_rationale_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen painamalla alla olevaa nappia."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s -sovelluksella ei ole lupaa käyttää mikrofoniasi. Anna lupa, jotta voit nauhoittaa ääniviestejä."</string>
+  <string name="error_room_address_already_exists">"Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä"</string>
+  <string name="error_room_address_invalid_symbols">"Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Joitakin viestejä ei ole lähetetty"</string>
   <string name="error_unknown">"Anteeksi, tapahtui virhe"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Tämän salatun viestin aitoutta ei voida taata tällä laitteella."</string>
@@ -341,6 +352,8 @@ Syy: %1$s."</string>
   <string name="settings_version_number">"Versio: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"fi"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Viestihistoria ei ole saatavilla tällä laitteella"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Sinun on vahvistettava tämä laite, jotta pääset käsiksi viestihistoriaan."</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sinulla ei ole oikeutta lukea tätä viestiä"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Viestin salauksen purkaminen ei onnistu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Tämä viesti estettiin, koska laitettasi ei ole vahvistettu tai koska lähettäjän on vahvistettava identiteettisi."</string>
 </resources>

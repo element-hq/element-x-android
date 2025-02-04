@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl
@@ -48,6 +48,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
@@ -58,6 +59,7 @@ import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -121,6 +123,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
+            val mode: MediaViewerEntryPoint.MediaViewerMode,
             val eventId: EventId?,
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
@@ -246,6 +249,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val params = MediaViewerEntryPoint.Params(
+                    mode = navTarget.mode,
                     eventId = navTarget.eventId,
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
@@ -358,6 +362,7 @@ class MessagesFlowNode @AssistedInject constructor(
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -369,6 +374,7 @@ class MessagesFlowNode @AssistedInject constructor(
                    if encrypted on certain bridges */
                 event.content.preferredMediaSource?.let { preferredMediaSource ->
                     buildMediaViewerNavTarget(
+                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                         event = event,
                         content = event.content,
                         mediaSource = preferredMediaSource,
@@ -378,6 +384,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemVideoContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -386,6 +393,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemFileContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -394,6 +402,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemAudioContent -> {
                 buildMediaViewerNavTarget(
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -422,12 +431,14 @@ class MessagesFlowNode @AssistedInject constructor(
     }
 
     private fun buildMediaViewerNavTarget(
+        mode: MediaViewerEntryPoint.MediaViewerMode,
         event: TimelineItem.Event,
         content: TimelineItemEventContentWithAttachment,
         mediaSource: MediaSource,
         thumbnailSource: MediaSource?,
     ): NavTarget {
         return NavTarget.MediaViewer(
+            mode = mode,
             eventId = event.eventId,
             mediaInfo = MediaInfo(
                 filename = content.filename,
@@ -447,6 +458,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     mode = DateFormatterMode.Full,
                 ),
                 waveform = (content as? TimelineItemVoiceContent)?.waveform,
+                duration = content.duration()?.toHumanReadableDuration(),
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,

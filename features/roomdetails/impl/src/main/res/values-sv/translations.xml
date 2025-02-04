@@ -7,11 +7,11 @@
   <string name="screen_room_change_permissions_ban_people">"Banna personer"</string>
   <string name="screen_room_change_permissions_delete_messages">"Ta bort meddelanden"</string>
   <string name="screen_room_change_permissions_everyone">"Alla"</string>
-  <string name="screen_room_change_permissions_invite_people">"Bjuda in personer"</string>
+  <string name="screen_room_change_permissions_invite_people">"Bjuda in personer och acceptera förfrågningar om att gå med"</string>
   <string name="screen_room_change_permissions_member_moderation">"Medlemsmoderering"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meddelanden och innehåll"</string>
   <string name="screen_room_change_permissions_moderators">"Administratörer och moderatorer"</string>
-  <string name="screen_room_change_permissions_remove_people">"Ta bort personer"</string>
+  <string name="screen_room_change_permissions_remove_people">"Ta bort personer och avslå förfrågningar om att gå med"</string>
   <string name="screen_room_change_permissions_room_avatar">"Byt rumsavatar"</string>
   <string name="screen_room_change_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_change_permissions_room_name">"Byt rumsnamn"</string>

@@ -1,8 +1,8 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package extension
@@ -35,9 +35,6 @@ val excludedKoverSubProjects = listOf(
     ":anvilannotations",
     ":anvilcodegen",
     ":tests:testutils",
-    // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix
-    // SDK api, so it is not really relevant to unit test it: there is no logic to test.
-    ":libraries:matrix:impl",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
     ":appconfig",

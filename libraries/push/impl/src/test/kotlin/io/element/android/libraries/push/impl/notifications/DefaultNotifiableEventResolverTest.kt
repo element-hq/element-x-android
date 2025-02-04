@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.push.impl.notifications
@@ -627,7 +627,7 @@ class DefaultNotifiableEventResolverTest {
                 senderId = A_USER_ID_2,
                 roomName = A_ROOM_NAME,
                 editedEventId = null,
-                description = "Incoming call",
+                description = "📹 Incoming call",
                 timestamp = timestamp,
                 canBeReplaced = true,
                 isRedacted = false,
@@ -663,7 +663,7 @@ class DefaultNotifiableEventResolverTest {
                 timestamp = 0L,
                 senderDisambiguatedDisplayName = A_USER_NAME_2,
                 senderId = A_USER_ID_2,
-                body = "☎\uFE0F Incoming call",
+                body = "📹 Incoming call",
                 roomId = A_ROOM_ID,
                 threadId = null,
                 roomName = A_ROOM_NAME,
@@ -699,7 +699,7 @@ class DefaultNotifiableEventResolverTest {
                 timestamp = A_TIMESTAMP,
                 senderDisambiguatedDisplayName = A_USER_NAME_2,
                 senderId = A_USER_ID_2,
-                body = "☎\uFE0F Incoming call",
+                body = "📹 Incoming call",
                 roomId = A_ROOM_ID,
                 threadId = null,
                 roomName = A_ROOM_NAME,

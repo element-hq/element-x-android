@@ -1,57 +1,43 @@
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import org.gradle.api.JavaVersion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 /**
- * Version codes are quite sensitive, because there is a mix between bundle and APKs, and we have to take into
- * account the future upgrade of Element Android.
+ * Version codes are quite sensitive, because there is a mix between bundle and APKs.
  * Max versionCode allowed by the PlayStore (for information):
  * 2_100_000_000
- * Current version code of EAx on the PlayStore, for the first uploaded beta (we cannot go below):
- * ----1_001_000
- * Current version code of EAx on the nightly:
- * ----1_001_000
- * Current version of Element Android (at some point EAx will replace this app) (v1.6.3)
- * ----40_106_03a where a stands for the architecture: 1, 2, 3, 4 and 0 for the universal APK
- * Current version of EAx distributed with Firebase app distribution:
- * ----1_002_000
- * Latest version of EAx distributed with Firebase app distribution (downgrading, so that's a problem)
- * -------10_200
- * Version when running the current debug build
- * -------10_200
  *
- * So adding 4_000_000 to the current version Code computed here should be fine, and since the versionCode
- * is multiplied by 10 in app/build.gradle.kts#L168:
+ * Also note that the versionCode is multiplied by 10 in app/build.gradle.kts#L168:
  * ```
  * output.versionCode.set((output.versionCode.get() ?: 0) * 10 + abiCode))
  * ```
- * we will have:
- * Release version:
- * ---40_001_020
- * Nightly version:
- * ---40_001_020
- * Debug version:
- * ---40_010_200
+ * We are using a CalVer-like approach to version the application. The version code is calculated as follows:
+ * - 2 digits for the year
+ * - 2 digits for the month
+ * - 1 (or 2) digits for the release number
+ * Note that the version codes need to be greater than the ones calculated for the previous releases, so we use
+ * year on 4 digits for this internal value.
+ * So for instance, the first release of Jan 2025 will have:
+ * - the version name: 25.01.0
+ * - the version code: 20250100a (202_501_00a) where `a` stands for the architecture code
  */
 
-// Note: 2 digits max for each value
-private const val versionMajor = 0
-private const val versionMinor = 7
+private const val versionYear = 25
+private const val versionMonth = 2
 
-// Note: even values are reserved for regular release, odd values for hotfix release.
-// When creating a hotfix, you should decrease the value, since the current value
-// is the value for the next regular release.
-private const val versionPatch = 6
+// Note: must be in [0,99]
+private const val versionReleaseNumber = 0
 
 object Versions {
-    const val VERSION_CODE = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
-    const val VERSION_NAME = "$versionMajor.$versionMinor.$versionPatch"
+    const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
+    val VERSION_NAME = "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber"
+
     const val COMPILE_SDK = 35
     const val TARGET_SDK = 35
 

@@ -1,8 +1,8 @@
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only
- * Please see LICENSE in the repository root for full details.
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.appnav.loggedin
@@ -19,8 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -29,6 +27,8 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
@@ -46,7 +46,7 @@ private val pusherTag = LoggerTag("Pusher", LoggerTag.PushLoggerTag)
 
 class LoggedInPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
     private val pushService: PushService,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
@@ -76,10 +76,10 @@ class LoggedInPresenter @Inject constructor(
                 .launchIn(this)
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
-        val networkStatus by networkMonitor.connectivity.collectAsState()
+        val isOnline by syncService.isOnline().collectAsState()
         val showSyncSpinner by remember {
             derivedStateOf {
-                networkStatus == NetworkStatus.Online && syncIndicator == RoomListService.SyncIndicator.Show
+                isOnline && syncIndicator == RoomListService.SyncIndicator.Show
             }
         }
         var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }

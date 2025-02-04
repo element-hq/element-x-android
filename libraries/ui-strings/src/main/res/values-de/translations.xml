@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
+  <string name="a11y_view_details">"Details anzeigen"</string>
   <string name="a11y_voice_message_record">"Sprachnachricht aufnehmen."</string>
   <string name="a11y_voice_message_stop_recording">"Aufnahme beenden"</string>
   <string name="action_accept">"Akzeptieren"</string>
@@ -127,6 +128,7 @@
   <string name="action_view_in_timeline">"Im Chatverlauf anzeigen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="action_yes_try_again">"Ja, versuchen Sie es noch einmal"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_adding_caption">"Hinzufügen einer Bildunterschrift"</string>
@@ -148,6 +150,8 @@
   <string name="common_device_id">"Geräte-ID"</string>
   <string name="common_direct_chat">"Direktnachricht"</string>
   <string name="common_do_not_show_this_again">"Nicht mehr anzeigen"</string>
+  <string name="common_download_failed">"Download fehlgeschlagen"</string>
+  <string name="common_downloading">"Herunterladen"</string>
   <string name="common_edited_suffix">"(bearbeitet)"</string>
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_editing_caption">"Bearbeitung der Bildunterschrift"</string>
@@ -164,6 +168,8 @@ Grund: %1$s."</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favorit"</string>
   <string name="common_file">"Datei"</string>
+  <string name="common_file_deleted">"Datei wurde gelöscht"</string>
+  <string name="common_file_saved">"Datei gespeichert"</string>
   <string name="common_file_saved_on_disk_android">"Datei wurde unter Downloads gespeichert"</string>
   <string name="common_forward_message">"Nachricht weiterleiten"</string>
   <string name="common_frequently_used">"Häufig verwendet"</string>
@@ -176,6 +182,7 @@ Grund: %1$s."</string>
   <string name="common_light">"Hell"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
+  <string name="common_loading_more">"Mehr wird geladen…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Mitglied"</item>
     <item quantity="other">"%1$d Mitglieder"</item>
@@ -185,7 +192,7 @@ Grund: %1$s."</string>
   <string name="common_message_layout">"Nachrichtenlayout"</string>
   <string name="common_message_removed">"Nachricht entfernt"</string>
   <string name="common_modern">"Modern"</string>
-  <string name="common_mute">"Stummschalten"</string>
+  <string name="common_mute">"Stumm"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Raumname"</string>
   <string name="common_offline">"Offline"</string>
@@ -271,6 +278,8 @@ Grund: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich offenbar geändert. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich offenbar geändert. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Die verifizierte Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Verifizierung zurückziehen"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
@@ -287,6 +296,8 @@ Grund: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
   <string name="error_missing_location_rationale_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Aktiviere unten den Zugriff."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s hat nicht die Erlaubnis auf dein Mikrofon zuzugreifen. Aktiviere den Zugriff, um eine Sprachnachricht aufzunehmen."</string>
+  <string name="error_room_address_already_exists">"Diese Chatroomadresse existiert bereits. Bitte versuchen Sie, das Adressenfeld des Chatrooms zu bearbeiten oder den Namen des Chatrooms zu ändern"</string>
+  <string name="error_room_address_invalid_symbols">"Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
@@ -341,6 +352,8 @@ Grund: %1$s."</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Sie müssen dieses Gerät verifizieren, um auf den Nachrichtenverlauf zugreifen zu können"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sie haben keinen Zugriff auf diese Nachricht"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nachricht kann nicht entschlüsselt werden"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Diese Nachricht wurde entweder blockiert, weil Ihr Gerät nicht verifiziert ist oder weil der Absender Ihre Identität überprüfen muss."</string>
 </resources>
