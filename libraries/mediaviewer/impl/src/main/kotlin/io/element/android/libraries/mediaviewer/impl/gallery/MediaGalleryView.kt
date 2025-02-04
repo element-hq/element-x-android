@@ -72,6 +72,9 @@ import io.element.android.libraries.mediaviewer.impl.gallery.ui.FileItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.ImageItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VideoItemView
 import io.element.android.libraries.mediaviewer.impl.gallery.ui.VoiceItemView
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.id
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlinx.collections.immutable.ImmutableList
 
@@ -137,7 +140,6 @@ fun MediaGalleryView(
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false,
-                modifier = Modifier,
             ) { page ->
                 val mode = MediaGalleryMode.entries[page]
                 MediaGalleryPage(
@@ -198,6 +200,13 @@ private fun MediaGalleryPage(
 ) {
     val groupedMediaItems = state.groupedMediaItems
     if (groupedMediaItems.isLoadingItems(mode)) {
+        // Need to trigger a pagination now if there is only one LoadingIndicator.
+        val loadingItem = groupedMediaItems.dataOrNull()?.getItems(mode)?.singleOrNull() as? MediaItem.LoadingIndicator
+        if (loadingItem != null) {
+            LaunchedEffect(loadingItem.timestamp) {
+                state.eventSink(MediaGalleryEvents.LoadMore(loadingItem.direction))
+            }
+        }
         LoadingContent(mode)
     } else {
         when (groupedMediaItems) {

@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.utils.snackbar
 import androidx.annotation.StringRes
 import androidx.compose.material3.SnackbarDuration
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.random.Random
 
 /**
  * A message to be displayed in a [Snackbar].
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param duration The duration of the message. The default value is [SnackbarDuration.Short].
  * @param actionResId The action text to be displayed. The default value is `null`.
  * @param isDisplayed Used to track if the current message is already displayed or not.
+ * @param id The unique identifier of the message. The default value is a random long.
  * @param action The action to be performed when the action is clicked.
  */
 data class SnackbarMessage(
@@ -24,5 +26,6 @@ data class SnackbarMessage(
     val duration: SnackbarDuration = SnackbarDuration.Short,
     @StringRes val actionResId: Int? = null,
     val isDisplayed: AtomicBoolean = AtomicBoolean(false),
+    val id: Long = Random.nextLong(),
     val action: () -> Unit = {},
 )

@@ -31,10 +31,17 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
     }
 
     data class Params(
+        val mode: MediaViewerMode,
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val canShowInfo: Boolean,
     ) : NodeInputs
+
+    enum class MediaViewerMode {
+        SingleMedia,
+        TimelineImagesAndVideos,
+        TimelineFilesAndAudios,
+    }
 }

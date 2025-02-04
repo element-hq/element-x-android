@@ -19,7 +19,7 @@ fun MatrixRoom.matches(roomIdOrAlias: RoomIdOrAlias): Boolean {
             roomIdOrAlias.roomId == roomId
         }
         is RoomIdOrAlias.Alias -> {
-            roomIdOrAlias.roomAlias == alias || roomIdOrAlias.roomAlias in alternativeAliases
+            roomIdOrAlias.roomAlias == canonicalAlias || roomIdOrAlias.roomAlias in alternativeAliases
         }
     }
 }

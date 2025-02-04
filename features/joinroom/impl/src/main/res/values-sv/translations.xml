@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Avbryt begäran"</string>
   <string name="screen_join_room_join_action">"Gå med i rummet"</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
   <string name="screen_join_room_knock_message_description">"Meddelande (valfritt)"</string>
+  <string name="screen_join_room_knock_sent_description">"Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras."</string>
   <string name="screen_join_room_knock_sent_title">"Begäran om att gå med skickad"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s stöder inte utrymmen än. Du kan komma åt utrymmen på webben."</string>
   <string name="screen_join_room_space_not_supported_title">"Utrymmen stöds inte ännu"</string>

@@ -25,6 +25,7 @@ data class MediaInfo(
     val dateSent: String?,
     val dateSentFull: String?,
     val waveform: List<Float>?,
+    val duration: String?,
 ) : Parcelable
 
 fun anImageMediaInfo(
@@ -45,6 +46,7 @@ fun anImageMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = null,
+    duration = null,
 )
 
 fun aVideoMediaInfo(
@@ -52,6 +54,7 @@ fun aVideoMediaInfo(
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
+    duration: String? = null,
 ): MediaInfo = MediaInfo(
     filename = "a video file.mp4",
     caption = caption,
@@ -64,6 +67,7 @@ fun aVideoMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = null,
+    duration = duration,
 )
 
 fun aPdfMediaInfo(
@@ -84,6 +88,7 @@ fun aPdfMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = null,
+    duration = null,
 )
 
 fun anApkMediaInfo(
@@ -103,6 +108,7 @@ fun anApkMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = null,
+    duration = null,
 )
 
 fun anAudioMediaInfo(
@@ -112,6 +118,7 @@ fun anAudioMediaInfo(
     dateSent: String? = null,
     dateSentFull: String? = null,
     waveForm: List<Float>? = null,
+    duration: String? = null,
 ): MediaInfo = MediaInfo(
     filename = filename,
     caption = caption,
@@ -124,6 +131,7 @@ fun anAudioMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = waveForm,
+    duration = duration,
 )
 
 fun aVoiceMediaInfo(
@@ -133,6 +141,7 @@ fun aVoiceMediaInfo(
     dateSent: String? = null,
     dateSentFull: String? = null,
     waveForm: List<Float>? = null,
+    duration: String? = null,
 ): MediaInfo = MediaInfo(
     filename = filename,
     caption = caption,
@@ -145,4 +154,5 @@ fun aVoiceMediaInfo(
     dateSent = dateSent,
     dateSentFull = dateSentFull,
     waveform = waveForm,
+    duration = duration,
 )

@@ -67,7 +67,10 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the clear room emits identity change, the presenter does not emit new state`() = runTest {
-        val room = FakeMatrixRoom(isEncrypted = false)
+        val room = FakeMatrixRoom(
+            isEncrypted = false,
+            enableEncryptionResult = { Result.success(Unit) }
+        )
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()

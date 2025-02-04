@@ -14,7 +14,7 @@
     <item quantity="other">"%d értesítés"</item>
   </plurals>
   <string name="notification_fallback_content">"Értesítés"</string>
-  <string name="notification_incoming_call">"Bejövő hívás"</string>
+  <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
   <string name="notification_invitation_action_reject">"Elutasítás"</string>

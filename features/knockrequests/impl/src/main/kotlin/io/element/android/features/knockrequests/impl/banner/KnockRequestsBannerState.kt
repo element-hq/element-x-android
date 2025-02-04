@@ -12,7 +12,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.knockrequests.impl.R
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
-import io.element.android.libraries.core.extensions.firstIfSingle
 import kotlinx.collections.immutable.ImmutableList
 
 data class KnockRequestsBannerState(
@@ -22,8 +21,8 @@ data class KnockRequestsBannerState(
     val canAccept: Boolean,
     val eventSink: (KnockRequestsBannerEvents) -> Unit,
 ) {
-    val subtitle = knockRequests.firstIfSingle()?.userId?.value
-    val reason = knockRequests.firstIfSingle()?.reason
+    val subtitle = knockRequests.singleOrNull()?.userId?.value
+    val reason = knockRequests.singleOrNull()?.reason
 
     @Composable
     fun formattedTitle(): String {

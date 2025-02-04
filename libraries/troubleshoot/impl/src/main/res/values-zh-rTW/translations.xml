@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"執行測試"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"再次執行測試"</string>
+  <string name="troubleshoot_notifications_screen_failure">"部份測試失敗。請檢查詳細資訊。"</string>
+  <string name="troubleshoot_notifications_screen_notice">"執行測試以偵測組態中可能導致通知無法如預期般執行的任何問題。"</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"嘗試修復"</string>
+  <string name="troubleshoot_notifications_screen_success">"所有測試皆成功通過。"</string>
+  <string name="troubleshoot_notifications_screen_title">"疑難排解通知"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"部份測試需要您的注意。請檢查詳細資訊。"</string>
+</resources>

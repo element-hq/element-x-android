@@ -8,7 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.gallery.di
 
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
 /**
  * A factory for a [Presenter] associated with a timeline item.

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Endringene dine er ikke lagret. Er du sikker på at du vil gå tilbake?"</string>
+  <string name="screen_create_poll_question_hint">"Hva handler avstemningen om?"</string>
+  <string name="screen_create_poll_title">"Opprett avstemning"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Er du sikker på at du vil slette denne avstemningen?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Slett avstemning"</string>
+  <string name="screen_edit_poll_title">"Rediger avstemning"</string>
+</resources>

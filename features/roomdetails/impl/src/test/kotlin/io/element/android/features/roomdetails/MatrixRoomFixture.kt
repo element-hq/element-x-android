@@ -11,6 +11,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -29,9 +30,11 @@ fun aMatrixRoom(
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
+    joinRule: JoinRule? = null,
     notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     emitRoomInfo: Boolean = false,
     canInviteResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    canBanResult: (UserId) -> Result<Boolean> = { lambdaError() },
     canSendStateResult: (UserId, StateEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
     userDisplayNameResult: (UserId) -> Result<String?> = { lambdaError() },
     userAvatarUrlResult: () -> Result<String?> = { lambdaError() },
@@ -51,6 +54,7 @@ fun aMatrixRoom(
     isDirect = isDirect,
     notificationSettingsService = notificationSettingsService,
     canInviteResult = canInviteResult,
+    canBanResult = canBanResult,
     canSendStateResult = canSendStateResult,
     userDisplayNameResult = userDisplayNameResult,
     userAvatarUrlResult = userAvatarUrlResult,
@@ -70,6 +74,7 @@ fun aMatrixRoom(
                 avatarUrl = avatarUrl,
                 isDirect = isDirect,
                 isPublic = isPublic,
+                joinRule = joinRule,
             )
         )
     }

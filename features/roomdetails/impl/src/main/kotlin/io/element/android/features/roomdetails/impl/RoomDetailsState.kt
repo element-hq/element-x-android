@@ -45,15 +45,14 @@ data class RoomDetailsState(
     val pinnedMessagesCount: Int?,
     val canShowKnockRequests: Boolean,
     val knockRequestsCount: Int?,
+    val canShowSecurityAndPrivacy: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
-        if (isEncrypted || isPublic) {
-            if (isEncrypted) {
-                add(RoomBadge.ENCRYPTED)
-            } else {
-                add(RoomBadge.NOT_ENCRYPTED)
-            }
+        if (isEncrypted) {
+            add(RoomBadge.ENCRYPTED)
+        } else {
+            add(RoomBadge.NOT_ENCRYPTED)
         }
         if (isPublic) {
             add(RoomBadge.PUBLIC)

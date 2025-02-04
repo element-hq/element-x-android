@@ -17,9 +17,9 @@ import dagger.assisted.AssistedInject
 import dagger.multibindings.IntoMap
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
 import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemEventContentKey
 import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresenterFactory
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlin.time.Duration

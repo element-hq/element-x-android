@@ -8,10 +8,12 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.PaginationStatusListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
+import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 
 class FakeRustTimeline : Timeline(NoPointer) {
     private var listener: TimelineListener? = null
@@ -23,4 +25,16 @@ class FakeRustTimeline : Timeline(NoPointer) {
     fun emitDiff(diff: List<TimelineDiff>) {
         listener!!.onUpdate(diff)
     }
+
+    private var paginationStatusListener: PaginationStatusListener? = null
+    override suspend fun subscribeToBackPaginationStatus(listener: PaginationStatusListener): TaskHandle {
+        this.paginationStatusListener = listener
+        return FakeRustTaskHandle()
+    }
+
+    fun emitPaginationStatus(status: LiveBackPaginationStatus) {
+        paginationStatusListener!!.onUpdate(status)
+    }
+
+    override suspend fun fetchMembers() = Unit
 }

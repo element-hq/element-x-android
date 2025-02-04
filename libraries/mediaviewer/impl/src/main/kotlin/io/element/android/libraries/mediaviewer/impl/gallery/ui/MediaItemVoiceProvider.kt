@@ -9,12 +9,8 @@ package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.preview.loremIpsum
-import io.element.android.libraries.designsystem.components.media.aWaveForm
-import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.mediaviewer.api.aVoiceMediaInfo
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
-import kotlinx.collections.immutable.toImmutableList
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 
 class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
     override val values: Sequence<MediaItem.Voice>
@@ -31,24 +27,4 @@ class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
                 waveform = emptyList(),
             ),
         )
-}
-
-fun aMediaItemVoice(
-    id: UniqueId = UniqueId("fileId"),
-    filename: String = "filename.ogg",
-    caption: String? = null,
-    duration: String? = "1:23",
-    waveform: List<Float> = aWaveForm(),
-): MediaItem.Voice {
-    return MediaItem.Voice(
-        id = id,
-        eventId = null,
-        mediaInfo = aVoiceMediaInfo(
-            filename = filename,
-            caption = caption,
-        ),
-        mediaSource = MediaSource(""),
-        duration = duration,
-        waveform = waveform.toImmutableList(),
-    )
 }

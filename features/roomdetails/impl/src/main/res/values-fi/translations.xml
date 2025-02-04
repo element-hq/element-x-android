@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa."</string>
+  <string name="screen_edit_room_address_title">"Huoneen osoite"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ilmoitusasetusten muokkaamisessa tapahtui virhe."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa."</string>
   <string name="screen_polls_history_title">"Kyselyt"</string>
@@ -7,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"Porttikieltojen antaminen"</string>
   <string name="screen_room_change_permissions_delete_messages">"Viestien poistaminen"</string>
   <string name="screen_room_change_permissions_everyone">"Kaikki"</string>
-  <string name="screen_room_change_permissions_invite_people">"Kutsujen antaminen"</string>
+  <string name="screen_room_change_permissions_invite_people">"Ihmisten kutsuminen ja liittymispyyntöjen hyväksyminen"</string>
   <string name="screen_room_change_permissions_member_moderation">"Jäsenten valvonta"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Viestit ja sisältö"</string>
   <string name="screen_room_change_permissions_moderators">"Ylläpitäjät ja valvojat"</string>
-  <string name="screen_room_change_permissions_remove_people">"Henkilöiden poistaminen"</string>
+  <string name="screen_room_change_permissions_remove_people">"Henkilöiden poistaminen ja liittymispyyntöjen hylkääminen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Huoneen avatarin vaihtaminen"</string>
   <string name="screen_room_change_permissions_room_details">"Huoneen tiedot"</string>
   <string name="screen_room_change_permissions_room_name">"Huoneen nimen vaihtaminen"</string>
@@ -54,9 +56,11 @@
   <string name="screen_room_details_notification_mode_default">"Oletus"</string>
   <string name="screen_room_details_notification_title">"Ilmoitukset"</string>
   <string name="screen_room_details_pinned_events_row_title">"Kiinnitetyt viestit"</string>
+  <string name="screen_room_details_profile_row_title">"Profiili"</string>
   <string name="screen_room_details_requests_to_join_title">"Liittymispyynnöt"</string>
   <string name="screen_room_details_roles_and_permissions">"Roolit ja oikeudet"</string>
   <string name="screen_room_details_room_name_label">"Huoneen nimi"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Turvallisuus ja yksityisyys"</string>
   <string name="screen_room_details_security_title">"Turvallisuus"</string>
   <string name="screen_room_details_share_room_title">"Jaa huone"</string>
   <string name="screen_room_details_title">"Huoneen tiedot"</string>
@@ -116,4 +120,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roolit"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Huoneen tiedot"</string>
   <string name="screen_room_roles_and_permissions_title">"Roolit ja oikeudet"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Lisää huoneen osoite"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Pyydä liittymistä"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Kyllä, ota salaus käyttöön"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kun salaus on kerran otettu käyttöön, sitä ei voi poistaa käytöstä. Viestihistoria näkyy vain huoneen jäsenille kutsusta tai liittymisestä lähtien.
+Kukaan muu kuin huoneen jäsenet eivät pysty lukemaan viestejä. Tämä voi estää botteja tai siltoja toimimasta oikein.
+Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa voi löytää ja joihin kuka tahansa voi liittyä."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Otetaanko salaus käyttöön?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Kun salaus on kerran otettu käyttöön, sitä ei voi poistaa käytöstä."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Salaus"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Ota päästä päähän -salaus käyttöön"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kuka tahansa voi löytää ja liittyä."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kuka tahansa"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Vain kutsutut henkilöt voivat liittyä"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Vain kutsutut"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Huoneeseen pääsy"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Tiloja ei tällä hetkellä tueta"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Tilan jäsenet"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Tarvitset huoneen osoitteen, jotta se näkyy huonehakemistossa."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Huoneen osoite"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Salli tämän huoneen löytäminen hakemalla %1$s -palvelimen julkisesta huonehakemistosta."</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Näkyy julkisessa huonehakemistossa"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kuka tahansa"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Kuka voi lukea viestihistoriaa"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Jäsenet vasta kutsusta lähtien"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Jäsenet tämän vaihtoehdon valinnan jälkeen"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
+Voit halutessasi julkaista huoneesi kotipalvelimesi julkisessa huonehakemistossa."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Huoneen julkaiseminen"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
+Osoitetta tarvitaan myös, jotta huone näkyy %1$s -palvelimen julkisessa huonehakemistossa."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Huoneen näkyvyys"</string>
+  <string name="screen_security_and_privacy_title">"Turvallisuus ja yksityisyys"</string>
 </resources>

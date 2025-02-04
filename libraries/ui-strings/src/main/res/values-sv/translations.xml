@@ -64,6 +64,7 @@
   <string name="action_forgot_password">"Glömt lösenordet?"</string>
   <string name="action_forward">"Vidarebefordra"</string>
   <string name="action_go_back">"Gå tillbaka"</string>
+  <string name="action_ignore">"Ignorera"</string>
   <string name="action_invite">"Bjud in"</string>
   <string name="action_invite_friends">"Bjud in personer"</string>
   <string name="action_invite_friends_to_app">"Bjud in personer till %1$s"</string>
@@ -137,6 +138,7 @@
   <string name="common_dark">"Mörkt"</string>
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
+  <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
   <string name="common_do_not_show_this_again">"Visa inte detta igen"</string>
   <string name="common_edited_suffix">"(redigerad)"</string>
@@ -244,6 +246,7 @@ Anledning:%1$s."</string>
   <string name="common_username">"Användarnamn"</string>
   <string name="common_verification_cancelled">"Verifiering avbruten"</string>
   <string name="common_verification_complete">"Verifieringen slutförd"</string>
+  <string name="common_verification_failed">"Verifiering misslyckades"</string>
   <string name="common_verified">"Verifierad"</string>
   <string name="common_verify_device">"Verifiera enheten"</string>
   <string name="common_video">"Video"</string>

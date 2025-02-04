@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Так, прийняти всі"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Ви впевнені, що хочете прийняти всі запити на приєднання?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Прийняти всі запити"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Прийняти всі"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Ми не змогли прийняти всі запити. Бажаєте спробувати ще раз?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Не вдалося прийняти всі запити"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Прийняття всіх запитів на приєднання"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Ми не змогли прийняти цей запит. Бажаєте спробувати ще раз?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Не вдалося прийняти запит"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Прийняття запиту на приєднання"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Так, відхилити та заблокувати"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Ви впевнені, що хочете відхилити та заборонити %1$s? Цей користувач не зможе знову запитувати про доступ до цієї кімнати."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Відмова та заборона доступу"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Відмова та заборона доступу"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Так, відхилити"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Ви впевнені, що хочете відхилити запит %1$s на приєднання до цієї кімнати?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Відмовити в доступі"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Відхилити та заблокувати"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Ми не змогли відхилити цей запит. Бажаєте спробувати ще раз?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Не вдалося відхилити запит"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Відхилення запиту на приєднання"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Коли хтось попросить приєднатися до кімнати, ви зможете побачити їхній запит тут."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Немає нерозглянутих запитів на приєднання"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Завантаження запитів на приєднання…"</string>
+  <string name="screen_knock_requests_list_title">"Запити на приєднання"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d інший хочуть приєднатися до цієї кімнати"</item>
+    <item quantity="few">"%1$s +%2$d інші хочуть приєднатися до цієї кімнати"</item>
+    <item quantity="many">"%1$s +%2$d інших хочуть приєднатися до цієї кімнати"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Переглянути все"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Прийняти"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s хоче приєднатися до цієї кімнати"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Перегляд"</string>
+</resources>

@@ -12,4 +12,5 @@ enum class SyncState {
     Running,
     Error,
     Terminated,
+    Offline,
 }

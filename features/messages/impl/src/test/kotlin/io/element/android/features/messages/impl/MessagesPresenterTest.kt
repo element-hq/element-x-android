@@ -35,7 +35,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -72,6 +71,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aTimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -1187,7 +1187,7 @@ class MessagesPresenterTest {
             identityChangeStatePresenter = { anIdentityChangeState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             roomCallStatePresenter = { aStandByCallState() },
-            networkMonitor = FakeNetworkMonitor(),
+            syncService = FakeSyncService(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,

@@ -18,7 +18,6 @@ import io.element.android.features.knockrequests.impl.data.KnockRequestPresentab
 import io.element.android.features.knockrequests.impl.data.KnockRequestsService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
-import io.element.android.libraries.core.extensions.firstIfSingle
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -79,7 +78,7 @@ class KnockRequestsBannerPresenter @Inject constructor(
         knockRequests: List<KnockRequestPresentable>,
         displayAcceptError: MutableState<Boolean>,
     ) = launch {
-        val knockRequest = knockRequests.firstIfSingle()
+        val knockRequest = knockRequests.singleOrNull()
         if (knockRequest != null) {
             knockRequestsService.acceptKnockRequest(knockRequest, optimistic = true)
                 .onFailure {

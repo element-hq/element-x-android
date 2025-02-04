@@ -11,6 +11,7 @@ import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 

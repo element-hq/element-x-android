@@ -35,9 +35,6 @@ val excludedKoverSubProjects = listOf(
     ":anvilannotations",
     ":anvilcodegen",
     ":tests:testutils",
-    // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix
-    // SDK api, so it is not really relevant to unit test it: there is no logic to test.
-    ":libraries:matrix:impl",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
     ":appconfig",

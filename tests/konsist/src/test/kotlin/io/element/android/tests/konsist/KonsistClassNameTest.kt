@@ -122,6 +122,7 @@ class KonsistClassNameTest {
             .withoutName(
                 "Factory",
                 "TimelineController",
+                "TimelineMediaGalleryDataSource",
             )
             .withoutNameStartingWith(
                 "Accompanist",
@@ -135,6 +136,7 @@ class KonsistClassNameTest {
                 "Enterprise",
                 "Fdroid",
                 "FileExtensionExtractor",
+                "LiveMediaTimeline",
                 "KeyStore",
                 "Matrix",
                 "Noop",

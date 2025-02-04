@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Цей файл буде вилучено з кімнати, і учасники не матимуть доступу до нього."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Видалити файл?"</string>
+  <string name="screen_media_browser_download_error_message">"Перевірте з\'єднання з інтернетом і повторіть спробу."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Тут будуть показані документи, аудіофайли та голосові повідомлення, вивантажені в цю кімнату."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ще не вивантажено жодного файлу"</string>
+  <string name="screen_media_browser_list_loading_files">"Завантаження файлів…"</string>
+  <string name="screen_media_browser_list_loading_media">"Завантаження медіа…"</string>
+  <string name="screen_media_browser_list_mode_files">"Файли"</string>
+  <string name="screen_media_browser_list_mode_media">"Медіа"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Зображення та відео, вивантажені в цю кімнату, будуть показані тут."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Ще не вивантажено жодного медіафайлу"</string>
+  <string name="screen_media_browser_title">"Медіа та файли"</string>
+  <string name="screen_media_details_file_format">"Формат файлу"</string>
+  <string name="screen_media_details_filename">"Назва файлу"</string>
+  <string name="screen_media_details_redact_confirmation_message">"Цей файл буде вилучено з кімнати, і учасники не матимуть доступу до нього."</string>
+  <string name="screen_media_details_redact_confirmation_title">"Видалити файл?"</string>
+  <string name="screen_media_details_uploaded_by">"Вивантажено користувачем"</string>
+  <string name="screen_media_details_uploaded_on">"Вивантажено"</string>
+</resources>

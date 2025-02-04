@@ -63,7 +63,7 @@ class StateContentFormatter @Inject constructor(
                 }
             }
             is OtherState.RoomTopic -> {
-                val hasRoomTopic = content.topic != null
+                val hasRoomTopic = content.topic?.isNotBlank() == true
                 when {
                     senderIsYou && hasRoomTopic -> sp.getString(R.string.state_event_room_topic_changed_by_you, content.topic)
                     senderIsYou && !hasRoomTopic -> sp.getString(R.string.state_event_room_topic_removed_by_you)

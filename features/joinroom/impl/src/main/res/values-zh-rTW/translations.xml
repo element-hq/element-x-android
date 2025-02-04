@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"取消請求"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"是的，取消"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"您確定您想要取消加入此聊天室的請求嗎？"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"取消加入請求"</string>
+  <string name="screen_join_room_join_action">"加入聊天室"</string>
+  <string name="screen_join_room_knock_action">"傳送加入請求"</string>
+  <string name="screen_join_room_knock_message_description">"訊息（選擇性）"</string>
+  <string name="screen_join_room_knock_sent_description">"若接受了您的請求，您將會收到加入聊天是的邀請。"</string>
+  <string name="screen_join_room_knock_sent_title">"已傳送加入請求"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s 尚未支援空間。您可以在網頁上存取空間。"</string>
+  <string name="screen_join_room_space_not_supported_title">"尚未支援空間"</string>
+  <string name="screen_join_room_subtitle_knock">"點選下方按鈕將會通知聊天試管里員。一旦核准，您就可以加入對話。"</string>
+  <string name="screen_join_room_subtitle_no_preview">"您必須是此聊天室的成員才能檢視訊息歷史紀錄。"</string>
+  <string name="screen_join_room_title_knock">"想要加入此聊天室？"</string>
+  <string name="screen_join_room_title_no_preview">"無法使用預覽"</string>
+</resources>

@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
+  <string name="a11y_view_details">"Details anzeigen"</string>
   <string name="a11y_voice_message_record">"Sprachnachricht aufnehmen."</string>
   <string name="a11y_voice_message_stop_recording">"Aufnahme beenden"</string>
   <string name="action_accept">"Akzeptieren"</string>
@@ -181,6 +182,7 @@ Grund: %1$s."</string>
   <string name="common_light">"Hell"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
+  <string name="common_loading_more">"Mehr wird geladen…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Mitglied"</item>
     <item quantity="other">"%1$d Mitglieder"</item>
@@ -190,7 +192,7 @@ Grund: %1$s."</string>
   <string name="common_message_layout">"Nachrichtenlayout"</string>
   <string name="common_message_removed">"Nachricht entfernt"</string>
   <string name="common_modern">"Modern"</string>
-  <string name="common_mute">"Stummschalten"</string>
+  <string name="common_mute">"Stumm"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Raumname"</string>
   <string name="common_offline">"Offline"</string>
@@ -308,8 +310,6 @@ Grund: %1$s."</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="screen_edit_room_address_room_address_section_footer">"Sie brauchen eine Chatroomadresse, so dass sie im Verzeichnis sichtbar gemacht werden kann."</string>
-  <string name="screen_edit_room_address_title">"Chatroomadresse"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
@@ -339,38 +339,6 @@ Grund: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Beitrittsanfrage gesendet"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Chatroomadresse hinzufügen"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Jeder kann den Beitritt zum Chatroom beantragen, aber ein Administrator oder Moderator muss die Anfrage annehmen."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Bitte um Beitritt"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, Verschlüsselung aktivieren"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Nach der Aktivierung kann die Verschlüsselung für einen Raum nicht mehr deaktiviert werden. Der Nachrichtenverlauf ist nur für Raummitglieder sichtbar, weil sie eingeladen wurden oder dem Chatroom beigetreten sind.
-Niemand außer den Raummitgliedern kann Nachrichten lesen. Dies kann verhindern, dass Bots und Bridges richtig funktionieren.
-Wir empfehlen nicht, die Verschlüsselung für Räume zu aktivieren, die jeder finden und denen jeder beitreten kann."</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Verschlüsselung aktivieren?"</string>
-  <string name="screen_security_and_privacy_encryption_section_footer">"Nach der Aktivierung kann die Verschlüsselung nicht deaktiviert werden."</string>
-  <string name="screen_security_and_privacy_encryption_section_header">"Verschlüsselung"</string>
-  <string name="screen_security_and_privacy_encryption_toggle_title">"Ende-zu-Ende-Verschlüsselung aktivieren"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Jeder kann es finden und beitreten"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Alle"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Personen können nur beitreten, wenn sie eingeladen werden."</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur auf Einladung"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Chatroomzugang"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Räume werden zur Zeit nicht unterstützt."</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Raum Mitglieder"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Um den Chatroom im Chatroomverzeichnis sichtbar zu machen, benötigen Sie eine Chatroomadresse."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Chatroomadresse"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Erlauben Sie, dass dieser Chatroom gefunden werden kann, indem Sie das %1$s öffentliche Chatroomverzeichnis durchsuchen"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Sichtbar im öffentlichen Chatroomverzeichnis"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Jeder"</string>
-  <string name="screen_security_and_privacy_room_history_section_header">"Wer kann die Verlaufsgeschichte lesen"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Nur Mitglieder, da sie eingeladen wurden"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Nur Mitglieder seit Auswahl dieser Option"</string>
-  <string name="screen_security_and_privacy_room_publishing_section_footer">"Chatroomadressen machen es möglich, Chatrooms zu finden und auf sie zuzugreifen. Dadurch wird auch sichergestellt, dass Sie Ihren Chatroom problemlos mit anderen teilen können.
-Lassen Sie die Möglichkeit zu, Ihren Chatroom in Ihrem öffentlichen Chatroomverzeichnis auf Ihrem Homeserver zu veröffentlichen."</string>
-  <string name="screen_security_and_privacy_room_publishing_section_header">"Veröffentlichung von Räumen"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Chatroomadressen sind Möglichkeiten, Chatrooms zu finden und auf sie zuzugreifen. So können Sie Ihren Chatroom auch problemlos mit anderen teilen. Die Adresse ist auch erforderlich, um den Chatroom in einem %1$s öffentlichen Chatroomverzeichnis sichtbar zu machen."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Chatroomsichtbarkeit."</string>
-  <string name="screen_security_and_privacy_title">"Sicherheit &amp; Datenschutz"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>

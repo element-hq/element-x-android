@@ -8,6 +8,7 @@
 package io.element.android.libraries.dateformatter.api
 
 import java.util.Locale
+import kotlin.time.Duration
 
 /**
  * Convert milliseconds to human readable duration.
@@ -38,3 +39,5 @@ fun Long.toHumanReadableDuration(): String {
         String.format(Locale.US, "%d:%02d", minutes, seconds)
     }
 }
+
+fun Duration.toHumanReadableDuration() = inWholeMilliseconds.toHumanReadableDuration()

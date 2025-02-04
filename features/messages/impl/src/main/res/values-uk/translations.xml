@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Додати смайлики"</string>
   <string name="screen_room_timeline_beginning_of_room">"Це початок %1$s"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Це початок цієї розмови."</string>
+  <string name="screen_room_timeline_legacy_call">"Непідтримуваний виклик. Запитайте, чи може абонент використовувати новий застосунок Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Показувати менше"</string>
   <string name="screen_room_timeline_message_copied">"Повідомлення скопійовано"</string>
   <string name="screen_room_timeline_no_permission_to_post">"У вас немає дозволу на публікацію в цій кімнаті"</string>
