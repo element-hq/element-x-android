@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"添加表情符号"</string>
   <string name="screen_room_timeline_beginning_of_room">"这是 %1$s 聊天室的开始。"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"这是本对话的开始。"</string>
+  <string name="screen_room_timeline_legacy_call">"不支持的呼叫。询问呼叫者是否可以使用新的 Element X 应用程序。"</string>
   <string name="screen_room_timeline_less_reactions">"折叠"</string>
   <string name="screen_room_timeline_message_copied">"消息已复制"</string>
   <string name="screen_room_timeline_no_permission_to_post">"您无权在此聊天室发言"</string>

@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
+  <string name="a11y_view_details">"View details"</string>
   <string name="a11y_voice_message_record">"Record voice message."</string>
   <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
   <string name="action_accept">"Accept"</string>
@@ -181,6 +182,7 @@ Reason: %1$s."</string>
   <string name="common_light">"Light"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
+  <string name="common_loading_more">"Loading more…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
@@ -308,8 +310,6 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_edit_room_address_room_address_section_footer">"You’ll need a room address in order to make it visible in the directory."</string>
-  <string name="screen_edit_room_address_title">"Room address"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
@@ -339,39 +339,6 @@ Reason: %1$s."</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Request to join sent"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Add room address"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Anyone can ask to join the room but an administrator or moderator will have to accept the request."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Yes, enable encryption"</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.
-No one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.
-We do not recommend enabling encryption for rooms that anyone can find and join."</string>
-  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Enable encryption?"</string>
-  <string name="screen_security_and_privacy_encryption_section_footer">"Once enabled, encryption cannot be disabled."</string>
-  <string name="screen_security_and_privacy_encryption_section_header">"Encryption"</string>
-  <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can find and join"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"People can only join if they are invited"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Room access"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spaces are not currently supported"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space members"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"You’ll need a room address in order to make it visible in the room directory."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Room address"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Allow for this room to be found by searching %1$s public room directory"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visible in public room directory"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Anyone"</string>
-  <string name="screen_security_and_privacy_room_history_section_header">"Who can read history"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Members only since they were invited"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Members only since selecting this option"</string>
-  <string name="screen_security_and_privacy_room_publishing_section_footer">"Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
-You can choose to publish your room in your homeserver public room directory."</string>
-  <string name="screen_security_and_privacy_room_publishing_section_header">"Room publishing"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
-The address is also required to make the room visible in %1$s public room directory."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Room visibility"</string>
-  <string name="screen_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

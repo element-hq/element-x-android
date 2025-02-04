@@ -57,6 +57,7 @@ import kotlin.time.Duration.Companion.seconds
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun MediaVideoView(
+    isDisplayed: Boolean,
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     localMedia: LocalMedia?,
@@ -64,6 +65,7 @@ fun MediaVideoView(
 ) {
     val exoPlayer = rememberExoPlayer()
     ExoPlayerMediaVideoView(
+        isDisplayed = isDisplayed,
         localMediaViewState = localMediaViewState,
         bottomPaddingInPixels = bottomPaddingInPixels,
         exoPlayer = exoPlayer,
@@ -75,6 +77,7 @@ fun MediaVideoView(
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 private fun ExoPlayerMediaVideoView(
+    isDisplayed: Boolean,
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
@@ -161,6 +164,12 @@ private fun ExoPlayerMediaVideoView(
             )
         }
     }
+    LaunchedEffect(isDisplayed) {
+        // If not displayed, make sure to pause the video
+        if (!isDisplayed) {
+            exoPlayer.pause()
+        }
+    }
     if (localMedia?.uri != null) {
         LaunchedEffect(localMedia.uri) {
             val mediaItem = MediaItem.fromUri(localMedia.uri)
@@ -245,6 +254,7 @@ private fun ExoPlayerMediaVideoView(
 @Composable
 internal fun MediaVideoViewPreview() = ElementPreview {
     MediaVideoView(
+        isDisplayed = true,
         modifier = Modifier.fillMaxSize(),
         bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),

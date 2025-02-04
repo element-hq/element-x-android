@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Avrai bisogno di un indirizzo della stanza per renderla visibile nell\'elenco."</string>
+  <string name="screen_edit_room_address_title">"Indirizzo della stanza"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Si è verificato un errore durante l\'aggiornamento delle impostazioni di notifica."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze crifrate, quindi potresti non ricevere notifiche in alcune stanze."</string>
   <string name="screen_polls_history_title">"Sondaggi"</string>
@@ -7,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"Escludi membri"</string>
   <string name="screen_room_change_permissions_delete_messages">"Rimuovi messaggi"</string>
   <string name="screen_room_change_permissions_everyone">"Tutti"</string>
-  <string name="screen_room_change_permissions_invite_people">"Invitare persone"</string>
+  <string name="screen_room_change_permissions_invite_people">"Invita persone e accetta richieste di partecipazione"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderazione dei membri"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messaggi e contenuti"</string>
   <string name="screen_room_change_permissions_moderators">"Amministratori e moderatori"</string>
-  <string name="screen_room_change_permissions_remove_people">"Rimuovi persone"</string>
+  <string name="screen_room_change_permissions_remove_people">"Rimuovi le persone e rifiuta le richieste di partecipazione"</string>
   <string name="screen_room_change_permissions_room_avatar">"Cambia avatar della stanza"</string>
   <string name="screen_room_change_permissions_room_details">"Dettagli della stanza"</string>
   <string name="screen_room_change_permissions_room_name">"Cambia il nome della stanza"</string>
@@ -49,13 +51,16 @@
   <string name="screen_room_details_invite_people_title">"Invita persone"</string>
   <string name="screen_room_details_leave_conversation_title">"Abbandona la conversazione"</string>
   <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
+  <string name="screen_room_details_media_gallery_title">"File e contenuti multimediali"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizzato"</string>
   <string name="screen_room_details_notification_mode_default">"Predefinito"</string>
   <string name="screen_room_details_notification_title">"Notifiche"</string>
   <string name="screen_room_details_pinned_events_row_title">"Messaggi fissati"</string>
+  <string name="screen_room_details_profile_row_title">"Profilo"</string>
   <string name="screen_room_details_requests_to_join_title">"Richieste di accesso"</string>
   <string name="screen_room_details_roles_and_permissions">"Ruoli e autorizzazioni"</string>
   <string name="screen_room_details_room_name_label">"Nome stanza"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Sicurezza e privacy"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
   <string name="screen_room_details_title">"Informazioni sulla stanza"</string>
@@ -115,4 +120,36 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ruoli"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Dettagli della stanza"</string>
   <string name="screen_room_roles_and_permissions_title">"Ruoli e autorizzazioni"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Aggiungi l\'indirizzo della stanza"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Chiunque può chiedere di entrare nella stanza, ma un amministratore o un moderatore dovrà accettare la richiesta."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Chiedi di entrare"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sì, attiva la crittografia"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Una volta attivata, la crittografia di una stanza non può essere disattivata, la cronologia dei messaggi sarà visibile solo ai membri della stanza da quando sono stati invitati o da quando sono entrati nella stanza.
+Nessuno, oltre ai membri della stanza, sarà in grado di leggere i messaggi. Ciò potrebbe impedire ai bot e ai bridge di funzionare correttamente.
+Non consigliamo di attivare la crittografia per le stanze che chiunque può trovare e in cui può entrare."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Attivare la crittografia?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Una volta attivata, la crittografia non può essere disattivata."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Crittografia"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Attiva la crittografia end-to-end"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Chiunque può trovare ed entrare"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Chiunque"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Le persone possono partecipare solo se invitate"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Solo su invito"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Accesso alla stanza"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Gli spazi non sono attualmente supportati"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membri dello spazio"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Per rendere visibile la stanza nell\'elenco delle stanze, è necessario l\'indirizzo della stanza."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Indirizzo della stanza"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Consenti la ricerca di questa stanza effettuando una ricerca nell\'elenco delle stanze pubbliche di %1$s"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visibile nell\'elenco delle stanze pubbliche"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Chiunque"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Chi può leggere la cronologia messaggi"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Solo membri da quando sono stati invitati"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Solo membri da dopo aver selezionato questa opzione"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Gli indirizzi delle stanze sono modi per trovare e accedervi. In questo modo puoi anche condividere facilmente la tua stanze con altri.
+Puoi scegliere di pubblicare la tua stanza nell\'elenco delle stanza pubbliche dell\'homeserver."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Pubblicazione della stanza"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Gli indirizzi delle stanze sono modi per trovare e accedere a queste ultime. Questo assicura anche che tu possa condividere facilmente la tua stanza con altri. L\'indirizzo è anche necessario per rendere la stanza visibile in %1$s nell\'elenco delle stanze pubbliche."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilità della stanza"</string>
+  <string name="screen_security_and_privacy_title">"Sicurezza e privacy"</string>
 </resources>

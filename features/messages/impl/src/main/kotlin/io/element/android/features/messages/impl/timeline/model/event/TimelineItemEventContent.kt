@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlin.time.Duration
 
 @Immutable
 sealed interface TimelineItemEventContent {
@@ -89,4 +90,13 @@ fun TimelineItemEventContent.canReact(): Boolean =
 fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
     is TimelineItemEventMutableContent -> isEdited
     else -> false
+}
+
+fun TimelineItemEventContentWithAttachment.duration(): Duration? {
+    return when (this) {
+        is TimelineItemAudioContent -> duration
+        is TimelineItemVideoContent -> duration
+        is TimelineItemVoiceContent -> duration
+        else -> null
+    }
 }

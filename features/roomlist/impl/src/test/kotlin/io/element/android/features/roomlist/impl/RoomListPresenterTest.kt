@@ -19,8 +19,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -49,6 +47,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -86,7 +85,6 @@ import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -204,7 +202,7 @@ class RoomListPresenterTest {
         val encryptionService = FakeEncryptionService().apply {
             emitRecoveryState(RecoveryState.INCOMPLETE)
         }
-        val syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running)
         val presenter = createRoomListPresenter(
             client = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService, syncService = syncService),
         )
@@ -235,7 +233,7 @@ class RoomListPresenterTest {
             sessionVerificationService = FakeSessionVerificationService().apply {
                 emitNeedsSessionVerification(false)
             },
-            syncService = FakeSyncService(MutableStateFlow(SyncState.Running)),
+            syncService = FakeSyncService(initialSyncState = SyncState.Running),
         )
         val presenter = createRoomListPresenter(
             client = matrixClient,
@@ -636,7 +634,7 @@ class RoomListPresenterTest {
     private fun TestScope.createRoomListPresenter(
         buildMeta: BuildMeta = aBuildMeta(),
         client: MatrixClient = FakeMatrixClient(),
-        networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
+        syncService: SyncService = FakeSyncService(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
@@ -651,7 +649,7 @@ class RoomListPresenterTest {
     ) = RoomListPresenter(
         buildMeta = buildMeta,
         client = client,
-        networkMonitor = networkMonitor,
+        syncService = syncService,
         snackbarDispatcher = snackbarDispatcher,
         leaveRoomPresenter = { leaveRoomState },
         roomListDataSource = RoomListDataSource(

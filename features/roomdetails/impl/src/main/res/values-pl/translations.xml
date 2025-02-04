@@ -49,12 +49,15 @@
   <string name="screen_room_details_invite_people_title">"Zaproś znajomych"</string>
   <string name="screen_room_details_leave_conversation_title">"Opuść rozmowę"</string>
   <string name="screen_room_details_leave_room_title">"Opuść pokój"</string>
+  <string name="screen_room_details_media_gallery_title">"Media i pliki"</string>
   <string name="screen_room_details_notification_mode_custom">"Niestandardowy"</string>
   <string name="screen_room_details_notification_mode_default">"Domyślny"</string>
   <string name="screen_room_details_notification_title">"Powiadomienia"</string>
   <string name="screen_room_details_pinned_events_row_title">"Przypięte wiadomości"</string>
+  <string name="screen_room_details_requests_to_join_title">"Prośby o dołączenie"</string>
   <string name="screen_room_details_roles_and_permissions">"Role i uprawnienia"</string>
   <string name="screen_room_details_room_name_label">"Nazwa pokoju"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Bezpieczeństwo i prywatność"</string>
   <string name="screen_room_details_security_title">"Bezpieczeństwo"</string>
   <string name="screen_room_details_share_room_title">"Udostępnij pokój"</string>
   <string name="screen_room_details_title">"Informacje pokoju"</string>
@@ -81,7 +84,7 @@
   <string name="screen_room_member_list_manage_member_user_info">"Wyświetl profil"</string>
   <string name="screen_room_member_list_mode_banned">"Zbanowanych"</string>
   <string name="screen_room_member_list_mode_members">"Członków"</string>
-  <string name="screen_room_member_list_pending_header_title">"Oczekiwanie"</string>
+  <string name="screen_room_member_list_pending_header_title">"Oczekujące"</string>
   <string name="screen_room_member_list_removing_user">"Usuwanie %1$s…"</string>
   <string name="screen_room_member_list_role_administrator">"Administrator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
@@ -115,4 +118,20 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Role"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szczegóły pokoju"</string>
   <string name="screen_room_roles_and_permissions_title">"Role i uprawnienia"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Każdy może poprosić o dołączenie do pokoju, ale administrator lub moderator będzie musiał zatwierdzić żądanie."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Poproś o dołączenie"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Tak, włącz szyfrowanie"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Po włączeniu szyfrowanie pokoju nie może zostać wyłączone, a historia wiadomości będzie widoczna tylko dla członków od momentu, w którym dołączyli lub zostali zaproszeni.
+Nikt poza członkami pokoju nie będzie mógł czytać wiadomości. Może to wpłynąć na prawidłowe działanie botów lub mostków.
+Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do których każdy może dołączyć."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Włączyć szyfrowanie?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Po włączeniu szyfrowania nie można wyłączyć."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Szyfrowanie"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Włącz szyfrowanie end-to-end"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może znaleźć i dołączyć"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Każdy"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>
+  <string name="screen_security_and_privacy_title">"Bezpieczeństwo i prywatność"</string>
 </resources>

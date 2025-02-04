@@ -50,6 +50,7 @@ class AndroidLocalMediaFactoryTest {
                 dateSent = "12:34",
                 dateSentFull = "full",
                 waveform = null,
+                duration = null,
             )
         )
     }

@@ -55,8 +55,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
@@ -181,7 +179,7 @@ class RustTimeline(
                 updatePaginationStatus(direction) { it.copy(isPaginating = true) }
                 when (direction) {
                     Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
-                    Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
+                    Timeline.PaginationDirection.FORWARDS -> inner.paginateForwards(PAGINATION_SIZE.toUShort())
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {
@@ -213,8 +211,8 @@ class RustTimeline(
 
     override val timelineItems: Flow<List<MatrixTimelineItem>> = combine(
         _timelineItems,
-        backPaginationStatus.filter { !it.isPaginating }.distinctUntilChanged(),
-        forwardPaginationStatus.filter { !it.isPaginating }.distinctUntilChanged(),
+        backPaginationStatus,
+        forwardPaginationStatus,
         matrixRoom.roomInfoFlow.map { it.creator },
         isTimelineInitialized,
     ) { timelineItems,

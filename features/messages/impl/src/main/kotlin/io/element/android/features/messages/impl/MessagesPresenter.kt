@@ -47,8 +47,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -72,6 +70,8 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -98,7 +98,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
-    private val networkMonitor: NetworkMonitor,
+    private val syncService: SyncService,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
@@ -170,7 +170,7 @@ class MessagesPresenter @AssistedInject constructor(
                 showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDm && room.activeMemberCount == 1L
             }
         }
-        val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+        val isOnline by syncService.isOnline().collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
@@ -221,7 +221,7 @@ class MessagesPresenter @AssistedInject constructor(
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
             readReceiptBottomSheetState = readReceiptBottomSheetState,
-            hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
+            hasNetworkConnection = isOnline,
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
@@ -485,7 +485,7 @@ class MessagesPresenter @AssistedInject constructor(
         )
     }
 
-    private suspend fun handleCopyContents(event: TimelineItem.Event) {
+    private fun handleCopyContents(event: TimelineItem.Event) {
         val content = when (event.content) {
             is TimelineItemTextBasedContent -> event.content.body
             is TimelineItemStateContent -> event.content.body
@@ -497,7 +497,7 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleCopyCaption(event: TimelineItem.Event) {
+    private fun handleCopyCaption(event: TimelineItem.Event) {
         val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
         clipboardHelper.copyPlainText(content)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {

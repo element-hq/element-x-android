@@ -68,7 +68,7 @@ class DefaultCallNotificationEventResolver @Inject constructor(
                     noisy = true,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
-                    body = "☎️ ${stringProvider.getString(R.string.notification_incoming_call)}",
+                    body = stringProvider.getString(R.string.notification_incoming_call),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,

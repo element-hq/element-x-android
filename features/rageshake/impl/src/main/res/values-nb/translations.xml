@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Legg ved skjermbilde"</string>
+  <string name="screen_bug_report_contact_me">"Du kan kontakte meg hvis du har noen oppfølgingsspørsmål."</string>
+  <string name="screen_bug_report_edit_screenshot">"Rediger skjermbilde"</string>
+  <string name="screen_bug_report_editor_description">"Vennligst beskriv problemet. Hva har du gjort? Hva forventet du skulle skje? Hva som faktisk skjedde. Vær så detaljert som mulig."</string>
+  <string name="screen_bug_report_editor_placeholder">"Beskriv problemet…"</string>
+  <string name="screen_bug_report_editor_supporting">"Hvis mulig, vennligst skriv beskrivelsen på engelsk."</string>
+  <string name="screen_bug_report_include_crash_logs">"Send krasjlogger"</string>
+  <string name="screen_bug_report_include_logs">"Tillat logger"</string>
+  <string name="screen_bug_report_include_screenshot">"Send skjermbilde"</string>
+  <string name="screen_bug_report_logs_description">"Logger vil bli inkludert i meldingen din, for å sikre at alt fungerer som det skal. For å sende meldingen uten logger, slå av denne innstillingen."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s krasjet sist gang den ble brukt. Vil du dele en krasjrapport med oss?"</string>
+</resources>

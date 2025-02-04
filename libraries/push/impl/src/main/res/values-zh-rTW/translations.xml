@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"通話"</string>
+  <string name="notification_channel_listening_for_events">"監聽事件"</string>
+  <string name="notification_channel_noisy">"吵雜通知"</string>
+  <string name="notification_channel_ringing_calls">"來電鈴聲"</string>
   <string name="notification_channel_silent">"無聲通知"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="other">"%1$s：%2$d 則訊息"</item>
@@ -9,6 +12,7 @@
     <item quantity="other">"%d 個通知"</item>
   </plurals>
   <string name="notification_fallback_content">"通知"</string>
+  <string name="notification_incoming_call">"來電"</string>
   <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒絕"</string>
@@ -16,6 +20,7 @@
     <item quantity="other">"%d 個邀請"</item>
   </plurals>
   <string name="notification_invite_body">"邀請您聊天"</string>
+  <string name="notification_invite_body_with_sender">"%1$s 邀請您加入聊天"</string>
   <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
   <string name="notification_new_messages">"新訊息"</string>
   <plurals name="notification_new_messages_for_room">
@@ -25,13 +30,45 @@
   <string name="notification_room_action_mark_as_read">"標為已讀"</string>
   <string name="notification_room_action_quick_reply">"快速回覆"</string>
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s 邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>
+  <string name="notification_sender_mention_reply">"%1$s 提及或回覆"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="other">"%d 則未讀的已通知訊息"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s 與 %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s 在 %2$s 中"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s 在 %2$s 與 %3$s 中"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="other">"%d 個聊天室"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服務。通知可能無法正常運作。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"取得目前提供者的名稱。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"未選取推播提供者。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"目前的推播提供者：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"目前的推播提供者"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"確保應用程式至少有一個推播提供者。"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"找不到推播提供者。"</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="other">"找到 %1$d 個推播提供者：%2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"偵測推播提供者"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"檢查應用程式是否可以顯示通知。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"尚未點選通知。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"無法顯示通知。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"已點選通知！"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"顯示通知"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"請點選通知以繼續測試。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"確保應用程式正在接收推播。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"錯誤：推播程式拒絕請求。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"錯誤：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"錯誤，無法測試推播。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"錯誤，等待推播逾時。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"推播返回需要 %1$d 毫秒。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"測試推播返回"</string>
 </resources>

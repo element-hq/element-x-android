@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Fortsett tilbakestillingen"</string>
+  <string name="screen_encryption_reset_bullet_1">"Dine kontodetaljer, kontakter, innstillinger og chatteliste vil bli beholdt"</string>
+  <string name="screen_encryption_reset_bullet_2">"Du mister all meldingshistorikk som bare er lagret på serveren"</string>
+  <string name="screen_encryption_reset_bullet_3">"Du må verifisere alle eksisterende enheter og kontakter på nytt"</string>
+  <string name="screen_encryption_reset_footer">"Tilbakestill identiteten din bare hvis du ikke har tilgang til en annen pålogget enhet og du har mistet gjenopprettingsnøkkelen."</string>
+  <string name="screen_encryption_reset_title">"Kan du ikke bekrefte? Du må tilbakestille identiteten din."</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Slå av"</string>
+  <string name="screen_recovery_key_confirm_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
+</resources>

@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
+  <string name="a11y_view_details">"Zobraziť podrobnosti"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
   <string name="action_accept">"Prijať"</string>
@@ -48,6 +49,7 @@
   <string name="action_confirm_password">"Potvrdiť heslo"</string>
   <string name="action_continue">"Pokračovať"</string>
   <string name="action_copy">"Kopírovať"</string>
+  <string name="action_copy_caption">"Kopírovať titulok"</string>
   <string name="action_copy_link">"Kopírovať odkaz"</string>
   <string name="action_copy_link_to_message">"Kopírovať odkaz do správy"</string>
   <string name="action_copy_text">"Kopírovať text"</string>
@@ -128,6 +130,7 @@
   <string name="action_view_in_timeline">"Zobraziť na časovej osi"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
+  <string name="action_yes_try_again">"Áno, skúsiť to znova"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_adding_caption">"Pridáva sa titulok"</string>
@@ -149,6 +152,8 @@
   <string name="common_device_id">"ID zariadenia"</string>
   <string name="common_direct_chat">"Priama konverzácia"</string>
   <string name="common_do_not_show_this_again">"Nezobrazovať toto znova"</string>
+  <string name="common_download_failed">"Sťahovanie zlyhalo"</string>
+  <string name="common_downloading">"Sťahovanie"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_editing_caption">"Úprava titulku"</string>
@@ -165,6 +170,8 @@ Dôvod: %1$s."</string>
   <string name="common_favourite">"Obľúbené"</string>
   <string name="common_favourited">"Obľúbené"</string>
   <string name="common_file">"Súbor"</string>
+  <string name="common_file_deleted">"Súbor bol vymazaný"</string>
+  <string name="common_file_saved">"Súbor bol uložený"</string>
   <string name="common_file_saved_on_disk_android">"Súbor bol uložený do priečinka Stiahnuté súbory"</string>
   <string name="common_forward_message">"Preposlať správu"</string>
   <string name="common_frequently_used">"Často používané"</string>
@@ -177,6 +184,7 @@ Dôvod: %1$s."</string>
   <string name="common_light">"Svetlý"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
+  <string name="common_loading_more">"Načítava sa viac…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d člen"</item>
     <item quantity="few">"%1$d členovia"</item>
@@ -274,6 +282,8 @@ Dôvod: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Zdá sa, že totožnosť používateľa %1$s sa zmenila.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Zdá sa, že identita %2$s používateľa %1$s sa zmenila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Overená identita používateľa %1$s %2$s sa zmenila. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Zrušiť overenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
@@ -347,4 +357,8 @@ Dôvod: %1$s."</string>
   <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sk"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historické správy nie sú na tomto zariadení k dispozícii"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ak chcete získať prístup k historickým správam, musíte toto zariadenie overiť"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemáte prístup k tejto správe"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Správu sa nepodarilo dešifrovať"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Táto správa bola zablokovaná buď preto, že ste neoverili svoje zariadenie, alebo preto, že odosielateľ potrebuje overiť vašu totožnosť."</string>
 </resources>

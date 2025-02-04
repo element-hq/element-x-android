@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі."</string>
+  <string name="screen_edit_room_address_title">"Адреса кімнати"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
   <string name="screen_polls_history_title">"Опитування"</string>
@@ -49,12 +51,16 @@
   <string name="screen_room_details_invite_people_title">"Запросити людей"</string>
   <string name="screen_room_details_leave_conversation_title">"Залишити розмову"</string>
   <string name="screen_room_details_leave_room_title">"Вийти з кімнати"</string>
+  <string name="screen_room_details_media_gallery_title">"Медіа та файли"</string>
   <string name="screen_room_details_notification_mode_custom">"Власні"</string>
   <string name="screen_room_details_notification_mode_default">"Типово"</string>
   <string name="screen_room_details_notification_title">"Сповіщення"</string>
   <string name="screen_room_details_pinned_events_row_title">"Закріплені повідомлення"</string>
+  <string name="screen_room_details_profile_row_title">"Профіль"</string>
+  <string name="screen_room_details_requests_to_join_title">"Запити на приєднання"</string>
   <string name="screen_room_details_roles_and_permissions">"Ролі та дозволи"</string>
   <string name="screen_room_details_room_name_label">"Назва кімнати"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Безпека й приватність"</string>
   <string name="screen_room_details_security_title">"Безпека"</string>
   <string name="screen_room_details_share_room_title">"Поділитися кімнатою"</string>
   <string name="screen_room_details_title">"Інформація про кімнату"</string>
@@ -115,4 +121,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Деталі кімнати"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі та дозволи"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Додати адресу кімнати"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Будь-хто може надіслати запит приєднатися до кімнати, але адміністратор або модератор повинні прийняти запит."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Запит на приєднання"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Так, увімкнути шифрування"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Після ввімкнення шифрування кімнати, його неможливо вимкнути, історію повідомлень бачитимуть лише учасники кімнати, яких було запрошено або які приєдналися до кімнати.
+Ніхто, крім учасників кімнати, не зможе прочитати повідомлення. Це може перешкоджати коректній роботі ботів і мостів.
+Ми не радимо вмикати шифрування для кімнат, які будь-хто може знайти та до яких може приєднатися всі."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Увімкнути шифрування?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Після ввімкнення шифрування неможливо вимкнути."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Шифрування"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Увімкнути наскрізне шифрування"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Будь-хто може знайти та приєднатися."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Будь-хто"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Люди можуть приєднатися, лише якщо їх запросили"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Лише запрошені"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Доступ до кімнати"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Простори наразі не підтримуються"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Учасники простору"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі кімнат."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Адреса кімнати"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Дозвольте, щоб цю кімнату можна було знайти за допомогою пошуку в каталозі загальнодоступних кімнат %1$s "</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Видима в каталозі загальнодоступних кімнат"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Будь-хто"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Хто може читати історію"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Лише учасники з моменту запрошення"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Лише учасники після вибору цього параметра"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Адреси кімнат — це спосіб знайти кімнату та отримати до неї доступ. Це також гарантує, що ви можете легко поділитися своєю кімнатою з іншими.
+Ви можете опублікувати свою кімнату в каталозі загальнодоступних кімнат вашого домашнього сервера."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Публікація в кімнаті"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими.
+Адреса також необхідна, щоб зробити кімнату видимою в каталозі загальнодоступних кімнат %1$s."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Видимість кімнати"</string>
+  <string name="screen_security_and_privacy_title">"Безпека й приватність"</string>
 </resources>

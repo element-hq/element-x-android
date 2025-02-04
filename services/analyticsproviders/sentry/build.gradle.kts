@@ -1,3 +1,4 @@
+import extension.readLocalProperty
 import extension.setupAnvil
 
 /*
@@ -12,6 +13,21 @@ plugins {
 
 android {
     namespace = "io.element.android.services.analyticsproviders.sentry"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField(
+            type = "String",
+            name = "SENTRY_DSN",
+            value = (System.getenv("ELEMENT_ANDROID_SENTRY_DSN")
+                ?: readLocalProperty("services.analyticsproviders.sentry.dsn")
+                ?: ""
+            ).let { "\"$it\"" }
+        )
+    }
 }
 
 setupAnvil()

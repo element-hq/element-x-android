@@ -7,11 +7,11 @@
 
 package io.element.android.appnav.loggedin
 
-import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -25,8 +25,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class SendQueuesTest {
     private val matrixClient = FakeMatrixClient()
-    private val networkMonitor = FakeNetworkMonitor()
-    private val sut = SendQueues(matrixClient, networkMonitor)
+    private val syncService = FakeSyncService(initialSyncState = SyncState.Running)
+    private val sut = SendQueues(matrixClient, syncService)
 
     @Test
     fun `test network status online and sending queue failed`() = runTest {
@@ -53,13 +53,13 @@ class SendQueuesTest {
     }
 
     @Test
-    fun `test network status offline and sending queue failed`() = runTest {
+    fun `test sync state offline and sending queue failed`() = runTest {
         val sendQueueDisabledFlow = MutableSharedFlow<RoomId>(replay = 1)
 
         val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
         matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
         matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
-        networkMonitor.connectivity.value = NetworkStatus.Offline
+        syncService.emitSyncState(SyncState.Offline)
         val setRoomSendQueueEnabledLambda = lambdaRecorder { _: Boolean -> }
         val room = FakeMatrixRoom(
             setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda

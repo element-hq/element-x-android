@@ -8,8 +8,8 @@
 package io.element.android.libraries.mediaviewer.impl.gallery.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemDateSeparator
 
 class MediaItemDateSeparatorProvider : PreviewParameterProvider<MediaItem.DateSeparator> {
     override val values: Sequence<MediaItem.DateSeparator>
@@ -17,14 +17,4 @@ class MediaItemDateSeparatorProvider : PreviewParameterProvider<MediaItem.DateSe
             aMediaItemDateSeparator(),
             aMediaItemDateSeparator(formattedDate = "A long date that should be truncated"),
         )
-}
-
-fun aMediaItemDateSeparator(
-    id: UniqueId = UniqueId("dateId"),
-    formattedDate: String = "October 2024",
-): MediaItem.DateSeparator {
-    return MediaItem.DateSeparator(
-        id = id,
-        formattedDate = formattedDate,
-    )
 }

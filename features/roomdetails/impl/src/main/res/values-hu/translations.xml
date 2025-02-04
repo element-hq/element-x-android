@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
+  <string name="screen_edit_room_address_title">"A szoba címe"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Hiba történt az értesítési beállítás frissítésekor."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, előfordulhat, hogy egyes szobákban nem kap értesítést."</string>
   <string name="screen_polls_history_title">"Szavazások"</string>
@@ -7,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"Emberek kitiltása"</string>
   <string name="screen_room_change_permissions_delete_messages">"Üzenetek eltávolítása"</string>
   <string name="screen_room_change_permissions_everyone">"Mindenki"</string>
-  <string name="screen_room_change_permissions_invite_people">"Emberek meghívása"</string>
+  <string name="screen_room_change_permissions_invite_people">"Személyek meghívása és csatlakozási kérések elfogadása"</string>
   <string name="screen_room_change_permissions_member_moderation">"Tagok moderálása"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Üzenetek és tartalom"</string>
   <string name="screen_room_change_permissions_moderators">"Adminisztrátorok és moderátorok"</string>
-  <string name="screen_room_change_permissions_remove_people">"Emberek eltávolítása"</string>
+  <string name="screen_room_change_permissions_remove_people">"Emberek eltávolítása és a csatlakozási kérések elutasítása"</string>
   <string name="screen_room_change_permissions_room_avatar">"Szoba profilképének módosítása"</string>
   <string name="screen_room_change_permissions_room_details">"Szoba részletei"</string>
   <string name="screen_room_change_permissions_room_name">"Szoba nevének módosítása"</string>
@@ -54,6 +56,7 @@
   <string name="screen_room_details_notification_mode_default">"Alapértelmezett"</string>
   <string name="screen_room_details_notification_title">"Értesítések"</string>
   <string name="screen_room_details_pinned_events_row_title">"Kitűzött üzenetek"</string>
+  <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
   <string name="screen_room_details_room_name_label">"Szoba neve"</string>
@@ -117,4 +120,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Szerepkörök"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szoba részletei"</string>
   <string name="screen_room_roles_and_permissions_title">"Szerepkörök és jogosultságok"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Szobacím hozzáadása"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Csatlakozás kérése"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Igen, engedélyezze a titkosítást"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Az engedélyezés után a szoba titkosítása nem tiltható le. Az üzenetek előzményei csak a szobatagok számára láthatók, amikor meghívást kaptak, vagy mióta csatlakoztak a szobához.
+A szobatagokon kívül senki sem tudja olvasni az üzeneteket. Ez megakadályozhatja a botok és a hidak megfelelő működését.
+Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket bárki megtalálhat és csatlakozhat."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Engedélyezi a titkosítást?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Engedélyezés után a titkosítás nem tiltható le."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki megtalálhatja és csatlakozhat"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Az emberek csak akkor csatlakozhatnak, ha meghívást kapnak"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívással"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Szobahozzáférés"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"A terek jelenleg nem támogatottak"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá váljon a szobakatalógusban."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Szoba címe"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"A szoba megtalálhatóvá tétele a(z) %1$s nyilvános szobakatalógusában való kereséssel."</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Látható a nyilvános szobakatalógusban"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Bárki"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Ki olvashatja az előzményeket"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Csak a tagok, a meghívásuktól kezdődően"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Csak a tagok, a beállítás választásától kezdődően"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
+Kiválaszthatja, hogy szobáját közzéteszi-e a Matrix-kiszolgáló nyilvános szobakatalógusában."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Szoba közzététele"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.
+A cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$s kiszolgáló nyilvános szobakatalógusában."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Szoba láthatósága"</string>
+  <string name="screen_security_and_privacy_title">"Biztonság és adatvédelem"</string>
 </resources>

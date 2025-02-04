@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"你需要房间地址才能使其在目录中可见。"</string>
+  <string name="screen_edit_room_address_title">"房间地址"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知设置时出错。"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"服务器在加密聊天室中不支持此选项，因此在某些聊天室可能无法收到通知。"</string>
   <string name="screen_polls_history_title">"投票"</string>
@@ -7,15 +9,15 @@
   <string name="screen_room_change_permissions_ban_people">"封禁成员"</string>
   <string name="screen_room_change_permissions_delete_messages">"移除消息"</string>
   <string name="screen_room_change_permissions_everyone">"所有人"</string>
-  <string name="screen_room_change_permissions_invite_people">"邀请成员"</string>
+  <string name="screen_room_change_permissions_invite_people">"邀请他人及接受加入请求"</string>
   <string name="screen_room_change_permissions_member_moderation">"成员权限"</string>
   <string name="screen_room_change_permissions_messages_and_content">"消息和内容"</string>
   <string name="screen_room_change_permissions_moderators">"管理员和协管员"</string>
-  <string name="screen_room_change_permissions_remove_people">"移除成员"</string>
+  <string name="screen_room_change_permissions_remove_people">"移除成员及拒绝加入请求"</string>
   <string name="screen_room_change_permissions_room_avatar">"更改聊天室头像"</string>
   <string name="screen_room_change_permissions_room_details">"聊天室详情"</string>
   <string name="screen_room_change_permissions_room_name">"更改聊天室名称"</string>
-  <string name="screen_room_change_permissions_room_topic">"更改聊天室话题"</string>
+  <string name="screen_room_change_permissions_room_topic">"更改聊天室主题"</string>
   <string name="screen_room_change_permissions_send_messages">"发送消息"</string>
   <string name="screen_room_change_role_administrators_title">"编辑管理员"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"您将无法撤消此操作。您正在提升用户的权限，使其拥有与您平权。"</string>
@@ -49,16 +51,20 @@
   <string name="screen_room_details_invite_people_title">"邀请朋友"</string>
   <string name="screen_room_details_leave_conversation_title">"离开聊天"</string>
   <string name="screen_room_details_leave_room_title">"离开聊天室"</string>
+  <string name="screen_room_details_media_gallery_title">"媒体和文件"</string>
   <string name="screen_room_details_notification_mode_custom">"自定义"</string>
   <string name="screen_room_details_notification_mode_default">"默认"</string>
   <string name="screen_room_details_notification_title">"通知"</string>
   <string name="screen_room_details_pinned_events_row_title">"置顶消息"</string>
+  <string name="screen_room_details_profile_row_title">"简介"</string>
+  <string name="screen_room_details_requests_to_join_title">"申请加入"</string>
   <string name="screen_room_details_roles_and_permissions">"角色与权限"</string>
   <string name="screen_room_details_room_name_label">"聊天室名称"</string>
+  <string name="screen_room_details_security_and_privacy_title">"安全与隐私"</string>
   <string name="screen_room_details_security_title">"安全"</string>
   <string name="screen_room_details_share_room_title">"分享聊天室"</string>
   <string name="screen_room_details_title">"聊天室信息"</string>
-  <string name="screen_room_details_topic_title">"话题"</string>
+  <string name="screen_room_details_topic_title">"主题"</string>
   <string name="screen_room_details_updating_room">"正在更新聊天室……"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"封禁"</string>
   <string name="screen_room_member_list_ban_member_confirmation_description">"即使受到邀请，他们也无法再次加入聊天室。"</string>
@@ -113,4 +119,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"角色"</string>
   <string name="screen_room_roles_and_permissions_room_details">"聊天室详情"</string>
   <string name="screen_room_roles_and_permissions_title">"角色与权限"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"添加房间地址"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"任何人都可以请求加入房间，但必须由管理员或版主接受请求。"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"请求加入"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"是的，启用加密"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"一旦启用，就不能再禁用房间的加密功能。消息历史记录只能在房间成员被邀请或加入房间后才可见。
+除房间成员外，任何人都无法阅读信息。这可能会妨碍机器人和网桥正常工作。
+我们不建议对任何人都能找到并加入的房间启用加密。"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"启用加密？"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"加密一旦启用，就无法禁用。"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"启用端到端加密"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以找到并加入"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"只有受邀者才能加入"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限邀请"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"房间访问权限"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"目前不支持空间"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"空间成员"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"你需要有房间地址才能使其在房间目录中可见。"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"房间地址"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允许通过搜索 %1$s 的公共房间目录来发现此房间"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公共房间目录中可见"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"谁可以读取历史记录"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"仅限被邀请的成员"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"仅自选择此选项以来的成员"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。
+你可以选择在你服务器的公共房间目录中发布你的房间。"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"房间发布"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。
+在 %1$s 的公共房间目录中显示该房间时也需要地址。"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"房间可见性"</string>
+  <string name="screen_security_and_privacy_title">"安全与隐私"</string>
 </resources>

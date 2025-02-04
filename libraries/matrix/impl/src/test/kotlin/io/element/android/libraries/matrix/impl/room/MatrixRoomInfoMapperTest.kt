@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
@@ -33,6 +34,7 @@ import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
+import org.matrix.rustcomponents.sdk.RoomHistoryVisibility as RustRoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 
 class MatrixRoomInfoMapperTest {
@@ -72,6 +74,7 @@ class MatrixRoomInfoMapperTest {
                     numUnreadMentions = 14uL,
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
                     roomCreator = A_USER_ID,
+                    historyVisibility = RustRoomHistoryVisibility.Joined,
                 )
             )
         ).isEqualTo(
@@ -113,6 +116,7 @@ class MatrixRoomInfoMapperTest {
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
+                historyVisibility = RoomHistoryVisibility.Joined,
             )
         )
     }
@@ -188,6 +192,7 @@ class MatrixRoomInfoMapperTest {
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
+                historyVisibility = RoomHistoryVisibility.Joined,
             )
         )
     }

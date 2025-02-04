@@ -46,7 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.mediaviewer.impl.gallery.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
@@ -115,7 +116,7 @@ private fun VoiceInfoRow(
         }
         Spacer(Modifier.width(8.dp))
         Text(
-            text = if (state.progress > 0f) state.time else voice.duration ?: state.time,
+            text = if (state.progress > 0f) state.time else voice.mediaInfo.duration ?: state.time,
             color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdMedium,
             maxLines = 1,
@@ -128,7 +129,7 @@ private fun VoiceInfoRow(
                 .height(34.dp),
             showCursor = state.showCursor,
             playbackProgress = state.progress,
-            waveform = voice.waveform.toPersistentList(),
+            waveform = voice.mediaInfo.waveform.orEmpty().toPersistentList(),
             onSeek = {
                 state.eventSink(VoiceMessageEvents.Seek(it))
             },

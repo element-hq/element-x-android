@@ -11,7 +11,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 
 data class MediaGalleryState(
     val roomName: String,
@@ -21,18 +21,6 @@ data class MediaGalleryState(
     val snackbarMessage: SnackbarMessage?,
     val eventSink: (MediaGalleryEvents) -> Unit,
 )
-
-data class GroupedMediaItems(
-    val imageAndVideoItems: ImmutableList<MediaItem>,
-    val fileItems: ImmutableList<MediaItem>,
-) {
-    fun getItems(mode: MediaGalleryMode): ImmutableList<MediaItem> {
-        return when (mode) {
-            MediaGalleryMode.Images -> imageAndVideoItems
-            MediaGalleryMode.Files -> fileItems
-        }
-    }
-}
 
 enum class MediaGalleryMode(val stringResource: Int) {
     Images(R.string.screen_media_browser_list_mode_media),
