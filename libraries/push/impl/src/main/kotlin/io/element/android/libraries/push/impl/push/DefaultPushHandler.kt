@@ -129,6 +129,7 @@ class DefaultPushHandler @Inject constructor(
             avatarUrl = notifiableEvent.roomAvatarUrl,
             timestamp = notifiableEvent.timestamp,
             notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
+            textContent = notifiableEvent.description,
         )
     }
 }
