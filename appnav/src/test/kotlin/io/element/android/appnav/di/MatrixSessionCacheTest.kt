@@ -145,7 +145,7 @@ class MatrixSessionCacheTest {
         override fun create(matrixClient: MatrixClient): DefaultSyncOrchestrator {
             return DefaultSyncOrchestrator(
                 matrixClient,
-                baseCoroutineScope = baseCoroutineScope,
+                sessionCoroutineScope = baseCoroutineScope,
                 appForegroundStateService = FakeAppForegroundStateService(),
                 networkMonitor = FakeNetworkMonitor(),
                 dispatchers = testCoroutineDispatchers(),

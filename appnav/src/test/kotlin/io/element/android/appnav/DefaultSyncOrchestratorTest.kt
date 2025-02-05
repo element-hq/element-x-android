@@ -35,33 +35,6 @@ class DefaultSyncOrchestratorTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `when the sync wasn't running before, an initial sync will always take place, even with no network`() = runTest {
-        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
-            startSyncLambda = startSyncRecorder
-        }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
-        val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
-            networkMonitor = networkMonitor,
-            baseCoroutineScope = coroutineScope
-        )
-
-        // We start observing
-        syncOrchestrator.start()
-
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
-
-        // Start sync will be called shortly after
-        startSyncRecorder.assertions().isCalledOnce()
-
-        // Stop observing
-        coroutineScope.cancel()
-    }
-
-    @Test
     fun `when the app goes to background and the sync was running, it will be stopped after a delay`() = runTest {
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
@@ -333,7 +306,7 @@ class DefaultSyncOrchestratorTest {
         matrixClient = FakeMatrixClient(syncService = syncService),
         networkMonitor = networkMonitor,
         appForegroundStateService = appForegroundStateService,
-        baseCoroutineScope = baseCoroutineScope,
+        sessionCoroutineScope = baseCoroutineScope,
         dispatchers = testCoroutineDispatchers(),
     )
 }

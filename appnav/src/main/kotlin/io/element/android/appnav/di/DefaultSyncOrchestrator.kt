@@ -24,9 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
@@ -34,10 +32,10 @@ import kotlin.time.Duration.Companion.seconds
 
 class DefaultSyncOrchestrator @AssistedInject constructor(
     @Assisted matrixClient: MatrixClient,
-    private val baseCoroutineScope: CoroutineScope = matrixClient.sessionCoroutineScope,
+    sessionCoroutineScope: CoroutineScope = matrixClient.sessionCoroutineScope,
     private val appForegroundStateService: AppForegroundStateService,
     private val networkMonitor: NetworkMonitor,
-    private val dispatchers: CoroutineDispatchers,
+    dispatchers: CoroutineDispatchers,
 ) : SyncOrchestrator {
     @AssistedFactory
     interface Factory {
@@ -46,11 +44,9 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
 
     private val syncService = matrixClient.syncService()
 
-    private val initialSyncMutex = Mutex()
-
     private val tag = "SyncOrchestrator"
 
-    private val coroutineScope = CoroutineScope(baseCoroutineScope.coroutineContext + CoroutineName(tag) + dispatchers.io)
+    private val coroutineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + CoroutineName(tag) + dispatchers.io)
 
     private val started = AtomicBoolean(false)
 
@@ -68,25 +64,7 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
 
         Timber.tag(tag).d("start observing the app and network state")
 
-        if (syncService.syncState.value != SyncState.Running) {
-            Timber.tag(tag).d("initial startSync")
-            baseCoroutineScope.launch(dispatchers.io) {
-                try {
-                    initialSyncMutex.lock()
-                    syncService.startSync()
-
-                    // Wait until it's running
-                    syncService.syncState.first { it == SyncState.Running }
-                } finally {
-                    initialSyncMutex.unlock()
-                }
-            }
-        }
-
         coroutineScope.launch {
-            // Wait until the initial sync is done, either successfully or failing
-            initialSyncMutex.lock()
-
             combine(
                 // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
                 syncService.syncState.debounce(100.milliseconds),
