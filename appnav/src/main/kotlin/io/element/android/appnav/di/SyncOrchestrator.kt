@@ -16,7 +16,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import io.element.android.services.appnavstate.api.SyncOrchestrator
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -30,16 +29,16 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class DefaultSyncOrchestrator @AssistedInject constructor(
+class SyncOrchestrator @AssistedInject constructor(
     @Assisted matrixClient: MatrixClient,
     sessionCoroutineScope: CoroutineScope = matrixClient.sessionCoroutineScope,
     private val appForegroundStateService: AppForegroundStateService,
     private val networkMonitor: NetworkMonitor,
     dispatchers: CoroutineDispatchers,
-) : SyncOrchestrator {
+) {
     @AssistedFactory
     interface Factory {
-        fun create(matrixClient: MatrixClient): DefaultSyncOrchestrator
+        fun create(matrixClient: MatrixClient): SyncOrchestrator
     }
 
     private val syncService = matrixClient.syncService()
@@ -56,7 +55,7 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
      * Before observing the state, a first attempt at starting the sync service will happen if it's not already running.
      */
     @OptIn(FlowPreview::class)
-    override fun start() {
+    fun start() {
         if (!started.compareAndSet(false, true)) {
             Timber.tag(tag).d("already started, exiting early")
             return

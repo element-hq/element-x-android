@@ -7,6 +7,7 @@
 
 package io.element.android.appnav.di
 
+import androidx.annotation.VisibleForTesting
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
 import com.squareup.anvil.annotations.ContributesBinding
@@ -16,8 +17,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.services.appnavstate.api.SyncOrchestrator
-import io.element.android.services.appnavstate.api.SyncOrchestratorProvider
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -34,11 +33,10 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, boundType = MatrixClientProvider::class)
-@ContributesBinding(AppScope::class, boundType = SyncOrchestratorProvider::class)
 class MatrixSessionCache @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
-    private val syncOrchestratorFactory: DefaultSyncOrchestrator.Factory,
-) : MatrixClientProvider, SyncOrchestratorProvider {
+    private val syncOrchestratorFactory: SyncOrchestrator.Factory,
+) : MatrixClientProvider {
     private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
     private val restoreMutex = Mutex()
 
@@ -74,7 +72,8 @@ class MatrixSessionCache @Inject constructor(
         }
     }
 
-    override fun getSyncOrchestrator(sessionId: SessionId): SyncOrchestrator? {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun getSyncOrchestrator(sessionId: SessionId): SyncOrchestrator? {
         return sessionIdsToMatrixSession[sessionId]?.syncOrchestrator
     }
 

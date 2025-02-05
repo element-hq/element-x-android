@@ -141,9 +141,9 @@ class MatrixSessionCacheTest {
 
     private fun TestScope.createSyncOrchestratorFactory(
         baseCoroutineScope: CoroutineScope = this,
-    ) = object : DefaultSyncOrchestrator.Factory {
-        override fun create(matrixClient: MatrixClient): DefaultSyncOrchestrator {
-            return DefaultSyncOrchestrator(
+    ) = object : SyncOrchestrator.Factory {
+        override fun create(matrixClient: MatrixClient): SyncOrchestrator {
+            return SyncOrchestrator(
                 matrixClient,
                 sessionCoroutineScope = baseCoroutineScope,
                 appForegroundStateService = FakeAppForegroundStateService(),
