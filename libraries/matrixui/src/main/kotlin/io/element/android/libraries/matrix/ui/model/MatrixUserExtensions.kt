@@ -21,3 +21,11 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
 fun MatrixUser.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
+
+fun MatrixUser.getFullName(): String {
+    return if (displayName.isNullOrBlank()) {
+        userId.value
+    } else {
+        "$displayName ($userId)"
+    }
+}

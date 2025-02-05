@@ -18,5 +18,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrix.test)
     implementation(projects.libraries.architecture)
+    implementation(projects.tests.testutils)
     api(projects.features.createroom.api)
 }
