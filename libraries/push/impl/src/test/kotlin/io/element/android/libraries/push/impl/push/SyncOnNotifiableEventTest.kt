@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.services.appnavstate.api.SyncOrchestrator
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -210,12 +209,6 @@ class SyncOnNotifiableEventTest {
             featureFlagService = featureFlagService,
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
-            syncOrchestratorProvider = { client -> FakeSyncOrchestrator() }
         )
     }
-}
-
-private class FakeSyncOrchestrator : SyncOrchestrator {
-    override fun start() = Unit
-    override fun stop() = Unit
 }

@@ -12,5 +12,4 @@ package io.element.android.services.appnavstate.api
  */
 interface SyncOrchestrator {
     fun start()
-    fun stop()
 }

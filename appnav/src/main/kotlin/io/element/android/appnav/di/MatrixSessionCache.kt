@@ -39,28 +39,30 @@ class MatrixSessionCache @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: DefaultSyncOrchestrator.Factory,
 ) : MatrixClientProvider, SyncOrchestratorProvider {
-    private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
+    private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
     private val restoreMutex = Mutex()
 
     init {
         authenticationService.listenToNewMatrixClients { matrixClient ->
-            sessionIdsToMatrixClient[matrixClient.sessionId] = InMemoryMatrixSession(
+            val syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+            sessionIdsToMatrixSession[matrixClient.sessionId] = InMemoryMatrixSession(
                 matrixClient = matrixClient,
-                syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+                syncOrchestrator = syncOrchestrator,
             )
+            syncOrchestrator.start()
         }
     }
 
     fun removeAll() {
-        sessionIdsToMatrixClient.clear()
+        sessionIdsToMatrixSession.clear()
     }
 
     fun remove(sessionId: SessionId) {
-        sessionIdsToMatrixClient.remove(sessionId)
+        sessionIdsToMatrixSession.remove(sessionId)
     }
 
     override fun getOrNull(sessionId: SessionId): MatrixClient? {
-        return sessionIdsToMatrixClient[sessionId]?.matrixClient
+        return sessionIdsToMatrixSession[sessionId]?.matrixClient
     }
 
     override suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient> {
@@ -73,13 +75,13 @@ class MatrixSessionCache @Inject constructor(
     }
 
     override fun getSyncOrchestrator(sessionId: SessionId): SyncOrchestrator? {
-        return sessionIdsToMatrixClient[sessionId]?.syncOrchestrator
+        return sessionIdsToMatrixSession[sessionId]?.syncOrchestrator
     }
 
     @Suppress("UNCHECKED_CAST")
     fun restoreWithSavedState(state: SavedStateMap?) {
         Timber.d("Restore state")
-        if (state == null || sessionIdsToMatrixClient.isNotEmpty()) {
+        if (state == null || sessionIdsToMatrixSession.isNotEmpty()) {
             Timber.w("Restore with non-empty map")
             return
         }
@@ -95,7 +97,7 @@ class MatrixSessionCache @Inject constructor(
     }
 
     fun saveIntoSavedState(state: MutableSavedStateMap) {
-        val sessionKeys = sessionIdsToMatrixClient.keys.toTypedArray()
+        val sessionKeys = sessionIdsToMatrixSession.keys.toTypedArray()
         Timber.d("Save matrix session keys = ${sessionKeys.map { it.value }}")
         state[SAVE_INSTANCE_KEY] = sessionKeys
     }
@@ -104,10 +106,12 @@ class MatrixSessionCache @Inject constructor(
         Timber.d("Restore matrix session: $sessionId")
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
-                sessionIdsToMatrixClient[matrixClient.sessionId] = InMemoryMatrixSession(
+                val syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+                sessionIdsToMatrixSession[matrixClient.sessionId] = InMemoryMatrixSession(
                     matrixClient = matrixClient,
-                    syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+                    syncOrchestrator = syncOrchestrator,
                 )
+                syncOrchestrator.start()
             }
             .onFailure {
                 Timber.e(it, "Fail to restore session")

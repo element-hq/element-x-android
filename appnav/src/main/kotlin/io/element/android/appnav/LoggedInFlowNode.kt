@@ -77,7 +77,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationR
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.services.appnavstate.api.AppNavigationStateService
-import io.element.android.services.appnavstate.api.SyncOrchestratorProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -107,7 +106,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
-    private val syncOrchestratorProvider: SyncOrchestratorProvider,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -138,8 +136,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-
-        syncOrchestratorProvider.getSyncOrchestrator(sessionId = matrixClient.sessionId)?.start()
 
         lifecycle.subscribe(
             onCreate = {
