@@ -12,7 +12,6 @@ package io.element.android.features.networkmonitor.impl
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -66,9 +65,7 @@ class DefaultNetworkMonitor @Inject constructor(
             }
         }
         trySendBlocking(connectivityManager.activeNetworkStatus())
-        val request = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-            .build()
+        val request = NetworkRequest.Builder().build()
 
         connectivityManager.registerNetworkCallback(request, callback)
         Timber.d("Subscribe")
@@ -85,17 +82,6 @@ class DefaultNetworkMonitor @Inject constructor(
         .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), connectivityManager.activeNetworkStatus())
 
     private fun ConnectivityManager.activeNetworkStatus(): NetworkStatus {
-        return activeNetwork?.let {
-            getNetworkCapabilities(it)?.getNetworkStatus()
-        } ?: NetworkStatus.Offline
-    }
-
-    private fun NetworkCapabilities.getNetworkStatus(): NetworkStatus {
-        val hasInternet = hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-        return if (hasInternet) {
-            NetworkStatus.Online
-        } else {
-            NetworkStatus.Offline
-        }
+        return if (activeNetwork != null) NetworkStatus.Online else NetworkStatus.Offline
     }
 }
