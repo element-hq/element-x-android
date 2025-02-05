@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.securityandprivacy
+package io.element.android.features.roomdetails.impl.securityandprivacy
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -14,13 +14,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyEvents
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyHistoryVisibility
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyRoomAccess
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyState
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyView
-import io.element.android.features.roomdetails.impl.securityandprivacy.aSecurityAndPrivacySettings
-import io.element.android.features.roomdetails.impl.securityandprivacy.aSecurityAndPrivacyState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled

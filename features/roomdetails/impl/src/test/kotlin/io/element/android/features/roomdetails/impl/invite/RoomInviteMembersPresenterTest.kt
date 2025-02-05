@@ -11,7 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList

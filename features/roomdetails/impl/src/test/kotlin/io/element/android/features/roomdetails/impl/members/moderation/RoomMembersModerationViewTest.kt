@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.members.moderation
+package io.element.android.features.roomdetails.impl.members.moderation
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -13,12 +13,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
-import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
-import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationView
-import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings

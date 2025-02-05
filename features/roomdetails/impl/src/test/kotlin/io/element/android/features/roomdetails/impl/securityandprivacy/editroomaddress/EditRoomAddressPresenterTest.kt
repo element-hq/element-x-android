@@ -5,13 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.securityandprivacy.editroomaddress
+package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.roomdetails.impl.securityandprivacy.FakeSecurityAndPrivacyNavigator
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressEvents
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressPresenter
-import io.element.android.features.roomdetails.securityandprivacy.FakeSecurityAndPrivacyNavigator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.MatrixRoom

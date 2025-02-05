@@ -5,18 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions
+package io.element.android.features.roomdetails.impl.rolesandpermissions
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsEvents
-import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsNavigator
-import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsState
-import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsView
-import io.element.android.features.roomdetails.impl.rolesandpermissions.aRolesAndPermissionsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.CommonStrings

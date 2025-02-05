@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.members.moderation
+package io.element.android.features.roomdetails.impl.members.moderation
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -14,10 +14,6 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
-import io.element.android.features.roomdetails.impl.members.moderation.ConfirmingRoomMemberAction
-import io.element.android.features.roomdetails.impl.members.moderation.ModerationAction
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState

@@ -5,14 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.securityandprivacy
+package io.element.android.features.roomdetails.impl.securityandprivacy
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyEvents
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyHistoryVisibility
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyPresenter
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyRoomAccess
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.MatrixRoom

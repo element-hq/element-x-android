@@ -5,14 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.edit
+package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.aMatrixRoom
-import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
-import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
+import io.element.android.features.roomdetails.impl.aMatrixRoom
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes

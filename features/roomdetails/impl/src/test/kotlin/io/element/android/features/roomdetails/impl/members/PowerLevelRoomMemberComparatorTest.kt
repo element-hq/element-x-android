@@ -5,10 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.members
+package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.features.roomdetails.impl.members.PowerLevelRoomMemberComparator
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2

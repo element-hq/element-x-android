@@ -5,15 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.notificationsettings
+package io.element.android.features.roomdetails.impl.notificationsettings
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.aMatrixRoom
-import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsEvents
-import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsPresenter
+import io.element.android.features.roomdetails.impl.aMatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE

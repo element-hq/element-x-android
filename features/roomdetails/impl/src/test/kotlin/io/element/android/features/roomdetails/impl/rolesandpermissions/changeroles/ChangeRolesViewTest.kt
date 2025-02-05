@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions.changeroles
+package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -16,11 +16,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesEvent
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesState
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesView
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.aChangeRolesState
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.aChangeRolesStateWithSelectedUsers
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -39,7 +34,6 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import java.lang.IllegalStateException
 
 @RunWith(AndroidJUnit4::class)
 class ChangeRolesViewTest {

@@ -5,10 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions.changeroles
+package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.MembersByRole
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2

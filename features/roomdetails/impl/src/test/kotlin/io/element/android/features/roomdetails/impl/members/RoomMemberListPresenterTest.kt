@@ -5,19 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.members
+package io.element.android.features.roomdetails.impl.members
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
-import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
-import io.element.android.features.roomdetails.impl.members.RoomMemberListNavigator
-import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
-import io.element.android.features.roomdetails.impl.members.aRoomMemberList
-import io.element.android.features.roomdetails.impl.members.aVictor
-import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
 import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
