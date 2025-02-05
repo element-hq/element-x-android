@@ -64,6 +64,49 @@ class SyncOrchestratorTest {
     }
 
     @Test
+    fun `when the app state changes several times in a short while, stop sync is only called once`() = runTest {
+        val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+            stopSyncLambda = stopSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true)
+        val syncOrchestrator = createSyncOrchestrator(
+            syncService = syncService,
+            networkMonitor = networkMonitor,
+            appForegroundStateService = appForegroundStateService,
+        )
+
+        // We start observing, we skip the initial sync attempt since the state is running
+        syncOrchestrator.start()
+
+        // Advance the time to make sure we left the initial sync behind
+        advanceTimeBy(1.seconds)
+
+        // Stop sync was never called
+        stopSyncRecorder.assertions().isNeverCalled()
+
+        // Now we send the app to background
+        appForegroundStateService.isInForeground.value = false
+
+        // Ensure the stop action wasn't called yet
+        stopSyncRecorder.assertions().isNeverCalled()
+        advanceTimeBy(1.seconds)
+        appForegroundStateService.isInForeground.value = true
+        advanceTimeBy(1.seconds)
+
+        // Ensure the stop action wasn't called yet either, since we didn't give it enough time to emit after the expected delay
+        stopSyncRecorder.assertions().isNeverCalled()
+
+        // Now change it again and wait for enough time
+        appForegroundStateService.isInForeground.value = false
+        advanceTimeBy(3.seconds)
+
+        // And confirm it's now called
+        stopSyncRecorder.assertions().isCalledOnce()
+    }
+
+    @Test
     fun `when the app was in background and we receive a notification, a sync will be started then stopped`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
