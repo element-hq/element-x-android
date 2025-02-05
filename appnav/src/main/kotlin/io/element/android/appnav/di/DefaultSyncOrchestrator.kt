@@ -99,7 +99,7 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
                 appForegroundStateService.isSyncingNotificationEvent,
             ) { syncState, networkState, isInForeground, isInCall, isSyncingNotificationEvent ->
                 val isAppActive = isInForeground || isInCall || isSyncingNotificationEvent
-                val isNetworkAvailable = networkState == NetworkStatus.Online
+                val isNetworkAvailable = networkState == NetworkStatus.Connected
 
                 Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
                 if (syncState == SyncState.Running && !isAppActive) {

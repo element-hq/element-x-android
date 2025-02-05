@@ -39,7 +39,7 @@ class DefaultSyncOrchestratorTest {
         val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
             startSyncLambda = startSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Offline)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
         val syncOrchestrator = createSyncOrchestrator(syncService, networkMonitor)
 
         // We start observing
@@ -61,7 +61,7 @@ class DefaultSyncOrchestratorTest {
         val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             stopSyncLambda = stopSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true)
         val syncOrchestrator = createSyncOrchestrator(syncService, networkMonitor, appForegroundStateService)
 
@@ -94,7 +94,7 @@ class DefaultSyncOrchestratorTest {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
             initialIsSyncingNotificationEventValue = false,
@@ -141,7 +141,7 @@ class DefaultSyncOrchestratorTest {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = false,
             initialIsSyncingNotificationEventValue = false,
@@ -188,7 +188,7 @@ class DefaultSyncOrchestratorTest {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
             initialIsSyncingNotificationEventValue = true,
@@ -230,7 +230,7 @@ class DefaultSyncOrchestratorTest {
         val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             stopSyncLambda = stopSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
             initialIsSyncingNotificationEventValue = true,
@@ -263,7 +263,7 @@ class DefaultSyncOrchestratorTest {
         val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             startSyncLambda = startSyncRecorder
         }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Offline)
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
         val syncOrchestrator = createSyncOrchestrator(syncService, networkMonitor)
 
         // We start observing, we skip the initial sync attempt since the state is running

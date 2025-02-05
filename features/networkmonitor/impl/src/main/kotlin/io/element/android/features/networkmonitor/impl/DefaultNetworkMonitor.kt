@@ -54,13 +54,13 @@ class DefaultNetworkMonitor @Inject constructor(
 
             override fun onLost(network: Network) {
                 if (activeNetworksCount.decrementAndGet() == 0) {
-                    trySendBlocking(NetworkStatus.Offline)
+                    trySendBlocking(NetworkStatus.Disconnected)
                 }
             }
 
             override fun onAvailable(network: Network) {
                 if (activeNetworksCount.incrementAndGet() > 0) {
-                    trySendBlocking(NetworkStatus.Online)
+                    trySendBlocking(NetworkStatus.Connected)
                 }
             }
         }
@@ -82,6 +82,6 @@ class DefaultNetworkMonitor @Inject constructor(
         .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), connectivityManager.activeNetworkStatus())
 
     private fun ConnectivityManager.activeNetworkStatus(): NetworkStatus {
-        return if (activeNetwork != null) NetworkStatus.Online else NetworkStatus.Offline
+        return if (activeNetwork != null) NetworkStatus.Connected else NetworkStatus.Disconnected
     }
 }
