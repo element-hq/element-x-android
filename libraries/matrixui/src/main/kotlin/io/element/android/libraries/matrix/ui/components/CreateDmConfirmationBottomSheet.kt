@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -71,8 +72,7 @@ fun CreateDmConfirmationBottomSheet(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                // TODO Check if finally we do not want to remove string duplication
-                text = stringResource(R.string.screen_bottom_sheet_create_dm_message_no_displayname, matrixUser.getFullName()),
+                text = stringResource(R.string.screen_bottom_sheet_create_dm_message, matrixUser.getFullName()),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
@@ -97,9 +97,9 @@ fun CreateDmConfirmationBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun CreateDmConfirmationBottomSheetPreview() = ElementPreview {
+internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
     CreateDmConfirmationBottomSheet(
-        matrixUser = aMatrixUser(),
+        matrixUser = matrixUser,
         onSendInvite = {},
         onDismiss = {},
     )
