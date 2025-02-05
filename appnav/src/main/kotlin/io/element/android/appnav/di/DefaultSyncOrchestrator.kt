@@ -102,7 +102,7 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
                 val isNetworkAvailable = networkState == NetworkStatus.Online
 
                 Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
-                if (syncState == SyncState.Running && (!isAppActive || !isNetworkAvailable)) {
+                if (syncState == SyncState.Running && !isAppActive) {
                     // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
                     delay(3.seconds)
                     SyncStateAction.StopSync

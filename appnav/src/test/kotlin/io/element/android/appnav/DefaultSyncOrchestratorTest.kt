@@ -283,33 +283,6 @@ class DefaultSyncOrchestratorTest {
         syncOrchestrator.stop()
     }
 
-    @Test
-    fun `when sync was running and network is now offline, sync service should be stopped`() = runTest {
-        val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
-            stopSyncLambda = stopSyncRecorder
-        }
-        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
-        val syncOrchestrator = createSyncOrchestrator(syncService, networkMonitor)
-
-        // We start observing, we skip the initial sync attempt since the state is running
-        syncOrchestrator.start()
-
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
-
-        // Network is now offline
-        networkMonitor.connectivity.value = NetworkStatus.Offline
-
-        // This will stop the sync after some delay
-        stopSyncRecorder.assertions().isNeverCalled()
-        advanceTimeBy(10.seconds)
-        stopSyncRecorder.assertions().isCalledOnce()
-
-        // Stop observing
-        syncOrchestrator.stop()
-    }
-
     private fun TestScope.createSyncOrchestrator(
         syncService: FakeSyncService = FakeSyncService(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
