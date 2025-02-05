@@ -17,10 +17,7 @@ import io.element.android.services.appnavstate.test.FakeAppForegroundStateServic
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -42,12 +39,10 @@ class SyncOrchestratorTest {
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true)
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -66,9 +61,6 @@ class SyncOrchestratorTest {
         stopSyncRecorder.assertions().isNeverCalled()
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledOnce()
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     @Test
@@ -84,12 +76,10 @@ class SyncOrchestratorTest {
             initialForegroundValue = false,
             initialIsSyncingNotificationEventValue = false,
         )
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -119,9 +109,6 @@ class SyncOrchestratorTest {
 
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledExactly(2)
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     @Test
@@ -137,12 +124,10 @@ class SyncOrchestratorTest {
             initialForegroundValue = false,
             initialIsSyncingNotificationEventValue = false,
         )
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -172,9 +157,6 @@ class SyncOrchestratorTest {
 
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledExactly(2)
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     @Test
@@ -191,12 +173,10 @@ class SyncOrchestratorTest {
             initialIsSyncingNotificationEventValue = true,
             initialIsInCallValue = true,
         )
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -222,9 +202,6 @@ class SyncOrchestratorTest {
         appForegroundStateService.updateIsInCallState(false)
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledOnce()
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     @Test
@@ -239,12 +216,10 @@ class SyncOrchestratorTest {
             initialIsSyncingNotificationEventValue = true,
             initialIsInCallValue = true,
         )
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -261,9 +236,6 @@ class SyncOrchestratorTest {
 
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isNeverCalled()
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     @Test
@@ -273,11 +245,9 @@ class SyncOrchestratorTest {
             startSyncLambda = startSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
             networkMonitor = networkMonitor,
-            baseCoroutineScope = coroutineScope
         )
 
         // We start observing, we skip the initial sync attempt since the state is running
@@ -292,21 +262,16 @@ class SyncOrchestratorTest {
         // This should still not trigger a sync, since there is no network
         advanceTimeBy(10.seconds)
         startSyncRecorder.assertions().isNeverCalled()
-
-        // Stop observing
-        coroutineScope.cancel()
     }
 
     private fun TestScope.createSyncOrchestrator(
         syncService: FakeSyncService = FakeSyncService(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
-        baseCoroutineScope: CoroutineScope = CoroutineScope(coroutineContext + SupervisorJob()),
     ) = SyncOrchestrator(
-        matrixClient = FakeMatrixClient(syncService = syncService),
+        matrixClient = FakeMatrixClient(syncService = syncService, sessionCoroutineScope = backgroundScope),
         networkMonitor = networkMonitor,
         appForegroundStateService = appForegroundStateService,
-        sessionCoroutineScope = baseCoroutineScope,
         dispatchers = testCoroutineDispatchers(),
     )
 }

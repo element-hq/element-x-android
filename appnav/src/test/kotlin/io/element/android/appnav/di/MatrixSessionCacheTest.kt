@@ -16,10 +16,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,77 +32,64 @@ class MatrixSessionCacheTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `test getSyncOrchestratorOrNull`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
 
         // With no matrix client there is no sync orchestrator
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
         assertThat(matrixSessionCache.getSyncOrchestrator(A_SESSION_ID)).isNull()
 
         // But as soon as we receive a client, we can get the sync orchestrator
-        val fakeMatrixClient = FakeMatrixClient()
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope)
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getSyncOrchestrator(A_SESSION_ID)).isNotNull()
-
-        coroutineScope.cancel()
     }
 
     @Test
     fun `test getOrRestore`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
-        val fakeMatrixClient = FakeMatrixClient()
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope)
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         // Do it again to hit the cache
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
-
-        coroutineScope.cancel()
     }
 
     @Test
     fun `test remove`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
-        val fakeMatrixClient = FakeMatrixClient()
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope)
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
         // Remove
         matrixSessionCache.remove(A_SESSION_ID)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
-
-        coroutineScope.cancel()
     }
 
     @Test
     fun `test remove all`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
-        val fakeMatrixClient = FakeMatrixClient()
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope)
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
         // Remove all
         matrixSessionCache.removeAll()
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
-
-        coroutineScope.cancel()
     }
 
     @Test
     fun `test save and restore`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
-        val fakeMatrixClient = FakeMatrixClient()
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope)
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         matrixSessionCache.getOrRestore(A_SESSION_ID)
         val savedStateMap = MutableSavedStateMapImpl { true }
@@ -119,33 +103,25 @@ class MatrixSessionCacheTest {
         // Restore again
         matrixSessionCache.restoreWithSavedState(savedStateMap)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
-
-        coroutineScope.cancel()
     }
 
     @Test
     fun `test AuthenticationService listenToNewMatrixClients emits a Client value and we save it`() = runTest {
-        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val fakeAuthenticationService = FakeMatrixAuthenticationService()
-        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory(coroutineScope))
+        val matrixSessionCache = MatrixSessionCache(fakeAuthenticationService, createSyncOrchestratorFactory())
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
 
-        fakeAuthenticationService.givenMatrixClient(FakeMatrixClient(sessionId = A_SESSION_ID))
+        fakeAuthenticationService.givenMatrixClient(FakeMatrixClient(sessionId = A_SESSION_ID, sessionCoroutineScope = backgroundScope))
         val loginSucceeded = fakeAuthenticationService.login("user", "pass")
 
         assertThat(loginSucceeded.isSuccess).isTrue()
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNotNull()
-
-        coroutineScope.cancel()
     }
 
-    private fun TestScope.createSyncOrchestratorFactory(
-        baseCoroutineScope: CoroutineScope = this,
-    ) = object : SyncOrchestrator.Factory {
+    private fun TestScope.createSyncOrchestratorFactory() = object : SyncOrchestrator.Factory {
         override fun create(matrixClient: MatrixClient): SyncOrchestrator {
             return SyncOrchestrator(
                 matrixClient,
-                sessionCoroutineScope = baseCoroutineScope,
                 appForegroundStateService = FakeAppForegroundStateService(),
                 networkMonitor = FakeNetworkMonitor(),
                 dispatchers = testCoroutineDispatchers(),

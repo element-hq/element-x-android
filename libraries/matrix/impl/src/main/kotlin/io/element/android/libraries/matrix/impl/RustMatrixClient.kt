@@ -495,31 +495,32 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
+        sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
-        clientDelegateTaskHandle?.cancelAndDestroy()
-        clientDelegateTaskHandle = null
-        withContext(sessionDispatcher) {
-            if (userInitiated) {
-                try {
-                    result = innerClient.logout()
-                } catch (failure: Throwable) {
-                    if (ignoreSdkError) {
-                        Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
-                    } else {
-                        // If the logout failed we need to restore the delegate
-                        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
-                        Timber.e(failure, "Fail to call logout on HS.")
-                        throw failure
-                    }
-                }
-            }
-            close()
-
-            deleteSessionDirectory(deleteCryptoDb = true)
-            if (userInitiated) {
-                sessionStore.removeSession(sessionId.value)
-            }
-        }
+//        clientDelegateTaskHandle?.cancelAndDestroy()
+//        clientDelegateTaskHandle = null
+//        withContext(sessionDispatcher) {
+//            if (userInitiated) {
+//                try {
+//                    result = innerClient.logout()
+//                } catch (failure: Throwable) {
+//                    if (ignoreSdkError) {
+//                        Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+//                    } else {
+//                        // If the logout failed we need to restore the delegate
+//                        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
+//                        Timber.e(failure, "Fail to call logout on HS.")
+//                        throw failure
+//                    }
+//                }
+//            }
+//            close()
+//
+//            deleteSessionDirectory(deleteCryptoDb = true)
+//            if (userInitiated) {
+//                sessionStore.removeSession(sessionId.value)
+//            }
+//        }
         return result
     }
 
