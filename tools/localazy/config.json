@@ -273,7 +273,8 @@
     {
       "name" : ":libraries:matrixui",
       "includeRegex" : [
-        "screen_invites_invited_you"
+        "screen_invites_invited_you",
+        "screen\\.bottom_sheet\\.create_dm\\..*"
       ]
     },
     {

@@ -21,7 +21,7 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
 
 fun aMatrixUser(
     id: String = "@id_of_alice:server.org",
-    displayName: String = "Alice",
+    displayName: String? = "Alice",
     avatarUrl: String? = null,
 ) = MatrixUser(
     userId = UserId(id),

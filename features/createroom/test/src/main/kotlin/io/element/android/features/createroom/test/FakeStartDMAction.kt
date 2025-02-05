@@ -11,20 +11,19 @@ import androidx.compose.runtime.MutableState
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.test.A_ROOM_ID
-import kotlinx.coroutines.delay
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeStartDMAction : StartDMAction {
-    private var executeResult: AsyncAction<RoomId> = AsyncAction.Success(A_ROOM_ID)
-
-    fun givenExecuteResult(result: AsyncAction<RoomId>) {
-        executeResult = result
+class FakeStartDMAction(
+    private val executeResult: (MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>) -> Unit = { _, _, _ ->
+        lambdaError()
     }
-
-    override suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>) {
-        actionState.value = AsyncAction.Loading
-        delay(1)
-        actionState.value = executeResult
+) : StartDMAction {
+    override suspend fun execute(
+        matrixUser: MatrixUser,
+        createIfDmDoesNotExist: Boolean,
+        actionState: MutableState<AsyncAction<RoomId>>,
+    ) {
+        executeResult(matrixUser, createIfDmDoesNotExist, actionState)
     }
 }

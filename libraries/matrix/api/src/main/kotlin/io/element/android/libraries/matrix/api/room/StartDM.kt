@@ -12,21 +12,27 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
 /**
- * Try to find an existing DM with the given user, or create one if none exists.
+ * Try to find an existing DM with the given user, or create one if none exists and [createIfDmDoesNotExist] is true.
  */
-suspend fun MatrixClient.startDM(userId: UserId): StartDMResult {
+suspend fun MatrixClient.startDM(
+    userId: UserId,
+    createIfDmDoesNotExist: Boolean,
+): StartDMResult {
     val existingDM = findDM(userId)
     return if (existingDM != null) {
         StartDMResult.Success(existingDM, isNew = false)
-    } else {
+    } else if (createIfDmDoesNotExist) {
         createDM(userId).fold(
             { StartDMResult.Success(it, isNew = true) },
             { StartDMResult.Failure(it) }
         )
+    } else {
+        StartDMResult.DmDoesNotExist
     }
 }
 
 sealed interface StartDMResult {
     data class Success(val roomId: RoomId, val isNew: Boolean) : StartDMResult
+    data object DmDoesNotExist : StartDMResult
     data class Failure(val throwable: Throwable) : StartDMResult
 }

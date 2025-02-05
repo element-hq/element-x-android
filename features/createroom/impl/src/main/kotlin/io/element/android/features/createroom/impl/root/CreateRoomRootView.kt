@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -43,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -110,6 +112,19 @@ fun CreateRoomRootView(
                 ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
         },
         onErrorDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
+        confirmationDialog = { data ->
+            if (data is ConfirmingStartDmWithMatrixUser) {
+                CreateDmConfirmationBottomSheet(
+                    matrixUser = data.matrixUser,
+                    onSendInvite = {
+                        state.eventSink(CreateRoomRootEvents.StartDM(data.matrixUser))
+                    },
+                    onDismiss = {
+                        state.eventSink(CreateRoomRootEvents.CancelStartDM)
+                    },
+                )
+            }
+        },
     )
 }
 
