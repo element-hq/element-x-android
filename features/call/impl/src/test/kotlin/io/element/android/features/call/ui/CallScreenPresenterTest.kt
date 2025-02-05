@@ -260,34 +260,6 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker {},
             appForegroundStateService = appForegroundStateService,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            consumeItemsUntilTimeout()
-
-            assert(startSyncLambda).isCalledOnce()
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
-        val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeMatrixWidgetDriver()
-        val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(SyncState.Running).apply {
-            this.stopSyncLambda = stopSyncLambda
-        }
-        val matrixClient = FakeMatrixClient(syncService = syncService)
-        val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
-            widgetDriver = widgetDriver,
-            navigator = navigator,
-            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) }),
-            screenTracker = FakeScreenTracker {},
-        )
         val hasRun = Mutex(true)
         val job = launch {
             moleculeFlow(RecompositionMode.Immediate) {

@@ -20,7 +20,6 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -36,9 +35,8 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when the sync wasn't running before, an initial sync will always take place, even with no network`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Idle)
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
             startSyncLambda = startSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Offline)
@@ -59,9 +57,8 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when the app goes to background and the sync was running, it will be stopped after a delay`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             stopSyncLambda = stopSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
@@ -91,10 +88,9 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when the app was in background and we receive a notification, a sync will be started then stopped`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
@@ -115,7 +111,7 @@ class DefaultSyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
 
         // We stop the ongoing sync, give the sync service some time to stop
-        stateFlow.value = SyncState.Idle
+        syncService.emitSyncState(SyncState.Idle)
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledOnce()
 
@@ -127,7 +123,7 @@ class DefaultSyncOrchestratorTest {
         startSyncRecorder.assertions().isCalledOnce()
 
         // If the sync is running and we mark the notification sync as no longer necessary, the sync stops after a delay
-        stateFlow.value = SyncState.Running
+        syncService.emitSyncState(SyncState.Running)
         appForegroundStateService.updateIsSyncingNotificationEvent(false)
 
         advanceTimeBy(10.seconds)
@@ -139,10 +135,9 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when the app was in background and we join a call, a sync will be started`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
@@ -163,7 +158,7 @@ class DefaultSyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
 
         // We stop the ongoing sync, give the sync service some time to stop
-        stateFlow.value = SyncState.Idle
+        syncService.emitSyncState(SyncState.Idle)
         advanceTimeBy(10.seconds)
         stopSyncRecorder.assertions().isCalledOnce()
 
@@ -175,7 +170,7 @@ class DefaultSyncOrchestratorTest {
         startSyncRecorder.assertions().isCalledOnce()
 
         // If the sync is running and we mark the in-call state as false, the sync stops after a delay
-        stateFlow.value = SyncState.Running
+        syncService.emitSyncState(SyncState.Running)
         appForegroundStateService.updateIsInCallState(false)
 
         advanceTimeBy(10.seconds)
@@ -187,10 +182,9 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when the app is in foreground, we sync for a notification and a call is ongoing, the sync will only stop when all conditions are false`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
@@ -232,9 +226,8 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `if the sync was running, it's set to be stopped but something triggers a sync again, the sync is not stopped`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             stopSyncLambda = stopSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)
@@ -266,9 +259,8 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when network is offline, sync service should not start`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             startSyncLambda = startSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Offline)
@@ -281,7 +273,7 @@ class DefaultSyncOrchestratorTest {
         advanceTimeBy(1.seconds)
 
         // Set the sync state to idle
-        stateFlow.value = SyncState.Idle
+        syncService.emitSyncState(SyncState.Idle)
 
         // This should still not trigger a sync, since there is no network
         advanceTimeBy(10.seconds)
@@ -293,9 +285,8 @@ class DefaultSyncOrchestratorTest {
 
     @Test
     fun `when sync was running and network is now offline, sync service should be stopped`() = runTest {
-        val stateFlow = MutableStateFlow<SyncState>(SyncState.Running)
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(syncStateFlow = stateFlow).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
             stopSyncLambda = stopSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Online)

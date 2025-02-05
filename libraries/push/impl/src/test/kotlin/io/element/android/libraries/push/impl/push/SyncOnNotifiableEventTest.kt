@@ -150,7 +150,7 @@ class SyncOnNotifiableEventTest {
         )
 
         appForegroundStateService.isSyncingNotificationEvent.test {
-            syncStateFlow.emitSyncState(SyncState.Running)
+            syncService.emitSyncState(SyncState.Running)
             sut(notifiableEvent)
 
             // It's initially false
