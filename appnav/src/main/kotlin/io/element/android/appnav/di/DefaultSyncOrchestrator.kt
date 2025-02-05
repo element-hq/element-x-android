@@ -20,7 +20,6 @@ import io.element.android.services.appnavstate.api.SyncOrchestrator
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -49,9 +48,9 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
 
     private val initialSyncMutex = Mutex()
 
-    private var coroutineScope: CoroutineScope? = null
-
     private val tag = "SyncOrchestrator"
+
+    private val coroutineScope = CoroutineScope(baseCoroutineScope.coroutineContext + CoroutineName(tag) + dispatchers.io)
 
     private val started = AtomicBoolean(false)
 
@@ -84,9 +83,7 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
             }
         }
 
-        coroutineScope = CoroutineScope(baseCoroutineScope.coroutineContext + CoroutineName(tag) + dispatchers.io)
-
-        coroutineScope?.launch {
+        coroutineScope.launch {
             // Wait until the initial sync is done, either successfully or failing
             initialSyncMutex.lock()
 
@@ -125,19 +122,6 @@ class DefaultSyncOrchestrator @AssistedInject constructor(
                     }
                 }
         }
-    }
-
-    /**
-     * Stop observing the app state and network state.
-     */
-    override fun stop() {
-        if (!started.compareAndSet(true, false)) {
-            Timber.tag(tag).d("already stopped, exiting early")
-            return
-        }
-        Timber.tag(tag).d("stop observing the app and network state")
-        coroutineScope?.cancel()
-        coroutineScope = null
     }
 }
 
