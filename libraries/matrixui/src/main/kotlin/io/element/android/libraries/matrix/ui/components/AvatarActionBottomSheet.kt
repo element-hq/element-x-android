@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -97,7 +96,7 @@ private fun AvatarActionBottomSheetContent(
                     Text(
                         text = stringResource(action.titleResId),
                         style = ElementTheme.typography.fontBodyLgRegular,
-                        color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                        color = if (action.destructive) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textPrimary,
                     )
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Resource(action.iconResourceId)),

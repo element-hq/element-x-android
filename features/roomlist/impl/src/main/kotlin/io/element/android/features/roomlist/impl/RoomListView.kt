@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -90,7 +90,7 @@ fun RoomListView(
                     .statusBarsPadding()
                     .padding(top = topPadding)
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(ElementTheme.colors.bgCanvasDefault)
             )
             acceptDeclineInviteView()
         }
@@ -152,14 +152,14 @@ private fun RoomListScaffold(
         floatingActionButton = {
             if (state.displayActions) {
                 FloatingActionButton(
-                    // FIXME align on Design system theme
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = ElementTheme.colors.iconPrimary,
                     onClick = onCreateRoomClick
                 ) {
                     Icon(
                         // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
                         imageVector = CompoundIcons.Compose(),
-                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
+                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message),
+                        tint = ElementTheme.colors.iconOnSolidPrimary,
                     )
                 }
             }

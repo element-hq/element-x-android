@@ -196,8 +196,8 @@ fun MessagesView(
             MessagesViewContent(
                 state = state,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
@@ -290,9 +290,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -402,13 +402,13 @@ private fun MessagesViewComposerBottomSheetContents(
         Column(modifier = Modifier.fillMaxWidth()) {
             SuggestionsPickerView(
                 modifier = Modifier
-                        .heightIn(max = 230.dp)
-                        // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
-                        .nestedScroll(object : NestedScrollConnection {
-                            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                                return available
-                            }
-                        }),
+                    .heightIn(max = 230.dp)
+                    // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
+                    .nestedScroll(object : NestedScrollConnection {
+                        override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                            return available
+                        }
+                    }),
                 roomId = state.roomId,
                 roomName = state.roomName.dataOrNull(),
                 roomAvatarData = state.roomAvatar.dataOrNull(),
@@ -456,8 +456,8 @@ private fun MessagesViewTopBar(
         title = {
             val roundedCornerShape = RoundedCornerShape(8.dp)
             val titleModifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() }
+                .clip(roundedCornerShape)
+                .clickable { onRoomDetailsClick() }
             if (roomName != null && roomAvatar != null) {
                 RoomAvatarAndNameRow(
                     roomName = roomName,
@@ -512,15 +512,15 @@ private fun RoomAvatarAndNameRow(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .padding(16.dp),
+            .fillMaxWidth()
+            .background(ElementTheme.colors.bgSubtleSecondary)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
             text = stringResource(id = R.string.screen_room_timeline_no_permission_to_post),
-            color = MaterialTheme.colorScheme.onSecondary,
+            color = ElementTheme.colors.textSecondary,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontStyle = FontStyle.Italic,

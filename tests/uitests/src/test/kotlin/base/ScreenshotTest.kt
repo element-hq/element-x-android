@@ -11,7 +11,6 @@ import android.content.res.Configuration
 import android.os.LocaleList
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -55,7 +54,7 @@ object ScreenshotTest {
                 ElementTheme {
                     Box(
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
+                            .background(ElementTheme.colors.bgCanvasDefault)
                     ) {
                         preview()
                     }

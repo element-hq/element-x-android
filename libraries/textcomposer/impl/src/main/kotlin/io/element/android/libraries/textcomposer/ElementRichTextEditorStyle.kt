@@ -27,9 +27,9 @@ object ElementRichTextEditorStyle {
         return baseStyle.copy(
             text = baseStyle.text.copy(
                 color = if (hasFocus) {
-                    ElementTheme.materialColors.primary
+                    ElementTheme.colors.textPrimary
                 } else {
-                    ElementTheme.materialColors.secondary
+                    ElementTheme.colors.textSecondary
                 },
                 lineHeight = TextUnit.Unspecified,
                 includeFontPadding = true,

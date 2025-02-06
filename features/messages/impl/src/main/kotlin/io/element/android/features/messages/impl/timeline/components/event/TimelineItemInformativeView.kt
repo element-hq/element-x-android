@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +52,7 @@ fun TimelineItemInformativeView(
         ) {
             Icon(
                 resourceId = iconResourceId,
-                tint = MaterialTheme.colorScheme.secondary,
+                tint = ElementTheme.colors.iconSecondary,
                 contentDescription = iconDescription,
                 modifier = Modifier.size(16.dp)
             )
@@ -61,7 +60,7 @@ fun TimelineItemInformativeView(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             fontStyle = FontStyle.Italic,
-            color = MaterialTheme.colorScheme.secondary,
+            color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdRegular,
             text = text
         )

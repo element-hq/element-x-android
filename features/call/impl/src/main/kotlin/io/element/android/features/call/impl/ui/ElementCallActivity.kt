@@ -44,6 +44,7 @@ import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -61,6 +62,7 @@ class ElementCallActivity :
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var enterpriseService: EnterpriseService
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
 
     private lateinit var presenter: Presenter<CallScreenState>
@@ -109,7 +111,10 @@ class ElementCallActivity :
         setContent {
             val pipState = pictureInPicturePresenter.present()
             ListenToAndroidEvents(pipState)
-            ElementThemeApp(appPreferencesStore) {
+            ElementThemeApp(
+                appPreferencesStore = appPreferencesStore,
+                enterpriseService = enterpriseService,
+            ) {
                 val state = presenter.present()
                 eventSink = state.eventSink
                 LaunchedEffect(state.isCallActive, state.isInWidgetMode) {

@@ -77,7 +77,7 @@ private fun TimelineItemAttachmentHeaderView(
             modifier = Modifier
                 .size(iconSize)
                 .clip(CircleShape)
-                .background(ElementTheme.materialColors.background),
+                .background(ElementTheme.colors.bgCanvasDefault),
             contentAlignment = Alignment.Center,
         ) {
             icon()
@@ -86,14 +86,14 @@ private fun TimelineItemAttachmentHeaderView(
         Column {
             Text(
                 text = filename,
-                color = ElementTheme.materialColors.primary,
+                color = ElementTheme.colors.textPrimary,
                 maxLines = 2,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = fileExtensionAndSize,
-                color = ElementTheme.materialColors.secondary,
+                color = ElementTheme.colors.textSecondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -119,7 +119,7 @@ private fun TimelineItemAttachmentCaptionView(
     Text(
         modifier = modifier,
         text = caption,
-        color = ElementTheme.materialColors.primary,
+        color = ElementTheme.colors.textPrimary,
         style = ElementTheme.typography.fontBodyLgRegular,
         onTextLayout = ContentAvoidingLayout.measureLastTextLine(
             onContentLayoutChange = onContentLayoutChange,
