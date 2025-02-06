@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-    api(libs.compound)
+    implementation(libs.compound)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
 }
