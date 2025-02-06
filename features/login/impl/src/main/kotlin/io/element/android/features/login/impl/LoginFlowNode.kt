@@ -199,7 +199,7 @@ class LoginFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        activity = LocalActivity.current
+        activity = requireNotNull(LocalActivity.current)
         darkTheme = !ElementTheme.isLightTheme
         DisposableEffect(Unit) {
             onDispose {

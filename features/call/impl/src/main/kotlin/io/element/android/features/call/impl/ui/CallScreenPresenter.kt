@@ -233,9 +233,7 @@ class CallScreenPresenter @AssistedInject constructor(
             }
             onDispose {
                 // Make sure we mark the call as ended in the app state
-                if (appForegroundStateService.isInCall.value) {
-                    appForegroundStateService.updateIsInCallState(false)
-                }
+                appForegroundStateService.updateIsInCallState(false)
             }
         }
     }
