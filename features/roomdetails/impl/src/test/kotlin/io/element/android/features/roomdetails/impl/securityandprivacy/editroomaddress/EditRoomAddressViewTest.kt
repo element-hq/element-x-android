@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.securityandprivacy.editroomaddress
+package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -13,10 +13,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressEvents
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressState
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.EditRoomAddressView
-import io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress.anEditRoomAddressState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.testtags.TestTags

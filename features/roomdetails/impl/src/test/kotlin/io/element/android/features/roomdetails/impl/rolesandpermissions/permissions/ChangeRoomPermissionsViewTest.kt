@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions.permissions
+package io.element.android.features.roomdetails.impl.rolesandpermissions.permissions
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -15,12 +15,6 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsEvent
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsState
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsView
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.RoomPermissionType
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.aChangeRoomPermissionsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.CommonStrings

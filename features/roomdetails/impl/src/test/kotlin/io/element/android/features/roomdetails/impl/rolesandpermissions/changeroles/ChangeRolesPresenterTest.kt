@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions.changeroles
+package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -13,8 +13,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesEvent
-import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesPresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState

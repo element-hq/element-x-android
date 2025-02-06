@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.matrix.api
 
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -172,11 +174,12 @@ fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<Ma
 }
 
 /**
- * Returns a room alias from a room alias name.
+ * Returns a room alias from a room alias name, or null if the name is not valid.
  * @param name the room alias name ie. the local part of the room alias.
  */
-fun MatrixClient.roomAliasFromName(name: String): Result<RoomAlias> {
-    return runCatching {
-        RoomAlias("#$name:${userIdServerName()}")
-    }
+fun MatrixClient.roomAliasFromName(name: String): RoomAlias? {
+    return name.takeIf { it.isNotEmpty() }
+        ?.let { "#$it:${userIdServerName()}" }
+        ?.takeIf { MatrixPatterns.isRoomAlias(it) }
+        ?.let { tryOrNull { RoomAlias(it) } }
 }

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.rolesandpermissions.permissions
+package io.element.android.features.roomdetails.impl.rolesandpermissions.permissions
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -14,11 +14,6 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsEvent
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsPresenter
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsState
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.RoomPermissionType
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.ADMIN
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.MODERATOR

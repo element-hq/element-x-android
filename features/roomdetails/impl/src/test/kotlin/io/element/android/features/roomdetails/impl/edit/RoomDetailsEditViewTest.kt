@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.edit
+package io.element.android.features.roomdetails.impl.edit
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -18,10 +18,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
-import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditState
-import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditView
-import io.element.android.features.roomdetails.impl.edit.aRoomDetailsEditState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.testtags.TestTags

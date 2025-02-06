@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.securityandprivacy
+package io.element.android.features.roomdetails.impl.securityandprivacy
 
-import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeSecurityAndPrivacyNavigator(
