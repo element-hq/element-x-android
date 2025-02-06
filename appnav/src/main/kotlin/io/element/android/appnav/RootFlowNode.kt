@@ -27,7 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.di.MatrixClientsHolder
+import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootNavStateFlowFactory
@@ -62,7 +62,7 @@ class RootFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,
     private val navStateFlowFactory: RootNavStateFlowFactory,
-    private val matrixClientsHolder: MatrixClientsHolder,
+    private val matrixSessionCache: MatrixSessionCache,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
     private val viewFolderEntryPoint: ViewFolderEntryPoint,
@@ -78,14 +78,14 @@ class RootFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     override fun onBuilt() {
-        matrixClientsHolder.restoreWithSavedState(buildContext.savedStateMap)
+        matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()
         observeNavState()
     }
 
     override fun onSaveInstanceState(state: MutableSavedStateMap) {
         super.onSaveInstanceState(state)
-        matrixClientsHolder.saveIntoSavedState(state)
+        matrixSessionCache.saveIntoSavedState(state)
         navStateFlowFactory.saveIntoSavedState(state)
     }
 
@@ -118,7 +118,7 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private fun switchToNotLoggedInFlow() {
-        matrixClientsHolder.removeAll()
+        matrixSessionCache.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow)
     }
 
@@ -131,7 +131,7 @@ class RootFlowNode @AssistedInject constructor(
         onFailure: () -> Unit,
         onSuccess: (SessionId) -> Unit,
     ) {
-        matrixClientsHolder.getOrRestore(sessionId)
+        matrixSessionCache.getOrRestore(sessionId)
             .onSuccess {
                 Timber.v("Succeed to restore session $sessionId")
                 onSuccess(sessionId)
@@ -200,7 +200,7 @@ class RootFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
+                val matrixClient = matrixSessionCache.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
                     Timber.w("Couldn't find any session, go through SplashScreen")
                 }
                 val inputs = LoggedInAppScopeFlowNode.Inputs(matrixClient)

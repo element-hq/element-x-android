@@ -48,6 +48,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -296,7 +297,7 @@ class RustTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching<Unit> {
+        runCatching {
             val editedContent = EditedContent.RoomMessage(
                 content = MessageEventContent.from(
                     body = body,
@@ -324,10 +325,12 @@ class RustTimeline(
                 },
                 mentions = null,
             )
-            inner.edit(
-                newContent = editedContent,
-                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
-            )
+            withContext(Dispatchers.IO) {
+                inner.edit(
+                    newContent = editedContent,
+                    eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+                )
+            }
         }
     }
 
@@ -519,7 +522,7 @@ class RustTimeline(
                 newContent = editedContent,
                 eventOrTransactionId = RustEventOrTransactionId.EventId(pollStartId.value),
             )
-        }.map { }
+        }
     }
 
     override suspend fun sendPollResponse(

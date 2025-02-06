@@ -38,6 +38,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -302,7 +303,8 @@ class PinnedMessagesListPresenterTest {
             syncService = syncService,
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
-            )
+            ),
+            dispatchers = testCoroutineDispatchers(),
         )
         timelineProvider.launchIn(backgroundScope)
         return PinnedMessagesListPresenter(

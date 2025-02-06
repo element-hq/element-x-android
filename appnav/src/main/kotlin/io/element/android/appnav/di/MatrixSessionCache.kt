@@ -7,6 +7,7 @@
 
 package io.element.android.appnav.di
 
+import androidx.annotation.VisibleForTesting
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
 import com.squareup.anvil.annotations.ContributesBinding
@@ -25,45 +26,61 @@ import javax.inject.Inject
 
 private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHolder.SaveInstanceKey"
 
+/**
+ * In-memory cache for logged in Matrix sessions.
+ *
+ * This component contains both the [MatrixClient] and the [SyncOrchestrator] for each session.
+ */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class MatrixClientsHolder @Inject constructor(
+class MatrixSessionCache @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
+    private val syncOrchestratorFactory: SyncOrchestrator.Factory,
 ) : MatrixClientProvider {
-    private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
+    private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
     private val restoreMutex = Mutex()
 
     init {
         authenticationService.listenToNewMatrixClients { matrixClient ->
-            sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
+            val syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+            sessionIdsToMatrixSession[matrixClient.sessionId] = InMemoryMatrixSession(
+                matrixClient = matrixClient,
+                syncOrchestrator = syncOrchestrator,
+            )
+            syncOrchestrator.start()
         }
     }
 
     fun removeAll() {
-        sessionIdsToMatrixClient.clear()
+        sessionIdsToMatrixSession.clear()
     }
 
     fun remove(sessionId: SessionId) {
-        sessionIdsToMatrixClient.remove(sessionId)
+        sessionIdsToMatrixSession.remove(sessionId)
     }
 
     override fun getOrNull(sessionId: SessionId): MatrixClient? {
-        return sessionIdsToMatrixClient[sessionId]
+        return sessionIdsToMatrixSession[sessionId]?.matrixClient
     }
 
     override suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient> {
         return restoreMutex.withLock {
-            when (val matrixClient = getOrNull(sessionId)) {
+            when (val cached = getOrNull(sessionId)) {
                 null -> restore(sessionId)
-                else -> Result.success(matrixClient)
+                else -> Result.success(cached)
             }
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun getSyncOrchestrator(sessionId: SessionId): SyncOrchestrator? {
+        return sessionIdsToMatrixSession[sessionId]?.syncOrchestrator
     }
 
     @Suppress("UNCHECKED_CAST")
     fun restoreWithSavedState(state: SavedStateMap?) {
         Timber.d("Restore state")
-        if (state == null || sessionIdsToMatrixClient.isNotEmpty()) {
+        if (state == null || sessionIdsToMatrixSession.isNotEmpty()) {
             Timber.w("Restore with non-empty map")
             return
         }
@@ -79,7 +96,7 @@ class MatrixClientsHolder @Inject constructor(
     }
 
     fun saveIntoSavedState(state: MutableSavedStateMap) {
-        val sessionKeys = sessionIdsToMatrixClient.keys.toTypedArray()
+        val sessionKeys = sessionIdsToMatrixSession.keys.toTypedArray()
         Timber.d("Save matrix session keys = ${sessionKeys.map { it.value }}")
         state[SAVE_INSTANCE_KEY] = sessionKeys
     }
@@ -88,10 +105,20 @@ class MatrixClientsHolder @Inject constructor(
         Timber.d("Restore matrix session: $sessionId")
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
-                sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
+                val syncOrchestrator = syncOrchestratorFactory.create(matrixClient)
+                sessionIdsToMatrixSession[matrixClient.sessionId] = InMemoryMatrixSession(
+                    matrixClient = matrixClient,
+                    syncOrchestrator = syncOrchestrator,
+                )
+                syncOrchestrator.start()
             }
             .onFailure {
                 Timber.e(it, "Fail to restore session")
             }
     }
 }
+
+private data class InMemoryMatrixSession(
+    val matrixClient: MatrixClient,
+    val syncOrchestrator: SyncOrchestrator,
+)
