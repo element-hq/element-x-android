@@ -18,7 +18,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -76,8 +75,6 @@ class SyncOrchestrator @AssistedInject constructor(
 
             Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
             if (syncState == SyncState.Running && !isAppActive) {
-                // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
-                delay(3.seconds)
                 SyncStateAction.StopSync
             } else if (syncState != SyncState.Running && isAppActive && isNetworkAvailable) {
                 SyncStateAction.StartSync
@@ -86,6 +83,10 @@ class SyncOrchestrator @AssistedInject constructor(
             }
         }
             .distinctUntilChanged()
+            .debounce { action ->
+                // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
+                if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
+            }
             .onEach { action ->
                 when (action) {
                     SyncStateAction.StartSync -> {

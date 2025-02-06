@@ -45,11 +45,11 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // Stop sync was never called
         stopSyncRecorder.assertions().isNeverCalled()
@@ -77,11 +77,11 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // Stop sync was never called
         stopSyncRecorder.assertions().isNeverCalled()
@@ -100,7 +100,7 @@ class SyncOrchestratorTest {
 
         // Now change it again and wait for enough time
         appForegroundStateService.isInForeground.value = false
-        advanceTimeBy(3.seconds)
+        advanceTimeBy(4.seconds)
 
         // And confirm it's now called
         stopSyncRecorder.assertions().isCalledOnce()
@@ -110,7 +110,7 @@ class SyncOrchestratorTest {
     fun `when the app was in background and we receive a notification, a sync will be started then stopped`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
@@ -125,19 +125,14 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // Start sync was never called
         startSyncRecorder.assertions().isNeverCalled()
-
-        // We stop the ongoing sync, give the sync service some time to stop
-        syncService.emitSyncState(SyncState.Idle)
-        advanceTimeBy(10.seconds)
-        stopSyncRecorder.assertions().isCalledOnce()
 
         // Now we receive a notification and need to sync
         appForegroundStateService.updateIsSyncingNotificationEvent(true)
@@ -151,14 +146,14 @@ class SyncOrchestratorTest {
         appForegroundStateService.updateIsSyncingNotificationEvent(false)
 
         advanceTimeBy(10.seconds)
-        stopSyncRecorder.assertions().isCalledExactly(2)
+        stopSyncRecorder.assertions().isCalledOnce()
     }
 
     @Test
     fun `when the app was in background and we join a call, a sync will be started`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
             startSyncLambda = startSyncRecorder
             stopSyncLambda = stopSyncRecorder
         }
@@ -173,19 +168,14 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // Start sync was never called
         startSyncRecorder.assertions().isNeverCalled()
-
-        // We stop the ongoing sync, give the sync service some time to stop
-        syncService.emitSyncState(SyncState.Idle)
-        advanceTimeBy(10.seconds)
-        stopSyncRecorder.assertions().isCalledOnce()
 
         // Now we join a call
         appForegroundStateService.updateIsInCallState(true)
@@ -199,7 +189,7 @@ class SyncOrchestratorTest {
         appForegroundStateService.updateIsInCallState(false)
 
         advanceTimeBy(10.seconds)
-        stopSyncRecorder.assertions().isCalledExactly(2)
+        stopSyncRecorder.assertions().isCalledOnce()
     }
 
     @Test
@@ -222,11 +212,11 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // Start sync was never called
         startSyncRecorder.assertions().isNeverCalled()
@@ -256,8 +246,8 @@ class SyncOrchestratorTest {
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(
             initialForegroundValue = true,
-            initialIsSyncingNotificationEventValue = true,
-            initialIsInCallValue = true,
+            initialIsSyncingNotificationEventValue = false,
+            initialIsInCallValue = false,
         )
         val syncOrchestrator = createSyncOrchestrator(
             syncService = syncService,
@@ -265,16 +255,17 @@ class SyncOrchestratorTest {
             appForegroundStateService = appForegroundStateService,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
 
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
 
         // This will set the sync to stop
         appForegroundStateService.givenIsInForeground(false)
-
+        
         // But if we reset it quickly before the stop sync takes place, the sync is not stopped
+        advanceTimeBy(2.seconds)
         appForegroundStateService.givenIsInForeground(true)
 
         advanceTimeBy(10.seconds)
@@ -284,7 +275,7 @@ class SyncOrchestratorTest {
     @Test
     fun `when network is offline, sync service should not start`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
             startSyncLambda = startSyncRecorder
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
@@ -293,14 +284,8 @@ class SyncOrchestratorTest {
             networkMonitor = networkMonitor,
         )
 
-        // We start observing, we skip the initial sync attempt since the state is running
+        // We start observing
         syncOrchestrator.start()
-
-        // Advance the time to make sure we left the initial sync behind
-        advanceTimeBy(1.seconds)
-
-        // Set the sync state to idle
-        syncService.emitSyncState(SyncState.Idle)
 
         // This should still not trigger a sync, since there is no network
         advanceTimeBy(10.seconds)
