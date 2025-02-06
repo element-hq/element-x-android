@@ -263,7 +263,7 @@ class SyncOrchestratorTest {
 
         // This will set the sync to stop
         appForegroundStateService.givenIsInForeground(false)
-        
+
         // But if we reset it quickly before the stop sync takes place, the sync is not stopped
         advanceTimeBy(2.seconds)
         appForegroundStateService.givenIsInForeground(true)
