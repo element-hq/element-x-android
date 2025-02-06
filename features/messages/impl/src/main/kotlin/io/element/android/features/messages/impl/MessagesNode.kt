@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -138,6 +139,7 @@ class MessagesNode @AssistedInject constructor(
         darkTheme: Boolean,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
+        customTab: Boolean
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
@@ -148,7 +150,13 @@ class MessagesNode @AssistedInject constructor(
             is PermalinkData.RoomLink -> {
                 handleRoomLinkClick(activity, permalink, eventSink)
             }
-            is PermalinkData.FallbackLink,
+            is PermalinkData.FallbackLink -> {
+                if (customTab) {
+                    activity.openUrlInChromeCustomTab(null, darkTheme, url)
+                } else {
+                    activity.openUrlInExternalApp(url)
+                }
+            }
             is PermalinkData.RoomEmailInviteLink -> {
                 activity.openUrlInChromeCustomTab(null, darkTheme, url)
             }
@@ -233,7 +241,7 @@ class MessagesNode @AssistedInject constructor(
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
+                onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,

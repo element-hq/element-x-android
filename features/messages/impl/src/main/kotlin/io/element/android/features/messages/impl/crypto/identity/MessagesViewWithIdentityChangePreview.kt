@@ -35,7 +35,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onRoomDetailsClick = {},
         onEventContentClick = { false },
         onUserDataClick = {},
-        onLinkClick = {},
+        onLinkClick = { _, _ -> },
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
