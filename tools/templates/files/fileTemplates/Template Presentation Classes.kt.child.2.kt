@@ -19,7 +19,7 @@ fun ${NAME}View(
     Box(modifier, contentAlignment = Alignment.Center) {
         Text(
             "${NAME} feature view",
-            color = ElementTheme.colors.textprimary,
+            color = ElementTheme.colors.textPrimary,
         )
     }
 }
