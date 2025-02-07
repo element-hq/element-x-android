@@ -256,7 +256,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         name = name,
         topic = topic,
         alias = canonicalAlias,
-        numberOfMembers = activeMembersCount,
+        numberOfMembers = joinedMembersCount,
         isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
