@@ -32,6 +32,30 @@ class SyncOrchestratorTest {
     val warmUpRule = WarmUpRule()
 
     @Test
+    fun `when the sync wasn't running before, an initial sync will take place, even with no network`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
+        val syncOrchestrator = createSyncOrchestrator(
+            syncService = syncService,
+            networkMonitor = networkMonitor,
+        )
+
+        // We start observing with an initial sync
+        syncOrchestrator.start(performInitialSync = true)
+
+        // Advance the time just enough to make sure the initial sync has run
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+
+        // If we wait for a while, the sync will not be started again by the observer since it's already running
+        advanceTimeBy(10.seconds)
+        startSyncRecorder.assertions().isCalledOnce()
+    }
+
+    @Test
     fun `when the app goes to background and the sync was running, it will be stopped after a delay`() = runTest {
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
@@ -46,7 +70,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -78,7 +102,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -126,7 +150,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -169,7 +193,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -213,7 +237,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -256,7 +280,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // Advance the time to make sure the orchestrator has had time to start processing the inputs
         advanceTimeBy(100.milliseconds)
@@ -285,7 +309,7 @@ class SyncOrchestratorTest {
         )
 
         // We start observing
-        syncOrchestrator.start()
+        syncOrchestrator.start(performInitialSync = false)
 
         // This should still not trigger a sync, since there is no network
         advanceTimeBy(10.seconds)

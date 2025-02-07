@@ -21,9 +21,8 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
@@ -52,56 +51,70 @@ class SyncOrchestrator @AssistedInject constructor(
      * Starting observing the app state and network state to start/stop the sync service.
      *
      * Before observing the state, a first attempt at starting the sync service will happen if it's not already running.
+     *
+     * @param performInitialSync If `true`, the initial sync will be performed before starting observing the state. This is the default behaviour.
+     *
+     * **IMPORTANT: this should only be `false` in tests.**
      */
     @OptIn(FlowPreview::class)
-    fun start() {
+    fun start(
+        performInitialSync: Boolean = true,
+    ) {
         if (!started.compareAndSet(false, true)) {
             Timber.tag(tag).d("already started, exiting early")
             return
         }
 
-        Timber.tag(tag).d("start observing the app and network state")
-
-        combine(
-            // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
-            syncService.syncState.debounce(100.milliseconds),
-            networkMonitor.connectivity,
-            appForegroundStateService.isInForeground,
-            appForegroundStateService.isInCall,
-            appForegroundStateService.isSyncingNotificationEvent,
-        ) { syncState, networkState, isInForeground, isInCall, isSyncingNotificationEvent ->
-            val isAppActive = isInForeground || isInCall || isSyncingNotificationEvent
-            val isNetworkAvailable = networkState == NetworkStatus.Connected
-
-            Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
-            if (syncState == SyncState.Running && !isAppActive) {
-                SyncStateAction.StopSync
-            } else if (syncState != SyncState.Running && isAppActive && isNetworkAvailable) {
-                SyncStateAction.StartSync
-            } else {
-                SyncStateAction.NoOp
+        coroutineScope.launch {
+            // Perform an initial sync if the sync service is not running, to check whether the homeserver is accessible
+            // Otherwise, if the device is offline the sync service will never start and the SyncState will be Idle, not Offline
+            if (performInitialSync) {
+                Timber.tag(tag).d("performing initial sync attempt")
+                syncService.startSync()
             }
-        }
-            .distinctUntilChanged()
-            .debounce { action ->
-                // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
-                if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
-            }
-            .onEach { action ->
-                when (action) {
-                    SyncStateAction.StartSync -> {
-                        syncService.startSync()
-                    }
-                    SyncStateAction.StopSync -> {
-                        syncService.stopSync()
-                    }
-                    SyncStateAction.NoOp -> Unit
+
+            Timber.tag(tag).d("start observing the app and network state")
+
+            combine(
+                // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
+                syncService.syncState.debounce(100.milliseconds),
+                networkMonitor.connectivity,
+                appForegroundStateService.isInForeground,
+                appForegroundStateService.isInCall,
+                appForegroundStateService.isSyncingNotificationEvent,
+            ) { syncState, networkState, isInForeground, isInCall, isSyncingNotificationEvent ->
+                val isAppActive = isInForeground || isInCall || isSyncingNotificationEvent
+                val isNetworkAvailable = networkState == NetworkStatus.Connected
+
+                Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
+                if (syncState == SyncState.Running && !isAppActive) {
+                    SyncStateAction.StopSync
+                } else if (syncState != SyncState.Running && isAppActive && isNetworkAvailable) {
+                    SyncStateAction.StartSync
+                } else {
+                    SyncStateAction.NoOp
                 }
             }
-            .onCompletion {
-                Timber.tag(tag).d("has been stopped")
-            }
-            .launchIn(coroutineScope)
+                .distinctUntilChanged()
+                .debounce { action ->
+                    // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
+                    if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
+                }
+                .onCompletion {
+                    Timber.tag(tag).d("has been stopped")
+                }
+                .collect { action ->
+                    when (action) {
+                        SyncStateAction.StartSync -> {
+                            syncService.startSync()
+                        }
+                        SyncStateAction.StopSync -> {
+                            syncService.stopSync()
+                        }
+                        SyncStateAction.NoOp -> Unit
+                    }
+                }
+        }
     }
 }
 
