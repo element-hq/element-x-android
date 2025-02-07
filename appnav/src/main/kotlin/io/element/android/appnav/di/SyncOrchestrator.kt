@@ -92,7 +92,7 @@ class SyncOrchestrator @AssistedInject constructor(
             Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
             if (syncState == SyncState.Running && !isAppActive) {
                 SyncStateAction.StopSync
-            } else if (syncState != SyncState.Running && isAppActive && isNetworkAvailable) {
+            } else if (syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
                 SyncStateAction.StartSync
             } else {
                 SyncStateAction.NoOp
