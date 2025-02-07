@@ -47,8 +47,9 @@ private const val THUMB_MAX_HEIGHT = 600
 
 /**
  * Frame of the video to be used for generating a thumbnail.
+ * It should be at least 1µs to avoid issues with some video files
  */
-private const val VIDEO_THUMB_FRAME = 0L
+private const val VIDEO_THUMB_FRAME = 1L
 
 class ThumbnailFactory @Inject constructor(
     @ApplicationContext private val context: Context,
