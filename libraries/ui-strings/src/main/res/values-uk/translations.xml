@@ -184,6 +184,7 @@
   <string name="common_light">"Світла"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_loading">"Завантаження"</string>
+  <string name="common_loading_more">"Завантаження наступних…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d учасник"</item>
     <item quantity="few">"%1$d учасники"</item>

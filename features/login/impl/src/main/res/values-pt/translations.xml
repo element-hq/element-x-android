@@ -44,8 +44,8 @@
   <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"O outro dispositivo não tem a sessão iniciada"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"O início de sessão foi cancelado no outro dispositivo."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Pedido de início de sessão cancelado"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"O início de sessão foi recusado no outro dispositivo."</string>
-  <string name="screen_qr_code_login_error_declined_title">"Início de sessão cancelado"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"O início de sessão foi rejeitado no outro dispositivo."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Início de sessão rejeitado"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"O início de sessão expirou. Por favor, tenta novamente."</string>
   <string name="screen_qr_code_login_error_expired_title">"O início de sessão não foi concluído a tempo"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"O teu outro dispositivo não suporta o início de sessão na %s com um código QR.

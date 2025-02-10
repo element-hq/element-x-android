@@ -17,6 +17,7 @@
   <string name="screen_join_room_knock_message_description">"Nachricht (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"Falls Ihre Anfrage, dem Raum beizutreten, akzeptiert wird, werden Sie eine Einladung erhalten."</string>
   <string name="screen_join_room_knock_sent_title">"Beitrittsanfrage geschickt"</string>
+  <string name="screen_join_room_loading_alert_message">"Wir konnten die Chatroomvorschau nicht anzeigen. Dies kann an Netzwerk- oder Serverproblemen liegen."</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s unterstützt noch keine Spaces. Du kannst auf Spaces im Web zugreifen."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces werden noch nicht unterstützt"</string>
   <string name="screen_join_room_subtitle_knock">"Klopfe an um einen Administrator zu benachrichtigen. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>

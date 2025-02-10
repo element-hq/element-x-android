@@ -14,7 +14,7 @@
     <item quantity="other">"%d notificações"</item>
   </plurals>
   <string name="notification_fallback_content">"Notificação"</string>
-  <string name="notification_incoming_call">"Chamada recebida"</string>
+  <string name="notification_incoming_call">"📹 A receber chamada"</string>
   <string name="notification_inline_reply_failed">"** Falha no envio - por favor abre a sala"</string>
   <string name="notification_invitation_action_join">"Entrar"</string>
   <string name="notification_invitation_action_reject">"Rejeitar"</string>

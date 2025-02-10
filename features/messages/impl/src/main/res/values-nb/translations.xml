@@ -12,7 +12,11 @@
   <string name="screen_report_content_block_user_hint">"Kryss av for om du vil skjule alle nåværende og fremtidige meldinger fra denne brukeren"</string>
   <string name="screen_report_content_explanation">"Denne meldingen vil bli rapportert til hjemmeserverens administratorer. De vil ikke kunne lese noen krypterte meldinger."</string>
   <string name="screen_report_content_hint">"Begrunnelse for å rapportere dette innholdet"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Ta bilde"</string>
+  <string name="screen_room_attachment_source_camera_video">"Ta opp video"</string>
+  <string name="screen_room_attachment_source_files">"Vedlegg"</string>
+  <string name="screen_room_attachment_source_gallery">"Foto- og videobibliotek"</string>
   <string name="screen_room_encrypted_history_banner">"Meldingshistorikken er for øyeblikket ikke tilgjengelig."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Meldingshistorikk er ikke tilgjengelig i dette rommet. Bekreft denne enheten for å se meldingshistorikken din."</string>
   <string name="screen_room_invite_again_alert_message">"Vil du invitere dem tilbake?"</string>

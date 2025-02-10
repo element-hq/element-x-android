@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Foste banido desta sala por %1$s."</string>
+  <string name="screen_join_room_ban_message">"Foste banido desta sala."</string>
+  <string name="screen_join_room_ban_reason">"Razão: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Cancelar pedido"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Sim, cancelar"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Tens a certeza de que queres cancelar o teu pedido de entrada nesta sala?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Cancela o pedido de adesão"</string>
+  <string name="screen_join_room_fail_message">"Falha ao entrar na sala."</string>
+  <string name="screen_join_room_fail_reason">"A entrada nesta sala ou está limitada a convites ou a alguma configuração de espaço."</string>
+  <string name="screen_join_room_forget_action">"Esquecer esta sala"</string>
+  <string name="screen_join_room_invite_required_message">"Precisas de um convite para entrares nesta sala"</string>
   <string name="screen_join_room_join_action">"Entrar na sala"</string>
+  <string name="screen_join_room_join_restricted_message">"Podes ter que ser convidado ou pertenceres a um espaço para poderes entrar."</string>
   <string name="screen_join_room_knock_action">"Bater à porta"</string>
   <string name="screen_join_room_knock_message_description">"Mensagem (opcional)"</string>
   <string name="screen_join_room_knock_sent_description">"Irá receber um convite para participar na sala se seu pedido for aceite."</string>
