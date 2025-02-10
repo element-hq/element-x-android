@@ -27,11 +27,13 @@ fun aRoomPreview(
     info: RoomPreviewInfo = aRoomPreviewInfo(),
     declineInviteResult: () -> Result<Unit> = { lambdaError() },
     forgetRoomResult: () -> Result<Unit> = { lambdaError() },
+    roomMembershipDetails: () -> Result<RoomMembershipDetails?> = { lambdaError() },
 ) = FakeRoomPreview(
     sessionId = sessionId,
     info = info,
     declineInviteResult = declineInviteResult,
     forgetRoomResult = forgetRoomResult,
+    roomMembershipDetails = roomMembershipDetails,
 )
 
 fun aRoomPreviewInfo(

@@ -115,12 +115,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = aLoadedContentState(
                     name = "A banned room",
                     joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
-                        InviteSender(
+                        banSender = InviteSender(
                             userId = UserId("@alice:domain"),
                             displayName = "Alice",
                             avatarData = AvatarData("alice", "Alice", size = AvatarSize.InviteSender),
                             membershipChangeReason = "spamming"
-                        )
+                        ),
+                        reason = "spamming",
                     ),
                 )
             ),

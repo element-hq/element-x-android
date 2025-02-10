@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
@@ -97,7 +98,20 @@ class JoinRoomPresenter @AssistedInject constructor(
             when {
                 isDismissingContent -> value = ContentState.Dismissing
                 roomInfo.isPresent -> {
-                    value = roomInfo.get().toContentState()
+                    val (sender, reason) = when (roomInfo.get().currentUserMembership) {
+                        CurrentUserMembership.BANNED -> {
+                            // Workaround to get info about the sender for banned rooms
+                            // TODO re-do this once we have a better API in the SDK
+                            val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
+                            val membershipDetalis = preview.getOrNull()?.membershipDetails()?.getOrNull()
+                            membershipDetalis?.senderMember to membershipDetalis?.currentUserMember?.membershipChangeReason
+                        }
+                        CurrentUserMembership.INVITED -> {
+                            roomInfo.get().inviter to null
+                        }
+                        else -> null to null
+                    }
+                    value = roomInfo.get().toContentState(sender, reason)
                 }
                 roomDescription.isPresent -> {
                     value = roomDescription.get().toContentState()
@@ -106,10 +120,19 @@ class JoinRoomPresenter @AssistedInject constructor(
                     value = ContentState.Loading
                     val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
-                        onSuccess = { previewInfo ->
-                            previewInfo.toContentState()
                         onSuccess = { preview ->
-                            preview.info.toContentState()
+                            val membershipInfo = when (preview.info.membership) {
+                                CurrentUserMembership.INVITED,
+                                CurrentUserMembership.BANNED,
+                                CurrentUserMembership.KNOCKED -> {
+                                    preview.membershipDetails().getOrNull()
+                                }
+                                else -> null
+                            }
+                            preview.info.toContentState(
+                                senderMember = membershipInfo?.senderMember,
+                                reason = membershipInfo?.currentUserMember?.membershipChangeReason,
+                            )
                         },
                         onFailure = { throwable ->
                             if (throwable is ClientException.MatrixApi && (throwable.kind == ErrorKind.NotFound || throwable.kind == ErrorKind.Forbidden)) {
@@ -213,7 +236,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     }
 }
 
-private fun RoomPreviewInfo.toContentState(): ContentState {
+private fun RoomPreviewInfo.toContentState(senderMember: RoomMember?, reason: String?): ContentState {
     return ContentState.Loaded(
         roomId = roomId,
         name = name,
@@ -224,8 +247,8 @@ private fun RoomPreviewInfo.toContentState(): ContentState {
         roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (membership) {
-            CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(null)
-            CurrentUserMembership.BANNED -> JoinAuthorisationStatus.IsBanned(null)
+            CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(senderMember?.toInviteSender())
+            CurrentUserMembership.BANNED -> JoinAuthorisationStatus.IsBanned(senderMember?.toInviteSender(), reason)
             CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             else -> joinRule.toJoinAuthorisationStatus()
         }
@@ -252,7 +275,7 @@ internal fun RoomDescription.toContentState(): ContentState {
 }
 
 @VisibleForTesting
-internal fun MatrixRoomInfo.toContentState(): ContentState {
+internal fun MatrixRoomInfo.toContentState(membershipSender: RoomMember?, reason: String?): ContentState {
     return ContentState.Loaded(
         roomId = id,
         name = name,
@@ -264,10 +287,11 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (currentUserMembership) {
             CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
-                inviteSender = inviter?.toInviteSender()
+                inviteSender = membershipSender?.toInviteSender()
             )
             CurrentUserMembership.BANNED -> JoinAuthorisationStatus.IsBanned(
-                banSender = inviter?.toInviteSender()
+                banSender = membershipSender?.toInviteSender(),
+                reason = reason,
             )
             CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             else -> joinRule.toJoinAuthorisationStatus()

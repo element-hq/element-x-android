@@ -28,15 +28,19 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.aRoomPreview
 import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
@@ -47,6 +51,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -253,10 +258,10 @@ class JoinRoomPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - when room is banned, then join authorization is equal to IsBanned`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.BANNED, joinRule = JoinRule.Public)
-        val matrixClient = FakeMatrixClient().apply {
         val matrixClient = FakeMatrixClient(
             getRoomPreviewResult = { _, _ ->
                 Result.success(
@@ -266,6 +271,14 @@ class JoinRoomPresenterTest {
                             joinRule = JoinRule.Public,
                             currentUserMembership = CurrentUserMembership.BANNED,
                         ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
                     )
                 )
             }
@@ -278,7 +291,13 @@ class JoinRoomPresenterTest {
             matrixClient = matrixClient
         )
         presenter.test {
+            // Skip initial state
             skipItems(1)
+
+            // Advance until the room info is loaded and the presenter recomposes. The room preview info still needs to be loaded async.
+            skipItems(1)
+
+            // Now we should have the room info
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isInstanceOf(JoinAuthorisationStatus.IsBanned::class.java)
             }
