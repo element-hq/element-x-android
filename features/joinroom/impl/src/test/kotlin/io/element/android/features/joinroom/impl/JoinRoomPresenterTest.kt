@@ -257,6 +257,19 @@ class JoinRoomPresenterTest {
     fun `present - when room is banned, then join authorization is equal to IsBanned`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.BANNED, joinRule = JoinRule.Public)
         val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.BANNED,
+                        ),
+                    )
+                )
+            }
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -504,19 +517,21 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(
-                        roomId = A_ROOM_ID,
-                        canonicalAlias = RoomAlias("#alias:matrix.org"),
-                        name = "Room name",
-                        topic = "Room topic",
-                        avatarUrl = "avatarUrl",
-                        numberOfJoinedMembers = 2,
-                        isSpace = false,
-                        isHistoryWorldReadable = false,
-                        joinRule = JoinRule.Public,
-                        currentUserMembership = null,
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = "Room name",
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = null,
+                        )
                     )
                 )
             }
@@ -547,9 +562,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Private`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(joinRule = JoinRule.Private)
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Private))
                 )
             }
         )
@@ -567,9 +582,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Custom`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(joinRule = JoinRule.Custom("custom"))
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Custom("custom")))
                 )
             }
         )
@@ -587,9 +602,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Invite`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(joinRule = JoinRule.Invite)
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Invite))
                 )
             }
         )
@@ -607,9 +622,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as KnockRestricted`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(joinRule = JoinRule.KnockRestricted(emptyList()))
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.KnockRestricted(emptyList())))
                 )
             }
         )
@@ -627,9 +642,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Restricted`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(joinRule = JoinRule.Restricted(emptyList()))
+                    aRoomPreview(info = aRoomPreviewInfo(joinRule = JoinRule.Restricted(emptyList())))
                 )
             }
         )
@@ -647,9 +662,9 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded as Space`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
-                    aRoomPreviewInfo(isSpace = true)
+                    aRoomPreview(info = aRoomPreviewInfo(isSpace = true))
                 )
             }
         )
@@ -667,7 +682,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -697,7 +712,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error Forbidden`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewInfoResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
             }
         )

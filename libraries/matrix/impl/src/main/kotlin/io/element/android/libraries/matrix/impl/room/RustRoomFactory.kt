@@ -145,7 +145,6 @@ class RustRoomFactory(
         }
         RustRoomPreview(
             sessionId = sessionId,
-            roomId = roomId,
             inner = innerRoom,
             roomMembershipObserver = roomMembershipObserver,
         )

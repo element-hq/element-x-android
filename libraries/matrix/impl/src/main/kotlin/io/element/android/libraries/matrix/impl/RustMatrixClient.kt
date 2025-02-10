@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRule
-import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -60,9 +59,9 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
+import io.element.android.libraries.matrix.impl.room.RustRoomPreview
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.room.join.map
-import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
@@ -450,14 +449,13 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            when (roomIdOrAlias) {
+            val roomPreview = when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
                 is RoomIdOrAlias.Id -> innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
-            }.use { roomPreview ->
-                RoomPreviewInfoMapper.map(roomPreview.info())
             }
+            RustRoomPreview(sessionId, roomPreview, roomMembershipObserver)
         }.mapFailure { it.mapClientException() }
     }
 

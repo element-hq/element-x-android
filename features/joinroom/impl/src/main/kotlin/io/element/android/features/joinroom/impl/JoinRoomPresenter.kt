@@ -104,10 +104,12 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading
-                    val result = matrixClient.getRoomPreviewInfo(roomIdOrAlias, serverNames)
+                    val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
                         onSuccess = { previewInfo ->
                             previewInfo.toContentState()
+                        onSuccess = { preview ->
+                            preview.info.toContentState()
                         },
                         onFailure = { throwable ->
                             if (throwable is ClientException.MatrixApi && (throwable.kind == ErrorKind.NotFound || throwable.kind == ErrorKind.Forbidden)) {
