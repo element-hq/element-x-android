@@ -131,7 +131,7 @@ fun JoinRoomView(
             content = stringResource(CommonStrings.error_network_or_server_issue),
             onRetry = { state.eventSink(JoinRoomEvents.RetryFetchingContent) },
             onDismiss = {
-                state.eventSink(JoinRoomEvents.DismissContent)
+                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
                 onBackClick()
             }
         )

@@ -176,7 +176,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 is JoinRoomEvents.UpdateKnockMessage -> {
                     knockMessage = event.message.take(MAX_KNOCK_MESSAGE_LENGTH)
                 }
-                JoinRoomEvents.DismissContent -> {
+                JoinRoomEvents.DismissErrorAndHideContent -> {
                     isDismissingContent = true
                 }
                 JoinRoomEvents.ForgetRoom -> coroutineScope.forgetRoom(forgetRoomAction)
