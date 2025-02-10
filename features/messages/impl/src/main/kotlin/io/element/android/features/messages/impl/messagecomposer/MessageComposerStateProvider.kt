@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -32,6 +33,7 @@ fun aMessageComposerState(
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
+    identityStates: ImmutableList<RoomMemberIdentityStateChange> = persistentListOf(),
     eventSink: (MessageComposerEvents) -> Unit = {},
 ) = MessageComposerState(
     textEditorState = textEditorState,
@@ -42,6 +44,7 @@ fun aMessageComposerState(
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
     suggestions = suggestions,
+    roomMemberIdentityStateChanges = identityStates,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     eventSink = eventSink,
 )

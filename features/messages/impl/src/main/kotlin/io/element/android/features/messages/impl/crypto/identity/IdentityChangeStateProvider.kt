@@ -30,7 +30,7 @@ class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState
                 roomMemberIdentityStateChanges = listOf(
                     aRoomMemberIdentityStateChange(
                         identityRoomMember = anIdentityRoomMember(displayNameOrDefault = "Alice"),
-                        identityState = IdentityState.PinViolation,
+                        identityState = IdentityState.VerificationViolation,
                     ),
                 ),
             ),
@@ -47,9 +47,10 @@ internal fun aRoomMemberIdentityStateChange(
 
 internal fun anIdentityChangeState(
     roomMemberIdentityStateChanges: List<RoomMemberIdentityStateChange> = emptyList(),
+    eventSink: (IdentityChangeEvent) -> Unit = {}
 ) = IdentityChangeState(
     roomMemberIdentityStateChanges = roomMemberIdentityStateChanges.toImmutableList(),
-    eventSink = {},
+    eventSink,
 )
 
 internal fun anIdentityRoomMember(

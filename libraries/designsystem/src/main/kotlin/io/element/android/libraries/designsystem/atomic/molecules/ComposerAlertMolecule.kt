@@ -78,7 +78,11 @@ fun ComposerAlertMolecule(
                         text = content,
                         modifier = Modifier.weight(1f),
                         style = ElementTheme.typography.fontBodyMdRegular,
-                        color = ElementTheme.colors.textPrimary,
+                        color = if (isCritical) {
+                            ElementTheme.colors.textCriticalPrimary
+                        } else {
+                            ElementTheme.colors.textPrimary
+                        },
                         textAlign = TextAlign.Start,
                     )
                 }
