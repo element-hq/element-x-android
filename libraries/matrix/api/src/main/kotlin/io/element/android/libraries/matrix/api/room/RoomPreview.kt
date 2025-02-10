@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.matrix.api.room
 
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 
 /** A reference to a room either invited, knocked or banned. */
 interface RoomPreview : AutoCloseable {
     val sessionId: SessionId
-    val roomId: RoomId
+    val info: RoomPreviewInfo
 
     /** Leave the room ie.decline invite or cancel knock. */
     suspend fun leave(): Result<Unit>

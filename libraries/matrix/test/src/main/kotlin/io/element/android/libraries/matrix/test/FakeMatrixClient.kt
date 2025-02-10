@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -79,7 +78,7 @@ class FakeMatrixClient(
         Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
     )
     },
-    private val getRoomPreviewInfoResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreviewInfo> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
@@ -105,7 +104,6 @@ class FakeMatrixClient(
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
-    val getRoomPreviewResults = mutableMapOf<RoomId, RoomPreview>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -132,8 +130,8 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? {
-        return getRoomPreviewResults[roomId]
+    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? = simulateLongTask {
+        getRoomPreviewResult(RoomIdOrAlias.Id(roomId), emptyList()).getOrNull()
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -313,8 +311,8 @@ class FakeMatrixClient(
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo> = simulateLongTask {
-        getRoomPreviewInfoResult(roomIdOrAlias, serverNames)
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = simulateLongTask {
+        getRoomPreviewResult(roomIdOrAlias, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
