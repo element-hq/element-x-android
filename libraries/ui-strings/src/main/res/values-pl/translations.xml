@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_user_menu">"Menu użytkownika"</string>
+  <string name="a11y_view_details">"Wyświetl szczegóły"</string>
   <string name="a11y_voice_message_record">"Nagraj wiadomość głosową."</string>
   <string name="a11y_voice_message_stop_recording">"Zatrzymaj nagrywanie"</string>
   <string name="action_accept">"Akceptuj"</string>
@@ -151,6 +152,7 @@
   <string name="common_device_id">"ID urządzenia"</string>
   <string name="common_direct_chat">"Czat prywatny"</string>
   <string name="common_do_not_show_this_again">"Nie pokazuj ponownie"</string>
+  <string name="common_download_failed">"Błąd pobierania"</string>
   <string name="common_downloading">"Pobieram"</string>
   <string name="common_edited_suffix">"(edytowane)"</string>
   <string name="common_editing">"Edytowanie"</string>
@@ -168,6 +170,8 @@ Powód: %1$s."</string>
   <string name="common_favourite">"Ulubione"</string>
   <string name="common_favourited">"Ulubione"</string>
   <string name="common_file">"Plik"</string>
+  <string name="common_file_deleted">"Plik usunięty"</string>
+  <string name="common_file_saved">"Plik zapisany"</string>
   <string name="common_file_saved_on_disk_android">"Plik zapisany do folderu Pobrane"</string>
   <string name="common_forward_message">"Przekaż wiadomość"</string>
   <string name="common_frequently_used">"Często używane"</string>
@@ -180,6 +184,7 @@ Powód: %1$s."</string>
   <string name="common_light">"Jasny"</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
   <string name="common_loading">"Ładowanie…"</string>
+  <string name="common_loading_more">"Ładuję więcej…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d członek"</item>
     <item quantity="few">"%1$d członki"</item>
@@ -277,6 +282,8 @@ Powód: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Tożsamość %1$s mogła ulec zmianie. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Wygląda na to, że tożsamość %1$s %2$s uległa zmianie. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Zweryfikowana tożsamość %1$s %2$s uległa zmianie.  %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Wycofaj weryfikację"</string>
   <string name="dialog_title_confirmation">"Potwierdzenie"</string>
   <string name="dialog_title_error">"Błąd"</string>
   <string name="dialog_title_success">"Sukces"</string>

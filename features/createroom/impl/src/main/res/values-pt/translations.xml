@@ -3,7 +3,7 @@
   <string name="screen_create_room_action_create_room">"Nova sala"</string>
   <string name="screen_create_room_add_people_title">"Convidar pessoas"</string>
   <string name="screen_create_room_error_creating_room">"Ocorreu um erro ao criar a sala"</string>
-  <string name="screen_create_room_private_option_description">"Apenas as pessoas convidadas podem aceder a esta sala. Todas as mensagens são encriptadas ponta a ponta."</string>
+  <string name="screen_create_room_private_option_description">"Apenas as pessoas convidadas podem aceder a esta sala. Todas as mensagens são cifradas ponta-a-ponta."</string>
   <string name="screen_create_room_private_option_title">"Sala privada"</string>
   <string name="screen_create_room_public_option_description">"Qualquer um pode encontrar esta sala. 
 Pode alterar esta opção nas definições da sala."</string>

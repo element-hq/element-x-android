@@ -17,6 +17,8 @@
   <string name="screen_join_room_knock_message_description">"Správa (voliteľné)"</string>
   <string name="screen_join_room_knock_sent_description">"Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti."</string>
   <string name="screen_join_room_knock_sent_title">"Žiadosť o pripojenie bola odoslaná"</string>
+  <string name="screen_join_room_loading_alert_message">"Nepodarilo sa zobraziť ukážku miestnosti. Môže to byť spôsobené problémami so sieťou alebo serverom."</string>
+  <string name="screen_join_room_loading_alert_title">"Ukážku tejto miestnosti sa nepodarilo zobraziť"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s zatiaľ nepodporuje priestory. K priestorom môžete pristupovať na webe."</string>
   <string name="screen_join_room_space_not_supported_title">"Priestory zatiaľ nie sú podporované"</string>
   <string name="screen_join_room_subtitle_knock">"Kliknite na tlačidlo nižšie a správca miestnosti bude informovaný. Po schválení sa budete môcť pripojiť ku konverzácii."</string>

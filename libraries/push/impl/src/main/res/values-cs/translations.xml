@@ -16,7 +16,7 @@
     <item quantity="other">"%d oznámení"</item>
   </plurals>
   <string name="notification_fallback_content">"Oznámení"</string>
-  <string name="notification_incoming_call">"Příchozí hovor"</string>
+  <string name="notification_incoming_call">"📹 Příchozí hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
   <string name="notification_invitation_action_join">"Vstoupit"</string>
   <string name="notification_invitation_action_reject">"Odmítnout"</string>

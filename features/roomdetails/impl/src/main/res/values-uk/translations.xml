@@ -9,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"Заблоковувати людей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Вилучати повідомлення"</string>
   <string name="screen_room_change_permissions_everyone">"Усі"</string>
-  <string name="screen_room_change_permissions_invite_people">"Запрошувати людей"</string>
+  <string name="screen_room_change_permissions_invite_people">"Запрошувати людей і приймати запити на приєднання"</string>
   <string name="screen_room_change_permissions_member_moderation">"Модерація учасників"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Повідомлення та зміст"</string>
   <string name="screen_room_change_permissions_moderators">"Адміністратори та модератори"</string>
-  <string name="screen_room_change_permissions_remove_people">"Вилучати людей"</string>
+  <string name="screen_room_change_permissions_remove_people">"Вилучати людей і відхиляти запити на приєднання"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змінювати аватар кімнати"</string>
   <string name="screen_room_change_permissions_room_details">"Деталі кімнати"</string>
   <string name="screen_room_change_permissions_room_name">"Змінювати назву кімнати"</string>

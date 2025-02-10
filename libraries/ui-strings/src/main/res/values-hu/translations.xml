@@ -193,6 +193,7 @@ Ok: %1$s."</string>
   <string name="common_message_removed">"Üzenet eltávolítva"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Némítás"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>

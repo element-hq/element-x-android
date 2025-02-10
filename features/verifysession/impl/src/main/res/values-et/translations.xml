@@ -13,6 +13,7 @@
   <string name="screen_session_verification_cancelled_subtitle">"Olukord pole päris õige. Päring kas aegus või teine osapool keeldus päringule vastamast."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Kinnita, et kõik järgnevalt kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis."</string>
   <string name="screen_session_verification_compare_emojis_title">"Võrdle emojisid"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Palun kinnita, et allpool näidatud emojid vastavad täpselt neile, mida kuvatakse teise kasutaja seadmes."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Kinnita, et kõik järgnevalt kuvatud numbrid on täpselt samad, mida sa näed oma teises sessioonis."</string>
   <string name="screen_session_verification_compare_numbers_title">"Võrdle numbreid"</string>
   <string name="screen_session_verification_complete_subtitle">"Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena."</string>
@@ -37,8 +38,11 @@
   <string name="screen_session_verification_they_match">"Nad klapivad omavahel"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Enne kui alustad siin verifitseerimist, palun ava rakendus teises seadmes."</string>
   <string name="screen_session_verification_use_another_device_title">"Ava rakendus teises verifitseeritud seadmes"</string>
+  <string name="screen_session_verification_user_initiator_title">"Kas verifitseerime selle kasutaja?"</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Sa peaksid teises seadmes nägema hüpikakent. Palun alusta sealt verifitseerimist."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Alusta verifitseerimist teises seadmes"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Ootame teise seadme järgi"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Ootame teise kasutaja järgi"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ootame nõustumist verifitseerimispäringuga"</string>
   <string name="screen_signout_in_progress_dialog_content">"Logime välja…"</string>

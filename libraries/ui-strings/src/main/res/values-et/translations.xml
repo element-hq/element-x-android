@@ -193,6 +193,7 @@ Põhjus: %1$s."</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
   <string name="common_mute">"Summutatud"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
   <string name="common_offline">"Võrgust väljas"</string>
@@ -270,6 +271,7 @@ Põhjus: %1$s."</string>
   <string name="common_verified">"Verifitseeritud"</string>
   <string name="common_verify_device">"Verifitseeri seade"</string>
   <string name="common_verify_identity">"Verifitseeri võrguidentiteet"</string>
+  <string name="common_verify_user">"Verifitseeri kasutaja"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
@@ -296,6 +298,7 @@ Põhjus: %1$s."</string>
   <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
   <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
+  <string name="error_network_or_server_issue">"See võib olla põhjustatud võrgu- või serverivigadest."</string>
   <string name="error_room_address_already_exists">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
   <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
