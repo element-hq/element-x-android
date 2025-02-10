@@ -213,7 +213,7 @@ class JoinRoomViewTest {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(null)),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(null, null)),
                 eventSink = eventsRecorder,
             ),
         )

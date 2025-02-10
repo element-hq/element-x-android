@@ -93,7 +93,7 @@ sealed interface JoinAuthorisationStatus {
     data object None : JoinAuthorisationStatus
     data class IsSpace(val applicationName: String) : JoinAuthorisationStatus
     data class IsInvited(val inviteSender: InviteSender?) : JoinAuthorisationStatus
-    data class IsBanned(val banSender: InviteSender?) : JoinAuthorisationStatus
+    data class IsBanned(val banSender: InviteSender?, val reason: String?) : JoinAuthorisationStatus
     data object IsKnocked : JoinAuthorisationStatus
     data object CanKnock : JoinAuthorisationStatus
     data object CanJoin : JoinAuthorisationStatus

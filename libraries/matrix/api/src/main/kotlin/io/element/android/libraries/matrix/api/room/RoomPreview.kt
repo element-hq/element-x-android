@@ -22,4 +22,9 @@ interface RoomPreview : AutoCloseable {
      * Forget the room if we had access to it, and it was left or banned.
      */
     suspend fun forget(): Result<Unit>
+
+    /**
+     * Get the membership details of the user in the room, as well as from the user who sent the `m.room.member` event.
+     */
+    suspend fun membershipDetails(): Result<RoomMembershipDetails?>
 }

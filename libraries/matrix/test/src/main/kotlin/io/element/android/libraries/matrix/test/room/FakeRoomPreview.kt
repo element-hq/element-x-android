@@ -22,6 +22,7 @@ class FakeRoomPreview(
     override val info: RoomPreviewInfo = aRoomPreviewInfo(),
     private val declineInviteResult: () -> Result<Unit> = { lambdaError() },
     private val forgetRoomResult: () -> Result<Unit> = { lambdaError() },
+    private val roomMembershipDetails: () -> Result<RoomMembershipDetails?> = { lambdaError() },
 ) : RoomPreview {
     override suspend fun leave(): Result<Unit> = simulateLongTask {
         declineInviteResult()
@@ -29,6 +30,10 @@ class FakeRoomPreview(
 
     override suspend fun forget(): Result<Unit> = simulateLongTask {
         forgetRoomResult()
+    }
+
+    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = simulateLongTask {
+        roomMembershipDetails()
     }
 
     override fun close() = Unit

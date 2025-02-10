@@ -287,8 +287,8 @@ private fun JoinBannedFooter(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        val banReason = status.banSender?.membershipChangeReason?.let {
-            stringResource(R.string.screen_join_room_ban_reason, it)
+        val banReason = status.reason?.let {
+            stringResource(R.string.screen_join_room_ban_reason, it.removeSuffix("."))
         }
         val title = if (status.banSender != null) {
             stringResource(R.string.screen_join_room_ban_by_message, status.banSender.displayName)
