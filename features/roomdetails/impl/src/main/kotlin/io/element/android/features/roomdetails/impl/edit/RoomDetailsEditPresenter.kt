@@ -223,6 +223,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                     mimeType = MimeTypes.Jpeg,
                     deleteOriginal = false,
                     compressIfPossible = false,
+                    isRoomEncrypted = false,
                 ).getOrThrow()
                 room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {

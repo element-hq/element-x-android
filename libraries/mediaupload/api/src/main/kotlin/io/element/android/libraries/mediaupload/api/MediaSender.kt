@@ -38,6 +38,7 @@ class MediaSender @Inject constructor(
                 mimeType = mimeType,
                 deleteOriginal = false,
                 compressIfPossible = compressIfPossible,
+                isRoomEncrypted = room.isEncrypted,
             )
     }
 
@@ -70,6 +71,7 @@ class MediaSender @Inject constructor(
                 mimeType = mimeType,
                 deleteOriginal = false,
                 compressIfPossible = compressIfPossible,
+                isRoomEncrypted = room.isEncrypted,
             )
             .flatMapCatching { info ->
                 room.sendMedia(
@@ -94,6 +96,7 @@ class MediaSender @Inject constructor(
                 mimeType = mimeType,
                 deleteOriginal = true,
                 compressIfPossible = false,
+                isRoomEncrypted = room.isEncrypted,
             )
             .flatMapCatching { info ->
                 val audioInfo = (info as MediaUploadInfo.Audio).audioInfo

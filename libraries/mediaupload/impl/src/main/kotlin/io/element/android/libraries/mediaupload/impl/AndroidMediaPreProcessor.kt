@@ -72,14 +72,15 @@ class AndroidMediaPreProcessor @Inject constructor(
         mimeType: String,
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
+        isRoomEncrypted: Boolean,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatching {
             val result = when {
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = compressIfPossible && mimeType !in notCompressibleImageTypes
-                    processImage(uri, mimeType, shouldBeCompressed)
+                    processImage(uri, mimeType, shouldBeCompressed, isRoomEncrypted)
                 }
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, compressIfPossible)
+                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, compressIfPossible, isRoomEncrypted)
                 mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
                 else -> processFile(uri, mimeType)
             }
@@ -120,7 +121,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
+    private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean, isRoomEncrypted: Boolean): MediaUploadInfo {
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -137,9 +138,10 @@ class AndroidMediaPreProcessor @Inject constructor(
             val thumbnailResult = thumbnailFactory.createImageThumbnail(
                 file = compressionResult.file,
                 mimeType = mimeType,
+                isRoomEncrypted = isRoomEncrypted,
             )
             val imageInfo = compressionResult.toImageInfo(
-                mimeType = mimeType,
+                mimeType = if (isRoomEncrypted) MimeTypes.OctetStream else mimeType,
                 thumbnailResult = thumbnailResult
             )
             removeSensitiveImageMetadata(compressionResult.file)
@@ -155,6 +157,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             val thumbnailResult = thumbnailFactory.createImageThumbnail(
                 file = file,
                 mimeType = mimeType,
+                isRoomEncrypted = isRoomEncrypted,
             )
             val imageInfo = contentResolver.openInputStream(uri).use { input ->
                 val bitmap = BitmapFactory.decodeStream(input, null, null)!!
@@ -183,7 +186,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
+    private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean, isRoomEncrypted: Boolean): MediaUploadInfo {
         val resultFile = videoCompressor.compress(uri, shouldBeCompressed)
             .onEach {
                 // TODO handle progress
@@ -191,7 +194,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             .filterIsInstance<VideoTranscodingEvent.Completed>()
             .first()
             .file
-        val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
+        val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile, isRoomEncrypted)
         val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
         return MediaUploadInfo.Video(
             file = resultFile,

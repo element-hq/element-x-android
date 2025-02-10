@@ -175,6 +175,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
                     mimeType = MimeTypes.Jpeg,
                     deleteOriginal = false,
                     compressIfPossible = false,
+                    isRoomEncrypted = false,
                 ).getOrThrow()
                 matrixClient.uploadAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {

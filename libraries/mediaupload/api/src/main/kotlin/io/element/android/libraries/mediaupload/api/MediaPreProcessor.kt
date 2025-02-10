@@ -20,6 +20,7 @@ interface MediaPreProcessor {
         mimeType: String,
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
+        isRoomEncrypted: Boolean,
     ): Result<MediaUploadInfo>
 
     data class Failure(override val cause: Throwable?) : Exception(cause)

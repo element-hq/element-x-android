@@ -58,8 +58,12 @@ class ThumbnailFactory @Inject constructor(
     suspend fun createImageThumbnail(
         file: File,
         mimeType: String,
+        isRoomEncrypted: Boolean,
     ): ThumbnailResult? {
-        return createThumbnail(mimeType = mimeType) { cancellationSignal ->
+        return createThumbnail(
+            mimeType = mimeType,
+            isRoomEncrypted = isRoomEncrypted
+        ) { cancellationSignal ->
             try {
                 // This API works correctly with GIF
                 if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
@@ -87,8 +91,11 @@ class ThumbnailFactory @Inject constructor(
         }
     }
 
-    suspend fun createVideoThumbnail(file: File): ThumbnailResult? {
-        return createThumbnail(mimeType = MimeTypes.Jpeg) {
+    suspend fun createVideoThumbnail(file: File, isRoomEncrypted: Boolean): ThumbnailResult? {
+        return createThumbnail(
+            mimeType = MimeTypes.Jpeg,
+            isRoomEncrypted = isRoomEncrypted,
+        ) {
             MediaMetadataRetriever().runAndRelease {
                 setDataSource(context, file.toUri())
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -102,6 +109,7 @@ class ThumbnailFactory @Inject constructor(
 
     private suspend fun createThumbnail(
         mimeType: String,
+        isRoomEncrypted: Boolean,
         bitmapFactory: (CancellationSignal) -> Bitmap?,
     ): ThumbnailResult? = suspendCancellableCoroutine { continuation ->
         val cancellationSignal = CancellationSignal()
@@ -125,7 +133,7 @@ class ThumbnailFactory @Inject constructor(
             info = ThumbnailInfo(
                 height = bitmapThumbnail.height.toLong(),
                 width = bitmapThumbnail.width.toLong(),
-                mimetype = mimeTypeToThumbnailMimeType(mimeType),
+                mimetype = if (isRoomEncrypted) MimeTypes.OctetStream else mimeTypeToThumbnailMimeType(mimeType),
                 size = thumbnailFile.length()
             ),
             blurhash = blurhash
