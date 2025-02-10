@@ -11,8 +11,12 @@ import android.content.Context
 import android.net.Uri
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
+import com.otaliastudios.transcoder.common.TrackType
+import com.otaliastudios.transcoder.internal.media.MediaFormatConstants
+import com.otaliastudios.transcoder.internal.utils.mutableTrackMapOf
 import com.otaliastudios.transcoder.resize.AtMostResizer
 import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
+import com.otaliastudios.transcoder.time.TimeInterpolator
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.ApplicationContext
@@ -27,6 +31,7 @@ class VideoCompressor @Inject constructor(
     fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
         val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)
+            .setTimeInterpolator(MonotonicTimelineInterpolator())
             .setVideoTrackStrategy(
                 DefaultVideoStrategy.Builder()
                     .addResizer(
@@ -38,6 +43,7 @@ class VideoCompressor @Inject constructor(
                             }
                         )
                     )
+                    .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
                     .build()
             )
             .addDataSource(context, uri)
@@ -74,4 +80,32 @@ class VideoCompressor @Inject constructor(
 sealed interface VideoTranscodingEvent {
     data class Progress(val value: Float) : VideoTranscodingEvent
     data class Completed(val file: File) : VideoTranscodingEvent
+}
+
+/**
+ * A TimeInterpolator that ensures timestamps are monotonically increasing.
+ * Timestamps can go back and forth for many reasons, like miscalculations in
+ * MediaCodec output or manually generated timestamps, or at the boundary
+ * between one data source and another.
+ *
+ * Since `MediaMuxer.writeSampleData` can throw in case of invalid timestamps,
+ * this interpolator ensures that the next timestamp is at least equal to
+ * the previous timestamp plus 1. It does no effort to preserve the input deltas,
+ * so the input stream must be as consistent as possible.
+ *
+ * For example, `20 30 40 50 10 20 30` would become `20 30 40 50 51 52 53`.
+ *
+ * Copied from the private [com.otaliastudios.transcoder.time.MonotonicTimelineInterpolator].
+ */
+private class MonotonicTimelineInterpolator : TimeInterpolator {
+    private val last = mutableTrackMapOf(Long.MIN_VALUE, Long.MIN_VALUE)
+
+    override fun interpolate(type: TrackType, time: Long): Long {
+        return interpolate(last[type], time).also { last[type] = it }
+    }
+
+    private fun interpolate(prev: Long, next: Long): Long {
+        if (prev == Long.MIN_VALUE) return next
+        return next.coerceAtLeast(prev + 1)
+    }
 }
