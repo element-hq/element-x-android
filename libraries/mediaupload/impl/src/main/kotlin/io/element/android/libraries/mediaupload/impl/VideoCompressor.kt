@@ -8,104 +8,118 @@
 package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
-import com.otaliastudios.transcoder.common.TrackType
 import com.otaliastudios.transcoder.internal.media.MediaFormatConstants
-import com.otaliastudios.transcoder.internal.utils.mutableTrackMapOf
 import com.otaliastudios.transcoder.resize.AtMostResizer
 import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
-import com.otaliastudios.transcoder.time.TimeInterpolator
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
+    companion object {
+        private const val MP4_EXTENSION = "mp4"
+    }
+
     fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
-        val tmpFile = context.createTmpFile(extension = "mp4")
-        val future = Transcoder.into(tmpFile.path)
-            .setTimeInterpolator(MonotonicTimelineInterpolator())
-            .setVideoTrackStrategy(
-                DefaultVideoStrategy.Builder()
-                    .addResizer(
-                        AtMostResizer(
-                            if (shouldBeCompressed) {
-                                720
-                            } else {
-                                1080
-                            }
-                        )
-                    )
-                    .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
-                    .build()
-            )
-            .addDataSource(context, uri)
-            .setListener(object : TranscoderListener {
-                override fun onTranscodeProgress(progress: Double) {
-                    trySend(VideoTranscodingEvent.Progress(progress.toFloat()))
-                }
+        val (width, height) = getVideoDimensions(uri) ?: (Int.MAX_VALUE to Int.MAX_VALUE)
 
-                override fun onTranscodeCompleted(successCode: Int) {
-                    trySend(VideoTranscodingEvent.Completed(tmpFile))
-                    close()
-                }
+        val resizer = when {
+            shouldBeCompressed && (width > 720 || height > 720) -> AtMostResizer(720)
+            width > 1080 || height > 1080 -> AtMostResizer(1080)
+            else -> null
+        }
 
-                override fun onTranscodeCanceled() {
-                    tmpFile.safeDelete()
-                    close()
-                }
+        val expectedExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getMimeType(uri))
 
-                override fun onTranscodeFailed(exception: Throwable) {
-                    tmpFile.safeDelete()
-                    close(exception)
+        val tmpFile = context.createTmpFile(extension = MP4_EXTENSION)
+
+        // If there's no transcoding needed for the video file, just copy it to the tmp file and return it
+        val future = if (expectedExtension == MP4_EXTENSION && resizer == null) {
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                tmpFile.outputStream().use { output ->
+                    input.copyTo(output)
                 }
-            })
-            .transcode()
+            }
+            trySend(VideoTranscodingEvent.Completed(tmpFile))
+            close()
+            null
+        } else {
+            Transcoder.into(tmpFile.path)
+                .setVideoTrackStrategy(
+                    DefaultVideoStrategy.Builder()
+                        .apply {
+                            resizer?.let { addResizer(it) }
+                        }
+                        .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
+                        .build()
+                )
+                .addDataSource(context, uri)
+                .setListener(object : TranscoderListener {
+                    override fun onTranscodeProgress(progress: Double) {
+                        trySend(VideoTranscodingEvent.Progress(progress.toFloat()))
+                    }
+
+                    override fun onTranscodeCompleted(successCode: Int) {
+                        trySend(VideoTranscodingEvent.Completed(tmpFile))
+                        close()
+                    }
+
+                    override fun onTranscodeCanceled() {
+                        tmpFile.safeDelete()
+                        close()
+                    }
+
+                    override fun onTranscodeFailed(exception: Throwable) {
+                        tmpFile.safeDelete()
+                        close(exception)
+                    }
+                })
+                .transcode()
+        }
 
         awaitClose {
-            if (!future.isDone) {
+            if (future?.isDone == false) {
                 future.cancel(true)
             }
         }
+    }
+
+    private fun getVideoDimensions(uri: Uri): Pair<Int, Int>? {
+        return runCatching {
+            MediaMetadataRetriever().use {
+                it.setDataSource(context, uri)
+
+                val width = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: -1
+                val height = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
+
+                if (width == -1 || height == -1) {
+                    // Try getting the first frame instead
+                    val bitmap = it.getFrameAtTime(0) ?: return null
+                    bitmap.width to bitmap.height
+                } else {
+                    width to height
+                }
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to get video dimensions")
+        }.getOrNull()
     }
 }
 
 sealed interface VideoTranscodingEvent {
     data class Progress(val value: Float) : VideoTranscodingEvent
     data class Completed(val file: File) : VideoTranscodingEvent
-}
-
-/**
- * A TimeInterpolator that ensures timestamps are monotonically increasing.
- * Timestamps can go back and forth for many reasons, like miscalculations in
- * MediaCodec output or manually generated timestamps, or at the boundary
- * between one data source and another.
- *
- * Since `MediaMuxer.writeSampleData` can throw in case of invalid timestamps,
- * this interpolator ensures that the next timestamp is at least equal to
- * the previous timestamp plus 1. It does no effort to preserve the input deltas,
- * so the input stream must be as consistent as possible.
- *
- * For example, `20 30 40 50 10 20 30` would become `20 30 40 50 51 52 53`.
- *
- * Copied from the private [com.otaliastudios.transcoder.time.MonotonicTimelineInterpolator].
- */
-private class MonotonicTimelineInterpolator : TimeInterpolator {
-    private val last = mutableTrackMapOf(Long.MIN_VALUE, Long.MIN_VALUE)
-
-    override fun interpolate(type: TrackType, time: Long): Long {
-        return interpolate(last[type], time).also { last[type] = it }
-    }
-
-    private fun interpolate(prev: Long, next: Long): Long {
-        if (prev == Long.MIN_VALUE) return next
-        return next.coerceAtLeast(prev + 1)
-    }
 }
