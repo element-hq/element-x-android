@@ -38,7 +38,7 @@ accompanist = "0.37.0"
 test_core = "1.6.1"
 
 # Jetbrain
-datetime = "0.6.1"
+datetime = "0.6.2"
 serialization_json = "1.8.0"
 
 #other
