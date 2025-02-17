@@ -54,11 +54,11 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.tests.testutils.EnsureCalledOnceWithParam
+import io.element.android.tests.testutils.EnsureCalledOnceWithTwoParamsAndResult
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
-import io.element.android.tests.testutils.EnsureNeverCalledWithParamAndResult
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
+import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParamsAndResult
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
@@ -129,8 +129,9 @@ class MessagesViewTest {
             eventSink = eventsRecorder
         )
         val timelineItem = state.timelineState.timelineItems.first()
-        val callback = EnsureCalledOnceWithParam(
-            expectedParam = timelineItem,
+        val callback = EnsureCalledOnceWithTwoParamsAndResult(
+            expectedParam1 = true,
+            expectedParam2 = timelineItem,
             result = true,
         )
         rule.setMessagesView(
@@ -513,7 +514,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     state: MessagesState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onRoomDetailsClick: () -> Unit = EnsureNeverCalled(),
-    onEventClick: (event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithParamAndResult(),
+    onEventClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithTwoParamsAndResult(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (String, Boolean) -> Unit = EnsureNeverCalledWithTwoParams(),
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),

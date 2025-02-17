@@ -52,7 +52,7 @@ class MediaGalleryPresenterTest {
             ),
             room = FakeMatrixRoom(
                 displayName = A_ROOM_NAME,
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
             )
         )
         presenter.test {
@@ -71,7 +71,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 displayName = A_ROOM_NAME,
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
             )
         )
         presenter.test {
@@ -101,7 +101,7 @@ class MediaGalleryPresenterTest {
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
                 displayName = A_ROOM_NAME,
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
                 canRedactOwnResult = { Result.success(canDeleteOwn) }
             )
         )
@@ -144,7 +144,7 @@ class MediaGalleryPresenterTest {
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
                 displayName = A_ROOM_NAME,
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
                 canRedactOtherResult = { Result.success(canDeleteOther) }
             )
         )
@@ -177,7 +177,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 displayName = A_ROOM_NAME,
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
             )
         )
         presenter.test {
@@ -244,7 +244,7 @@ class MediaGalleryPresenterTest {
         )
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
-                mediaTimelineResult = { Result.success(FakeTimeline()) },
+                createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
             ),
             navigator = navigator,
         )

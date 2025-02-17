@@ -138,9 +138,7 @@ class FakeMatrixRoom(
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
-    private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
-    private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
-    private val mediaTimelineResult: (EventId?) -> Result<Timeline> = { lambdaError() },
+    private val createTimelineResult: (EventId?, Boolean, Boolean) -> Result<Timeline> = { _, _, _ -> lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -220,16 +218,12 @@ class FakeMatrixRoom(
         _syncUpdateFlow.tryEmit(_syncUpdateFlow.value + 1)
     }
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
-        timelineFocusedOnEventResult(eventId)
-    }
-
-    override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
-        pinnedEventsTimelineResult()
-    }
-
-    override suspend fun mediaTimeline(eventId: EventId?): Result<Timeline> = simulateLongTask {
-        mediaTimelineResult(eventId)
+    override suspend fun createTimeline(
+        focusedOnEventId: EventId?,
+        onlyPinnedEvents: Boolean,
+        onlyMedia: Boolean,
+    ): Result<Timeline> = simulateLongTask {
+        createTimelineResult(focusedOnEventId, onlyPinnedEvents, onlyMedia)
     }
 
     override suspend fun subscribeToSync() {

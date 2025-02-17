@@ -44,7 +44,7 @@ class LiveMediaTimeline @Inject constructor(
     override suspend fun getTimeline(): Result<Timeline> = mutex.withLock {
         val currentTimeline = timeline
         if (currentTimeline == null) {
-            room.mediaTimeline(null)
+            room.createTimeline(onlyMedia = true)
                 .onSuccess { timeline = it }
         } else {
             Result.success(currentTimeline)
@@ -58,14 +58,20 @@ class LiveMediaTimeline @Inject constructor(
 
 /**
  * A class that will provide a media timeline that is focused on a particular event.
+ * Optionally, the timeline will only contain the pinned events.
  */
 class FocusedMediaTimeline(
     private val room: MatrixRoom,
     private val eventId: EventId,
+    private val onlyPinnedEvents: Boolean,
     initialMediaItem: MediaItem.Event,
 ) : MediaTimeline {
     override suspend fun getTimeline(): Result<Timeline> {
-        return room.mediaTimeline(eventId)
+        return room.createTimeline(
+            focusedOnEventId = eventId,
+            onlyPinnedEvents = onlyPinnedEvents,
+            onlyMedia = true,
+        )
     }
 
     override val cache = persistentListOf(

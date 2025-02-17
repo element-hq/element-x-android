@@ -64,7 +64,7 @@ class TimelineController @Inject constructor(
     }
 
     suspend fun focusOnEvent(eventId: EventId): Result<Unit> {
-        return room.timelineFocusedOnEvent(eventId)
+        return room.createTimeline(focusedOnEventId = eventId)
             .onFailure {
                 if (it is CancellationException) {
                     throw it

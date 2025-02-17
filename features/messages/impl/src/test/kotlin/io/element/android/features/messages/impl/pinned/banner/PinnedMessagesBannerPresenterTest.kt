@@ -55,7 +55,7 @@ class PinnedMessagesBannerPresenterTest {
     @Test
     fun `present - loading state`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(FakeTimeline()) }
+            createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
         }
@@ -86,7 +86,7 @@ class PinnedMessagesBannerPresenterTest {
             )
         )
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) }
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
         }
@@ -125,7 +125,7 @@ class PinnedMessagesBannerPresenterTest {
             )
         )
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) }
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
         }
@@ -160,7 +160,7 @@ class PinnedMessagesBannerPresenterTest {
     @Test
     fun `present - timeline failed`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.failure(Exception()) }
+            createTimelineResult = { _, _, _ -> Result.failure(Exception()) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
         }

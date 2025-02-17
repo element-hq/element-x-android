@@ -104,7 +104,7 @@ class PinnedEventsTimelineProvider @Inject constructor(
             is AsyncData.Uninitialized, is AsyncData.Failure -> {
                 timelineStateFlow.emit(AsyncData.Loading())
                 withContext(dispatchers.io) {
-                    room.pinnedEventsTimeline()
+                    room.createTimeline(onlyPinnedEvents = true)
                 }
                     .fold(
                         { timelineStateFlow.emit(AsyncData.Success(it)) },

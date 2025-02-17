@@ -22,6 +22,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
@@ -69,16 +70,40 @@ class MediaViewerNode @AssistedInject constructor(
             // Should not happen
             timelineMediaGalleryDataSource
         } else {
-            // Does timelineMediaGalleryDataSource knows the eventId?
-            val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
-            val isEventKnown = lastData?.hasEvent(eventId) == true
-            if (isEventKnown) {
-                timelineMediaGalleryDataSource
-            } else {
-                focusedTimelineMediaGalleryDataSourceFactory.createFor(
-                    eventId = eventId,
-                    mediaItem = inputs.toMediaItem(),
-                )
+            // Can we use a specific timeline?
+            val timelineMode = when (val mode = inputs.mode) {
+                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> mode.timelineMode
+                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> mode.timelineMode
+                else -> null
+            }
+            when (timelineMode) {
+                null -> timelineMediaGalleryDataSource
+                Timeline.Mode.LIVE -> {
+                    // Even if the timelineMediaGalleryDataSource does not know the eventId, the SDK will create the timeline faster
+                    timelineMediaGalleryDataSource
+                }
+                Timeline.Mode.FOCUSED_ON_EVENT -> {
+                    // Does timelineMediaGalleryDataSource knows the eventId?
+                    val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
+                    val isEventKnown = lastData?.hasEvent(eventId) == true
+                    if (isEventKnown) {
+                        timelineMediaGalleryDataSource
+                    } else {
+                        focusedTimelineMediaGalleryDataSourceFactory.createFor(
+                            eventId = eventId,
+                            mediaItem = inputs.toMediaItem(),
+                            onlyPinnedEvents = false,
+                        )
+                    }
+                }
+                Timeline.Mode.PINNED_EVENTS -> {
+                    focusedTimelineMediaGalleryDataSourceFactory.createFor(
+                        eventId = eventId,
+                        mediaItem = inputs.toMediaItem(),
+                        onlyPinnedEvents = true,
+                    )
+                }
+                Timeline.Mode.MEDIA -> timelineMediaGalleryDataSource
             }
         }
     }
