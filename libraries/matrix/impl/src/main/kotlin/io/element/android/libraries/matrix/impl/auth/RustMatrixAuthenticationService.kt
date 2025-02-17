@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -61,7 +60,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
     private val oidcConfigurationProvider: OidcConfigurationProvider,
-    private val appPreferencesStore: AppPreferencesStore,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.

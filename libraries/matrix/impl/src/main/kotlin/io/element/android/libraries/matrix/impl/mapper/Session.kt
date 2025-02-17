@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
-import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import java.util.Date
 
 internal fun Session.toSessionData(
