@@ -47,7 +47,7 @@ showkase = "1.0.3"
 appyx = "1.6.0"
 sqldelight = "2.0.2"
 wysiwyg = "2.38.2"
-telephoto = "0.14.0"
+telephoto = "0.15.1"
 
 # Dependency analysis
 dependencyAnalysis = "2.8.0"
