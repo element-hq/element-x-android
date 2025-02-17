@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Stable
+import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -24,6 +25,7 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val suggestions: ImmutableList<ResolvedSuggestion>,
+    val roomMemberIdentityStateChanges: ImmutableList<RoomMemberIdentityStateChange>,
     val resolveMentionDisplay: (String, String) -> TextDisplay,
     val eventSink: (MessageComposerEvents) -> Unit,
 )

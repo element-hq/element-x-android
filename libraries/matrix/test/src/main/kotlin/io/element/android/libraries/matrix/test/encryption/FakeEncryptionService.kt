@@ -24,6 +24,7 @@ class FakeEncryptionService(
     var startIdentityResetLambda: () -> Result<IdentityResetHandle?> = { lambdaError() },
     private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val isUserVerifiedResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    private val withdrawVerificationResult: (UserId) -> Result<Unit> = { lambdaError() },
 ) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
@@ -122,6 +123,10 @@ class FakeEncryptionService(
 
     override suspend fun pinUserIdentity(userId: UserId): Result<Unit> {
         return pinUserIdentityResult(userId)
+    }
+
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> {
+        return withdrawVerificationResult(userId)
     }
 
     override suspend fun isUserVerified(userId: UserId): Result<Boolean> = simulateLongTask {

@@ -143,7 +143,22 @@ class IdentityChangeStatePresenterTest {
             val presenter = createIdentityChangeStatePresenter(encryptionService = encryptionService)
             presenter.test {
                 val initialState = awaitItem()
-                initialState.eventSink(IdentityChangeEvent.Submit(A_USER_ID))
+                initialState.eventSink(IdentityChangeEvent.PinIdentity(A_USER_ID))
+                lambda.assertions().isCalledOnce().with(value(A_USER_ID))
+            }
+        }
+
+    @Test
+    fun `present - when the user withdraw the identity, the presenter invokes the encryption service api`() =
+        runTest {
+            val lambda = lambdaRecorder<UserId, Result<Unit>> { Result.success(Unit) }
+            val encryptionService = FakeEncryptionService(
+                withdrawVerificationResult = lambda,
+            )
+            val presenter = createIdentityChangeStatePresenter(encryptionService = encryptionService)
+            presenter.test {
+                val initialState = awaitItem()
+                initialState.eventSink(IdentityChangeEvent.WithdrawVerification(A_USER_ID))
                 lambda.assertions().isCalledOnce().with(value(A_USER_ID))
             }
         }

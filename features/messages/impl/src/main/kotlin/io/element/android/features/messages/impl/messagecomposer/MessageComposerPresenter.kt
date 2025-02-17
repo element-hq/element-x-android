@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -389,6 +390,11 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
             }
         }
+
+        val roomMemberIdentityStateChange by produceState(persistentListOf()) {
+            observeRoomMemberIdentityStateChange(room)
+        }
+
         return MessageComposerState(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
@@ -398,6 +404,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
+            roomMemberIdentityStateChanges = roomMemberIdentityStateChange,
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
         )
