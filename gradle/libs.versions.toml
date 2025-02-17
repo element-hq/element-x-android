@@ -16,7 +16,7 @@ core = "1.15.0"
 # Clear the storage of the application and run the app. Nearly each time, there is an infinite loading
 # due to the DefaultMigrationStore not behaving as expected.
 # Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
-datastore = "1.0.0"
+datastore = "1.1.2"
 constraintlayout = "2.2.0"
 constraintlayout_compose = "1.1.0"
 lifecycle = "2.8.7"
