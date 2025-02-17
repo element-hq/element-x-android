@@ -113,7 +113,7 @@ class RustSessionVerificationService(
 
     override suspend fun requestVerification() = tryOrFail {
         initVerificationControllerIfNeeded()
-        verificationController.requestVerification()
+        verificationController.requestDeviceVerification()
     }
 
     override suspend fun cancelVerification() = tryOrFail {

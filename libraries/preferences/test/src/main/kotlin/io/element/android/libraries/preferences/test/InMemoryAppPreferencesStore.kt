@@ -51,14 +51,6 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
-    override suspend fun setSimplifiedSlidingSyncEnabled(enabled: Boolean) {
-        simplifiedSlidingSyncEnabled.value = enabled
-    }
-
-    override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
-        return simplifiedSlidingSyncEnabled
-    }
-
     override suspend fun setHideImagesAndVideos(value: Boolean) {
         hideImagesAndVideos.value = value
     }

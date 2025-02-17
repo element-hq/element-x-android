@@ -22,7 +22,6 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
             aSkeletonContentState(),
             anEmptyContentState(),
             anEmptyContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
-            aRoomsContentState(securityBannerState = SecurityBannerState.NeedsNativeSlidingSyncMigration),
         )
 }
 

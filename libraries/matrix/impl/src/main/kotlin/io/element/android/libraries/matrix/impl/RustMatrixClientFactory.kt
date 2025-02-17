@@ -129,10 +129,8 @@ class RustMatrixClientFactory @Inject constructor(
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
                     ClientBuilderSlidingSync.Restored -> this
-                    is ClientBuilderSlidingSync.CustomProxy -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Proxy(slidingSyncType.url))
-                    ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverProxy)
-                    ClientBuilderSlidingSync.Simplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
-                    ClientBuilderSlidingSync.ForcedSimplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Native)
+                    ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DISCOVER_NATIVE)
+                    ClientBuilderSlidingSync.Native -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.NATIVE)
                 }
             }
             .run {
@@ -143,21 +141,14 @@ class RustMatrixClientFactory @Inject constructor(
 }
 
 sealed interface ClientBuilderSlidingSync {
-    // The proxy is set by the user.
-    data class CustomProxy(val url: String) : ClientBuilderSlidingSync
-
     // The proxy will be supplied when restoring the Session.
     data object Restored : ClientBuilderSlidingSync
 
-    // A proxy must be discovered whilst building the session.
+    // A Native Sliding Sync instance must be discovered whilst building the session.
     data object Discovered : ClientBuilderSlidingSync
 
-    // Use Simplified Sliding Sync.
-    data object Simplified : ClientBuilderSlidingSync
-
-    // Force using Simplified Sliding Sync.
-    // TODO allow the user to select between proxy, simplified or force simplified in developer options.
-    data object ForcedSimplified : ClientBuilderSlidingSync
+    // Force using Native Sliding Sync.
+    data object Native : ClientBuilderSlidingSync
 }
 
 private fun SessionData.toSession() = Session(
@@ -166,6 +157,6 @@ private fun SessionData.toSession() = Session(
     userId = userId,
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
-    slidingSyncVersion = slidingSyncProxy?.let(SlidingSyncVersion::Proxy) ?: SlidingSyncVersion.Native,
+    slidingSyncVersion = SlidingSyncVersion.NATIVE,
     oidcData = oidcData,
 )

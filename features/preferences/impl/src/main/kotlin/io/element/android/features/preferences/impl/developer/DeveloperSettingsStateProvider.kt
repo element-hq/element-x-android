@@ -32,7 +32,6 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 fun aDeveloperSettingsState(
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
-    isSimplifiedSlidingSyncEnabled: Boolean = false,
     hideImagesAndVideos: Boolean = false,
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
@@ -41,7 +40,6 @@ fun aDeveloperSettingsState(
     cacheSize = AsyncData.Success("1.2 MB"),
     clearCacheAction = clearCacheAction,
     customElementCallBaseUrlState = customElementCallBaseUrlState,
-    isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
     hideImagesAndVideos = hideImagesAndVideos,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
     eventSink = eventSink,

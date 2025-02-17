@@ -20,9 +20,6 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
-    suspend fun setSimplifiedSlidingSyncEnabled(enabled: Boolean)
-    fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean>
-
     suspend fun setHideImagesAndVideos(value: Boolean)
     fun doesHideImagesAndVideosFlow(): Flow<Boolean>
 

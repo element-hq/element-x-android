@@ -12,8 +12,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion as RustSlidingSyncVersio
 
 internal fun RustSlidingSyncVersion.map(): SlidingSyncVersion {
     return when (this) {
-        RustSlidingSyncVersion.None -> SlidingSyncVersion.None
-        is RustSlidingSyncVersion.Proxy -> SlidingSyncVersion.Proxy
-        RustSlidingSyncVersion.Native -> SlidingSyncVersion.Native
+        RustSlidingSyncVersion.NONE -> SlidingSyncVersion.None
+        RustSlidingSyncVersion.NATIVE -> SlidingSyncVersion.Native
     }
 }

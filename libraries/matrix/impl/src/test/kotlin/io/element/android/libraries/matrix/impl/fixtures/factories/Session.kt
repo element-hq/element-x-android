@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 
 internal fun aRustSession(
-    proxy: SlidingSyncVersion = SlidingSyncVersion.None,
+    proxy: SlidingSyncVersion = SlidingSyncVersion.NONE,
     accessToken: String = "accessToken",
     refreshToken: String = "refreshToken",
 ): Session {
