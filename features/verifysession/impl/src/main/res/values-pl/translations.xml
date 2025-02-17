@@ -13,9 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"Coś tu nie gra. Albo upłynął limit czasu, albo żądanie zostało odrzucone."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Upewnij się, że emoji poniżej pasują do tych pokazanych na innej sesji."</string>
   <string name="screen_session_verification_compare_emojis_title">"Porównaj emoji"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Upewnij się, że emoji poniżej odpowiadają tym na urządzeniu drugiego użytkownika."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Upewnij się, że liczby poniżej pasują do tych wyświetlanych na innej sesji."</string>
   <string name="screen_session_verification_compare_numbers_title">"Porównaj liczby"</string>
   <string name="screen_session_verification_complete_subtitle">"Twoja nowa sesja jest teraz zweryfikowana. Ma ona dostęp do Twoich zaszyfrowanych wiadomości, a inni użytkownicy będą widzieć ją jako zaufaną."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Teraz możesz zaufać tożsamości tego użytkownika podczas wysyłania lub odbierania wiadomości."</string>
   <string name="screen_session_verification_enter_recovery_key">"Wprowadź klucz przywracania"</string>
   <string name="screen_session_verification_failed_subtitle">"Albo upłynął limit czasu żądania, albo żądanie zostało odrzucone, albo wystąpił błąd weryfikacji."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Udowodnij, że to ty, aby uzyskać dostęp do historii zaszyfrowanych wiadomości."</string>
@@ -37,8 +39,14 @@
   <string name="screen_session_verification_they_match">"Pasują do siebie"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Upewnij się, że aplikacja jest otwarta na drugim urządzeniu przed rozpoczęciem weryfikacji."</string>
   <string name="screen_session_verification_use_another_device_title">"Otwórz aplikację na drugim zweryfikowanym urządzeniu"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"Dla dodatkowej ochrony, zweryfikuj tego użytkownika, porównując zestaw emoji na obu urządzeniach. Zrób to, korzystając z zaufanej metody komunikacji."</string>
+  <string name="screen_session_verification_user_initiator_title">"Zweryfikować tego użytkownika?"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Dla dodatkowej ochrony, inny użytkownik chce zweryfikować Twoją tożsamość. Pojawi się unikalny zestaw emoji do porównania."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Powinno wyskoczyć okno na drugim urządzeniu. Rozpocznij tam weryfikację."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Rozpocznij weryfikację na drugim urządzeniu"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Oczekiwanie na drugie urządzenie"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Oczekiwanie na drugiego użytkownika"</string>
+  <string name="screen_session_verification_waiting_subtitle">"Po zaakceptowaniu będziesz mógł kontynuować weryfikację."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Zaakceptuj prośbę o rozpoczęcie procesu weryfikacji w innej sesji, aby kontynuować."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Oczekiwanie na zaakceptowanie prośby"</string>
   <string name="screen_signout_in_progress_dialog_content">"Wylogowywanie…"</string>

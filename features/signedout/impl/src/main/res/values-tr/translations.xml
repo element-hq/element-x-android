@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Başka bir oturumda şifrenizi değiştirdiniz"</string>
+  <string name="screen_signed_out_reason_2">"Oturumu başka bir oturumdan sildiniz"</string>
+  <string name="screen_signed_out_reason_3">"Sunucunuzun yöneticisi erişiminizi geçersiz kıldı"</string>
+  <string name="screen_signed_out_subtitle">"Aşağıda listelenen nedenlerden biri nedeniyle oturumunuz kapatılmış olabilir. %s kullanmaya devam etmek için lütfen tekrar oturum açın."</string>
+  <string name="screen_signed_out_title">"Oturumunuz kapatıldı"</string>
+</resources>

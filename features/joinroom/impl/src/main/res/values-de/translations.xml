@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, abbrechen"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Möchten Sie Ihre Beitrittsanfrage für diesen Chatroom wirklich stornieren?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Beitrittsanfrage stornieren"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, ablehnen und blockieren"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Sind Sie sicher, dass Sie die Einladung zu diesem Raum ablehnen möchten? Dadurch wird auch verhindert, dass %1$s Sie kontaktiert oder in Räume einlädt."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Einladung ablehnen und blockieren"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Ablehnen und blockieren"</string>
   <string name="screen_join_room_fail_message">"Der Beitritt zum Chatroom schlug fehl."</string>
   <string name="screen_join_room_fail_reason">"Dieser Chatroom ist entweder nur auf Einladung zugänglich oder es kann zu Zugangsbeschränkungen auf Spaceebene kommen."</string>
   <string name="screen_join_room_forget_action">"Vergessen Sie diesen Raum"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Nachricht (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"Falls Ihre Anfrage, dem Raum beizutreten, akzeptiert wird, werden Sie eine Einladung erhalten."</string>
   <string name="screen_join_room_knock_sent_title">"Beitrittsanfrage geschickt"</string>
+  <string name="screen_join_room_loading_alert_message">"Wir konnten die Chatroomvorschau nicht anzeigen. Dies kann an Netzwerk- oder Serverproblemen liegen."</string>
+  <string name="screen_join_room_loading_alert_title">"Wir konnten diese Chatroomvorschau nicht anzeigen"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s unterstützt noch keine Spaces. Du kannst auf Spaces im Web zugreifen."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces werden noch nicht unterstützt"</string>
   <string name="screen_join_room_subtitle_knock">"Klopfe an um einen Administrator zu benachrichtigen. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>

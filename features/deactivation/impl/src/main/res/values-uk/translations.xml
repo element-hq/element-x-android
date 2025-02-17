@@ -10,5 +10,5 @@
   <string name="screen_deactivate_account_list_item_2">"Видалити вас з усіх чатів."</string>
   <string name="screen_deactivate_account_list_item_3">"Видаліть інформацію свого облікового запису з нашого сервера ідентифікації."</string>
   <string name="screen_deactivate_account_list_item_4">"Ваші повідомлення залишатимуться видимими для зареєстрованих користувачів, але недоступними для нових або незареєстрованих користувачів, якщо ви вирішите їх видалити."</string>
-  <string name="screen_deactivate_account_title">"Відключити обліковий запис"</string>
+  <string name="screen_deactivate_account_title">"Деактивувати обліковий запис"</string>
 </resources>

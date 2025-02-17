@@ -16,8 +16,6 @@
   <string name="screen_media_details_filename">"File name"</string>
   <string name="screen_media_details_no_more_files_to_show">"No more files to show"</string>
   <string name="screen_media_details_no_more_media_to_show">"No more media to show"</string>
-  <string name="screen_media_details_redact_confirmation_message">"This file will be removed from the room and members won’t have access to it."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Delete file?"</string>
   <string name="screen_media_details_uploaded_by">"Uploaded by"</string>
   <string name="screen_media_details_uploaded_on">"Uploaded on"</string>
 </resources>

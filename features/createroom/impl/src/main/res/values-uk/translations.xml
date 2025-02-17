@@ -7,7 +7,7 @@
   <string name="screen_create_room_private_option_title">"Приватна кімната (тільки за запрошенням)"</string>
   <string name="screen_create_room_public_option_description">"Будь-хто може знайти цю кімнату. 
 Ви можете змінити це в будь-який час у налаштуваннях кімнати."</string>
-  <string name="screen_create_room_public_option_title">"Публічна кімната"</string>
+  <string name="screen_create_room_public_option_title">"Загальнодоступна кімната"</string>
   <string name="screen_create_room_room_access_section_anyone_option_description">"Будь-хто може приєднатися до цієї кімнати"</string>
   <string name="screen_create_room_room_access_section_anyone_option_title">"Кожний"</string>
   <string name="screen_create_room_room_access_section_header">"Доступ до кімнати"</string>

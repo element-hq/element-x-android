@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_submit">"Ställ in återställning"</string>
   <string name="banner_set_up_recovery_title">"Ställ in återställning"</string>
   <string name="confirm_recovery_key_banner_message">"Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Ange din återställningsnyckel"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Glömt din återställningsnyckel?"</string>
   <string name="confirm_recovery_key_banner_title">"Din nyckellagring är inte synkroniserad"</string>
   <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
   <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>

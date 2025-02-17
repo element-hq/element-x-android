@@ -103,7 +103,7 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Vaikimisi seadistuste taastamine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Seadistuste muutmine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Kõik sõnumid"</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Kõikide sõnumite korral"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mainimiste ja võtmesõnade alusel"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Selles jututoas teavita mind"</string>
   <string name="screen_room_roles_and_permissions_admins">"Peakasutajad"</string>
@@ -122,7 +122,7 @@
   <string name="screen_room_roles_and_permissions_title">"Rollid ja õigused"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lisa jututoa aadress"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist, kuid peakasutaja või moderaator peavad sellega nõustuma."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Palu võimalust liituda"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Küsi võimalust liitumiseks"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
 Keegi teine peale jututoa liikmete ei saa sõnumeid lugeda. See võib takistada suhtlusrobotite ja/või võrgusildade toimimist.

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"%1$s tarafından bu odadan yasaklandınız."</string>
+  <string name="screen_join_room_ban_message">"Bu odadan yasaklandın"</string>
+  <string name="screen_join_room_ban_reason">"Neden: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"İsteği iptal et"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Evet, iptal et"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Bu odaya katılma isteğinizi iptal etmek istediğinizden emin misiniz?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Katılma isteğini iptal et"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Evet, reddet ve engelle"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Bu odaya katılma davetini reddetmek istediğinizden emin misiniz? Bu aynı zamanda %1$s sizinle iletişim kurmasını veya sizi odalara davet etmesini de engeller."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Daveti reddet ve engelle"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Reddet ve engelle"</string>
+  <string name="screen_join_room_fail_message">"Odaya katılım başarısız oldu."</string>
+  <string name="screen_join_room_fail_reason">"Bu odaya yalnızca davetle girilebilir veya alan düzeyinde erişim kısıtlamaları olabilir."</string>
+  <string name="screen_join_room_forget_action">"Bu odayı unut"</string>
+  <string name="screen_join_room_invite_required_message">"Bu odaya katılmak için bir davete ihtiyacınız var"</string>
+  <string name="screen_join_room_join_action">"Odaya katıl"</string>
+  <string name="screen_join_room_join_restricted_message">"Katılmak için davet edilmeniz veya bir alana üye olmanız gerekebilir."</string>
+  <string name="screen_join_room_knock_action">"Katılma isteği gönder"</string>
+  <string name="screen_join_room_knock_message_description">"Mesaj (isteğe bağlı)"</string>
+  <string name="screen_join_room_knock_sent_description">"Talebiniz kabul edilirse odaya katılmanız için bir davet alacaksınız."</string>
+  <string name="screen_join_room_knock_sent_title">"Katılma isteği gönderildi"</string>
+  <string name="screen_join_room_loading_alert_message">"Oda önizlemesini görüntüleyemedik. Bunun nedeni ağ veya sunucu sorunları olabilir."</string>
+  <string name="screen_join_room_loading_alert_title">"Bu oda önizlemesini görüntüleyemedik"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s henüz alanları desteklemiyor. Alanlara web üzerinden erişebilirsiniz."</string>
+  <string name="screen_join_room_space_not_supported_title">"Alanlar henüz desteklenmiyor"</string>
+  <string name="screen_join_room_subtitle_knock">"Aşağıdaki düğmeyi tıkladığınızda bir oda yöneticisi bilgilendirilecektir. Onaylandıktan sonra görüşmeye katılabilirsiniz."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Mesaj geçmişini görüntülemek için bu odaya üye olmanız gerekmektedir."</string>
+  <string name="screen_join_room_title_knock">"Bu odaya katılmak ister misiniz?"</string>
+  <string name="screen_join_room_title_no_preview">"Önizleme mevcut değil"</string>
+</resources>

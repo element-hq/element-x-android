@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"biyometrik kimlik doğrulama"</string>
+  <string name="screen_app_lock_biometric_unlock">"biyometrik kilit açma"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Biyometrik ile kilit aç"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Biyometrik doğrulama"</string>
+  <string name="screen_app_lock_forgot_pin">"PIN\'i unuttum"</string>
+  <string name="screen_app_lock_settings_change_pin">"PIN kodunu değiştir"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Biyometrik kilit açmaya izin ver"</string>
+  <string name="screen_app_lock_settings_remove_pin">"PIN kodunu kaldır"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"PIN\'i kaldırmak istediğinizden emin misiniz?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"PIN\'i kaldır?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"İzin ver %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"PIN kullanmayı tercih ederim"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"%1$s kullanarak oturum açarken kendinize zaman kazandırın"</string>
+  <string name="screen_app_lock_setup_choose_pin">"PIN Seç"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"PIN\'i onayla"</string>
+  <string name="screen_app_lock_setup_pin_context">"Sohbetlerinize ekstra güvenlik eklemek için %1$s kilitleyin.
+
+Hatırlanabilir bir şey seçin. Bu PIN\'i unutursanız, uygulamadan çıkış yaparsınız."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Güvenlik nedeniyle bunu PIN kodunuz olarak seçemezsiniz"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Farklı bir PIN seçin"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Lütfen aynı PIN\'i iki kez girin"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN\'ler eşleşmiyor"</string>
+  <string name="screen_app_lock_signout_alert_message">"Devam etmek için yeniden oturum açmanız ve yeni bir PIN oluşturmanız gerekir"</string>
+  <string name="screen_app_lock_signout_alert_title">"Oturumunuz kapatılıyor"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Kilidi açmak için %1$d deneme hakkınız var"</item>
+    <item quantity="other">"Kilidi açmak için %1$d deneme hakkınız var"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Yanlış PIN. %1$d kere daha şansınız var"</item>
+    <item quantity="other">"Yanlış PIN. %1$d kere daha şansınız var"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Biyometrik kullan"</string>
+  <string name="screen_app_lock_use_pin_android">"PIN kullan"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Oturum kapatılıyor…"</string>
+</resources>
