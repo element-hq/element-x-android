@@ -19,6 +19,7 @@
   <string name="screen_change_server_form_notice">"Siz faqat siljish sinxronlashni qo\'llab-quvvatlaydigan mavjud serverga ulanishingiz mumkin. Uy serveringiz administratori uni sozlashi kerak.%1$s"</string>
   <string name="screen_change_server_subtitle">"Serveringizning manzili nima?"</string>
   <string name="screen_change_server_title">"Serveringizni tanlang"</string>
+  <string name="screen_create_account_title">"Hisob yaratish"</string>
   <string name="screen_login_error_deactivated_account">"Bu hisob o‘chirilgan."</string>
   <string name="screen_login_error_invalid_credentials">"Notog\'ri foydalanuvchi nomi va/yoki parol"</string>
   <string name="screen_login_error_invalid_user_id">"Bu haqiqiy foydalanuvchi identifikatori emas. Kutilayotgan format: \'@user:homeserver.org\'"</string>

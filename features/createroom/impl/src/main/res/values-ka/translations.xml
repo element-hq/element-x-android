@@ -7,7 +7,6 @@
   <string name="screen_create_room_private_option_title">"კერძო ოთახი"</string>
   <string name="screen_create_room_public_option_description">"ყველას ამ ოთახის მოძებნა შეუძლია.
 თქვენ ნებისმიერ დროს შეგიძლიათ ამის შეცვლა ოთახის პარამეტრებში."</string>
-  <string name="screen_create_room_public_option_title">"საჯარო ოთახი"</string>
   <string name="screen_create_room_room_name_label">"ოთახის სახელი"</string>
   <string name="screen_create_room_title">"ოთახის შექმნა"</string>
   <string name="screen_create_room_topic_label">"თემა (სურვილისამებრ)"</string>

@@ -4,7 +4,11 @@
   <string name="screen_chat_backup_key_backup_action_enable">"Slå på säkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_description">"Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Nyckellagring"</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"Nyckellagring måste vara aktiverat för att konfigurera återställning."</string>
+  <string name="screen_chat_backup_key_storage_toggle_description">"Ladda upp nycklar från den här enheten"</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"Tillåt lagring av nycklar"</string>
   <string name="screen_chat_backup_recovery_action_change">"Byt återställningsnyckel"</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Återställ din kryptografiska identitet och meddelandehistorik med en återställningsnyckel om du har tappat bort alla dina befintliga enheter."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Ange återställningsnyckel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Din nyckellagring är för närvarande osynkroniserad."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ställ in återställning"</string>
@@ -42,6 +46,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Ange …"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Blivit av med din återställningsnyckel?"</string>
   <string name="screen_recovery_key_confirm_success">"Återställningsnyckel bekräftad"</string>
+  <string name="screen_recovery_key_confirm_title">"Ange din återställningsnyckel"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Kopierade återställningsnyckel"</string>
   <string name="screen_recovery_key_generating_key">"Genererar …"</string>
   <string name="screen_recovery_key_save_action">"Spara återställningsnyckeln"</string>

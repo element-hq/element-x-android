@@ -6,7 +6,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="banner_set_up_recovery_content">"Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést."</string>
   <string name="banner_set_up_recovery_submit">"Helyreállítás beállítása"</string>
-  <string name="banner_set_up_recovery_title">"Helyreállítás beállítása"</string>
+  <string name="banner_set_up_recovery_title">"Helyreállítás beállítása a fiókja védelméhez"</string>
   <string name="confirm_recovery_key_banner_message">"Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Adja meg a helyreállítási kulcsot"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Elfelejtette a helyreállítási kulcsot?"</string>

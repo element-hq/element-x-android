@@ -18,7 +18,6 @@
   <string name="screen_room_details_invite_people_title">"Inviter folk"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlat samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlat rommet"</string>
-  <string name="screen_room_details_media_gallery_title">"Medier og filer"</string>
   <string name="screen_room_details_notification_mode_custom">"Tilpasset"</string>
   <string name="screen_room_details_notification_mode_default">"Standard"</string>
   <string name="screen_room_details_room_name_label">"Romnavn"</string>
@@ -60,10 +59,10 @@
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"globale innstillinger"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Standard innstilling"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Fjern egendefinert innstilling"</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Alle meldinger"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I dette rommet, varsle meg om"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Endre rollen min"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Områder støttes ikke for øyeblikket"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer av område"</string>
 </resources>

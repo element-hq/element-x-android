@@ -132,5 +132,7 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Τα άτομα μπορούν να συμμετάσχουν μόνο εάν έχουν προσκληθεί"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Μόνο πρόσκληση"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Πρόσβαση δωματίου"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Οποιοσδήποτε"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Ορατότητα δωματίου"</string>
   <string name="screen_security_and_privacy_title">"Ασφάλεια &amp; απόρρητο"</string>
 </resources>

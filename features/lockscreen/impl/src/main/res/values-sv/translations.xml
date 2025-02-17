@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"biometrisk autentisering"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrisk upplåsning"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Lås upp med biometri"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Bekräfta biometriskt"</string>
   <string name="screen_app_lock_forgot_pin">"Glömt PIN-kod?"</string>
   <string name="screen_app_lock_settings_change_pin">"Byt PIN-kod"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Tillåt biometrisk upplåsning"</string>

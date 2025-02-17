@@ -190,6 +190,7 @@
   <string name="common_message_removed">"消息已移除"</string>
   <string name="common_modern">"现代"</string>
   <string name="common_mute">"静音"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
   <string name="common_no_room_name">"无聊天室名"</string>
   <string name="common_offline">"离线"</string>

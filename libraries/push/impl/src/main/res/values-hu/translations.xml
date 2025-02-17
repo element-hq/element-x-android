@@ -6,12 +6,12 @@
   <string name="notification_channel_ringing_calls">"Csörgő hívások"</string>
   <string name="notification_channel_silent">"Csendes értesítések"</string>
   <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d üzenet"</item>
-    <item quantity="other">"%1$s: %2$d üzenet"</item>
+    <item quantity="%1$s: %2$d üzenet">"one"</item>
+    <item quantity="%1$s: %2$d üzenet">"other"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
-    <item quantity="one">"%d értesítés"</item>
-    <item quantity="other">"%d értesítés"</item>
+    <item quantity="%d értesítés">"one"</item>
+    <item quantity="%d értesítés">"other"</item>
   </plurals>
   <string name="notification_fallback_content">"Értesítés"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
@@ -19,16 +19,16 @@
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
   <string name="notification_invitation_action_reject">"Elutasítás"</string>
   <plurals name="notification_invitations">
-    <item quantity="one">"%d meghívó"</item>
-    <item quantity="other">"%d meghívó"</item>
+    <item quantity="%d meghívó">"one"</item>
+    <item quantity="%d meghívó">"other"</item>
   </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
   <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d új üzenet"</item>
-    <item quantity="other">"%d új üzenet"</item>
+    <item quantity="%d új üzenet">"one"</item>
+    <item quantity="%d új üzenet">"other"</item>
   </plurals>
   <string name="notification_reaction_body">"Ezzel reagált: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
@@ -41,15 +41,15 @@
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
-    <item quantity="one">"%d olvasatlan értesített üzenet"</item>
-    <item quantity="other">"%d olvasatlan értesített üzenet"</item>
+    <item quantity="%d olvasatlan értesített üzenet">"one"</item>
+    <item quantity="%d olvasatlan értesített üzenet">"other"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s és %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%1$s itt: %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s itt: %2$s és %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="one">"%d szoba"</item>
-    <item quantity="other">"%d szoba"</item>
+    <item quantity="%d szoba">"one"</item>
+    <item quantity="%d szoba">"other"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"Háttérszinkronizálás"</string>
   <string name="push_distributor_firebase_android">"Google szolgáltatások"</string>
@@ -61,8 +61,8 @@
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"%1$d leküldéses szolgáltató találva: %2$s"</item>
-    <item quantity="other">"%1$d leküldéses szolgáltató találva: %2$s"</item>
+    <item quantity="%1$d leküldéses szolgáltató találva: %2$s">"one"</item>
+    <item quantity="%1$d leküldéses szolgáltató találva: %2$s">"other"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Leküldéses értesítési szolgáltatók észlelése"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Ellenőrizze, hogy az alkalmazás képes-e megjeleníteni az értesítést."</string>

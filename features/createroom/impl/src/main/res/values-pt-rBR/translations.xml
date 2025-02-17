@@ -7,7 +7,6 @@
   <string name="screen_create_room_private_option_title">"Sala privativa (somente por convite)"</string>
   <string name="screen_create_room_public_option_description">"Qualquer um pode encontrar esta sala.
 Você pode mudar isso a qualquer momento nas configurações da sala."</string>
-  <string name="screen_create_room_public_option_title">"Sala pública (qualquer pessoa)"</string>
   <string name="screen_create_room_room_name_label">"Nome da sala"</string>
   <string name="screen_create_room_title">"Criar uma sala"</string>
   <string name="screen_create_room_topic_label">"Tópico (opcional)"</string>

@@ -8,7 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Własny bazowy URL dla połączeń Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ustaw własny bazowy URL dla połączeń Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Nieprawidłowy adres URL, upewnij się, że zawiera protokół (http/https) i poprawny adres."</string>
-  <string name="screen_advanced_settings_media_compression_description">"Przesyłaj zdjęcia i filmy szybciej i zmniejsz zużycie danych"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Przesyłaj zdjęcia i filmy szybciej, zmniejszając zużycie danych"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optymalizuj jakość multimediów"</string>
   <string name="screen_advanced_settings_push_provider_android">"Dostawca powiadomień push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Wyłącz edytor tekstu bogatego, aby pisać tekst Markdown ręcznie."</string>

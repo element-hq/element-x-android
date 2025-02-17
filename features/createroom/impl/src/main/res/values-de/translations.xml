@@ -7,14 +7,14 @@
   <string name="screen_create_room_private_option_title">"Privater Chatroom"</string>
   <string name="screen_create_room_public_option_description">"Jeder kann diesen Chatroom finden.
 Sie können dies aber jederzeit in den Chatroomeinstellungen ändern."</string>
-  <string name="screen_create_room_public_option_title">"Öffentlicher Chatroom"</string>
+  <string name="screen_create_room_public_option_title">"Öffentlicher Raum"</string>
   <string name="screen_create_room_room_access_section_anyone_option_description">"Jeder kann diesem Chatroom beitreten"</string>
   <string name="screen_create_room_room_access_section_anyone_option_title">"Jemand"</string>
   <string name="screen_create_room_room_access_section_header">"Chatroom Zugang"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann darum bitten, dem Chatroom beizutreten, aber ein Administrator oder ein Moderator muss die Anfrage akzeptieren."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
   <string name="screen_create_room_room_address_section_footer">"Damit dieser Chatroom im öffentlichen Chatroomverzeichnis sichtbar ist, benötigen Sie eine Chatroomadresse."</string>
-  <string name="screen_create_room_room_address_section_title">"Chatroom Adresse"</string>
+  <string name="screen_create_room_room_address_section_title">"Chatroomadresse"</string>
   <string name="screen_create_room_room_name_label">"Raumname"</string>
   <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chatrooms"</string>
   <string name="screen_create_room_title">"Raum erstellen"</string>
