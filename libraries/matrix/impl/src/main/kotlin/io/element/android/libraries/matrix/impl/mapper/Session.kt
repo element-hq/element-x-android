@@ -28,7 +28,7 @@ internal fun Session.toSessionData(
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl ?: this.homeserverUrl,
     oidcData = oidcData,
-    slidingSyncProxy = (slidingSyncVersion as? SlidingSyncVersion.Proxy)?.url,
+    slidingSyncProxy = null,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,

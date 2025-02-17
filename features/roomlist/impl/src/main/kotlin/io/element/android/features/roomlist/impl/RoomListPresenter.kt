@@ -173,16 +173,13 @@ class RoomListPresenter @Inject constructor(
     @Composable
     private fun rememberSecurityBannerState(
         securityBannerDismissed: Boolean,
-        needsSlidingSyncMigration: Boolean,
     ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
-        val currentNeedsSlidingSyncMigration by rememberUpdatedState(needsSlidingSyncMigration)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         return remember {
             derivedStateOf {
                 calculateBannerState(
                     securityBannerDismissed = currentSecurityBannerDismissed,
-                    needsSlidingSyncMigration = currentNeedsSlidingSyncMigration,
                     recoveryState = recoveryState,
                 )
             }
@@ -191,7 +188,6 @@ class RoomListPresenter @Inject constructor(
 
     private fun calculateBannerState(
         securityBannerDismissed: Boolean,
-        needsSlidingSyncMigration: Boolean,
         recoveryState: RecoveryState,
     ): SecurityBannerState {
         if (securityBannerDismissed) {
@@ -204,10 +200,6 @@ class RoomListPresenter @Inject constructor(
             RecoveryState.UNKNOWN,
             RecoveryState.WAITING_FOR_SYNC,
             RecoveryState.ENABLED -> Unit
-        }
-
-        if (needsSlidingSyncMigration) {
-            return SecurityBannerState.NeedsNativeSlidingSyncMigration
         }
 
         return SecurityBannerState.None
@@ -231,10 +223,7 @@ class RoomListPresenter @Inject constructor(
                 loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
             }
         }
-        val needsSlidingSyncMigration by produceState(false) {
-            value = client.needsSlidingSyncMigration().getOrDefault(false)
-        }
-        val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
+        val securityBannerState by rememberSecurityBannerState(securityBannerDismissed)
         return when {
             showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
@@ -317,19 +306,6 @@ class RoomListPresenter @Inject constructor(
     private fun CoroutineScope.clearCacheOfRoom(roomId: RoomId) = launch {
         client.getRoom(roomId)?.use { room ->
             room.clearEventCacheStorage()
-        }
-    }
-
-    /**
-     * Checks if the user needs to migrate to a native sliding sync version.
-     */
-    private suspend fun MatrixClient.needsSlidingSyncMigration(): Result<Boolean> = runCatching {
-        val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
-        if (currentSlidingSyncVersion != SlidingSyncVersion.Native) {
-            val availableSlidingSyncVersions = availableSlidingSyncVersions().getOrThrow()
-            availableSlidingSyncVersions.contains(SlidingSyncVersion.Native)
-        } else {
-            false
         }
     }
 

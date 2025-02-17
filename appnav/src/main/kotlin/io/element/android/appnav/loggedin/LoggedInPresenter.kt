@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
@@ -51,7 +50,6 @@ class LoggedInPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
-    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -103,12 +101,10 @@ class LoggedInPresenter @Inject constructor(
                     }
                 }
                 LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
-                    forceNativeSlidingSyncMigration = matrixClient.forceNativeSlidingSyncMigration().getOrDefault(false)
+                    forceNativeSlidingSyncMigration = matrixClient.needsForcedNativeSlidingSyncMigration().getOrDefault(false)
                 }
                 LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
-                    // Enable native sliding sync if it wasn't already the case
-                    enableNativeSlidingSyncUseCase()
-                    // Then force the logout
+                    // Force the logout since Native Sliding Sync is already enforced by the SDK
                     matrixClient.logout(userInitiated = true, ignoreSdkError = true)
                 }
             }
@@ -123,16 +119,10 @@ class LoggedInPresenter @Inject constructor(
         )
     }
 
-    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
-    private suspend fun MatrixClient.forceNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
+    // Force the user to log out if they were using the proxy sliding sync as it's no longer supported by the SDK
+    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatching {
         val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
-        if (currentSlidingSyncVersion == SlidingSyncVersion.Proxy) {
-            val availableSlidingSyncVersions = availableSlidingSyncVersions().getOrThrow()
-            availableSlidingSyncVersions.contains(SlidingSyncVersion.Native) &&
-                !availableSlidingSyncVersions.contains(SlidingSyncVersion.Proxy)
-        } else {
-            false
-        }
+        currentSlidingSyncVersion == SlidingSyncVersion.Proxy
     }
 
     private suspend fun ensurePusherIsRegistered(pusherRegistrationState: MutableState<AsyncData<Unit>>) {
