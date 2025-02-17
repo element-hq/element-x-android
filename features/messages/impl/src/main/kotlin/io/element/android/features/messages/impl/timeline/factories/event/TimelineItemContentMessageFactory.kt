@@ -7,13 +7,11 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
-import android.text.Spannable
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.buildSpannedString
 import androidx.core.text.getSpans
 import androidx.core.text.toSpannable
-import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -29,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -232,7 +231,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
-                    pillifiedBody = textPillificationHelper.pillify(body),
+                    pillifiedBody = textPillificationHelper.pillify(body).withFixedURLSpans(),
                     htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
                     formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
                     isEdited = content.isEdited,
@@ -276,36 +275,15 @@ class TimelineItemContentMessageFactory @Inject constructor(
             result
         }
     }
+}
 
-    private fun CharSequence.withFixedURLSpans(): CharSequence {
-        val spannable = this.toSpannable()
-        // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
-        val oldURLSpans = spannable.getSpans<URLSpan>(0, length).associateWith {
-            val start = spannable.getSpanStart(it)
-            val end = spannable.getSpanEnd(it)
-            Pair(start, end)
-        }
-        // Find and set as URLSpans any links present in the text
-        LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
-        // Restore old spans, remove new ones if there is a conflict
-        for ((urlSpan, location) in oldURLSpans) {
-            val (start, end) = location
-            val addedSpans = spannable.getSpans<URLSpan>(start, end).orEmpty()
-            if (addedSpans.isNotEmpty()) {
-                for (span in addedSpans) {
-                    spannable.removeSpan(span)
-                }
-            }
-            spannable.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-        return spannable
-    }
+private fun CharSequence.withFixedURLSpans(): CharSequence {
+    return LinkifyHelper.linkify(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
 }
 
 @Suppress("USELESS_ELVIS")
 private fun String.withLinks(): CharSequence? {
     // Note: toSpannable() can return null when running unit tests
-    val spannable = toSpannable() ?: return null
-    val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
-    return spannable.takeIf { addedLinks }
+    val spannable = withFixedURLSpans().toSpannable() ?: return null
+    return spannable.takeIf { spannable.getSpans<URLSpan>(0, length).isNotEmpty() }
 }

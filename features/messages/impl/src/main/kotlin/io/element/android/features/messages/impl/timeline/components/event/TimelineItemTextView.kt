@@ -20,13 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.utils.containsOnlyEmojis
+import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.UserId
@@ -109,6 +112,30 @@ private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCach
 internal fun TimelineItemTextViewPreview(
     @PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent
 ) = ElementPreview {
+    TimelineItemTextView(
+        content = content,
+        onLinkClick = {},
+    )
+}
+
+@Preview
+@Composable
+internal fun TimelineItemTextViewWithLinkifiedUrlPreview() = ElementPreview {
+    val content = aTimelineItemTextContent(
+        pillifiedBody = LinkifyHelper.linkify("Does this work (url: github.com/element-hq/element-x-android/README?)?.")
+    )
+    TimelineItemTextView(
+        content = content,
+        onLinkClick = {},
+    )
+}
+
+@Preview
+@Composable
+internal fun TimelineItemTextViewWithLinkifiedUrlAndNestedParenthesisPreview() = ElementPreview {
+    val content = aTimelineItemTextContent(
+        pillifiedBody = LinkifyHelper.linkify("Does this work ((url: github.com/element-hq/element-x-android/READ(ME)))!")
+    )
     TimelineItemTextView(
         content = content,
         onLinkClick = {},
