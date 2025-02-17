@@ -39,16 +39,16 @@
   <string name="screen_room_timeline_reactions_show_more">"Több megjelenítése"</string>
   <string name="screen_room_timeline_read_marker_title">"Új"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="%1$d szobaváltozás">"one"</item>
-    <item quantity="%1$d szobaváltozás">"other"</item>
+    <item quantity="one">"%1$d szobaváltozás"</item>
+    <item quantity="other">"%1$d szobaváltozás"</item>
   </plurals>
   <plurals name="screen_room_typing_many_members">
-    <item quantity="%1$s, %2$s és %3$d további felhasználó">"one"</item>
-    <item quantity="%1$s, %2$s és %3$d további felhasználó">"other"</item>
+    <item quantity="one">"%1$s, %2$s és %3$d további felhasználó"</item>
+    <item quantity="other">"%1$s, %2$s és %3$d további felhasználó"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
-    <item quantity="%1$s éppen ír…">"one"</item>
-    <item quantity="%1$s éppen ír…">"other"</item>
+    <item quantity="one">"%1$s éppen ír…"</item>
+    <item quantity="other">"%1$s éppen ír…"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s és %2$s"</string>
 </resources>

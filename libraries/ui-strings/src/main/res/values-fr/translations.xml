@@ -193,6 +193,7 @@ Raison : %1$s."</string>
   <string name="common_message_removed">"Message supprimé"</string>
   <string name="common_modern">"Moderne"</string>
   <string name="common_mute">"Mettre en sourdine"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
   <string name="common_offline">"Hors ligne"</string>
@@ -270,6 +271,7 @@ Raison : %1$s."</string>
   <string name="common_verified">"Vérifié(e)"</string>
   <string name="common_verify_device">"Vérifier la session"</string>
   <string name="common_verify_identity">"Vérifier l’identité"</string>
+  <string name="common_verify_user">"Vérifier l’utilisateur"</string>
   <string name="common_video">"Vidéo"</string>
   <string name="common_voice_message">"Message vocal"</string>
   <string name="common_waiting">"En attente…"</string>
@@ -278,6 +280,7 @@ Raison : %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"L’identité de %1$s semble avoir changé. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s semble avoir changé. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"L’identité vérifiée de l’utilisateur %1$s a changé."</string>
   <string name="crypto_identity_change_verification_violation_new">"L’identité vérifiée de %1$s %2$s a changé. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Révoquer la vérification"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -296,6 +299,7 @@ Raison : %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
   <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’utiliser le microphone. Autorisez l’utilisation pour enregistrer un message vocal."</string>
+  <string name="error_network_or_server_issue">"Cela peut être dû à des problèmes de réseau ou de serveur."</string>
   <string name="error_room_address_already_exists">"Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d’adresse de salon ou de modifier le nom du salon"</string>
   <string name="error_room_address_invalid_symbols">"Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>

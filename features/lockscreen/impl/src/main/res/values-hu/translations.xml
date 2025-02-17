@@ -25,12 +25,12 @@ Válasszon valami megjegyezhetőt. Ha elfelejti a PIN-kódot, akkor ki lesz jele
   <string name="screen_app_lock_signout_alert_message">"A folytatáshoz újra be kell jelentkeznie, és létre kell hoznia egy új PIN-kódot"</string>
   <string name="screen_app_lock_signout_alert_title">"Kijelentkeztetésre kerül"</string>
   <plurals name="screen_app_lock_subtitle">
-    <item quantity="%1$d próbálkozása van a feloldáshoz">"one"</item>
-    <item quantity="%1$d próbálkozása van a feloldáshoz">"other"</item>
+    <item quantity="one">"%1$d próbálkozása van a feloldáshoz"</item>
+    <item quantity="other">"%1$d próbálkozása van a feloldáshoz"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="Hibás PIN-kód. Még %1$d próbálkozási lehetősége maradt.">"one"</item>
-    <item quantity="Hibás PIN-kód. Még %1$d próbálkozási lehetősége maradt.">"other"</item>
+    <item quantity="one">"Hibás PIN-kód. Még %1$d próbálkozási lehetősége maradt."</item>
+    <item quantity="other">"Hibás PIN-kód. Még %1$d próbálkozási lehetősége maradt."</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Biometrikus adatok használata"</string>
   <string name="screen_app_lock_use_pin_android">"PIN-kód használata"</string>

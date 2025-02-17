@@ -26,8 +26,8 @@
   <string name="screen_knock_requests_list_initial_loading_title">"Csatlakozási kérések betöltése…"</string>
   <string name="screen_knock_requests_list_title">"Csatlakozási kérelem"</string>
   <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához">"one"</item>
-    <item quantity="%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához">"other"</item>
+    <item quantity="one">"%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához"</item>
+    <item quantity="other">"%1$s és még %2$d felhasználó szeretne csatlakozni ehhez a szobához"</item>
   </plurals>
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Összes megtekintése"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Elfogadás"</string>
