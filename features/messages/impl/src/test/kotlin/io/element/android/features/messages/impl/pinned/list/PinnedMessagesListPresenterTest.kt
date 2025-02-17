@@ -83,7 +83,7 @@ class PinnedMessagesListPresenterTest {
     @Test
     fun `present - timeline failure state`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.failure(RuntimeException()) },
+            createTimelineResult = { _, _, _ -> Result.failure(RuntimeException()) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -102,7 +102,7 @@ class PinnedMessagesListPresenterTest {
     @Test
     fun `present - empty state`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(FakeTimeline()) },
+            createTimelineResult = { _, _, _ -> Result.success(FakeTimeline()) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -122,7 +122,7 @@ class PinnedMessagesListPresenterTest {
     fun `present - filled state`() = runTest {
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -149,7 +149,7 @@ class PinnedMessagesListPresenterTest {
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -195,7 +195,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -224,7 +224,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -253,7 +253,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },

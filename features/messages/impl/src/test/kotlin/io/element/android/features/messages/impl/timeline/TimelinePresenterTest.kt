@@ -483,7 +483,7 @@ import kotlin.time.Duration.Companion.seconds
         )
         val room = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            timelineFocusedOnEventResult = { Result.success(detachedTimeline) },
+            createTimelineResult = { _, _, _ -> Result.success(detachedTimeline) },
             canUserSendMessageResult = { _, _ -> Result.success(true) },
         )
         val presenter = createTimelinePresenter(
@@ -561,7 +561,7 @@ import kotlin.time.Duration.Companion.seconds
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(emptyList()),
                 ),
-                timelineFocusedOnEventResult = { Result.failure(Throwable("An error")) },
+                createTimelineResult = { _, _, _ -> Result.failure(Throwable("An error")) },
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
             )
         )

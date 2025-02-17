@@ -75,11 +75,11 @@ class FocusedMediaTimelineTest {
 
     @Test
     fun `getTimeline returns the timeline provided by the room`() = runTest {
-        val mediaTimelineResult = lambdaRecorder<EventId?, Result<Timeline>> {
+        val createTimelineResult = lambdaRecorder<EventId?, Boolean, Boolean, Result<Timeline>> { _, _, _ ->
             Result.success(FakeTimeline())
         }
         val room = FakeMatrixRoom(
-            mediaTimelineResult = mediaTimelineResult,
+            createTimelineResult = createTimelineResult,
         )
         val sut = createFocusedMediaTimeline(
             room = room,
@@ -87,16 +87,38 @@ class FocusedMediaTimelineTest {
         )
         val timeline = sut.getTimeline()
         assertThat(timeline.isSuccess).isTrue()
-        mediaTimelineResult.assertions().isCalledOnce().with(value(AN_EVENT_ID))
+        createTimelineResult.assertions().isCalledOnce()
+            .with(value(AN_EVENT_ID), value(false), value(true))
+    }
+
+    @Test
+    fun `getTimeline returns the timeline provided by the room for pinned Events`() = runTest {
+        val createTimelineResult = lambdaRecorder<EventId?, Boolean, Boolean, Result<Timeline>> { _, _, _ ->
+            Result.success(FakeTimeline())
+        }
+        val room = FakeMatrixRoom(
+            createTimelineResult = createTimelineResult,
+        )
+        val sut = createFocusedMediaTimeline(
+            room = room,
+            eventId = AN_EVENT_ID,
+            onlyPinnedEvent = true,
+        )
+        val timeline = sut.getTimeline()
+        assertThat(timeline.isSuccess).isTrue()
+        createTimelineResult.assertions().isCalledOnce()
+            .with(value(AN_EVENT_ID), value(true), value(true))
     }
 
     private fun createFocusedMediaTimeline(
         room: MatrixRoom = FakeMatrixRoom(),
         eventId: EventId = AN_EVENT_ID,
         initialMediaItem: MediaItem.Event = aMediaItemImage(),
+        onlyPinnedEvent: Boolean = false,
     ) = FocusedMediaTimeline(
         room = room,
         eventId = eventId,
         initialMediaItem = initialMediaItem,
+        onlyPinnedEvents = onlyPinnedEvent,
     )
 }

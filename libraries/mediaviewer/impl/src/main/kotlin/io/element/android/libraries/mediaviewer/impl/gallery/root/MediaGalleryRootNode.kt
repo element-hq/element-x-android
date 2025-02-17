@@ -27,6 +27,7 @@ import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -96,9 +97,9 @@ class MediaGalleryRootNode @AssistedInject constructor(
                         val mode = when (item) {
                             is MediaItem.Audio,
                             is MediaItem.Voice,
-                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios
+                            is MediaItem.File -> MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.MEDIA)
                             is MediaItem.Image,
-                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos
+                            is MediaItem.Video -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.MEDIA)
                         }
                         overlay.show(
                             NavTarget.MediaViewer(

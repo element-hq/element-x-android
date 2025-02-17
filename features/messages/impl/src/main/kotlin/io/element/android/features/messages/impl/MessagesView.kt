@@ -109,7 +109,7 @@ fun MessagesView(
     state: MessagesState,
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
-    onEventContentClick: (event: TimelineItem.Event) -> Boolean,
+    onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -140,7 +140,7 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
-        val hideKeyboard = onEventContentClick(event)
+        val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
             localView.hideKeyboard()
         }
@@ -535,7 +535,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         state = state,
         onBackClick = {},
         onRoomDetailsClick = {},
-        onEventContentClick = { false },
+        onEventContentClick = { _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},

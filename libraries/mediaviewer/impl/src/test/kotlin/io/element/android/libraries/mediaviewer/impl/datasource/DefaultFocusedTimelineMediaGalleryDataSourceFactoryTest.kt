@@ -25,6 +25,7 @@ class DefaultFocusedTimelineMediaGalleryDataSourceFactoryTest {
         val result = sut.createFor(
             eventId = AN_EVENT_ID,
             mediaItem = aMediaItemImage(),
+            onlyPinnedEvents = false,
         )
         assertThat(result).isInstanceOf(TimelineMediaGalleryDataSource::class.java)
     }

@@ -214,80 +214,72 @@ class RustMatrixRoom(
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.timelineWithConfiguration(
-                configuration = TimelineConfiguration(
-                    focus = TimelineFocus.Event(
-                        eventId = eventId.value,
-                        numContextEvents = 50u,
-                    ),
-                    allowedMessageTypes = AllowedMessageTypes.All,
-                    internalIdPrefix = "focus_$eventId",
-                    dateDividerMode = DateDividerMode.DAILY,
-                )
-            ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
-            }
-        }.mapFailure {
-            it.toFocusEventException()
-        }.onFailure {
-            if (it is CancellationException) {
-                throw it
-            }
-        }
-    }
-
-    override suspend fun pinnedEventsTimeline(): Result<Timeline> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.timelineWithConfiguration(
-                configuration = TimelineConfiguration(
-                    focus = TimelineFocus.PinnedEvents(
-                        maxEventsToLoad = 100u,
-                        maxConcurrentRequests = 10u,
-                    ),
-                    allowedMessageTypes = AllowedMessageTypes.All,
-                    internalIdPrefix = "pinned_events",
-                    dateDividerMode = DateDividerMode.DAILY,
-                )
-            ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
-            }
-        }.onFailure {
-            if (it is CancellationException) {
-                throw it
-            }
-        }
-    }
-
-    override suspend fun mediaTimeline(
-        eventId: EventId?,
+    override suspend fun createTimeline(
+        focusedOnEventId: EventId?,
+        onlyPinnedEvents: Boolean,
+        onlyMedia: Boolean,
     ): Result<Timeline> = withContext(roomDispatcher) {
-        val focus = if (eventId != null) {
+        val focus = if (onlyPinnedEvents) {
+            TimelineFocus.PinnedEvents(
+                maxEventsToLoad = 100u,
+                maxConcurrentRequests = 10u,
+            )
+        } else if (focusedOnEventId != null) {
             TimelineFocus.Event(
-                eventId = eventId.value,
+                eventId = focusedOnEventId.value,
                 numContextEvents = 50u,
             )
         } else {
             TimelineFocus.Live
         }
+        val allowedMessageTypes = if (onlyMedia) {
+            AllowedMessageTypes.Only(
+                types = listOf(
+                    RoomMessageEventMessageType.FILE,
+                    RoomMessageEventMessageType.IMAGE,
+                    RoomMessageEventMessageType.VIDEO,
+                    RoomMessageEventMessageType.AUDIO,
+                )
+            )
+        } else {
+            AllowedMessageTypes.All
+        }
+        val internalIdPrefix = if (onlyPinnedEvents) {
+            "pinned_events"
+        } else if (focusedOnEventId != null) {
+            "focus_$focusedOnEventId"
+        } else if (onlyMedia) {
+            "MediaGallery_"
+        } else {
+            "live"
+        }
+        val dateDividerMode = if (onlyMedia) {
+            DateDividerMode.MONTHLY
+        } else {
+            DateDividerMode.DAILY
+        }
+        val mode = when {
+            onlyPinnedEvents -> Timeline.Mode.PINNED_EVENTS
+            focusedOnEventId != null -> Timeline.Mode.FOCUSED_ON_EVENT
+            onlyMedia -> Timeline.Mode.MEDIA
+            else -> Timeline.Mode.LIVE
+        }
         runCatching {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
                     focus = focus,
-                    allowedMessageTypes = AllowedMessageTypes.Only(
-                        types = listOf(
-                            RoomMessageEventMessageType.FILE,
-                            RoomMessageEventMessageType.IMAGE,
-                            RoomMessageEventMessageType.VIDEO,
-                            RoomMessageEventMessageType.AUDIO,
-                        )
-                    ),
-                    internalIdPrefix = "MediaGallery_",
-                    dateDividerMode = DateDividerMode.MONTHLY,
+                    allowedMessageTypes = allowedMessageTypes,
+                    internalIdPrefix = internalIdPrefix,
+                    dateDividerMode = dateDividerMode,
                 )
             ).let { inner ->
-                createTimeline(inner, mode = if (eventId != null) Timeline.Mode.FOCUSED_ON_EVENT else Timeline.Mode.MEDIA)
+                createTimeline(inner, mode = mode)
+            }
+        }.mapFailure {
+            if (focusedOnEventId != null) {
+                it.toFocusEventException()
+            } else {
+                it
             }
         }.onFailure {
             if (it is CancellationException) {

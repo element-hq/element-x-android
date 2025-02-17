@@ -28,22 +28,23 @@ class LiveMediaTimelineTest {
 
     @Test
     fun `getTimeline returns the timeline provided by the room, then from cache`() = runTest {
-        val mediaTimelineResult = lambdaRecorder<EventId?, Result<Timeline>> {
+        val createTimelineResult = lambdaRecorder<EventId?, Boolean, Boolean, Result<Timeline>> { _, _, _ ->
             Result.success(FakeTimeline())
         }
         val room = FakeMatrixRoom(
-            mediaTimelineResult = mediaTimelineResult,
+            createTimelineResult = createTimelineResult,
         )
         val sut = createLiveMediaTimeline(
             room = room,
         )
         val timeline = sut.getTimeline()
         assertThat(timeline.isSuccess).isTrue()
-        mediaTimelineResult.assertions().isCalledOnce().with(value(null))
+        createTimelineResult.assertions().isCalledOnce()
+            .with(value(null), value(false), value(true))
         val timeline2 = sut.getTimeline()
         assertThat(timeline2.isSuccess).isTrue()
         // No called another time
-        mediaTimelineResult.assertions().isCalledOnce()
+        createTimelineResult.assertions().isCalledOnce()
     }
 
     private fun createLiveMediaTimeline(
