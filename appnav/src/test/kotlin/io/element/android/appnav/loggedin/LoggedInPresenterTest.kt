@@ -14,6 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -26,6 +27,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -89,6 +91,7 @@ class LoggedInPresenterTest {
         val roomListService = FakeRoomListService()
         val verificationService = FakeSessionVerificationService()
         val encryptionService = FakeEncryptionService()
+        val buildMeta = aBuildMeta()
         val presenter = LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService),
             syncService = FakeSyncService(initialSyncState = SyncState.Running),
@@ -96,6 +99,7 @@ class LoggedInPresenterTest {
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
+            buildMeta = buildMeta,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -552,6 +556,7 @@ class LoggedInPresenterTest {
         encryptionService: EncryptionService = FakeEncryptionService(),
         pushService: PushService = FakePushService(),
         matrixClient: MatrixClient = FakeMatrixClient(roomListService = roomListService),
+        buildMeta: BuildMeta = aBuildMeta(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -560,6 +565,7 @@ class LoggedInPresenterTest {
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
+            buildMeta = buildMeta,
         )
     }
 }
