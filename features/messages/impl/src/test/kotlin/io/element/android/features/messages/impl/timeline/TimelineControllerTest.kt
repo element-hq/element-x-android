@@ -31,7 +31,7 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { _, _, _ -> Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) }
         )
         val sut = TimelineController(matrixRoom)
 
@@ -63,7 +63,7 @@ class TimelineControllerTest {
         var callNumber = 0
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { _, _, _ ->
+            createTimelineResult = {
                 callNumber++
                 when (callNumber) {
                     1 -> Result.success(detachedTimeline1)
@@ -117,7 +117,7 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { _, _, _ -> Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) }
         )
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
@@ -167,7 +167,7 @@ class TimelineControllerTest {
         }
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { _, _, _ -> Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) }
         )
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
@@ -192,7 +192,7 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { _, _, _ -> Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) }
         )
         val sut = TimelineController(matrixRoom)
 

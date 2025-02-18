@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -138,7 +139,7 @@ class FakeMatrixRoom(
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
-    private val createTimelineResult: (EventId?, Boolean, Boolean) -> Result<Timeline> = { _, _, _ -> lambdaError() },
+    private val createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -219,11 +220,9 @@ class FakeMatrixRoom(
     }
 
     override suspend fun createTimeline(
-        focusedOnEventId: EventId?,
-        onlyPinnedEvents: Boolean,
-        onlyMedia: Boolean,
+        createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = simulateLongTask {
-        createTimelineResult(focusedOnEventId, onlyPinnedEvents, onlyMedia)
+        createTimelineResult(createTimelineParams)
     }
 
     override suspend fun subscribeToSync() {

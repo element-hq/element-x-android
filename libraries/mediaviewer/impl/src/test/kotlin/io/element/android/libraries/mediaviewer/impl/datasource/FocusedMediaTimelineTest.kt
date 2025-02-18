@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -75,7 +76,7 @@ class FocusedMediaTimelineTest {
 
     @Test
     fun `getTimeline returns the timeline provided by the room`() = runTest {
-        val createTimelineResult = lambdaRecorder<EventId?, Boolean, Boolean, Result<Timeline>> { _, _, _ ->
+        val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
         val room = FakeMatrixRoom(
@@ -87,13 +88,12 @@ class FocusedMediaTimelineTest {
         )
         val timeline = sut.getTimeline()
         assertThat(timeline.isSuccess).isTrue()
-        createTimelineResult.assertions().isCalledOnce()
-            .with(value(AN_EVENT_ID), value(false), value(true))
+        createTimelineResult.assertions().isCalledOnce().with(value(CreateTimelineParams.MediaOnlyFocused(AN_EVENT_ID)))
     }
 
     @Test
     fun `getTimeline returns the timeline provided by the room for pinned Events`() = runTest {
-        val createTimelineResult = lambdaRecorder<EventId?, Boolean, Boolean, Result<Timeline>> { _, _, _ ->
+        val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
         val room = FakeMatrixRoom(
@@ -106,8 +106,7 @@ class FocusedMediaTimelineTest {
         )
         val timeline = sut.getTimeline()
         assertThat(timeline.isSuccess).isTrue()
-        createTimelineResult.assertions().isCalledOnce()
-            .with(value(AN_EVENT_ID), value(true), value(true))
+        createTimelineResult.assertions().isCalledOnce().with(value(CreateTimelineParams.PinnedOnly))
     }
 
     private fun createFocusedMediaTimeline(

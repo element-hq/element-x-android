@@ -12,6 +12,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -44,7 +45,7 @@ class LiveMediaTimeline @Inject constructor(
     override suspend fun getTimeline(): Result<Timeline> = mutex.withLock {
         val currentTimeline = timeline
         if (currentTimeline == null) {
-            room.createTimeline(onlyMedia = true)
+            room.createTimeline(CreateTimelineParams.MediaOnly)
                 .onSuccess { timeline = it }
         } else {
             Result.success(currentTimeline)
@@ -68,9 +69,11 @@ class FocusedMediaTimeline(
 ) : MediaTimeline {
     override suspend fun getTimeline(): Result<Timeline> {
         return room.createTimeline(
-            focusedOnEventId = eventId,
-            onlyPinnedEvents = onlyPinnedEvents,
-            onlyMedia = true,
+            createTimelineParams = if (onlyPinnedEvents) {
+                CreateTimelineParams.PinnedOnly
+            } else {
+                CreateTimelineParams.MediaOnlyFocused(eventId)
+            },
         )
     }
 

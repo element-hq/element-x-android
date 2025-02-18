@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -215,25 +216,26 @@ class RustMatrixRoom(
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
     override suspend fun createTimeline(
-        focusedOnEventId: EventId?,
-        onlyPinnedEvents: Boolean,
-        onlyMedia: Boolean,
+        createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
-        val focus = if (onlyPinnedEvents) {
-            TimelineFocus.PinnedEvents(
+        val focus = when (createTimelineParams) {
+            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
                 maxEventsToLoad = 100u,
                 maxConcurrentRequests = 10u,
             )
-        } else if (focusedOnEventId != null) {
-            TimelineFocus.Event(
-                eventId = focusedOnEventId.value,
+            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live
+            is CreateTimelineParams.Focused -> TimelineFocus.Event(
+                eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
             )
-        } else {
-            TimelineFocus.Live
+            is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
+                eventId = createTimelineParams.focusedEventId.value,
+                numContextEvents = 50u,
+            )
         }
-        val allowedMessageTypes = if (onlyMedia) {
-            AllowedMessageTypes.Only(
+        val allowedMessageTypes = when (createTimelineParams) {
+            is CreateTimelineParams.MediaOnly,
+            is CreateTimelineParams.MediaOnlyFocused -> AllowedMessageTypes.Only(
                 types = listOf(
                     RoomMessageEventMessageType.FILE,
                     RoomMessageEventMessageType.IMAGE,
@@ -241,28 +243,22 @@ class RustMatrixRoom(
                     RoomMessageEventMessageType.AUDIO,
                 )
             )
-        } else {
-            AllowedMessageTypes.All
+            is CreateTimelineParams.Focused,
+            CreateTimelineParams.PinnedOnly -> AllowedMessageTypes.All
         }
-        val internalIdPrefix = if (onlyPinnedEvents) {
-            "pinned_events"
-        } else if (focusedOnEventId != null) {
-            "focus_$focusedOnEventId"
-        } else if (onlyMedia) {
-            "MediaGallery_"
-        } else {
-            "live"
+        val internalIdPrefix = when (createTimelineParams) {
+            is CreateTimelineParams.PinnedOnly -> "pinned_events"
+            is CreateTimelineParams.Focused -> "focus_${createTimelineParams.focusedEventId}"
+            is CreateTimelineParams.MediaOnly -> "MediaGallery_"
+            is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
         }
-        val dateDividerMode = if (onlyMedia) {
-            DateDividerMode.MONTHLY
-        } else {
-            DateDividerMode.DAILY
-        }
-        val mode = when {
-            onlyPinnedEvents -> Timeline.Mode.PINNED_EVENTS
-            focusedOnEventId != null -> Timeline.Mode.FOCUSED_ON_EVENT
-            onlyMedia -> Timeline.Mode.MEDIA
-            else -> Timeline.Mode.LIVE
+        // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
+        // but there is no way to exclude data separator at the moment.
+        val dateDividerMode = when (createTimelineParams) {
+            is CreateTimelineParams.MediaOnly,
+            is CreateTimelineParams.MediaOnlyFocused -> DateDividerMode.MONTHLY
+            is CreateTimelineParams.Focused,
+            CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
         }
         runCatching {
             innerRoom.timelineWithConfiguration(
@@ -273,13 +269,20 @@ class RustMatrixRoom(
                     dateDividerMode = dateDividerMode,
                 )
             ).let { inner ->
+                val mode = when (createTimelineParams) {
+                    is CreateTimelineParams.Focused -> Timeline.Mode.FOCUSED_ON_EVENT
+                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.MEDIA
+                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
+                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
+                }
                 createTimeline(inner, mode = mode)
             }
         }.mapFailure {
-            if (focusedOnEventId != null) {
-                it.toFocusEventException()
-            } else {
-                it
+            when (createTimelineParams) {
+                is CreateTimelineParams.Focused,
+                is CreateTimelineParams.MediaOnlyFocused -> it.toFocusEventException()
+                CreateTimelineParams.MediaOnly,
+                CreateTimelineParams.PinnedOnly -> it
             }
         }.onFailure {
             if (it is CancellationException) {
@@ -604,6 +607,7 @@ class RustMatrixRoom(
 
     override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
+            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
             innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)

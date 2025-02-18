@@ -110,15 +110,10 @@ interface MatrixRoom : Closeable {
 
     /**
      * Create a new timeline.
-     * @param focusedOnEventId The event to focus on, if any. Note: if not null, and for regular timeline,
-     * this method should not be used directly, see `TimelineController` to manage the various timelines.
-     * @param onlyPinnedEvents True to get the timeline for pinned events only.
-     * @param onlyMedia True to get the timeline for media events only.
+     * @param createTimelineParams contains parameters about how to filter the timeline. Will also configure the date separators.
      */
     suspend fun createTimeline(
-        focusedOnEventId: EventId? = null,
-        onlyPinnedEvents: Boolean = false,
-        onlyMedia: Boolean = false,
+        createTimelineParams: CreateTimelineParams,
     ): Result<Timeline>
 
     fun destroy()

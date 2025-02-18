@@ -57,7 +57,7 @@ class TimelineMediaGalleryDataSourceTest {
         val fakeTimeline = FakeTimeline()
         val sut = createTimelineMediaGalleryDataSource(
             room = FakeMatrixRoom(
-                createTimelineResult = { _, _, _ -> Result.success(fakeTimeline) },
+                createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
         )
@@ -75,7 +75,7 @@ class TimelineMediaGalleryDataSourceTest {
         runTest {
             val sut = createTimelineMediaGalleryDataSource(
                 room = FakeMatrixRoom(
-                    createTimelineResult = { _, _, _ -> Result.success(fakeTimeline) },
+                    createTimelineResult = { Result.success(fakeTimeline) },
                     roomCoroutineScope = backgroundScope,
                 )
             )
@@ -112,7 +112,7 @@ class TimelineMediaGalleryDataSourceTest {
         }
         val sut = createTimelineMediaGalleryDataSource(
             room = FakeMatrixRoom(
-                createTimelineResult = { _, _, _ -> Result.success(fakeTimeline) },
+                createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
         )
@@ -135,7 +135,7 @@ class TimelineMediaGalleryDataSourceTest {
         }
         val sut = createTimelineMediaGalleryDataSource(
             room = FakeMatrixRoom(
-                createTimelineResult = { _, _, _ -> Result.success(fakeTimeline) },
+                createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
         )
@@ -154,7 +154,7 @@ class TimelineMediaGalleryDataSourceTest {
     fun `test - failing to load timeline should emit an error`() = runTest {
         val sut = createTimelineMediaGalleryDataSource(
             room = FakeMatrixRoom(
-                createTimelineResult = { _, _, _ -> Result.failure(AN_EXCEPTION) },
+                createTimelineResult = { Result.failure(AN_EXCEPTION) },
                 roomCoroutineScope = backgroundScope,
             )
         )
@@ -176,7 +176,7 @@ class TimelineMediaGalleryDataSourceTest {
         )
         val sut = createTimelineMediaGalleryDataSource(
             room = FakeMatrixRoom(
-                createTimelineResult = { _, _, _ -> Result.success(fakeTimeline) },
+                createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
         )
