@@ -271,6 +271,7 @@ Reason: %1$s."</string>
   <string name="common_verified">"Verified"</string>
   <string name="common_verify_device">"Verify device"</string>
   <string name="common_verify_identity">"Verify identity"</string>
+  <string name="common_verify_user">"Verify user"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
@@ -279,6 +280,7 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity appears to have changed. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity appears to have changed. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s’s verified identity has changed."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s verified identity has changed.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -297,6 +299,7 @@ Reason: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
+  <string name="error_network_or_server_issue">"This may be due to network or server issues."</string>
   <string name="error_room_address_already_exists">"This room address already exists. Please try editing the room address field or change the room name"</string>
   <string name="error_room_address_invalid_symbols">"Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>

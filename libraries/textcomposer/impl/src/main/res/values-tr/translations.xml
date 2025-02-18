@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Ek ekle"</string>
+  <string name="rich_text_editor_bullet_list">"Madde işaretli listeyi aç/kapat"</string>
+  <string name="rich_text_editor_close_formatting_options">"Biçimlendirme seçeneklerini kapat"</string>
+  <string name="rich_text_editor_code_block">"Kod Bloğunu Aç/Kapat"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Açıklama ekle"</string>
+  <string name="rich_text_editor_composer_placeholder">"Mesaj…"</string>
+  <string name="rich_text_editor_create_link">"Bir bağlantı oluştur"</string>
+  <string name="rich_text_editor_edit_link">"Bağlantıyı Düzenle"</string>
+  <string name="rich_text_editor_format_bold">"Kalın biçimi uygula"</string>
+  <string name="rich_text_editor_format_italic">"İtalik biçimi uygula"</string>
+  <string name="rich_text_editor_format_strikethrough">"Üstü çizili biçimi uygula"</string>
+  <string name="rich_text_editor_format_underline">"Altı çizili biçimi uygula"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Tam ekran modunu aç/kapat"</string>
+  <string name="rich_text_editor_indent">"Girinti"</string>
+  <string name="rich_text_editor_inline_code">"Satır içi kod biçimini uygula"</string>
+  <string name="rich_text_editor_link">"Bağlantıyı ayarla"</string>
+  <string name="rich_text_editor_numbered_list">"Numaralı listeyi aç/kapat"</string>
+  <string name="rich_text_editor_open_compose_options">"Oluşturma seçeneklerini aç"</string>
+  <string name="rich_text_editor_quote">"Alıntıyı Aç/Kapat"</string>
+  <string name="rich_text_editor_remove_link">"Bağlantıyı kaldır"</string>
+  <string name="rich_text_editor_unindent">"Girintiyi kaldır"</string>
+  <string name="rich_text_editor_url_placeholder">"Bağlantı"</string>
+  <string name="screen_room_voice_message_tooltip">"Kaydetmek için basılı tut"</string>
+</resources>

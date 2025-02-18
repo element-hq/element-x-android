@@ -9,11 +9,11 @@ package io.element.android.libraries.designsystem.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
@@ -38,7 +38,7 @@ fun LabelledCheckbox(
         )
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.primary,
+            color = ElementTheme.colors.textPrimary,
         )
     }
 }

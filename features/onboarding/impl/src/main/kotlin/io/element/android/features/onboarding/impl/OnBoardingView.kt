@@ -103,14 +103,14 @@ private fun OnBoardingContent(state: OnBoardingState) {
             ) {
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_title),
-                    color = ElementTheme.materialColors.primary,
+                    color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontHeadingLgBold,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
-                    color = ElementTheme.materialColors.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
                     textAlign = TextAlign.Center
                 )

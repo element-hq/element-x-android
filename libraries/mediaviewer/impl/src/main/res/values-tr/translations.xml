@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Bu dosya odadan kaldırılır ve üyeler bu dosyaya erişemez."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Dosyayı sil?"</string>
+  <string name="screen_media_browser_download_error_message">"İnternet bağlantınızı kontrol edin ve tekrar deneyin."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Bu odaya yüklenen belgeler, ses dosyaları ve sesli mesajlar burada gösterilecektir."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Henüz yüklenen dosya yok"</string>
+  <string name="screen_media_browser_list_loading_files">"Dosyalar yükleniyor…"</string>
+  <string name="screen_media_browser_list_loading_media">"Medya yükleniyor…"</string>
+  <string name="screen_media_browser_list_mode_files">"Dosyalar"</string>
+  <string name="screen_media_browser_list_mode_media">"Medya"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Bu odaya yüklenen resimler ve videolar burada gösterilecektir."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Henüz yüklenen medya yok"</string>
+  <string name="screen_media_browser_title">"Medya ve dosyalar"</string>
+  <string name="screen_media_details_file_format">"Dosya biçimi"</string>
+  <string name="screen_media_details_filename">"Dosya adı"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Gösterilecek daha fazla dosya yok"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Gösterilecek daha fazla medya yok"</string>
+  <string name="screen_media_details_uploaded_by">"Yükleyen:"</string>
+  <string name="screen_media_details_uploaded_on">"Yüklendi"</string>
+</resources>

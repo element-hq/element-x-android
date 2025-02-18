@@ -17,6 +17,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 /**
@@ -29,6 +30,7 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 @Composable
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
+    enterpriseService: EnterpriseService,
     content: @Composable () -> Unit,
 ) {
     val theme by remember {
@@ -44,8 +46,12 @@ fun ElementThemeApp(
             }
         )
     }
+    val compoundLight = remember { enterpriseService.semanticColorsLight() }
+    val compoundDark = remember { enterpriseService.semanticColorsDark() }
     ElementTheme(
         darkTheme = theme.isDark(),
         content = content,
+        compoundLight = compoundLight,
+        compoundDark = compoundDark,
     )
 }

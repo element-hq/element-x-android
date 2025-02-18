@@ -424,7 +424,7 @@ private fun TitleAndSubtitle(
             Text(
                 text = subtitle,
                 style = ElementTheme.typography.fontBodyLgRegular,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
             )
         }

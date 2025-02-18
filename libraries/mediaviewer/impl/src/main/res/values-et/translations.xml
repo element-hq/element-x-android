@@ -16,8 +16,6 @@
   <string name="screen_media_details_filename">"Failinimi"</string>
   <string name="screen_media_details_no_more_files_to_show">"Pole enam kuvatavaid faile"</string>
   <string name="screen_media_details_no_more_media_to_show">"Pole enam kuvatavat meediat"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Järgnevaga eemaldame selle faili jututoast ja tema liikmed enam ei pääse failile ligi."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Kas kustutame faili?"</string>
   <string name="screen_media_details_uploaded_by">"Üleslaadija"</string>
   <string name="screen_media_details_uploaded_on">"Üleslaaditud"</string>
 </resources>

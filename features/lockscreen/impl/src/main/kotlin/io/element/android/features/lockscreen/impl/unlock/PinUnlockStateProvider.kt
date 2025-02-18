@@ -23,17 +23,19 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
             aPinUnlockState(showWrongPinTitle = true),
             aPinUnlockState(showSignOutPrompt = true),
             aPinUnlockState(showBiometricUnlock = false),
-            aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
+            aPinUnlockState(showSignOutPrompt = true, remainingAttempts = AsyncData.Success(0)),
             aPinUnlockState(signOutAction = AsyncAction.Loading),
-            aPinUnlockState(biometricUnlockResult = BiometricAuthenticator.AuthenticationResult.Failure(
-                BiometricUnlockError(BiometricPrompt.ERROR_LOCKOUT, "Biometric auth disabled")
-            )),
+            aPinUnlockState(
+                biometricUnlockResult = BiometricAuthenticator.AuthenticationResult.Failure(
+                    BiometricUnlockError(BiometricPrompt.ERROR_LOCKOUT, "Biometric auth disabled")
+                )
+            ),
         )
 }
 
 fun aPinUnlockState(
     pinEntry: PinEntry = PinEntry.createEmpty(4),
-    remainingAttempts: Int = 3,
+    remainingAttempts: AsyncData<Int> = AsyncData.Success(3),
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,
     showBiometricUnlock: Boolean = true,
@@ -43,7 +45,7 @@ fun aPinUnlockState(
 ) = PinUnlockState(
     pinEntry = AsyncData.Success(pinEntry),
     showWrongPinTitle = showWrongPinTitle,
-    remainingAttempts = AsyncData.Success(remainingAttempts),
+    remainingAttempts = remainingAttempts,
     showSignOutPrompt = showSignOutPrompt,
     showBiometricUnlock = showBiometricUnlock,
     signOutAction = signOutAction,

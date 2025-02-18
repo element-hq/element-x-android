@@ -25,7 +25,7 @@
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
   <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
   <string name="screen_encryption_reset_footer">"Csak akkor állítsa vissza a személyazonosságát, ha nem fér hozzá másik bejelentkezett eszközhöz, és elvesztette a helyreállítási kulcsot."</string>
-  <string name="screen_encryption_reset_title">"Állítsa vissza a személyazonosságát, ha más módon nem tudja megerősíteni"</string>
+  <string name="screen_encryption_reset_title">"Állítsa alaphelyzetbe a személyazonosságát, ha más módon nem tudja megerősíteni"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Kikapcsolás"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>

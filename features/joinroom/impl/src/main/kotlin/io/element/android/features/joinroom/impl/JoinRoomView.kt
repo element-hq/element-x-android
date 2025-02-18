@@ -19,12 +19,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +32,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -47,7 +46,8 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.background.LightGradientBackground
+import io.element.android.libraries.designsystem.components.Announcement
+import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -55,16 +55,17 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.SuperButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -74,30 +75,33 @@ fun JoinRoomView(
     onBackClick: () -> Unit,
     onJoinSuccess: () -> Unit,
     onKnockSuccess: () -> Unit,
+    onForgetSuccess: () -> Unit,
     onCancelKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        LightGradientBackground()
         HeaderFooterPage(
             containerColor = Color.Transparent,
-            paddingValues = PaddingValues(16.dp),
+            paddingValues = PaddingValues(
+                horizontal = 16.dp,
+                vertical = 32.dp
+            ),
             topBar = {
                 JoinRoomTopBar(contentState = state.contentState, onBackClick = onBackClick)
             },
             content = {
                 JoinRoomContent(
+                    roomIdOrAlias = state.roomIdOrAlias,
                     contentState = state.contentState,
-                    applicationName = state.applicationName,
                     knockMessage = state.knockMessage,
                     onKnockMessageUpdate = { state.eventSink(JoinRoomEvents.UpdateKnockMessage(it)) },
                 )
             },
             footer = {
                 JoinRoomFooter(
-                    state = state,
+                    joinAuthorisationStatus = state.joinAuthorisationStatus,
                     onAcceptInvite = {
                         state.eventSink(JoinRoomEvents.AcceptInvite)
                     },
@@ -113,31 +117,55 @@ fun JoinRoomView(
                     onCancelKnock = {
                         state.eventSink(JoinRoomEvents.CancelKnock(requiresConfirmation = true))
                     },
-                    onRetry = {
-                        state.eventSink(JoinRoomEvents.RetryFetchingContent)
+                    onForgetRoom = {
+                        state.eventSink(JoinRoomEvents.ForgetRoom)
                     },
                     onGoBack = onBackClick,
                 )
             }
         )
     }
+    if (state.contentState is ContentState.Failure) {
+        RetryDialog(
+            title = stringResource(R.string.screen_join_room_loading_alert_title),
+            content = stringResource(CommonStrings.error_network_or_server_issue),
+            onRetry = { state.eventSink(JoinRoomEvents.RetryFetchingContent) },
+            onDismiss = {
+                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
+                onBackClick()
+            }
+        )
+    }
+    // This particular error is shown directly in the footer
+    if (!state.isJoinActionUnauthorized) {
+        AsyncActionView(
+            async = state.joinAction,
+            errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
+            errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
+            onSuccess = { onJoinSuccess() },
+            onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        )
+    }
     AsyncActionView(
-        async = state.joinAction,
-        onSuccess = { onJoinSuccess() },
+        async = state.knockAction,
+        errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
+        errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
+        onSuccess = { onKnockSuccess() },
         onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
     )
     AsyncActionView(
-        async = state.knockAction,
-        onSuccess = { onKnockSuccess() },
+        async = state.forgetAction,
+        errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
+        errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
+        onSuccess = { onForgetSuccess() },
         onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
     )
     AsyncActionView(
         async = state.cancelKnockAction,
         onSuccess = { onCancelKnockSuccess() },
         onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
-        errorMessage = {
-            stringResource(CommonStrings.error_unknown)
-        },
+        errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
+        errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
         confirmationDialog = {
             ConfirmationDialog(
                 content = stringResource(R.string.screen_join_room_cancel_knock_alert_description),
@@ -153,13 +181,13 @@ fun JoinRoomView(
 
 @Composable
 private fun JoinRoomFooter(
-    state: JoinRoomState,
+    joinAuthorisationStatus: JoinAuthorisationStatus,
     onAcceptInvite: () -> Unit,
     onDeclineInvite: () -> Unit,
     onJoinRoom: () -> Unit,
     onKnockRoom: () -> Unit,
     onCancelKnock: () -> Unit,
-    onRetry: () -> Unit,
+    onForgetRoom: () -> Unit,
     onGoBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -168,79 +196,170 @@ private fun JoinRoomFooter(
                 .fillMaxWidth()
                 .padding(top = 8.dp)
     ) {
-        if (state.contentState is ContentState.Failure) {
-            Button(
-                text = stringResource(CommonStrings.action_retry),
-                onClick = onRetry,
-                modifier = Modifier.fillMaxWidth(),
-                size = ButtonSize.Large,
-            )
-        } else if (state.contentState is ContentState.Loaded && state.contentState.roomType == RoomType.Space) {
-            Button(
-                text = stringResource(CommonStrings.action_go_back),
-                onClick = onGoBack,
-                modifier = Modifier.fillMaxWidth(),
-                size = ButtonSize.Large,
-            )
-        } else {
-            val joinAuthorisationStatus = state.joinAuthorisationStatus
-            when (joinAuthorisationStatus) {
-                is JoinAuthorisationStatus.IsInvited -> {
-                    ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                        OutlinedButton(
-                            text = stringResource(CommonStrings.action_decline),
-                            onClick = onDeclineInvite,
-                            modifier = Modifier.weight(1f),
-                            size = ButtonSize.LargeLowPadding,
-                        )
-                        Button(
-                            text = stringResource(CommonStrings.action_accept),
-                            onClick = onAcceptInvite,
-                            modifier = Modifier.weight(1f),
-                            size = ButtonSize.LargeLowPadding,
-                        )
-                    }
-                }
-                JoinAuthorisationStatus.CanJoin -> {
-                    SuperButton(
-                        onClick = onJoinRoom,
-                        modifier = Modifier.fillMaxWidth(),
-                        buttonSize = ButtonSize.Large,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.screen_join_room_join_action),
-                        )
-                    }
-                }
-                JoinAuthorisationStatus.CanKnock -> {
-                    SuperButton(
-                        onClick = onKnockRoom,
-                        modifier = Modifier.fillMaxWidth(),
-                        buttonSize = ButtonSize.Large,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.screen_join_room_knock_action),
-                        )
-                    }
-                }
-                JoinAuthorisationStatus.IsKnocked -> {
+        when (joinAuthorisationStatus) {
+            is JoinAuthorisationStatus.IsInvited -> {
+                ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     OutlinedButton(
-                        text = stringResource(R.string.screen_join_room_cancel_knock_action),
-                        onClick = onCancelKnock,
-                        modifier = Modifier.fillMaxWidth(),
-                        size = ButtonSize.Large,
+                        text = stringResource(CommonStrings.action_decline),
+                        onClick = onDeclineInvite,
+                        modifier = Modifier.weight(1f),
+                        size = ButtonSize.LargeLowPadding,
+                    )
+                    Button(
+                        text = stringResource(CommonStrings.action_accept),
+                        onClick = onAcceptInvite,
+                        modifier = Modifier.weight(1f),
+                        size = ButtonSize.LargeLowPadding,
                     )
                 }
-                JoinAuthorisationStatus.Unknown -> Unit
             }
+            JoinAuthorisationStatus.CanJoin -> {
+                SuperButton(
+                    onClick = onJoinRoom,
+                    modifier = Modifier.fillMaxWidth(),
+                    buttonSize = ButtonSize.Large,
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_join_room_join_action),
+                    )
+                }
+            }
+            JoinAuthorisationStatus.CanKnock -> {
+                SuperButton(
+                    onClick = onKnockRoom,
+                    modifier = Modifier.fillMaxWidth(),
+                    buttonSize = ButtonSize.Large,
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_join_room_knock_action),
+                    )
+                }
+            }
+            JoinAuthorisationStatus.IsKnocked -> {
+                OutlinedButton(
+                    text = stringResource(R.string.screen_join_room_cancel_knock_action),
+                    onClick = onCancelKnock,
+                    modifier = Modifier.fillMaxWidth(),
+                    size = ButtonSize.Large,
+                )
+            }
+            JoinAuthorisationStatus.NeedInvite -> {
+                Announcement(
+                    title = stringResource(R.string.screen_join_room_invite_required_message),
+                    description = null,
+                    type = AnnouncementType.Informative(isCritical = false),
+                )
+            }
+            is JoinAuthorisationStatus.IsBanned -> JoinBannedFooter(joinAuthorisationStatus, onForgetRoom)
+            JoinAuthorisationStatus.Unknown -> JoinRestrictedFooter(onJoinRoom)
+            JoinAuthorisationStatus.Restricted -> JoinRestrictedFooter(onJoinRoom)
+            JoinAuthorisationStatus.Unauthorized -> JoinUnauthorizedFooter(onGoBack)
+            is JoinAuthorisationStatus.IsSpace -> UnsupportedSpaceFooter(joinAuthorisationStatus.applicationName, onGoBack)
+            JoinAuthorisationStatus.None -> Unit
         }
     }
 }
 
 @Composable
-private fun JoinRoomContent(
-    contentState: ContentState,
+private fun JoinUnauthorizedFooter(
+    onOkClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Announcement(
+            title = stringResource(R.string.screen_join_room_fail_message),
+            description = stringResource(R.string.screen_join_room_fail_reason),
+            type = AnnouncementType.Informative(isCritical = true),
+        )
+        Spacer(Modifier.height(24.dp))
+        Button(
+            text = stringResource(CommonStrings.action_ok),
+            onClick = onOkClick,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+private fun JoinBannedFooter(
+    status: JoinAuthorisationStatus.IsBanned,
+    onForgetRoom: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        val banReason = status.reason?.let {
+            stringResource(R.string.screen_join_room_ban_reason, it.removeSuffix("."))
+        }
+        val title = if (status.banSender != null) {
+            stringResource(R.string.screen_join_room_ban_by_message, status.banSender.displayName)
+        } else {
+            stringResource(R.string.screen_join_room_ban_message)
+        }
+        Announcement(
+            title = title,
+            description = banReason,
+            type = AnnouncementType.Informative(isCritical = true),
+        )
+        Spacer(Modifier.height(24.dp))
+        Button(
+            text = stringResource(R.string.screen_join_room_forget_action),
+            onClick = onForgetRoom,
+            modifier = Modifier.fillMaxWidth(),
+            size = ButtonSize.Large,
+        )
+    }
+}
+
+@Composable
+private fun JoinRestrictedFooter(
+    onJoinRoom: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Announcement(
+            title = stringResource(R.string.screen_join_room_join_restricted_message),
+            description = null,
+            type = AnnouncementType.Informative(),
+        )
+        Spacer(Modifier.height(24.dp))
+        SuperButton(
+            onClick = onJoinRoom,
+            modifier = Modifier.fillMaxWidth(),
+            buttonSize = ButtonSize.Large,
+        ) {
+            Text(
+                text = stringResource(R.string.screen_join_room_join_action),
+            )
+        }
+    }
+}
+
+@Composable
+private fun UnsupportedSpaceFooter(
     applicationName: String,
+    onGoBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Announcement(
+            title = stringResource(R.string.screen_join_room_space_not_supported_title),
+            description = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
+            type = AnnouncementType.Informative(),
+        )
+        Spacer(Modifier.height(24.dp))
+        Button(
+            text = stringResource(CommonStrings.action_ok),
+            onClick = onGoBack,
+            modifier = Modifier.fillMaxWidth(),
+            size = ButtonSize.Large,
+        )
+    }
+}
+
+@Composable
+private fun JoinRoomContent(
+    roomIdOrAlias: RoomIdOrAlias,
+    contentState: ContentState,
     knockMessage: String,
     onKnockMessageUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -256,65 +375,65 @@ private fun JoinRoomContent(
                         DefaultLoadedContent(
                             modifier = Modifier.verticalScroll(rememberScrollState()),
                             contentState = contentState,
-                            applicationName = applicationName,
                             knockMessage = knockMessage,
                             onKnockMessageUpdate = onKnockMessageUpdate
                         )
                     }
                 }
             }
-            is ContentState.UnknownRoom -> {
-                RoomPreviewOrganism(
-                    avatar = {
-                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
-                    },
-                    title = {
-                        RoomPreviewTitleAtom(stringResource(R.string.screen_join_room_title_no_preview))
-                    },
-                    subtitle = {
-                        RoomPreviewSubtitleAtom(stringResource(R.string.screen_join_room_subtitle_no_preview))
-                    },
-                )
-            }
-            is ContentState.Loading -> {
-                RoomPreviewOrganism(
-                    avatar = {
-                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
-                    },
-                    title = {
-                        PlaceholderAtom(width = 200.dp, height = 22.dp)
-                    },
-                    subtitle = {
-                        PlaceholderAtom(width = 140.dp, height = 20.dp)
-                    },
-                )
-            }
-            is ContentState.Failure -> {
-                RoomPreviewOrganism(
-                    avatar = {
-                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
-                    },
-                    title = {
-                        when (contentState.roomIdOrAlias) {
-                            is RoomIdOrAlias.Alias -> {
-                                RoomPreviewTitleAtom(contentState.roomIdOrAlias.identifier)
-                            }
-                            is RoomIdOrAlias.Id -> {
-                                PlaceholderAtom(width = 200.dp, height = 22.dp)
-                            }
-                        }
-                    },
-                    subtitle = {
-                        Text(
-                            text = stringResource(id = CommonStrings.error_unknown),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.error,
-                        )
-                    },
-                )
-            }
+            is ContentState.UnknownRoom -> UnknownRoomContent()
+            is ContentState.Loading -> IncompleteContent(roomIdOrAlias, isLoading = true)
+            is ContentState.Dismissing -> IncompleteContent(roomIdOrAlias, isLoading = false)
+            is ContentState.Failure -> IncompleteContent(roomIdOrAlias, isLoading = false)
         }
     }
+}
+
+@Composable
+private fun UnknownRoomContent(
+    modifier: Modifier = Modifier
+) {
+    RoomPreviewOrganism(
+        modifier = modifier,
+        avatar = {
+            Spacer(modifier = Modifier.size(AvatarSize.RoomHeader.dp))
+        },
+        title = {
+            RoomPreviewTitleAtom(stringResource(R.string.screen_join_room_title_no_preview))
+        },
+        subtitle = {
+        },
+    )
+}
+
+@Composable
+private fun IncompleteContent(
+    roomIdOrAlias: RoomIdOrAlias,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier
+) {
+    RoomPreviewOrganism(
+        modifier = modifier,
+        avatar = {
+            PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+        },
+        title = {
+            when (roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> {
+                    RoomPreviewSubtitleAtom(roomIdOrAlias.identifier)
+                }
+                is RoomIdOrAlias.Id -> {
+                    PlaceholderAtom(width = 200.dp, height = 22.dp)
+                }
+            }
+        },
+        subtitle = {
+            if (isLoading) {
+                Spacer(Modifier.height(8.dp))
+                CircularProgressIndicator()
+            }
+        },
+    )
 }
 
 @Composable
@@ -337,7 +456,6 @@ private fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
 @Composable
 private fun DefaultLoadedContent(
     contentState: ContentState.Loaded,
-    applicationName: String,
     knockMessage: String,
     onKnockMessageUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -374,21 +492,7 @@ private fun DefaultLoadedContent(
                     InviteSenderView(inviteSender = inviteSender)
                 }
                 RoomPreviewDescriptionAtom(contentState.topic ?: "")
-                if (contentState.roomType == RoomType.Space) {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = stringResource(R.string.screen_join_room_space_not_supported_title),
-                        textAlign = TextAlign.Center,
-                        style = ElementTheme.typography.fontBodyLgMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        text = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
-                        textAlign = TextAlign.Center,
-                        style = ElementTheme.typography.fontBodyMdRegular,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                } else if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
+                if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))
                     val supportingText = if (knockMessage.isNotEmpty()) {
                         "${knockMessage.length}/$MAX_KNOCK_MESSAGE_LENGTH"
@@ -462,6 +566,7 @@ internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class)
         onBackClick = { },
         onJoinSuccess = { },
         onKnockSuccess = { },
+        onForgetSuccess = { },
         onCancelKnockSuccess = { },
     )
 }

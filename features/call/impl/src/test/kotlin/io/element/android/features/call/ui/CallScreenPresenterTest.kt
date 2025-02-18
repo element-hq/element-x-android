@@ -32,10 +32,9 @@ import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.consumeItemsUntilTimeout
-import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -243,7 +242,7 @@ class CallScreenPresenterTest {
     }
 
     @Test
-    fun `present - automatically starts the Matrix client sync when on RoomCall`() = runTest {
+    fun `present - automatically sets the isInCall state when starting the call and disposing the screen`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val startSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
@@ -251,6 +250,7 @@ class CallScreenPresenterTest {
             this.startSyncLambda = startSyncLambda
         }
         val matrixClient = FakeMatrixClient(syncService = syncService)
+        val appForegroundStateService = FakeAppForegroundStateService()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -258,34 +258,7 @@ class CallScreenPresenterTest {
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) }),
             screenTracker = FakeScreenTracker {},
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            consumeItemsUntilTimeout()
-
-            assert(startSyncLambda).isCalledOnce()
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
-        val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeMatrixWidgetDriver()
-        val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(SyncState.Running).apply {
-            this.stopSyncLambda = stopSyncLambda
-        }
-        val matrixClient = FakeMatrixClient(syncService = syncService)
-        val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
-            widgetDriver = widgetDriver,
-            navigator = navigator,
-            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) }),
-            screenTracker = FakeScreenTracker {},
+            appForegroundStateService = appForegroundStateService,
         )
         val hasRun = Mutex(true)
         val job = launch {
@@ -296,11 +269,25 @@ class CallScreenPresenterTest {
             }
         }
 
-        hasRun.lock()
+        appForegroundStateService.isInCall.test {
+            // The initial isInCall state will always be false
+            assertThat(awaitItem()).isFalse()
 
-        job.cancelAndJoin()
+            // Wait until the call starts
+            hasRun.lock()
 
-        assert(stopSyncLambda).isCalledOnce()
+            // Then it'll be true once the call is active
+            assertThat(awaitItem()).isTrue()
+
+            // If we dispose the screen
+            job.cancelAndJoin()
+
+            // The isInCall state is now false
+            assertThat(awaitItem()).isFalse()
+
+            // And there are no more events
+            ensureAllEventsConsumed()
+        }
     }
 
     @Test
@@ -354,6 +341,7 @@ class CallScreenPresenterTest {
         matrixClientsProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
         screenTracker: ScreenTracker = FakeScreenTracker(),
+        appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -369,10 +357,10 @@ class CallScreenPresenterTest {
             clock = clock,
             dispatchers = dispatchers,
             matrixClientsProvider = matrixClientsProvider,
-            appCoroutineScope = this,
             activeCallManager = activeCallManager,
             screenTracker = screenTracker,
             languageTagProvider = FakeLanguageTagProvider("en-US"),
+            appForegroundStateService = appForegroundStateService,
         )
     }
 }

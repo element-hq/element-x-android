@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -64,13 +65,13 @@ fun ProgressDialog(
                 when (type) {
                     is ProgressDialogType.Indeterminate -> {
                         CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary
+                            color = ElementTheme.colors.iconPrimary
                         )
                     }
                     is ProgressDialogType.Determinate -> {
                         CircularProgressIndicator(
                             progress = { type.progress },
-                            color = MaterialTheme.colorScheme.primary
+                            color = ElementTheme.colors.iconPrimary
                         )
                     }
                 }
@@ -93,7 +94,7 @@ private fun ProgressDialogContent(
     onCancelClick: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
-            color = MaterialTheme.colorScheme.primary
+            color = ElementTheme.colors.iconPrimary
         )
     }
 ) {
@@ -114,7 +115,7 @@ private fun ProgressDialogContent(
                 Spacer(modifier = Modifier.height(22.dp))
                 Text(
                     text = text,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                 )
             }
             if (showCancelButton) {

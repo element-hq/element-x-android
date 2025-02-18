@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +44,7 @@ fun RoundedIconAtom(
     size: RoundedIconAtomSize = RoundedIconAtomSize.Big,
     resourceId: Int? = null,
     imageVector: ImageVector? = null,
-    tint: Color = MaterialTheme.colorScheme.secondary,
+    tint: Color = ElementTheme.colors.iconSecondary,
     backgroundTint: Color = ElementTheme.colors.temporaryColorBgSpecial,
 ) {
     Box(

@@ -48,7 +48,7 @@ class DefaultAppNavigationStateService @Inject constructor(
 
     init {
         coroutineScope.launch {
-            appForegroundStateService.start()
+            appForegroundStateService.startObservingForeground()
             appForegroundStateService.isInForeground.collect { isInForeground ->
                 state.getAndUpdate { it.copy(isInForeground = isInForeground) }
             }

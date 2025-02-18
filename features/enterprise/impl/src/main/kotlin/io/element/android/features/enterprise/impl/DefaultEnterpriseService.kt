@@ -8,6 +8,9 @@
 package io.element.android.features.enterprise.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.compound.tokens.generated.SemanticColors
+import io.element.android.compound.tokens.generated.compoundColorsDark
+import io.element.android.compound.tokens.generated.compoundColorsLight
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -18,4 +21,8 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
+
+    override fun semanticColorsLight(): SemanticColors = compoundColorsLight
+
+    override fun semanticColorsDark(): SemanticColors = compoundColorsDark
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Lütfen hesabınızı devre dışı bırakmak istediğinizi onaylayın. Bu işlem geri alınamaz."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Tüm mesajlarımı sil"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Uyarı: Gelecekteki kullanıcılar eksik konuşmalar görebilir."</string>
+  <string name="screen_deactivate_account_description">"Hesabınızı devre dışı bırakmak %1$s, şunları yapacaktır:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"geri alınamaz"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s (tekrar giriş yapamazsınız ve kimliğiniz yeniden kullanılamaz)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Kalıcı olarak devre dışı bırak"</string>
+  <string name="screen_deactivate_account_list_item_2">"Sizi tüm sohbet odalarından çıkarmak."</string>
+  <string name="screen_deactivate_account_list_item_3">"Hesap bilgileriniz kimlik sunucumuzdan silinecek."</string>
+  <string name="screen_deactivate_account_list_item_4">"Mesajlarınız kayıtlı kullanıcılar tarafından görülmeye devam eder, ancak silmeyi seçerseniz yeni veya kayıtlı olmayan kullanıcılar tarafından görüntülenemeyecek."</string>
+  <string name="screen_deactivate_account_title">"Hesabı devre dışı bırak"</string>
+</resources>

@@ -8,14 +8,16 @@
 package io.element.android.libraries.matrix.impl.room.preview
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPreviewInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 
 class RoomPreviewInfoMapperTest {
     @Test
@@ -23,7 +25,7 @@ class RoomPreviewInfoMapperTest {
         assertThat(
             RoomPreviewInfoMapper.map(
                 info = aRustRoomPreviewInfo(
-                    membership = null,
+                    membership = Membership.JOINED,
                 )
             )
         ).isEqualTo(
@@ -36,10 +38,8 @@ class RoomPreviewInfoMapperTest {
                 numberOfJoinedMembers = 1L,
                 roomType = RoomType.Room,
                 isHistoryWorldReadable = true,
-                isJoined = false,
-                isInvited = false,
-                isPublic = true,
-                canKnock = false,
+                membership = CurrentUserMembership.JOINED,
+                joinRule = JoinRule.Public,
             )
         )
     }
@@ -51,7 +51,7 @@ class RoomPreviewInfoMapperTest {
                 info = aRustRoomPreviewInfo(
                     canonicalAlias = null,
                     membership = Membership.JOINED,
-                    joinRule = JoinRule.Knock,
+                    joinRule = RustJoinRule.Knock,
                 )
             )
         ).isEqualTo(
@@ -64,10 +64,8 @@ class RoomPreviewInfoMapperTest {
                 numberOfJoinedMembers = 1L,
                 roomType = RoomType.Room,
                 isHistoryWorldReadable = true,
-                isJoined = true,
-                isInvited = false,
-                isPublic = false,
-                canKnock = true,
+                membership = CurrentUserMembership.JOINED,
+                joinRule = JoinRule.Knock,
             )
         )
     }

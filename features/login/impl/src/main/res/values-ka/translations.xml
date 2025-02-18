@@ -19,6 +19,7 @@
   <string name="screen_change_server_form_notice">"თქვენ შეგიძლიათ დაუკავშირდეთ მხოლოდ იმ სერვერს, რომელიც მხარს უჭერს \"sliding sync\"-ს. თქვენი სახლის სერვერის ადმინისტრატორს დასჭირდება მისი კონფიგურაცია.%1$s"</string>
   <string name="screen_change_server_subtitle">"რა არის თქვენი სერვერის მისამართი?"</string>
   <string name="screen_change_server_title">"აირჩიეთ თქვენი სერვერი"</string>
+  <string name="screen_create_account_title">"ანგარიშის შექმნა"</string>
   <string name="screen_login_error_deactivated_account">"ეს ანგარიში დეაქტივირებულია."</string>
   <string name="screen_login_error_invalid_credentials">"არასწორი მომხმარებლის სახელი და/ან პაროლი"</string>
   <string name="screen_login_error_invalid_user_id">"მოცემული მომხმარებლის იდენტიფიკატორი არასწორია. დასაშვები ფორმატი: ‘@user:homeserver.org’"</string>

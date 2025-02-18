@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +40,7 @@ fun TimelineItemRoomBeginningView(
             stringResource(id = R.string.screen_room_timeline_beginning_of_room, roomName)
         }
         Text(
-            color = MaterialTheme.colorScheme.secondary,
+            color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdRegular,
             text = text,
             textAlign = TextAlign.Center,

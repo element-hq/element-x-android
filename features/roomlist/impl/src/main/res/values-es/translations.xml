@@ -18,6 +18,7 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puedes añadir un chat a tus favoritos en la configuración del chat.
 Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Aún no tienes chats favoritos"</string>
+  <string name="screen_roomlist_filter_invites">"Invitaciones"</string>
   <string name="screen_roomlist_filter_low_priority">"Prioridad baja"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puedes deseleccionar filtros para ver tus otros chats."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"No tienes chats para esta selección"</string>

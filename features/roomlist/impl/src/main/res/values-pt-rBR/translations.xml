@@ -16,6 +16,7 @@
   <string name="screen_roomlist_empty_title">"Ainda não há conversas."</string>
   <string name="screen_roomlist_filter_favourites">"Favoritos"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Você não tem nenhuma conversa favorita ainda"</string>
+  <string name="screen_roomlist_filter_invites">"Convites"</string>
   <string name="screen_roomlist_filter_low_priority">"Baixa prioridade"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Você não tem conversas para esta seleção"</string>
   <string name="screen_roomlist_filter_people">"Pessoas"</string>

@@ -24,7 +24,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -236,7 +235,7 @@ private fun PollHistoryItemRow(
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = pollHistoryItem.formattedDate,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.textSecondary,
                 style = ElementTheme.typography.fontBodySmRegular,
             )
             Spacer(modifier = Modifier.height(4.dp))

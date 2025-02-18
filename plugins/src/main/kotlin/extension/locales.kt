@@ -28,6 +28,7 @@ val locales = setOf(
     "ru",
     "sk",
     "sv",
+    "tr",
     "uk",
     "uz",
     "zh-rCN",

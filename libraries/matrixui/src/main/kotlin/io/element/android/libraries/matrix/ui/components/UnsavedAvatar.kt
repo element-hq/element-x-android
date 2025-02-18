@@ -67,7 +67,7 @@ fun UnsavedAvatar(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(40.dp),
-                tint = MaterialTheme.colorScheme.secondary,
+                tint = ElementTheme.colors.iconSecondary,
             )
         }
     }

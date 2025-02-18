@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Testleri çalıştır"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Testleri yeniden çalıştır"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Bazı testler başarısız oldu. Lütfen ayrıntıları kontrol edin."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Yapılandırmanızda bildirimlerin beklendiği gibi davranmamasına neden olabilecek herhangi bir sorunu algılamak için testleri çalıştırın."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Düzeltmeye çalışın"</string>
+  <string name="troubleshoot_notifications_screen_success">"Tüm testler başarıyla geçti."</string>
+  <string name="troubleshoot_notifications_screen_title">"Sorun Giderme Bildirimleri"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Bazı testlere bakmanız gerekiyor. Lütfen ayrıntıları kontrol edin."</string>
+</resources>

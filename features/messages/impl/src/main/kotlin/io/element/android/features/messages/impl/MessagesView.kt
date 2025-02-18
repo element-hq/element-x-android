@@ -522,14 +522,14 @@ private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(ElementTheme.colors.bgSubtleSecondary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
             text = stringResource(id = R.string.screen_room_timeline_no_permission_to_post),
-            color = MaterialTheme.colorScheme.onSecondary,
+            color = ElementTheme.colors.textSecondary,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             fontStyle = FontStyle.Italic,

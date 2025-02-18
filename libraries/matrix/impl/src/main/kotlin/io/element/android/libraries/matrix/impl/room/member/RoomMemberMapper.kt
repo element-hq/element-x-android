@@ -25,6 +25,7 @@ object RoomMemberMapper {
         normalizedPowerLevel = roomMember.normalizedPowerLevel,
         isIgnored = roomMember.isIgnored,
         role = mapRole(roomMember.suggestedRoleForPowerLevel),
+        membershipChangeReason = roomMember.membershipChangeReason
     )
 
     fun mapRole(role: RoomMemberRole): RoomMember.Role =

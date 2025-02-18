@@ -172,7 +172,7 @@ private fun AggregatedReactionButton(
     val textColor = if (isHighlighted) {
         MaterialTheme.colorScheme.inversePrimary
     } else {
-        MaterialTheme.colorScheme.primary
+        ElementTheme.colors.textPrimary
     }
 
     val roundedCornerShape = RoundedCornerShape(corner = CornerSize(percent = 50))
@@ -250,12 +250,12 @@ private fun SenderRow(
                     text = name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Text(
                     text = sentTime,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = ElementTheme.typography.fontBodySmRegular,
@@ -263,7 +263,7 @@ private fun SenderRow(
             }
             Text(
                 text = userId,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = ElementTheme.typography.fontBodySmRegular,

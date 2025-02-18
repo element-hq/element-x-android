@@ -12,6 +12,7 @@
   <string name="screen_roomlist_a11y_create_message">"Yangi suhbat yoki xona yarating"</string>
   <string name="screen_roomlist_empty_message">"Kimgadir xabar yuborishdan boshlang."</string>
   <string name="screen_roomlist_empty_title">"Hozircha chatlar yo‘q."</string>
+  <string name="screen_roomlist_filter_invites">"Takliflar"</string>
   <string name="screen_roomlist_filter_people">"Odamlar"</string>
   <string name="screen_roomlist_main_space_title">"Suhbatlar"</string>
   <string name="session_verification_banner_message">"Siz yangi qurilmadan foydalanayotganga o‘xshaysiz. Shifrlangan xabarlaringizga kirish uchun boshqa qurilma bilan tasdiqlang."</string>

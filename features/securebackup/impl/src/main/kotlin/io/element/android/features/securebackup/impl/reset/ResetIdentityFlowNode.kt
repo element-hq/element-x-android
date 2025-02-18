@@ -9,11 +9,11 @@ package io.element.android.features.securebackup.impl.reset
 
 import android.app.Activity
 import android.os.Parcelable
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -160,7 +160,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         // Workaround to get the current activity
         if (!this::activity.isInitialized) {
-            activity = LocalContext.current as Activity
+            activity = requireNotNull(LocalActivity.current)
         }
 
         val startResetState by resetIdentityFlowManager.currentHandleFlow.collectAsState()

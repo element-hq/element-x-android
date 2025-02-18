@@ -262,7 +262,7 @@ private fun ColumnScope.Footer(
         textAlign = TextAlign.Center,
         text = text,
         style = ElementTheme.typography.fontBodySmRegular,
-        color = ElementTheme.materialColors.secondary,
+        color = ElementTheme.colors.textSecondary,
     )
 }
 

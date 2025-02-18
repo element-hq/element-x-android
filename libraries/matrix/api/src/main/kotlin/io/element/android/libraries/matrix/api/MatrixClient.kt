@@ -25,10 +25,9 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -55,7 +54,7 @@ interface MatrixClient : Closeable {
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun getPendingRoom(roomId: RoomId): PendingRoom?
+    suspend fun getPendingRoom(roomId: RoomId): RoomPreview?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
@@ -146,7 +145,11 @@ interface MatrixClient : Closeable {
      * Execute generic GET requests through the SDKs internal HTTP client.
      */
     suspend fun getUrl(url: String): Result<String>
-    suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo>
+
+    /**
+     * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
+     */
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
 
     /**
      * Returns the currently used sliding sync version.

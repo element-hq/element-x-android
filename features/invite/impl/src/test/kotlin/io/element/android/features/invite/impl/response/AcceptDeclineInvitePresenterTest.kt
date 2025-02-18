@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakePendingRoom
+import io.element.android.libraries.matrix.test.room.FakeRoomPreview
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -77,9 +77,11 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteFailure = lambdaRecorder { ->
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
-        val client = FakeMatrixClient().apply {
-            getPendingRoomResults[A_ROOM_ID] = FakePendingRoom(declineInviteResult = declineInviteFailure)
-        }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
+            }
+        )
         val presenter = createAcceptDeclineInvitePresenter(client = client)
         presenter.test {
             val inviteData = anInviteData()
@@ -120,9 +122,11 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteSuccess = lambdaRecorder { ->
             Result.success(Unit)
         }
-        val client = FakeMatrixClient().apply {
-            getPendingRoomResults[A_ROOM_ID] = FakePendingRoom(declineInviteResult = declineInviteSuccess)
-        }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
+            }
+        )
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
             notificationCleaner = fakeNotificationCleaner,

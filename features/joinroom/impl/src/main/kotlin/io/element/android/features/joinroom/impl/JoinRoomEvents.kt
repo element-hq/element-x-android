@@ -9,8 +9,10 @@ package io.element.android.features.joinroom.impl
 
 sealed interface JoinRoomEvents {
     data object RetryFetchingContent : JoinRoomEvents
+    data object DismissErrorAndHideContent : JoinRoomEvents
     data object JoinRoom : JoinRoomEvents
     data object KnockRoom : JoinRoomEvents
+    data object ForgetRoom : JoinRoomEvents
     data class CancelKnock(val requiresConfirmation: Boolean) : JoinRoomEvents
     data class UpdateKnockMessage(val message: String) : JoinRoomEvents
     data object ClearActionStates : JoinRoomEvents

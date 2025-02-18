@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,7 @@ internal fun VerificationContentVerifying(
                     modifier = Modifier.fillMaxWidth(),
                     text = text,
                     style = ElementTheme.typography.fontHeadingLgBold,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -86,7 +85,7 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
         Text(
             text = stringResource(id = emojiResource.nameRes),
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
+            color = ElementTheme.colors.textSecondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Firebase\'in kullanılabilir olduğundan emin olun."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase kullanılamıyor."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase kullanılabilir."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Firebase\'i kontrol et"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Firebase belirtecinin mevcut olduğundan emin olun."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase belirteci bilinmiyor."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase belirteci: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Firebase jetonunu kontrol edin"</string>
+</resources>

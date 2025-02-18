@@ -193,6 +193,7 @@ Ok: %1$s."</string>
   <string name="common_message_removed">"Üzenet eltávolítva"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Némítás"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
@@ -270,6 +271,7 @@ Ok: %1$s."</string>
   <string name="common_verified">"Ellenőrizve"</string>
   <string name="common_verify_device">"Eszköz ellenőrzése"</string>
   <string name="common_verify_identity">"Személyazonosság ellenőrzése"</string>
+  <string name="common_verify_user">"Felhasználó ellenőrzése"</string>
   <string name="common_video">"Videó"</string>
   <string name="common_voice_message">"Hangüzenet"</string>
   <string name="common_waiting">"Várakozás…"</string>
@@ -278,6 +280,7 @@ Ok: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Úgy tűnik, hogy %1$s személyazonossága megváltozott. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Úgy tűnik, hogy %1$s %2$s személyazonossága megváltozott. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s ellenőrzött személyazonossága megváltozott."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s, %2$s ellenőrzött személyazonossága megváltozott. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ellenőrzés visszavonása"</string>
   <string name="dialog_title_confirmation">"Megerősítés"</string>
@@ -296,6 +299,7 @@ Ok: %1$s."</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Ezt a beállításokban engedélyezheti."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
+  <string name="error_network_or_server_issue">"Ennek oka hálózati vagy kiszolgálóprobléma lehet."</string>
   <string name="error_room_address_already_exists">"Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét."</string>
   <string name="error_room_address_invalid_symbols">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>

@@ -7,9 +7,13 @@
 
 package io.element.android.features.enterprise.api
 
+import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.matrix.api.core.SessionId
 
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
+
+    fun semanticColorsLight(): SemanticColors
+    fun semanticColorsDark(): SemanticColors
 }

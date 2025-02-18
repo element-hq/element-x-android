@@ -38,7 +38,7 @@ fun TimelineItemAudioView(
             Icon(
                 imageVector = Icons.Outlined.GraphicEq,
                 contentDescription = null,
-                tint = ElementTheme.materialColors.primary,
+                tint = ElementTheme.colors.iconPrimary,
                 modifier = Modifier
                     .size(16.dp),
             )
