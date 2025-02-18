@@ -427,7 +427,7 @@ private fun MessagesViewComposerBottomSheetContents(
                     onLinkClick = onLinkClick,
                 )
             }
-            val verificationViolation = state.composerState.roomMemberIdentityStateChanges.firstOrNull {
+            val verificationViolation = state.roomMemberIdentityStateChanges.firstOrNull {
                 it.identityState == IdentityState.VerificationViolation
             }
             if (verificationViolation != null) {
