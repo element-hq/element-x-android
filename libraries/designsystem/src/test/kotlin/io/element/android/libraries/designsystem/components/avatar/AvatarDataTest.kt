@@ -34,4 +34,10 @@ class AvatarDataTest {
         val data = AvatarData("id", "✂ Test", null, AvatarSize.InviteSender)
         assertThat(data.initial).isEqualTo("✂")
     }
+
+    @Test
+    fun `initial with a single letter should take that letter`() {
+        val data = AvatarData("id", "T", null, AvatarSize.InviteSender)
+        assertThat(data.initial).isEqualTo("T")
+    }
 }

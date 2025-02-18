@@ -49,7 +49,7 @@ data class AvatarData(
                 val fullCharacterIterator = BreakIterator.getCharacterInstance()
                 fullCharacterIterator.setText(dn)
                 val glyphBoundary = tryOrNull { fullCharacterIterator.following(startIndex) }
-                    ?.takeIf { it in startIndex until dn.length }
+                    ?.takeIf { it in startIndex..dn.length }
 
                 when {
                     // Use the found boundary
