@@ -149,7 +149,7 @@ class IdentityChangeStatePresenterTest {
         }
 
     @Test
-    fun `present - when the user withdraw the identity, the presenter invokes the encryption service api`() =
+    fun `present - when the user withdraws the identity, the presenter invokes the encryption service api`() =
         runTest {
             val lambda = lambdaRecorder<UserId, Result<Unit>> { Result.success(Unit) }
             val encryptionService = FakeEncryptionService(
