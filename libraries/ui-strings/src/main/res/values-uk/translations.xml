@@ -131,6 +131,8 @@
   <string name="action_view_source">"Переглянути джерело"</string>
   <string name="action_yes">"Так"</string>
   <string name="action_yes_try_again">"Так, повторити спробу"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>

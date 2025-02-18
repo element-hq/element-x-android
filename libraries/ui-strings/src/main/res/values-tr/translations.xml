@@ -129,6 +129,8 @@
   <string name="action_view_source">"Kaynağı görüntüle"</string>
   <string name="action_yes">"Evet"</string>
   <string name="action_yes_try_again">"Evet, tekrar dene"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Yükseltme mevcut"</string>
   <string name="common_about">"Hakkında"</string>
   <string name="common_acceptable_use_policy">"Kabul edilebilir kullanım politikası"</string>
   <string name="common_adding_caption">"Açıklama ekleme"</string>

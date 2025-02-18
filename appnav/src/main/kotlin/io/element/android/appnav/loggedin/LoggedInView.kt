@@ -73,9 +73,12 @@ fun LoggedInView(
 
     // Set the force migration dialog here so it's always displayed over every screen
     if (state.forceNativeSlidingSyncMigration) {
-        ForceNativeSlidingSyncMigrationDialog(onSubmit = {
-            state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
-        })
+        ForceNativeSlidingSyncMigrationDialog(
+            appName = state.appName,
+            onSubmit = {
+                state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
+            }
+        )
     }
 }
 
@@ -98,11 +101,12 @@ private fun Throwable.getReason(): String? {
 
 @Composable
 private fun ForceNativeSlidingSyncMigrationDialog(
+    appName: String,
     onSubmit: () -> Unit,
 ) {
     ErrorDialog(
         title = null,
-        content = stringResource(R.string.banner_migrate_to_native_sliding_sync_force_logout_title),
+        content = stringResource(R.string.banner_migrate_to_native_sliding_sync_app_force_logout_title, appName),
         submitText = stringResource(R.string.banner_migrate_to_native_sliding_sync_action),
         onSubmit = onSubmit,
         canDismiss = false,

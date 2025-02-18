@@ -129,6 +129,8 @@
   <string name="action_view_source">"Ver fonte"</string>
   <string name="action_yes">"Sim"</string>
   <string name="action_yes_try_again">"Sim, tentar novamente"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"O teu servidor suporta agora um protocolo novo e mais rápido. Termina a sessão e volta a iniciar sessão para atualizar agora. Se o fizeres agora, evitarás um fim de sessão forçado quando o protocolo antigo for removido mais tarde."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Atualização disponível"</string>
   <string name="common_about">"Sobre"</string>
   <string name="common_acceptable_use_policy">"Política de utilização aceitável"</string>
   <string name="common_adding_caption">"A adicionar legenda"</string>

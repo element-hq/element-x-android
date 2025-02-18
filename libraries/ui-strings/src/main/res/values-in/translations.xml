@@ -125,6 +125,8 @@
   <string name="action_view_in_timeline">"Lihat di lini masa"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
   <string name="common_adding_caption">"Menambahkan keterangan"</string>

@@ -122,6 +122,8 @@
   <string name="action_view_in_timeline">"Прагляд у хроніцы"</string>
   <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер зараз падтрымлівае новы, хутчэйшы пратакол. Выйдзіце з сістэмы і зноў увайдзіце, каб абнавіць яе. Гэта дапаможа вам пазбегнуць прымусовага выхаду з сістэмы, калі стары пратакол будзе пазней выдалены."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Даступна абнаўленне"</string>
   <string name="common_about">"Аб праграме"</string>
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
   <string name="common_advanced_settings">"Пашыраныя налады"</string>

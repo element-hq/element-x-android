@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import io.element.android.appconfig.ElementCallConfig
-import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevel
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevelItem
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
@@ -51,7 +50,6 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val rageshakePresenter: Presenter<RageshakePreferencesState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
-    private val logoutUseCase: LogoutUseCase,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -72,9 +70,6 @@ class DeveloperSettingsPresenter @Inject constructor(
         val customElementCallBaseUrl by appPreferencesStore
             .getCustomElementCallBaseUrlFlow()
             .collectAsState(initial = null)
-        val isSimplifiedSlidingSyncEnabled by appPreferencesStore
-            .isSimplifiedSlidingSyncEnabledFlow()
-            .collectAsState(initial = false)
         val hideImagesAndVideos by appPreferencesStore
             .doesHideImagesAndVideosFlow()
             .collectAsState(initial = false)
@@ -122,12 +117,6 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
-                is DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled -> coroutineScope.launch {
-                    appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
-                    runCatching {
-                        logoutUseCase.logout(ignoreSdkError = true)
-                    }
-                }
                 is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
                     appPreferencesStore.setHideImagesAndVideos(event.value)
                 }
@@ -147,7 +136,6 @@ class DeveloperSettingsPresenter @Inject constructor(
                 defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
                 validator = ::customElementCallUrlValidator,
             ),
-            isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
             hideImagesAndVideos = hideImagesAndVideos,
             tracingLogLevel = tracingLogLevel,
             eventSink = ::handleEvents

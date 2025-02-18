@@ -131,6 +131,8 @@
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
   <string name="action_yes_try_again">"Да, попробуйте еще раз"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Доступно обновление"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_adding_caption">"Добавление подписи"</string>

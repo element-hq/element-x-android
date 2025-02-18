@@ -129,6 +129,8 @@
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
   <string name="action_yes_try_again">"Igen, újrapróbálkozás"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
   <string name="common_adding_caption">"Felirat hozzáadása"</string>
