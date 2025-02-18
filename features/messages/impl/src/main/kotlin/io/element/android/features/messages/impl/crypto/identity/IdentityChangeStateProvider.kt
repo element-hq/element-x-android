@@ -47,10 +47,10 @@ internal fun aRoomMemberIdentityStateChange(
 
 internal fun anIdentityChangeState(
     roomMemberIdentityStateChanges: List<RoomMemberIdentityStateChange> = emptyList(),
-    eventSink: (IdentityChangeEvent) -> Unit = {}
+    eventSink: (IdentityChangeEvent) -> Unit = {},
 ) = IdentityChangeState(
     roomMemberIdentityStateChanges = roomMemberIdentityStateChanges.toImmutableList(),
-    eventSink,
+    eventSink = eventSink,
 )
 
 internal fun anIdentityRoomMember(
