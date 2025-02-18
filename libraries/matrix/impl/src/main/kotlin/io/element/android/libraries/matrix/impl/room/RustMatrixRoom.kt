@@ -608,7 +608,6 @@ class RustMatrixRoom(
     override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
-            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
