@@ -8,11 +8,15 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.ProduceStateScope
+import io.element.android.features.messages.impl.crypto.identity.IdentityRoomMember
 import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
-import io.element.android.features.messages.impl.crypto.identity.createDefaultRoomMemberForIdentityChange
-import io.element.android.features.messages.impl.crypto.identity.toIdentityRoomMember
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,3 +55,20 @@ fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoom
         }
         .launchIn(this)
 }
+
+private fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
+    userId = userId,
+    displayNameOrDefault = displayNameOrDefault,
+    avatarData = getAvatarData(AvatarSize.ComposerAlert),
+)
+
+private fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
+    userId = userId,
+    displayNameOrDefault = userId.extractedDisplayName,
+    avatarData = AvatarData(
+        id = userId.value,
+        name = null,
+        url = null,
+        size = AvatarSize.ComposerAlert,
+    ),
+)

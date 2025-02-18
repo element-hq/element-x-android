@@ -13,13 +13,9 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.messagecomposer.observeRoomMemberIdentityStateChange
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -68,20 +64,3 @@ class IdentityChangeStatePresenter @Inject constructor(
             }
     }
 }
-
-fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
-    userId = userId,
-    displayNameOrDefault = displayNameOrDefault,
-    avatarData = getAvatarData(AvatarSize.ComposerAlert),
-)
-
-fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
-    userId = userId,
-    displayNameOrDefault = userId.extractedDisplayName,
-    avatarData = AvatarData(
-        id = userId.value,
-        name = null,
-        url = null,
-        size = AvatarSize.ComposerAlert,
-    ),
-)
