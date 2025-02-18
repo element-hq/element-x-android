@@ -33,6 +33,7 @@ android {
         implementation(libs.vanniktech.blurhash)
         implementation(projects.features.enterprise.api)
         implementation(projects.libraries.architecture)
+        implementation(projects.libraries.core)
         implementation(projects.libraries.preferences.api)
         implementation(projects.libraries.testtags)
         implementation(projects.libraries.uiStrings)

@@ -8,6 +8,7 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.core.data.tryOrNull
 import java.text.BreakIterator
 
 @Immutable
@@ -47,7 +48,8 @@ data class AvatarData(
 
                 val fullCharacterIterator = BreakIterator.getCharacterInstance()
                 fullCharacterIterator.setText(dn)
-                val glyphBoundary = runCatching { fullCharacterIterator.following(startIndex).takeIf { it in startIndex until dn.length } }.getOrNull()
+                val glyphBoundary = tryOrNull { fullCharacterIterator.following(startIndex) }
+                    ?.takeIf { it in startIndex until dn.length }
 
                 when {
                     // Use the found boundary
