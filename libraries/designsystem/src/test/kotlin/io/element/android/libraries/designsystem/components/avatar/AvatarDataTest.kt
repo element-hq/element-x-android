@@ -30,7 +30,7 @@ class AvatarDataTest {
     }
 
     @Test
-    fun `initial with short emoji should get the full emoji`() {
+    fun `initial with short emoji should get the emoji`() {
         val data = AvatarData("id", "✂ Test", null, AvatarSize.InviteSender)
         assertThat(data.initial).isEqualTo("✂")
     }
