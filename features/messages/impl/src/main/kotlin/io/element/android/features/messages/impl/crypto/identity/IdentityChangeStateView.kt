@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.crypto.identity
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,10 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.appconfig.LearnMoreConfig
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.encryption.identity.isAViolation
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -29,61 +32,88 @@ fun IdentityChangeStateView(
     onLinkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Pick the first identity change to PinViolation
-    val pinViolationIdentityChange = state.roomMemberIdentityStateChanges.firstOrNull {
-        // For now only render PinViolation
-        it.identityState == IdentityState.PinViolation
+    // Pick the first identity change that is a violation
+    val identityChangeViolation = state.roomMemberIdentityStateChanges.firstOrNull {
+        it.identityState.isAViolation()
     }
-    if (pinViolationIdentityChange != null) {
-        ComposerAlertMolecule(
+    when (identityChangeViolation?.identityState) {
+        IdentityState.PinViolation -> ViolationAlert(
+            identityChangeViolation = identityChangeViolation,
+            onLinkClick = onLinkClick,
+            textId = CommonStrings.crypto_identity_change_pin_violation_new,
+            isCritical = false,
+            submitTextId = CommonStrings.action_ok,
+            onSubmitClick = { state.eventSink(IdentityChangeEvent.PinIdentity(identityChangeViolation.identityRoomMember.userId)) },
             modifier = modifier,
-            avatar = pinViolationIdentityChange.identityRoomMember.avatarData,
-            content = buildAnnotatedString {
-                val learnMoreStr = stringResource(CommonStrings.action_learn_more)
-                val displayName = pinViolationIdentityChange.identityRoomMember.displayNameOrDefault
-                val userIdStr = stringResource(
-                    CommonStrings.crypto_identity_change_pin_violation_new_user_id,
-                    pinViolationIdentityChange.identityRoomMember.userId,
-                )
-                val fullText = stringResource(
-                    id = CommonStrings.crypto_identity_change_pin_violation_new,
-                    displayName,
-                    userIdStr,
-                    learnMoreStr,
-                )
-                append(fullText)
-                val userIdStartIndex = fullText.indexOf(userIdStr)
-                addStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    start = userIdStartIndex,
-                    end = userIdStartIndex + userIdStr.length,
-                )
-                val learnMoreStartIndex = fullText.lastIndexOf(learnMoreStr)
-                addStyle(
-                    style = SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    start = learnMoreStartIndex,
-                    end = learnMoreStartIndex + learnMoreStr.length,
-                )
-                addLink(
-                    url = LinkAnnotation.Url(
-                        url = LearnMoreConfig.IDENTITY_CHANGE_URL,
-                        linkInteractionListener = {
-                            onLinkClick(LearnMoreConfig.IDENTITY_CHANGE_URL, true)
-                        }
-                    ),
-                    start = learnMoreStartIndex,
-                    end = learnMoreStartIndex + learnMoreStr.length,
-                )
-            },
-            onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(pinViolationIdentityChange.identityRoomMember.userId)) },
-            isCritical = pinViolationIdentityChange.identityState == IdentityState.VerificationViolation,
         )
+        IdentityState.VerificationViolation -> ViolationAlert(
+            identityChangeViolation = identityChangeViolation,
+            onLinkClick = onLinkClick,
+            textId = CommonStrings.crypto_identity_change_verification_violation_new,
+            isCritical = true,
+            submitTextId = CommonStrings.crypto_identity_change_withdraw_verification_action,
+            onSubmitClick = { state.eventSink(IdentityChangeEvent.WithdrawVerification(identityChangeViolation.identityRoomMember.userId)) },
+            modifier = modifier,
+        )
+        else -> Unit
     }
+}
+
+@Composable
+private fun ViolationAlert(
+    identityChangeViolation: RoomMemberIdentityStateChange,
+    onLinkClick: (String, Boolean) -> Unit,
+    @StringRes textId: Int,
+    isCritical: Boolean,
+    @StringRes submitTextId: Int,
+    onSubmitClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ComposerAlertMolecule(
+        modifier = modifier,
+        avatar = identityChangeViolation.identityRoomMember.avatarData,
+        content = buildAnnotatedString {
+            val learnMoreStr = stringResource(CommonStrings.action_learn_more)
+            val displayName = identityChangeViolation.identityRoomMember.displayNameOrDefault
+            val userIdStr = stringResource(
+                CommonStrings.crypto_identity_change_pin_violation_new_user_id,
+                identityChangeViolation.identityRoomMember.userId,
+            )
+            val fullText = stringResource(textId, displayName, userIdStr, learnMoreStr)
+            append(fullText)
+            val userIdStartIndex = fullText.indexOf(userIdStr)
+            addStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.Bold,
+                ),
+                start = userIdStartIndex,
+                end = userIdStartIndex + userIdStr.length,
+            )
+            val learnMoreStartIndex = fullText.lastIndexOf(learnMoreStr)
+            addStyle(
+                style = SpanStyle(
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold,
+                    color = ElementTheme.colors.textPrimary
+                ),
+                start = learnMoreStartIndex,
+                end = learnMoreStartIndex + learnMoreStr.length,
+            )
+            addLink(
+                url = LinkAnnotation.Url(
+                    url = LearnMoreConfig.IDENTITY_CHANGE_URL,
+                    linkInteractionListener = {
+                        onLinkClick(LearnMoreConfig.IDENTITY_CHANGE_URL, true)
+                    }
+                ),
+                start = learnMoreStartIndex,
+                end = learnMoreStartIndex + learnMoreStr.length,
+            )
+        },
+        submitText = stringResource(submitTextId),
+        onSubmitClick = onSubmitClick,
+        isCritical = isCritical,
+    )
 }
 
 @PreviewsDayNight
