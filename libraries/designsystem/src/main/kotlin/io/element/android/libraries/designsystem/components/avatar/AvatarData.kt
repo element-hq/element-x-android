@@ -47,9 +47,16 @@ data class AvatarData(
 
                 val fullCharacterIterator = BreakIterator.getCharacterInstance()
                 fullCharacterIterator.setText(dn)
-                val glyphBoundary = fullCharacterIterator.following(startIndex)
+                val glyphBoundary = runCatching { fullCharacterIterator.following(startIndex).takeIf { it in startIndex until dn.length } }.getOrNull()
 
-                dn.substring(startIndex, glyphBoundary)
+                when {
+                    // Use the found boundary
+                    glyphBoundary != null -> dn.substring(startIndex, glyphBoundary)
+                    // If no boundary was found, default to the next char if possible
+                    startIndex + 1 < dn.length -> dn.substring(startIndex, startIndex + 1)
+                    // Return a fallback character otherwise
+                    else -> "#"
+                }
             }
             .uppercase()
     }
