@@ -233,6 +233,7 @@ class RustMatrixRoom(
                 numContextEvents = 50u,
             )
         }
+
         val allowedMessageTypes = when (createTimelineParams) {
             is CreateTimelineParams.MediaOnly,
             is CreateTimelineParams.MediaOnlyFocused -> AllowedMessageTypes.Only(
@@ -246,12 +247,14 @@ class RustMatrixRoom(
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly -> AllowedMessageTypes.All
         }
+
         val internalIdPrefix = when (createTimelineParams) {
             is CreateTimelineParams.PinnedOnly -> "pinned_events"
             is CreateTimelineParams.Focused -> "focus_${createTimelineParams.focusedEventId}"
             is CreateTimelineParams.MediaOnly -> "MediaGallery_"
             is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
         }
+
         // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
         // but there is no way to exclude data separator at the moment.
         val dateDividerMode = when (createTimelineParams) {
@@ -260,6 +263,7 @@ class RustMatrixRoom(
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
         }
+
         runCatching {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
@@ -275,7 +279,10 @@ class RustMatrixRoom(
                     is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
                     CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
                 }
-                createTimeline(inner, mode = mode)
+                createTimeline(
+                    timeline = inner,
+                    mode = mode,
+                )
             }
         }.mapFailure {
             when (createTimelineParams) {
