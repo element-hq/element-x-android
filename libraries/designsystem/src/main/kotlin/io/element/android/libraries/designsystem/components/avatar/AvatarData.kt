@@ -28,19 +28,30 @@ data class AvatarData(
                 }
 
                 var length = 1
-                var first = dn[startIndex]
+                var next = dn[startIndex]
 
                 // LEFT-TO-RIGHT MARK
-                if (dn.length >= 2 && 0x200e == first.code) {
+                if (dn.length >= 2 && 0x200e == next.code) {
                     startIndex++
-                    first = dn[startIndex]
+                    next = dn[startIndex]
+                }
+
+                while (next.isWhitespace()) {
+                    if (dn.length > startIndex + 1) {
+                        startIndex++
+                        next = dn[startIndex]
+                    } else {
+                        break
+                    }
                 }
 
                 // check if it’s the start of a surrogate pair
-                if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
-                    val second = dn[startIndex + 1]
-                    if (second.code in 0xDC00..0xDFFF) {
-                        length++
+                while (isPartOfEmoji(next) && dn.length > startIndex + length) {
+                    length++
+                    if (dn.length > startIndex + length + 1) {
+                        next = dn[startIndex + length]
+                    } else {
+                        break
                     }
                 }
 
@@ -52,4 +63,12 @@ data class AvatarData(
 
 fun AvatarData.getBestName(): String {
     return name?.takeIf { it.isNotEmpty() } ?: id
+}
+
+private fun isPartOfEmoji(char: Char): Boolean {
+    val isHighSurrogate = char.code in 0xD800..0xDBFF
+    val isLowSurrogate = char.code in 0xDC00..0xDFFF
+    val isVariantSelector = char.code in 0xFE00..0xFE0F
+    val isZeroWidthJoin = char.code == 0x200D
+    return isHighSurrogate || isLowSurrogate || isVariantSelector || isZeroWidthJoin
 }
