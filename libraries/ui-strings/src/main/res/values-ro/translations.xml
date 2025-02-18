@@ -123,6 +123,8 @@
   <string name="action_view_in_timeline">"Vedeți în cameră"</string>
   <string name="action_view_source">"Vedeți sursă"</string>
   <string name="action_yes">"Da"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade disponibil"</string>
   <string name="common_about">"Despre"</string>
   <string name="common_acceptable_use_policy">"Politică de utilizare rezonabilă"</string>
   <string name="common_advanced_settings">"Setări avansate"</string>

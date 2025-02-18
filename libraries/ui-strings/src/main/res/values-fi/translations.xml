@@ -129,6 +129,8 @@
   <string name="action_view_source">"Näytä lähde"</string>
   <string name="action_yes">"Kyllä"</string>
   <string name="action_yes_try_again">"Kyllä, yritä uudelleen"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Palvelimesi tukee nyt uutta, nopeampaa protokollaa. Kirjaudu ulos ja takaisin sisään päivittääksesi nyt. Jos teet tämän nyt, voit välttää pakotetun uloskirjautumisen, kun vanha protokolla poistetaan myöhemmin."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Päivitys saatavilla"</string>
   <string name="common_about">"Tietoa"</string>
   <string name="common_acceptable_use_policy">"Hyväksyttävän käytön käytäntö"</string>
   <string name="common_adding_caption">"Lisätään kuvatekstiä"</string>

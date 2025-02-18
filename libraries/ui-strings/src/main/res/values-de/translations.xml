@@ -129,6 +129,8 @@
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, versuchen Sie es noch einmal"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Dein Server unterstützt jetzt ein neues, schnelleres Protokoll. Melde dich ab und melde dich wieder an, um zu aktualisieren. Wenn du das jetzt tust, vermeidest du eine erzwungene Abmeldung, wenn das alte Protokoll später entfernt wird."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Aktualisierung verfügbar"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_adding_caption">"Hinzufügen einer Bildunterschrift"</string>

@@ -127,6 +127,8 @@
   <string name="action_view_in_timeline">"Προβολή στο χρονοδιάγραμμα"</string>
   <string name="action_view_source">"Προβολή πηγής"</string>
   <string name="action_yes">"Ναι"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Διαθέσιμη αναβάθμιση"</string>
   <string name="common_about">"Σχετικά"</string>
   <string name="common_acceptable_use_policy">"Πολιτική αποδεκτής χρήσης"</string>
   <string name="common_adding_caption">"Η λεζάντα προστίθεται"</string>

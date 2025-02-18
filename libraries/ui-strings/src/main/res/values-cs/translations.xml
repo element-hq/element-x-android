@@ -131,6 +131,8 @@
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
   <string name="action_yes_try_again">"Ano, zkusit znovu"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade k dispozici"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_adding_caption">"Přidání titulku"</string>

@@ -113,6 +113,7 @@
   <string name="action_take_photo">"Ta bilde"</string>
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
   <string name="common_adding_caption">"Legger til bildetekst"</string>

@@ -127,6 +127,9 @@
   <string name="action_view_in_timeline">"Visa i tidslinjen"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="action_yes_try_again">"Ja, försök igen"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Uppgradering tillgänglig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Policy för godtagbar användning"</string>
   <string name="common_adding_caption">"Lägga till bildtext"</string>

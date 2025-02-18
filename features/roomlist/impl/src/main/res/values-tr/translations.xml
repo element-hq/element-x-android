@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_action">"Çıkış Yap ve Yükselt"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır."</string>
-  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ana sunucunuz artık eski protokolü desteklemiyor. Lütfen oturumu kapatın ve uygulamayı kullanmaya devam etmek için tekrar oturum açın."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Yükseltme mevcut"</string>
   <string name="banner_set_up_recovery_content">"Mevcut tüm cihazlarınızı kaybettiyseniz şifreleme kimliğinizi ve mesaj geçmişinizi bir kurtarma anahtarıyla kurtarın."</string>
   <string name="banner_set_up_recovery_submit">"Kurtarmayı ayarlayın"</string>
   <string name="banner_set_up_recovery_title">"Hesabınızı korumak için kurtarmayı ayarlayın"</string>

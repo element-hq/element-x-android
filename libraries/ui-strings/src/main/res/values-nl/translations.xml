@@ -120,6 +120,8 @@
   <string name="action_view_in_timeline">"Bekijk in tijdlijn"</string>
   <string name="action_view_source">"Bron weergeven"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Je server ondersteunt nu een nieuw, sneller protocol. Log uit en log opnieuw in om nu te upgraden. Als je dit nu doet, voorkom je dat je geforceerd uitlogt wordt wanneer het oude protocol later wordt verwijderd."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade beschikbaar"</string>
   <string name="common_about">"Over"</string>
   <string name="common_acceptable_use_policy">"Beleid inzake redelijk gebruik"</string>
   <string name="common_advanced_settings">"Geavanceerde instellingen"</string>

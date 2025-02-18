@@ -131,6 +131,8 @@
   <string name="action_view_source">"Wyświetl źródło"</string>
   <string name="action_yes">"Tak"</string>
   <string name="action_yes_try_again">"Tak, spróbuj ponownie"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Dostępna aktualizacja"</string>
   <string name="common_about">"O programie"</string>
   <string name="common_acceptable_use_policy">"Polityka użytkowania"</string>
   <string name="common_adding_caption">"Dodawanie opisu"</string>
