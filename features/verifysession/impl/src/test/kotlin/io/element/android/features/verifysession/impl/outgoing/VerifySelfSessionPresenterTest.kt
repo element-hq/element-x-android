@@ -149,7 +149,7 @@ class VerifySelfSessionPresenterTest {
         )
         val presenter = createVerifySelfSessionPresenter(service)
         presenter.test {
-            awaitItem().eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
+            awaitItem().eventSink(VerifySelfSessionViewEvents.Initial)
             awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
@@ -264,7 +264,7 @@ class VerifySelfSessionPresenterTest {
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.SkipVerification)
-            assertThat(awaitItem().step).isEqualTo(Step.Skipped)
+            assertThat(awaitItem().step).isEqualTo(Step.Exit)
         }
     }
 
@@ -301,7 +301,7 @@ class VerifySelfSessionPresenterTest {
         )
         presenter.test {
             skipItems(1)
-            assertThat(awaitItem().step).isEqualTo(Step.Skipped)
+            assertThat(awaitItem().step).isEqualTo(Step.Exit)
         }
     }
 
@@ -336,9 +336,9 @@ class VerifySelfSessionPresenterTest {
     ): VerifySelfSessionState {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial(false))
-        state.eventSink(VerifySelfSessionViewEvents.UseAnotherDevice)
+        state.eventSink(VerifySelfSessionViewEvents.Initial)
         state = awaitItem()
-        assertThat(state.step).isEqualTo(Step.UseAnotherDevice)
+        assertThat(state.step).isEqualTo(Step.Initial)
         state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)

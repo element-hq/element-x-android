@@ -37,7 +37,7 @@ class FakeSessionVerificationService(
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
-    override suspend fun requestVerification() {
+    override suspend fun requestCurrentSessionVerification() {
         requestVerificationLambda()
     }
 

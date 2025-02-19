@@ -28,7 +28,7 @@ class IncomingVerificationNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins),
     IncomingVerificationNavigator {
     private val presenter = presenterFactory.create(
-        sessionVerificationRequestDetails = inputs<IncomingVerificationEntryPoint.Params>().sessionVerificationRequestDetails,
+        verificationRequest = inputs<IncomingVerificationEntryPoint.Params>().verificationRequest,
         navigator = this,
     )
 

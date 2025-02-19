@@ -7,8 +7,6 @@
 
 package io.element.android.features.verifysession.impl.outgoing
 
-import android.app.Activity
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -21,7 +19,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
@@ -33,28 +30,22 @@ class VerifySelfSessionNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
 
-    private val presenter = presenterFactory.create(
-        showDeviceVerifiedScreen = inputs<VerifySessionEntryPoint.Params>().showDeviceVerifiedScreen,
-    )
+    private val inputs = inputs<VerifySessionEntryPoint.Params>()
 
-    private fun onLearnMoreClick(activity: Activity, dark: Boolean) {
-        activity.openUrlInChromeCustomTab(null, dark, LearnMoreConfig.ENCRYPTION_URL)
-    }
+    private val presenter = presenterFactory.create(
+        showDeviceVerifiedScreen = inputs.showDeviceVerifiedScreen,
+        verificationRequest = inputs.verificationRequest,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = requireNotNull(LocalActivity.current)
-        val isDark = ElementTheme.isLightTheme.not()
         VerifySelfSessionView(
             state = state,
             modifier = modifier,
-            onLearnMoreClick = {
-                onLearnMoreClick(activity, isDark)
-            },
-            onEnterRecoveryKey = callback::onEnterRecoveryKey,
-            onResetKey = callback::onResetKey,
+            onLearnMoreClick = callback::onLearnMoreAboutEncryption,
             onFinish = callback::onDone,
+            onBack = callback::onBack,
         )
     }
 }

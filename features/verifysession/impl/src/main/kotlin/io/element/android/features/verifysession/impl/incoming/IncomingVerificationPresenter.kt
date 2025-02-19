@@ -25,6 +25,7 @@ import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +35,7 @@ import io.element.android.features.verifysession.impl.incoming.IncomingVerificat
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.State as StateMachineState
 
 class IncomingVerificationPresenter @AssistedInject constructor(
-    @Assisted private val sessionVerificationRequestDetails: SessionVerificationRequestDetails,
+    @Assisted private val verificationRequest: VerificationRequest.Incoming,
     @Assisted private val navigator: IncomingVerificationNavigator,
     private val sessionVerificationService: SessionVerificationService,
     private val stateMachine: IncomingVerificationStateMachine,
@@ -43,7 +44,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            sessionVerificationRequestDetails: SessionVerificationRequestDetails,
+            verificationRequest: VerificationRequest.Incoming,
             navigator: IncomingVerificationNavigator,
         ): IncomingVerificationPresenter
     }
@@ -56,19 +57,19 @@ class IncomingVerificationPresenter @AssistedInject constructor(
                 cancelAnyPendingVerificationAttempt = false
             )
             // Acknowledge the request right now
-            sessionVerificationService.acknowledgeVerificationRequest(sessionVerificationRequestDetails)
+            sessionVerificationService.acknowledgeVerificationRequest(verificationRequest)
         }
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
         val formattedSignInTime = remember {
             dateFormatter.format(
-                timestamp = sessionVerificationRequestDetails.firstSeenTimestamp,
+                timestamp = verificationRequest.details.firstSeenTimestamp,
                 mode = DateFormatterMode.TimeOrDate,
             )
         }
         val step by remember {
             derivedStateOf {
                 stateAndDispatch.state.value.toVerificationStep(
-                    sessionVerificationRequestDetails = sessionVerificationRequestDetails,
+                    sessionVerificationRequestDetails = verificationRequest.details,
                     formattedSignInTime = formattedSignInTime,
                 )
             }
@@ -119,6 +120,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
 
         return IncomingVerificationState(
             step = step,
+            request = verificationRequest,
             eventSink = ::handleEvents,
         )
     }
@@ -133,7 +135,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
             IncomingVerificationStateMachine.State.RejectingIncomingVerification,
             null -> {
                 Step.Initial(
-                    deviceDisplayName = sessionVerificationRequestDetails.displayName ?: sessionVerificationRequestDetails.deviceId.value,
+                    deviceDisplayName = sessionVerificationRequestDetails.senderProfile.displayName ?: sessionVerificationRequestDetails.deviceId.value,
                     deviceId = sessionVerificationRequestDetails.deviceId,
                     formattedSignInTime = formattedSignInTime,
                     isWaiting = machineState == IncomingVerificationStateMachine.State.AcceptingIncomingVerification ||

@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -127,8 +128,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     )
 
     private val verificationListener = object : SessionVerificationServiceListener {
-        override fun onIncomingSessionRequest(sessionVerificationRequestDetails: SessionVerificationRequestDetails) {
-            backstack.singleTop(NavTarget.IncomingVerificationRequest(sessionVerificationRequestDetails))
+        override fun onIncomingSessionRequest(verificationRequest: VerificationRequest.Incoming) {
+            backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
         }
     }
 
@@ -218,7 +219,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
 
         @Parcelize
-        data class IncomingVerificationRequest(val data: SessionVerificationRequestDetails) : NavTarget
+        data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

@@ -8,13 +8,14 @@
 package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
-import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
@@ -50,6 +51,8 @@ class RustSessionVerificationService(
     isSyncServiceReady: Flow<Boolean>,
     private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
+    private var currentVerificationRequest: VerificationRequest? = null
+
     private val encryptionService: Encryption = client.encryption()
     private lateinit var verificationController: SessionVerificationController
 
@@ -88,10 +91,8 @@ class RustSessionVerificationService(
         verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
-    private var isOwnVerification = true
-
     override fun didReceiveVerificationRequest(details: RustSessionVerificationRequestDetails) {
-        listener?.onIncomingSessionRequest(details.map())
+        listener?.onIncomingSessionRequest(details.toVerificationRequest(UserId(client.userId())))
     }
 
     private var listener: SessionVerificationServiceListener? = null
@@ -111,9 +112,16 @@ class RustSessionVerificationService(
         this.listener = listener
     }
 
-    override suspend fun requestVerification() = tryOrFail {
+    override suspend fun requestCurrentSessionVerification() = tryOrFail {
         initVerificationControllerIfNeeded()
         verificationController.requestDeviceVerification()
+        currentVerificationRequest = VerificationRequest.Outgoing.CurrentSession
+    }
+
+    override suspend fun requestUserVerification(userId: UserId) {
+        initVerificationControllerIfNeeded()
+        verificationController.requestUserVerification(userId.value)
+        currentVerificationRequest = VerificationRequest.Outgoing.User(userId)
     }
 
     override suspend fun cancelVerification() = tryOrFail {
@@ -130,12 +138,11 @@ class RustSessionVerificationService(
         verificationController.startSasVerification()
     }
 
-    override suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) = tryOrFail {
-        isOwnVerification = false
+    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) = tryOrFail {
         initVerificationControllerIfNeeded()
         verificationController.acknowledgeVerificationRequest(
-            senderId = details.senderId.value,
-            flowId = details.flowId.value,
+            senderId = verificationRequest.details.senderProfile.userId.value,
+            flowId = verificationRequest.details.flowId.value,
         )
     }
 
@@ -154,6 +161,10 @@ class RustSessionVerificationService(
             Timber.e(it, "Failed to verify session")
             didFail()
         }
+    }
+
+    override fun getCurrentVerificationRequest(): VerificationRequest? {
+        return currentVerificationRequest
     }
 
     // region Delegate implementation
@@ -183,7 +194,7 @@ class RustSessionVerificationService(
                 }
             }
                 .onSuccess {
-                    if (isOwnVerification) {
+                    if (currentVerificationRequest is VerificationRequest.Outgoing.CurrentSession) {
                         // Try waiting for the final recovery state for better UX, but don't block the verification state on it
                         tryOrNull {
                             withTimeout(10.seconds) {
@@ -215,7 +226,7 @@ class RustSessionVerificationService(
     // end-region
 
     override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
-        isOwnVerification = true
+        currentVerificationRequest = null
         if (isReady.value && cancelAnyPendingVerificationAttempt) {
             // Cancel any pending verification attempt
             tryOrNull { verificationController.cancelVerification() }

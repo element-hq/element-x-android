@@ -73,7 +73,6 @@ class UserProfilePresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         val isCurrentUser = remember { client.isMe(userId) }
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
-        var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val isVerified: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
@@ -86,9 +85,8 @@ class UserProfilePresenter @AssistedInject constructor(
                 .onEach { isBlocked.value = AsyncData.Success(it) }
                 .launchIn(this)
         }
-        LaunchedEffect(Unit) {
-            userProfile = client.getProfile(userId).getOrNull()
-        }
+        val userProfile by produceState<MatrixUser?>(null) { value = client.getProfile(userId).getOrNull() }
+
         LaunchedEffect(Unit) {
             suspend {
                 client.encryptionService().isUserVerified(userId).getOrThrow()

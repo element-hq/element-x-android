@@ -19,67 +19,60 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.timeout
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import com.freeletics.flowredux.dsl.State as MachineState
 
 @OptIn(FlowPreview::class)
-class VerifySelfSessionStateMachine @Inject constructor(
+class VerifySelfSessionStateMachine(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
 ) : FlowReduxStateMachine<VerifySelfSessionStateMachine.State, VerifySelfSessionStateMachine.Event>(
-    initialState = State.Initial
+    initialState = State.Initial,
 ) {
     init {
         spec {
             inState<State.Initial> {
-                on { _: Event.UseAnotherDevice, state ->
-                    state.override { State.UseAnotherDevice.andLogStateChange() }
-                }
-            }
-            inState<State.UseAnotherDevice> {
-                on { _: Event.RequestVerification, state ->
-                    state.override { State.RequestingVerification.andLogStateChange() }
+                on<Event.RequestVerification> { event, state ->
+                    when (event.verificationRequest) {
+                        is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestCurrentSessionVerification()
+                        is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(event.verificationRequest.userId)
+                    }
+                    state.override { State.RequestingVerification(event.verificationRequest).andLogStateChange() }
                 }
             }
             inState<State.RequestingVerification> {
-                onEnterEffect {
-                    sessionVerificationService.requestVerification()
-                }
-                on { _: Event.DidAcceptVerificationRequest, state ->
+                on<Event.DidAcceptVerificationRequest> { _, state ->
                     state.override { State.VerificationRequestAccepted.andLogStateChange() }
                 }
             }
-            inState<State.StartingSasVerification> {
-                onEnterEffect {
+            inState<State.StartingSasVerification> {}
+            inState<State.VerificationRequestAccepted> {
+                onActionEffect<Event.StartSasVerification> { _, state ->
                     sessionVerificationService.startVerification()
                 }
             }
-            inState<State.VerificationRequestAccepted> {
-                on { _: Event.StartSasVerification, state ->
-                    state.override { State.StartingSasVerification.andLogStateChange() }
-                }
-            }
             inState<State.Canceled> {
-                on { _: Event.Reset, state ->
+                on<Event.Reset> { _, state ->
                     state.override { State.Initial.andLogStateChange() }
                 }
             }
             inState<State.SasVerificationStarted> {
-                on { event: Event.DidReceiveChallenge, state ->
+                on<Event.DidReceiveChallenge> { event, state ->
                     state.override { State.Verifying.ChallengeReceived(event.data).andLogStateChange() }
                 }
             }
             inState<State.Verifying.ChallengeReceived> {
-                on { _: Event.AcceptChallenge, state ->
+                on<Event.AcceptChallenge> { _, state ->
                     state.override { State.Verifying.Replying(state.snapshot.data, accept = true).andLogStateChange() }
                 }
-                on { _: Event.DeclineChallenge, state ->
+                on<Event.DeclineChallenge> { _, state ->
                     state.override { State.Verifying.Replying(state.snapshot.data, accept = false).andLogStateChange() }
                 }
             }
@@ -91,7 +84,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                         sessionVerificationService.declineVerification()
                     }
                 }
-                on { _: Event.DidAcceptChallenge, state ->
+                on<Event.DidAcceptChallenge> { _, state ->
                     // If a key backup exists, wait until it's restored or a timeout happens
                     val hasBackup = encryptionService.doesBackupExistOnServer().getOrNull().orFalse()
                     if (hasBackup) {
@@ -104,21 +97,14 @@ class VerifySelfSessionStateMachine @Inject constructor(
                     state.override { State.Completed.andLogStateChange() }
                 }
             }
-            inState<State.Canceling> {
-                // TODO The 'Canceling' -> 'Canceled' transitions doesn't seem to work anymore, check if something changed in the Rust SDK
-                onEnterEffect {
-                    sessionVerificationService.cancelVerification()
-                }
-            }
             inState {
                 logReceivedEvents()
-                on { _: Event.DidStartSasVerification, state: MachineState<State> ->
+                on<Event.DidStartSasVerification> { _, state: MachineState<State> ->
                     state.override { State.SasVerificationStarted.andLogStateChange() }
                 }
-                on { _: Event.Cancel, state: MachineState<State> ->
+                on<Event.Cancel> { event, state: MachineState<State> ->
                     when (state.snapshot) {
-                        State.Initial, State.Completed, State.Canceled -> state.noChange()
-                        State.UseAnotherDevice -> state.override { State.Initial.andLogStateChange() }
+                        State.Initial, State.Completed, is State.Canceled -> state.override { State.Exit }
                         // For some reason `cancelVerification` is not calling its delegate `didCancel` method so we don't pass from
                         // `Canceling` state to `Canceled` automatically anymore
                         else -> {
@@ -127,10 +113,10 @@ class VerifySelfSessionStateMachine @Inject constructor(
                         }
                     }
                 }
-                on { _: Event.DidCancel, state: MachineState<State> ->
+                on<Event.DidCancel> { event, state: MachineState<State> ->
                     state.override { State.Canceled.andLogStateChange() }
                 }
-                on { _: Event.DidFail, state: MachineState<State> ->
+                on<Event.DidFail> { event, state: MachineState<State> ->
                     when (state.snapshot) {
                         is State.RequestingVerification -> state.override { State.Initial.andLogStateChange() }
                         else -> state.override { State.Canceled.andLogStateChange() }
@@ -141,14 +127,11 @@ class VerifySelfSessionStateMachine @Inject constructor(
     }
 
     sealed interface State {
-        /** The initial state, before verification started. */
+        /** Let the user know that they need to get ready on their other session. */
         data object Initial : State
 
-        /** Let the user know that they need to get ready on their other session. */
-        data object UseAnotherDevice : State
-
         /** Waiting for verification acceptance. */
-        data object RequestingVerification : State
+        data class RequestingVerification(val verificationRequest: VerificationRequest.Outgoing) : State
 
         /** Verification request accepted. Waiting for start. */
         data object VerificationRequestAccepted : State
@@ -167,22 +150,18 @@ class VerifySelfSessionStateMachine @Inject constructor(
             data class Replying(override val data: SessionVerificationData, val accept: Boolean) : Verifying(data)
         }
 
-        /** The verification is being canceled. */
-        data object Canceling : State
-
         /** The verification has been canceled, remotely or locally. */
         data object Canceled : State
 
         /** Verification successful. */
         data object Completed : State
+
+        data object Exit : State
     }
 
     sealed interface Event {
-        /** User wants to use another session. */
-        data object UseAnotherDevice : Event
-
         /** Request verification. */
-        data object RequestVerification : Event
+        data class RequestVerification(val verificationRequest: VerificationRequest.Outgoing) : Event
 
         /** The current verification request has been accepted. */
         data object DidAcceptVerificationRequest : Event
@@ -217,4 +196,9 @@ class VerifySelfSessionStateMachine @Inject constructor(
         /** Reset the verification flow to the initial state. */
         data object Reset : Event
     }
+}
+
+sealed interface VerificationType {
+    data object CurrentSession : VerificationType
+    data object User : VerificationType
 }

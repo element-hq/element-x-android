@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
     implementation(projects.features.analytics.api)
+    implementation(projects.features.logout.api)
     implementation(projects.features.securebackup.api)
     implementation(projects.features.verifysession.api)
     implementation(projects.services.analytics.api)
@@ -37,6 +38,7 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
     implementation(projects.services.toolbox.api)
+    implementation(projects.appconfig)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
