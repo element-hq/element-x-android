@@ -8,7 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -28,22 +28,22 @@ class LiveMediaTimelineTest {
 
     @Test
     fun `getTimeline returns the timeline provided by the room, then from cache`() = runTest {
-        val mediaTimelineResult = lambdaRecorder<EventId?, Result<Timeline>> {
+        val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
         val room = FakeMatrixRoom(
-            mediaTimelineResult = mediaTimelineResult,
+            createTimelineResult = createTimelineResult,
         )
         val sut = createLiveMediaTimeline(
             room = room,
         )
         val timeline = sut.getTimeline()
         assertThat(timeline.isSuccess).isTrue()
-        mediaTimelineResult.assertions().isCalledOnce().with(value(null))
+        createTimelineResult.assertions().isCalledOnce().with(value(CreateTimelineParams.MediaOnly))
         val timeline2 = sut.getTimeline()
         assertThat(timeline2.isSuccess).isTrue()
         // No called another time
-        mediaTimelineResult.assertions().isCalledOnce()
+        createTimelineResult.assertions().isCalledOnce()
     }
 
     private fun createLiveMediaTimeline(

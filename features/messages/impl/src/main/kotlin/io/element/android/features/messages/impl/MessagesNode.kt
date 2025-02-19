@@ -89,7 +89,7 @@ class MessagesNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onRoomDetailsClick()
-        fun onEventClick(event: TimelineItem.Event): Boolean
+        fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData)
@@ -120,12 +120,12 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onRoomDetailsClick() }
     }
 
-    private fun onEventClick(event: TimelineItem.Event): Boolean {
+    private fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
         // Note: cannot use `callbacks.all { it.onEventClick(event) }` because:
         // - if callbacks is empty, it will return true and we want to return false.
         // - if a callback returns false, the other callback will not be invoked.
         return callbacks.takeIf { it.isNotEmpty() }
-            ?.map { it.onEventClick(event) }
+            ?.map { it.onEventClick(isLive, event) }
             ?.all { it }
             .orFalse()
     }

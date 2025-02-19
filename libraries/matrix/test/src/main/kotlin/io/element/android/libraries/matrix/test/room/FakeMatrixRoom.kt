@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -138,9 +139,7 @@ class FakeMatrixRoom(
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
-    private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
-    private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
-    private val mediaTimelineResult: (EventId?) -> Result<Timeline> = { lambdaError() },
+    private val createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
@@ -220,16 +219,10 @@ class FakeMatrixRoom(
         _syncUpdateFlow.tryEmit(_syncUpdateFlow.value + 1)
     }
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
-        timelineFocusedOnEventResult(eventId)
-    }
-
-    override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
-        pinnedEventsTimelineResult()
-    }
-
-    override suspend fun mediaTimeline(eventId: EventId?): Result<Timeline> = simulateLongTask {
-        mediaTimelineResult(eventId)
+    override suspend fun createTimeline(
+        createTimelineParams: CreateTimelineParams,
+    ): Result<Timeline> = simulateLongTask {
+        createTimelineResult(createTimelineParams)
     }
 
     override suspend fun subscribeToSync() {

@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -214,80 +215,81 @@ class RustMatrixRoom(
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.timelineWithConfiguration(
-                configuration = TimelineConfiguration(
-                    focus = TimelineFocus.Event(
-                        eventId = eventId.value,
-                        numContextEvents = 50u,
-                    ),
-                    allowedMessageTypes = AllowedMessageTypes.All,
-                    internalIdPrefix = "focus_$eventId",
-                    dateDividerMode = DateDividerMode.DAILY,
-                )
-            ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
-            }
-        }.mapFailure {
-            it.toFocusEventException()
-        }.onFailure {
-            if (it is CancellationException) {
-                throw it
-            }
-        }
-    }
-
-    override suspend fun pinnedEventsTimeline(): Result<Timeline> = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.timelineWithConfiguration(
-                configuration = TimelineConfiguration(
-                    focus = TimelineFocus.PinnedEvents(
-                        maxEventsToLoad = 100u,
-                        maxConcurrentRequests = 10u,
-                    ),
-                    allowedMessageTypes = AllowedMessageTypes.All,
-                    internalIdPrefix = "pinned_events",
-                    dateDividerMode = DateDividerMode.DAILY,
-                )
-            ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
-            }
-        }.onFailure {
-            if (it is CancellationException) {
-                throw it
-            }
-        }
-    }
-
-    override suspend fun mediaTimeline(
-        eventId: EventId?,
+    override suspend fun createTimeline(
+        createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
-        val focus = if (eventId != null) {
-            TimelineFocus.Event(
-                eventId = eventId.value,
+        val focus = when (createTimelineParams) {
+            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
+                maxEventsToLoad = 100u,
+                maxConcurrentRequests = 10u,
+            )
+            is CreateTimelineParams.MediaOnly -> TimelineFocus.Live
+            is CreateTimelineParams.Focused -> TimelineFocus.Event(
+                eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
             )
-        } else {
-            TimelineFocus.Live
+            is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
+                eventId = createTimelineParams.focusedEventId.value,
+                numContextEvents = 50u,
+            )
         }
+
+        val allowedMessageTypes = when (createTimelineParams) {
+            is CreateTimelineParams.MediaOnly,
+            is CreateTimelineParams.MediaOnlyFocused -> AllowedMessageTypes.Only(
+                types = listOf(
+                    RoomMessageEventMessageType.FILE,
+                    RoomMessageEventMessageType.IMAGE,
+                    RoomMessageEventMessageType.VIDEO,
+                    RoomMessageEventMessageType.AUDIO,
+                )
+            )
+            is CreateTimelineParams.Focused,
+            CreateTimelineParams.PinnedOnly -> AllowedMessageTypes.All
+        }
+
+        val internalIdPrefix = when (createTimelineParams) {
+            is CreateTimelineParams.PinnedOnly -> "pinned_events"
+            is CreateTimelineParams.Focused -> "focus_${createTimelineParams.focusedEventId}"
+            is CreateTimelineParams.MediaOnly -> "MediaGallery_"
+            is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
+        }
+
+        // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
+        // but there is no way to exclude data separator at the moment.
+        val dateDividerMode = when (createTimelineParams) {
+            is CreateTimelineParams.MediaOnly,
+            is CreateTimelineParams.MediaOnlyFocused -> DateDividerMode.MONTHLY
+            is CreateTimelineParams.Focused,
+            CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
+        }
+
         runCatching {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
                     focus = focus,
-                    allowedMessageTypes = AllowedMessageTypes.Only(
-                        types = listOf(
-                            RoomMessageEventMessageType.FILE,
-                            RoomMessageEventMessageType.IMAGE,
-                            RoomMessageEventMessageType.VIDEO,
-                            RoomMessageEventMessageType.AUDIO,
-                        )
-                    ),
-                    internalIdPrefix = "MediaGallery_",
-                    dateDividerMode = DateDividerMode.MONTHLY,
+                    allowedMessageTypes = allowedMessageTypes,
+                    internalIdPrefix = internalIdPrefix,
+                    dateDividerMode = dateDividerMode,
                 )
             ).let { inner ->
-                createTimeline(inner, mode = if (eventId != null) Timeline.Mode.FOCUSED_ON_EVENT else Timeline.Mode.MEDIA)
+                val mode = when (createTimelineParams) {
+                    is CreateTimelineParams.Focused -> Timeline.Mode.FOCUSED_ON_EVENT
+                    is CreateTimelineParams.MediaOnly -> Timeline.Mode.MEDIA
+                    is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FOCUSED_ON_EVENT
+                    CreateTimelineParams.PinnedOnly -> Timeline.Mode.PINNED_EVENTS
+                }
+                createTimeline(
+                    timeline = inner,
+                    mode = mode,
+                )
+            }
+        }.mapFailure {
+            when (createTimelineParams) {
+                is CreateTimelineParams.Focused,
+                is CreateTimelineParams.MediaOnlyFocused -> it.toFocusEventException()
+                CreateTimelineParams.MediaOnly,
+                CreateTimelineParams.PinnedOnly -> it
             }
         }.onFailure {
             if (it is CancellationException) {

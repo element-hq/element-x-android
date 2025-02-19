@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.api
 
+import android.os.Parcelable
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -14,6 +15,8 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import kotlinx.parcelize.Parcelize
 
 interface MediaViewerEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
@@ -39,9 +42,14 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
         val canShowInfo: Boolean,
     ) : NodeInputs
 
-    enum class MediaViewerMode {
-        SingleMedia,
-        TimelineImagesAndVideos,
-        TimelineFilesAndAudios,
+    sealed interface MediaViewerMode : Parcelable {
+        @Parcelize
+        data object SingleMedia : MediaViewerMode
+
+        @Parcelize
+        data class TimelineImagesAndVideos(val timelineMode: Timeline.Mode) : MediaViewerMode
+
+        @Parcelize
+        data class TimelineFilesAndAudios(val timelineMode: Timeline.Mode) : MediaViewerMode
     }
 }

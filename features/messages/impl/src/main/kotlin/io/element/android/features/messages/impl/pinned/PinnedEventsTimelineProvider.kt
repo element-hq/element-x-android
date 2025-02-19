@@ -14,6 +14,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -104,7 +105,7 @@ class PinnedEventsTimelineProvider @Inject constructor(
             is AsyncData.Uninitialized, is AsyncData.Failure -> {
                 timelineStateFlow.emit(AsyncData.Loading())
                 withContext(dispatchers.io) {
-                    room.pinnedEventsTimeline()
+                    room.createTimeline(CreateTimelineParams.PinnedOnly)
                 }
                     .fold(
                         { timelineStateFlow.emit(AsyncData.Success(it)) },
