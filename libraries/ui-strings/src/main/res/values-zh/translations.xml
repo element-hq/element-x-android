@@ -127,6 +127,8 @@
   <string name="action_view_source">"查看源码"</string>
   <string name="action_yes">"是"</string>
   <string name="action_yes_try_again">"是的，再试一次"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"您的服务器现在支持更快的新协议。现在登出并重新登录以进行升级。现在这样做可以帮助您避免在以后删除旧协议时被强制登出。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"有可用升级"</string>
   <string name="common_about">"关于"</string>
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
   <string name="common_adding_caption">"添加标题"</string>
@@ -190,6 +192,7 @@
   <string name="common_message_removed">"消息已移除"</string>
   <string name="common_modern">"现代"</string>
   <string name="common_mute">"静音"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
   <string name="common_no_room_name">"无聊天室名"</string>
   <string name="common_offline">"离线"</string>

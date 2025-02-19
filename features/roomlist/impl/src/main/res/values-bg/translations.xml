@@ -9,6 +9,7 @@
   <string name="screen_roomlist_a11y_create_message">"Създаване на нов разговор или стая"</string>
   <string name="screen_roomlist_empty_message">"Започнете, като изпратите съобщение на някого."</string>
   <string name="screen_roomlist_empty_title">"Все още няма чатове."</string>
+  <string name="screen_roomlist_filter_invites">"Покани"</string>
   <string name="screen_roomlist_filter_low_priority">"Нисък приоритет"</string>
   <string name="screen_roomlist_filter_people">"Хора"</string>
   <string name="screen_roomlist_filter_rooms">"Стаи"</string>

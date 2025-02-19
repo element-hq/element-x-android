@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Çıkış yapmak istediğinize emin misiniz?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Oturumu kapat"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Oturumu kapat"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Oturum kapatılıyor…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Son oturumunuzdan çıkmak üzeresiniz. Şimdi çıkış yaparsanız, şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Yedeklemeyi kapattınız"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Çevrimdışı olduğunuzda anahtarlarınız hala yedekleniyordu. Oturumu kapatmadan önce anahtarlarınızın yedeklenebilmesi için yeniden bağlanın."</string>
+  <string name="screen_signout_key_backup_offline_title">"Anahtarlarınız hala yedekleniyor"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Lütfen oturumu kapatmadan önce bunun tamamlanmasını bekleyin."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Anahtarlarınız hala yedekleniyor"</string>
+  <string name="screen_signout_preference_item">"Oturumu kapat"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Son oturumunuzdan çıkmak üzeresiniz. Şimdi çıkış yaparsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz."</string>
+  <string name="screen_signout_recovery_disabled_title">"Kurtarma ayarlanmadı"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Son oturumunuzdan çıkmak üzeresiniz. Şimdi oturumu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedebilirsiniz."</string>
+  <string name="screen_signout_save_recovery_key_title">"Kurtarma anahtarınızı kaydettiniz mi?"</string>
+</resources>

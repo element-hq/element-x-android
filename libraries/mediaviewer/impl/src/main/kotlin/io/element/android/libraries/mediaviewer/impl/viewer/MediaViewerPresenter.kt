@@ -204,8 +204,8 @@ class MediaViewerPresenter @AssistedInject constructor(
     private fun showNoMoreItemsSnackbar() {
         val messageResId = when (inputs.mode) {
             MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-            MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
-            MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+            is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
+            is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
         }
         val message = SnackbarMessage(messageResId)
         snackbarDispatcher.post(message)

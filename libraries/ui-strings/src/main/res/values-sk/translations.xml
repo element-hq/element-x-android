@@ -131,6 +131,8 @@
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="action_yes_try_again">"Áno, skúsiť to znova"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Aktualizácia je k dispozícii"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_adding_caption">"Pridáva sa titulok"</string>
@@ -196,6 +198,7 @@ Dôvod: %1$s."</string>
   <string name="common_message_removed">"Správa odstránená"</string>
   <string name="common_modern">"Moderné"</string>
   <string name="common_mute">"Stlmiť"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_no_room_name">"Žiadny názov miestnosti"</string>
   <string name="common_offline">"Offline"</string>
@@ -274,6 +277,7 @@ Dôvod: %1$s."</string>
   <string name="common_verified">"Overené"</string>
   <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="common_verify_identity">"Overiť totožnosť"</string>
+  <string name="common_verify_user">"Overiť používateľa"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
@@ -282,6 +286,7 @@ Dôvod: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Zdá sa, že totožnosť používateľa %1$s sa zmenila.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Zdá sa, že identita %2$s používateľa %1$s sa zmenila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Overená totožnosť používateľa %1$s sa zmenila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Overená identita používateľa %1$s %2$s sa zmenila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušiť overenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
@@ -300,6 +305,7 @@ Dôvod: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
+  <string name="error_network_or_server_issue">"Môže to byť spôsobené problémami so sieťou alebo serverom."</string>
   <string name="error_room_address_already_exists">"Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti"</string>
   <string name="error_room_address_invalid_symbols">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
@@ -343,7 +349,7 @@ Dôvod: %1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítava sa správa…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobraziť všetko"</string>
   <string name="screen_room_title">"Konverzácia"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Žiadosť o vstup odoslaná"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Žiadosť o pripojenie bola odoslaná"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>

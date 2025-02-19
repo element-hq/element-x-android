@@ -113,6 +113,7 @@
   <string name="action_take_photo">"Ta bilde"</string>
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
   <string name="common_adding_caption">"Legger til bildetekst"</string>
@@ -145,6 +146,7 @@
   <string name="common_failed">"Mislyktes"</string>
   <string name="common_favourite">"Favoritt"</string>
   <string name="common_file">"Fil"</string>
+  <string name="common_file_saved_on_disk_android">"Fil lagret i Nedlastinger"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bilde"</string>
   <string name="common_in_reply_to">"Som svar på %1$s"</string>
@@ -220,6 +222,7 @@
   <string name="common_text">"Tekst"</string>
   <string name="common_thread">"Tråd"</string>
   <string name="common_topic">"Emne"</string>
+  <string name="common_topic_placeholder">"Hva er dette rommet for?"</string>
   <string name="common_unable_to_decrypt">"Kan ikke dekryptere"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har ikke tilgang til denne meldingen"</string>
   <string name="common_unable_to_decrypt_verification_violation">"Avsenderens verifiserte identitet er endret"</string>
@@ -254,6 +257,10 @@
   <string name="invite_friends_rich_title">"🔐️ Bli med meg på %1$s"</string>
   <string name="invite_friends_text">"Hei, snakk med meg på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle media for opplasting, vennligst prøv igjen."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Opplasting av media mislyktes, vennligst prøv igjen."</string>
+  <string name="screen_room_error_failed_processing_media">"Kunne ikke behandle media for opplasting, vennligst prøv igjen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brukerdetaljer"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Åpne i Google Maps"</string>

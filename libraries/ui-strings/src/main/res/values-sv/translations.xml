@@ -32,6 +32,7 @@
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
   <string name="action_accept">"Godkänn"</string>
+  <string name="action_add_caption">"Lägg till bildtext"</string>
   <string name="action_add_to_timeline">"Lägg till i tidslinjen"</string>
   <string name="action_back">"Tillbaka"</string>
   <string name="action_call">"Ring"</string>
@@ -45,8 +46,10 @@
   <string name="action_confirm_password">"Bekräfta lösenord"</string>
   <string name="action_continue">"Fortsätt"</string>
   <string name="action_copy">"Kopiera"</string>
+  <string name="action_copy_caption">"Kopiera bildtext"</string>
   <string name="action_copy_link">"Kopiera länk"</string>
   <string name="action_copy_link_to_message">"Kopiera länk till meddelande"</string>
+  <string name="action_copy_text">"Kopiera text"</string>
   <string name="action_create">"Skapa"</string>
   <string name="action_create_a_room">"Skapa ett rum"</string>
   <string name="action_deactivate">"Inaktivera"</string>
@@ -57,6 +60,7 @@
   <string name="action_discard">"Kassera"</string>
   <string name="action_done">"Klar"</string>
   <string name="action_edit">"Redigera"</string>
+  <string name="action_edit_caption">"Redigera bildtext"</string>
   <string name="action_edit_poll">"Redigera omröstning"</string>
   <string name="action_enable">"Aktivera"</string>
   <string name="action_end_poll">"Avsluta omröstning"</string>
@@ -91,6 +95,8 @@
   <string name="action_react">"Reagera"</string>
   <string name="action_reject">"Avvisa"</string>
   <string name="action_remove">"Ta bort"</string>
+  <string name="action_remove_caption">"Ta bort bildtext"</string>
+  <string name="action_remove_message">"Ta bort meddelande"</string>
   <string name="action_reply">"Svara"</string>
   <string name="action_reply_in_thread">"Svara i tråd"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
@@ -121,8 +127,12 @@
   <string name="action_view_in_timeline">"Visa i tidslinjen"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="action_yes_try_again">"Ja, försök igen"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Uppgradering tillgänglig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Policy för godtagbar användning"</string>
+  <string name="common_adding_caption">"Lägga till bildtext"</string>
   <string name="common_advanced_settings">"Avancerade inställningar"</string>
   <string name="common_analytics">"Analysdata"</string>
   <string name="common_appearance">"Utseende"</string>
@@ -141,9 +151,12 @@
   <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
   <string name="common_do_not_show_this_again">"Visa inte detta igen"</string>
+  <string name="common_downloading">"Laddar ner"</string>
   <string name="common_edited_suffix">"(redigerad)"</string>
   <string name="common_editing">"Redigerar"</string>
+  <string name="common_editing_caption">"Redigera bildtext"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption">"Kryptering"</string>
   <string name="common_encryption_enabled">"Kryptering aktiverad"</string>
   <string name="common_enter_your_pin">"Ange din PIN-kod"</string>
   <string name="common_error">"Fel"</string>
@@ -157,6 +170,7 @@ Anledning:%1$s."</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_saved_on_disk_android">"Fil sparad i Download"</string>
   <string name="common_forward_message">"Vidarebefordra meddelande"</string>
+  <string name="common_frequently_used">"Används ofta"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
   <string name="common_in_reply_to">"Som svar på %1$s"</string>
@@ -237,11 +251,14 @@ Anledning:%1$s."</string>
   <string name="common_topic">"Ämne"</string>
   <string name="common_topic_placeholder">"Vad handlar det här rummet om?"</string>
   <string name="common_unable_to_decrypt">"Kan inte avkryptera"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Skickad från en osäker enhet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har inte tillgång till det här meddelandet"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Avsändarens verifierade identitet har ändrats"</string>
   <string name="common_unable_to_invite_message">"Inbjudan kunde inte skickas till en eller flera användare."</string>
   <string name="common_unable_to_invite_title">"Kunde inte skicka inbjudningar"</string>
   <string name="common_unlock">"Lås upp"</string>
   <string name="common_unmute">"Avtysta"</string>
+  <string name="common_unsupported_call">"Samtal som inte stöds"</string>
   <string name="common_unsupported_event">"Händelse som inte stöds"</string>
   <string name="common_username">"Användarnamn"</string>
   <string name="common_verification_cancelled">"Verifiering avbruten"</string>
@@ -249,6 +266,7 @@ Anledning:%1$s."</string>
   <string name="common_verification_failed">"Verifiering misslyckades"</string>
   <string name="common_verified">"Verifierad"</string>
   <string name="common_verify_device">"Verifiera enheten"</string>
+  <string name="common_verify_identity">"Verifiera identitet"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Röstmeddelande"</string>
   <string name="common_waiting">"Väntar …"</string>
@@ -273,6 +291,8 @@ Anledning:%1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
   <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s är inte behörig att komma åt din mikrofon. Aktivera åtkomst för att spela in ett röstmeddelande."</string>
+  <string name="error_room_address_already_exists">"Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn"</string>
+  <string name="error_room_address_invalid_symbols">"Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
   <string name="error_unknown">"Tyvärr, ett fel uppstod"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten."</string>
@@ -286,6 +306,7 @@ Anledning:%1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tryck på ett meddelande och välj ”%1$s” för att inkludera det här."</string>
@@ -312,6 +333,7 @@ Anledning:%1$s."</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Visa alla"</string>
   <string name="screen_room_title">"Chatt"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Begäran om att gå med skickad"</string>
   <string name="screen_share_location_title">"Dela plats"</string>
   <string name="screen_share_my_location_action">"Dela min plats"</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>
@@ -324,4 +346,8 @@ Anledning:%1$s."</string>
   <string name="screen_view_location_title">"Plats"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sv"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiska meddelanden är inte tillgängliga på den här enheten"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har inte tillgång till det här meddelandet"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Det gick inte att dekryptera meddelandet"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Det här meddelandet blockerades antingen för att du inte verifierade din enhet eller för att avsändaren måste verifiera din identitet."</string>
 </resources>

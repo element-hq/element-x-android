@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_action">"Kirjaudu Ulos &amp; Päivitä"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Palvelimesi tukee nyt uutta, nopeampaa protokollaa. Kirjaudu ulos ja takaisin sisään päivittääksesi nyt. Jos teet tämän nyt, voit välttää pakotetun uloskirjautumisen, kun vanha protokolla poistetaan myöhemmin."</string>
-  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Kotipalvelimesi ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Päivitys saatavilla"</string>
   <string name="banner_set_up_recovery_content">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, mikäli menetät pääsyn kaikkiin laitteisiisi."</string>
   <string name="banner_set_up_recovery_submit">"Ota palautus käyttöön"</string>
   <string name="banner_set_up_recovery_title">"Ota palautus käyttöön tilisi suojaamiseksi"</string>

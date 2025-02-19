@@ -55,6 +55,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
+import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
@@ -97,6 +98,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -109,7 +111,7 @@ fun MessagesView(
     state: MessagesState,
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
-    onEventContentClick: (event: TimelineItem.Event) -> Boolean,
+    onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -140,7 +142,7 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
-        val hideKeyboard = onEventContentClick(event)
+        val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
             localView.hideKeyboard()
         }
@@ -425,13 +427,20 @@ private fun MessagesViewComposerBottomSheetContents(
                     onLinkClick = onLinkClick,
                 )
             }
-            MessageComposerView(
-                state = state.composerState,
-                voiceMessageState = state.voiceMessageComposerState,
-                subcomposing = subcomposing,
-                enableVoiceMessages = state.enableVoiceMessages,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            val verificationViolation = state.roomMemberIdentityStateChanges.firstOrNull {
+                it.identityState == IdentityState.VerificationViolation
+            }
+            if (verificationViolation != null) {
+                DisabledComposerView(modifier = Modifier.fillMaxWidth())
+            } else {
+                MessageComposerView(
+                    state = state.composerState,
+                    voiceMessageState = state.voiceMessageComposerState,
+                    subcomposing = subcomposing,
+                    enableVoiceMessages = state.enableVoiceMessages,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     } else {
         CantSendMessageBanner()
@@ -535,7 +544,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         state = state,
         onBackClick = {},
         onRoomDetailsClick = {},
-        onEventContentClick = { false },
+        onEventContentClick = { _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},

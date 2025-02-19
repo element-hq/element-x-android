@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Mostrar senha"</string>
   <string name="a11y_start_call">"Iniciar chamada"</string>
   <string name="a11y_user_menu">"Menu de utilizador"</string>
+  <string name="a11y_view_details">"Ver detalhes"</string>
   <string name="a11y_voice_message_record">"Gravar mensagem de voz."</string>
   <string name="a11y_voice_message_stop_recording">"Parar gravação"</string>
   <string name="action_accept">"Aceitar"</string>
@@ -127,6 +128,9 @@
   <string name="action_view_in_timeline">"Ver na cronologia"</string>
   <string name="action_view_source">"Ver fonte"</string>
   <string name="action_yes">"Sim"</string>
+  <string name="action_yes_try_again">"Sim, tentar novamente"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"O teu servidor suporta agora um protocolo novo e mais rápido. Termina a sessão e volta a iniciar sessão para atualizar agora. Se o fizeres agora, evitarás um fim de sessão forçado quando o protocolo antigo for removido mais tarde."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Atualização disponível"</string>
   <string name="common_about">"Sobre"</string>
   <string name="common_acceptable_use_policy">"Política de utilização aceitável"</string>
   <string name="common_adding_caption">"A adicionar legenda"</string>
@@ -148,12 +152,13 @@
   <string name="common_device_id">"ID do dispositivo"</string>
   <string name="common_direct_chat">"Conversa direta"</string>
   <string name="common_do_not_show_this_again">"Não mostrar novamente"</string>
+  <string name="common_download_failed">"Descarga falhada"</string>
   <string name="common_downloading">"A descarregar"</string>
   <string name="common_edited_suffix">"(editada)"</string>
   <string name="common_editing">"A editar"</string>
   <string name="common_editing_caption">"A editar legenda"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
-  <string name="common_encryption">"Encriptação"</string>
+  <string name="common_encryption">"Cifragem"</string>
   <string name="common_encryption_enabled">"Cifragem ativada"</string>
   <string name="common_enter_your_pin">"Introduz o teu PIN"</string>
   <string name="common_error">"Erro"</string>
@@ -165,6 +170,8 @@ Razão: %1$s."</string>
   <string name="common_favourite">"Marcar como favorita"</string>
   <string name="common_favourited">"Favoritas"</string>
   <string name="common_file">"Ficheiro"</string>
+  <string name="common_file_deleted">"Ficheiro eliminado"</string>
+  <string name="common_file_saved">"Ficheiro guardado"</string>
   <string name="common_file_saved_on_disk_android">"Ficheiro guardado nas Transferências"</string>
   <string name="common_forward_message">"Reencaminhar mensagem"</string>
   <string name="common_frequently_used">"Frequentemente utilizado"</string>
@@ -177,6 +184,7 @@ Razão: %1$s."</string>
   <string name="common_light">"Claro"</string>
   <string name="common_link_copied_to_clipboard">"Ligação copiada para a área de transferência"</string>
   <string name="common_loading">"A carregar…"</string>
+  <string name="common_loading_more">"A carregar mais…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membros"</item>
@@ -187,6 +195,7 @@ Razão: %1$s."</string>
   <string name="common_message_removed">"Mensagem removida"</string>
   <string name="common_modern">"Moderno"</string>
   <string name="common_mute">"Silenciar"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Sem resultados"</string>
   <string name="common_no_room_name">"Sala sem nome"</string>
   <string name="common_offline">"Desligado"</string>
@@ -264,6 +273,7 @@ Razão: %1$s."</string>
   <string name="common_verified">"Verificado"</string>
   <string name="common_verify_device">"Verificar o dispositivo"</string>
   <string name="common_verify_identity">"Verifica a identidade"</string>
+  <string name="common_verify_user">"Verificar utilizador"</string>
   <string name="common_video">"Vídeo"</string>
   <string name="common_voice_message">"Mensagem de voz"</string>
   <string name="common_waiting">"A aguardar…"</string>
@@ -272,6 +282,9 @@ Razão: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"A identidade de %1$s parece ter mudado. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s (username: %2$s ) aparenta ter mudado. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"A identidade verificada de %1$s foi alterada."</string>
+  <string name="crypto_identity_change_verification_violation_new">"A identidade verificada de %1$s %2$s foi alterada. %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Retirar verificação"</string>
   <string name="dialog_title_confirmation">"Confirmação"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
@@ -288,6 +301,7 @@ Razão: %1$s."</string>
   <string name="error_missing_location_auth_android">"A %1$s não tem permissão para aceder à tua localização. Podes ativar o acesso nas Definições."</string>
   <string name="error_missing_location_rationale_android">"A %1$s não tem permissão para aceder à tua localização. Continua para ativares o acesso."</string>
   <string name="error_missing_microphone_voice_rationale_android">"A %1$s não tem permissão para aceder ao teu microfone. Permite o acesso para gravar uma mensagem de voz."</string>
+  <string name="error_network_or_server_issue">"Isto pode dever-se a problemas na rede ou no servidor."</string>
   <string name="error_room_address_already_exists">"Este endereço de sala já existe, tente editar o campo de endereço da sala ou altere o nome da sala"</string>
   <string name="error_room_address_invalid_symbols">"Alguns caracteres não são permitidos. Apenas letras, dígitos e os seguintes símbolos são suportados! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
@@ -344,6 +358,8 @@ Razão: %1$s."</string>
   <string name="settings_version_number">"Versão: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"pt"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"O histórico de mensagens não está disponível neste dispositivo"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"É necessário verificares este dispositivos para acederes a mensagens antigas"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Não tens acesso a esta mensagem"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossível decifrar mensagem"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Esta mensagem foi bloqueada ou porque ainda não verificaste este dispositivo ou porque o remetente necessita de verificar a tua identidade."</string>
 </resources>

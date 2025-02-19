@@ -31,7 +31,7 @@
   <string name="screen_session_verification_request_footer">"Συνέχισε μόνο εάν ξεκίνησες εσύ αυτήν την επαλήθευση."</string>
   <string name="screen_session_verification_request_subtitle">"Επαλήθευσε την άλλη συσκευή για να διατηρήσεις το ιστορικό μηνυμάτων σου ασφαλές."</string>
   <string name="screen_session_verification_request_success_subtitle">"Τώρα μπορείς να διαβάσεις ή να στείλεις μηνύματα με ασφάλεια στην άλλη συσκευή σου."</string>
-  <string name="screen_session_verification_request_success_title">"Η συσκευή επαληθεύτηκε"</string>
+  <string name="screen_session_verification_request_success_title">"Επαληθευμένη συσκευή"</string>
   <string name="screen_session_verification_request_title">"Ζητήθηκε επαλήθευση"</string>
   <string name="screen_session_verification_they_dont_match">"Δεν ταιριάζουν"</string>
   <string name="screen_session_verification_they_match">"Ταιριάζουν"</string>

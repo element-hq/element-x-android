@@ -14,7 +14,7 @@
     <item quantity="other">"%d ilmoitusta"</item>
   </plurals>
   <string name="notification_fallback_content">"Ilmoitus"</string>
-  <string name="notification_incoming_call">"Saapuva puhelu"</string>
+  <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
   <string name="notification_invitation_action_join">"Liity"</string>
   <string name="notification_invitation_action_reject">"Hylkää"</string>

@@ -7,7 +7,7 @@
   <string name="screen_create_room_private_option_title">"私有聊天室"</string>
   <string name="screen_create_room_public_option_description">"任何人都能找到此聊天室。
 你可以随时在聊天室设置中更改。"</string>
-  <string name="screen_create_room_public_option_title">"公开聊天室"</string>
+  <string name="screen_create_room_public_option_title">"公共聊天室"</string>
   <string name="screen_create_room_room_access_section_anyone_option_description">"任何人都可以加入此房间"</string>
   <string name="screen_create_room_room_access_section_anyone_option_title">"任何人"</string>
   <string name="screen_create_room_room_access_section_header">"房间访问权限"</string>

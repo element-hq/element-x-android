@@ -7,6 +7,7 @@
 
 package io.element.android.appnav.di
 
+import androidx.annotation.VisibleForTesting
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,9 +22,9 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
@@ -53,13 +54,28 @@ class SyncOrchestrator @AssistedInject constructor(
      *
      * Before observing the state, a first attempt at starting the sync service will happen if it's not already running.
      */
-    @OptIn(FlowPreview::class)
     fun start() {
         if (!started.compareAndSet(false, true)) {
             Timber.tag(tag).d("already started, exiting early")
             return
         }
 
+        coroutineScope.launch {
+            // Perform an initial sync if the sync service is not running, to check whether the homeserver is accessible
+            // Otherwise, if the device is offline the sync service will never start and the SyncState will be Idle, not Offline
+            Timber.tag(tag).d("performing initial sync attempt")
+            syncService.startSync()
+
+            // Wait until the sync service is not idle, either it will be running or in error/offline state
+            syncService.syncState.first { it != SyncState.Idle }
+
+            observeStates()
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun observeStates() = coroutineScope.launch {
         Timber.tag(tag).d("start observing the app and network state")
 
         combine(
@@ -76,7 +92,7 @@ class SyncOrchestrator @AssistedInject constructor(
             Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
             if (syncState == SyncState.Running && !isAppActive) {
                 SyncStateAction.StopSync
-            } else if (syncState != SyncState.Running && isAppActive && isNetworkAvailable) {
+            } else if (syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
                 SyncStateAction.StartSync
             } else {
                 SyncStateAction.NoOp
@@ -87,7 +103,10 @@ class SyncOrchestrator @AssistedInject constructor(
                 // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
                 if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
             }
-            .onEach { action ->
+            .onCompletion {
+                Timber.tag(tag).d("has been stopped")
+            }
+            .collect { action ->
                 when (action) {
                     SyncStateAction.StartSync -> {
                         syncService.startSync()
@@ -98,10 +117,6 @@ class SyncOrchestrator @AssistedInject constructor(
                     SyncStateAction.NoOp -> Unit
                 }
             }
-            .onCompletion {
-                Timber.tag(tag).d("has been stopped")
-            }
-            .launchIn(coroutineScope)
     }
 }
 

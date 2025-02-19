@@ -102,7 +102,7 @@
   <string name="screen_room_notification_settings_error_restoring_default">"恢复默认模式失败，请重试。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"设置模式失败，请重试。"</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"服务器在加密聊天室中不支持此选项，无法在此聊天室收到通知。"</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"所有消息"</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"全部消息"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"仅限提及和关键词"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"在这个聊天室，通知我："</string>
   <string name="screen_room_roles_and_permissions_admins">"管理员"</string>

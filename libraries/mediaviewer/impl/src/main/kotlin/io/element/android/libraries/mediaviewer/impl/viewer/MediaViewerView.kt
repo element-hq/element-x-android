@@ -81,6 +81,7 @@ import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaVie
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
+import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
@@ -297,7 +298,7 @@ private fun MediaViewerPage(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 val zoomableState = rememberZoomableState(
-                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, overzoomEffect = OverzoomEffect.NoLimits)
                 )
                 val localMediaViewState = rememberLocalMediaViewState(zoomableState)
                 val showThumbnail = !localMediaViewState.isReady

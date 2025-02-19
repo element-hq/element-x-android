@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Seçenek ekle"</string>
+  <string name="screen_create_poll_anonymous_desc">"Sonuçları yalnızca anket bittikten sonra göster"</string>
+  <string name="screen_create_poll_anonymous_headline">"Oyları gizle"</string>
+  <string name="screen_create_poll_answer_hint">"Seçenek %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Değişiklikleriniz kaydedilmedi. Geri dönmek istediğinden emin misin?"</string>
+  <string name="screen_create_poll_question_desc">"Soru veya konu"</string>
+  <string name="screen_create_poll_question_hint">"Anket ne hakkında?"</string>
+  <string name="screen_create_poll_title">"Anket Oluştur"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Bu anketi silmek istediğinize emin misiniz?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Anketi Sil"</string>
+  <string name="screen_edit_poll_title">"Anketi düzenle"</string>
+  <string name="screen_polls_history_empty_ongoing">"Devam eden bir anket bulamadım."</string>
+  <string name="screen_polls_history_empty_past">"Geçmiş herhangi bir anket bulamıyorum."</string>
+  <string name="screen_polls_history_filter_ongoing">"Devam ediyor"</string>
+  <string name="screen_polls_history_filter_past">"Geçmiş"</string>
+  <string name="screen_polls_history_title">"Anketler"</string>
+</resources>

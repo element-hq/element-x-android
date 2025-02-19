@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_action">"Uitloggen &amp; Upgraden"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Je server ondersteunt nu een nieuw, sneller protocol. Log uit en log opnieuw in om nu te upgraden. Als je dit nu doet, voorkom je dat je geforceerd uitlogt wordt wanneer het oude protocol later wordt verwijderd."</string>
-  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Je homeserver ondersteunt het oude protocol niet meer. Log uit en log opnieuw in om de app te blijven gebruiken."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade beschikbaar"</string>
   <string name="banner_set_up_recovery_submit">"Herstelmogelijkheid instellen"</string>
   <string name="confirm_recovery_key_banner_message">"Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up."</string>
   <string name="confirm_recovery_key_banner_title">"Voer je herstelsleutel in"</string>

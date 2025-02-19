@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Uygulamanın kamerayı kullanmasına izin vermek için lütfen sistem ayarlarından izin verin."</string>
+  <string name="dialog_permission_generic">"Lütfen sistem ayarlarından izin verin."</string>
+  <string name="dialog_permission_microphone">"Uygulamanın mikrofonu kullanmasına izin vermek için lütfen sistem ayarlarından izin verin."</string>
+  <string name="dialog_permission_notification">"Uygulamanın bildirimleri görüntülemesine izin vermek için lütfen sistem ayarlarından izin verin."</string>
+</resources>

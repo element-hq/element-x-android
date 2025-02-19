@@ -20,7 +20,6 @@ data class DeveloperSettingsState(
     val rageshakeState: RageshakePreferencesState,
     val clearCacheAction: AsyncAction<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
-    val isSimpleSlidingSyncEnabled: Boolean,
     val hideImagesAndVideos: Boolean,
     val tracingLogLevel: AsyncData<LogLevelItem>,
     val eventSink: (DeveloperSettingsEvents) -> Unit

@@ -112,6 +112,7 @@
   <string name="action_view_in_timeline">"دیدن در خط زمانی"</string>
   <string name="action_view_source">"دیدن منبع"</string>
   <string name="action_yes">"بله"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"ارتقا موجود است"</string>
   <string name="common_about">"درباره"</string>
   <string name="common_acceptable_use_policy">"سیاست استفادهٔ پذیرفتنی"</string>
   <string name="common_advanced_settings">"تنظیمات پیش‌رفته"</string>

@@ -129,6 +129,8 @@
   <string name="action_view_source">"Vedi codice sorgente"</string>
   <string name="action_yes">"Sì"</string>
   <string name="action_yes_try_again">"Sì, riprova"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Il tuo server ora supporta un nuovo protocollo più veloce. Esci e rientra per effettuare l\'aggiornamento. Se lo fai ora, eviterai una disconnessione forzata quando il vecchio protocollo verrà rimosso in seguito."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Aggiornamento disponibile"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
   <string name="common_adding_caption">"Aggiunta didascalia"</string>

@@ -129,6 +129,8 @@
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_yes_try_again">"Yes, try again"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_adding_caption">"Adding caption"</string>
@@ -280,6 +282,7 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity appears to have changed. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity appears to have changed. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s’s verified identity has changed."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s verified identity has changed.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>

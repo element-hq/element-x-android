@@ -109,21 +109,12 @@ interface MatrixRoom : Closeable {
     val liveTimeline: Timeline
 
     /**
-     * Create a new timeline, focused on the provided Event.
-     * Should not be used directly, see `TimelineController` to manage the various timelines.
+     * Create a new timeline.
+     * @param createTimelineParams contains parameters about how to filter the timeline. Will also configure the date separators.
      */
-    suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
-
-    /**
-     * Create a new timeline for the pinned events of the room.
-     */
-    suspend fun pinnedEventsTimeline(): Result<Timeline>
-
-    /**
-     * Create a new timeline for the media events of the room.
-     * @param eventId The event to focus on, if any.
-     */
-    suspend fun mediaTimeline(eventId: EventId?): Result<Timeline>
+    suspend fun createTimeline(
+        createTimelineParams: CreateTimelineParams,
+    ): Result<Timeline>
 
     fun destroy()
 

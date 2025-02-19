@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Saada kutse"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"Kas sa soovid alustada vestlust kasutajaga %1$s?"</string>
+  <string name="screen_bottom_sheet_create_dm_title">"Kas saadame kutse?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
 </resources>

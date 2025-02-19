@@ -72,7 +72,7 @@ class SessionKtTest {
     @Test
     fun `toSessionData copy the sliding sync url if present`() {
         val result = aRustSession(
-            proxy = SlidingSyncVersion.Proxy("proxyUrl")
+            proxy = SlidingSyncVersion.NATIVE
         ).toSessionData(
             isTokenValid = true,
             loginType = LoginType.PASSWORD,
@@ -80,7 +80,7 @@ class SessionKtTest {
             sessionPaths = SessionPaths(File("/a/file"), File("/a/cache")),
             homeserverUrl = A_HOMESERVER_URL_2,
         )
-        assertThat(result.slidingSyncProxy).isEqualTo("proxyUrl")
+        assertThat(result.slidingSyncProxy).isNull()
     }
 
     @Test

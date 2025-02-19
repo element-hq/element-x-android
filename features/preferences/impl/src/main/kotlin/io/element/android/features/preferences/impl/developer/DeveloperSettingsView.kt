@@ -60,14 +60,6 @@ fun DeveloperSettingsView(
                      state.eventSink(DeveloperSettingsEvents.SetTracingLogLevel(logLevel))
                 }
             )
-            PreferenceSwitch(
-                title = "Enable Simplified Sliding Sync",
-                subtitle = "When toggled you'll be logged out of the app and will need to log in again.",
-                isChecked = state.isSimpleSlidingSyncEnabled,
-                onCheckedChange = {
-                    state.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(it))
-                }
-            )
         }
         PreferenceCategory(title = "Showkase") {
             PreferenceText(

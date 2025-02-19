@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Áno, zrušiť"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Ste si istí, že chcete zrušiť svoju žiadosť o vstup do tejto miestnosti?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Zrušiť žiadosť o pripojenie"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Áno, odmietnuť a zablokovať"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ste si istí, že chcete odmietnuť pozvanie na vstup do tejto miestnosti? To tiež zabráni tomu, aby vás %1$s kontaktoval/a alebo vás pozval/a do miestností."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Odmietnuť pozvánku a zablokovať"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Odmietnuť a zablokovať"</string>
   <string name="screen_join_room_fail_message">"Pripojenie do miestnosti zlyhalo."</string>
   <string name="screen_join_room_fail_reason">"Táto miestnosť je buď len pre pozvaných, alebo môžu existovať obmedzenia na prístup na úrovni priestoru."</string>
   <string name="screen_join_room_forget_action">"Zabudnúť túto miestnosť"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Správa (voliteľné)"</string>
   <string name="screen_join_room_knock_sent_description">"Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti."</string>
   <string name="screen_join_room_knock_sent_title">"Žiadosť o pripojenie bola odoslaná"</string>
+  <string name="screen_join_room_loading_alert_message">"Nepodarilo sa zobraziť ukážku miestnosti. Môže to byť spôsobené problémami so sieťou alebo serverom."</string>
+  <string name="screen_join_room_loading_alert_title">"Ukážku tejto miestnosti sa nepodarilo zobraziť"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s zatiaľ nepodporuje priestory. K priestorom môžete pristupovať na webe."</string>
   <string name="screen_join_room_space_not_supported_title">"Priestory zatiaľ nie sú podporované"</string>
   <string name="screen_join_room_subtitle_knock">"Kliknite na tlačidlo nižšie a správca miestnosti bude informovaný. Po schválení sa budete môcť pripojiť ku konverzácii."</string>
