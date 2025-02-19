@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,7 +122,7 @@ fun VerifySelfSessionView(
                 )
             },
             header = {
-                VerifySelfSessionHeader(step = step)
+                VerifySelfSessionHeader(step = step, request = state.request)
             },
             footer = {
                 VerifySelfSessionBottomMenu(
@@ -135,6 +136,7 @@ fun VerifySelfSessionView(
         ) {
             VerifySelfSessionContent(
                 flowState = step,
+                request = state.request,
                 onLearnMoreClick = onLearnMoreClick,
             )
         }
@@ -157,25 +159,42 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-private fun VerifySelfSessionHeader(step: Step) {
+private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Outgoing) {
+
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
         is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
-        Step.UseAnotherDevice -> BigIcon.Style.Default(CompoundIcons.Devices())
-        Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.Devices())
+        Step.UseAnotherDevice -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> BigIcon.Style.Default(CompoundIcons.Devices())
+            is VerificationRequest.Outgoing.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
+        }
+        Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Loading
         Step.Canceled -> BigIcon.Style.AlertSolid
-        Step.Ready, is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
+        Step.Ready -> BigIcon.Style.Default(CompoundIcons.Reaction())
         Step.Completed -> BigIcon.Style.SuccessSolid
+        is Step.Verifying -> {
+            if (step.state is AsyncData.Loading<Unit>) {
+                BigIcon.Style.Loading
+            } else {
+                BigIcon.Style.Default(CompoundIcons.Reaction())
+            }
+        }
         is Step.Skipped -> return
     }
     val titleTextId = when (step) {
         Step.Loading -> error("Should not happen")
         is Step.Initial -> R.string.screen_identity_confirmation_title
-        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_title
-        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_title
+        Step.UseAnotherDevice -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_use_another_device_title
+            is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_user_initiator_title
+        }
+        Step.AwaitingOtherDeviceResponse -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_waiting_another_device_title
+            is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_waiting_other_user_title
+        }
         Step.Canceled -> CommonStrings.common_verification_failed
         Step.Ready -> R.string.screen_session_verification_compare_emojis_title
-        Step.Completed -> R.string.screen_identity_confirmed_title
+        Step.Completed -> CommonStrings.common_verification_complete
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
@@ -185,14 +204,23 @@ private fun VerifySelfSessionHeader(step: Step) {
     val subtitleTextId = when (step) {
         Step.Loading -> error("Should not happen")
         is Step.Initial -> R.string.screen_identity_confirmation_subtitle
-        Step.UseAnotherDevice -> R.string.screen_session_verification_use_another_device_subtitle
-        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_another_device_subtitle
+        Step.UseAnotherDevice -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_use_another_device_subtitle
+            is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_user_initiator_subtitle
+        }
+        Step.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_subtitle
         Step.Canceled -> R.string.screen_session_verification_failed_subtitle
         Step.Ready -> R.string.screen_session_verification_ready_subtitle
-        Step.Completed -> R.string.screen_identity_confirmed_subtitle
+        Step.Completed -> when (request) {
+            is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_identity_confirmed_subtitle
+            is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_complete_user_subtitle
+        }
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
-            is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
+            is SessionVerificationData.Emojis -> when (request) {
+                is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_compare_emojis_subtitle
+                is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_compare_emojis_user_subtitle
+            }
         }
         is Step.Skipped -> return
     }
@@ -207,11 +235,18 @@ private fun VerifySelfSessionHeader(step: Step) {
 @Composable
 private fun VerifySelfSessionContent(
     flowState: Step,
+    request: VerificationRequest.Outgoing,
     onLearnMoreClick: () -> Unit,
 ) {
     when (flowState) {
         is Step.Initial -> {
             ContentInitial(onLearnMoreClick)
+        }
+        is Step.UseAnotherDevice -> {
+            when (request) {
+                is VerificationRequest.Outgoing.CurrentSession -> Unit
+                is VerificationRequest.Outgoing.User -> ContentInitial(onLearnMoreClick)
+            }
         }
         is Step.Verifying -> {
             VerificationContentVerifying(flowState.data)
@@ -308,39 +343,20 @@ private fun VerifySelfSessionBottomMenu(
                 )
             }
         }
-        is Step.AwaitingOtherDeviceResponse -> {
-            VerificationBottomMenu {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_identity_waiting_on_other_device),
-                    onClick = {},
-                    showProgress = true,
-                    enabled = false,
-                )
-                InvisibleButton()
-            }
-        }
+        is Step.AwaitingOtherDeviceResponse -> Unit
         is Step.Verifying -> {
-            val positiveButtonTitle = if (isVerifying) {
-                stringResource(R.string.screen_session_verification_positive_button_verifying_ongoing)
+            if (isVerifying) {
+                // Show nothing
             } else {
-                stringResource(R.string.screen_session_verification_they_match)
-            }
-            VerificationBottomMenu {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = positiveButtonTitle,
-                    showProgress = isVerifying,
-                    enabled = !isVerifying,
-                    onClick = {
-                        if (!isVerifying) {
+                VerificationBottomMenu {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_they_match),
+                        onClick = {
                             eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
-                        }
-                    },
-                )
-                if (isVerifying) {
-                    InvisibleButton()
-                } else {
+                        },
+                    )
+
                     TextButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_session_verification_they_dont_match),

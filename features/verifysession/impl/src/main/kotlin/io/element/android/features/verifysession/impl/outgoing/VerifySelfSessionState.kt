@@ -12,10 +12,12 @@ import androidx.compose.runtime.Stable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 @Immutable
 data class VerifySelfSessionState(
     val step: Step,
+    val request: VerificationRequest.Outgoing,
     val signOutAction: AsyncAction<String?>,
     val displaySkipButton: Boolean,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,

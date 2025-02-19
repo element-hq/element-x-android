@@ -282,7 +282,7 @@ class IncomingVerificationPresenterTest {
         service: SessionVerificationService = FakeSessionVerificationService(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
     ) = IncomingVerificationPresenter(
-        sessionVerificationRequestDetails = sessionVerificationRequestDetails,
+        verificationRequest = sessionVerificationRequestDetails,
         navigator = navigator,
         sessionVerificationService = service,
         stateMachine = IncomingVerificationStateMachine(service),

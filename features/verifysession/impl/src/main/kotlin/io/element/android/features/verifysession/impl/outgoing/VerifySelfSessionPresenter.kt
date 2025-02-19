@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,53 +46,79 @@ import io.element.android.features.verifysession.impl.outgoing.VerifySelfSession
 
 class VerifySelfSessionPresenter @AssistedInject constructor(
     @Assisted private val showDeviceVerifiedScreen: Boolean,
+    @Assisted private val verificationRequest: VerificationRequest.Outgoing,
+    @Assisted private val navigator: Navigator,
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
-    private val stateMachine: VerifySelfSessionStateMachine,
     private val buildMeta: BuildMeta,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val logoutUseCase: LogoutUseCase,
 ) : Presenter<VerifySelfSessionState> {
     @AssistedFactory
     interface Factory {
-        fun create(showDeviceVerifiedScreen: Boolean): VerifySelfSessionPresenter
+        fun create(
+            verificationRequest: VerificationRequest.Outgoing,
+            showDeviceVerifiedScreen: Boolean,
+            navigator: Navigator,
+        ): VerifySelfSessionPresenter
     }
+
+    interface Navigator {
+        fun pop()
+    }
+
+    private val returnToRootWhenCancelled = verificationRequest is VerificationRequest.Outgoing.CurrentSession
+
+    private val stateMachine = VerifySelfSessionStateMachine(
+        sessionVerificationService = sessionVerificationService,
+        encryptionService = encryptionService,
+        verificationType = when (verificationRequest) {
+            is VerificationRequest.Outgoing.CurrentSession -> VerificationType.CurrentSession
+            is VerificationRequest.Outgoing.User -> VerificationType.User
+        }
+    )
 
     @Composable
     override fun present(): VerifySelfSessionState {
         val coroutineScope = rememberCoroutineScope()
+        val stateAndDispatch = stateMachine.rememberStateAndDispatch()
+
         LaunchedEffect(Unit) {
             // Force reset, just in case the service was left in a broken state
             sessionVerificationService.reset(true)
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val stateAndDispatch = stateMachine.rememberStateAndDispatch()
-        val skipVerification by sessionPreferencesStore.isSessionVerificationSkipped().collectAsState(initial = false)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         val signOutAction = remember {
             mutableStateOf<AsyncAction<String?>>(AsyncAction.Uninitialized)
         }
         val step by remember {
             derivedStateOf {
-                if (skipVerification) {
-                    VerifySelfSessionState.Step.Skipped
-                } else {
-                    when (sessionVerifiedStatus) {
-                        SessionVerifiedStatus.Unknown -> VerifySelfSessionState.Step.Loading
-                        SessionVerifiedStatus.NotVerified -> {
-                            stateAndDispatch.state.value.toVerificationStep(
-                                canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
-                            )
-                        }
-                        SessionVerifiedStatus.Verified -> {
-                            if (stateAndDispatch.state.value != StateMachineState.Initial || showDeviceVerifiedScreen) {
-                                // The user has verified the session, we need to show the success screen
-                                VerifySelfSessionState.Step.Completed
-                            } else {
-                                // Automatic verification, which can happen on freshly created account, in this case, skip the screen
-                                VerifySelfSessionState.Step.Skipped
+                when (verificationRequest) {
+                    is VerificationRequest.Outgoing.CurrentSession -> {
+                        when (sessionVerifiedStatus) {
+                            SessionVerifiedStatus.Unknown -> VerifySelfSessionState.Step.Loading
+                            SessionVerifiedStatus.NotVerified -> {
+                                stateAndDispatch.state.value.toVerificationStep(
+                                    canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
+                                )
+                            }
+                            SessionVerifiedStatus.Verified -> {
+                                if (stateAndDispatch.state.value != StateMachineState.Initial || showDeviceVerifiedScreen) {
+                                    // The user has verified the session, we need to show the success screen
+                                    VerifySelfSessionState.Step.Completed
+                                } else {
+                                    // Automatic verification, which can happen on freshly created account, in this case, skip the screen
+                                    VerifySelfSessionState.Step.Skipped
+                                }
                             }
                         }
+                    }
+                    is VerificationRequest.Outgoing.User -> when (stateAndDispatch.state.value) {
+                        StateMachineState.Initial -> VerifySelfSessionState.Step.UseAnotherDevice
+                        else -> stateAndDispatch.state.value.toVerificationStep(
+                            canEnterRecoveryKey = false,
+                        )
                     }
                 }
             }
@@ -99,17 +126,29 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
         // Start this after observing state machine
         LaunchedEffect(Unit) {
             observeVerificationService()
+
+            if (verificationRequest is VerificationRequest.Outgoing.User) {
+                stateMachine.dispatch(StateMachineEvent.UseAnotherDevice)
+            }
+        }
+
+        val currentStateMachineState = stateAndDispatch.state.value
+        LaunchedEffect(currentStateMachineState) {
+            if (currentStateMachineState is VerifySelfSessionStateMachine.State.Exit) {
+                stateMachine.dispatch(StateMachineEvent.Reset)
+                navigator.pop()
+            }
         }
 
         fun handleEvents(event: VerifySelfSessionViewEvents) {
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 VerifySelfSessionViewEvents.UseAnotherDevice -> stateAndDispatch.dispatchAction(StateMachineEvent.UseAnotherDevice)
-                VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification)
+                VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification(verificationRequest))
                 VerifySelfSessionViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
                 VerifySelfSessionViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
                 VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
-                VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
+                VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel(returnToRootWhenCancelled))
                 VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
                 VerifySelfSessionViewEvents.SignOut -> coroutineScope.signOut(signOutAction)
                 VerifySelfSessionViewEvents.SkipVerification -> coroutineScope.launch {
@@ -119,6 +158,7 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
         }
         return VerifySelfSessionState(
             step = step,
+            request = verificationRequest,
             signOutAction = signOutAction.value,
             displaySkipButton = buildMeta.isDebuggable,
             eventSink = ::handleEvents,
@@ -138,10 +178,8 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
             VerifySelfSessionStateMachine.State.UseAnotherDevice -> {
                 VerifySelfSessionState.Step.UseAnotherDevice
             }
-            StateMachineState.RequestingVerification,
-            StateMachineState.StartingSasVerification,
-            StateMachineState.SasVerificationStarted,
-            StateMachineState.Canceling -> {
+            is StateMachineState.RequestingVerification,
+            StateMachineState.SasVerificationStarted -> {
                 VerifySelfSessionState.Step.AwaitingOtherDeviceResponse
             }
 
@@ -149,7 +187,7 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
                 VerifySelfSessionState.Step.Ready
             }
 
-            StateMachineState.Canceled -> {
+            is StateMachineState.Canceled -> {
                 VerifySelfSessionState.Step.Canceled
             }
 
@@ -163,6 +201,10 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
 
             StateMachineState.Completed -> {
                 VerifySelfSessionState.Step.Completed
+            }
+
+            StateMachineState.Exit -> {
+                VerifySelfSessionState.Step.Skipped
             }
         }
 
@@ -185,10 +227,10 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
                         stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidAcceptChallenge)
                     }
                     VerificationFlowState.DidCancel -> {
-                        stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidCancel)
+                        stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidCancel(returnToRootWhenCancelled))
                     }
                     VerificationFlowState.DidFail -> {
-                        stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidFail)
+                        stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidFail(returnToRootWhenCancelled))
                     }
                 }
             }

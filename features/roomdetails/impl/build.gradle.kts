@@ -51,6 +51,7 @@ dependencies {
     implementation(projects.features.messages.api)
     implementation(projects.features.roomcall.api)
     implementation(projects.features.knockrequests.api)
+    implementation(projects.features.verifysession.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

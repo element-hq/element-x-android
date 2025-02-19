@@ -26,6 +26,7 @@ import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -71,7 +72,10 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.Root -> {
                 verifySessionEntryPoint.nodeBuilder(this, buildContext)
-                    .params(VerifySessionEntryPoint.Params(navTarget.showDeviceVerifiedScreen))
+                    .params(VerifySessionEntryPoint.Params(
+                        showDeviceVerifiedScreen = navTarget.showDeviceVerifiedScreen,
+                        verificationRequest = VerificationRequest.Outgoing.CurrentSession,
+                    ))
                     .callback(object : VerifySessionEntryPoint.Callback {
                         override fun onEnterRecoveryKey() {
                             backstack.push(NavTarget.EnterRecoveryKey)

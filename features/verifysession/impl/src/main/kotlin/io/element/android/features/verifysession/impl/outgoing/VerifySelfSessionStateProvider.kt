@@ -13,16 +13,28 @@ import io.element.android.features.verifysession.impl.ui.aDecimalsSessionVerific
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
             aVerifySelfSessionState(displaySkipButton = true),
             aVerifySelfSessionState(
-                step = Step.AwaitingOtherDeviceResponse
+                step = Step.AwaitingOtherDeviceResponse,
+                request = anOutgoingSessionVerificationRequest(),
             ),
             aVerifySelfSessionState(
-                step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized)
+                step = Step.AwaitingOtherDeviceResponse,
+                request = anOutgoingUserVerificationRequest(),
+            ),
+            aVerifySelfSessionState(
+                step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized),
+                request = anOutgoingSessionVerificationRequest(),
+            ),
+            aVerifySelfSessionState(
+                step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized),
+                request = anOutgoingUserVerificationRequest(),
             ),
             aVerifySelfSessionState(
                 step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
@@ -45,6 +57,12 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState(
                 step = Step.Completed,
                 displaySkipButton = true,
+                request = anOutgoingSessionVerificationRequest(),
+            ),
+            aVerifySelfSessionState(
+                step = Step.Completed,
+                displaySkipButton = true,
+                request = anOutgoingUserVerificationRequest(),
             ),
             aVerifySelfSessionState(
                 signOutAction = AsyncAction.Loading,
@@ -57,19 +75,29 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 step = Step.Skipped
             ),
             aVerifySelfSessionState(
-                step = Step.UseAnotherDevice
+                step = Step.UseAnotherDevice,
+                request = anOutgoingSessionVerificationRequest(),
+            ),
+            aVerifySelfSessionState(
+                step = Step.UseAnotherDevice,
+                request = anOutgoingUserVerificationRequest(),
             ),
             // Add other state here
         )
 }
 
+internal fun anOutgoingUserVerificationRequest() = VerificationRequest.Outgoing.User(userId = UserId("@alice:example.com"))
+internal fun anOutgoingSessionVerificationRequest() = VerificationRequest.Outgoing.CurrentSession
+
 internal fun aVerifySelfSessionState(
     step: Step = Step.Initial(canEnterRecoveryKey = false),
+    request: VerificationRequest.Outgoing = anOutgoingSessionVerificationRequest(),
     signOutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
     displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(
     step = step,
+    request = request,
     displaySkipButton = displaySkipButton,
     eventSink = eventSink,
     signOutAction = signOutAction,

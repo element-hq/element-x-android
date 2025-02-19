@@ -34,8 +34,16 @@ class VerifySelfSessionNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
 
+    private val inputs = inputs<VerifySessionEntryPoint.Params>()
+
     private val presenter = presenterFactory.create(
-        showDeviceVerifiedScreen = inputs<VerifySessionEntryPoint.Params>().showDeviceVerifiedScreen,
+        showDeviceVerifiedScreen = inputs.showDeviceVerifiedScreen,
+        verificationRequest = inputs.verificationRequest,
+        navigator = object : VerifySelfSessionPresenter.Navigator {
+            override fun pop() {
+                callback.onDone()
+            }
+        }
     )
 
     private fun onLearnMoreClick(activity: Activity, dark: Boolean) {
