@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
+    implementation("io.github.hughns:element-call-embedded:1.1.33")
     api(projects.features.call.api)
 
     testImplementation(libs.coroutines.test)
