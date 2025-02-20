@@ -8,6 +8,7 @@
 package io.element.android.features.createroom.impl
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,9 +23,11 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.DefaultCreateRoomNavigator
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.createroom.impl.joinbyaddress.JoinRoomByAddressNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.OverlayView
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -50,10 +53,13 @@ class CreateRoomFlowNode @AssistedInject constructor(
         @Parcelize
         data object NewRoom : NavTarget
 
+        @Parcelize
+        data object JoinByAddress : NavTarget
     }
 
     private val navigator = DefaultCreateRoomNavigator(
         backstack = backstack,
+        overlay = overlay,
         openRoom = { roomIdOrAlias ->
             plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias) }
         }
@@ -67,11 +73,17 @@ class CreateRoomFlowNode @AssistedInject constructor(
             NavTarget.NewRoom -> {
                 createNode<ConfigureRoomFlowNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
+            NavTarget.JoinByAddress -> {
+                createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))
+            }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        Box(modifier = modifier) {
+            BackstackView()
+            OverlayView(transitionHandler = remember { JumpToEndTransitionHandler() })
+        }
     }
 }

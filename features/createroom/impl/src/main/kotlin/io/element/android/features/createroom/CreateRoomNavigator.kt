@@ -19,10 +19,13 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 interface CreateRoomNavigator : Plugin {
     fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias)
     fun onCreateNewRoom()
+    fun onShowJoinRoomByAddress()
+    fun onDismissJoinRoomByAddress()
 }
 
 class DefaultCreateRoomNavigator(
     private val backstack: BackStack<NavTarget>,
+    private val overlay: Overlay<NavTarget>,
     private val openRoom: (RoomIdOrAlias) -> Unit,
 ) : CreateRoomNavigator {
 
@@ -32,4 +35,11 @@ class DefaultCreateRoomNavigator(
         backstack.push(NavTarget.NewRoom)
     }
 
+    override fun onShowJoinRoomByAddress() {
+        overlay.show(NavTarget.JoinByAddress)
+    }
+
+    override fun onDismissJoinRoomByAddress() {
+        overlay.hide()
+    }
 }
