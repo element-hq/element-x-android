@@ -357,8 +357,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
-                    override fun onSuccess(roomId: RoomId) {
-                        backstack.replace(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias) {
+                        backstack.replace(NavTarget.Room(roomIdOrAlias))
                     }
                 }
 
