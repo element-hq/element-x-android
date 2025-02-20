@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +99,11 @@ private fun RoomAddressField(
                 "e.g. #room-name:matrix.org"
             }
         },
-        isError = addressState is RoomAddressState.Invalid,
+        validity = when (addressState) {
+            RoomAddressState.Unknown -> null
+            RoomAddressState.Invalid -> TextFieldValidity.Invalid
+            is RoomAddressState.Valid -> if (addressState.matchingRoomFound) TextFieldValidity.Valid else null
+        },
         onValueChange = onAddressChange,
         singleLine = true,
     )
