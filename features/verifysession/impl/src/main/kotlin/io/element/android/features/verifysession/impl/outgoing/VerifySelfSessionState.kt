@@ -9,7 +9,6 @@ package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
@@ -18,8 +17,6 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 data class VerifySelfSessionState(
     val step: Step,
     val request: VerificationRequest.Outgoing,
-    val signOutAction: AsyncAction<String?>,
-    val displaySkipButton: Boolean,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 ) {
     @Stable
@@ -27,13 +24,12 @@ data class VerifySelfSessionState(
         data object Loading : Step
 
         // FIXME canEnterRecoveryKey value is never read.
-        data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean = false) : Step
-        data object UseAnotherDevice : Step
+        data object Initial : Step
         data object Canceled : Step
         data object AwaitingOtherDeviceResponse : Step
         data object Ready : Step
         data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : Step
         data object Completed : Step
-        data object Skipped : Step
+        data object Exit : Step
     }
 }

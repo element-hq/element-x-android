@@ -24,6 +24,7 @@ android {
 setupAnvil()
 
 dependencies {
+    implementation(projects.appconfig)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

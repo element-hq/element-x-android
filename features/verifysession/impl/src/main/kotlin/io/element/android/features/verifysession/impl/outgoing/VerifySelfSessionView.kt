@@ -17,12 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -32,18 +28,15 @@ import io.element.android.features.verifysession.impl.R
 import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionState.Step
 import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
 import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
-import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.InvisibleButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -56,18 +49,15 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onLearnMoreClick: () -> Unit,
-    onEnterRecoveryKey: () -> Unit,
-    onResetKey: () -> Unit,
     onFinish: () -> Unit,
-    onSuccessLogout: (String?) -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val step = state.step
     fun cancelOrResetFlow() {
         when (step) {
-            is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
-            is Step.AwaitingOtherDeviceResponse,
-            Step.UseAnotherDevice,
+            is Step.AwaitingOtherDeviceResponse, is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            Step.Initial, Step.Completed -> onBack()
             Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
@@ -78,18 +68,11 @@ fun VerifySelfSessionView(
         }
     }
 
-    val latestOnFinish by rememberUpdatedState(newValue = onFinish)
-    LaunchedEffect(step, latestOnFinish) {
-        if (step is Step.Skipped) {
-            latestOnFinish()
-        }
-    }
     BackHandler {
         cancelOrResetFlow()
     }
 
-    if (step is Step.Loading ||
-        step is Step.Skipped) {
+    if (step is Step.Loading) {
         // Just display a loader in this case, to avoid UI glitch.
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -101,25 +84,7 @@ fun VerifySelfSessionView(
         HeaderFooterPage(
             modifier = modifier,
             topBar = {
-                TopAppBar(
-                    title = {},
-                    actions = {
-                        if (step !is Step.Completed &&
-                            state.displaySkipButton &&
-                            LocalInspectionMode.current.not()) {
-                            TextButton(
-                                text = stringResource(CommonStrings.action_skip),
-                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
-                            )
-                        }
-                        if (step is Step.Initial) {
-                            TextButton(
-                                text = stringResource(CommonStrings.action_signout),
-                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SignOut) }
-                            )
-                        }
-                    }
-                )
+                TopAppBar(title = {})
             },
             header = {
                 VerifySelfSessionHeader(step = step, request = state.request)
@@ -128,9 +93,7 @@ fun VerifySelfSessionView(
                 VerifySelfSessionBottomMenu(
                     screenState = state,
                     onCancelClick = ::cancelOrResetFlow,
-                    onEnterRecoveryKey = onEnterRecoveryKey,
                     onContinueClick = onFinish,
-                    onResetKey = onResetKey,
                 )
             }
         ) {
@@ -141,30 +104,13 @@ fun VerifySelfSessionView(
             )
         }
     }
-
-    when (state.signOutAction) {
-        AsyncAction.Loading -> {
-            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
-        }
-        is AsyncAction.Success -> {
-            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
-            LaunchedEffect(state) {
-                latestOnSuccessLogout(state.signOutAction.data)
-            }
-        }
-        is AsyncAction.Confirming,
-        is AsyncAction.Failure,
-        AsyncAction.Uninitialized -> Unit
-    }
 }
 
 @Composable
 private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Outgoing) {
-
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial -> BigIcon.Style.Default(CompoundIcons.LockSolid())
-        Step.UseAnotherDevice -> when (request) {
+        Step.Initial -> when (request) {
             is VerificationRequest.Outgoing.CurrentSession -> BigIcon.Style.Default(CompoundIcons.Devices())
             is VerificationRequest.Outgoing.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
         }
@@ -179,12 +125,11 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
                 BigIcon.Style.Default(CompoundIcons.Reaction())
             }
         }
-        is Step.Skipped -> return
+        is Step.Exit -> return
     }
     val titleTextId = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial -> R.string.screen_identity_confirmation_title
-        Step.UseAnotherDevice -> when (request) {
+        Step.Initial -> when (request) {
             is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_use_another_device_title
             is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_user_initiator_title
         }
@@ -199,12 +144,11 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
         }
-        is Step.Skipped -> return
+        is Step.Exit -> return
     }
     val subtitleTextId = when (step) {
         Step.Loading -> error("Should not happen")
-        is Step.Initial -> R.string.screen_identity_confirmation_subtitle
-        Step.UseAnotherDevice -> when (request) {
+        Step.Initial -> when (request) {
             is VerificationRequest.Outgoing.CurrentSession -> R.string.screen_session_verification_use_another_device_subtitle
             is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_user_initiator_subtitle
         }
@@ -222,7 +166,7 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
                 is VerificationRequest.Outgoing.User -> R.string.screen_session_verification_compare_emojis_user_subtitle
             }
         }
-        is Step.Skipped -> return
+        is Step.Exit -> return
     }
 
     PageTitle(
@@ -240,9 +184,6 @@ private fun VerifySelfSessionContent(
 ) {
     when (flowState) {
         is Step.Initial -> {
-            ContentInitial(onLearnMoreClick)
-        }
-        is Step.UseAnotherDevice -> {
             when (request) {
                 is VerificationRequest.Outgoing.CurrentSession -> Unit
                 is VerificationRequest.Outgoing.User -> ContentInitial(onLearnMoreClick)
@@ -276,8 +217,6 @@ private fun ContentInitial(
 @Composable
 private fun VerifySelfSessionBottomMenu(
     screenState: VerifySelfSessionState,
-    onEnterRecoveryKey: () -> Unit,
-    onResetKey: () -> Unit,
     onCancelClick: () -> Unit,
     onContinueClick: () -> Unit,
 ) {
@@ -289,27 +228,6 @@ private fun VerifySelfSessionBottomMenu(
     when (verificationViewState) {
         Step.Loading -> error("Should not happen")
         is Step.Initial -> {
-            VerificationBottomMenu {
-                if (verificationViewState.isLastDevice.not()) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = { eventSink(VerifySelfSessionViewEvents.UseAnotherDevice) },
-                    )
-                }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onClick = onEnterRecoveryKey,
-                )
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
-                    onClick = onResetKey,
-                )
-            }
-        }
-        is Step.UseAnotherDevice -> {
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -375,7 +293,7 @@ private fun VerifySelfSessionBottomMenu(
                 InvisibleButton()
             }
         }
-        is Step.Skipped -> return
+        is Step.Exit -> return
     }
 }
 
@@ -385,9 +303,7 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onLearnMoreClick = {},
-        onEnterRecoveryKey = {},
-        onResetKey = {},
         onFinish = {},
-        onSuccessLogout = {},
+        onBack = {},
     )
 }

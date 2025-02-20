@@ -134,7 +134,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDefau
     setContent {
         DefaultDirectLogoutView().Render(
             state,
-            onSuccessLogout = onSuccessLogout,
+            onSuccessLogoutAction = onSuccessLogout,
         )
     }
 }

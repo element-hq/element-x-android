@@ -32,6 +32,7 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
         implementation(projects.features.enterprise.api)
+        implementation(projects.libraries.androidutils)
         implementation(projects.libraries.architecture)
         implementation(projects.libraries.core)
         implementation(projects.libraries.preferences.api)

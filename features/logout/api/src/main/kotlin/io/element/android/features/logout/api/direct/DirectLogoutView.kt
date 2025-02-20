@@ -13,6 +13,7 @@ interface DirectLogoutView {
     @Composable
     fun Render(
         state: DirectLogoutState,
-        onSuccessLogout: (logoutUrlResult: String?) -> Unit
+        openLogoutUrlIfPresent: Boolean,
+        customOnSuccessLogout: (logoutUrlResult: String?) -> Unit,
     )
 }

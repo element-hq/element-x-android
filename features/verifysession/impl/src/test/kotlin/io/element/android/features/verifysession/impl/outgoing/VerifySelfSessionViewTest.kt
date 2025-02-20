@@ -215,7 +215,7 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Skipped,
+                    step = VerifySelfSessionState.Step.Exit,
                     displaySkipButton = true,
                     eventSink = EnsureNeverCalledWithParam(),
                 ),

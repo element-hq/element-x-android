@@ -122,14 +122,13 @@ private fun VerifyUserSection(
     state: UserProfileState,
     onVerifyClick: () -> Unit,
 ) {
-    // TODO: uncomment this
-//    if (state.isVerified.dataOrNull() == false) {
+    if (state.isVerified.dataOrNull() == false) {
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.common_verify_identity)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
             onClick = onVerifyClick,
         )
-//    }
+    }
 }
 
 @PreviewsDayNight

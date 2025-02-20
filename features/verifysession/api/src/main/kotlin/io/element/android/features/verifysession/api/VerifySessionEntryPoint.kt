@@ -29,8 +29,8 @@ interface VerifySessionEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onEnterRecoveryKey()
-        fun onResetKey()
+        fun onLearnMoreAboutEncryption()
+        fun onBack()
         fun onDone()
     }
 }

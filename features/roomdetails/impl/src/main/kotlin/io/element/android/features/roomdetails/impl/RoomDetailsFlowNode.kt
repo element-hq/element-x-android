@@ -9,6 +9,7 @@ package io.element.android.features.roomdetails.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -21,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
@@ -36,11 +38,13 @@ import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAnd
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.designsystem.utils.OpenUrlInTabView
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -319,12 +323,16 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 verifySessionEntryPoint.nodeBuilder(this, buildContext)
                     .params(params)
                     .callback(object : VerifySessionEntryPoint.Callback {
-                        override fun onEnterRecoveryKey() = Unit
-
-                        override fun onResetKey() = Unit
-
                         override fun onDone() {
                             backstack.pop()
+                        }
+
+                        override fun onBack() {
+                            backstack.pop()
+                        }
+
+                        override fun onLearnMoreAboutEncryption() {
+                            learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
                         }
                     })
                     .build()
@@ -332,8 +340,12 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         }
     }
 
+    private val learnMoreUrl = mutableStateOf<String?>(null)
+
     @Composable
     override fun View(modifier: Modifier) {
         BackstackWithOverlayBox(modifier)
+
+        OpenUrlInTabView(learnMoreUrl)
     }
 }
