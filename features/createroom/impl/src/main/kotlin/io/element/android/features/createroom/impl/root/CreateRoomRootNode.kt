@@ -55,6 +55,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             onOpenDM = {
                 navigator.onOpenRoom(it.toRoomIdOrAlias())
             },
+            onJoinByAddressClick = navigator::onShowJoinRoomByAddress,
             onInviteFriendsClick = { invitePeople(activity) }
         )
     }
