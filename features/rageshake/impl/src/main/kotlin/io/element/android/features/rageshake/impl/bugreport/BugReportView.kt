@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -90,7 +91,7 @@ fun BugReportView(
                         keyboardController?.hide()
                     }),
                     minLines = 3,
-                    isError = state.isDescriptionInError,
+                    validity = if(state.isDescriptionInError) TextFieldValidity.Invalid else null,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
