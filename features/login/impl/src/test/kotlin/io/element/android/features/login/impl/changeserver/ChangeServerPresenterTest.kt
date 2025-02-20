@@ -7,10 +7,8 @@
 
 package io.element.android.features.login.impl.changeserver
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
@@ -18,6 +16,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -28,13 +27,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createPresenter().test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
         }
@@ -43,13 +36,9 @@ class ChangeServerPresenterTest {
     @Test
     fun `present - change server ok`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService()
-        val presenter = ChangeServerPresenter(
-            authenticationService,
-            AccountProviderDataSource()
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createPresenter(
+            authenticationService = authenticationService,
+        ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             authenticationService.givenHomeserver(A_HOMESERVER)
@@ -63,14 +52,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server error`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
-        val presenter = ChangeServerPresenter(
-            authenticationService,
-            AccountProviderDataSource()
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createPresenter().test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
@@ -84,4 +66,12 @@ class ChangeServerPresenterTest {
             assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
+
+    private fun createPresenter(
+        authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
+        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+    ) = ChangeServerPresenter(
+        authenticationService = authenticationService,
+        accountProviderDataSource = accountProviderDataSource
+    )
 }
