@@ -22,6 +22,8 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
 
+    override fun defaultHomeserver() = null
+
     override fun semanticColorsLight(): SemanticColors = compoundColorsLight
 
     override fun semanticColorsDark(): SemanticColors = compoundColorsDark
