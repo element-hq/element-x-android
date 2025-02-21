@@ -118,7 +118,7 @@ class RustSessionVerificationService(
         currentVerificationRequest = VerificationRequest.Outgoing.CurrentSession
     }
 
-    override suspend fun requestUserVerification(userId: UserId) {
+    override suspend fun requestUserVerification(userId: UserId) = tryOrFail {
         initVerificationControllerIfNeeded()
         verificationController.requestUserVerification(userId.value)
         currentVerificationRequest = VerificationRequest.Outgoing.User(userId)
@@ -147,6 +147,7 @@ class RustSessionVerificationService(
     }
 
     override suspend fun acceptVerificationRequest() = tryOrFail {
+        Timber.d("Accepting incoming verification request")
         verificationController.acceptVerificationRequest()
     }
 

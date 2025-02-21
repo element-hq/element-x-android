@@ -40,22 +40,28 @@ class VerifySelfSessionStateMachine(
         spec {
             inState<State.Initial> {
                 on<Event.RequestVerification> { event, state ->
-                    when (event.verificationRequest) {
-                        is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestCurrentSessionVerification()
-                        is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(event.verificationRequest.userId)
-                    }
                     state.override { State.RequestingVerification(event.verificationRequest).andLogStateChange() }
                 }
             }
             inState<State.RequestingVerification> {
+                onEnterEffect { event ->
+                    when (event.verificationRequest) {
+                        is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestCurrentSessionVerification()
+                        is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(event.verificationRequest.userId)
+                    }
+                }
                 on<Event.DidAcceptVerificationRequest> { _, state ->
                     state.override { State.VerificationRequestAccepted.andLogStateChange() }
                 }
             }
-            inState<State.StartingSasVerification> {}
-            inState<State.VerificationRequestAccepted> {
-                onActionEffect<Event.StartSasVerification> { _, state ->
+            inState<State.StartingSasVerification> {
+                onEnterEffect {
                     sessionVerificationService.startVerification()
+                }
+            }
+            inState<State.VerificationRequestAccepted> {
+                on<Event.StartSasVerification> { _, state ->
+                    state.override { State.StartingSasVerification.andLogStateChange() }
                 }
             }
             inState<State.Canceled> {

@@ -73,11 +73,11 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -129,7 +129,11 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     private val verificationListener = object : SessionVerificationServiceListener {
         override fun onIncomingSessionRequest(verificationRequest: VerificationRequest.Incoming) {
-            backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
+            // Without this launch the rendering and actual state of this Appyx node's children gets out of sync, resulting in a crash.
+            // This might be because this method is called back from Rust in a background thread.
+            MainScope().launch {
+                backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
+            }
         }
     }
 
