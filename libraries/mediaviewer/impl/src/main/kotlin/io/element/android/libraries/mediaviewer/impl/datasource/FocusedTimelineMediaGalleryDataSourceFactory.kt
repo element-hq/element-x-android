@@ -18,6 +18,7 @@ interface FocusedTimelineMediaGalleryDataSourceFactory {
     fun createFor(
         eventId: EventId,
         mediaItem: MediaItem.Event,
+        onlyPinnedEvents: Boolean,
     ): MediaGalleryDataSource
 }
 
@@ -30,6 +31,7 @@ class DefaultFocusedTimelineMediaGalleryDataSourceFactory @Inject constructor(
     override fun createFor(
         eventId: EventId,
         mediaItem: MediaItem.Event,
+        onlyPinnedEvents: Boolean,
     ): MediaGalleryDataSource {
         return TimelineMediaGalleryDataSource(
             room = room,
@@ -37,6 +39,7 @@ class DefaultFocusedTimelineMediaGalleryDataSourceFactory @Inject constructor(
                 room = room,
                 eventId = eventId,
                 initialMediaItem = mediaItem,
+                onlyPinnedEvents = onlyPinnedEvents,
             ),
             timelineMediaItemsFactory = timelineMediaItemsFactory,
             mediaItemsPostProcessor = mediaItemsPostProcessor,

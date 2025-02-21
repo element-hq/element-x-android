@@ -71,6 +71,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -187,8 +188,11 @@ class MessagesFlowNode @AssistedInject constructor(
                         callbacks.forEach { it.onRoomDetailsClick() }
                     }
 
-                    override fun onEventClick(event: TimelineItem.Event): Boolean {
-                        return processEventClick(event)
+                    override fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
+                        return processEventClick(
+                            timelineMode = if (isLive) Timeline.Mode.LIVE else Timeline.Mode.FOCUSED_ON_EVENT,
+                            event = event,
+                        )
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
@@ -316,7 +320,10 @@ class MessagesFlowNode @AssistedInject constructor(
             NavTarget.PinnedMessagesList -> {
                 val callback = object : PinnedMessagesListNode.Callback {
                     override fun onEventClick(event: TimelineItem.Event) {
-                        processEventClick(event)
+                        processEventClick(
+                            timelineMode = Timeline.Mode.PINNED_EVENTS,
+                            event = event,
+                        )
                     }
 
                     override fun onUserDataClick(userId: UserId) {
@@ -358,11 +365,14 @@ class MessagesFlowNode @AssistedInject constructor(
         callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
     }
 
-    private fun processEventClick(event: TimelineItem.Event): Boolean {
+    private fun processEventClick(
+        timelineMode: Timeline.Mode,
+        event: TimelineItem.Event,
+    ): Boolean {
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
                 buildMediaViewerNavTarget(
-                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -374,7 +384,7 @@ class MessagesFlowNode @AssistedInject constructor(
                    if encrypted on certain bridges */
                 event.content.preferredMediaSource?.let { preferredMediaSource ->
                     buildMediaViewerNavTarget(
-                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
                         event = event,
                         content = event.content,
                         mediaSource = preferredMediaSource,
@@ -384,7 +394,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemVideoContent -> {
                 buildMediaViewerNavTarget(
-                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -393,7 +403,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemFileContent -> {
                 buildMediaViewerNavTarget(
-                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode),
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
@@ -402,7 +412,7 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemAudioContent -> {
                 buildMediaViewerNavTarget(
-                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+                    mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode),
                     event = event,
                     content = event.content,
                     mediaSource = event.content.mediaSource,
