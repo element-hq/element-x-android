@@ -56,9 +56,9 @@ fun VerifySelfSessionView(
     val step = state.step
     fun cancelOrResetFlow() {
         when (step) {
-            is Step.AwaitingOtherDeviceResponse, is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
             Step.Initial, Step.Completed -> onBack()
-            Step.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            Step.Ready, is Step.AwaitingOtherDeviceResponse -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
                     state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
