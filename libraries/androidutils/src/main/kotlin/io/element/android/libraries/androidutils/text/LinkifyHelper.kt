@@ -18,7 +18,6 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.isNotEmpty
 import kotlin.collections.iterator
-import kotlin.collections.orEmpty
 
 /**
  * Helper class to linkify text while preserving existing URL spans.
