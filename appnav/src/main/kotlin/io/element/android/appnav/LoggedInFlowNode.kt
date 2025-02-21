@@ -78,6 +78,8 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -85,6 +87,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
 import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -132,6 +135,12 @@ class LoggedInFlowNode @AssistedInject constructor(
             // Without this launch the rendering and actual state of this Appyx node's children gets out of sync, resulting in a crash.
             // This might be because this method is called back from Rust in a background thread.
             MainScope().launch {
+                // Wait until the app is in foreground to display the incoming verification request
+                appNavigationStateService.appNavigationState.first { it.isInForeground }
+
+                // Wait for the UI to be ready
+                delay(500.milliseconds)
+
                 backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
             }
         }
