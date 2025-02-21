@@ -38,7 +38,6 @@ import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAnd
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode

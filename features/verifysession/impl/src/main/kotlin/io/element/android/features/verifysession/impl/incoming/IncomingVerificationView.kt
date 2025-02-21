@@ -10,9 +10,7 @@ package io.element.android.features.verifysession.impl.incoming
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -33,10 +31,10 @@ import io.element.android.features.verifysession.impl.ui.VerificationUserProfile
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -63,6 +61,13 @@ fun IncomingVerificationView(
         topBar = {
             TopAppBar(
                 title = {},
+                navigationIcon = {
+                    when {
+                        step is Step.Initial && !step.isWaiting -> Unit
+                        step is Step.Completed -> Unit
+                        else -> BackButton(onClick = { state.eventSink(IncomingVerificationViewEvents.GoBack) })
+                    }
+                }
             )
         },
         header = {
@@ -93,7 +98,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
                 is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
             }
         }
-        is Step.Verifying -> if (step.isWaiting) { BigIcon.Style.Loading } else { BigIcon.Style.Default(CompoundIcons.LockSolid()) }
+        is Step.Verifying -> if (step.isWaiting) BigIcon.Style.Loading else BigIcon.Style.Default(CompoundIcons.LockSolid())
         Step.Completed -> BigIcon.Style.SuccessSolid
         Step.Failure -> BigIcon.Style.AlertSolid
     }
@@ -150,7 +155,6 @@ private fun ContentInitial(
     initialIncoming: Step.Initial,
     request: VerificationRequest.Incoming,
 ) {
-
     when (request) {
         is VerificationRequest.Incoming.OtherSession -> {
             Column(

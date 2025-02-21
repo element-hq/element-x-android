@@ -1,4 +1,5 @@
 import extension.setupAnvil
+import org.gradle.kotlin.dsl.test
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -14,6 +15,12 @@ plugins {
 
 android {
     namespace = "io.element.android.features.ftue.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -45,6 +52,9 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.analytics.noop)

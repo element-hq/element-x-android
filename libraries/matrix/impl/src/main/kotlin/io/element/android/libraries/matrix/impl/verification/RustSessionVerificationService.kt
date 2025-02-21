@@ -164,10 +164,6 @@ class RustSessionVerificationService(
         }
     }
 
-    override fun getCurrentVerificationRequest(): VerificationRequest? {
-        return currentVerificationRequest
-    }
-
     // region Delegate implementation
 
     // When verification attempt is accepted by the other device

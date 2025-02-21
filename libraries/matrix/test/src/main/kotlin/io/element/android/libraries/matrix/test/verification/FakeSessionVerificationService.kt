@@ -7,11 +7,12 @@
 
 package io.element.android.libraries.matrix.test.verification
 
-import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -20,13 +21,14 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService(
     initialSessionVerifiedStatus: SessionVerifiedStatus = SessionVerifiedStatus.Unknown,
-    private val requestVerificationLambda: () -> Unit = { lambdaError() },
+    private val requestCurrentSessionVerificationLambda: () -> Unit = { lambdaError() },
+    private val requestUserVerificationLambda: (UserId) -> Unit = { lambdaError() },
     private val cancelVerificationLambda: () -> Unit = { lambdaError() },
     private val approveVerificationLambda: () -> Unit = { lambdaError() },
     private val declineVerificationLambda: () -> Unit = { lambdaError() },
     private val startVerificationLambda: () -> Unit = { lambdaError() },
     private val resetLambda: (Boolean) -> Unit = { lambdaError() },
-    private val acknowledgeVerificationRequestLambda: (SessionVerificationRequestDetails) -> Unit = { lambdaError() },
+    private val acknowledgeVerificationRequestLambda: (VerificationRequest.Incoming) -> Unit = { lambdaError() },
     private val acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
 ) : SessionVerificationService {
     private val _sessionVerifiedStatus = MutableStateFlow(initialSessionVerifiedStatus)
@@ -38,7 +40,11 @@ class FakeSessionVerificationService(
     override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
     override suspend fun requestCurrentSessionVerification() {
-        requestVerificationLambda()
+        requestCurrentSessionVerificationLambda()
+    }
+
+    override suspend fun requestUserVerification(userId: UserId) {
+        requestUserVerificationLambda(userId)
     }
 
     override suspend fun cancelVerification() {
@@ -68,8 +74,8 @@ class FakeSessionVerificationService(
         this.listener = listener
     }
 
-    override suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) {
-        acknowledgeVerificationRequestLambda(details)
+    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) {
+        acknowledgeVerificationRequestLambda(verificationRequest)
     }
 
     override suspend fun acceptVerificationRequest() = simulateLongTask {

@@ -79,8 +79,6 @@ interface SessionVerificationService {
      * Accept the previously acknowledged verification request.
      */
     suspend fun acceptVerificationRequest()
-
-    fun getCurrentVerificationRequest(): VerificationRequest?
 }
 
 interface SessionVerificationServiceListener {
