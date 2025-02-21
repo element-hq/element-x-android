@@ -14,5 +14,6 @@ import com.bumble.appyx.core.node.Node
 interface OidcEntryPoint {
     fun canUseCustomTab(): Boolean
     fun openUrlInCustomTab(activity: Activity, darkTheme: Boolean, url: String)
+    fun openUrlInExternalApp(activity: Activity, url: String)
     fun createFallbackWebViewNode(parentNode: Node, buildContext: BuildContext, url: String): Node
 }
