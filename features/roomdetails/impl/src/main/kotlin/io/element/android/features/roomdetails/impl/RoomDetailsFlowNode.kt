@@ -177,6 +177,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.SecurityAndPrivacy)
                     }
 
+                    override fun openDmUserProfile(userId: UserId) {
+                        backstack.push(NavTarget.RoomMemberDetails(userId))
+                    }
+
                     override fun onJoinCall() {
                         val inputs = CallType.RoomCall(
                             sessionId = room.sessionId,

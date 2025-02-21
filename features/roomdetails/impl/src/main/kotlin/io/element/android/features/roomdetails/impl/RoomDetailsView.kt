@@ -70,6 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
@@ -101,6 +102,7 @@ fun RoomDetailsView(
     onPinnedMessagesClick: () -> Unit,
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
+    onProfileClick: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -179,10 +181,15 @@ fun RoomDetailsView(
                         state.eventSink(RoomDetailsEvent.SetFavorite(it))
                     }
                 )
+
                 if (state.canShowSecurityAndPrivacy) {
                     SecurityAndPrivacyItem(
                         onClick = onSecurityAndPrivacyClick
                     )
+                }
+
+                state.roomMemberDetailsState?.let { dmMemberDetails ->
+                    ProfileItem(onClick = { onProfileClick(dmMemberDetails.userId) })
                 }
             }
 
@@ -547,6 +554,17 @@ private fun FavoriteItem(
 }
 
 @Composable
+private fun ProfileItem(
+    onClick: () -> Unit,
+) {
+    PreferenceText(
+        icon = CompoundIcons.UserProfile(),
+        title = stringResource(id = R.string.screen_room_details_profile_row_title),
+        onClick = onClick,
+    )
+}
+
+@Composable
 private fun MembersItem(
     memberCount: Long,
     openRoomMemberList: () -> Unit,
@@ -655,5 +673,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onPinnedMessagesClick = {},
         onKnockRequestsClick = {},
         onSecurityAndPrivacyClick = {},
+        onProfileClick = {},
     )
 }
