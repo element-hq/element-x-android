@@ -28,7 +28,6 @@ class ChooseSelfVerificationModeNode @AssistedInject constructor(
     private val presenter: Presenter<ChooseSelfVerificationModeState>,
     private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onUseAnotherDevice()
         fun onUseRecoveryKey()

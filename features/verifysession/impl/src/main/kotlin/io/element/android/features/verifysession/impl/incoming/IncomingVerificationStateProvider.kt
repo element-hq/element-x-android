@@ -26,9 +26,15 @@ open class IncomingVerificationStateProvider : PreviewParameterProvider<Incoming
             anIncomingVerificationState(step = aStepInitial(isWaiting = true), verificationRequest = anIncomingSessionVerificationRequest()),
             anIncomingVerificationState(step = aStepInitial(isWaiting = true), verificationRequest = anIncomingUserVerificationRequest()),
             anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = false)),
-            anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = false), verificationRequest = anIncomingUserVerificationRequest()),
+            anIncomingVerificationState(
+                step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = false),
+                verificationRequest = anIncomingUserVerificationRequest()
+            ),
             anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = true)),
-            anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = true), verificationRequest = anIncomingUserVerificationRequest()),
+            anIncomingVerificationState(
+                step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = true),
+                verificationRequest = anIncomingUserVerificationRequest()
+            ),
             anIncomingVerificationState(step = Step.Verifying(data = aDecimalsSessionVerificationData(), isWaiting = false)),
             anIncomingVerificationState(step = Step.Completed),
             anIncomingVerificationState(step = Step.Completed, verificationRequest = anIncomingUserVerificationRequest()),
@@ -56,7 +62,7 @@ internal fun anIncomingSessionVerificationRequest() = VerificationRequest.Incomi
         ),
         flowId = FlowId("1234"),
         deviceId = DeviceId("ILAKNDNASDLK"),
-        firstSeenTimestamp = 1234567890,
+        firstSeenTimestamp = 0,
     )
 )
 
@@ -69,7 +75,7 @@ internal fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.
         ),
         flowId = FlowId("1234"),
         deviceId = DeviceId("ILAKNDNASDLK"),
-        firstSeenTimestamp = 1234567890,
+        firstSeenTimestamp = 0,
     )
 )
 

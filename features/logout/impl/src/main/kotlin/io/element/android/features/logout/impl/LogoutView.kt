@@ -7,6 +7,7 @@
 
 package io.element.android.features.logout.impl
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -45,7 +46,7 @@ fun LogoutView(
     state: LogoutState,
     onChangeRecoveryKeyClick: () -> Unit,
     onBackClick: () -> Unit,
-    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
+    onSuccessLogout: (activity: Activity, darkTheme: Boolean, logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
@@ -80,9 +81,7 @@ fun LogoutView(
         onDismissDialog = {
             eventSink(LogoutEvents.CloseDialogs)
         },
-        onSuccessLogout = {
-            onSuccessLogout(it)
-        },
+        onSuccessLogout = onSuccessLogout,
     )
 }
 
@@ -177,7 +176,7 @@ internal fun LogoutViewPreview(
     LogoutView(
         state,
         onChangeRecoveryKeyClick = {},
-        onSuccessLogout = {},
+        onSuccessLogout = { _, _, _ -> },
         onBackClick = {},
     )
 }

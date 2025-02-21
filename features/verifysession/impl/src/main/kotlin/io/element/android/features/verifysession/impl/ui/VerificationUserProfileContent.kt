@@ -34,13 +34,14 @@ fun VerificationUserProfileContent(
     userId: UserId,
     displayName: String?,
     avatarUrl: String?,
+    modifier: Modifier = Modifier,
 ) {
     val avatarData = remember(userId, displayName, avatarUrl) {
         AvatarData(id = userId.value, name = displayName, url = avatarUrl, size = AvatarSize.UserVerification)
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
             .padding(12.dp),

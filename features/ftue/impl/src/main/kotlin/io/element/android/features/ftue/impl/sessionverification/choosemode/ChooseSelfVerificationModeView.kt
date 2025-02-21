@@ -73,7 +73,7 @@ fun ChooseSelfVerificationModeView(
         },
         footer = {
             ButtonColumnMolecule(
-                modifier = modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp)
             ) {
                 if (state.isLastDevice.not()) {
                     Button(
@@ -125,4 +125,3 @@ internal fun ChooseSelfVerificationModeViewPreview(
         onLearnMore = {},
     )
 }
-

@@ -20,7 +20,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
-import io.element.android.features.logout.api.util.onSuccessLogout as defaultOnSuccessLogoutAction
 
 @ContributesBinding(SessionScope::class)
 class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
@@ -41,7 +40,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
             onDismissDialog = {
                 eventSink(DirectLogoutEvents.CloseDialogs)
             },
-            onSuccessLogout = ::defaultOnSuccessLogoutAction,
+            onSuccessLogout = onSuccessLogout,
         )
     }
 }

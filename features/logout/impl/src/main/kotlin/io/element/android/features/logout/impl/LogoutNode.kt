@@ -7,7 +7,6 @@
 
 package io.element.android.features.logout.impl
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -17,7 +16,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.di.SessionScope
@@ -35,14 +33,10 @@ class LogoutNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = requireNotNull(LocalActivity.current)
-        val isDark = ElementTheme.isLightTheme.not()
         LogoutView(
             state = state,
             onChangeRecoveryKeyClick = ::onChangeRecoveryKeyClick,
-            onSuccessLogout = {
-                onSuccessLogout(activity, isDark, it)
-            },
+            onSuccessLogout = ::onSuccessLogout,
             onBackClick = ::navigateUp,
             modifier = modifier,
         )

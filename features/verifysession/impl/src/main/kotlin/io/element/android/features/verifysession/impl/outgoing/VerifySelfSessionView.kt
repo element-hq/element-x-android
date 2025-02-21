@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -84,7 +85,14 @@ fun VerifySelfSessionView(
         HeaderFooterPage(
             modifier = modifier,
             topBar = {
-                TopAppBar(title = {})
+                TopAppBar(
+                    title = {},
+                    navigationIcon = if (step != Step.Completed) {
+                        { BackButton(onClick = ::cancelOrResetFlow) }
+                    } else {
+                        {}
+                    }
+                )
             },
             header = {
                 VerifySelfSessionHeader(step = step, request = state.request)

@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.FlowId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -25,6 +26,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -37,7 +39,7 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - nominal case - incoming verification successful`() = runTest {
-        val acknowledgeVerificationRequestLambda = lambdaRecorder<SessionVerificationRequestDetails, Unit> { _ -> }
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
         val approveVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
@@ -60,7 +62,7 @@ class IncomingVerificationPresenterTest {
                 )
             )
             resetLambda.assertions().isCalledOnce().with(value(false))
-            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(aSessionVerificationRequestDetails))
+            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
             initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
@@ -100,7 +102,7 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - emoji not matching case - incoming verification failure`() = runTest {
-        val acknowledgeVerificationRequestLambda = lambdaRecorder<SessionVerificationRequestDetails, Unit> { _ -> }
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
         val declineVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
@@ -123,7 +125,7 @@ class IncomingVerificationPresenterTest {
                 )
             )
             resetLambda.assertions().isCalledOnce().with(value(false))
-            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(aSessionVerificationRequestDetails))
+            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
             initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
@@ -157,7 +159,7 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - incoming verification is remotely canceled`() = runTest {
-        val acknowledgeVerificationRequestLambda = lambdaRecorder<SessionVerificationRequestDetails, Unit> { _ -> }
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
         val declineVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
@@ -191,7 +193,7 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - user goes back when comparing emoji - incoming verification failure`() = runTest {
-        val acknowledgeVerificationRequestLambda = lambdaRecorder<SessionVerificationRequestDetails, Unit> { _ -> }
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
         val declineVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
@@ -214,7 +216,7 @@ class IncomingVerificationPresenterTest {
                 )
             )
             resetLambda.assertions().isCalledOnce().with(value(false))
-            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(aSessionVerificationRequestDetails))
+            acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
             initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
@@ -248,7 +250,7 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - user ignores incoming request`() = runTest {
-        val acknowledgeVerificationRequestLambda = lambdaRecorder<SessionVerificationRequestDetails, Unit> { _ -> }
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
         val fakeSessionVerificationService = FakeSessionVerificationService(
@@ -268,24 +270,30 @@ class IncomingVerificationPresenterTest {
         }
     }
 
-    private val aSessionVerificationRequestDetails = SessionVerificationRequestDetails(
-        senderId = A_USER_ID,
-        flowId = FlowId("flowId"),
-        deviceId = A_DEVICE_ID,
-        displayName = "a device name",
-        firstSeenTimestamp = A_TIMESTAMP,
+    private val anIncomingSessionVerificationRequest = VerificationRequest.Incoming.OtherSession(
+        details = SessionVerificationRequestDetails(
+            senderProfile = SessionVerificationRequestDetails.SenderProfile(
+                userId = A_USER_ID,
+                displayName = "a device name",
+                avatarUrl = null,
+            ),
+            flowId = FlowId("flowId"),
+            deviceId = A_DEVICE_ID,
+            firstSeenTimestamp = A_TIMESTAMP,
+        )
     )
 
-    private fun createPresenter(
-        sessionVerificationRequestDetails: SessionVerificationRequestDetails = aSessionVerificationRequestDetails,
+    private fun TestScope.createPresenter(
+        verificationRequest: VerificationRequest.Incoming = anIncomingSessionVerificationRequest,
         navigator: IncomingVerificationNavigator = IncomingVerificationNavigator { lambdaError() },
         service: SessionVerificationService = FakeSessionVerificationService(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
     ) = IncomingVerificationPresenter(
-        verificationRequest = sessionVerificationRequestDetails,
+        verificationRequest = verificationRequest,
         navigator = navigator,
         sessionVerificationService = service,
         stateMachine = IncomingVerificationStateMachine(service),
         dateFormatter = dateFormatter,
+        sessionCoroutineScope = backgroundScope,
     )
 }
