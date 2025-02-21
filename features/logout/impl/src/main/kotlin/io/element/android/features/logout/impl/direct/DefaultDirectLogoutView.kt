@@ -7,33 +7,28 @@
 
 package io.element.android.features.logout.impl.direct
 
-import androidx.activity.compose.LocalActivity
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.DirectLogoutStateProvider
 import io.element.android.features.logout.api.direct.DirectLogoutView
-import io.element.android.features.logout.api.util.onSuccessLogout as defaultOnSuccessLogoutAction
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
+import io.element.android.features.logout.api.util.onSuccessLogout as defaultOnSuccessLogoutAction
 
 @ContributesBinding(SessionScope::class)
 class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
     @Composable
     override fun Render(
         state: DirectLogoutState,
-        openLogoutUrlIfPresent: Boolean,
-        customOnSuccessLogout: (logoutUrlResult: String?) -> Unit,
+        onSuccessLogout: (activity: Activity, darkMode: Boolean, url: String?) -> Unit,
     ) {
-        val activity = LocalActivity.current
-        val isDarkTheme = ElementTheme.isLightTheme.not()
-
         val eventSink = state.eventSink
         LogoutActionDialog(
             state.logoutAction,
@@ -46,12 +41,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
             onDismissDialog = {
                 eventSink(DirectLogoutEvents.CloseDialogs)
             },
-            onSuccessLogout = { url ->
-                if (openLogoutUrlIfPresent) {
-                    activity?.let { defaultOnSuccessLogoutAction(it, darkTheme = isDarkTheme, url) }
-                }
-                customOnSuccessLogout(url)
-            },
+            onSuccessLogout = ::defaultOnSuccessLogoutAction,
         )
     }
 }
@@ -63,7 +53,6 @@ internal fun DefaultDirectLogoutViewPreview(
 ) = ElementPreview {
     DefaultDirectLogoutView().Render(
         state = state,
-        openLogoutUrlIfPresent = true,
-        customOnSuccessLogout = {},
+        onSuccessLogout = { _, _, _ -> }
     )
 }

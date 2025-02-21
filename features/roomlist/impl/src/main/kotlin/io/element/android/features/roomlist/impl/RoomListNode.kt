@@ -113,8 +113,7 @@ class RoomListNode @AssistedInject constructor(
 
         directLogoutView.Render(
             state = state.directLogoutState,
-            openLogoutUrlIfPresent = false,
-            customOnSuccessLogout = {},
+            onSuccessLogout = { _, _, _ -> },
         )
     }
 }

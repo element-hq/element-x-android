@@ -7,11 +7,14 @@
 
 package io.element.android.features.logout.impl.ui
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -24,8 +27,11 @@ fun LogoutActionDialog(
     onConfirmClick: () -> Unit,
     onForceLogoutClick: () -> Unit,
     onDismissDialog: () -> Unit,
-    onSuccessLogout: (String?) -> Unit,
+    onSuccessLogout: (activity: Activity, darkMode: Boolean, url: String?) -> Unit,
 ) {
+    val activity = LocalActivity.current
+    val isDarkTheme = ElementTheme.isLightTheme.not()
+
     when (state) {
         AsyncAction.Uninitialized ->
             Unit
@@ -47,7 +53,7 @@ fun LogoutActionDialog(
         is AsyncAction.Success -> {
             val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
             LaunchedEffect(state) {
-                latestOnSuccessLogout(state.data)
+                activity?.let { latestOnSuccessLogout(it, isDarkTheme, state.data) }
             }
         }
     }

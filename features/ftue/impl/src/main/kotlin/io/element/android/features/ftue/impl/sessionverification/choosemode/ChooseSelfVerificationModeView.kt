@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -26,6 +27,8 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -79,11 +82,13 @@ fun ChooseSelfVerificationModeView(
                         onClick = onUseAnotherDevice,
                     )
                 }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onClick = onUseRecoveryKey,
-                )
+                if (state.canEnterRecoveryKey) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        onClick = onUseRecoveryKey,
+                    )
+                }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
@@ -106,3 +111,18 @@ fun ChooseSelfVerificationModeView(
         }
     }
 }
+
+@PreviewsDayNight
+@Composable
+internal fun ChooseSelfVerificationModeViewPreview(
+    @PreviewParameter(ChooseSelfVerificationModeStateProvider::class) state: ChooseSelfVerificationModeState
+) = ElementPreview {
+    ChooseSelfVerificationModeView(
+        state = state,
+        onUseAnotherDevice = {},
+        onUseRecoveryKey = {},
+        onResetKey = {},
+        onLearnMore = {},
+    )
+}
+

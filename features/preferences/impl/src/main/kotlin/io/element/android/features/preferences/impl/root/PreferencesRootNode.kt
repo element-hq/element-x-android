@@ -142,8 +142,7 @@ class PreferencesRootNode @AssistedInject constructor(
 
         directLogoutView.Render(
             state = state.directLogoutState,
-            openLogoutUrlIfPresent = true,
-            customOnSuccessLogout = {},
+            onSuccessLogout = ::onSuccessLogout,
         )
     }
 }
