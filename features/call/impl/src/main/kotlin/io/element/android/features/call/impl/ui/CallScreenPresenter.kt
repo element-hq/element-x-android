@@ -135,7 +135,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
                         val parsedMessage = parseMessage(it)
                         if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
-                            if (parsedMessage.action == WidgetMessage.Action.HangUp) {
+                            if (parsedMessage.action == WidgetMessage.Action.Close) {
                                 close(callWidgetDriver.value, navigator)
                             } else if (parsedMessage.action == WidgetMessage.Action.SendEvent) {
                                 // This event is received when a member joins the call, the first one will be the current one
