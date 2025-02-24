@@ -9,6 +9,7 @@ package io.element.android.features.ftue.impl.sessionverification
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -17,15 +18,21 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appconfig.LearnMoreConfig
+import io.element.android.features.ftue.impl.sessionverification.choosemode.ChooseSelfVerificationModeNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.utils.OpenUrlInTabView
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -37,7 +44,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
 ) : BaseFlowNode<FtueSessionVerificationFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root(showDeviceVerifiedScreen = false),
+        initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -45,7 +52,10 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 ) {
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data class Root(val showDeviceVerifiedScreen: Boolean) : NavTarget
+        data object Root : NavTarget
+
+        @Parcelize
+        data class UseAnotherDevice(val showDeviceVerifiedScreen: Boolean) : NavTarget
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
@@ -62,7 +72,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         override fun onDone() {
             lifecycleScope.launch {
                 // Move to the completed state view in the verification flow
-                backstack.newRoot(NavTarget.Root(showDeviceVerifiedScreen = true))
+                backstack.newRoot(NavTarget.UseAnotherDevice(showDeviceVerifiedScreen = true))
             }
         }
     }
@@ -70,19 +80,43 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.Root -> {
-                verifySessionEntryPoint.nodeBuilder(this, buildContext)
-                    .params(VerifySessionEntryPoint.Params(navTarget.showDeviceVerifiedScreen))
-                    .callback(object : VerifySessionEntryPoint.Callback {
-                        override fun onEnterRecoveryKey() {
-                            backstack.push(NavTarget.EnterRecoveryKey)
-                        }
+                val callback = object : ChooseSelfVerificationModeNode.Callback {
+                    override fun onUseAnotherDevice() {
+                        backstack.push(NavTarget.UseAnotherDevice(showDeviceVerifiedScreen = true))
+                    }
 
+                    override fun onUseRecoveryKey() {
+                        backstack.push(NavTarget.EnterRecoveryKey)
+                    }
+
+                    override fun onResetKey() {
+                        backstack.push(NavTarget.ResetIdentity)
+                    }
+
+                    override fun onLearnMoreAboutEncryption() {
+                        learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
+                    }
+                }
+
+                createNode<ChooseSelfVerificationModeNode>(buildContext, plugins = listOf(callback))
+            }
+            is NavTarget.UseAnotherDevice -> {
+                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                    .params(VerifySessionEntryPoint.Params(
+                        showDeviceVerifiedScreen = navTarget.showDeviceVerifiedScreen,
+                        verificationRequest = VerificationRequest.Outgoing.CurrentSession,
+                    ))
+                    .callback(object : VerifySessionEntryPoint.Callback {
                         override fun onDone() {
                             plugins<Callback>().forEach { it.onDone() }
                         }
 
-                        override fun onResetKey() {
-                            backstack.push(NavTarget.ResetIdentity)
+                        override fun onBack() {
+                            backstack.pop()
+                        }
+
+                        override fun onLearnMoreAboutEncryption() {
+                            learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
                         }
                     })
                     .build()
@@ -106,8 +140,12 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         }
     }
 
+    private val learnMoreUrl = mutableStateOf<String?>(null)
+
     @Composable
     override fun View(modifier: Modifier) {
         BackstackView()
+
+        OpenUrlInTabView(learnMoreUrl)
     }
 }

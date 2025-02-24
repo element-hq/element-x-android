@@ -7,12 +7,13 @@
 
 package io.element.android.features.logout.api.direct
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 
 interface DirectLogoutView {
     @Composable
     fun Render(
         state: DirectLogoutState,
-        onSuccessLogout: (logoutUrlResult: String?) -> Unit
+        onSuccessLogout: (activity: Activity, darkMode: Boolean, url: String?) -> Unit,
     )
 }

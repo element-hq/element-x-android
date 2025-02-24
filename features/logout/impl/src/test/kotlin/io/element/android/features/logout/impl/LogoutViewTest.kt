@@ -7,6 +7,7 @@
 
 package io.element.android.features.logout.impl
 
+import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -15,7 +16,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithParam
+import io.element.android.tests.testutils.EnsureNeverCalledWithThreeParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
@@ -106,7 +107,7 @@ class LogoutViewTest {
                     logoutAction = AsyncAction.Success(data),
                     eventSink = eventsRecorder
                 ),
-                onSuccessLogout = callback,
+                onSuccessLogout = { _, _, url -> callback(url) },
             )
         }
     }
@@ -131,7 +132,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogou
     state: LogoutState,
     onChangeRecoveryKeyClick: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
-    onSuccessLogout: (logoutUrlResult: String?) -> Unit = EnsureNeverCalledWithParam()
+    onSuccessLogout: (activity: Activity, darkTheme: Boolean, logoutUrlResult: String?) -> Unit = EnsureNeverCalledWithThreeParams()
 ) {
     setContent {
         LogoutView(

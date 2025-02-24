@@ -25,6 +25,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.userprofile.impl.root.UserProfileNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
+import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -32,7 +33,9 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import kotlinx.parcelize.Parcelize
 
@@ -43,6 +46,7 @@ class UserProfileFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val sessionIdHolder: CurrentSessionIdHolder,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
+    private val verifySessionEntryPoint: VerifySessionEntryPoint,
 ) : BaseFlowNode<UserProfileFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -57,6 +61,9 @@ class UserProfileFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
+
+        @Parcelize
+        data class VerifyUser(val userId: UserId) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -73,6 +80,10 @@ class UserProfileFlowNode @AssistedInject constructor(
 
                     override fun onStartCall(dmRoomId: RoomId) {
                         elementCallEntryPoint.startCall(CallType.RoomCall(sessionId = sessionIdHolder.current, roomId = dmRoomId))
+                    }
+
+                    override fun onVerifyUser(userId: UserId) {
+                        backstack.push(NavTarget.VerifyUser(userId))
                     }
                 }
                 val params = UserProfileNode.UserProfileInputs(userId = inputs<UserProfileEntryPoint.Params>().userId)
@@ -94,6 +105,15 @@ class UserProfileFlowNode @AssistedInject constructor(
                         avatarUrl = navTarget.avatarUrl
                     )
                     .callback(callback)
+                    .build()
+            }
+            is NavTarget.VerifyUser -> {
+                val params = VerifySessionEntryPoint.Params(
+                    showDeviceVerifiedScreen = false,
+                    verificationRequest = VerificationRequest.Outgoing.User(userId = navTarget.userId)
+                )
+                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                    .params(params)
                     .build()
             }
         }

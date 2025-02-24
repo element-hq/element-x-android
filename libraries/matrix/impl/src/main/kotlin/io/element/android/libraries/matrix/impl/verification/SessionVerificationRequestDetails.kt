@@ -11,12 +11,28 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.FlowId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import org.matrix.rustcomponents.sdk.SessionVerificationRequestDetails as RustSessionVerificationRequestDetails
+import org.matrix.rustcomponents.sdk.UserProfile as RustUserProfile
 
 fun RustSessionVerificationRequestDetails.map() = SessionVerificationRequestDetails(
-    senderId = UserId(senderProfile.userId),
+    senderProfile = senderProfile.map(),
     flowId = FlowId(flowId),
     deviceId = DeviceId(deviceId),
-    displayName = senderProfile.displayName,
     firstSeenTimestamp = firstSeenTimestamp.toLong(),
 )
+
+fun RustUserProfile.map() = SessionVerificationRequestDetails.SenderProfile(
+    userId = UserId(userId),
+    displayName = displayName,
+    avatarUrl = avatarUrl,
+)
+
+fun RustSessionVerificationRequestDetails.toVerificationRequest(currentUserId: UserId): VerificationRequest.Incoming {
+    val details = map()
+    return if (currentUserId == details.senderProfile.userId) {
+        VerificationRequest.Incoming.OtherSession(details)
+    } else {
+        VerificationRequest.Incoming.User(details)
+    }
+}

@@ -12,9 +12,13 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 interface VerifySessionEntryPoint : FeatureEntryPoint {
-    data class Params(val showDeviceVerifiedScreen: Boolean) : NodeInputs
+    data class Params(
+        val showDeviceVerifiedScreen: Boolean,
+        val verificationRequest: VerificationRequest.Outgoing,
+    ) : NodeInputs
 
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
@@ -25,8 +29,8 @@ interface VerifySessionEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onEnterRecoveryKey()
-        fun onResetKey()
+        fun onLearnMoreAboutEncryption()
+        fun onBack()
         fun onDone()
     }
 }

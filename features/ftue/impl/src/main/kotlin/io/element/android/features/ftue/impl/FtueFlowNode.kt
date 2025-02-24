@@ -104,7 +104,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> {
                 createNode<PlaceholderNode>(buildContext)
             }
-            NavTarget.SessionVerification -> {
+            is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
                     override fun onDone() {
                         moveToNextStepIfNeeded()

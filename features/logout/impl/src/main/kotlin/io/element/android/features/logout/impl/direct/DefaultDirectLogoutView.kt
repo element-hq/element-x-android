@@ -7,6 +7,7 @@
 
 package io.element.android.features.logout.impl.direct
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.squareup.anvil.annotations.ContributesBinding
@@ -25,7 +26,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
     @Composable
     override fun Render(
         state: DirectLogoutState,
-        onSuccessLogout: (logoutUrlResult: String?) -> Unit,
+        onSuccessLogout: (activity: Activity, darkMode: Boolean, url: String?) -> Unit,
     ) {
         val eventSink = state.eventSink
         LogoutActionDialog(
@@ -39,9 +40,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
             onDismissDialog = {
                 eventSink(DirectLogoutEvents.CloseDialogs)
             },
-            onSuccessLogout = {
-                onSuccessLogout(it)
-            },
+            onSuccessLogout = onSuccessLogout,
         )
     }
 }
@@ -53,6 +52,6 @@ internal fun DefaultDirectLogoutViewPreview(
 ) = ElementPreview {
     DefaultDirectLogoutView().Render(
         state = state,
-        onSuccessLogout = {},
+        onSuccessLogout = { _, _, _ -> }
     )
 }
