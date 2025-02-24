@@ -175,7 +175,7 @@ private fun CreateRoomActionButtonsList(
         }
         item {
             CreateRoomActionButton(
-                iconRes = CompoundDrawables.ic_compound_mention,
+                iconRes = CompoundDrawables.ic_compound_room,
                 text = "Join room by address",
                 onClick = onJoinByAddressClick,
             )
