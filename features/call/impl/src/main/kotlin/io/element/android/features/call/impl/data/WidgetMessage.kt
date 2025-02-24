@@ -33,6 +33,9 @@ data class WidgetMessage(
         @SerialName("im.vector.hangup")
         HangUp,
 
+        @SerialName("io.element.close")
+        Close,
+
         @SerialName("send_event")
         SendEvent,
     }

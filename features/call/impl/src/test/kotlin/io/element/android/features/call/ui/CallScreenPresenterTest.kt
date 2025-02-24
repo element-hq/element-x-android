@@ -174,7 +174,7 @@ class CallScreenPresenterTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - a received hang up message closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
+    fun `present - a received close message closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
@@ -191,7 +191,7 @@ class CallScreenPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
 
-            messageInterceptor.givenInterceptedMessage("""{"action":"im.vector.hangup","api":"fromWidget","widgetId":"1","requestId":"1"}""")
+            messageInterceptor.givenInterceptedMessage("""{"action":"io.element.close","api":"fromWidget","widgetId":"1","requestId":"1"}""")
 
             // Let background coroutines run
             runCurrent()
