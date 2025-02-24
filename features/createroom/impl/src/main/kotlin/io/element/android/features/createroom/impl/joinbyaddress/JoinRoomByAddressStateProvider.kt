@@ -8,16 +8,21 @@
 package io.element.android.features.createroom.impl.joinbyaddress
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 open class JoinRoomByAddressStateProvider : PreviewParameterProvider<JoinRoomByAddressState> {
     override val values: Sequence<JoinRoomByAddressState>
         get() = sequenceOf(
             aJoinRoomByAddressState(),
-            aJoinRoomByAddressState("#room-"),
-            aJoinRoomByAddressState("#room-", addressState = RoomAddressState.Invalid),
-            aJoinRoomByAddressState("#room-name:matrix.org", addressState = RoomAddressState.Valid(true)),
-            aJoinRoomByAddressState("#room-name-here:matrix.org", addressState = RoomAddressState.Valid(false)),
-            // Add other states here
+            aJoinRoomByAddressState(address = "#room-"),
+            aJoinRoomByAddressState(address = "#room-", addressState = RoomAddressState.Invalid),
+            aJoinRoomByAddressState(address = "#room-name:matrix.org", addressState = RoomAddressState.Resolving),
+            aJoinRoomByAddressState(address = "#room-name-none:matrix.org", addressState = RoomAddressState.RoomNotFound),
+            aJoinRoomByAddressState(
+                address = "#room-name:matrix.org",
+                addressState = RoomAddressState.RoomFound(ResolvedRoomAlias(RoomId("!aRoom:id"), emptyList())),
+            ),
         )
 }
 

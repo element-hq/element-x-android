@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -23,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -60,13 +63,16 @@ fun JoinRoomByAddressView(
                 requestFocus = sheetState.isVisible,
                 onAddressChange = {
                     state.eventSink(JoinRoomByAddressEvents.UpdateAddress(it))
-                }
+                },
+                onContinue = {
+                    state.eventSink(JoinRoomByAddressEvents.Continue)
+                },
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 text = stringResource(CommonStrings.action_continue),
                 modifier = Modifier.fillMaxWidth(),
-                enabled = state.addressState is RoomAddressState.Valid,
+                showProgress = state.addressState is RoomAddressState.Resolving,
                 onClick = {
                     state.eventSink(JoinRoomByAddressEvents.Continue)
                 }
@@ -81,6 +87,7 @@ private fun RoomAddressField(
     addressState: RoomAddressState,
     requestFocus: Boolean,
     onAddressChange: (String) -> Unit,
+    onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -94,24 +101,26 @@ private fun RoomAddressField(
         placeholder = "Enter...",
         supportingText = when (addressState) {
             RoomAddressState.Invalid -> "Not a valid address"
-            RoomAddressState.Unknown -> "e.g. #room-name:matrix.org"
-            is RoomAddressState.Valid -> if (addressState.matchingRoomFound) {
-                "Matching room found"
-            } else {
-                "e.g. #room-name:matrix.org"
-            }
+            is RoomAddressState.RoomFound -> "Matching room found"
+            RoomAddressState.RoomNotFound -> "Room not found"
+            RoomAddressState.Unknown, RoomAddressState.Resolving -> "e.g. #room-name:matrix.org"
         },
         validity = when (addressState) {
-            RoomAddressState.Unknown -> null
-            RoomAddressState.Invalid -> TextFieldValidity.Invalid
-            is RoomAddressState.Valid -> if (addressState.matchingRoomFound) TextFieldValidity.Valid else null
+            RoomAddressState.Unknown, RoomAddressState.Resolving -> null
+            RoomAddressState.Invalid, RoomAddressState.RoomNotFound -> TextFieldValidity.Invalid
+            is RoomAddressState.RoomFound -> TextFieldValidity.Valid
         },
         onValueChange = onAddressChange,
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.None,
             autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Uri,
+            imeAction = ImeAction.Go
         ),
+        keyboardActions = KeyboardActions(
+            onGo = { onContinue() }
+        )
     )
 }
 
