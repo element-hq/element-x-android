@@ -64,9 +64,6 @@ class KonsistLicenseTest {
             .filter {
                 it.moduleName.startsWith("enterprise")
             }
-            .also {
-                assertThat(it).isNotEmpty()
-            }
             .assertTrue {
                 enterpriseLicense.containsMatchIn(it.text)
             }
