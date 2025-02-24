@@ -8,6 +8,7 @@
 package io.element.android.features.createroom.impl.joinbyaddress
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 data class JoinRoomByAddressState(
     val address: String,
@@ -19,5 +20,7 @@ data class JoinRoomByAddressState(
 sealed interface RoomAddressState {
     data object Unknown : RoomAddressState
     data object Invalid : RoomAddressState
-    data class Valid(val matchingRoomFound: Boolean) : RoomAddressState
+    data object Resolving : RoomAddressState
+    data object RoomNotFound : RoomAddressState
+    data class RoomFound(val resolved: ResolvedRoomAlias) : RoomAddressState
 }
