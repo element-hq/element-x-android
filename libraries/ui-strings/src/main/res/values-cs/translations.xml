@@ -286,6 +286,7 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Zdá se, že identita %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Ověřená identita %1$s se změnila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Ověřená identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>

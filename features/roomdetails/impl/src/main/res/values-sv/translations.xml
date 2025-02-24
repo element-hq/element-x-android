@@ -133,6 +133,9 @@ Vi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hit
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Endast inbjudan"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Tillgång till rum"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Vem som helst"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Vem kan läsa historik"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Endast medlemmar sedan de bjöds in"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Endast medlemmar sedan det här alternativet har valts"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Rumssynlighet"</string>
   <string name="screen_security_and_privacy_title">"Säkerhet och sekretess"</string>
 </resources>

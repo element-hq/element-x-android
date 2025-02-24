@@ -347,6 +347,7 @@ Anledning:%1$s."</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sv"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiska meddelanden är inte tillgängliga på den här enheten"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Du måste verifiera den här enheten för åtkomst till historiska meddelanden"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har inte tillgång till det här meddelandet"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Det gick inte att dekryptera meddelandet"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Det här meddelandet blockerades antingen för att du inte verifierade din enhet eller för att avsändaren måste verifiera din identitet."</string>

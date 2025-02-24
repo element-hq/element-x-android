@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"Odhlásiť sa a aktualizovať"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s už nepodporuje starý protokol. Odhláste sa a znova prihláste, aby ste mohli pokračovať v používaní aplikácie."</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Váš domovský server už nepodporuje starý protokol. Ak chcete pokračovať v používaní aplikácie, odhláste sa a znova sa prihláste."</string>
 </resources>
