@@ -72,11 +72,11 @@ class FakeMatrixClient(
     private val syncService: FakeSyncService = FakeSyncService(),
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
-    private val accountManagementUrlString: Result<String?> = Result.success(null),
+    private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
     private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
-        Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
-    )
+            Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
+        )
     },
     private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
@@ -192,8 +192,8 @@ class FakeMatrixClient(
         return Result.success(result)
     }
 
-    override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {
-        return accountManagementUrlString
+    override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = simulateLongTask {
+        accountManagementUrlResult(action)
     }
 
     override suspend fun uploadMedia(

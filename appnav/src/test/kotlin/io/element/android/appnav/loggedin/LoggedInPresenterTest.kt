@@ -5,12 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.appnav.loggedin
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
@@ -19,6 +18,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -45,8 +45,8 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -58,10 +58,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createLoggedInPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createLoggedInPresenter().test {
             val initialState = awaitItem()
             assertThat(initialState.showSyncSpinner).isFalse()
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
@@ -70,12 +67,31 @@ class LoggedInPresenterTest {
     }
 
     @Test
+    fun `present - ensure that account urls are preloaded`() = runTest {
+        val accountManagementUrlResult = lambdaRecorder<AccountManagementAction?, Result<String?>> { Result.success("aUrl") }
+        val matrixClient = FakeMatrixClient(
+            accountManagementUrlResult = accountManagementUrlResult,
+        )
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+        ).test {
+            awaitItem()
+            advanceUntilIdle()
+            accountManagementUrlResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(AccountManagementAction.Profile)),
+                    listOf(value(AccountManagementAction.SessionsList)),
+                )
+        }
+    }
+
+    @Test
     fun `present - show sync spinner`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createLoggedInPresenter(roomListService, SyncState.Running)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createLoggedInPresenter(
+            syncState = SyncState.Running,
+            matrixClient = FakeMatrixClient(roomListService = roomListService),
+        ).test {
             val initialState = awaitItem()
             assertThat(initialState.showSyncSpinner).isFalse()
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
@@ -92,18 +108,18 @@ class LoggedInPresenterTest {
         val verificationService = FakeSessionVerificationService()
         val encryptionService = FakeEncryptionService()
         val buildMeta = aBuildMeta()
-        val presenter = LoggedInPresenter(
-            matrixClient = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService),
+        LoggedInPresenter(
+            matrixClient = FakeMatrixClient(
+                roomListService = roomListService,
+                encryptionService = encryptionService,
+            ),
             syncService = FakeSyncService(initialSyncState = SyncState.Running),
             pushService = FakePushService(),
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
             buildMeta = buildMeta,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
@@ -129,13 +145,10 @@ class LoggedInPresenterTest {
         val verificationService = FakeSessionVerificationService(
             initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = verificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.AccountNotVerified::class.java)
@@ -155,13 +168,13 @@ class LoggedInPresenterTest {
         val pushService = createFakePushService(
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
@@ -188,13 +201,13 @@ class LoggedInPresenterTest {
         val pushService = createFakePushService(
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isFailure()).isTrue()
             lambda.assertions()
@@ -233,13 +246,13 @@ class LoggedInPresenterTest {
             currentPushProvider = { pushProvider },
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
@@ -277,13 +290,13 @@ class LoggedInPresenterTest {
             currentPushProvider = { pushProvider },
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
@@ -317,13 +330,10 @@ class LoggedInPresenterTest {
             currentPushProvider = { pushProvider },
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
@@ -345,13 +355,10 @@ class LoggedInPresenterTest {
             registerWithLambda = lambda,
             setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
@@ -394,13 +401,10 @@ class LoggedInPresenterTest {
             registerWithLambda = lambda,
             selectPushProviderLambda = selectPushProviderLambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
@@ -445,13 +449,13 @@ class LoggedInPresenterTest {
             pushProvider1 = pushProvider1,
             registerWithLambda = lambda,
         )
-        val presenter = createLoggedInPresenter(
+        createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions().isCalledOnce()
@@ -505,10 +509,9 @@ class LoggedInPresenterTest {
             currentSlidingSyncVersionLambda = { Result.success(SlidingSyncVersion.Proxy) },
             availableSlidingSyncVersionsLambda = { Result.success(listOf(SlidingSyncVersion.Native)) },
         )
-        val presenter = createLoggedInPresenter(matrixClient = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+        ).test {
             val initialState = awaitItem()
             assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
 
@@ -526,13 +529,14 @@ class LoggedInPresenterTest {
             assertThat(ignoreSdkError).isTrue()
             null
         }
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            accountManagementUrlResult = { Result.success(null) },
+        ).apply {
             this.logoutLambda = logoutLambda
         }
-        val presenter = createLoggedInPresenter(matrixClient = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+        ).test {
             val initialState = awaitItem()
 
             initialState.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
@@ -548,14 +552,15 @@ class LoggedInPresenterTest {
         return awaitItem()
     }
 
-    private fun TestScope.createLoggedInPresenter(
-        roomListService: RoomListService = FakeRoomListService(),
+    private fun createLoggedInPresenter(
         syncState: SyncState = SyncState.Running,
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         pushService: PushService = FakePushService(),
-        matrixClient: MatrixClient = FakeMatrixClient(roomListService = roomListService),
+        matrixClient: MatrixClient = FakeMatrixClient(
+            accountManagementUrlResult = { Result.success(null) },
+        ),
         buildMeta: BuildMeta = aBuildMeta(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
