@@ -60,8 +60,8 @@ class CreateRoomFlowNode @AssistedInject constructor(
     private val navigator = DefaultCreateRoomNavigator(
         backstack = backstack,
         overlay = overlay,
-        openRoom = { roomIdOrAlias ->
-            plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias) }
+        openRoom = { roomIdOrAlias, viaServers ->
+            plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias, viaServers) }
         }
     )
 

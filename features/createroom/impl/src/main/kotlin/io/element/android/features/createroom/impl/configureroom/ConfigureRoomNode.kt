@@ -49,7 +49,7 @@ class ConfigureRoomNode @AssistedInject constructor(
             modifier = modifier,
             onBackClick = this::navigateUp,
             onCreateRoomSuccess = {
-                navigator.onOpenRoom(it.toRoomIdOrAlias())
+                navigator.onOpenRoom(roomIdOrAlias = it.toRoomIdOrAlias(), serverNames = emptyList())
             },
         )
     }

@@ -21,6 +21,6 @@ interface CreateRoomEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias)
+        fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>)
     }
 }

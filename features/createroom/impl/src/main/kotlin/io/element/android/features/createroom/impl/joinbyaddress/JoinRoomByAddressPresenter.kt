@@ -94,7 +94,10 @@ class JoinRoomByAddressPresenter @AssistedInject constructor(
 
     private fun onRoomFound(state: RoomAddressState.RoomFound) {
         navigator.onDismissJoinRoomByAddress()
-        navigator.onOpenRoom(state.resolved.roomId.toRoomIdOrAlias())
+        navigator.onOpenRoom(
+            roomIdOrAlias = state.resolved.roomId.toRoomIdOrAlias(),
+            serverNames = state.resolved.servers
+        )
     }
 
     @Composable

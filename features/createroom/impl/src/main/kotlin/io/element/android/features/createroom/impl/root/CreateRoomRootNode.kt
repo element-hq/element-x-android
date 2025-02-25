@@ -53,7 +53,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             onCloseClick = this::navigateUp,
             onNewRoomClick = navigator::onCreateNewRoom,
             onOpenDM = {
-                navigator.onOpenRoom(it.toRoomIdOrAlias())
+                navigator.onOpenRoom(roomIdOrAlias = it.toRoomIdOrAlias(), serverNames = emptyList())
             },
             onJoinByAddressClick = navigator::onShowJoinRoomByAddress,
             onInviteFriendsClick = { invitePeople(activity) }
