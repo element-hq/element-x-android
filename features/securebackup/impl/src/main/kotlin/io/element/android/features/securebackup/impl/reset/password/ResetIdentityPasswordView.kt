@@ -83,8 +83,8 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
     var showPassword by remember { mutableStateOf(false) }
     TextField(
         modifier = Modifier
-                .fillMaxWidth()
-                .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+            .fillMaxWidth()
+            .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
         value = text,
         onValueChange = onTextChange,
         placeholder = stringResource(CommonStrings.common_password),
