@@ -107,7 +107,7 @@ private fun RoomAddressField(
             RoomAddressState.Unknown, RoomAddressState.Resolving -> stringResource(R.string.screen_start_chat_join_room_by_address_supporting_text)
         },
         validity = when (addressState) {
-            RoomAddressState.Unknown, RoomAddressState.Resolving -> null
+            RoomAddressState.Unknown, RoomAddressState.Resolving -> TextFieldValidity.None
             RoomAddressState.Invalid, RoomAddressState.RoomNotFound -> TextFieldValidity.Invalid
             is RoomAddressState.RoomFound -> TextFieldValidity.Valid
         },

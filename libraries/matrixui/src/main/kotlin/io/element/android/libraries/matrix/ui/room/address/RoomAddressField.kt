@@ -59,7 +59,7 @@ fun RoomAddressField(
         },
         validity = when (addressValidity) {
             RoomAddressValidity.InvalidSymbols, RoomAddressValidity.NotAvailable -> TextFieldValidity.Invalid
-            else -> null
+            else -> TextFieldValidity.None
         },
         onValueChange = onAddressChange,
         singleLine = true,

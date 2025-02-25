@@ -58,7 +58,7 @@ fun TextField(
     placeholder: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    validity: TextFieldValidity? = null,
+    validity: TextFieldValidity = TextFieldValidity.None,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
@@ -288,6 +288,7 @@ private fun SupportingTextLayout(validity: TextFieldValidity?, supportingText: S
 }
 
 enum class TextFieldValidity {
+    None,
     Invalid,
     Valid
 }

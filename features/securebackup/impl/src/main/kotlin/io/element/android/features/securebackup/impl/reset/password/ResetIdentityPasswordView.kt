@@ -100,7 +100,7 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
                 Icon(imageVector = image, description)
             }
         },
-        validity = if (hasError) TextFieldValidity.Invalid else null,
+        validity = if (hasError) TextFieldValidity.Invalid else TextFieldValidity.None,
         supportingText = if (hasError) {
             stringResource(R.string.screen_reset_encryption_password_error)
         } else {
