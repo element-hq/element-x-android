@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.createroom.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -97,13 +98,13 @@ private fun RoomAddressField(
     TextField(
         modifier = modifier.focusRequester(focusRequester),
         value = address,
-        label = "Join room by address",
-        placeholder = "Enter...",
+        label = stringResource(R.string.screen_start_chat_join_room_by_address_action),
+        placeholder = stringResource(R.string.screen_start_chat_join_room_by_address_placeholder),
         supportingText = when (addressState) {
-            RoomAddressState.Invalid -> "Not a valid address"
-            is RoomAddressState.RoomFound -> "Matching room found"
-            RoomAddressState.RoomNotFound -> "Room not found"
-            RoomAddressState.Unknown, RoomAddressState.Resolving -> "e.g. #room-name:matrix.org"
+            RoomAddressState.Invalid -> stringResource(R.string.screen_start_chat_join_room_by_address_invalid_address)
+            is RoomAddressState.RoomFound -> stringResource(R.string.screen_start_chat_join_room_by_address_room_found)
+            RoomAddressState.RoomNotFound -> stringResource(R.string.screen_start_chat_join_room_by_address_room_not_found)
+            RoomAddressState.Unknown, RoomAddressState.Resolving -> stringResource(R.string.screen_start_chat_join_room_by_address_supporting_text)
         },
         validity = when (addressState) {
             RoomAddressState.Unknown, RoomAddressState.Resolving -> null
