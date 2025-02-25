@@ -29,8 +29,9 @@ open class JoinRoomByAddressStateProvider : PreviewParameterProvider<JoinRoomByA
 fun aJoinRoomByAddressState(
     address: String = "",
     addressState: RoomAddressState = RoomAddressState.Unknown,
+    eventSink: (JoinRoomByAddressEvents) -> Unit = {},
 ) = JoinRoomByAddressState(
     address = address,
     addressState = addressState,
-    eventSink = {}
+    eventSink = eventSink
 )
