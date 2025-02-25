@@ -34,7 +34,6 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
 ) : Node(buildContext, plugins = plugins) {
-
     private val navigator = plugins<CreateRoomNavigator>().first()
 
     init {

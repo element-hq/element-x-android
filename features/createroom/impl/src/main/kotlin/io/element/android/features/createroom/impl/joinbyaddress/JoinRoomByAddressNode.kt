@@ -25,7 +25,6 @@ class JoinRoomByAddressNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: JoinRoomByAddressPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     private val navigator = plugins<CreateRoomNavigator>().first()
     private val presenter = presenterFactory.create(navigator)
 

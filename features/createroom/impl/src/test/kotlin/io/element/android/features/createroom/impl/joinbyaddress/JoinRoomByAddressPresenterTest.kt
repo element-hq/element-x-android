@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class JoinRoomByAddressPresenterTest {
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createJoinRoomByAddressPresenter()

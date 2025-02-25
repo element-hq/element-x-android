@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.ui.room.address
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 
 /**
  * Represents the validity state of a room address.

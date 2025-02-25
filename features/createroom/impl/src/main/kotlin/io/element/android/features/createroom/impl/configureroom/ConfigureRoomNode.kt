@@ -30,7 +30,6 @@ class ConfigureRoomNode @AssistedInject constructor(
     private val presenter: ConfigureRoomPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     private val navigator = plugins<CreateRoomNavigator>().first()
 
     init {

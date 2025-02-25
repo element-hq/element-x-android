@@ -24,7 +24,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class JoinRoomByAddressViewTest {
-
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
@@ -52,7 +51,6 @@ class JoinRoomByAddressViewTest {
         rule.clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(JoinRoomByAddressEvents.Continue)
     }
-
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinRoomByAddressView(

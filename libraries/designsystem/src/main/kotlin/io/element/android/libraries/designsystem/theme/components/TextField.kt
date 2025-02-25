@@ -321,7 +321,7 @@ private fun ContentToPreview() {
                     TextField(
                         onValueChange = {},
                         label = "Label",
-                        value = "Hello val=${validity}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                        value = "Hello val=$validity, en=${enabled.asInt()}, ro=${readonly.asInt()}",
                         supportingText = "Supporting text",
                         validity = validity,
                         enabled = enabled,

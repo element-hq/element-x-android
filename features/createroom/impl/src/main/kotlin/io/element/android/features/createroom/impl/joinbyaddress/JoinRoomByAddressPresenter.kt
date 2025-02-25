@@ -36,7 +36,6 @@ class JoinRoomByAddressPresenter @AssistedInject constructor(
     private val client: MatrixClient,
     private val roomAliasHelper: RoomAliasHelper,
 ) : Presenter<JoinRoomByAddressState> {
-
     @AssistedFactory
     interface Factory {
         fun create(navigator: CreateRoomNavigator): JoinRoomByAddressPresenter
@@ -137,6 +136,3 @@ class JoinRoomByAddressPresenter @AssistedInject constructor(
         } ?: RoomAddressState.RoomNotFound
     }
 }
-
-
-

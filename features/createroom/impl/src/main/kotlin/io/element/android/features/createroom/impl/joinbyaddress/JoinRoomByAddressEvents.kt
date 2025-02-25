@@ -9,6 +9,6 @@ package io.element.android.features.createroom.impl.joinbyaddress
 
 sealed interface JoinRoomByAddressEvents {
     data object Dismiss : JoinRoomByAddressEvents
-    data object Continue: JoinRoomByAddressEvents
+    data object Continue : JoinRoomByAddressEvents
     data class UpdateAddress(val address: String) : JoinRoomByAddressEvents
 }

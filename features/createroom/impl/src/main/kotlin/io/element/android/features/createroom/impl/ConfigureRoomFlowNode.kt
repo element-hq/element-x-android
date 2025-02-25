@@ -60,7 +60,6 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
         data object ConfigureRoom : NavTarget
     }
 
-
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {

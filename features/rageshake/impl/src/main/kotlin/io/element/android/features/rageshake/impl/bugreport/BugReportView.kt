@@ -91,7 +91,7 @@ fun BugReportView(
                         keyboardController?.hide()
                     }),
                     minLines = 3,
-                    validity = if(state.isDescriptionInError) TextFieldValidity.Invalid else null,
+                    validity = if (state.isDescriptionInError) TextFieldValidity.Invalid else null,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

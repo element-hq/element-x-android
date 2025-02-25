@@ -28,7 +28,6 @@ class DefaultCreateRoomNavigator(
     private val overlay: Overlay<NavTarget>,
     private val openRoom: (RoomIdOrAlias, List<String>) -> Unit,
 ) : CreateRoomNavigator {
-
     override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) = openRoom(roomIdOrAlias, serverNames)
 
     override fun onCreateNewRoom() {
