@@ -122,9 +122,7 @@ class FakeMatrixClient(
     var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
         flowOf<Optional<RoomSummary>>(Optional.empty())
     }
-    var logoutLambda: (Boolean, Boolean) -> String? = { _, _ ->
-        null
-    }
+    var logoutLambda: (Boolean, Boolean) -> Unit = { _, _ -> }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -174,8 +172,8 @@ class FakeMatrixClient(
         clearCacheLambda()
     }
 
-    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? = simulateLongTask {
-        return logoutLambda(ignoreSdkError, userInitiated)
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) = simulateLongTask {
+        logoutLambda(ignoreSdkError, userInitiated)
     }
 
     override fun canDeactivateAccount() = canDeactivateAccountResult()

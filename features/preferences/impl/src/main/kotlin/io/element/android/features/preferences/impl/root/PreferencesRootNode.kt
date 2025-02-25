@@ -21,7 +21,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutView
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -140,11 +139,6 @@ class PreferencesRootNode @AssistedInject constructor(
             onDeactivateClick = this::onOpenAccountDeactivation
         )
 
-        directLogoutView.Render(
-            state = state.directLogoutState,
-            onSuccessLogout = {
-                onSuccessLogout(activity, isDark, it)
-            }
-        )
+        directLogoutView.Render(state = state.directLogoutState)
     }
 }

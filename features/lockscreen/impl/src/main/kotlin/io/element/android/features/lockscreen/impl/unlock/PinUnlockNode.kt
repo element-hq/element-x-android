@@ -7,7 +7,6 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -18,8 +17,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -41,8 +38,6 @@ class PinUnlockNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = requireNotNull(LocalActivity.current)
-        val isDark = ElementTheme.isLightTheme.not()
         LaunchedEffect(state.isUnlocked) {
             if (state.isUnlocked) {
                 onUnlock()
@@ -53,7 +48,6 @@ class PinUnlockNode @AssistedInject constructor(
             // UnlockNode is only used for in-app unlock, so we can safely set isInAppUnlock to true.
             // It's set to false in PinUnlockActivity.
             isInAppUnlock = true,
-            onSuccessLogout = { onSuccessLogout(activity, isDark, it) },
             modifier = modifier
         )
     }

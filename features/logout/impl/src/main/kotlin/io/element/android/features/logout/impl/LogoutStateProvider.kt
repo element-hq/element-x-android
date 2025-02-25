@@ -38,7 +38,7 @@ fun aLogoutState(
     doesBackupExistOnServer: Boolean = true,
     recoveryState: RecoveryState = RecoveryState.ENABLED,
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
-    logoutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (LogoutEvents) -> Unit = {},
 ) = LogoutState(
     isLastDevice = isLastDevice,

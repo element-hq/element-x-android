@@ -493,8 +493,7 @@ class RustMatrixClient(
         deleteSessionDirectory(deleteCryptoDb = false)
     }
 
-    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
-        var result: String? = null
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
         sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -502,7 +501,7 @@ class RustMatrixClient(
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
-                    result = innerClient.logout()
+                    innerClient.logout()
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
@@ -521,7 +520,6 @@ class RustMatrixClient(
                 sessionStore.removeSession(sessionId.value)
             }
         }
-        return result
     }
 
     override fun canDeactivateAccount(): Boolean {
