@@ -207,7 +207,7 @@ class LoggedInPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.preloadAccountManagementUrl() = launch {
-        matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
-        matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
+        matrixClient.getAccountManagementUrl(AccountManagementAction.Profile)
+        matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList)
     }
 }
