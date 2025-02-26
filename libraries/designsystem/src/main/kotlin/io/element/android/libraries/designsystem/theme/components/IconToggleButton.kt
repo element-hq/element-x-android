@@ -54,7 +54,7 @@ internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) 
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             val icon: @Composable () -> Unit = {
                 Icon(
-                    imageVector = if (checked) CompoundIcons.CheckCircle() else CompoundIcons.Circle(),
+                    imageVector = if (checked) CompoundIcons.CheckCircleSolid() else CompoundIcons.Circle(),
                     contentDescription = null
                 )
             }
@@ -64,7 +64,7 @@ internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) 
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             val icon: @Composable () -> Unit = {
                 Icon(
-                    imageVector = if (!checked) CompoundIcons.CheckCircle() else CompoundIcons.Circle(),
+                    imageVector = if (!checked) CompoundIcons.CheckCircleSolid() else CompoundIcons.Circle(),
                     contentDescription = null
                 )
             }
