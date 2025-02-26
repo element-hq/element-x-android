@@ -12,6 +12,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -19,8 +20,8 @@ data class NotificationSettingsState(
     val matrixSettings: MatrixSettings,
     val appSettings: AppSettings,
     val changeNotificationSettingAction: AsyncAction<Unit>,
-    val currentPushDistributor: AsyncData<String>,
-    val availablePushDistributors: ImmutableList<String>,
+    val currentPushDistributor: AsyncData<Distributor>,
+    val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
     val eventSink: (NotificationSettingsEvents) -> Unit,
