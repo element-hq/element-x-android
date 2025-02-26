@@ -132,7 +132,7 @@ private fun NotificationSettingsContentView(
         if (!state.fullScreenIntentPermissionsState.permissionGranted) {
             PreferenceCategory {
                 PreferenceText(
-                    icon = CompoundIcons.VoiceCall(),
+                    icon = CompoundIcons.VoiceCallSolid(),
                     title = stringResource(id = R.string.full_screen_intent_banner_title),
                     subtitle = stringResource(R.string.full_screen_intent_banner_message),
                     onClick = {
