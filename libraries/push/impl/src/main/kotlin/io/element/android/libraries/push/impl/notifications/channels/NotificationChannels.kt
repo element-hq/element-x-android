@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.os.Build
@@ -18,7 +17,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -60,7 +58,6 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultNotificationChannels @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
 ) : NotificationChannels {
