@@ -58,7 +58,7 @@ fun TextField(
     placeholder: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
+    validity: TextFieldValidity = TextFieldValidity.None,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
@@ -93,7 +93,7 @@ fun TextField(
             readOnly = readOnly,
             enabled = enabled,
             isFocused = isFocused,
-            isError = isError,
+            validity = validity,
             leadingIcon = leadingIcon,
             placeholder = placeholder,
             isTextEmpty = value.isEmpty(),
@@ -114,7 +114,7 @@ fun TextField(
     placeholder: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
+    validity: TextFieldValidity? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
@@ -149,7 +149,7 @@ fun TextField(
             readOnly = readOnly,
             enabled = enabled,
             isFocused = isFocused,
-            isError = isError,
+            validity = validity,
             leadingIcon = leadingIcon,
             placeholder = placeholder,
             isTextEmpty = value.text.isEmpty(),
@@ -166,7 +166,7 @@ private fun DecorationBox(
     enabled: Boolean,
     readOnly: Boolean,
     isFocused: Boolean,
-    isError: Boolean,
+    validity: TextFieldValidity?,
     placeholder: String?,
     isTextEmpty: Boolean,
     supportingText: String?,
@@ -187,7 +187,7 @@ private fun DecorationBox(
             enabled = enabled,
             readOnly = readOnly,
             isFocused = isFocused,
-            isError = isError
+            isError = validity == TextFieldValidity.Invalid
         ) {
             Row(modifier = Modifier.padding(16.dp)) {
                 if (leadingIcon != null) {
@@ -216,7 +216,7 @@ private fun DecorationBox(
         }
         if (supportingText != null) {
             Spacer(modifier = Modifier.height(4.dp))
-            SupportingTextLayout(isError, supportingText)
+            SupportingTextLayout(validity, supportingText)
         }
     }
 }
@@ -254,22 +254,43 @@ private fun TextFieldContainer(
 }
 
 @Composable
-private fun SupportingTextLayout(isError: Boolean, supportingText: String) {
+private fun SupportingTextLayout(validity: TextFieldValidity?, supportingText: String) {
     Row(horizontalArrangement = spacedBy(4.dp)) {
-        if (isError) {
-            Icon(
-                imageVector = CompoundIcons.Error(),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp),
-                tint = ElementTheme.colors.iconCriticalPrimary
-            )
+        when (validity) {
+            TextFieldValidity.Invalid -> {
+                Icon(
+                    imageVector = CompoundIcons.Error(),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = ElementTheme.colors.iconCriticalPrimary
+                )
+            }
+            TextFieldValidity.Valid -> {
+                Icon(
+                    imageVector = CompoundIcons.CheckCircleSolid(),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = ElementTheme.colors.iconSuccessPrimary
+                )
+            }
+            else -> Unit
         }
         Text(
             text = supportingText,
-            color = if (isError) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textSecondary,
+            color = when (validity) {
+                TextFieldValidity.Invalid -> ElementTheme.colors.textCriticalPrimary
+                TextFieldValidity.Valid -> ElementTheme.colors.textSuccessPrimary
+                else -> ElementTheme.colors.textSecondary
+            },
             style = ElementTheme.typography.fontBodySmRegular,
         )
     }
+}
+
+enum class TextFieldValidity {
+    None,
+    Invalid,
+    Valid
 }
 
 @Composable
@@ -283,11 +304,11 @@ private fun textFieldStyle(enabled: Boolean): TextStyle {
     )
 }
 
-@Preview(group = PreviewGroup.TextFields)
+@Preview(group = PreviewGroup.TextFields, heightDp = 1000)
 @Composable
 internal fun TextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
-@Preview(group = PreviewGroup.TextFields)
+@Preview(group = PreviewGroup.TextFields, heightDp = 1000)
 @Composable
 internal fun TextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
@@ -295,15 +316,15 @@ internal fun TextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @ExcludeFromCoverage
 private fun ContentToPreview() {
     Column(modifier = Modifier.padding(4.dp)) {
-        allBooleans.forEach { isError ->
+        TextFieldValidity.entries.forEach { validity ->
             allBooleans.forEach { enabled ->
                 allBooleans.forEach { readonly ->
                     TextField(
                         onValueChange = {},
                         label = "Label",
-                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                        value = "Hello val=$validity, en=${enabled.asInt()}, ro=${readonly.asInt()}",
                         supportingText = "Supporting text",
-                        isError = isError,
+                        validity = validity,
                         enabled = enabled,
                         readOnly = readonly,
                     )

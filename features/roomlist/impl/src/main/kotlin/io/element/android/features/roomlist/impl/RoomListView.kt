@@ -152,8 +152,7 @@ private fun RoomListScaffold(
                     onClick = onCreateRoomClick
                 ) {
                     Icon(
-                        // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                        imageVector = CompoundIcons.Compose(),
+                        imageVector = CompoundIcons.Plus(),
                         contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message),
                         tint = ElementTheme.colors.iconOnSolidPrimary,
                     )

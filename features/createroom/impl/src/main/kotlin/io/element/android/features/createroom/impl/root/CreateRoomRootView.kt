@@ -55,6 +55,7 @@ fun CreateRoomRootView(
     onNewRoomClick: () -> Unit,
     onOpenDM: (RoomId) -> Unit,
     onInviteFriendsClick: () -> Unit,
+    onJoinByAddressClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -89,6 +90,7 @@ fun CreateRoomRootView(
                     state = state,
                     onNewRoomClick = onNewRoomClick,
                     onInvitePeopleClick = onInviteFriendsClick,
+                    onJoinByAddressClick = onJoinByAddressClick,
                     onDmClick = onOpenDM,
                 )
             }
@@ -153,6 +155,7 @@ private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     onNewRoomClick: () -> Unit,
     onInvitePeopleClick: () -> Unit,
+    onJoinByAddressClick: () -> Unit,
     onDmClick: (RoomId) -> Unit,
 ) {
     LazyColumn {
@@ -168,6 +171,13 @@ private fun CreateRoomActionButtonsList(
                 iconRes = CompoundDrawables.ic_compound_share_android,
                 text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
                 onClick = onInvitePeopleClick,
+            )
+        }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_room,
+                text = stringResource(R.string.screen_start_chat_join_room_by_address_action),
+                onClick = onJoinByAddressClick,
             )
         }
         if (state.userListState.recentDirectRooms.isNotEmpty()) {
@@ -230,6 +240,7 @@ internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProv
             onCloseClick = {},
             onNewRoomClick = {},
             onOpenDM = {},
+            onJoinByAddressClick = {},
             onInviteFriendsClick = {},
         )
     }

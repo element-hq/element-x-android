@@ -19,8 +19,4 @@ sealed interface RoomAddressValidity {
     data object InvalidSymbols : RoomAddressValidity
     data object NotAvailable : RoomAddressValidity
     data object Valid : RoomAddressValidity
-
-    fun isError(): Boolean {
-        return this is InvalidSymbols || this is NotAvailable
-    }
 }

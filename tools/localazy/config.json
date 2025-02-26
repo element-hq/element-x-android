@@ -64,7 +64,8 @@
       "includeRegex" : [
         "screen_create_room_.*",
         "screen\\.create_room\\..*",
-        "screen_start_chat_.*"
+        "screen_start_chat_.*",
+        "screen\\.start_chat\\..*"
       ]
     },
     {
