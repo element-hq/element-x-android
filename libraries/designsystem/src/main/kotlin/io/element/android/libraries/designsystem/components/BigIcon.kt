@@ -105,7 +105,7 @@ object BigIcon {
         val icon = when (style) {
             is Style.Default -> style.vectorIcon
             Style.Alert,
-            Style.AlertSolid -> CompoundIcons.Error()
+            Style.AlertSolid -> CompoundIcons.ErrorSolid()
             Style.Success,
             Style.SuccessSolid -> CompoundIcons.CheckCircleSolid()
         }

@@ -391,7 +391,7 @@ private fun VerifiedUserSendFailureView(
         modifier = modifier
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Error())),
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ErrorSolid())),
         trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
         headlineContent = {
             Text(

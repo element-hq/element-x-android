@@ -136,7 +136,7 @@ private fun ColumnScope.Buttons(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = CompoundIcons.Error(),
+                            imageVector = CompoundIcons.ErrorSolid(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
