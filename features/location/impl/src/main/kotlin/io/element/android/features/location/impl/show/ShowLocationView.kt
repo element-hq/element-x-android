@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationSearching
-import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -132,8 +129,8 @@ fun ShowLocationView(
                 onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
             ) {
                 when (state.isTrackMyLocation) {
-                    false -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
-                    true -> Icon(imageVector = Icons.Default.MyLocation, contentDescription = null)
+                    false -> Icon(imageVector = CompoundIcons.LocationNavigator(), contentDescription = null)
+                    true -> Icon(imageVector = CompoundIcons.LocationNavigatorCentred(), contentDescription = null)
                 }
             }
         },
