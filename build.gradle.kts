@@ -166,14 +166,17 @@ allprojects {
 // Register quality check tasks.
 tasks.register("runQualityChecks") {
     dependsOn(":tests:konsist:testDebugUnitTest")
+    dependsOn(":app:lintGplayDebug")
     project.subprojects {
-        // For some reason `findByName("lint")` doesn't work
-        tasks.findByPath("$path:lint")?.let { dependsOn(it) }
+        tasks.findByPath("$path:lintDebug")?.let { dependsOn(it) }
         tasks.findByName("detekt")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
+
+    // Make sure all checks run even if some fail
+    gradle.startParameter.isContinueOnFailure = true
 }
 
 // Make sure to delete old screenshots before recording new ones
