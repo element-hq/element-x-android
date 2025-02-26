@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl.notifications.channels
 import android.os.Build
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.mockk.every
@@ -65,7 +64,6 @@ class NotificationChannelsTest {
     private fun createNotificationChannels(
         notificationManager: NotificationManagerCompat = mockk(relaxed = true),
     ) = DefaultNotificationChannels(
-        context = InstrumentationRegistry.getInstrumentation().targetContext,
         notificationManager = notificationManager,
         stringProvider = FakeStringProvider(),
     )
