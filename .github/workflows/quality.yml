@@ -138,7 +138,7 @@ jobs:
       - name: Build Fdroid Debug
         run: ./gradlew :app:compileFdroidDebugKotlin $CI_GRADLE_ARG_PROPERTIES
       - name: Run lint
-        run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug lintDebug $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
