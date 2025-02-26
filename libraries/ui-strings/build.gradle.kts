@@ -11,8 +11,4 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.ui.strings"
-
-    lint {
-        disable += "Typos"
-    }
 }
