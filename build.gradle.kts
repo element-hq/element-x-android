@@ -174,6 +174,9 @@ tasks.register("runQualityChecks") {
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
+
+    // Make sure all checks run even if some fail
+    gradle.startParameter.isContinueOnFailure = true
 }
 
 // Make sure to delete old screenshots before recording new ones
