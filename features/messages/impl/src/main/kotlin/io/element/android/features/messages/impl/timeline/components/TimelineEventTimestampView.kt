@@ -68,7 +68,7 @@ fun TimelineEventTimestampView(
             val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
-                imageVector = CompoundIcons.Error(),
+                imageVector = CompoundIcons.ErrorSolid(),
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
                 modifier = Modifier

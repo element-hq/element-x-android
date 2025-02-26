@@ -68,7 +68,7 @@ fun UnresolvedUserRow(
                     .padding(top = 3.dp)
             ) {
                 Icon(
-                    imageVector = CompoundIcons.Error(),
+                    imageVector = CompoundIcons.ErrorSolid(),
                     contentDescription = null,
                     modifier = Modifier
                         .size(18.dp)
