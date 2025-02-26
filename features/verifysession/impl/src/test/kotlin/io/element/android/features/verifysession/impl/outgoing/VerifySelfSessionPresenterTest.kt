@@ -314,7 +314,7 @@ class VerifySelfSessionPresenterTest {
             emitVerifiedStatus(SessionVerifiedStatus.Verified)
             emitVerificationFlowState(VerificationFlowState.DidFinish)
         }
-        val signOutLambda = lambdaRecorder<Boolean, String?> { "aUrl" }
+        val signOutLambda = lambdaRecorder<Boolean, Unit> {}
         val presenter = createVerifySelfSessionPresenter(
             service,
             logoutUseCase = FakeLogoutUseCase(signOutLambda)
@@ -326,7 +326,6 @@ class VerifySelfSessionPresenterTest {
             assertThat(awaitItem().signOutAction.isLoading()).isTrue()
             val finalItem = awaitItem()
             assertThat(finalItem.signOutAction.isSuccess()).isTrue()
-            assertThat(finalItem.signOutAction.dataOrNull()).isEqualTo("aUrl")
             signOutLambda.assertions().isCalledOnce().with(value(true))
         }
     }

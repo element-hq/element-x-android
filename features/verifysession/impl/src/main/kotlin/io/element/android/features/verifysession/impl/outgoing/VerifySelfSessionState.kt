@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 @Immutable
 data class VerifySelfSessionState(
     val step: Step,
-    val signOutAction: AsyncAction<String?>,
+    val signOutAction: AsyncAction<Unit>,
     val displaySkipButton: Boolean,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 ) {

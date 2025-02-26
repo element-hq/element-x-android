@@ -521,10 +521,9 @@ class LoggedInPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - LogoutAndMigrateToNativeSlidingSync logs out the user`() = runTest {
-        val logoutLambda = lambdaRecorder<Boolean, Boolean, String?> { userInitiated, ignoreSdkError ->
+        val logoutLambda = lambdaRecorder<Boolean, Boolean, Unit> { userInitiated, ignoreSdkError ->
             assertThat(userInitiated).isTrue()
             assertThat(ignoreSdkError).isTrue()
-            null
         }
         val matrixClient = FakeMatrixClient().apply {
             this.logoutLambda = logoutLambda

@@ -19,9 +19,9 @@ class DefaultLogoutUseCase @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientProvider: MatrixClientProvider,
 ) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean): String? {
+    override suspend fun logout(ignoreSdkError: Boolean) {
         val currentSession = authenticationService.getLatestSessionId()
-        return if (currentSession != null) {
+        if (currentSession != null) {
             matrixClientProvider.getOrRestore(currentSession)
                 .getOrThrow()
                 .logout(userInitiated = true, ignoreSdkError = true)

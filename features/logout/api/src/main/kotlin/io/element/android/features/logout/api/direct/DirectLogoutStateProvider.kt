@@ -17,13 +17,13 @@ open class DirectLogoutStateProvider : PreviewParameterProvider<DirectLogoutStat
             aDirectLogoutState(logoutAction = AsyncAction.ConfirmingNoParams),
             aDirectLogoutState(logoutAction = AsyncAction.Loading),
             aDirectLogoutState(logoutAction = AsyncAction.Failure(Exception("Error"))),
-            aDirectLogoutState(logoutAction = AsyncAction.Success("success")),
+            aDirectLogoutState(logoutAction = AsyncAction.Success(Unit)),
         )
 }
 
 fun aDirectLogoutState(
     canDoDirectSignOut: Boolean = true,
-    logoutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (DirectLogoutEvents) -> Unit = {},
 ) = DirectLogoutState(
     canDoDirectSignOut = canDoDirectSignOut,

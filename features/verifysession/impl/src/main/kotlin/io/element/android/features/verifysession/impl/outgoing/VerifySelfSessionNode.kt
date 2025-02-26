@@ -20,7 +20,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.inputs
@@ -56,7 +55,6 @@ class VerifySelfSessionNode @AssistedInject constructor(
             onEnterRecoveryKey = callback::onEnterRecoveryKey,
             onResetKey = callback::onResetKey,
             onFinish = callback::onDone,
-            onSuccessLogout = { onSuccessLogout(activity, isDark, it) },
         )
     }
 }
