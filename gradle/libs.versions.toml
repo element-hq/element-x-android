@@ -20,7 +20,7 @@ datastore = "1.0.0"
 constraintlayout = "2.2.0"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.8.7"
-activity = "1.10.0"
+activity = "1.10.1"
 media3 = "1.5.1"
 camera = "1.4.1"
 
