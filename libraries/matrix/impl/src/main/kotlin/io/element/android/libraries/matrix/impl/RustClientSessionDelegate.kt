@@ -19,6 +19,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.Session
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -43,13 +44,20 @@ class RustClientSessionDelegate(
     private val updateTokensDispatcher = coroutineDispatchers.io.limitedParallelism(1)
 
     // This Client needs to be set up as soon as possible so `didReceiveAuthError` can work properly.
-    private var client: RustMatrixClient? = null
+    private var client: WeakReference<RustMatrixClient> = WeakReference(null)
 
     /**
      * Sets the [ClientDelegate] for the [RustMatrixClient], and keeps a reference to the client so it can be used later.
      */
     fun bindClient(client: RustMatrixClient) {
-        this.client = client
+        this.client = WeakReference(client)
+    }
+
+    /**
+     * Clears the current client reference.
+     */
+    fun clearCurrentClient() {
+        this.client.clear()
     }
 
     override fun saveSessionInKeychain(session: Session) {
@@ -81,7 +89,7 @@ class RustClientSessionDelegate(
             clientLog.v("didReceiveAuthError -> do the cleanup")
             // TODO handle isSoftLogout parameter.
             appCoroutineScope.launch(updateTokensDispatcher) {
-                val currentClient = client
+                val currentClient = client.get()
                 if (currentClient == null) {
                     clientLog.w("didReceiveAuthError -> no client, exiting")
                     isLoggingOut.set(false)
@@ -101,7 +109,7 @@ class RustClientSessionDelegate(
                 } else {
                     clientLog.d("No session data found.")
                 }
-                client?.logout(userInitiated = false, ignoreSdkError = true)
+                currentClient.logout(userInitiated = false, ignoreSdkError = true)
             }.invokeOnCompletion {
                 if (it != null) {
                     clientLog.e(it, "Failed to remove session data.")

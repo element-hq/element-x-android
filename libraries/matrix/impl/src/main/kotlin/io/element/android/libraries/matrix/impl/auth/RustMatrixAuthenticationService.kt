@@ -156,6 +156,10 @@ class RustMatrixAuthenticationService @Inject constructor(
                     )
                 newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
+
+                // Clean up the strong reference held here since it's no longer necessary
+                currentClient = null
+
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
@@ -229,6 +233,10 @@ class RustMatrixAuthenticationService @Inject constructor(
                 pendingOidcAuthorizationData = null
                 newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
+
+                // Clean up the strong reference held here since it's no longer necessary
+                currentClient = null
+
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
@@ -264,6 +272,10 @@ class RustMatrixAuthenticationService @Inject constructor(
                     )
                 newMatrixClientObserver?.invoke(rustMatrixClientFactory.create(client))
                 sessionStore.storeData(sessionData)
+
+                // Clean up the strong reference held here since it's no longer necessary
+                currentClient = null
+
                 SessionId(sessionData.userId)
             }.mapFailure {
                 when (it) {
