@@ -9,6 +9,14 @@ package io.element.android.features.networkmonitor.api
 
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Monitors the network status of the device, providing the current network connectivity status as a flow.
+ *
+ * **Note:** network connectivity does not imply internet connectivity. The device can be connected to a network that can't reach the homeserver.
+ */
 interface NetworkMonitor {
+    /**
+     * A flow containing the current network connectivity status.
+     */
     val connectivity: StateFlow<NetworkStatus>
 }

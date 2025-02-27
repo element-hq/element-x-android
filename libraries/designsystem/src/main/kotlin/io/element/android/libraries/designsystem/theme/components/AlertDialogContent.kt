@@ -159,7 +159,7 @@ internal fun SimpleAlertDialogContent(
         // most cases, TextButtons should be used for dismiss and confirm buttons.
         // TextButtons will not consume this provided content color value, and will used their
         // own defined or default colors.
-        buttonContentColor = MaterialTheme.colorScheme.primary,
+        buttonContentColor = ElementTheme.colors.textPrimary,
         applyPaddingToContents = applyPaddingToContents,
     )
 }

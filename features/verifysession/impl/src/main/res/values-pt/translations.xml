@@ -13,9 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"Algo não bateu certo. O pedido ou demorou demasiado tempo ou foi rejeitado."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirma se os emojis abaixo correspondem aos apresentados na tua outra sessão."</string>
   <string name="screen_session_verification_compare_emojis_title">"Compara os emojis"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Confirma se os emojis abaixo correspondem aos apresentados no dispositivo do outro utilizador."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirma se os números abaixo correspondem aos números apresentados na tua outra sessão."</string>
   <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
   <string name="screen_session_verification_complete_subtitle">"A tua nova sessão está agora verificada, pelo que tem acesso às tuas mensagens cifradas e os outros utilizadores vão vê-la como de confiança."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Agora podes confiar na identidade deste utilizador quando envias ou recebes mensagens."</string>
   <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
   <string name="screen_session_verification_failed_subtitle">"O pedido expirou, o pedido foi recusado ou houve um erro de verificação."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prova que és tu para acederes ao teu histórico de mensagens cifradas."</string>
@@ -37,8 +39,14 @@
   <string name="screen_session_verification_they_match">"Correspondem"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Certifica-te de que tens a aplicação aberta no outro dispositivo antes de iniciares a verificação aqui."</string>
   <string name="screen_session_verification_use_another_device_title">"Abre a aplicação noutro dispositivo verificado"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"Para maior segurança, verifica este utilizador comparando um conjunto de emojis nos teus dispositivos. Faz isto utilizando uma forma de comunicação de confiança."</string>
+  <string name="screen_session_verification_user_initiator_title">"Verificar este utilizador?"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Para maior segurança, outro utilizador quer verificar a tua identidade. Ser-te-á mostrado um conjunto de emojis para comparares."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Deves ver uma notificação no outro dispositivo. Inicia a verificação a partir daí."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Inicia a verificação no outro dispositivo"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"À espera do outro dispositivo"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"A espera do outro utilizador"</string>
+  <string name="screen_session_verification_waiting_subtitle">"Uma vez aceite, poderás continuar com a verificação."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"À aguardar a aceitação do pedido"</string>
   <string name="screen_signout_in_progress_dialog_content">"A terminar sessão…"</string>

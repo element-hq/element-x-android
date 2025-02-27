@@ -8,6 +8,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.features.createroom.impl.userlist.aRecentDirectRoomList
 import io.element.android.features.createroom.impl.userlist.aUserListState
@@ -48,6 +49,9 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 userListState = aUserListState(
                     recentDirectRooms = aRecentDirectRoomList()
                 )
+            ),
+            aCreateRoomRootState(
+                startDmAction = ConfirmingStartDmWithMatrixUser(aMatrixUser()),
             ),
         )
 }

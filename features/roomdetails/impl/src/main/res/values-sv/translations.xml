@@ -49,12 +49,15 @@
   <string name="screen_room_details_invite_people_title">"Bjud in personer"</string>
   <string name="screen_room_details_leave_conversation_title">"Lämna konversation"</string>
   <string name="screen_room_details_leave_room_title">"Lämna rum"</string>
+  <string name="screen_room_details_media_gallery_title">"Media och filer"</string>
   <string name="screen_room_details_notification_mode_custom">"Anpassad"</string>
   <string name="screen_room_details_notification_mode_default">"Förval"</string>
   <string name="screen_room_details_notification_title">"Aviseringar"</string>
   <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
+  <string name="screen_room_details_requests_to_join_title">"Begäran om att gå med"</string>
   <string name="screen_room_details_roles_and_permissions">"Roller och behörigheter"</string>
   <string name="screen_room_details_room_name_label">"Rumsnamn"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Säkerhet och sekretess"</string>
   <string name="screen_room_details_security_title">"Säkerhet"</string>
   <string name="screen_room_details_share_room_title">"Dela rum"</string>
   <string name="screen_room_details_title">"Rumsinfo"</string>
@@ -114,4 +117,25 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller och behörigheter"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Vem som helst kan be om att gå med i rummet men en administratör eller moderator måste acceptera begäran."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Be om att gå med"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktivera kryptering"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"När det är aktiverat kan kryptering för ett rum inte inaktiveras, meddelandehistoriken visas bara för rumsmedlemmar sedan de blev inbjudna eller sedan de gick med i rummet.
+Ingen förutom rumsmedlemmarna kommer att kunna läsa meddelanden. Detta kan förhindra att bots och bridges fungerar korrekt.
+Vi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hitta och gå med i."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Aktivera kryptering?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Efter aktivering kan kryptering inte inaktiveras."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivera totalsträckskryptering"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Vem som helst kan hitta och gå med"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Vem som helst"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Användare kan bara gå med om de är inbjudna"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Endast inbjudan"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Tillgång till rum"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Vem som helst"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Vem kan läsa historik"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Endast medlemmar sedan de bjöds in"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Endast medlemmar sedan det här alternativet har valts"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Rumssynlighet"</string>
+  <string name="screen_security_and_privacy_title">"Säkerhet och sekretess"</string>
 </resources>

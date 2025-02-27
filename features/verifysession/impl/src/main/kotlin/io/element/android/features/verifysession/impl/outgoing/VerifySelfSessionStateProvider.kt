@@ -65,7 +65,7 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
 
 internal fun aVerifySelfSessionState(
     step: Step = Step.Initial(canEnterRecoveryKey = false),
-    signOutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    signOutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(

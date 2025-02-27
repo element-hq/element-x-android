@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
@@ -37,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,6 +97,19 @@ fun UserProfileView(
                 errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
                 onRetry = { state.eventSink(UserProfileEvents.StartDM) },
                 onErrorDismiss = { state.eventSink(UserProfileEvents.ClearStartDMState) },
+                confirmationDialog = { data ->
+                    if (data is ConfirmingStartDmWithMatrixUser) {
+                        CreateDmConfirmationBottomSheet(
+                            matrixUser = data.matrixUser,
+                            onSendInvite = {
+                                state.eventSink(UserProfileEvents.StartDM)
+                            },
+                            onDismiss = {
+                                state.eventSink(UserProfileEvents.ClearStartDMState)
+                            },
+                        )
+                    }
+                },
             )
         }
     }

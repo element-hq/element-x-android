@@ -9,19 +9,29 @@ package io.element.android.services.appnavstate.test
 
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class FakeAppForegroundStateService(
-    initialValue: Boolean = true,
+    initialForegroundValue: Boolean = true,
+    initialIsInCallValue: Boolean = false,
+    initialIsSyncingNotificationEventValue: Boolean = false
 ) : AppForegroundStateService {
-    private val state = MutableStateFlow(initialValue)
-    override val isInForeground: StateFlow<Boolean> = state
+    override val isInForeground = MutableStateFlow(initialForegroundValue)
+    override val isInCall = MutableStateFlow(initialIsInCallValue)
+    override val isSyncingNotificationEvent = MutableStateFlow(initialIsSyncingNotificationEventValue)
 
-    override fun start() {
+    override fun startObservingForeground() {
         // No-op
     }
 
     fun givenIsInForeground(isInForeground: Boolean) {
-        state.value = isInForeground
+        this.isInForeground.value = isInForeground
+    }
+
+    override fun updateIsInCallState(isInCall: Boolean) {
+        this.isInCall.value = isInCall
+    }
+
+    override fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean) {
+        this.isSyncingNotificationEvent.value = isSyncingNotificationEvent
     }
 }

@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -54,6 +55,7 @@ fun CreateRoomRootView(
     onNewRoomClick: () -> Unit,
     onOpenDM: (RoomId) -> Unit,
     onInviteFriendsClick: () -> Unit,
+    onJoinByAddressClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -88,6 +90,7 @@ fun CreateRoomRootView(
                     state = state,
                     onNewRoomClick = onNewRoomClick,
                     onInvitePeopleClick = onInviteFriendsClick,
+                    onJoinByAddressClick = onJoinByAddressClick,
                     onDmClick = onOpenDM,
                 )
             }
@@ -110,6 +113,19 @@ fun CreateRoomRootView(
                 ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
         },
         onErrorDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
+        confirmationDialog = { data ->
+            if (data is ConfirmingStartDmWithMatrixUser) {
+                CreateDmConfirmationBottomSheet(
+                    matrixUser = data.matrixUser,
+                    onSendInvite = {
+                        state.eventSink(CreateRoomRootEvents.StartDM(data.matrixUser))
+                    },
+                    onDismiss = {
+                        state.eventSink(CreateRoomRootEvents.CancelStartDM)
+                    },
+                )
+            }
+        },
     )
 }
 
@@ -139,6 +155,7 @@ private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     onNewRoomClick: () -> Unit,
     onInvitePeopleClick: () -> Unit,
+    onJoinByAddressClick: () -> Unit,
     onDmClick: (RoomId) -> Unit,
 ) {
     LazyColumn {
@@ -154,6 +171,13 @@ private fun CreateRoomActionButtonsList(
                 iconRes = CompoundDrawables.ic_compound_share_android,
                 text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
                 onClick = onInvitePeopleClick,
+            )
+        }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_room,
+                text = stringResource(R.string.screen_start_chat_join_room_by_address_action),
+                onClick = onJoinByAddressClick,
             )
         }
         if (state.userListState.recentDirectRooms.isNotEmpty()) {
@@ -196,7 +220,7 @@ private fun CreateRoomActionButton(
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = ElementTheme.colors.iconSecondary,
             resourceId = iconRes,
             contentDescription = null,
         )
@@ -216,6 +240,7 @@ internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProv
             onCloseClick = {},
             onNewRoomClick = {},
             onOpenDM = {},
+            onJoinByAddressClick = {},
             onInviteFriendsClick = {},
         )
     }

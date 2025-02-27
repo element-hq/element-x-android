@@ -13,6 +13,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -32,12 +33,11 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRule
-import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
@@ -58,9 +59,9 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
+import io.element.android.libraries.matrix.impl.room.RustRoomPreview
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.room.join.map
-import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
@@ -261,8 +262,8 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): PendingRoom? {
-        return roomFactory.createPendingRoom(roomId)
+    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? {
+        return roomFactory.createRoomPreview(roomId)
     }
 
     /**
@@ -393,7 +394,7 @@ class RustMatrixClient(
                 null
             }
         }
-    }
+    }.mapFailure { it.mapClientException() }
 
     override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?> = withContext(sessionDispatcher) {
         runCatching {
@@ -407,7 +408,7 @@ class RustMatrixClient(
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
             }
-        }
+        }.mapFailure { it.mapClientException() }
     }
 
     override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomSummary?> = withContext(
@@ -421,7 +422,7 @@ class RustMatrixClient(
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
             }
-        }
+        }.mapFailure { it.mapClientException() }
     }
 
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
@@ -448,15 +449,14 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            when (roomIdOrAlias) {
+            val roomPreview = when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
                 is RoomIdOrAlias.Id -> innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
-            }.use { roomPreview ->
-                RoomPreviewInfoMapper.map(roomPreview.info())
             }
-        }
+            RustRoomPreview(sessionId, roomPreview, roomMembershipObserver)
+        }.mapFailure { it.mapClientException() }
     }
 
     override fun syncService(): SyncService = rustSyncService
@@ -493,15 +493,15 @@ class RustMatrixClient(
         deleteSessionDirectory(deleteCryptoDb = false)
     }
 
-    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
-        var result: String? = null
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
+        sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
-                    result = innerClient.logout()
+                    innerClient.logout()
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
@@ -520,7 +520,6 @@ class RustMatrixClient(
                 sessionStore.removeSession(sessionId.value)
             }
         }
-        return result
     }
 
     override fun canDeactivateAccount(): Boolean {

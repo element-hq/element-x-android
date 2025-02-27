@@ -128,14 +128,14 @@ private fun KnockRequestsBannerContent(
                 Text(
                     text = state.formattedTitle(),
                     style = ElementTheme.typography.fontBodyMdMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Start,
                 )
                 if (state.subtitle != null) {
                     Text(
                         text = state.subtitle,
                         style = ElementTheme.typography.fontBodySmRegular,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = ElementTheme.colors.textSecondary,
                         textAlign = TextAlign.Start,
                     )
                 }

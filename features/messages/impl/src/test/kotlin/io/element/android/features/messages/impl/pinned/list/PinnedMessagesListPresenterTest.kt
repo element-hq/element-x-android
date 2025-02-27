@@ -38,6 +38,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -82,7 +83,7 @@ class PinnedMessagesListPresenterTest {
     @Test
     fun `present - timeline failure state`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.failure(RuntimeException()) },
+            createTimelineResult = { Result.failure(RuntimeException()) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -101,7 +102,7 @@ class PinnedMessagesListPresenterTest {
     @Test
     fun `present - empty state`() = runTest {
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(FakeTimeline()) },
+            createTimelineResult = { Result.success(FakeTimeline()) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -121,7 +122,7 @@ class PinnedMessagesListPresenterTest {
     fun `present - filled state`() = runTest {
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -148,7 +149,7 @@ class PinnedMessagesListPresenterTest {
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -194,7 +195,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -223,7 +224,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -252,7 +253,7 @@ class PinnedMessagesListPresenterTest {
         }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
         val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
+            createTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserPinUnpinResult = { Result.success(true) },
@@ -302,7 +303,8 @@ class PinnedMessagesListPresenterTest {
             syncService = syncService,
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
-            )
+            ),
+            dispatchers = testCoroutineDispatchers(),
         )
         timelineProvider.launchIn(backgroundScope)
         return PinnedMessagesListPresenter(

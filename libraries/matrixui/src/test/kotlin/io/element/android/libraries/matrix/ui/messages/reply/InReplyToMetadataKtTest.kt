@@ -7,12 +7,6 @@
 
 package io.element.android.libraries.matrix.ui.messages.reply
 
-import android.content.res.Configuration
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -52,6 +46,7 @@ import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.tests.testutils.withConfigurationAndContext
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -350,7 +345,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a location message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            testEnv {
+            withConfigurationAndContext {
                 anInReplyToDetailsReady(
                     eventContent = aMessageContent(
                         messageType = LocationMessageType(
@@ -380,7 +375,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a voice message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            testEnv {
+            withConfigurationAndContext {
                 anInReplyToDetailsReady(
                     eventContent = aMessageContent(
                         messageType = VoiceMessageType(
@@ -587,18 +582,4 @@ fun anImageInfo(): ImageInfo {
         thumbnailSource = aMediaSource(),
         blurhash = A_BLUR_HASH,
     )
-}
-
-@Composable
-private fun testEnv(content: @Composable () -> Any?): Any? {
-    var result: Any? = null
-    CompositionLocalProvider(
-        LocalConfiguration provides Configuration(),
-        LocalContext provides ApplicationProvider.getApplicationContext(),
-    ) {
-        content().apply {
-            result = this
-        }
-    }
-    return result
 }

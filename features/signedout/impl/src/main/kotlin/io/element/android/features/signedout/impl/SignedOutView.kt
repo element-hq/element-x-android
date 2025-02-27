@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -63,7 +61,7 @@ private fun SignedOutHeader(state: SignedOutState) {
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = stringResource(id = R.string.screen_signed_out_title),
         subTitle = stringResource(id = R.string.screen_signed_out_subtitle, state.appName),
-        iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
     )
 }
 

@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
@@ -81,6 +79,7 @@ import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaVie
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
+import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
@@ -297,7 +296,7 @@ private fun MediaViewerPage(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 val zoomableState = rememberZoomableState(
-                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, overzoomEffect = OverzoomEffect.NoLimits)
                 )
                 val localMediaViewState = rememberLocalMediaViewState(zoomableState)
                 val showThumbnail = !localMediaViewState.isReady
@@ -467,7 +466,7 @@ private fun MediaViewerTopBar(
                         contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
                     )
                     else -> Icon(
-                        imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                        imageVector = CompoundIcons.PopOut(),
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
                     )
                 }

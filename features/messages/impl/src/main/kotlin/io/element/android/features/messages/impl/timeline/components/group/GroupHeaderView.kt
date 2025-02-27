@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -67,7 +66,7 @@ fun GroupHeaderView(
             ) {
                 Text(
                     text = text,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 val rotation: Float by animateFloatAsState(
@@ -82,7 +81,7 @@ fun GroupHeaderView(
                     modifier = Modifier.rotate(rotation),
                     imageVector = CompoundIcons.ChevronRight(),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
+                    tint = ElementTheme.colors.iconSecondary
                 )
             }
         }

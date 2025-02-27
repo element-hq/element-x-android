@@ -16,8 +16,6 @@
   <string name="screen_media_details_filename">"Název souboru"</string>
   <string name="screen_media_details_no_more_files_to_show">"Žádné další soubory k zobrazení"</string>
   <string name="screen_media_details_no_more_media_to_show">"Žádná další média k zobrazení"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Tento soubor bude odstraněn z místnosti a členové k němu nebudou mít přístup."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Smazat soubor?"</string>
   <string name="screen_media_details_uploaded_by">"Nahrál(a)"</string>
   <string name="screen_media_details_uploaded_on">"Nahráno"</string>
 </resources>

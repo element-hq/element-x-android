@@ -16,8 +16,6 @@
   <string name="screen_media_details_filename">"Имя файла"</string>
   <string name="screen_media_details_no_more_files_to_show">"Больше нет файлов для показа"</string>
   <string name="screen_media_details_no_more_media_to_show">"Больше нет медиа для показа"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Этот файл будет удален из комнаты и у участников не будет к нему доступа."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Удалить файл?"</string>
   <string name="screen_media_details_uploaded_by">"Загружено"</string>
   <string name="screen_media_details_uploaded_on">"Загружено на"</string>
 </resources>

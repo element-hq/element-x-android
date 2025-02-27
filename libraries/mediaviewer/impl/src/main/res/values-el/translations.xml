@@ -11,8 +11,6 @@
   <string name="screen_media_browser_title">"Πολυμέσα και αρχεία"</string>
   <string name="screen_media_details_file_format">"Μορφή αρχείου"</string>
   <string name="screen_media_details_filename">"Όνομα αρχείου"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Αυτό το αρχείο θα αφαιρεθεί από το δωμάτιο και τα μέλη δεν θα έχουν πρόσβαση σε αυτό."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Διαγραφή αρχείου;"</string>
   <string name="screen_media_details_uploaded_by">"Μεταφορτώθηκε από"</string>
   <string name="screen_media_details_uploaded_on">"Μεταφορτώθηκε στις"</string>
 </resources>

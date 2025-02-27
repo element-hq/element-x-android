@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ja, acceptera alla"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Är du säker på att du vill acceptera alla förfrågningar om att gå med?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Acceptera alla förfrågningar"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Acceptera alla"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Vi kunde inte acceptera alla förfrågningar. Vill du försöka igen?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Misslyckades att acceptera alla förfrågningar"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Accepterar alla förfrågningar om att gå med"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Vi kunde inte acceptera denna begäran. Vill du försöka igen?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Misslyckades att acceptera förfrågan"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Accepterar begäran om att gå med"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, avslå och förbjud"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Är du säker på att du vill avvisa och förbjuda%1$s? Den här användaren kommer inte att kunna begära åtkomst för att gå med i det här rummet igen."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Avvisa och förbjud åtkomst"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Avvisar och bannar åtkomst"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ja, avböj"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Är du säker på att du vill avslå %1$s begäran om att gå med i det här rummet?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Avvisa åtkomst"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Avvisa och förbjud"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Vi kunde inte avslå denna begäran. Vill du försöka igen?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Misslyckades att avvisa begäran"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Avvisa begäran om att gå med"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"När någon begär om att gå med i rummet, kan du se deras förfrågan här."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Ingen väntande begäran om att gå med"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Laddar förfrågningar om att gå med …"</string>
+  <string name="screen_knock_requests_list_title">"Begäran om att gå med"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s+ %2$d annan vill gå med i detta rum"</item>
+    <item quantity="other">"%1$s+ %2$d andra vill gå med i detta rum"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Visa alla"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Godkänn"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s vill gå med i det här rummet"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Visa"</string>
+</resources>

@@ -8,9 +8,9 @@
 package io.element.android.features.createroom.impl.root
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -20,9 +20,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.CreateRoomNavigator
 import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(SessionScope::class)
@@ -33,18 +34,7 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
 ) : Node(buildContext, plugins = plugins) {
-    interface Callback : Plugin {
-        fun onCreateNewRoom()
-        fun onStartChatSuccess(roomId: RoomId)
-    }
-
-    private fun onCreateNewRoom() {
-        plugins<Callback>().forEach { it.onCreateNewRoom() }
-    }
-
-    private fun onStartChatSuccess(roomId: RoomId) {
-        plugins<Callback>().forEach { it.onStartChatSuccess(roomId) }
-    }
+    private val navigator = plugins<CreateRoomNavigator>().first()
 
     init {
         lifecycle.subscribe(
@@ -55,13 +45,16 @@ class CreateRoomRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = LocalContext.current as Activity
+        val activity = requireNotNull(LocalActivity.current)
         CreateRoomRootView(
             state = state,
             modifier = modifier,
             onCloseClick = this::navigateUp,
-            onNewRoomClick = ::onCreateNewRoom,
-            onOpenDM = ::onStartChatSuccess,
+            onNewRoomClick = navigator::onCreateNewRoom,
+            onOpenDM = {
+                navigator.onOpenRoom(roomIdOrAlias = it.toRoomIdOrAlias(), serverNames = emptyList())
+            },
+            onJoinByAddressClick = navigator::onShowJoinRoomByAddress,
             onInviteFriendsClick = { invitePeople(activity) }
         )
     }

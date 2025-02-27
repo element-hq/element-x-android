@@ -131,6 +131,8 @@
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
   <string name="action_yes_try_again">"Ano, zkusit znovu"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade k dispozici"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_adding_caption">"Přidání titulku"</string>
@@ -145,7 +147,7 @@
   <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
-  <string name="common_current_user_left_room">"Opustit místnost"</string>
+  <string name="common_current_user_left_room">"Místnost opuštěna"</string>
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
@@ -196,6 +198,7 @@ Důvod: %1$s."</string>
   <string name="common_message_removed">"Zpráva byla odstraněna"</string>
   <string name="common_modern">"Moderní"</string>
   <string name="common_mute">"Ztlumit"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žádné výsledky"</string>
   <string name="common_no_room_name">"Žádný název místnosti"</string>
   <string name="common_offline">"Offline"</string>
@@ -245,7 +248,7 @@ Důvod: %1$s."</string>
   <string name="common_settings">"Nastavení"</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_signing_out">"Odhlašování"</string>
-  <string name="common_something_went_wrong">"Něco se pokazilo"</string>
+  <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
   <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>
@@ -274,6 +277,7 @@ Důvod: %1$s."</string>
   <string name="common_verified">"Ověřeno"</string>
   <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="common_verify_identity">"Ověření totožnosti"</string>
+  <string name="common_verify_user">"Ověřit uživatele"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
@@ -282,6 +286,7 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Zdá se, že identita %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Ověřená identita %1$s se změnila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Ověřená identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
@@ -300,6 +305,7 @@ Důvod: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Přístup můžete povolit v Nastavení."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Povolit přístup níže."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá oprávnění k přístupu k mikrofonu. Povolte přístup k nahrávání hlasové zprávy."</string>
+  <string name="error_network_or_server_issue">"Může to být způsobeno problémy se sítí nebo serverem."</string>
   <string name="error_room_address_already_exists">"Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti"</string>
   <string name="error_room_address_invalid_symbols">"Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>

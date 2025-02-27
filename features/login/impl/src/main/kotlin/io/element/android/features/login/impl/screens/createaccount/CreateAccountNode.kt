@@ -8,9 +8,9 @@
 package io.element.android.features.login.impl.screens.createaccount
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -41,7 +41,7 @@ class CreateAccountNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val activity = LocalContext.current as Activity
+        val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
         val state = presenter.present()
         CreateAccountView(

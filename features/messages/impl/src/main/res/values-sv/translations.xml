@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Lägg till emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Det här är början på %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Detta är början på det här samtalet."</string>
+  <string name="screen_room_timeline_legacy_call">"Samtalet stöds inte. Fråga om den som ringer kan använda den nya Element X-appen."</string>
   <string name="screen_room_timeline_less_reactions">"Visa mindre"</string>
   <string name="screen_room_timeline_message_copied">"Meddelande kopierat"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Du är inte behörig att göra inlägg i det här rummet"</string>

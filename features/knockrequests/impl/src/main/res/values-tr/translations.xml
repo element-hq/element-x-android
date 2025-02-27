@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Evet, tümünü kabul et"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Tüm katılma isteklerini kabul etmek istediğinizden emin misiniz?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Tüm istekleri kabul et"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Tümünü kabul et"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Tüm istekleri kabul edemedik. Tekrar denemek ister misiniz?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Tüm istekler kabul edilemedi"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Tüm katılım istekleri kabul ediliyor"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Bu isteği kabul edemedik. Tekrar denemek ister misiniz?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"İstek kabul edilemedi"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Katılma isteği kabul ediliyor"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Evet, reddet ve yasakla"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"%1$s reddetmek ve yasaklamak istediğinizden emin misiniz? Bu kullanıcı, bu odaya tekrar katılmak için erişim isteğinde bulunamaz."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Reddet ve erişimi yasakla"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Reddediliyor ve erişim yasaklanıyor"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Evet, reddet"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Bu odaya katılma isteğini reddetmek istediğinizden emin misiniz %1$s?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Erişimi reddet"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Reddet ve yasakla"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Bu isteği reddedemedik. Tekrar denemek ister misiniz?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"İsteği reddetme başarısız oldu"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Katılma isteği reddediliyor"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Birisi odaya katılmak istediğinde, isteklerini burada görebileceksiniz."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Bekleyen katılım isteği yok"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Katılma istekleri yükleniyor…"</string>
+  <string name="screen_knock_requests_list_title">"Katılma istekleri"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d kişi daha bu odaya katılmak istiyor"</item>
+    <item quantity="other">"%1$s +%2$d kişi daha bu odaya katılmak istiyor"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Tümünü görüntüle"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Kabul et"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s bu odaya katılmak istiyor"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Görüntüle"</string>
+</resources>

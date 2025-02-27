@@ -9,7 +9,9 @@ package io.element.android.libraries.matrix.api.room.preview
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 
 data class RoomPreviewInfo(
     /** The room id for this room. */
@@ -28,12 +30,8 @@ data class RoomPreviewInfo(
     val roomType: RoomType,
     /** Is the history world-readable for this room? */
     val isHistoryWorldReadable: Boolean,
-    /** Is the room joined by the current user? */
-    val isJoined: Boolean,
-    /** Is the current user invited to this room? */
-    val isInvited: Boolean,
-    /** is the join rule public for this room? */
-    val isPublic: Boolean,
-    /** Can we knock (or restricted-knock) to this room? */
-    val canKnock: Boolean,
+    /** the membership of the current user. */
+    val membership: CurrentUserMembership?,
+    /** The room's join rule. */
+    val joinRule: JoinRule,
 )

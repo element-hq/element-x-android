@@ -389,6 +389,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                 }
             }
         }
+
         return MessageComposerState(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,

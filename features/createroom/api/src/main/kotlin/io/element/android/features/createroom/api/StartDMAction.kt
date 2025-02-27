@@ -10,13 +10,19 @@ package io.element.android.features.createroom.api
 import androidx.compose.runtime.MutableState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 interface StartDMAction {
     /**
      * Try to find an existing DM with the given user, or create one if none exists.
-     * @param userId The user to start a DM with.
+     * @param matrixUser The user to start a DM with.
+     * @param createIfDmDoesNotExist If true, create a DM if one does not exist. If false and the DM
+     * does not exist, the action will fail with the value [ConfirmingStartDmWithMatrixUser].
      * @param actionState The state to update with the result of the action.
      */
-    suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>)
+    suspend fun execute(
+        matrixUser: MatrixUser,
+        createIfDmDoesNotExist: Boolean,
+        actionState: MutableState<AsyncAction<RoomId>>,
+    )
 }

@@ -139,7 +139,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá váljon a szobakatalógusban."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Szoba címe"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"A szoba címe"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"A szoba megtalálhatóvá tétele a(z) %1$s nyilvános szobakatalógusában való kereséssel."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Látható a nyilvános szobakatalógusban"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Bárki"</string>

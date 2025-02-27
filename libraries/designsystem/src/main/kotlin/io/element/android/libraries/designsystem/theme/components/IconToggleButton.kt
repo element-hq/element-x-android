@@ -11,9 +11,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.runtime.Composable
@@ -24,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
@@ -56,7 +54,7 @@ internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) 
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             val icon: @Composable () -> Unit = {
                 Icon(
-                    imageVector = if (checked) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                    imageVector = if (checked) CompoundIcons.CheckCircleSolid() else CompoundIcons.Circle(),
                     contentDescription = null
                 )
             }
@@ -66,7 +64,7 @@ internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) 
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             val icon: @Composable () -> Unit = {
                 Icon(
-                    imageVector = if (!checked) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                    imageVector = if (!checked) CompoundIcons.CheckCircleSolid() else CompoundIcons.Circle(),
                     contentDescription = null
                 )
             }

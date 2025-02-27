@@ -23,10 +23,7 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
     @Composable
-    override fun Render(
-        state: DirectLogoutState,
-        onSuccessLogout: (logoutUrlResult: String?) -> Unit,
-    ) {
+    override fun Render(state: DirectLogoutState) {
         val eventSink = state.eventSink
         LogoutActionDialog(
             state.logoutAction,
@@ -39,9 +36,6 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
             onDismissDialog = {
                 eventSink(DirectLogoutEvents.CloseDialogs)
             },
-            onSuccessLogout = {
-                onSuccessLogout(it)
-            },
         )
     }
 }
@@ -51,8 +45,5 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
 internal fun DefaultDirectLogoutViewPreview(
     @PreviewParameter(DirectLogoutStateProvider::class) state: DirectLogoutState,
 ) = ElementPreview {
-    DefaultDirectLogoutView().Render(
-        state = state,
-        onSuccessLogout = {},
-    )
+    DefaultDirectLogoutView().Render(state = state)
 }

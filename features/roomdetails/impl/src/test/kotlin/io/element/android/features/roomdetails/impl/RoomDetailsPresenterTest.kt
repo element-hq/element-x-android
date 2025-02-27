@@ -18,7 +18,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -146,7 +145,6 @@ class RoomDetailsPresenterTest {
     fun `present - initial state is updated with roomInfo if it exists`() = runTest {
         val roomInfo = aRoomInfo(
             name = A_ROOM_NAME,
-            isPublic = true,
             topic = A_ROOM_TOPIC,
             avatarUrl = AN_AVATAR_URL,
             pinnedEventIds = listOf(AN_EVENT_ID),

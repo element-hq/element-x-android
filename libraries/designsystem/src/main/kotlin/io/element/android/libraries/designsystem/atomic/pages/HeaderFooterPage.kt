@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
@@ -46,7 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(20.dp),
-    containerColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = ElementTheme.colors.bgCanvasDefault,
     isScrollable: Boolean = false,
     background: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},

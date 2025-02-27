@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -76,7 +75,7 @@ fun MessagesReactionButton(
             .background(Color.Transparent)
             // Outer border, same colour as background
             .border(
-                BorderStroke(2.dp, MaterialTheme.colorScheme.background),
+                BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
                 shape = RoundedCornerShape(corner = CornerSize(14.dp))
             )
             .padding(vertical = 2.dp, horizontal = 2.dp)
@@ -122,7 +121,7 @@ private fun TextContent(
         .height(REACTION_EMOJI_LINE_HEIGHT.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
-    color = ElementTheme.materialColors.primary
+    color = ElementTheme.colors.textPrimary
 )
 
 @Composable
@@ -131,7 +130,7 @@ private fun IconContent(
 ) = Icon(
     resourceId = resourceId,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
-    tint = ElementTheme.materialColors.secondary,
+    tint = ElementTheme.colors.iconSecondary,
     modifier = Modifier
         .size(ADD_EMOJI_SIZE)
 )
@@ -164,7 +163,7 @@ private fun ReactionContent(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = reaction.count.toString(),
-            color = if (reaction.isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+            color = if (reaction.isHighlighted) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodyMdRegular,
         )
     }

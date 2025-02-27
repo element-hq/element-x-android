@@ -10,10 +10,10 @@ package io.element.android.libraries.designsystem.theme.components.previews
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -48,7 +48,7 @@ private fun ContentToPreview() {
         shape = AlertDialogDefaults.shape,
         containerColor = AlertDialogDefaults.containerColor,
         tonalElevation = AlertDialogDefaults.TonalElevation,
-        buttonContentColor = MaterialTheme.colorScheme.primary,
+        buttonContentColor = ElementTheme.colors.textPrimary,
         iconContentColor = AlertDialogDefaults.iconContentColor,
         titleContentColor = AlertDialogDefaults.titleContentColor,
         textContentColor = AlertDialogDefaults.textContentColor,

@@ -10,5 +10,5 @@
   <string name="screen_deactivate_account_list_item_2">"Vous retirer de tous les salons et toutes les discussions."</string>
   <string name="screen_deactivate_account_list_item_3">"Supprimer les informations de votre compte du serveur d’identité."</string>
   <string name="screen_deactivate_account_list_item_4">"Rendre vos messages invisibles aux futurs membres des salons si vous choisissez de les supprimer. Vos messages seront toujours visibles pour les utilisateurs qui les ont déjà récupérés."</string>
-  <string name="screen_deactivate_account_title">"Désactiver votre compte"</string>
+  <string name="screen_deactivate_account_title">"Désactiver le compte"</string>
 </resources>

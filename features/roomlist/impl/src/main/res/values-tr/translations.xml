@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Mevcut tüm cihazlarınızı kaybettiyseniz şifreleme kimliğinizi ve mesaj geçmişinizi bir kurtarma anahtarıyla kurtarın."</string>
+  <string name="banner_set_up_recovery_submit">"Kurtarmayı ayarlayın"</string>
+  <string name="banner_set_up_recovery_title">"Hesabınızı korumak için kurtarmayı ayarlayın"</string>
+  <string name="confirm_recovery_key_banner_message">"Anahtar depolama alanınıza ve mesaj geçmişinize erişimi sürdürmek için kurtarma anahtarınızı onaylayın."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Kurtarma anahtarınızı girin"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Kurtarma anahtarınızı mı unuttunuz?"</string>
+  <string name="confirm_recovery_key_banner_title">"Anahtar depolama alanınız senkronize değil"</string>
+  <string name="full_screen_intent_banner_message">"Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin."</string>
+  <string name="full_screen_intent_banner_title">"Arama deneyiminizi geliştirin"</string>
+  <string name="screen_invites_decline_chat_message">"%1$s katılma davetini reddetmek istediğinizden emin misiniz?"</string>
+  <string name="screen_invites_decline_chat_title">"Daveti reddet"</string>
+  <string name="screen_invites_decline_direct_chat_message">"%1$s ile bu özel sohbeti reddetmek istediğinizden emin misiniz?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Sohbeti reddet"</string>
+  <string name="screen_invites_empty_list">"Davet Yok"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) sizi davet etti"</string>
+  <string name="screen_join_room_knock_sent_title">"Katılma isteği gönderildi"</string>
+  <string name="screen_migration_message">"Bu tek seferlik bir işlemdir, beklediğiniz için teşekkürler."</string>
+  <string name="screen_migration_title">"Hesabınızı ayarlanıyor."</string>
+  <string name="screen_roomlist_a11y_create_message">"Yeni bir sohbet veya oda oluşturun"</string>
+  <string name="screen_roomlist_empty_message">"Birine mesaj göndererek başla."</string>
+  <string name="screen_roomlist_empty_title">"Henüz sohbet yok."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoriler"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Sohbet ayarlarından bir sohbeti favorilerinize ekleyebilirsiniz.
+Şimdilik, diğer sohbetlerinizi görmek için filtrelerin seçimini kaldırabilirsiniz"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Henüz favori sohbetleriniz yok"</string>
+  <string name="screen_roomlist_filter_invites">"Davetiyeler"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Bekleyen davetiniz yok."</string>
+  <string name="screen_roomlist_filter_low_priority">"Düşük Öncelikli"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Diğer sohbetlerinizi görmek için filtrelerin seçimini kaldırabilirsiniz"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Bu seçim için sohbetiniz yok"</string>
+  <string name="screen_roomlist_filter_people">"Kişiler"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Henüz hiç DM\'niz yok"</string>
+  <string name="screen_roomlist_filter_rooms">"Odalar"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Henüz herhangi bir odada değilsiniz"</string>
+  <string name="screen_roomlist_filter_unreads">"Okunmamış"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Tebrikler!
+Okunmamış mesajınız yok!"</string>
+  <string name="screen_roomlist_main_space_title">"Sohbetler"</string>
+  <string name="screen_roomlist_mark_as_read">"Okundu olarak işaretle"</string>
+  <string name="screen_roomlist_mark_as_unread">"Okunmamış olarak işaretle"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Tüm odalara göz at"</string>
+  <string name="session_verification_banner_message">"Görünüşe göre yeni bir cihaz kullanıyorsunuz. Şifrelenmiş mesajlarınıza erişmek için başka bir cihazla doğrulayın."</string>
+  <string name="session_verification_banner_title">"Siz olduğunuzu doğrulayın"</string>
+</resources>

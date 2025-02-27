@@ -160,7 +160,8 @@ class DefaultActiveCallManager @Inject constructor(
             senderDisplayName = notificationData.senderName ?: notificationData.senderId.value,
             roomAvatarUrl = notificationData.avatarUrl,
             notificationChannelId = notificationData.notificationChannelId,
-            timestamp = notificationData.timestamp
+            timestamp = notificationData.timestamp,
+            textContent = notificationData.textContent,
         ) ?: return
         runCatching {
             notificationManagerCompat.notify(

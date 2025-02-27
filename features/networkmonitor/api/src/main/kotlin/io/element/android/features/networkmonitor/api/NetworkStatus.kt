@@ -7,7 +7,19 @@
 
 package io.element.android.features.networkmonitor.api
 
+/**
+ * Network connectivity status of the device.
+ *
+ * **Note:** this is *network* connectivity status, not *internet* connectivity status.
+ */
 enum class NetworkStatus {
-    Online,
-    Offline
+    /**
+     * The device is connected to a network.
+     */
+    Connected,
+
+    /**
+     * The device is not connected to any networks.
+     */
+    Disconnected
 }

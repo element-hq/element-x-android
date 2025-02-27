@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Ekran görüntüsü ekle"</string>
+  <string name="screen_bug_report_contact_me">"Herhangi bir sorunuz olursa benimle iletişime geçebilirsiniz."</string>
+  <string name="screen_bug_report_contact_me_title">"Bana ulaş"</string>
+  <string name="screen_bug_report_edit_screenshot">"Ekran görüntüsünü düzenle"</string>
+  <string name="screen_bug_report_editor_description">"Lütfen sorunu açıklayın. Ne yaptınız? Ne olmasını bekliyordunuz? Gerçekten ne oldu. Lütfen olabildiğince ayrıntılı bilgi verin."</string>
+  <string name="screen_bug_report_editor_placeholder">"Sorunu açıklayın…"</string>
+  <string name="screen_bug_report_editor_supporting">"Mümkünse, lütfen açıklamayı İngilizce olarak yazın."</string>
+  <string name="screen_bug_report_error_description_too_short">"Açıklama çok kısa, lütfen ne olduğu hakkında daha fazla ayrıntı verin. Teşekkürler!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Hata günlüklerini gönder"</string>
+  <string name="screen_bug_report_include_logs">"Günlüklere izin ver"</string>
+  <string name="screen_bug_report_include_screenshot">"Ekran görüntüsü gönder"</string>
+  <string name="screen_bug_report_logs_description">"Her şeyin düzgün çalıştığından emin olmak için günlükler mesajınıza dahil edilecektir. Mesajınızı kayıt tutmadan göndermek için bu ayarı kapatın."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s son kullanıldığında çöktü. Bizimle bir çökme raporu paylaşmak ister misiniz?"</string>
+  <string name="screen_bug_report_view_logs">"Günlükleri görüntüle"</string>
+</resources>

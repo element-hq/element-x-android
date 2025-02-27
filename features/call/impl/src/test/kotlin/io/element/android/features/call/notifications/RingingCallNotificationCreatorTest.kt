@@ -73,6 +73,7 @@ class RingingCallNotificationCreatorTest {
         roomAvatarUrl = "https://example.com/avatar.jpg",
         notificationChannelId = "channelId",
         timestamp = 0L,
+        textContent = "textContent",
     )
 
     private fun createRingingCallNotificationCreator(

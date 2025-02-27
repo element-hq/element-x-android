@@ -7,18 +7,16 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
-import android.media.RingtoneManager
 import android.os.Build
+import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -60,7 +58,6 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultNotificationChannels @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
 ) : NotificationChannels {
@@ -153,8 +150,6 @@ class DefaultNotificationChannels @Inject constructor(
         )
 
         // Register a channel for incoming call notifications which will ring the device when received
-        // TODO use a fallback ringtone if the default ringtone is not available
-        val ringtoneUri = runCatching { RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE) }.getOrNull()
         notificationManager.createNotificationChannel(
             NotificationChannelCompat.Builder(
                 RINGING_CALL_NOTIFICATION_CHANNEL_ID,
@@ -162,18 +157,14 @@ class DefaultNotificationChannels @Inject constructor(
             )
                 .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing calls" })
                 .setVibrationEnabled(true)
-                .apply {
-                    if (ringtoneUri != null) {
-                        setSound(
-                            ringtoneUri,
-                            AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                                .setLegacyStreamType(AudioManager.STREAM_RING)
-                                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                                .build()
-                        )
-                    }
-                }
+                .setSound(
+                    Settings.System.DEFAULT_RINGTONE_URI,
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setLegacyStreamType(AudioManager.STREAM_RING)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                        .build()
+                )
                 .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
                 .setLightsEnabled(true)
                 .setLightColor(accentColor)

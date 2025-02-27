@@ -13,6 +13,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -24,11 +25,19 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
             aValidNotificationSettingsState(
-                availablePushDistributors = listOf("Firebase"),
+                availablePushDistributors = listOf(aDistributor("Firebase")),
                 changeNotificationSettingAction = AsyncAction.Failure(Throwable("error")),
             ),
-            aValidNotificationSettingsState(availablePushDistributors = listOf("Firebase")),
+            aValidNotificationSettingsState(availablePushDistributors = listOf(aDistributor("Firebase"))),
             aValidNotificationSettingsState(showChangePushProviderDialog = true),
+            aValidNotificationSettingsState(
+                availablePushDistributors = listOf(
+                    aDistributor("Firebase"),
+                    aDistributor("ntfy", "app.id1"),
+                    aDistributor("ntfy", "app.id2"),
+                ),
+                showChangePushProviderDialog = true,
+            ),
             aValidNotificationSettingsState(currentPushDistributor = AsyncData.Loading()),
             aValidNotificationSettingsState(currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor"))),
             aInvalidNotificationSettingsState(),
@@ -45,8 +54,11 @@ fun aValidNotificationSettingsState(
     inviteForMeNotificationsEnabled: Boolean = true,
     systemNotificationsEnabled: Boolean = true,
     appNotificationEnabled: Boolean = true,
-    currentPushDistributor: AsyncData<String> = AsyncData.Success("Firebase"),
-    availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
+    currentPushDistributor: AsyncData<Distributor> = AsyncData.Success(aDistributor("Firebase")),
+    availablePushDistributors: List<Distributor> = listOf(
+        aDistributor("Firebase"),
+        aDistributor("ntfy"),
+    ),
     showChangePushProviderDialog: Boolean = false,
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     eventSink: (NotificationSettingsEvents) -> Unit = {},
@@ -87,4 +99,12 @@ fun aInvalidNotificationSettingsState(
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     eventSink = eventSink,
+)
+
+fun aDistributor(
+    name: String = "Name",
+    value: String = "$name Value",
+) = Distributor(
+    value = value,
+    name = name,
 )

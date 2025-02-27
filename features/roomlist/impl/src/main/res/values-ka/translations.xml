@@ -14,6 +14,7 @@
   <string name="screen_roomlist_a11y_create_message">"ახალი საუბრისა ან ოთახის შექმნა"</string>
   <string name="screen_roomlist_empty_message">"დაიწყეთ ვინმესთვის შეტყობინების გაგზავნით."</string>
   <string name="screen_roomlist_empty_title">"არც ერთი ჩატი ჯერ არაა."</string>
+  <string name="screen_roomlist_filter_invites">"მოწვევები"</string>
   <string name="screen_roomlist_filter_people">"ხალხი"</string>
   <string name="screen_roomlist_main_space_title">"ჩატები"</string>
   <string name="session_verification_banner_message">"როგორც ჩანს, ახალ მოწყობილობას იყენებთ. დაადასტურეთ სხვა მოწყობილობით თქვენს დაშიფრულ შეტყობინებებზე წვდომისთვის."</string>

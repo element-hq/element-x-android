@@ -8,9 +8,7 @@
 package io.element.android.features.logout.impl.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -20,11 +18,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutActionDialog(
-    state: AsyncAction<String?>,
+    state: AsyncAction<Unit>,
     onConfirmClick: () -> Unit,
     onForceLogoutClick: () -> Unit,
     onDismissDialog: () -> Unit,
-    onSuccessLogout: (String?) -> Unit,
 ) {
     when (state) {
         AsyncAction.Uninitialized ->
@@ -44,11 +41,6 @@ fun LogoutActionDialog(
                 onRetry = onForceLogoutClick,
                 onDismiss = onDismissDialog,
             )
-        is AsyncAction.Success -> {
-            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
-            LaunchedEffect(state) {
-                latestOnSuccessLogout(state.data)
-            }
-        }
+        is AsyncAction.Success -> Unit
     }
 }

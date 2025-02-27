@@ -27,7 +27,6 @@
   <string name="screen_session_verification_request_accepted_subtitle">"Sammenlign de unike emojiene, og sørg for at de vises i samme rekkefølge."</string>
   <string name="screen_session_verification_request_details_timestamp">"Logget inn"</string>
   <string name="screen_session_verification_request_failure_subtitle">"Enten ble forespørselen tidsavbrutt, forespørselen ble avslått eller det var en feil i verifiseringen."</string>
-  <string name="screen_session_verification_request_failure_title">"Verifisering mislyktes"</string>
   <string name="screen_session_verification_request_footer">"Bare fortsett hvis du startet denne verifiseringen."</string>
   <string name="screen_session_verification_request_subtitle">"Bekreft den andre enheten for å holde meldingsloggen din sikker."</string>
   <string name="screen_session_verification_request_success_subtitle">"Nå kan du lese eller sende meldinger sikkert på den andre enheten din."</string>

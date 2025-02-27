@@ -131,6 +131,8 @@
   <string name="action_view_source">"Переглянути джерело"</string>
   <string name="action_yes">"Так"</string>
   <string name="action_yes_try_again">"Так, повторити спробу"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>
@@ -184,6 +186,7 @@
   <string name="common_light">"Світла"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_loading">"Завантаження"</string>
+  <string name="common_loading_more">"Завантаження наступних…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d учасник"</item>
     <item quantity="few">"%1$d учасники"</item>
@@ -195,6 +198,7 @@
   <string name="common_message_removed">"Повідомлення вилучено"</string>
   <string name="common_modern">"Модерн"</string>
   <string name="common_mute">"Вимкнути звук"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Немає результатів"</string>
   <string name="common_no_room_name">"Немає назви кімнати"</string>
   <string name="common_offline">"Не в мережі"</string>
@@ -273,6 +277,7 @@
   <string name="common_verified">"Перевірено"</string>
   <string name="common_verify_device">"Верифікувати пристрій"</string>
   <string name="common_verify_identity">"Підтвердити особу"</string>
+  <string name="common_verify_user">"Верифікувати користувача"</string>
   <string name="common_video">"Відео"</string>
   <string name="common_voice_message">"Голосове повідомлення"</string>
   <string name="common_waiting">"Очікування…"</string>
@@ -299,6 +304,7 @@
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкніть доступ нижче."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не має доступу до вашого мікрофона. Надайте доступ, щоб записати голосове повідомлення."</string>
+  <string name="error_network_or_server_issue">"Це може бути пов\'язано з проблемами мережі або сервера."</string>
   <string name="error_room_address_already_exists">"Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати"</string>
   <string name="error_room_address_invalid_symbols">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Деякі повідомлення не були надіслані"</string>

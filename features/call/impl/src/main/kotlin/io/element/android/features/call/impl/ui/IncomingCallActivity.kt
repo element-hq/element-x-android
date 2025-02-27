@@ -19,6 +19,7 @@ import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.CallState
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -47,6 +48,9 @@ class IncomingCallActivity : AppCompatActivity() {
     @Inject
     lateinit var appPreferencesStore: AppPreferencesStore
 
+    @Inject
+    lateinit var enterpriseService: EnterpriseService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,7 +68,10 @@ class IncomingCallActivity : AppCompatActivity() {
         val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
         if (notificationData != null) {
             setContent {
-                ElementThemeApp(appPreferencesStore) {
+                ElementThemeApp(
+                    appPreferencesStore = appPreferencesStore,
+                    enterpriseService = enterpriseService,
+                ) {
                     IncomingCallScreen(
                         notificationData = notificationData,
                         onAnswer = ::onAnswer,

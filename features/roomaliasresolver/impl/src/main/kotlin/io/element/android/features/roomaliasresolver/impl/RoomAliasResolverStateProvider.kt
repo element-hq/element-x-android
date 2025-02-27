@@ -10,6 +10,7 @@ package io.element.android.features.roomaliasresolver.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 open class RoomAliasResolverStateProvider : PreviewParameterProvider<RoomAliasResolverState> {
@@ -17,10 +18,10 @@ open class RoomAliasResolverStateProvider : PreviewParameterProvider<RoomAliasRe
         get() = sequenceOf(
             aRoomAliasResolverState(),
             aRoomAliasResolverState(
-                resolveState = AsyncData.Loading(),
+                resolveState = AsyncData.Failure(ClientException.Generic("Something went wrong")),
             ),
             aRoomAliasResolverState(
-                resolveState = AsyncData.Failure(Exception("Error")),
+                resolveState = AsyncData.Failure(RoomAliasResolverFailures.UnknownAlias),
             ),
         )
 }

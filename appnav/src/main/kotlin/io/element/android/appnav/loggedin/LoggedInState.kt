@@ -14,5 +14,6 @@ data class LoggedInState(
     val pusherRegistrationState: AsyncData<Unit>,
     val ignoreRegistrationError: Boolean,
     val forceNativeSlidingSyncMigration: Boolean,
+    val appName: String,
     val eventSink: (LoggedInEvents) -> Unit,
 )

@@ -32,7 +32,7 @@ fun RoomAddressValidityEffect(
         }
         // debounce the room address validation
         delay(300)
-        val roomAlias = client.roomAliasFromName(newRoomAddress).getOrNull()
+        val roomAlias = client.roomAliasFromName(newRoomAddress)
         if (roomAlias == null || !roomAliasHelper.isRoomAliasValid(roomAlias)) {
             onChange(RoomAddressValidity.InvalidSymbols)
         } else {

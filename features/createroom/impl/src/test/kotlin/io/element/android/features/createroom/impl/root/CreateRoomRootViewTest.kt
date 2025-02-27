@@ -101,6 +101,21 @@ class CreateRoomRootViewTest {
             rule.onNodeWithText(firstRoom.matrixUser.getBestName()).performClick()
         }
     }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on Join room by address invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<CreateRoomRootEvents>(expectEvents = false)
+        ensureCalledOnce {
+            rule.setCreateRoomRootView(
+                aCreateRoomRootState(
+                    eventSink = eventsRecorder,
+                ),
+                onJoinRoomByAddressClick = it
+            )
+            rule.clickOn(R.string.screen_start_chat_join_room_by_address_action)
+        }
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreateRoomRootView(
@@ -109,6 +124,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreat
     onNewRoomClick: () -> Unit = EnsureNeverCalled(),
     onOpenDM: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onInviteFriendsClick: () -> Unit = EnsureNeverCalled(),
+    onJoinRoomByAddressClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         CreateRoomRootView(
@@ -117,6 +133,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreat
             onNewRoomClick = onNewRoomClick,
             onOpenDM = onOpenDM,
             onInviteFriendsClick = onInviteFriendsClick,
+            onJoinByAddressClick = onJoinRoomByAddressClick
         )
     }
 }

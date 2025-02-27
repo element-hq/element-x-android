@@ -14,8 +14,6 @@
   <string name="screen_media_browser_title">"媒體與檔案"</string>
   <string name="screen_media_details_file_format">"檔案格式"</string>
   <string name="screen_media_details_filename">"檔案名稱"</string>
-  <string name="screen_media_details_redact_confirmation_message">"此檔案將會從聊天室中移除，成員將無法存取該檔案。"</string>
-  <string name="screen_media_details_redact_confirmation_title">"刪除檔案？"</string>
   <string name="screen_media_details_uploaded_by">"上傳者："</string>
   <string name="screen_media_details_uploaded_on">"上傳於"</string>
 </resources>

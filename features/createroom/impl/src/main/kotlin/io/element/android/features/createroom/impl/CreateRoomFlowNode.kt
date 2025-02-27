@@ -8,25 +8,28 @@
 package io.element.android.features.createroom.impl
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.transition.JumpToEndTransitionHandler
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.DefaultCreateRoomNavigator
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
-import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
+import io.element.android.features.createroom.impl.joinbyaddress.JoinRoomByAddressNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.OverlayView
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -47,35 +50,38 @@ class CreateRoomFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object NewRoom : NavTarget
+
+        @Parcelize
+        data object JoinByAddress : NavTarget
     }
+
+    private val navigator = DefaultCreateRoomNavigator(
+        backstack = backstack,
+        overlay = overlay,
+        openRoom = { roomIdOrAlias, viaServers ->
+            plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias, viaServers) }
+        }
+    )
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                val callback = object : CreateRoomRootNode.Callback {
-                    override fun onCreateNewRoom() {
-                        backstack.push(NavTarget.NewRoom)
-                    }
-
-                    override fun onStartChatSuccess(roomId: RoomId) {
-                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
-                    }
-                }
-                createNode<CreateRoomRootNode>(buildContext = buildContext, plugins = listOf(callback))
+                createNode<CreateRoomRootNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
             NavTarget.NewRoom -> {
-                val callback = object : ConfigureRoomNode.Callback {
-                    override fun onCreateRoomSuccess(roomId: RoomId) {
-                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
-                    }
-                }
-                createNode<ConfigureRoomFlowNode>(buildContext = buildContext, plugins = listOf(callback))
+                createNode<ConfigureRoomFlowNode>(buildContext = buildContext, plugins = listOf(navigator))
+            }
+            NavTarget.JoinByAddress -> {
+                createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        Box(modifier = modifier) {
+            BackstackView()
+            OverlayView(transitionHandler = remember { JumpToEndTransitionHandler() })
+        }
     }
 }

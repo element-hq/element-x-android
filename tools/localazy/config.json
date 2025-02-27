@@ -4,7 +4,8 @@
       "name" : ":appnav",
       "includeRegex" : [
         "banner\\.migrate_to_native_sliding_sync\\.force_logout.title",
-        "banner\\.migrate_to_native_sliding_sync\\.action"
+        "banner\\.migrate_to_native_sliding_sync\\.action",
+        "banner\\.migrate_to_native_sliding_sync\\.app_force_logout\\.title"
       ]
     },
     {
@@ -36,7 +37,8 @@
     {
       "name" : ":features:roomaliasresolver:impl",
       "includeRegex" : [
-        "screen_room_alias_resolver_.*"
+        "screen_room_alias_resolver_.*",
+        "screen.join_room.loading_alert_title"
       ]
     },
     {
@@ -62,7 +64,8 @@
       "includeRegex" : [
         "screen_create_room_.*",
         "screen\\.create_room\\..*",
-        "screen_start_chat_.*"
+        "screen_start_chat_.*",
+        "screen\\.start_chat\\..*"
       ]
     },
     {
@@ -167,7 +170,6 @@
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
-        "banner\\.migrate_to_native_sliding_sync\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*",
@@ -273,7 +275,8 @@
     {
       "name" : ":libraries:matrixui",
       "includeRegex" : [
-        "screen_invites_invited_you"
+        "screen_invites_invited_you",
+        "screen\\.bottom_sheet\\.create_dm\\..*"
       ]
     },
     {

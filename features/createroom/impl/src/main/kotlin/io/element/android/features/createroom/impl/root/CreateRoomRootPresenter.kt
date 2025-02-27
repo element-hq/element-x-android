@@ -50,7 +50,11 @@ class CreateRoomRootPresenter @Inject constructor(
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
                 is CreateRoomRootEvents.StartDM -> localCoroutineScope.launch {
-                    startDMAction.execute(event.matrixUser.userId, startDmActionState)
+                    startDMAction.execute(
+                        matrixUser = event.matrixUser,
+                        createIfDmDoesNotExist = startDmActionState.value is AsyncAction.Confirming,
+                        actionState = startDmActionState,
+                    )
                 }
                 CreateRoomRootEvents.CancelStartDM -> startDmActionState.value = AsyncAction.Uninitialized
             }

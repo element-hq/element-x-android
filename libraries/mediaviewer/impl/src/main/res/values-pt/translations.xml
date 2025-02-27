@@ -2,6 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_delete_confirmation_subtitle">"Este ficheiro será removido da sala e os membros deixarão de o poder aceder."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Eliminar ficheiro?"</string>
+  <string name="screen_media_browser_download_error_message">"Verifica a tua ligação à Internet e tenta novamente."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Documentos, ficheiros de áudio e mensagens de voz carregados para esta sala serão mostrados aqui."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ainda sem qualquer ficheiro"</string>
   <string name="screen_media_browser_list_loading_files">"A carregar ficheiros…"</string>
   <string name="screen_media_browser_list_loading_media">"A carregar multimédia…"</string>
   <string name="screen_media_browser_list_mode_files">"Ficheiros"</string>
@@ -11,7 +14,8 @@
   <string name="screen_media_browser_title">"Multimédia e ficheiros"</string>
   <string name="screen_media_details_file_format">"Formato do ficheiro"</string>
   <string name="screen_media_details_filename">"Nome do ficheiro"</string>
-  <string name="screen_media_details_redact_confirmation_title">"Eliminar ficheiro?"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Sem mais ficheiros para mostrar"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Sem mais multimédia para mostrar"</string>
   <string name="screen_media_details_uploaded_by">"Enviado por"</string>
   <string name="screen_media_details_uploaded_on">"Enviado a"</string>
 </resources>

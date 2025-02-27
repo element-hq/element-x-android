@@ -19,6 +19,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.CreateRoomNavigator
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.di.CreateRoomComponent
@@ -46,6 +47,7 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
     private val component by lazy {
         parent!!.bindings<CreateRoomComponent.ParentBindings>().createRoomComponentBuilder().build()
     }
+    private val navigator = plugins<CreateRoomNavigator>().first()
 
     override val daggerComponent: Any
         get() = component
@@ -69,8 +71,7 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
                 createNode<AddPeopleNode>(buildContext = buildContext, plugins = listOf(callback))
             }
             NavTarget.ConfigureRoom -> {
-                val callbacks = plugins<ConfigureRoomNode.Callback>()
-                createNode<ConfigureRoomNode>(buildContext = buildContext, plugins = callbacks)
+                createNode<ConfigureRoomNode>(buildContext = buildContext, plugins = listOf(navigator))
             }
         }
     }

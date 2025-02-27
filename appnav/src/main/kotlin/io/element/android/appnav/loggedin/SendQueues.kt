@@ -32,7 +32,7 @@ class SendQueues @Inject constructor(
 ) {
     /**
      * Launches the send queues retry mechanism in the given [coroutineScope].
-     * Makes sure to re-enable all send queues when the network status is [NetworkStatus.Online].
+     * Makes sure to re-enable all send queues when the network status is [NetworkStatus.Connected].
      */
     @OptIn(FlowPreview::class)
     fun launchIn(coroutineScope: CoroutineScope) {

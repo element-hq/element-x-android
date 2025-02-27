@@ -31,7 +31,7 @@ fun TimelineItemLegacyCallInviteView(
         modifier = modifier,
     ) {
         Icon(
-            imageVector = CompoundIcons.VoiceCall(),
+            imageVector = CompoundIcons.VoiceCallSolid(),
             contentDescription = null,
             tint = ElementTheme.colors.iconSecondary,
         )

@@ -477,7 +477,7 @@ internal fun BloomPreview() {
                             }
                             .bloom(
                                 hash = blurhash,
-                                background = ElementTheme.materialColors.background,
+                                background = ElementTheme.colors.bgCanvasDefault,
                                 blurSize = DpSize(430.dp, 430.dp),
                                 offset = DpOffset(24.dp, 24.dp),
                                 clipToSize = if (topAppBarHeight > 0) DpSize(430.dp, topAppBarHeight.toDp()) else DpSize.Zero,
@@ -554,9 +554,9 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorIntProvider::cl
                         // Workaround to display a very subtle bloom for avatars with very soft colors
                         Color(0xFFF9F9F9)
                     } else {
-                        ElementTheme.materialColors.background
+                        ElementTheme.colors.bgCanvasDefault
                     },
-                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
+                    bottomSoftEdgeColor = ElementTheme.colors.bgCanvasDefault,
                     blurSize = DpSize(256.dp, 256.dp),
                 ),
             contentAlignment = Alignment.Center
