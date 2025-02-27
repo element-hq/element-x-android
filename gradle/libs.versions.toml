@@ -17,7 +17,7 @@ core = "1.15.0"
 # due to the DefaultMigrationStore not behaving as expected.
 # Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
 datastore = "1.0.0"
-constraintlayout = "2.2.0"
+constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.8.7"
 activity = "1.10.1"
