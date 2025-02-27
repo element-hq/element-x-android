@@ -85,7 +85,10 @@ class FakeMatrixClient(
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
-    private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() }
+    private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() },
+    private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
+    private var unIgnoreUserResult: (UserId)-> Result<Unit> = {Result.success(Unit)},
+    override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -96,10 +99,7 @@ class FakeMatrixClient(
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
-    override val ignoredUsersFlow: MutableStateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
 
-    private var ignoreUserResult: Result<Unit> = Result.success(Unit)
-    private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
@@ -137,11 +137,11 @@ class FakeMatrixClient(
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = simulateLongTask {
-        return ignoreUserResult
+        return ignoreUserResult(userId)
     }
 
     override suspend fun unignoreUser(userId: UserId): Result<Unit> = simulateLongTask {
-        return unignoreUserResult
+        return unIgnoreUserResult(userId)
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = simulateLongTask {
@@ -239,10 +239,6 @@ class FakeMatrixClient(
         return RoomMembershipObserver()
     }
 
-    suspend fun emitIgnoreUserList(users: List<UserId>) {
-        ignoredUsersFlow.emit(users.toImmutableList())
-    }
-
     // Mocks
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
@@ -251,14 +247,6 @@ class FakeMatrixClient(
 
     fun givenCreateDmResult(result: Result<RoomId>) {
         createDmResult = result
-    }
-
-    fun givenIgnoreUserResult(result: Result<Unit>) {
-        ignoreUserResult = result
-    }
-
-    fun givenUnignoreUserResult(result: Result<Unit>) {
-        unignoreUserResult = result
     }
 
     fun givenFindDmResult(result: RoomId?) {
