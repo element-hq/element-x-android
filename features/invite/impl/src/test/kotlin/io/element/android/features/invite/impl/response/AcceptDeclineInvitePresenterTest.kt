@@ -17,10 +17,12 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomPreview
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
@@ -93,7 +95,7 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite()
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -141,7 +143,7 @@ class AcceptDeclineInvitePresenterTest {
             awaitItem().also { state ->
                 assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite()
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -237,12 +239,14 @@ class AcceptDeclineInvitePresenterTest {
     private fun anInviteData(
         roomId: RoomId = A_ROOM_ID,
         name: String = A_ROOM_NAME,
-        isDm: Boolean = false
+        isDm: Boolean = false,
+        senderId: UserId = A_USER_ID,
     ): InviteData {
         return InviteData(
             roomId = roomId,
             roomName = name,
-            isDm = isDm
+            isDm = isDm,
+            senderId = senderId,
         )
     }
 

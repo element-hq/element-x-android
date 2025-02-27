@@ -152,15 +152,15 @@ class JoinRoomPresenter @AssistedInject constructor(
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
                 is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
                 JoinRoomEvents.AcceptInvite -> {
-                    val inviteData = contentState.toInviteData() ?: return
+                    val inviteData = contentState.toInviteData()
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                     )
                 }
-                JoinRoomEvents.DeclineInvite -> {
-                    val inviteData = contentState.toInviteData() ?: return
+                is JoinRoomEvents.DeclineInvite -> {
+                    val inviteData = contentState.toInviteData()
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(inviteData)
+                        AcceptDeclineInviteEvents.DeclineInvite(invite = inviteData, blockUser = event.blockUser)
                     )
                 }
                 is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
@@ -314,12 +314,19 @@ private fun JoinRule?.toJoinAuthorisationStatus(): JoinAuthorisationStatus {
 @VisibleForTesting
 internal fun ContentState.toInviteData(): InviteData? {
     return when (this) {
-        is ContentState.Loaded -> InviteData(
-            roomId = roomId,
-            // Note: name should not be null at this point, but use Id just in case...
-            roomName = name ?: roomId.value,
-            isDm = isDm
-        )
+        is ContentState.Loaded -> {
+            if (joinAuthorisationStatus is JoinAuthorisationStatus.IsInvited && joinAuthorisationStatus.inviteSender != null) {
+                InviteData(
+                    roomId = roomId,
+                    // Note: name should not be null at this point, but use Id just in case...
+                    roomName = name ?: roomId.value,
+                    senderId = joinAuthorisationStatus.inviteSender.userId,
+                    isDm = isDm
+                )
+            } else {
+                null
+            }
+        }
         else -> null
     }
 }

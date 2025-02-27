@@ -63,6 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -105,8 +106,8 @@ fun JoinRoomView(
                     onAcceptInvite = {
                         state.eventSink(JoinRoomEvents.AcceptInvite)
                     },
-                    onDeclineInvite = {
-                        state.eventSink(JoinRoomEvents.DeclineInvite)
+                    onDeclineInvite = { blockUser ->
+                        state.eventSink(JoinRoomEvents.DeclineInvite(blockUser))
                     },
                     onJoinRoom = {
                         state.eventSink(JoinRoomEvents.JoinRoom)
@@ -183,7 +184,7 @@ fun JoinRoomView(
 private fun JoinRoomFooter(
     joinAuthorisationStatus: JoinAuthorisationStatus,
     onAcceptInvite: () -> Unit,
-    onDeclineInvite: () -> Unit,
+    onDeclineInvite: (Boolean) -> Unit,
     onJoinRoom: () -> Unit,
     onKnockRoom: () -> Unit,
     onCancelKnock: () -> Unit,
@@ -198,19 +199,29 @@ private fun JoinRoomFooter(
     ) {
         when (joinAuthorisationStatus) {
             is JoinAuthorisationStatus.IsInvited -> {
-                ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                    OutlinedButton(
-                        text = stringResource(CommonStrings.action_decline),
-                        onClick = onDeclineInvite,
-                        modifier = Modifier.weight(1f),
-                        size = ButtonSize.LargeLowPadding,
+                Column {
+                    ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                        OutlinedButton(
+                            text = stringResource(CommonStrings.action_decline),
+                            onClick = { onDeclineInvite(false) },
+                            modifier = Modifier.weight(1f),
+                            size = ButtonSize.LargeLowPadding,
+                        )
+                        Button(
+                            text = stringResource(CommonStrings.action_accept),
+                            onClick = onAcceptInvite,
+                            modifier = Modifier.weight(1f),
+                            size = ButtonSize.LargeLowPadding,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    TextButton(
+                        text = stringResource(R.string.screen_join_room_decline_and_block_button_title),
+                        onClick = { onDeclineInvite(true) },
+                        modifier = Modifier.fillMaxWidth(),
+                        destructive = true
                     )
-                    Button(
-                        text = stringResource(CommonStrings.action_accept),
-                        onClick = onAcceptInvite,
-                        modifier = Modifier.weight(1f),
-                        size = ButtonSize.LargeLowPadding,
-                    )
+
                 }
             }
             JoinAuthorisationStatus.CanJoin -> {
