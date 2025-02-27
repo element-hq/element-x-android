@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.RustRoomPreview
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
@@ -328,6 +329,7 @@ class RustMatrixClient(
                     }
                 ),
                 joinRuleOverride = createRoomParams.joinRuleOverride?.map(),
+                historyVisibilityOverride = createRoomParams.historyVisibilityOverride?.map(),
                 canonicalAlias = createRoomParams.roomAliasName.getOrNull(),
             )
             val roomId = RoomId(innerClient.createRoom(rustParams))
