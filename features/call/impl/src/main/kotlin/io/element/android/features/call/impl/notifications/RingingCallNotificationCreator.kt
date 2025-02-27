@@ -124,8 +124,8 @@ class RingingCallNotificationCreator @Inject constructor(
                     setContentText(textContent)
                     // Else the content text is set by the style (will be "Incoming call")
                 }
-                setSound(Settings.System.DEFAULT_RINGTONE_URI, AudioManager.STREAM_RING)
             }
+            .setSound(Settings.System.DEFAULT_RINGTONE_URI, AudioManager.STREAM_RING)
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)
             .setDeleteIntent(declineIntent)

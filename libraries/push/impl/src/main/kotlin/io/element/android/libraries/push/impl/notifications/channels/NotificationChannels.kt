@@ -157,16 +157,14 @@ class DefaultNotificationChannels @Inject constructor(
             )
                 .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing calls" })
                 .setVibrationEnabled(true)
-                .apply {
-                    setSound(
-                        Settings.System.DEFAULT_RINGTONE_URI,
-                        AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .setLegacyStreamType(AudioManager.STREAM_RING)
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                            .build()
-                    )
-                }
+                .setSound(
+                    Settings.System.DEFAULT_RINGTONE_URI,
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setLegacyStreamType(AudioManager.STREAM_RING)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                        .build()
+                )
                 .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
                 .setLightsEnabled(true)
                 .setLightColor(accentColor)
