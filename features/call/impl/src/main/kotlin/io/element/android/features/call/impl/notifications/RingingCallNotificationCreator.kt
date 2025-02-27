@@ -11,7 +11,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
-import android.media.RingtoneManager
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
@@ -109,8 +109,6 @@ class RingingCallNotificationCreator @Inject constructor(
             false
         )
 
-        // TODO use a fallback ringtone if the default ringtone is not available
-        val ringtoneUri = runCatching { RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE) }.getOrNull()
         return NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification_small)
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -126,10 +124,8 @@ class RingingCallNotificationCreator @Inject constructor(
                     setContentText(textContent)
                     // Else the content text is set by the style (will be "Incoming call")
                 }
-                if (ringtoneUri != null) {
-                    setSound(ringtoneUri, AudioManager.STREAM_RING)
-                }
             }
+            .setSound(Settings.System.DEFAULT_RINGTONE_URI, AudioManager.STREAM_RING)
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)
             .setDeleteIntent(declineIntent)
