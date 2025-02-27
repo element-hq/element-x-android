@@ -25,8 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -41,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.components.PinEntryTextField
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
@@ -290,13 +289,13 @@ private fun PinUnlockHeader(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (isInAppUnlock) {
-            BigIcon(style = BigIcon.Style.Default(Icons.Filled.Lock))
+            BigIcon(style = BigIcon.Style.Default(CompoundIcons.LockSolid()))
         } else {
             Icon(
                 modifier = Modifier
                     .size(32.dp),
                 tint = ElementTheme.colors.iconPrimary,
-                imageVector = Icons.Filled.Lock,
+                imageVector = CompoundIcons.LockSolid(),
                 contentDescription = null,
             )
         }

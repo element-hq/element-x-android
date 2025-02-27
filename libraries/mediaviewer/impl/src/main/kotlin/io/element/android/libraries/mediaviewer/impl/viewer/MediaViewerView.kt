@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
@@ -468,7 +466,7 @@ private fun MediaViewerTopBar(
                         contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
                     )
                     else -> Icon(
-                        imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                        imageVector = CompoundIcons.PopOut(),
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
                     )
                 }

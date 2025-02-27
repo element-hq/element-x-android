@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -53,6 +51,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -264,7 +263,7 @@ private fun ExoPlayerMediaAudioView(
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.GraphicEq,
+                                imageVector = CompoundIcons.Audio(),
                                 contentDescription = null,
                                 tint = ElementTheme.colors.iconOnSolidPrimary,
                                 modifier = Modifier
