@@ -26,6 +26,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,6 +62,7 @@ class LoggedInPresenter @Inject constructor(
             pushService.ignoreRegistrationError(matrixClient.sessionId)
         }.collectAsState(initial = false)
         val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
+        LaunchedEffect(Unit) { preloadAccountManagementUrl() }
         LaunchedEffect(Unit) {
             sessionVerificationService.sessionVerifiedStatus
                 .onEach { sessionVerifiedStatus ->
@@ -201,5 +204,10 @@ class LoggedInPresenter @Inject constructor(
         if (changeVerificationState != null && changeRecoveryState != null) {
             analyticsService.capture(CryptoSessionStateChange(changeRecoveryState, changeVerificationState))
         }
+    }
+
+    private fun CoroutineScope.preloadAccountManagementUrl() = launch {
+        matrixClient.getAccountManagementUrl(AccountManagementAction.Profile)
+        matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList)
     }
 }

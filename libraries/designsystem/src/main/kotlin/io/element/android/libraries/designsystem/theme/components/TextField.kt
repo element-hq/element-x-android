@@ -259,7 +259,7 @@ private fun SupportingTextLayout(validity: TextFieldValidity?, supportingText: S
         when (validity) {
             TextFieldValidity.Invalid -> {
                 Icon(
-                    imageVector = CompoundIcons.Error(),
+                    imageVector = CompoundIcons.ErrorSolid(),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                     tint = ElementTheme.colors.iconCriticalPrimary

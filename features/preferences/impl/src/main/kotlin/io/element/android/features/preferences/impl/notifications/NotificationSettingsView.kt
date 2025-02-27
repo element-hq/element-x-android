@@ -132,7 +132,7 @@ private fun NotificationSettingsContentView(
         if (!state.fullScreenIntentPermissionsState.permissionGranted) {
             PreferenceCategory {
                 PreferenceText(
-                    icon = CompoundIcons.VoiceCall(),
+                    icon = CompoundIcons.VoiceCallSolid(),
                     title = stringResource(id = R.string.full_screen_intent_banner_title),
                     subtitle = stringResource(R.string.full_screen_intent_banner_message),
                     onClick = {
@@ -206,7 +206,7 @@ private fun NotificationSettingsContentView(
                             stringResource(id = CommonStrings.common_error)
                         )
                         is AsyncData.Success -> ListItemContent.Text(
-                            state.currentPushDistributor.dataOrNull() ?: ""
+                            state.currentPushDistributor.dataOrNull()?.name ?: ""
                         )
                     },
                     onClick = {
@@ -219,8 +219,14 @@ private fun NotificationSettingsContentView(
             if (state.showChangePushProviderDialog) {
                 SingleSelectionDialog(
                     title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
-                    options = state.availablePushDistributors.map {
-                        ListOption(title = it)
+                    options = state.availablePushDistributors.map { distributor ->
+                        // If there are several distributors with the same name, use the full name
+                        val title = if (state.availablePushDistributors.count { it.name == distributor.name } > 1) {
+                            distributor.fullName
+                        } else {
+                            distributor.name
+                        }
+                        ListOption(title = title)
                     }.toImmutableList(),
                     initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
                     onSelectOption = { index ->

@@ -267,7 +267,7 @@ class NotificationSettingsViewTest {
             state = aValidNotificationSettingsState(
                 eventSink = eventsRecorder,
                 showChangePushProviderDialog = true,
-                availablePushDistributors = listOf("P1", "P2")
+                availablePushDistributors = listOf(aDistributor("P1"), aDistributor("P2"))
             ),
         )
         rule.onNodeWithText("P2").performClick()

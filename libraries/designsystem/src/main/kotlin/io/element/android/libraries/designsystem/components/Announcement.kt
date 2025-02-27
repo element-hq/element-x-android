@@ -118,7 +118,7 @@ private fun InformativeAnnouncement(
     AnnouncementSurface(modifier = modifier) {
         Row {
             Icon(
-                imageVector = if (isError) CompoundIcons.Error() else CompoundIcons.Info(),
+                imageVector = if (isError) CompoundIcons.ErrorSolid() else CompoundIcons.Info(),
                 tint = if (isError) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconPrimary,
                 contentDescription = null,
             )
