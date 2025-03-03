@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.createroom
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import java.util.Optional
@@ -22,5 +23,6 @@ data class CreateRoomParameters(
     val invite: List<UserId>? = null,
     val avatar: String? = null,
     val joinRuleOverride: JoinRule? = null,
+    val historyVisibilityOverride: RoomHistoryVisibility? = null,
     val roomAliasName: Optional<String> = Optional.empty(),
 )
