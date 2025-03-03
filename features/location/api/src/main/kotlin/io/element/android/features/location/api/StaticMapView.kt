@@ -102,7 +102,7 @@ fun StaticMapView(
             )
         } else {
             StaticMapPlaceholder(
-                showProgress = collectedState.value is AsyncImagePainter.State.Loading,
+                showProgress = collectedState.value.isLoading(),
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,
@@ -110,6 +110,11 @@ fun StaticMapView(
             )
         }
     }
+}
+
+private fun AsyncImagePainter.State.isLoading(): Boolean {
+    return this is AsyncImagePainter.State.Empty ||
+        this is AsyncImagePainter.State.Loading
 }
 
 @PreviewsDayNight
