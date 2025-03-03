@@ -344,6 +344,7 @@ Důvod: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
+  <string name="screen_room_event_pill">"Zpráva v %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
   <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>

@@ -275,6 +275,8 @@ Anledning:%1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Identitet för %1$s verkar ha ändrats. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Identitet för %1$s %2$s verkar ha förändrats. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Verifierad identitet för %1$s %2$s har ändrats.%3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Återkalla verifiering"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>

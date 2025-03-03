@@ -5,6 +5,7 @@
   <string name="rich_text_editor_close_formatting_options">"Sulge vorminduse valikud"</string>
   <string name="rich_text_editor_code_block">"Lülita lähtekoodi lõik sisse/välja"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Selgitus või nimi, kui soovid lisada…"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Krüptitud sõnum…"</string>
   <string name="rich_text_editor_composer_placeholder">"Sõnum…"</string>
   <string name="rich_text_editor_create_link">"Lisa link"</string>
   <string name="rich_text_editor_edit_link">"Muuda linki"</string>

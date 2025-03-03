@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Du behöver en rumsadress för att göra den synlig i katalogen."</string>
+  <string name="screen_edit_room_address_title">"Rumsadress"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ett fel uppstod vid uppdatering av aviseringsinställningen."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Din hemserver stöder inte det här alternativet i krypterade rum, du kanske inte aviseras i vissa rum."</string>
   <string name="screen_polls_history_title">"Omröstningar"</string>
@@ -132,10 +134,18 @@ Vi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hit
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Användare kan bara gå med om de är inbjudna"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Endast inbjudan"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Tillgång till rum"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Utrymmen stöds för närvarande inte"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Utrymmesmedlemmar"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Rumsadress"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillåt att detta rum hittas genom att söka i den offentliga rumskatalogen på %1$s"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Vem som helst"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Vem kan läsa historik"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Endast medlemmar sedan de bjöds in"</string>
   <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Endast medlemmar sedan det här alternativet har valts"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Rumsadresser är sätt att hitta och komma åt rum. Detta säkerställer också att du enkelt kan dela ditt rum med andra.
+Du kan välja att publicera ditt rum i din hemservers offentliga rumskatalog."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Rumsadresser är sätt att hitta och komma åt rum. Detta säkerställer också att du enkelt kan dela ditt rum med andra.
+Adressen krävs också för att rummet ska synas i den allmänna rumskatalogen på %1$s."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Rumssynlighet"</string>
   <string name="screen_security_and_privacy_title">"Säkerhet och sekretess"</string>
 </resources>
