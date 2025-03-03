@@ -9,6 +9,8 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +22,8 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenterArg
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.usersearch.api.UserRepository
 import kotlinx.coroutines.launch
@@ -31,6 +35,7 @@ class CreateRoomRootPresenter @Inject constructor(
     userListDataStore: UserListDataStore,
     private val startDMAction: StartDMAction,
     private val buildMeta: BuildMeta,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<CreateRoomRootState> {
     private val presenter = presenterFactory.create(
         UserListPresenterArgs(
@@ -46,6 +51,8 @@ class CreateRoomRootPresenter @Inject constructor(
 
         val localCoroutineScope = rememberCoroutineScope()
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+
+        val isRoomDirectorySearchEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomDirectorySearch).collectAsState(initial = false)
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
@@ -64,6 +71,7 @@ class CreateRoomRootPresenter @Inject constructor(
             applicationName = buildMeta.applicationName,
             userListState = userListState,
             startDmAction = startDmActionState.value,
+            isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
             eventSink = ::handleEvents,
         )
     }

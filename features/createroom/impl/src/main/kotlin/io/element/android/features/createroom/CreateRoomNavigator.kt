@@ -21,14 +21,18 @@ interface CreateRoomNavigator : Plugin {
     fun onCreateNewRoom()
     fun onShowJoinRoomByAddress()
     fun onDismissJoinRoomByAddress()
+    fun onOpenRoomDirectory()
 }
 
 class DefaultCreateRoomNavigator(
     private val backstack: BackStack<NavTarget>,
     private val overlay: Overlay<NavTarget>,
     private val openRoom: (RoomIdOrAlias, List<String>) -> Unit,
+    private val openRoomDirectory: () -> Unit,
 ) : CreateRoomNavigator {
     override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) = openRoom(roomIdOrAlias, serverNames)
+
+    override fun onOpenRoomDirectory() = openRoomDirectory()
 
     override fun onCreateNewRoom() {
         backstack.push(NavTarget.NewRoom)

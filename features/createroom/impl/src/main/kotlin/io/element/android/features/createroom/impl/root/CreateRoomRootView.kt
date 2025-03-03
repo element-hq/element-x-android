@@ -56,6 +56,7 @@ fun CreateRoomRootView(
     onOpenDM: (RoomId) -> Unit,
     onInviteFriendsClick: () -> Unit,
     onJoinByAddressClick: () -> Unit,
+    onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -91,6 +92,7 @@ fun CreateRoomRootView(
                     onNewRoomClick = onNewRoomClick,
                     onInvitePeopleClick = onInviteFriendsClick,
                     onJoinByAddressClick = onJoinByAddressClick,
+                    onRoomDirectorySearchClick = onRoomDirectorySearchClick,
                     onDmClick = onOpenDM,
                 )
             }
@@ -156,6 +158,7 @@ private fun CreateRoomActionButtonsList(
     onNewRoomClick: () -> Unit,
     onInvitePeopleClick: () -> Unit,
     onJoinByAddressClick: () -> Unit,
+    onRoomDirectorySearchClick: () -> Unit,
     onDmClick: (RoomId) -> Unit,
 ) {
     LazyColumn {
@@ -165,6 +168,15 @@ private fun CreateRoomActionButtonsList(
                 text = stringResource(id = R.string.screen_create_room_action_create_room),
                 onClick = onNewRoomClick,
             )
+        }
+        if (state.isRoomDirectorySearchEnabled) {
+            item {
+                CreateRoomActionButton(
+                    iconRes = CompoundDrawables.ic_compound_list_bulleted,
+                    text = stringResource(id = R.string.screen_room_directory_search_title),
+                    onClick = onRoomDirectorySearchClick,
+                )
+            }
         }
         item {
             CreateRoomActionButton(
@@ -242,5 +254,6 @@ internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProv
             onOpenDM = {},
             onJoinByAddressClick = {},
             onInviteFriendsClick = {},
+            onRoomDirectorySearchClick = {},
         )
     }

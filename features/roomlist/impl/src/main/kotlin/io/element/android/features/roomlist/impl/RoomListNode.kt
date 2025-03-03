@@ -82,10 +82,6 @@ class RoomListNode @AssistedInject constructor(
         }
     }
 
-    private fun onRoomDirectorySearchClick() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomDirectorySearchClick() }
-    }
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -100,7 +96,6 @@ class RoomListNode @AssistedInject constructor(
             onConfirmRecoveryKeyClick = this::onSessionConfirmRecoveryKeyClick,
             onRoomSettingsClick = this::onRoomSettingsClick,
             onMenuActionClick = { onMenuActionClick(activity, it) },
-            onRoomDirectorySearchClick = this::onRoomDirectorySearchClick,
             modifier = modifier,
         ) {
             acceptDeclineInviteView.Render(
