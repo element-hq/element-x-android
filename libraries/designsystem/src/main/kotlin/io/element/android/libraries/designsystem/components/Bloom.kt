@@ -342,7 +342,9 @@ fun Modifier.avatarBloom(
             withContext(Dispatchers.IO) {
                 val bitmap = SingletonImageLoader.get(context)
                     .execute(painterRequest)
-                    .image?.toBitmap() ?: return@withContext
+                    .image
+                    ?.toBitmap()
+                    ?: return@withContext
                 blurHash = BlurHash.encode(
                     bitmap = bitmap,
                     componentX = BloomDefaults.HASH_COMPONENTS,
