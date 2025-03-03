@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Det oppstod en feil under oppdatering av varslingsinnstillingen."</string>
+  <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_role_section_administrators">"Administratorer"</string>
   <string name="screen_room_change_role_section_users">"Medlemmer"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Du har endringer som ikke er lagret."</string>
@@ -15,11 +17,15 @@
   <string name="screen_room_details_edition_error_title">"Kan ikke oppdatere rommet"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Meldingene er krypterte. Det er bare du og mottakerne som har de unike nøklene til å låse dem opp."</string>
   <string name="screen_room_details_encryption_enabled_title">"Meldingskryptering aktivert"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"Det oppstod en feil ved lasting av varslingsinnstillinger."</string>
+  <string name="screen_room_details_error_muting">"Mislyktes i å dempe dette rommet, prøv igjen."</string>
+  <string name="screen_room_details_error_unmuting">"Mislyktes i å oppheve dempingen av dette rommet, prøv igjen."</string>
   <string name="screen_room_details_invite_people_title">"Inviter folk"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlat samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlat rommet"</string>
   <string name="screen_room_details_notification_mode_custom">"Tilpasset"</string>
   <string name="screen_room_details_notification_mode_default">"Standard"</string>
+  <string name="screen_room_details_notification_title">"Varslinger"</string>
   <string name="screen_room_details_room_name_label">"Romnavn"</string>
   <string name="screen_room_details_security_title">"Sikkerhet"</string>
   <string name="screen_room_details_share_room_title">"Del rom"</string>
@@ -59,6 +65,11 @@
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"globale innstillinger"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Standard innstilling"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Fjern egendefinert innstilling"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"Det oppstod en feil ved innlasting av varslingsinnstillinger."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Gjenoppretting av standardmodus mislyktes, prøv igjen."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"Innstilling av modus mislyktes, prøv igjen."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Alle meldinger"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Bare omtaler og nøkkelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I dette rommet, varsle meg om"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Endre rollen min"</string>

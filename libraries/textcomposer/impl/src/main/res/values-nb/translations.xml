@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Legg til vedlegg"</string>
   <string name="rich_text_editor_bullet_list">"Aktiver/deaktiver punktliste"</string>
+  <string name="rich_text_editor_close_formatting_options">"Lukk formateringsvalg"</string>
   <string name="rich_text_editor_code_block">"Aktiver kodeblokk"</string>
   <string name="rich_text_editor_composer_placeholder">"Melding…"</string>
   <string name="rich_text_editor_create_link">"Opprett en lenke"</string>
@@ -9,12 +11,15 @@
   <string name="rich_text_editor_format_italic">"Bruk kursivformat"</string>
   <string name="rich_text_editor_format_strikethrough">"Bruke gjennomstrekingsformat"</string>
   <string name="rich_text_editor_format_underline">"Bruke understrekingsformat"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Veksle fullskjermmodus"</string>
   <string name="rich_text_editor_indent">"Innrykk"</string>
   <string name="rich_text_editor_inline_code">"Bruk inline-kodeformat"</string>
   <string name="rich_text_editor_link">"Angi lenke"</string>
   <string name="rich_text_editor_numbered_list">"Aktiver/deaktiver nummerert liste"</string>
+  <string name="rich_text_editor_open_compose_options">"Åpne skrivealternativer"</string>
   <string name="rich_text_editor_quote">"Slå på sitat"</string>
   <string name="rich_text_editor_remove_link">"Fjern lenke"</string>
   <string name="rich_text_editor_unindent">"Fjern innrykk"</string>
   <string name="rich_text_editor_url_placeholder">"Lenke"</string>
+  <string name="screen_room_voice_message_tooltip">"Hold for å ta opp"</string>
 </resources>

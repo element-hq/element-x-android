@@ -14,6 +14,7 @@ Du kan ändra detta när som helst i rumsinställningarna."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Vem som helst kan be om att gå med i rummet men en administratör eller en moderator måste acceptera begäran"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Be om att gå med"</string>
   <string name="screen_create_room_room_address_section_footer">"För att detta rum ska vara synligt i den allmänna rumskatalogen behöver du en rumsadress."</string>
+  <string name="screen_create_room_room_address_section_title">"Rumsadress"</string>
   <string name="screen_create_room_room_name_label">"Rumsnamn"</string>
   <string name="screen_create_room_room_visibility_section_title">"Rumssynlighet"</string>
   <string name="screen_create_room_title">"Skapa ett rum"</string>

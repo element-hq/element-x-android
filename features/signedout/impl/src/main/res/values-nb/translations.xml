@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Du har endret passordet ditt i en annen sesjon"</string>
+  <string name="screen_signed_out_reason_2">"Du har slettet sesjonen fra en annen sesjon"</string>
+  <string name="screen_signed_out_reason_3">"Serveradministratoren har ugyldiggjort tilgangen din"</string>
+  <string name="screen_signed_out_subtitle">"Du kan ha blitt logget av av en av årsakene som er oppført nedenfor. Logg på igjen for å fortsette å bruke %s."</string>
   <string name="screen_signed_out_title">"Du er logget ut"</string>
 </resources>
