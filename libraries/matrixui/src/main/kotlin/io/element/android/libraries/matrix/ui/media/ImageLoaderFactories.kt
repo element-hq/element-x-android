@@ -31,13 +31,13 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
 ) : LoggedInImageLoaderFactory {
     override fun newImageLoader(matrixClient: MatrixClient): ImageLoader {
-        return ImageLoader
-            .Builder(context)
+        return ImageLoader.Builder(context)
             .components {
                 add(
                     OkHttpNetworkFetcherFactory(
                         callFactory = {
-                            okHttpClient.get()
+                            // Use newBuilder, see https://coil-kt.github.io/coil/network/#using-a-custom-okhttpclient
+                            okHttpClient.get().newBuilder().build()
                         }
                     )
                 )
@@ -61,13 +61,13 @@ class NotLoggedInImageLoaderFactory @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
 ) {
     fun newImageLoader(): ImageLoader {
-        return ImageLoader
-            .Builder(context)
+        return ImageLoader.Builder(context)
             .components {
                 add(
                     OkHttpNetworkFetcherFactory(
                         callFactory = {
-                            okHttpClient.get()
+                            // Use newBuilder, see https://coil-kt.github.io/coil/network/#using-a-custom-okhttpclient
+                            okHttpClient.get().newBuilder().build()
                         }
                     )
                 )
