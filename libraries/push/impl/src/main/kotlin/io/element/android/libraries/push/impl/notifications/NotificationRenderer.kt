@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider

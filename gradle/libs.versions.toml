@@ -42,7 +42,7 @@ datetime = "0.6.2"
 serialization_json = "1.8.0"
 
 #other
-coil = "2.7.0"
+coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.6.0"
 sqldelight = "2.0.2"
@@ -159,10 +159,11 @@ test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.5.1"
 
 # Others
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-coil_gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
-coil_test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil_network_okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+coil_compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil_gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 compound = { module = "io.element.android:compound-android", version = "25.2.26" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }

@@ -9,10 +9,10 @@ package io.element.android.libraries.matrix.ui.media
 
 import android.content.Context
 import android.os.Build
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
+import coil3.ImageLoader
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -33,11 +33,17 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
     override fun newImageLoader(matrixClient: MatrixClient): ImageLoader {
         return ImageLoader
             .Builder(context)
-            .okHttpClient { okHttpClient.get() }
             .components {
+                add(
+                    OkHttpNetworkFetcherFactory(
+                        callFactory = {
+                            okHttpClient.get()
+                        }
+                    )
+                )
                 // Add gif support
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    add(ImageDecoderDecoder.Factory())
+                    add(AnimatedImageDecoder.Factory())
                 } else {
                     add(GifDecoder.Factory())
                 }
@@ -53,11 +59,19 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
 class NotLoggedInImageLoaderFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val okHttpClient: Provider<OkHttpClient>,
-) : ImageLoaderFactory {
-    override fun newImageLoader(): ImageLoader {
+) {
+    fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
-            .okHttpClient { okHttpClient.get() }
+            .components {
+                add(
+                    OkHttpNetworkFetcherFactory(
+                        callFactory = {
+                            okHttpClient.get()
+                        }
+                    )
+                )
+            }
             .build()
     }
 }

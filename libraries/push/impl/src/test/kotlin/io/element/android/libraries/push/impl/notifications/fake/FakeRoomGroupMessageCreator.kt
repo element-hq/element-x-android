@@ -8,7 +8,7 @@
 package io.element.android.libraries.push.impl.notifications.fake
 
 import android.app.Notification
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.RoomGroupMessageCreator

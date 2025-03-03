@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.push.test.notifications
 
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
