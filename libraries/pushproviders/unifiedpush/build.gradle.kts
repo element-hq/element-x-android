@@ -42,7 +42,7 @@ dependencies {
     implementation(libs.serialization.json)
 
     // UnifiedPush library
-    api(libs.unifiedpush)
+    implementation(libs.unifiedpush)
 
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
