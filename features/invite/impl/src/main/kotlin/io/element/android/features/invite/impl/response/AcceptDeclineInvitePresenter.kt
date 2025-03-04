@@ -121,9 +121,8 @@ class AcceptDeclineInvitePresenter @Inject constructor(
             client.getPendingRoom(inviteData.roomId)?.use {
                 it.leave().getOrThrow()
             }
-            val senderId = inviteData.senderId
-            if (blockUser && senderId != null) {
-                client.ignoreUser(senderId).getOrThrow()
+            if (blockUser) {
+                client.ignoreUser(inviteData.senderId).getOrThrow()
             }
             notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, inviteData.roomId)
             inviteData.roomId

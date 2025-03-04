@@ -139,7 +139,7 @@ class JoinRoomViewTest {
     }
 
     @Test
-    fun `clicking on Accept invitation IsInvited room emits the expected Event`() {
+    fun `clicking on Accept when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
@@ -152,7 +152,7 @@ class JoinRoomViewTest {
     }
 
     @Test
-    fun `clicking on Decline invitation on IsInvited room emits the expected Event`() {
+    fun `clicking on Decline when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
@@ -161,7 +161,20 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite)
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(false))
+    }
+
+    @Test
+    fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(true))
     }
 
     @Test
