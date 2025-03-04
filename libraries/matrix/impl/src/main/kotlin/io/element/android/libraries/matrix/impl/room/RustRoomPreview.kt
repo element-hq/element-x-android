@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomPreview
@@ -33,7 +34,11 @@ class RustRoomPreview(
     override suspend fun leave(): Result<Unit> = runCatching {
         inner.leave()
     }.onSuccess {
-        roomMembershipObserver?.notifyUserLeftRoom(info.roomId)
+        when (info.membership) {
+            CurrentUserMembership.INVITED -> roomMembershipObserver?.notifyUserDeclinedInvite(info.roomId)
+            CurrentUserMembership.KNOCKED -> roomMembershipObserver?.notifyUserCanceledKnock(info.roomId)
+            else -> Unit
+        }
     }
 
     override suspend fun forget(): Result<Unit> = runCatching {
