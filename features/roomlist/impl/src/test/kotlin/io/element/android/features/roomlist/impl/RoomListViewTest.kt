@@ -240,7 +240,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
     onRoomSettingsClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
-    onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomListView(
@@ -252,7 +251,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             onCreateRoomClick = onCreateRoomClick,
             onRoomSettingsClick = onRoomSettingsClick,
             onMenuActionClick = onMenuActionClick,
-            onRoomDirectorySearchClick = onRoomDirectorySearchClick,
             acceptDeclineInviteView = { },
         )
     }

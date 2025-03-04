@@ -60,6 +60,9 @@ class CreateRoomFlowNode @AssistedInject constructor(
         overlay = overlay,
         openRoom = { roomIdOrAlias, viaServers ->
             plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias, viaServers) }
+        },
+        openRoomDirectory = {
+            plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoomDirectory() }
         }
     )
 

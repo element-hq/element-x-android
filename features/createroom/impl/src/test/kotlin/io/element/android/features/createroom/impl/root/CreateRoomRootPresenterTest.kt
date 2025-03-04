@@ -19,6 +19,8 @@ import io.element.android.features.createroom.impl.userlist.FakeUserListPresente
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -163,14 +165,34 @@ class CreateRoomRootPresenterTest {
         }
     }
 
+    @Test
+    fun `present - room directory search`() = runTest {
+        val presenter = createCreateRoomRootPresenter(isRoomDirectorySearchEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.isRoomDirectorySearchEnabled).isTrue()
+            }
+        }
+    }
+
     private fun createCreateRoomRootPresenter(
         startDMAction: StartDMAction = FakeStartDMAction(),
+        isRoomDirectorySearchEnabled: Boolean = false,
     ): CreateRoomRootPresenter {
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.RoomDirectorySearch.key to isRoomDirectorySearchEnabled,
+            ),
+        )
         return CreateRoomRootPresenter(
             presenterFactory = FakeUserListPresenterFactory(FakeUserListPresenter()),
             userRepository = FakeUserRepository(),
             userListDataStore = UserListDataStore(),
             startDMAction = startDMAction,
+            featureFlagService = featureFlagService,
             buildMeta = aBuildMeta(),
         )
     }

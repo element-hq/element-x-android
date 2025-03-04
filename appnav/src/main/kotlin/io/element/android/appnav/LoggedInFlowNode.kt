@@ -262,10 +262,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onRoomDirectorySearchClick() {
-                        backstack.push(NavTarget.RoomDirectorySearch)
-                    }
-
                     override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
                         backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
                     }
@@ -359,6 +355,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) {
                         backstack.replace(NavTarget.Room(roomIdOrAlias = roomIdOrAlias, serverNames = serverNames))
+                    }
+
+                    override fun onOpenRoomDirectory() {
+                        backstack.push(NavTarget.RoomDirectorySearch)
                     }
                 }
 

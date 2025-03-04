@@ -15,7 +15,8 @@ class FakeCreateRoomNavigator(
     private val createNewRoomLambda: () -> Unit = {},
     private val showJoinRoomByAddressLambda: () -> Unit = {},
     private val dismissJoinRoomByAddressLambda: () -> Unit = {},
-    ) : CreateRoomNavigator {
+    private val openRoomDirectoryLambda: () -> Unit = {},
+) : CreateRoomNavigator {
     override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) {
         openRoomLambda(roomIdOrAlias, serverNames)
     }
@@ -30,5 +31,9 @@ class FakeCreateRoomNavigator(
 
     override fun onDismissJoinRoomByAddress() {
         dismissJoinRoomByAddressLambda()
+    }
+
+    override fun onOpenRoomDirectory() {
+        openRoomDirectoryLambda()
     }
 }
