@@ -194,8 +194,8 @@ private fun JoinRoomFooter(
 ) {
     Box(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
+            .fillMaxWidth()
+            .padding(top = 8.dp)
     ) {
         when (joinAuthorisationStatus) {
             is JoinAuthorisationStatus.IsInvited -> {
@@ -221,7 +221,6 @@ private fun JoinRoomFooter(
                         modifier = Modifier.fillMaxWidth(),
                         destructive = true
                     )
-
                 }
             }
             JoinAuthorisationStatus.CanJoin -> {
@@ -458,8 +457,8 @@ private fun IncompleteContent(
 private fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
+            .fillMaxHeight()
+            .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
         IconTitleSubtitleMolecule(

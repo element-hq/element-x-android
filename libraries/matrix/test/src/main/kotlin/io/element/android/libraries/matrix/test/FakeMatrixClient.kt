@@ -47,7 +47,6 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,7 +86,7 @@ class FakeMatrixClient(
     private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
     private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
-    private var unIgnoreUserResult: (UserId)-> Result<Unit> = {Result.success(Unit)},
+    private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
