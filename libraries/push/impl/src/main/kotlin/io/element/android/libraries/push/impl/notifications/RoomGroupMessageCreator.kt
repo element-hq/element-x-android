@@ -9,7 +9,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import android.graphics.Bitmap
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId

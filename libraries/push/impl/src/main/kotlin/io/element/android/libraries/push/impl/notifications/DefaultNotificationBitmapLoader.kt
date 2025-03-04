@@ -11,10 +11,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.graphics.drawable.toBitmap
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.transformations
+import coil3.toBitmap
+import coil3.transform.CircleCropTransformation
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -50,7 +51,7 @@ class DefaultNotificationBitmapLoader @Inject constructor(
                 .transformations(CircleCropTransformation())
                 .build()
             val result = imageLoader.execute(imageRequest)
-            result.drawable?.toBitmap()
+            result.image?.toBitmap()
         } catch (e: Throwable) {
             Timber.e(e, "Unable to load room bitmap")
             null
@@ -78,7 +79,7 @@ class DefaultNotificationBitmapLoader @Inject constructor(
                 .transformations(CircleCropTransformation())
                 .build()
             val result = imageLoader.execute(imageRequest)
-            val bitmap = result.drawable?.toBitmap()
+            val bitmap = result.image?.toBitmap()
             return bitmap?.let { IconCompat.createWithBitmap(it) }
         } catch (e: Throwable) {
             Timber.e(e, "Unable to load user bitmap")

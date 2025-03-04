@@ -9,7 +9,7 @@ package io.element.android.libraries.push.test.notifications.push
 
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.IconCompat
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 
 class FakeNotificationBitmapLoader(
