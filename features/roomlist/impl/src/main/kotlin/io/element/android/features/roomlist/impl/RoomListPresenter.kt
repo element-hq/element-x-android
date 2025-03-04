@@ -329,9 +329,12 @@ class RoomListPresenter @Inject constructor(
 }
 
 @VisibleForTesting
-internal fun RoomListRoomSummary.toInviteData() = InviteData(
-    roomId = roomId,
-    // Note: `name` should not be null at this point, but just in case, fallback to the roomId
-    roomName = name ?: roomId.value,
-    isDm = isDm,
-)
+internal fun RoomListRoomSummary.toInviteData(): InviteData? {
+    if (inviteSender == null) return null
+    return InviteData(
+        roomId = roomId,
+        roomName = name ?: roomId.value,
+        isDm = isDm,
+        senderId = inviteSender.userId,
+    )
+}

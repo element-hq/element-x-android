@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -40,9 +41,9 @@ class BlockedUsersPresenterTest {
 
     @Test
     fun `present - initial state with blocked users`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID)
-        }
+        val matrixClient = FakeMatrixClient(
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        )
         val presenter = aBlockedUsersPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -56,9 +57,10 @@ class BlockedUsersPresenterTest {
 
     @Test
     fun `present - blocked users list updates with new emissions`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID)
-        }
+        val ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        val matrixClient = FakeMatrixClient(
+            ignoredUsersFlow = ignoredUsersFlow
+        )
         val presenter = aBlockedUsersPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -66,7 +68,7 @@ class BlockedUsersPresenterTest {
             with(awaitItem()) {
                 assertThat(blockedUsers).isEqualTo(listOf(MatrixUser(A_USER_ID)))
             }
-            matrixClient.ignoredUsersFlow.value = persistentListOf(A_USER_ID, A_USER_ID_2)
+            ignoredUsersFlow.value = persistentListOf(A_USER_ID, A_USER_ID_2)
             skipItems(1)
             with(awaitItem()) {
                 assertThat(blockedUsers).isEqualTo(listOf(MatrixUser(A_USER_ID), MatrixUser(A_USER_ID_2)))
@@ -77,8 +79,9 @@ class BlockedUsersPresenterTest {
     @Test
     fun `present - blocked users list with data`() = runTest {
         val alice = MatrixUser(A_USER_ID, displayName = "Alice", avatarUrl = "aliceAvatar")
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID, A_USER_ID_2)
+        val matrixClient = FakeMatrixClient(
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID, A_USER_ID_2))
+        ).apply {
             givenGetProfileResult(A_USER_ID, Result.success(alice))
             givenGetProfileResult(A_USER_ID_2, Result.failure(AN_EXCEPTION))
         }
@@ -103,9 +106,9 @@ class BlockedUsersPresenterTest {
 
     @Test
     fun `present - unblock user`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID)
-        }
+        val matrixClient = FakeMatrixClient(
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        )
         val presenter = aBlockedUsersPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -125,10 +128,10 @@ class BlockedUsersPresenterTest {
 
     @Test
     fun `present - unblock user handles failure`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID)
-            givenUnignoreUserResult(Result.failure(IllegalStateException("User not banned")))
-        }
+        val matrixClient = FakeMatrixClient(
+            unIgnoreUserResult = { Result.failure(IllegalStateException("User not banned")) },
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        )
         val presenter = aBlockedUsersPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,10 +150,10 @@ class BlockedUsersPresenterTest {
 
     @Test
     fun `present - unblock user then cancel`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
-            ignoredUsersFlow.value = persistentListOf(A_USER_ID)
-            givenUnignoreUserResult(Result.failure(IllegalStateException("User not banned")))
-        }
+        val matrixClient = FakeMatrixClient(
+            unIgnoreUserResult = { Result.failure(IllegalStateException("User not banned")) },
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        )
         val presenter = aBlockedUsersPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

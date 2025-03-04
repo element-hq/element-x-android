@@ -50,8 +50,9 @@ fun AcceptDeclineInviteView(
                 if (confirming is ConfirmingDeclineInvite) {
                     DeclineConfirmationDialog(
                         invite = confirming.inviteData,
+                        blockUser = confirming.blockUser,
                         onConfirmClick = {
-                            state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(confirming.inviteData.roomId))
+                            state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite)
                         },
                         onDismissClick = {
                             state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
@@ -66,29 +67,35 @@ fun AcceptDeclineInviteView(
 @Composable
 private fun DeclineConfirmationDialog(
     invite: InviteData,
+    blockUser: Boolean,
     onConfirmClick: () -> Unit,
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val contentResource = if (invite.isDm) {
-        R.string.screen_invites_decline_direct_chat_message
-    } else {
-        R.string.screen_invites_decline_chat_message
+    val senderId = invite.senderId.value
+    val content = when {
+        blockUser -> stringResource(R.string.screen_join_room_decline_and_block_alert_message, senderId)
+        invite.isDm -> stringResource(R.string.screen_invites_decline_direct_chat_message, invite.roomName)
+        else -> stringResource(R.string.screen_invites_decline_chat_message, invite.roomName)
     }
-
-    val titleResource = if (invite.isDm) {
-        R.string.screen_invites_decline_direct_chat_title
-    } else {
-        R.string.screen_invites_decline_chat_title
+    val title = when {
+        blockUser -> stringResource(R.string.screen_join_room_decline_and_block_alert_title)
+        invite.isDm -> stringResource(R.string.screen_invites_decline_direct_chat_title)
+        else -> stringResource(R.string.screen_invites_decline_chat_title)
     }
-
+    val submitText = if (blockUser) {
+        stringResource(R.string.screen_join_room_decline_and_block_alert_confirmation)
+    } else {
+        stringResource(CommonStrings.action_decline)
+    }
     ConfirmationDialog(
         modifier = modifier,
-        content = stringResource(contentResource, invite.roomName),
-        title = stringResource(titleResource),
-        submitText = stringResource(CommonStrings.action_decline),
+        content = content,
+        title = title,
+        submitText = submitText,
         cancelText = stringResource(CommonStrings.action_cancel),
         onSubmitClick = onConfirmClick,
+        destructiveSubmit = blockUser,
         onDismiss = onDismissClick,
     )
 }
