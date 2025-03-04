@@ -383,12 +383,19 @@ private fun JoinRoomContent(
                         IsKnockedLoadedContent()
                     }
                     else -> {
-                        DefaultLoadedContent(
-                            modifier = Modifier.verticalScroll(rememberScrollState()),
-                            contentState = contentState,
-                            knockMessage = knockMessage,
-                            onKnockMessageUpdate = onKnockMessageUpdate
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
+                            if (inviteSender != null) {
+                                InviteSenderView(inviteSender = inviteSender)
+                                Spacer(modifier = Modifier.height(32.dp))
+                            }
+                            DefaultLoadedContent(
+                                modifier = Modifier.verticalScroll(rememberScrollState()),
+                                contentState = contentState,
+                                knockMessage = knockMessage,
+                                onKnockMessageUpdate = onKnockMessageUpdate
+                            )
+                        }
                     }
                 }
             }
@@ -498,10 +505,6 @@ private fun DefaultLoadedContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
-                if (inviteSender != null) {
-                    InviteSenderView(inviteSender = inviteSender)
-                }
                 RoomPreviewDescriptionAtom(contentState.topic ?: "")
                 if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))
