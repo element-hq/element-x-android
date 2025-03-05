@@ -16,9 +16,10 @@ import io.element.android.features.rageshake.api.R
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -52,7 +53,11 @@ fun RageshakePreferencesView(
                     onValueChange = ::onSensitivityChanged
                 )
             } else {
-                PreferenceText(title = "Rageshaking is not supported by your device")
+                ListItem(
+                    headlineContent = {
+                        Text("Rageshaking is not supported by your device")
+                    },
+                )
             }
         }
     }

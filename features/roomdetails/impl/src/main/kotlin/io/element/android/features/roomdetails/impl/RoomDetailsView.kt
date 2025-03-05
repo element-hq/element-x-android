@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.components.button.MainActionBut
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -481,10 +480,14 @@ private fun TopicSection(
         showTopDivider = false,
     ) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
-            PreferenceText(
-                title = stringResource(R.string.screen_room_details_add_topic_title),
-                icon = CompoundIcons.Plus(),
-                onClick = { onActionClick(RoomDetailsAction.AddTopic) },
+            ListItem(
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
+                headlineContent = {
+                    Text(stringResource(id = R.string.screen_room_details_add_topic_title))
+                },
+                onClick = {
+                    onActionClick(RoomDetailsAction.AddTopic)
+                },
             )
         } else if (roomTopic is RoomTopicState.ExistingTopic) {
             ClickableLinkText(
