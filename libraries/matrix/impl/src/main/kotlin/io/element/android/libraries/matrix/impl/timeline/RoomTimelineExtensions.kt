@@ -20,11 +20,11 @@ import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineInterface
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
+import uniffi.matrix_sdk.RoomPaginationStatus
 
-internal fun TimelineInterface.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus> = callbackFlow {
+internal fun TimelineInterface.liveBackPaginationStatus(): Flow<RoomPaginationStatus> = callbackFlow {
     val listener = object : PaginationStatusListener {
-        override fun onUpdate(status: LiveBackPaginationStatus) {
+        override fun onUpdate(status: RoomPaginationStatus) {
             trySend(status)
         }
     }
