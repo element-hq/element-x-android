@@ -54,7 +54,7 @@ class ChooseSessionVerificationModePresenterTest {
         }
     }
 
-    fun createPresenter(
+    private fun createPresenter(
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         directLogoutPresenter: Presenter<DirectLogoutState> = Presenter<DirectLogoutState> { aDirectLogoutState() }
     ) = ChooseSelfVerificationModePresenter(

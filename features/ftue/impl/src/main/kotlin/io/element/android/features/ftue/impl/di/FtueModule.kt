@@ -19,5 +19,5 @@ import io.element.android.libraries.di.SessionScope
 @Module
 interface FtueModule {
     @Binds
-    fun bindChooseVerificationMethodPresenter(presenter: ChooseSelfVerificationModePresenter): Presenter<ChooseSelfVerificationModeState>
+    fun bindChooseSelfVerificationMethodPresenter(presenter: ChooseSelfVerificationModePresenter): Presenter<ChooseSelfVerificationModeState>
 }
