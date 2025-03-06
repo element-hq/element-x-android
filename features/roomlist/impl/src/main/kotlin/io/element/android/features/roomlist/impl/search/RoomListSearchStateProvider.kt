@@ -17,7 +17,6 @@ class RoomListSearchStateProvider : PreviewParameterProvider<RoomListSearchState
     override val values: Sequence<RoomListSearchState>
         get() = sequenceOf(
             aRoomListSearchState(),
-            aRoomListSearchState(isRoomDirectorySearchEnabled = true),
             aRoomListSearchState(
                 isSearchActive = true,
                 query = "Test",
@@ -30,12 +29,10 @@ fun aRoomListSearchState(
     isSearchActive: Boolean = false,
     query: String = "",
     results: ImmutableList<RoomListRoomSummary> = persistentListOf(),
-    isRoomDirectorySearchEnabled: Boolean = false,
     eventSink: (RoomListSearchEvents) -> Unit = { },
 ) = RoomListSearchState(
     isSearchActive = isSearchActive,
     query = query,
     results = results,
-    isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
     eventSink = eventSink,
 )

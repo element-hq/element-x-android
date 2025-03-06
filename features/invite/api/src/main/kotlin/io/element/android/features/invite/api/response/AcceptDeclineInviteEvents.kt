@@ -8,6 +8,6 @@
 package io.element.android.features.invite.api.response
 
 interface AcceptDeclineInviteEvents {
-    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvents
-    data class DeclineInvite(val invite: InviteData) : AcceptDeclineInviteEvents
+    data class AcceptInvite(val invite: InviteData?) : AcceptDeclineInviteEvents
+    data class DeclineInvite(val invite: InviteData?, val blockUser: Boolean = false) : AcceptDeclineInviteEvents
 }

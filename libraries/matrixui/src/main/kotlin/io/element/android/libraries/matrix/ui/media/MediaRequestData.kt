@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.ui.media
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 /**
- * Can be use with [coil.compose.AsyncImage] to load a [MediaSource].
+ * Can be use with [coil3.compose.AsyncImage] to load a [MediaSource].
  * This will go internally through our [CoilMediaFetcher].
  *
  * Example of usage:

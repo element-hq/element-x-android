@@ -53,6 +53,9 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
             aCreateRoomRootState(
                 startDmAction = ConfirmingStartDmWithMatrixUser(aMatrixUser()),
             ),
+            aCreateRoomRootState(
+                isRoomDirectorySearchEnabled = true,
+            ),
         )
 }
 
@@ -60,10 +63,12 @@ fun aCreateRoomRootState(
     applicationName: String = "Element X Preview",
     userListState: UserListState = aUserListState(),
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    isRoomDirectorySearchEnabled: Boolean = false,
     eventSink: (CreateRoomRootEvents) -> Unit = {},
 ) = CreateRoomRootState(
     applicationName = applicationName,
     userListState = userListState,
     startDmAction = startDmAction,
+    isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
     eventSink = eventSink,
 )

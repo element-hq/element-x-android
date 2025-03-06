@@ -10,6 +10,7 @@ package io.element.android.features.invite.api.response
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 
 open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDeclineInviteState> {
     override val values: Sequence<AcceptDeclineInviteState>
@@ -17,12 +18,20 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
             anAcceptDeclineInviteState(),
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
-                    InviteData(RoomId("!room:matrix.org"), isDm = true, roomName = "Alice")
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice", senderId = UserId("@alice:matrix.org")),
+                    blockUser = false,
                 ),
             ),
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
-                    InviteData(RoomId("!room:matrix.org"), isDm = false, roomName = "Some room")
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = false, roomName = "Some room", senderId = UserId("@alice:matrix.org")),
+                    blockUser = false,
+                ),
+            ),
+            anAcceptDeclineInviteState(
+                declineAction = ConfirmingDeclineInvite(
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice", senderId = UserId("@alice:matrix.org")),
+                    blockUser = true,
                 ),
             ),
             anAcceptDeclineInviteState(

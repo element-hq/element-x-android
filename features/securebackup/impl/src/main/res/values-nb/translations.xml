@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_key_backup_action_enable">"Slå på sikkerhetskopiering"</string>
+  <string name="screen_chat_backup_key_backup_description">"Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. %1$s."</string>
+  <string name="screen_chat_backup_recovery_action_change">"Endre gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Få tilgang til de krypterte meldingene dine hvis du mister alle enhetene dine eller blir logget ut av %1$s overalt."</string>
   <string name="screen_encryption_reset_action_continue_reset">"Fortsett tilbakestillingen"</string>
   <string name="screen_encryption_reset_bullet_1">"Dine kontodetaljer, kontakter, innstillinger og chatteliste vil bli beholdt"</string>
   <string name="screen_encryption_reset_bullet_2">"Du mister all meldingshistorikk som bare er lagret på serveren"</string>
@@ -8,5 +12,6 @@
   <string name="screen_encryption_reset_footer">"Tilbakestill identiteten din bare hvis du ikke har tilgang til en annen pålogget enhet og du har mistet gjenopprettingsnøkkelen."</string>
   <string name="screen_encryption_reset_title">"Kan du ikke bekrefte? Du må tilbakestille identiteten din."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Slå av"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Du vil ikke ha kryptert meldingshistorikk på nye enheter"</string>
   <string name="screen_recovery_key_confirm_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
 </resources>

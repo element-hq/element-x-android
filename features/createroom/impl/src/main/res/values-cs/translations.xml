@@ -20,4 +20,10 @@ To můžete kdykoli změnit v nastavení místnosti."</string>
   <string name="screen_create_room_title">"Vytvořit místnost"</string>
   <string name="screen_create_room_topic_label">"Téma (nepovinné)"</string>
   <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Vstoupit do místnosti pomocí adresy"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Neplatná adresa"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Zadejte…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Odpovídající místnost nalezena"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Místnost nebyla nalezena"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"např. #room-name:matrix.org"</string>
 </resources>

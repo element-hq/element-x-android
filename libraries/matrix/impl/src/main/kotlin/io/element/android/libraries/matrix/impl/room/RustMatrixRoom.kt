@@ -83,7 +83,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.AllowedMessageTypes
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
@@ -92,6 +91,7 @@ import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
+import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
@@ -234,9 +234,9 @@ class RustMatrixRoom(
             )
         }
 
-        val allowedMessageTypes = when (createTimelineParams) {
+        val filter = when (createTimelineParams) {
             is CreateTimelineParams.MediaOnly,
-            is CreateTimelineParams.MediaOnlyFocused -> AllowedMessageTypes.Only(
+            is CreateTimelineParams.MediaOnlyFocused -> TimelineFilter.OnlyMessage(
                 types = listOf(
                     RoomMessageEventMessageType.FILE,
                     RoomMessageEventMessageType.IMAGE,
@@ -245,7 +245,7 @@ class RustMatrixRoom(
                 )
             )
             is CreateTimelineParams.Focused,
-            CreateTimelineParams.PinnedOnly -> AllowedMessageTypes.All
+            CreateTimelineParams.PinnedOnly -> TimelineFilter.All
         }
 
         val internalIdPrefix = when (createTimelineParams) {
@@ -268,9 +268,10 @@ class RustMatrixRoom(
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
                     focus = focus,
-                    allowedMessageTypes = allowedMessageTypes,
+                    filter = filter,
                     internalIdPrefix = internalIdPrefix,
                     dateDividerMode = dateDividerMode,
+                    trackReadReceipts = false,
                 )
             ).let { inner ->
                 val mode = when (createTimelineParams) {

@@ -56,7 +56,8 @@
     {
       "name" : ":features:invite:impl",
       "includeRegex" : [
-        "screen_invites_.*"
+        "screen_invites_.*",
+        "screen\\.join_room\\.decline_and_block_.*"
       ]
     },
     {
@@ -65,7 +66,8 @@
         "screen_create_room_.*",
         "screen\\.create_room\\..*",
         "screen_start_chat_.*",
-        "screen\\.start_chat\\..*"
+        "screen\\.start_chat\\..*",
+        "screen_room_directory_search_title*"
       ]
     },
     {

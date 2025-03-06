@@ -8,8 +8,10 @@
 package io.element.android.features.invite.api.response
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 
 data class InviteData(
+    val senderId: UserId,
     val roomId: RoomId,
     val roomName: String,
     val isDm: Boolean,

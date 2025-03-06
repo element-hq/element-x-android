@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
+import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentProvider
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView

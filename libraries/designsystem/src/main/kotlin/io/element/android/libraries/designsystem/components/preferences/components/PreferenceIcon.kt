@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.toSecondaryEnabledColor
+import io.element.android.libraries.designsystem.toIconSecondaryEnabledColor
 
 @Composable
 fun preferenceIcon(
@@ -68,7 +68,7 @@ private fun PreferenceIcon(
                 imageVector = icon,
                 resourceId = iconResourceId,
                 contentDescription = null,
-                tint = tintColor ?: enabled.toSecondaryEnabledColor(),
+                tint = tintColor ?: enabled.toIconSecondaryEnabledColor(),
                 modifier = Modifier
                     .size(24.dp),
             )

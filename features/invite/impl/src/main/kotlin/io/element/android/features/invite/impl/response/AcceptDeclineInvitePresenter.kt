@@ -16,6 +16,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -43,15 +44,34 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         fun handleEvents(event: AcceptDeclineInviteEvents) {
             when (event) {
                 is AcceptDeclineInviteEvents.AcceptInvite -> {
-                    localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
+                    val inviteData = event.invite
+                    if (inviteData == null) {
+                        acceptedAction.value = AsyncAction.Failure(InvalidDataException())
+                    } else {
+                        localCoroutineScope.acceptInvite(inviteData.roomId, acceptedAction)
+                    }
                 }
 
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
-                    declinedAction.value = ConfirmingDeclineInvite(event.invite)
+                    val inviteData = event.invite
+                    if (inviteData == null) {
+                        declinedAction.value = AsyncAction.Failure(InvalidDataException())
+                    } else {
+                        declinedAction.value = ConfirmingDeclineInvite(inviteData, event.blockUser)
+                    }
                 }
 
                 is InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
-                    localCoroutineScope.declineInvite(event.roomId, declinedAction)
+                    when (val declinedActionValue = declinedAction.value) {
+                        is ConfirmingDeclineInvite -> {
+                            localCoroutineScope.declineInvite(
+                                inviteData = declinedActionValue.inviteData,
+                                declinedAction = declinedAction,
+                                blockUser = declinedActionValue.blockUser,
+                            )
+                        }
+                        else -> Unit
+                    }
                 }
 
                 is InternalAcceptDeclineInviteEvents.CancelDeclineInvite -> {
@@ -92,13 +112,20 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncAction<RoomId>>) = launch {
+    private fun CoroutineScope.declineInvite(
+        inviteData: InviteData,
+        blockUser: Boolean,
+        declinedAction: MutableState<AsyncAction<RoomId>>,
+    ) = launch {
         suspend {
-            client.getPendingRoom(roomId)?.use {
+            client.getPendingRoom(inviteData.roomId)?.use {
                 it.leave().getOrThrow()
-                notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
-            roomId
+            if (blockUser) {
+                client.ignoreUser(inviteData.senderId).getOrThrow()
+            }
+            notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, inviteData.roomId)
+            inviteData.roomId
         }.runCatchingUpdatingState(declinedAction)
     }
 }

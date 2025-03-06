@@ -40,7 +40,11 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -169,7 +173,8 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
-        val client = createFakeMatrixClient()
+        val ignoredUsersFlow = MutableStateFlow(persistentListOf<UserId>())
+        val client = createFakeMatrixClient(ignoredUsersFlow = ignoredUsersFlow)
         val presenter = createUserProfilePresenter(
             client = client,
             userId = A_USER_ID
@@ -178,20 +183,21 @@ class UserProfilePresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
-            client.emitIgnoreUserList(listOf(A_USER_ID))
+            ignoredUsersFlow.emit(persistentListOf(A_USER_ID))
             assertThat(awaitItem().isBlocked.dataOrNull()).isTrue()
 
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
-            client.emitIgnoreUserList(listOf())
+            ignoredUsersFlow.emit(persistentListOf())
             assertThat(awaitItem().isBlocked.dataOrNull()).isFalse()
         }
     }
 
     @Test
     fun `present - BlockUser with error`() = runTest {
-        val matrixClient = createFakeMatrixClient()
-        matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
+        val matrixClient = createFakeMatrixClient(
+            ignoreUserResult = { Result.failure(A_THROWABLE) }
+        )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem()
@@ -207,8 +213,9 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - UnblockUser with error`() = runTest {
-        val matrixClient = createFakeMatrixClient()
-        matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
+        val matrixClient = createFakeMatrixClient(
+            unIgnoreUserResult = { Result.failure(A_THROWABLE) }
+        )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem()
@@ -374,10 +381,16 @@ class UserProfilePresenterTest {
 
     private fun createFakeMatrixClient(
         isUserVerified: Boolean = false,
+        ignoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+        unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+        ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
     ) = FakeMatrixClient(
         encryptionService = FakeEncryptionService(
             isUserVerifiedResult = { Result.success(isUserVerified) }
         ),
+        ignoreUserResult = ignoreUserResult,
+        unIgnoreUserResult = unIgnoreUserResult,
+        ignoredUsersFlow = ignoredUsersFlow
     )
 
     private fun createUserProfilePresenter(

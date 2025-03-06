@@ -67,7 +67,9 @@ import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -305,6 +307,35 @@ class RoomListPresenterTest {
                             isFavorite = true,
                             markAsUnreadFeatureFlagEnabled = true,
                             eventCacheFeatureFlagEnabled = false,
+                            hasNewContent = false,
+                        )
+                    )
+            }
+        }
+    }
+
+    @Test
+    fun `present - show context menu with view source on`() = runTest {
+        val presenter = createRoomListPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                isDeveloperModeEnabled = true,
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            val summary = createRoomListRoomSummary()
+            initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = false,
+                            markAsUnreadFeatureFlagEnabled = true,
+                            // true here.
+                            eventCacheFeatureFlagEnabled = true,
                             hasNewContent = false,
                         )
                     )
@@ -643,6 +674,7 @@ class RoomListPresenterTest {
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = RoomListPresenter(
         client = client,
         syncService = syncService,
@@ -672,6 +704,7 @@ class RoomListPresenterTest {
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         notificationCleaner = notificationCleaner,
         logoutPresenter = { aDirectLogoutState() },
+        appPreferencesStore = appPreferencesStore,
     )
 }
 

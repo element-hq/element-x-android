@@ -2,12 +2,38 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
   <string name="screen_advanced_settings_developer_mode">"Utviklermodus"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Aktiver for å få tilgang til funksjoner og funksjonalitet for utviklere."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rik tekstredigering for å skrive Markdown manuelt."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Fjern blokkering"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du vil kunne se alle meldingene fra dem igjen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Fjern blokkering av bruker"</string>
   <string name="screen_edit_profile_display_name">"Visningsnavn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnavn"</string>
+  <string name="screen_edit_profile_error">"Det oppstod en ukjent feil, og informasjonen kunne ikke endres."</string>
   <string name="screen_edit_profile_error_title">"Kan ikke oppdatere profilen"</string>
   <string name="screen_edit_profile_title">"Rediger profil"</string>
   <string name="screen_edit_profile_updating_details">"Oppdaterer profilen…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Ytterligere innstillinger"</string>
+  <string name="screen_notification_settings_calls_label">"Lyd- og videosamtaler"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Uoverensstemmelse i konfigurasjonen"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Vi har forenklet varslingsinnstillingene for å gjøre det lettere å finne alternativene. Noen av de egendefinerte innstillingene du har valgt tidligere, vises ikke her, men de er fortsatt aktive.
+
+Hvis du fortsetter, kan noen av innstillingene dine endres."</string>
+  <string name="screen_notification_settings_direct_chats">"Direkte chatter"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Egendefinert innstilling per chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Det oppstod en feil under oppdatering av varslingsinnstillingen."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Alle meldinger"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Bare omtaler og nøkkelord"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"På direkte chatter, varsle meg for"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"I gruppechatter, varsle meg om"</string>
+  <string name="screen_notification_settings_enable_notifications">"Aktiver varsler på denne enheten"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurasjonen er ikke korrigert, prøv igjen."</string>
+  <string name="screen_notification_settings_group_chats">"Gruppechatter"</string>
+  <string name="screen_notification_settings_mode_all">"Alle"</string>
+  <string name="screen_notification_settings_notification_section_title">"Varsle meg om"</string>
+  <string name="screen_notification_settings_room_mention_label">"Gi meg varsel på @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"For å motta varsler, vennligst endre %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminnstillinger"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systemvarsler er slått av"</string>
+  <string name="screen_notification_settings_title">"Varslinger"</string>
 </resources>

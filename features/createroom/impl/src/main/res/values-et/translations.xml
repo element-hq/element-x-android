@@ -20,4 +20,10 @@ Sa võid seda jututoa seadistustest alati muuta."</string>
   <string name="screen_create_room_title">"Loo jututuba"</string>
   <string name="screen_create_room_topic_label">"Teema (kui soovid lisada)"</string>
   <string name="screen_start_chat_error_starting_chat">"Vestluse alustamisel tekkis viga"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Liitu jututoaga aadressi alusel"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"See pole kehtiv aadress"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Sisene…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Leidsime vastava jututoa"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Jututuba ei leidu"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"nt. #jututoa-nimi:matrix.org"</string>
 </resources>

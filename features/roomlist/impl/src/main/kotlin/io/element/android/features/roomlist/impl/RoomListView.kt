@@ -49,7 +49,6 @@ fun RoomListView(
     onCreateRoomClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
-    onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -83,7 +82,6 @@ fun RoomListView(
                 state = state.searchState,
                 eventSink = state.eventSink,
                 onRoomClick = onRoomClick,
-                onRoomDirectorySearchClick = onRoomDirectorySearchClick,
                 modifier = Modifier
                     .statusBarsPadding()
                     .padding(top = topPadding)
@@ -177,7 +175,6 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onCreateRoomClick = {},
         onRoomSettingsClick = {},
         onMenuActionClick = {},
-        onRoomDirectorySearchClick = {},
         acceptDeclineInviteView = {},
     )
 }

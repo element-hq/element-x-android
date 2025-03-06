@@ -63,6 +63,7 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -105,8 +106,8 @@ fun JoinRoomView(
                     onAcceptInvite = {
                         state.eventSink(JoinRoomEvents.AcceptInvite)
                     },
-                    onDeclineInvite = {
-                        state.eventSink(JoinRoomEvents.DeclineInvite)
+                    onDeclineInvite = { blockUser ->
+                        state.eventSink(JoinRoomEvents.DeclineInvite(blockUser))
                     },
                     onJoinRoom = {
                         state.eventSink(JoinRoomEvents.JoinRoom)
@@ -183,7 +184,7 @@ fun JoinRoomView(
 private fun JoinRoomFooter(
     joinAuthorisationStatus: JoinAuthorisationStatus,
     onAcceptInvite: () -> Unit,
-    onDeclineInvite: () -> Unit,
+    onDeclineInvite: (Boolean) -> Unit,
     onJoinRoom: () -> Unit,
     onKnockRoom: () -> Unit,
     onCancelKnock: () -> Unit,
@@ -193,23 +194,32 @@ private fun JoinRoomFooter(
 ) {
     Box(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
+            .fillMaxWidth()
+            .padding(top = 8.dp)
     ) {
         when (joinAuthorisationStatus) {
             is JoinAuthorisationStatus.IsInvited -> {
-                ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                    OutlinedButton(
-                        text = stringResource(CommonStrings.action_decline),
-                        onClick = onDeclineInvite,
-                        modifier = Modifier.weight(1f),
-                        size = ButtonSize.LargeLowPadding,
-                    )
-                    Button(
-                        text = stringResource(CommonStrings.action_accept),
-                        onClick = onAcceptInvite,
-                        modifier = Modifier.weight(1f),
-                        size = ButtonSize.LargeLowPadding,
+                Column {
+                    ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                        OutlinedButton(
+                            text = stringResource(CommonStrings.action_decline),
+                            onClick = { onDeclineInvite(false) },
+                            modifier = Modifier.weight(1f),
+                            size = ButtonSize.LargeLowPadding,
+                        )
+                        Button(
+                            text = stringResource(CommonStrings.action_accept),
+                            onClick = onAcceptInvite,
+                            modifier = Modifier.weight(1f),
+                            size = ButtonSize.LargeLowPadding,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    TextButton(
+                        text = stringResource(R.string.screen_join_room_decline_and_block_button_title),
+                        onClick = { onDeclineInvite(true) },
+                        modifier = Modifier.fillMaxWidth(),
+                        destructive = true
                     )
                 }
             }
@@ -372,12 +382,19 @@ private fun JoinRoomContent(
                         IsKnockedLoadedContent()
                     }
                     else -> {
-                        DefaultLoadedContent(
-                            modifier = Modifier.verticalScroll(rememberScrollState()),
-                            contentState = contentState,
-                            knockMessage = knockMessage,
-                            onKnockMessageUpdate = onKnockMessageUpdate
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
+                            if (inviteSender != null) {
+                                InviteSenderView(inviteSender = inviteSender)
+                                Spacer(modifier = Modifier.height(32.dp))
+                            }
+                            DefaultLoadedContent(
+                                modifier = Modifier.verticalScroll(rememberScrollState()),
+                                contentState = contentState,
+                                knockMessage = knockMessage,
+                                onKnockMessageUpdate = onKnockMessageUpdate
+                            )
+                        }
                     }
                 }
             }
@@ -440,8 +457,8 @@ private fun IncompleteContent(
 private fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
+            .fillMaxHeight()
+            .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
         IconTitleSubtitleMolecule(
@@ -487,10 +504,6 @@ private fun DefaultLoadedContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
-                if (inviteSender != null) {
-                    InviteSenderView(inviteSender = inviteSender)
-                }
                 RoomPreviewDescriptionAtom(contentState.topic ?: "")
                 if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanKnock) {
                     Spacer(modifier = Modifier.height(24.dp))

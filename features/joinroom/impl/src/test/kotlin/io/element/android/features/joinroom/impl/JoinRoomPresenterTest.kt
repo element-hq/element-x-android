@@ -167,9 +167,9 @@ class JoinRoomPresenterTest {
 
             awaitItem().also { state ->
                 state.eventSink(JoinRoomEvents.AcceptInvite)
-                state.eventSink(JoinRoomEvents.DeclineInvite)
+                state.eventSink(JoinRoomEvents.DeclineInvite(false))
 
-                val inviteData = state.contentState.toInviteData()!!
+                val inviteData = state.contentState.toInviteData()
 
                 assert(eventSinkRecorder)
                     .isCalledExactly(2)
