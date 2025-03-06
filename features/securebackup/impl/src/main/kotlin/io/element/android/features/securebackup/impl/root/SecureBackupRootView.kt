@@ -9,9 +9,11 @@ package io.element.android.features.securebackup.impl.root
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -74,7 +76,35 @@ fun SecureBackupRootView(
         )
 
         // Disable / Enable key storage
+        val keyStorageToggleModifier = when (state.backupState) {
+            BackupState.UNKNOWN -> {
+                when (state.doesBackupExistOnServer) {
+                    is AsyncData.Success -> {
+                        Modifier
+                            .toggleable(
+                                value = state.doesBackupExistOnServer.data,
+                                role = Role.Checkbox,
+                                enabled = true,
+                                onValueChange = {
+                                    if (state.doesBackupExistOnServer.data) {
+                                        onDisableClick()
+                                    } else {
+                                        state.eventSink.invoke(SecureBackupRootEvents.EnableKeyStorage)
+                                    }
+                                }
+                            )
+                    }
+                    else -> {
+                         Modifier
+                    }
+                }
+            }
+            else -> {
+                Modifier
+            }
+        }
         ListItem(
+            modifier = keyStorageToggleModifier,
             headlineContent = {
                 Text(
                     text = stringResource(id = R.string.screen_chat_backup_key_storage_toggle_title),
