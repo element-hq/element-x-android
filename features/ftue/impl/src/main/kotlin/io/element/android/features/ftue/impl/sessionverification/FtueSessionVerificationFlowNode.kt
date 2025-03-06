@@ -55,7 +55,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         data object Root : NavTarget
 
         @Parcelize
-        data class UseAnotherDevice(val showDeviceVerifiedScreen: Boolean) : NavTarget
+        data object UseAnotherDevice : NavTarget
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
@@ -72,7 +72,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         override fun onDone() {
             lifecycleScope.launch {
                 // Move to the completed state view in the verification flow
-                backstack.newRoot(NavTarget.UseAnotherDevice(showDeviceVerifiedScreen = true))
+                backstack.newRoot(NavTarget.UseAnotherDevice)
             }
         }
     }
@@ -82,7 +82,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
             is NavTarget.Root -> {
                 val callback = object : ChooseSelfVerificationModeNode.Callback {
                     override fun onUseAnotherDevice() {
-                        backstack.push(NavTarget.UseAnotherDevice(showDeviceVerifiedScreen = true))
+                        backstack.push(NavTarget.UseAnotherDevice)
                     }
 
                     override fun onUseRecoveryKey() {
@@ -103,7 +103,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
             is NavTarget.UseAnotherDevice -> {
                 verifySessionEntryPoint.nodeBuilder(this, buildContext)
                     .params(VerifySessionEntryPoint.Params(
-                        showDeviceVerifiedScreen = navTarget.showDeviceVerifiedScreen,
+                        showDeviceVerifiedScreen = true,
                         verificationRequest = VerificationRequest.Outgoing.CurrentSession,
                     ))
                     .callback(object : VerifySessionEntryPoint.Callback {
