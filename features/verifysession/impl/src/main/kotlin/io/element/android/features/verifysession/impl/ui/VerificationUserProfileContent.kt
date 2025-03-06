@@ -8,6 +8,7 @@
 package io.element.android.features.verifysession.impl.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,7 +52,7 @@ fun VerificationUserProfileContent(
 
         Spacer(modifier = Modifier.padding(12.dp))
 
-        Column {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(text = displayName ?: userId.value, style = ElementTheme.typography.fontBodyLgMedium, color = ElementTheme.colors.textPrimary)
 
             if (displayName != null) {
