@@ -17,7 +17,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.logout.api.direct.DirectLogoutView
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 
@@ -50,9 +49,6 @@ class ChooseSelfVerificationModeNode @AssistedInject constructor(
             modifier = modifier,
         )
 
-        directLogoutView.Render(
-            state = state.directLogoutState,
-            onSuccessLogout = ::onSuccessLogout,
-        )
+        directLogoutView.Render(state = state.directLogoutState)
     }
 }

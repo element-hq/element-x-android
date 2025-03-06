@@ -7,7 +7,6 @@
 
 package io.element.android.features.logout.impl
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope

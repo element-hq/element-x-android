@@ -557,9 +557,9 @@ private fun FavoriteItem(
 private fun ProfileItem(
     onClick: () -> Unit,
 ) {
-    PreferenceText(
-        icon = CompoundIcons.UserProfile(),
-        title = stringResource(id = R.string.screen_room_details_profile_row_title),
+    ListItem(
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
+        headlineContent = { Text(stringResource(id = R.string.screen_room_details_profile_row_title)) },
         onClick = onClick,
     )
 }
