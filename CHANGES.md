@@ -1,3 +1,43 @@
+Changes in Element X v25.03.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.03.1 -->
+
+## What's Changed
+### ✨ Features
+* Enable the Event cache by default. by @bmarty in https://github.com/element-hq/element-x-android/pull/4373
+### 🙌 Improvements
+* change(create room) : use history visibility "invited" by @ganfra in https://github.com/element-hq/element-x-android/pull/4335
+* change(room directory) : move the the room directory entry  by @ganfra in https://github.com/element-hq/element-x-android/pull/4348
+* [Change] Invited state room preview by @ganfra in https://github.com/element-hq/element-x-android/pull/4353
+* change(left room snackbar) : manage cancel knock and decline invite by @ganfra in https://github.com/element-hq/element-x-android/pull/4360
+### 🐛 Bugfixes
+* Restore manual `Client` cleanup on session logout by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4333
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4346
+### 🧱 Build
+* Fix typo on job name. by @bmarty in https://github.com/element-hq/element-x-android/pull/4352
+### Dependency upgrades
+* chore(deps): update plugin ktlint to v12.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4338
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.8.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4340
+* fix(deps): update dependency io.mockk:mockk to v1.13.17 by @renovate in https://github.com/element-hq/element-x-android/pull/4334
+* fix(deps): update kotlin to v2.1.10-1.0.31 by @renovate in https://github.com/element-hq/element-x-android/pull/4337
+* fix(deps): update dependency com.google.firebase:firebase-bom to v33.10.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4339
+* Migrate to coil3 by @bmarty in https://github.com/element-hq/element-x-android/pull/4347
+* fix(deps): update dependency org.jsoup:jsoup to v1.19.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4351
+* deps(rust sdk) : update to 25.03.05 by @ganfra in https://github.com/element-hq/element-x-android/pull/4370
+* Update dependency org.matrix.rustcomponents:sdk-android to v25.3.6 by @renovate in https://github.com/element-hq/element-x-android/pull/4371
+### Others
+* Prevent PRs with the X-Blocked label from being merged by @robintown in https://github.com/element-hq/element-x-android/pull/4350
+* Fix some icon colors by @bmarty in https://github.com/element-hq/element-x-android/pull/4365
+* Remove PreferenceText, replace by ListItem. by @bmarty in https://github.com/element-hq/element-x-android/pull/4369
+* Show error screens in group calls by @robintown in https://github.com/element-hq/element-x-android/pull/4297
+
+## New Contributors
+* @robintown made their first contribution in https://github.com/element-hq/element-x-android/pull/4350
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.03.0...v25.03.1
+
 Changes in Element X v25.03.0
 =============================
 
