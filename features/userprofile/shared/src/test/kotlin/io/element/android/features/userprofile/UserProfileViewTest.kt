@@ -203,7 +203,7 @@ class UserProfileViewTest {
                 state = aUserProfileState(userId = A_USER_ID, isVerified = AsyncData.Success(false)),
                 onVerifyClick = callback,
             )
-            rule.clickOn(CommonStrings.common_verify_identity)
+            rule.clickOn(CommonStrings.common_verify_user)
         }
     }
 }
