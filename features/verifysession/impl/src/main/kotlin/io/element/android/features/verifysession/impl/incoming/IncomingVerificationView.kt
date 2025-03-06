@@ -98,7 +98,11 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
                 is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
             }
         }
-        is Step.Verifying -> if (step.isWaiting) BigIcon.Style.Loading else BigIcon.Style.Default(CompoundIcons.LockSolid())
+        is Step.Verifying -> if (step.isWaiting) {
+            BigIcon.Style.Loading
+        } else {
+            BigIcon.Style.Default(CompoundIcons.ReactionSolid())
+        }
         Step.Completed -> BigIcon.Style.SuccessSolid
         Step.Failure -> BigIcon.Style.AlertSolid
     }
