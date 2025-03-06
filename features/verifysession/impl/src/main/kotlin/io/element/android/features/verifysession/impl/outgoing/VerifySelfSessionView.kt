@@ -120,7 +120,7 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
         Step.Loading -> error("Should not happen")
         Step.Initial -> when (request) {
             is VerificationRequest.Outgoing.CurrentSession -> BigIcon.Style.Default(CompoundIcons.Devices())
-            is VerificationRequest.Outgoing.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
+            is VerificationRequest.Outgoing.User -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         }
         Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Loading
         Step.Canceled -> BigIcon.Style.AlertSolid
