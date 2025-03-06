@@ -45,14 +45,3 @@ class ChooseSelfVerificationModePresenter @Inject constructor(
         )
     }
 }
-
-data class ChooseSelfVerificationModeState(
-    val isLastDevice: Boolean,
-    val canEnterRecoveryKey: Boolean,
-    val directLogoutState: DirectLogoutState,
-    val eventSink: (ChooseSelfVerificationModeEvent) -> Unit,
-)
-
-sealed interface ChooseSelfVerificationModeEvent {
-    object SignOut : ChooseSelfVerificationModeEvent
-}
