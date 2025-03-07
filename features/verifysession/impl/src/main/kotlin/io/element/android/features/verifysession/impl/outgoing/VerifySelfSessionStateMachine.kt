@@ -65,6 +65,7 @@ class VerifySelfSessionStateMachine(
             }
             inState<State.Canceled> {
                 on<Event.Reset> { _, state ->
+                    sessionVerificationService.reset(cancelAnyPendingVerificationAttempt = false)
                     state.override { State.Initial.andLogStateChange() }
                 }
             }
@@ -122,10 +123,7 @@ class VerifySelfSessionStateMachine(
                     state.override { State.Canceled.andLogStateChange() }
                 }
                 on<Event.DidFail> { event, state: MachineState<State> ->
-                    when (state.snapshot) {
-                        is State.RequestingVerification -> state.override { State.Initial.andLogStateChange() }
-                        else -> state.override { State.Canceled.andLogStateChange() }
-                    }
+                    state.override { State.Canceled.andLogStateChange() }
                 }
             }
         }

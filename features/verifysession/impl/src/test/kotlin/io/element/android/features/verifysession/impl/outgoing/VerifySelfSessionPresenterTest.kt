@@ -122,7 +122,7 @@ class VerifySelfSessionPresenterTest {
     }
 
     @Test
-    fun `present - A fail when requesting verification resets the state to the initial one`() = runTest {
+    fun `present - A fail when requesting verification resets the state to the canceled one`() = runTest {
         val service = unverifiedSessionService(
             requestSessionVerificationLambda = { },
         )
@@ -131,7 +131,7 @@ class VerifySelfSessionPresenterTest {
             awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
-            assertThat(awaitItem().step).isEqualTo(Step.Initial)
+            assertThat(awaitItem().step).isEqualTo(Step.Canceled)
         }
     }
 
