@@ -100,6 +100,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     onEventClick: (event: TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkLongClick: (String) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         PinnedMessagesListView(
@@ -108,6 +109,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
             onEventClick = onEventClick,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
         )
     }
 }
