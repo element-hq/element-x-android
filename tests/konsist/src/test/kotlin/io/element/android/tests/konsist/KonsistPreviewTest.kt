@@ -66,6 +66,7 @@ class KonsistPreviewTest {
                 "CallScreenPipViewPreview",
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",
+                "FocusedEventPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
                 "IconsCompoundPreview",
                 "IconsOtherPreview",
