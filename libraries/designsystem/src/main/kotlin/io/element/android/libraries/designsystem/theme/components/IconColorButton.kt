@@ -45,12 +45,11 @@ fun IconColorButton(
         IconColorButtonStyle.Disabled -> ElementTheme.colors.iconDisabled
     }
     IconButton(
-        modifier = modifier
-            .size(48.dp),
-        onClick = onClick
+        modifier = modifier.size(48.dp),
+        onClick = onClick,
     ) {
         Icon(
-            modifier = modifier
+            modifier = Modifier
                 .clip(CircleShape)
                 .size(buttonSize.toContainerSize())
                 .background(bgColor)
