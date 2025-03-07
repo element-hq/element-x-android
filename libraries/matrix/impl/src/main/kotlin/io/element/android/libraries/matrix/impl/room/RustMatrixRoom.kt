@@ -264,6 +264,9 @@ class RustMatrixRoom(
             CreateTimelineParams.PinnedOnly -> DateDividerMode.DAILY
         }
 
+        // Track read receipts only for focused timeline for performance optimization
+        val trackReadReceipts = createTimelineParams is CreateTimelineParams.Focused
+
         runCatching {
             innerRoom.timelineWithConfiguration(
                 configuration = TimelineConfiguration(
@@ -271,7 +274,7 @@ class RustMatrixRoom(
                     filter = filter,
                     internalIdPrefix = internalIdPrefix,
                     dateDividerMode = dateDividerMode,
-                    trackReadReceipts = false,
+                    trackReadReceipts = trackReadReceipts,
                 )
             ).let { inner ->
                 val mode = when (createTimelineParams) {
