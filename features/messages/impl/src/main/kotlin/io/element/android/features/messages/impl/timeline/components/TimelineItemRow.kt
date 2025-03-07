@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.LocalIsEnterpriseBuild
 import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -171,8 +172,13 @@ private fun Modifier.focusedEvent(
     focusedEventOffset: Dp
 ): Modifier {
     val highlightedLineColor = ElementTheme.colors.textActionAccent
+    val gradientFirstColor = if (LocalIsEnterpriseBuild.current) {
+        ElementTheme.colors.textActionAccent.copy(alpha = 0.125f)
+    } else {
+        ElementTheme.colors.highlightedMessageBackgroundColor
+    }
     val gradientColors = listOf(
-        ElementTheme.colors.highlightedMessageBackgroundColor,
+        gradientFirstColor,
         ElementTheme.colors.bgCanvasDefault,
     )
     val verticalOffset = focusedEventOffset.toPx()
