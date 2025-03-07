@@ -200,8 +200,3 @@ class VerifySelfSessionStateMachine(
         data object Reset : Event
     }
 }
-
-sealed interface VerificationType {
-    data object CurrentSession : VerificationType
-    data object User : VerificationType
-}
