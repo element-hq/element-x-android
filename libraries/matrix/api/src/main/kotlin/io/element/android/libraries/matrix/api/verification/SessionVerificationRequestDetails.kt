@@ -15,9 +15,15 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SessionVerificationRequestDetails(
-    val senderId: UserId,
+    val senderProfile: SenderProfile,
     val flowId: FlowId,
     val deviceId: DeviceId,
-    val displayName: String?,
     val firstSeenTimestamp: Long,
-) : Parcelable
+) : Parcelable {
+    @Parcelize
+    data class SenderProfile(
+        val userId: UserId,
+        val displayName: String?,
+        val avatarUrl: String?,
+    ) : Parcelable
+}

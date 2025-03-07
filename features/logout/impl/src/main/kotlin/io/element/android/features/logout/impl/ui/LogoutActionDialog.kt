@@ -8,7 +8,6 @@
 package io.element.android.features.logout.impl.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.impl.R
 import io.element.android.libraries.architecture.AsyncAction

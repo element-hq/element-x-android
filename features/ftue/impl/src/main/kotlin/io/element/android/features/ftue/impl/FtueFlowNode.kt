@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.navigation.backpresshandlerstrategies.BaseBackPressHandlerStrategy
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -38,8 +37,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -59,7 +56,6 @@ class FtueFlowNode @AssistedInject constructor(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
         savedStateMap = buildContext.savedStateMap,
-        backPressHandler = NoOpBackstackHandlerStrategy(),
     ),
     buildContext = buildContext,
     plugins = plugins,
@@ -104,7 +100,7 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> {
                 createNode<PlaceholderNode>(buildContext)
             }
-            NavTarget.SessionVerification -> {
+            is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
                     override fun onDone() {
                         moveToNextStepIfNeeded()
@@ -173,13 +169,5 @@ class FtueFlowNode @AssistedInject constructor(
                 CircularProgressIndicator()
             }
         }
-    }
-}
-
-private class NoOpBackstackHandlerStrategy<NavTarget : Any> : BaseBackPressHandlerStrategy<NavTarget, BackStack.State>() {
-    override val canHandleBackPressFlow: StateFlow<Boolean> = MutableStateFlow(true)
-
-    override fun onBackPressed() {
-        // No-op
     }
 }
