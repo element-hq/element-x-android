@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.RadialGradientShader
@@ -97,8 +98,8 @@ fun GradientFloatingActionButton(
             .graphicsLayer(shape = shape, clip = false)
             .clip(shape)
             .drawBehind {
-                drawRect(brush = radialShaderBrush, alpha = 0.4f)
                 drawRect(brush = linearShaderBrush)
+                drawRect(brush = radialShaderBrush, alpha = 0.4f, blendMode = BlendMode.Overlay)
             }
             .clickable(
                 enabled = true,
