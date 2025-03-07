@@ -12,7 +12,7 @@ import io.element.android.libraries.designsystem.R
 // This list and all the drawable it contains should be removed at some point.
 // All the icons should be defined in Compound.
 internal val iconsOther = listOf(
-    R.drawable.ic_notification_small,
+    R.drawable.ic_notification,
     R.drawable.ic_stop,
     R.drawable.pin,
 )

@@ -67,7 +67,7 @@ class CallForegroundService : Service() {
         val callActivityIntent = Intent(this, ElementCallActivity::class.java)
         val pendingIntent = PendingIntentCompat.getActivity(this, 0, callActivityIntent, 0, false)
         val notification = NotificationCompat.Builder(this, foregroundServiceChannel.id)
-            .setSmallIcon(IconCompat.createWithResource(this, CommonDrawables.ic_notification_small))
+            .setSmallIcon(IconCompat.createWithResource(this, CommonDrawables.ic_notification))
             .setContentTitle(getString(R.string.call_foreground_service_title_android))
             .setContentText(getString(R.string.call_foreground_service_message_android))
             .setContentIntent(pendingIntent)
