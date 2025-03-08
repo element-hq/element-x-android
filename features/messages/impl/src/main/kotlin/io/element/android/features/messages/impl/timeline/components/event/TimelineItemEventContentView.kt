@@ -40,6 +40,7 @@ fun TimelineItemEventContentView(
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     onLinkClick: (url: String) -> Unit,
+    onLinkLongClick: (String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
@@ -60,6 +61,7 @@ fun TimelineItemEventContentView(
             content = content,
             modifier = modifier,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
@@ -78,6 +80,7 @@ fun TimelineItemEventContentView(
             onLongClick = onLongClick,
             onShowContentClick = onShowContentClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier,
         )
@@ -96,6 +99,7 @@ fun TimelineItemEventContentView(
             onLongClick = onLongClick,
             onShowContentClick = onShowContentClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
