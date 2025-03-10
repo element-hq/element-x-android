@@ -13,5 +13,6 @@
   <string name="screen_create_room_room_name_label">"Назва пакоя"</string>
   <string name="screen_create_room_title">"Стварыце пакой"</string>
   <string name="screen_create_room_topic_label">"Тэма (неабавязкова)"</string>
+  <string name="screen_room_directory_search_title">"Каталог пакояў"</string>
   <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
 </resources>

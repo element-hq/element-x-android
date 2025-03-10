@@ -7,6 +7,7 @@
   <string name="rich_text_editor_composer_caption_placeholder">"Add a caption"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Encrypted message…"</string>
   <string name="rich_text_editor_composer_placeholder">"Message…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Unencrypted message…"</string>
   <string name="rich_text_editor_create_link">"Create a link"</string>
   <string name="rich_text_editor_edit_link">"Edit link"</string>
   <string name="rich_text_editor_format_bold">"Apply bold format"</string>

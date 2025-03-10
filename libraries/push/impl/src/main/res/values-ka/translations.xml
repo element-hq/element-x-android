@@ -27,6 +27,7 @@
     <item quantity="other">"%d ახალი მესიჯი"</item>
   </plurals>
   <string name="notification_reaction_body">"რეაგირება მოხდა: %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"წაკითხულად მონიშვნა"</string>
   <string name="notification_room_action_quick_reply">"Სწრაფი პასუხი"</string>
   <string name="notification_room_invite_body">"მოგიწვიათ ოთახში"</string>
   <string name="notification_sender_me">"მე"</string>
@@ -47,4 +48,28 @@
   <string name="push_distributor_background_sync_android">"ფონის სინქრონიზაცია"</string>
   <string name="push_distributor_firebase_android">"Google სერვისები"</string>
   <string name="push_no_valid_google_play_services_apk_android">"მოქმედი Google Play სერვისები ვერ მოიძებნა. შეტყობინებები შეიძლება ვერ იმუშაოს სწორად."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"მიმდინარე პროვაიდერის სახელის გაგება"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"push პროვაიდერები არაა არჩეული."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"მიმდინარე push პროვაიდერი: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"მიმდინარე push პროვაიდერი"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"დარწმუნდით რომ აპლიკაციას მინიმუმ ერთი push პროვაიდერი."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"push პროვაიდერები ვერ მოიძებნა."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"მოიძებნა %1$d push პროვაიდერი: %2$s"</item>
+    <item quantity="other">"მოიძებნა %1$d push პროვაიდერი: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"push პროვაიდერების აღმოჩენა"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"შეამოწმეთ აპლიკაციას თუ შეუძლია შეტყობინებების ჩვენება"</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"შეტყობინება არ იქნა დაჭერილი."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"შეტყობინების ჩვენება შეუძლებელია."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"შეტყობინება იყო დაჭერილი!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"შეტყობინებების ჩვენება"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"გთხოვთ დააჭიროთ შეტყობინებაზე ტესტის გასაგრძელებლად."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"დარწმუნდით რომ აპლიკაცია იღებს push-შეტყობინებას."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"შეცდომა: გამგზავნმა უარყო მოთხოვნა."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"შეცდომა: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"შეცდომა, push-ის ტესტირება შეუძლებელია."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"შეცდომა, push-ისთვის ლოდინის დრო გავიდა."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Push-შეტყობინების ციკლმა დაიკავა %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"push-შეტყობინების ციკლის ტესტირება"</string>
 </resources>

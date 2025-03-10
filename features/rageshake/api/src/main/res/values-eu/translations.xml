@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s kraskatu zen azkenekoz erabili zenean. Gurekin partekatu nahi al duzu kraskatzearen txostena?"</string>
+  <string name="rageshake_detection_dialog_content">"Frustrazioaren eraginez mugikorra astintzen ari zarela dirudi. Erroreen berri emateko pantaila ireki nahi al duzu?"</string>
+</resources>

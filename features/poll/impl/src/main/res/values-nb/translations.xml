@@ -11,4 +11,8 @@
   <string name="screen_edit_poll_delete_confirmation">"Er du sikker på at du vil slette denne avstemningen?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Slett avstemning"</string>
   <string name="screen_edit_poll_title">"Rediger avstemning"</string>
+  <string name="screen_polls_history_empty_ongoing">"Finner ingen pågående avstemninger."</string>
+  <string name="screen_polls_history_empty_past">"Kan ikke finne noen tidligere avstemninger."</string>
+  <string name="screen_polls_history_filter_ongoing">"Pågående"</string>
+  <string name="screen_polls_history_title">"Avstemninger"</string>
 </resources>

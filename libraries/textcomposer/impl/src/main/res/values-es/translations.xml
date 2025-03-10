@@ -4,6 +4,8 @@
   <string name="rich_text_editor_bullet_list">"Lista de puntos"</string>
   <string name="rich_text_editor_close_formatting_options">"Cerrar opciones de formato"</string>
   <string name="rich_text_editor_code_block">"Bloque de código"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Agregar una leyenda"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Mensaje cifrado…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mensaje…"</string>
   <string name="rich_text_editor_create_link">"Crear un enlace"</string>
   <string name="rich_text_editor_edit_link">"Editar enlace"</string>

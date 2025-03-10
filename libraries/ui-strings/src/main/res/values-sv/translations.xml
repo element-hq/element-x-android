@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
+  <string name="a11y_view_details">"Visa detaljer"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
   <string name="action_accept">"Godkänn"</string>
@@ -151,6 +152,7 @@
   <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
   <string name="common_do_not_show_this_again">"Visa inte detta igen"</string>
+  <string name="common_download_failed">"Nedladdningen misslyckades"</string>
   <string name="common_downloading">"Laddar ner"</string>
   <string name="common_edited_suffix">"(redigerad)"</string>
   <string name="common_editing">"Redigerar"</string>
@@ -168,6 +170,8 @@ Anledning:%1$s."</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favoriter"</string>
   <string name="common_file">"Fil"</string>
+  <string name="common_file_deleted">"Fil borttagen"</string>
+  <string name="common_file_saved">"Fil sparad"</string>
   <string name="common_file_saved_on_disk_android">"Fil sparad i Download"</string>
   <string name="common_forward_message">"Vidarebefordra meddelande"</string>
   <string name="common_frequently_used">"Används ofta"</string>
@@ -180,6 +184,7 @@ Anledning:%1$s."</string>
   <string name="common_light">"Ljust"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
+  <string name="common_loading_more">"Laddar mer …"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d medlem"</item>
     <item quantity="other">"%1$d medlemmar"</item>
