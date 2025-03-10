@@ -42,7 +42,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.LocalIsEnterpriseBuild
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 @OptIn(CoreColorToken::class)
@@ -53,12 +53,12 @@ fun GradientFloatingActionButton(
     shape: Shape = RoundedCornerShape(25),
     content: @Composable () -> Unit,
 ) {
-    val color1 = if (LocalIsEnterpriseBuild.current) {
+    val color1 = if (LocalBuildMeta.current.isEnterpriseBuild) {
         ElementTheme.colors.textActionAccent
     } else {
         LightColorTokens.colorGreen700
     }
-    val color2 = if (LocalIsEnterpriseBuild.current) {
+    val color2 = if (LocalBuildMeta.current.isEnterpriseBuild) {
         ElementTheme.colors.textActionAccent
     } else {
         LightColorTokens.colorBlue900
