@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"登出並升級"</string>
-  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"Element X 不再支援舊版通訊協定。請登出並重新登入以繼續使用應用程式。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s 不再支援舊版通訊協定。請登出並重新登入以繼續使用應用程式。"</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"您的家伺服器不再支援舊協定。請登出並重新登入以繼續使用應用程式。"</string>
 </resources>

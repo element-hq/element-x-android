@@ -22,7 +22,7 @@ Velg noe som du husker. Hvis du glemmer denne PIN-koden, blir du logget ut av ap
   <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Velg en annen PIN-kode"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Skriv inn samme PIN-kode to ganger"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-kodene samsvarer ikke"</string>
-  <string name="screen_app_lock_signout_alert_message">"Du må logge på på nytt og opprette en ny PIN-kode for å fortsette"</string>
+  <string name="screen_app_lock_signout_alert_message">"Du må logge inn på nytt og opprette en ny PIN-kode for å fortsette"</string>
   <string name="screen_app_lock_signout_alert_title">"Du blir logget av"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Du har %1$d forsøk på å låse opp"</item>
