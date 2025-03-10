@@ -1,7 +1,7 @@
-name: Prevent blocked
+name: Pull Request
 on:
   pull_request:
-    types: [opened, labeled, unlabeled]
+    types: [ opened, labeled, unlabeled ]
 jobs:
   prevent-blocked:
     name: Prevent blocked
@@ -15,3 +15,31 @@ jobs:
         with:
           script: |
             core.setFailed("PR has been labeled with X-Blocked; it cannot be merged.");
+
+  community-prs:
+    name: Label Community PRs
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check membership
+        if: github.event.pull_request.user.login != 'renovate[bot]'
+        uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
+        id: teams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          organization: element-hq
+          team: Core Team
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+      - name: Add label
+        if: steps.teams.outputs.isTeamMember == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Z-Community-PR']
+            });
