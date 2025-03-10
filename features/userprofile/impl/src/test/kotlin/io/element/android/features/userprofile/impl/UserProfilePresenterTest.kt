@@ -7,8 +7,13 @@
 
 package io.element.android.features.userprofile.impl
 
+import androidx.compose.runtime.MutableState
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.userprofile.api.UserProfileEvents
@@ -20,6 +25,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -32,8 +38,15 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.lambda.any
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -162,7 +175,8 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
-        val client = createFakeMatrixClient()
+        val ignoredUsersFlow = MutableStateFlow(persistentListOf<UserId>())
+        val client = createFakeMatrixClient(ignoredUsersFlow = ignoredUsersFlow)
         val presenter = createUserProfilePresenter(
             client = client,
             userId = A_USER_ID
@@ -171,20 +185,21 @@ class UserProfilePresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
-            client.emitIgnoreUserList(listOf(A_USER_ID))
+            ignoredUsersFlow.emit(persistentListOf(A_USER_ID))
             assertThat(awaitItem().isBlocked.dataOrNull()).isTrue()
 
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
-            client.emitIgnoreUserList(listOf())
+            ignoredUsersFlow.emit(persistentListOf())
             assertThat(awaitItem().isBlocked.dataOrNull()).isFalse()
         }
     }
 
     @Test
     fun `present - BlockUser with error`() = runTest {
-        val matrixClient = createFakeMatrixClient()
-        matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
+        val matrixClient = createFakeMatrixClient(
+            ignoreUserResult = { Result.failure(A_THROWABLE) }
+        )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem()
@@ -200,8 +215,9 @@ class UserProfilePresenterTest {
 
     @Test
     fun `present - UnblockUser with error`() = runTest {
-        val matrixClient = createFakeMatrixClient()
-        matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
+        val matrixClient = createFakeMatrixClient(
+            unIgnoreUserResult = { Result.failure(A_THROWABLE) }
+        )
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem()
@@ -231,34 +247,119 @@ class UserProfilePresenterTest {
     }
 
     @Test
-    fun `present - start DM action complete scenario`() = runTest {
-        val startDMAction = FakeStartDMAction()
+    fun `present - start DM action failure scenario`() = runTest {
+        val startDMFailureResult = AsyncAction.Failure(A_THROWABLE)
+        val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
+            actionState.value = startDMFailureResult
+        }
+        val startDMAction = FakeStartDMAction(executeResult = executeResult)
         val presenter = createUserProfilePresenter(startDMAction = startDMAction)
-        presenter.test {
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            val startDMSuccessResult = AsyncAction.Success(A_ROOM_ID)
-            val startDMFailureResult = AsyncAction.Failure(A_THROWABLE)
-
-            // Failure
-            startDMAction.givenExecuteResult(startDMFailureResult)
+            val matrixUser = MatrixUser(UserId("@alice:server.org"))
             initialState.eventSink(UserProfileEvents.StartDM)
-            assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncAction.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
+                executeResult.assertions().isCalledOnce().with(
+                    value(matrixUser),
+                    value(false),
+                    any(),
+                )
                 state.eventSink(UserProfileEvents.ClearStartDMState)
             }
-
-            // Success
-            startDMAction.givenExecuteResult(startDMSuccessResult)
             awaitItem().also { state ->
-                assertThat(state.startDmActionState).isEqualTo(AsyncAction.Uninitialized)
-                state.eventSink(UserProfileEvents.StartDM)
+                assertThat(state.startDmActionState.isUninitialized()).isTrue()
             }
-            assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncAction.Loading::class.java)
+        }
+    }
+
+    @Test
+    fun `present - start DM action success scenario`() = runTest {
+        val startDMSuccessResult = AsyncAction.Success(A_ROOM_ID)
+        val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
+            actionState.value = startDMSuccessResult
+        }
+        val startDMAction = FakeStartDMAction(executeResult = executeResult)
+        val presenter = createUserProfilePresenter(startDMAction = startDMAction)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
+            val matrixUser = MatrixUser(UserId("@alice:server.org"))
+            initialState.eventSink(UserProfileEvents.StartDM)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMSuccessResult)
+                executeResult.assertions().isCalledOnce().with(
+                    value(matrixUser),
+                    value(false),
+                    any(),
+                )
             }
+        }
+    }
+
+    @Test
+    fun `present - start DM action confirmation scenario - cancel`() = runTest {
+        val matrixUser = MatrixUser(UserId("@alice:server.org"))
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
+            actionState.value = startDMConfirmationResult
+        }
+        val startDMAction = FakeStartDMAction(executeResult = executeResult)
+        val presenter = createUserProfilePresenter(startDMAction = startDMAction)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
+            initialState.eventSink(UserProfileEvents.StartDM)
+            val confirmingState = awaitItem()
+            assertThat(confirmingState.startDmActionState).isEqualTo(startDMConfirmationResult)
+            executeResult.assertions().isCalledOnce().with(
+                value(matrixUser),
+                value(false),
+                any(),
+            )
+            // Cancelling should not create the DM
+            confirmingState.eventSink(UserProfileEvents.ClearStartDMState)
+            val finalState = awaitItem()
+            assertThat(finalState.startDmActionState.isUninitialized()).isTrue()
+            executeResult.assertions().isCalledExactly(1)
+        }
+    }
+
+    @Test
+    fun `present - start DM action confirmation scenario - confirm`() = runTest {
+        val matrixUser = MatrixUser(UserId("@alice:server.org"))
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
+            actionState.value = startDMConfirmationResult
+        }
+        val startDMAction = FakeStartDMAction(executeResult = executeResult)
+        val presenter = createUserProfilePresenter(startDMAction = startDMAction)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
+            initialState.eventSink(UserProfileEvents.StartDM)
+            val confirmingState = awaitItem()
+            assertThat(confirmingState.startDmActionState).isEqualTo(startDMConfirmationResult)
+            executeResult.assertions().isCalledOnce().with(
+                value(matrixUser),
+                value(false),
+                any(),
+            )
+            // Start DM again should invoke the action with createIfDmDoesNotExist = true
+            confirmingState.eventSink(UserProfileEvents.StartDM)
+            executeResult.assertions().isCalledExactly(2).withSequence(
+                listOf(value(matrixUser), value(false), any()),
+                listOf(value(matrixUser), value(true), any()),
+            )
         }
     }
 
@@ -282,10 +383,16 @@ class UserProfilePresenterTest {
 
     private fun createFakeMatrixClient(
         isUserVerified: Boolean = false,
+        ignoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+        unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+        ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
     ) = FakeMatrixClient(
         encryptionService = FakeEncryptionService(
             isUserVerifiedResult = { Result.success(isUserVerified) }
         ),
+        ignoreUserResult = ignoreUserResult,
+        unIgnoreUserResult = unIgnoreUserResult,
+        ignoredUsersFlow = ignoredUsersFlow
     )
 
     private fun createUserProfilePresenter(

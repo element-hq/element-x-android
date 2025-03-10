@@ -7,8 +7,6 @@
 
 package io.element.android.libraries.designsystem.theme.components.previews
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +33,7 @@ internal fun MenuPreview() {
                 val leadingIcon: @Composable (() -> Unit)? = if (i in 2..3) {
                     @Composable {
                         Icon(
-                            imageVector = Icons.Filled.Favorite,
+                            imageVector = CompoundIcons.Favourite(),
                             contentDescription = null
                         )
                     }

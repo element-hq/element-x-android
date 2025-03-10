@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.jsoup)
 
     testImplementation(libs.coroutines.test)

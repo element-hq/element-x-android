@@ -8,14 +8,13 @@
 package io.element.android.libraries.designsystem.utils
 
 import android.content.pm.ActivityInfo
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ForceOrientation(orientation: ScreenOrientation) {
-    val activity = LocalContext.current as? ComponentActivity ?: return
+    val activity = LocalActivity.current ?: return
     val orientationFlags = when (orientation) {
         ScreenOrientation.PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         ScreenOrientation.LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE

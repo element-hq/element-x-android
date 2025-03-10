@@ -21,6 +21,7 @@ setupAnvil()
 dependencies {
     api(projects.features.lockscreen.api)
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

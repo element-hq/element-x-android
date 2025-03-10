@@ -8,13 +8,12 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
@@ -36,9 +35,9 @@ fun TimelineItemAudioView(
         modifier = modifier,
         icon = {
             Icon(
-                imageVector = Icons.Outlined.GraphicEq,
+                imageVector = CompoundIcons.Audio(),
                 contentDescription = null,
-                tint = ElementTheme.materialColors.primary,
+                tint = ElementTheme.colors.iconPrimary,
                 modifier = Modifier
                     .size(16.dp),
             )

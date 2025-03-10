@@ -29,6 +29,7 @@ setupAnvil()
 
 dependencies {
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
@@ -40,6 +41,7 @@ dependencies {
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.api)
+    implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)
     implementation(libs.coil.compose)
@@ -59,6 +61,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

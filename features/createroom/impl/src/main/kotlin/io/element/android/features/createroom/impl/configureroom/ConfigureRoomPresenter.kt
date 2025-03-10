@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
@@ -177,6 +178,7 @@ class ConfigureRoomPresenter @Inject constructor(
                         isEncrypted = true,
                         isDirect = false,
                         visibility = RoomVisibility.Private,
+                        historyVisibilityOverride = RoomHistoryVisibility.Invited,
                         preset = RoomPreset.PRIVATE_CHAT,
                         invite = config.invites.map { it.userId },
                         avatar = avatarUrl,

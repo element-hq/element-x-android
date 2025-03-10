@@ -15,6 +15,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -56,7 +57,10 @@ fun RoomAddressField(
             }
             else -> supportingText
         },
-        isError = addressValidity.isError(),
+        validity = when (addressValidity) {
+            RoomAddressValidity.InvalidSymbols, RoomAddressValidity.NotAvailable -> TextFieldValidity.Invalid
+            else -> TextFieldValidity.None
+        },
         onValueChange = onAddressChange,
         singleLine = true,
     )

@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
@@ -41,6 +42,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -92,6 +94,7 @@ fun aMessagesState(
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
+    roomMemberIdentityStateChanges: ImmutableList<RoomMemberIdentityStateChange> = persistentListOf(),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState: TimelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
@@ -118,6 +121,7 @@ fun aMessagesState(
     heroes = persistentListOf(),
     userEventPermissions = userEventPermissions,
     composerState = composerState,
+    roomMemberIdentityStateChanges = roomMemberIdentityStateChanges,
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,

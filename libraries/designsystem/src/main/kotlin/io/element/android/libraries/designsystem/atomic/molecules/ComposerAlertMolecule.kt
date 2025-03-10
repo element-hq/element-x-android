@@ -58,7 +58,7 @@ fun ComposerAlertMolecule(
         )
         val startColor = if (isCritical) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgInfoSubtle
         val brush = Brush.verticalGradient(
-            listOf(startColor, ElementTheme.materialColors.background),
+            listOf(startColor, ElementTheme.colors.bgCanvasDefault),
         )
         Box(
             modifier = Modifier
@@ -78,7 +78,11 @@ fun ComposerAlertMolecule(
                         text = content,
                         modifier = Modifier.weight(1f),
                         style = ElementTheme.typography.fontBodyMdRegular,
-                        color = ElementTheme.colors.textPrimary,
+                        color = if (isCritical) {
+                            ElementTheme.colors.textCriticalPrimary
+                        } else {
+                            ElementTheme.colors.textPrimary
+                        },
                         textAlign = TextAlign.Start,
                     )
                 }

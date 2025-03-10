@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Du kan endre innstillingene dine senere."</string>
+  <string name="screen_notification_optin_title">"Tillat varslinger og gå aldri glipp av en melding"</string>
+  <string name="screen_welcome_bullet_1">"Samtaler, avstemninger, søk og mer vil bli lagt til senere i år."</string>
+  <string name="screen_welcome_bullet_2">"Meldingshistorikk for krypterte rom er ikke tilgjengelig ennå."</string>
+  <string name="screen_welcome_bullet_3">"Vi vil gjerne høre fra deg, så la oss få vite hva du synes via innstillingssiden."</string>
+  <string name="screen_welcome_button">"Kom igjen!"</string>
+  <string name="screen_welcome_subtitle">"Her er hva du trenger å vite:"</string>
+  <string name="screen_welcome_title">"Velkommen til %1$s!"</string>
+</resources>

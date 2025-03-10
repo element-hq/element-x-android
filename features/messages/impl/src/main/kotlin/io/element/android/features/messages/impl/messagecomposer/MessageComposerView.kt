@@ -139,6 +139,7 @@ internal fun MessageComposerViewPreview(
             enableVoiceMessages = true,
             subcomposing = false,
         )
+        DisabledComposerView()
     }
 }
 

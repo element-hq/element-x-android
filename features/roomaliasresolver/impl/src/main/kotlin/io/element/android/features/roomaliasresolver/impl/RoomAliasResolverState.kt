@@ -18,3 +18,7 @@ data class RoomAliasResolverState(
     val resolveState: AsyncData<ResolvedRoomAlias>,
     val eventSink: (RoomAliasResolverEvents) -> Unit
 )
+
+sealed class RoomAliasResolverFailures : Exception() {
+    data object UnknownAlias : RoomAliasResolverFailures()
+}

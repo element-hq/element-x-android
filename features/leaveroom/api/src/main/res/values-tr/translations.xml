@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Bu sohbetten ayrılmak istediğinizden emin misiniz? Bu sohbet herkese açık değil ve davet olmadan tekrar katılamayacaksınız."</string>
+  <string name="leave_room_alert_empty_subtitle">"Bu odadan ayrılmak istediğinizden emin misiniz? Burada tek kişi sizsiniz. Ayrılırsanız, siz de dahil olmak üzere gelecekte kimse katılamayacak."</string>
+  <string name="leave_room_alert_private_subtitle">"Bu odadan ayrılmak istediğinizden emin misiniz? Bu oda herkese açık değildir ve davet olmadan tekrar katılamazsınız."</string>
+  <string name="leave_room_alert_subtitle">"Odadan çıkmak istediğinden emin misin?"</string>
+</resources>

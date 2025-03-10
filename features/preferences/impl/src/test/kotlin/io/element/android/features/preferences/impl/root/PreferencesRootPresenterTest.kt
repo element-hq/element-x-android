@@ -5,12 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.preferences.impl.root
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
@@ -19,6 +18,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -28,6 +28,10 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,11 +42,16 @@ class PreferencesRootPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val matrixClient = FakeMatrixClient(canDeactivateAccountResult = { true })
-        val presenter = createPresenter(matrixClient = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val accountManagementUrlResult = lambdaRecorder<AccountManagementAction?, Result<String?>> { action ->
+            Result.success("$action url")
+        }
+        val matrixClient = FakeMatrixClient(
+            canDeactivateAccountResult = { true },
+            accountManagementUrlResult = accountManagementUrlResult,
+        )
+        createPresenter(
+            matrixClient = matrixClient,
+        ).test {
             val initialState = awaitItem()
             assertThat(initialState.myUser).isEqualTo(
                 MatrixUser(
@@ -72,19 +81,26 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.canDeactivateAccount).isTrue()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(loadedState.snackbarMessage).isNull()
+            skipItems(1)
+            val finalState = awaitItem()
+            accountManagementUrlResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(AccountManagementAction.Profile)),
+                    listOf(value(AccountManagementAction.SessionsList)),
+                )
+            assertThat(finalState.accountManagementUrl).isEqualTo("Profile url")
+            assertThat(finalState.devicesManagementUrl).isEqualTo("SessionsList url")
         }
     }
 
     @Test
     fun `present - can deactivate account is false if the Matrix client say so`() = runTest {
-        val presenter = createPresenter(
+        createPresenter(
             matrixClient = FakeMatrixClient(
-                canDeactivateAccountResult = { false }
-            )
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+                canDeactivateAccountResult = { false },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+        ).test {
             val loadedState = awaitFirstItem()
             assertThat(loadedState.canDeactivateAccount).isFalse()
         }
@@ -92,12 +108,13 @@ class PreferencesRootPresenterTest {
 
     @Test
     fun `present - developer settings is hidden by default in release builds`() = runTest {
-        val presenter = createPresenter(
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
             showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.RELEASE))
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val loadedState = awaitFirstItem()
             assertThat(loadedState.showDeveloperSettings).isFalse()
         }
@@ -105,12 +122,13 @@ class PreferencesRootPresenterTest {
 
     @Test
     fun `present - developer settings can be enabled in release builds`() = runTest {
-        val presenter = createPresenter(
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
             showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.RELEASE))
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        ).test {
             val loadedState = awaitFirstItem()
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
                 assertThat(loadedState.showDeveloperSettings).isFalse()
@@ -127,7 +145,7 @@ class PreferencesRootPresenterTest {
 
     private fun createPresenter(
         buildMeta: BuildMeta = aBuildMeta(),
-        matrixClient: FakeMatrixClient = FakeMatrixClient(canDeactivateAccountResult = { true }),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
     ) = PreferencesRootPresenter(

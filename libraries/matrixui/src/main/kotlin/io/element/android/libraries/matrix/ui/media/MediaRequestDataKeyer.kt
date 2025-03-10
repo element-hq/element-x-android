@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import coil.key.Keyer
-import coil.request.Options
+import coil3.key.Keyer
+import coil3.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 
 internal class AvatarDataKeyer : Keyer<AvatarData> {

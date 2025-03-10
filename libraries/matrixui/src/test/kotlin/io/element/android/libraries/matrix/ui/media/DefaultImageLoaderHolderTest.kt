@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.ui.media
 
 import androidx.test.platform.app.InstrumentationRegistry
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID

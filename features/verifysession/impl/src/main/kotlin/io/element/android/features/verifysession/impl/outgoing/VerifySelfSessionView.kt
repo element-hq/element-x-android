@@ -58,7 +58,6 @@ fun VerifySelfSessionView(
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
     onFinish: () -> Unit,
-    onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val step = state.step
@@ -144,12 +143,7 @@ fun VerifySelfSessionView(
         AsyncAction.Loading -> {
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
         }
-        is AsyncAction.Success -> {
-            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
-            LaunchedEffect(state) {
-                latestOnSuccessLogout(state.signOutAction.data)
-            }
-        }
+        is AsyncAction.Success,
         is AsyncAction.Confirming,
         is AsyncAction.Failure,
         AsyncAction.Uninitialized -> Unit
@@ -372,6 +366,5 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
         onEnterRecoveryKey = {},
         onResetKey = {},
         onFinish = {},
-        onSuccessLogout = {},
     )
 }

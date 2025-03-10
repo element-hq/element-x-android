@@ -14,8 +14,8 @@
   <string name="screen_media_browser_title">"Медіа та файли"</string>
   <string name="screen_media_details_file_format">"Формат файлу"</string>
   <string name="screen_media_details_filename">"Назва файлу"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Цей файл буде вилучено з кімнати, і учасники не матимуть доступу до нього."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Видалити файл?"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Більше немає файлів для показу"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Більше немає медіа для показу"</string>
   <string name="screen_media_details_uploaded_by">"Вивантажено користувачем"</string>
   <string name="screen_media_details_uploaded_on">"Вивантажено"</string>
 </resources>

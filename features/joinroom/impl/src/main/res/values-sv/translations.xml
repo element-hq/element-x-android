@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_cancel_knock_action">"Avbryt begäran"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, avbryt"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Är du säker på att du vill avbryta din begäran om att gå med i det här rummet?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Avbryt begäran om att gå med"</string>
+  <string name="screen_join_room_forget_action">"Glöm det här rummet"</string>
+  <string name="screen_join_room_invite_required_message">"Du behöver en inbjudan för att gå med i detta rum"</string>
   <string name="screen_join_room_join_action">"Gå med i rummet"</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
   <string name="screen_join_room_knock_message_description">"Meddelande (valfritt)"</string>

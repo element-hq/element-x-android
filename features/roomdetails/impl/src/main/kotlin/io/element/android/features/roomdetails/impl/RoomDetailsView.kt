@@ -21,9 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -57,7 +54,6 @@ import io.element.android.libraries.designsystem.components.button.MainActionBut
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -273,7 +269,7 @@ private fun RoomDetailsTopBar(
         actions = {
             if (showEdit) {
                 IconButton(onClick = { showMenu = !showMenu }) {
-                    Icon(Icons.Default.MoreVert, stringResource(id = CommonStrings.a11y_user_menu))
+                    Icon(CompoundIcons.OverflowVertical(), stringResource(id = CommonStrings.a11y_user_menu))
                 }
                 DropdownMenu(
                     expanded = showMenu,
@@ -427,7 +423,7 @@ private fun TitleAndSubtitle(
             Text(
                 text = subtitle,
                 style = ElementTheme.typography.fontBodyLgRegular,
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
             )
         }
@@ -487,10 +483,14 @@ private fun TopicSection(
         showTopDivider = false,
     ) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
-            PreferenceText(
-                title = stringResource(R.string.screen_room_details_add_topic_title),
-                icon = Icons.Outlined.Add,
-                onClick = { onActionClick(RoomDetailsAction.AddTopic) },
+            ListItem(
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
+                headlineContent = {
+                    Text(stringResource(id = R.string.screen_room_details_add_topic_title))
+                },
+                onClick = {
+                    onActionClick(RoomDetailsAction.AddTopic)
+                },
             )
         } else if (roomTopic is RoomTopicState.ExistingTopic) {
             ClickableLinkText(

@@ -97,11 +97,6 @@ internal fun PreferencePagePreview() = ElementPreview {
         PreferenceCategory(
             title = "Category title",
         ) {
-            PreferenceText(
-                title = "Title",
-                subtitle = "Some other text",
-                icon = CompoundIcons.ChatProblem(),
-            )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",

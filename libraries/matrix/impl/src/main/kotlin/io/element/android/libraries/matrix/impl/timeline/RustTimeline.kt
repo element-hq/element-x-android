@@ -48,6 +48,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -72,7 +73,7 @@ import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.UploadParameters
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
+import uniffi.matrix_sdk.RoomPaginationStatus
 import java.io.File
 import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
@@ -147,8 +148,8 @@ class RustTimeline(
             .onEach { backPaginationStatus ->
                 updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
                     when (backPaginationStatus) {
-                        is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
-                        is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                        is RoomPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitTimelineStart)
+                        is RoomPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
                     }
                 }
             }
@@ -296,7 +297,7 @@ class RustTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatching<Unit> {
+        runCatching {
             val editedContent = EditedContent.RoomMessage(
                 content = MessageEventContent.from(
                     body = body,
@@ -324,10 +325,12 @@ class RustTimeline(
                 },
                 mentions = null,
             )
-            inner.edit(
-                newContent = editedContent,
-                eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
-            )
+            withContext(Dispatchers.IO) {
+                inner.edit(
+                    newContent = editedContent,
+                    eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
+                )
+            }
         }
     }
 
@@ -519,7 +522,7 @@ class RustTimeline(
                 newContent = editedContent,
                 eventOrTransactionId = RustEventOrTransactionId.EventId(pollStartId.value),
             )
-        }.map { }
+        }
     }
 
     override suspend fun sendPollResponse(

@@ -8,12 +8,14 @@
 package io.element.android.features.userprofile.shared
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState> {
     override val values: Sequence<UserProfileState>
@@ -26,7 +28,7 @@ open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState>
             aUserProfileState(isBlocked = AsyncData.Loading(true), isVerified = AsyncData.Loading()),
             aUserProfileState(startDmActionState = AsyncAction.Loading),
             aUserProfileState(canCall = true),
-            // Add other states here
+            aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser())),
         )
 }
 

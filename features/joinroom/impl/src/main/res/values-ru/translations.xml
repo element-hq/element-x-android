@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Да, отменить"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Вы действительно хотите отменить заявку на вступление в эту комнату?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Отменить запрос на присоединение"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Да, отклонить и заблокировать"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Вы действительно хотите отклонить приглашение в эту комнате? Это также предотвратит %1$s возможность связываться с вами или приглашать вас в комнаты."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Отклонить приглашение и заблокировать"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Отклонить и заблокировать"</string>
   <string name="screen_join_room_fail_message">"Не удалось присоединиться к комнате."</string>
   <string name="screen_join_room_fail_reason">"Доступ в эту комнату возможен только по приглашениям или может быть ограничен на уровне пространства."</string>
   <string name="screen_join_room_forget_action">"Забыть эту комнату"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Сообщение (опционально)"</string>
   <string name="screen_join_room_knock_sent_description">"Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят."</string>
   <string name="screen_join_room_knock_sent_title">"Запрос на присоединение отправлен"</string>
+  <string name="screen_join_room_loading_alert_message">"Не удалось отобразить предварительный просмотр комнаты. Это может быть связано с проблемами сети или сервера."</string>
+  <string name="screen_join_room_loading_alert_title">"Мы не смогли отобразить предварительный просмотр этой комнаты"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s еще не поддерживает пространства. Вы можете получить к ним доступ в веб-версии."</string>
   <string name="screen_join_room_space_not_supported_title">"Пространства пока не поддерживаются"</string>
   <string name="screen_join_room_subtitle_knock">"Нажмите кнопку ниже и администратор комнаты получит уведомление. После одобрения вы сможете присоединиться к обсуждению."</string>

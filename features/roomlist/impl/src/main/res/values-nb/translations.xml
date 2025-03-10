@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gjenopprettingsnøkkel?"</string>
   <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>
@@ -9,6 +8,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Avslå chat"</string>
   <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
+  <string name="screen_migration_message">"Dette er en engangsprosess, takk for at du venter."</string>
+  <string name="screen_migration_title">"Setter opp kontoen din."</string>
   <string name="screen_roomlist_a11y_create_message">"Opprett en ny samtale eller et nytt rom"</string>
   <string name="screen_roomlist_empty_message">"Kom i gang med å sende meldinger til noen."</string>
   <string name="screen_roomlist_empty_title">"Ingen chatter ennå."</string>

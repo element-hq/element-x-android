@@ -9,6 +9,8 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Immutable
 import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
+import io.element.android.libraries.core.data.tryOrNull
+import java.text.BreakIterator
 
 @Immutable
 data class AvatarData(
@@ -28,24 +30,36 @@ data class AvatarData(
                     startIndex++
                 }
 
-                var length = 1
-                var first = dn[startIndex]
+                var next = dn[startIndex]
 
                 // LEFT-TO-RIGHT MARK
-                if (dn.length >= 2 && 0x200e == first.code) {
+                if (dn.length >= 2 && 0x200e == next.code) {
                     startIndex++
-                    first = dn[startIndex]
+                    next = dn[startIndex]
                 }
 
-                // check if it’s the start of a surrogate pair
-                if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
-                    val second = dn[startIndex + 1]
-                    if (second.code in 0xDC00..0xDFFF) {
-                        length++
+                while (next.isWhitespace()) {
+                    if (dn.length > startIndex + 1) {
+                        startIndex++
+                        next = dn[startIndex]
+                    } else {
+                        break
                     }
                 }
 
-                dn.substring(startIndex, startIndex + length)
+                val fullCharacterIterator = BreakIterator.getCharacterInstance()
+                fullCharacterIterator.setText(dn)
+                val glyphBoundary = tryOrNull { fullCharacterIterator.following(startIndex) }
+                    ?.takeIf { it in startIndex..dn.length }
+
+                when {
+                    // Use the found boundary
+                    glyphBoundary != null -> dn.substring(startIndex, glyphBoundary)
+                    // If no boundary was found, default to the next char if possible
+                    startIndex + 1 < dn.length -> dn.substring(startIndex, startIndex + 1)
+                    // Return a fallback character otherwise
+                    else -> "#"
+                }
             }
             .uppercase()
     }

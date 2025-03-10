@@ -15,9 +15,6 @@ import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummary
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -122,27 +119,11 @@ class RoomListSearchPresenterTest {
             }
         }
     }
-
-    @Test
-    fun `present - room directory search`() = runTest {
-        val featureFlagService = FakeFeatureFlagService()
-        featureFlagService.setFeatureEnabled(FeatureFlags.RoomDirectorySearch, true)
-        val presenter = createRoomListSearchPresenter(featureFlagService = featureFlagService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            awaitItem().let { state ->
-                assertThat(state.isRoomDirectorySearchEnabled).isTrue()
-            }
-        }
-    }
 }
 
 fun TestScope.createRoomListSearchPresenter(
     buildMeta: BuildMeta = aBuildMeta(),
     roomListService: RoomListService = FakeRoomListService(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ): RoomListSearchPresenter {
     return RoomListSearchPresenter(
         buildMeta = buildMeta,
@@ -154,6 +135,5 @@ fun TestScope.createRoomListSearchPresenter(
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
         ),
-        featureFlagService = featureFlagService,
     )
 }

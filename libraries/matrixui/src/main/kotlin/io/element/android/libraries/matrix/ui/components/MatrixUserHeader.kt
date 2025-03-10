@@ -80,14 +80,14 @@ private fun MatrixUserHeaderContent(
                 maxLines = 1,
                 style = ElementTheme.typography.fontHeadingSmMedium,
                 overflow = TextOverflow.Ellipsis,
-                color = ElementTheme.materialColors.primary,
+                color = ElementTheme.colors.textPrimary,
             )
             // Id
             if (isDebugBuild && matrixUser.displayName.isNullOrEmpty().not()) { // TCHAP hide the Matrix Id in release mode
                 Text(
                     text = matrixUser.userId.value,
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    color = ElementTheme.materialColors.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

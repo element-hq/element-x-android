@@ -38,7 +38,7 @@ fun TimelineItemFileView(
             Icon(
                 resourceId = CompoundDrawables.ic_compound_attachment,
                 contentDescription = null,
-                tint = ElementTheme.materialColors.primary,
+                tint = ElementTheme.colors.iconPrimary,
                 modifier = Modifier
                     .size(16.dp)
                     .rotate(-45f),

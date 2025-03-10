@@ -123,7 +123,7 @@
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Добавить адрес комнаты"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Присоединиться"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Попросить присоединиться"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включить шифрование"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Шифрование комнаты нельзя будет отключить, история сообщений будет видна только участникам комнаты с момента их приглашения или с момента присоединения к комнате.
 Никто, кроме членов комнаты, не сможет читать сообщения. Это может помешать ботам и мостам работать корректно.

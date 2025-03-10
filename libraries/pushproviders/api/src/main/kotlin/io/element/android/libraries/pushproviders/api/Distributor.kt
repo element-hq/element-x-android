@@ -18,4 +18,6 @@ package io.element.android.libraries.pushproviders.api
 data class Distributor(
     val value: String,
     val name: String,
-)
+) {
+    val fullName = "$name ($value)"
+}

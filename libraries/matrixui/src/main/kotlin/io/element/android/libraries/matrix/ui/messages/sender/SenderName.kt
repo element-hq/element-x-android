@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.ui.messages.sender
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,7 +76,7 @@ private fun RowScope.MainText(
     val color = when (mode) {
         is SenderNameMode.Timeline -> mode.mainColor
         SenderNameMode.ActionList,
-        SenderNameMode.Reply -> MaterialTheme.colorScheme.primary
+        SenderNameMode.Reply -> ElementTheme.colors.textPrimary
     }
     Text(
         modifier = modifier.clipToBounds(),
@@ -108,7 +107,7 @@ private fun RowScope.SecondaryText(
         modifier = modifier.clipToBounds(),
         text = text,
         style = style,
-        color = MaterialTheme.colorScheme.secondary,
+        color = ElementTheme.colors.textSecondary,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )

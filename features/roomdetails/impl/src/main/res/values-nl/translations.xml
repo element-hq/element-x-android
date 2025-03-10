@@ -114,4 +114,7 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Kamergegevens"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollen en rechten"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Vraag om toe te treden"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Iedereen"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Iedereen"</string>
 </resources>

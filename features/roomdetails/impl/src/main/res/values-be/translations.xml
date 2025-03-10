@@ -115,4 +115,7 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Папрасіце далучыцца"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Хто заўгодна"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Хто заўгодна"</string>
 </resources>

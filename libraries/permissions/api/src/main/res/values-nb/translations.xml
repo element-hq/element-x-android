@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="dialog_permission_camera">"For å la programmet bruke kameraet, vennligst gi tillatelse i systeminnstillingene."</string>
   <string name="dialog_permission_generic">"Vennligst gi tillatelse i systeminnstillingene."</string>
+  <string name="dialog_permission_microphone">"For å la applikasjonen bruke mikrofonen, må du gi tillatelse i systeminnstillingene."</string>
+  <string name="dialog_permission_notification">"For å la applikasjonen vise varsler, må du gi tillatelse til dette i systeminnstillingene."</string>
 </resources>

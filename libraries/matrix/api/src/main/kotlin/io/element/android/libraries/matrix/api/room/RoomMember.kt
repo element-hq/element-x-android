@@ -20,6 +20,7 @@ data class RoomMember(
     val normalizedPowerLevel: Long,
     val isIgnored: Boolean,
     val role: Role,
+    val membershipChangeReason: String?,
 ) {
     /**
      * Role of the RoomMember, based on its [powerLevel].

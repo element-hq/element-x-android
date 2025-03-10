@@ -17,6 +17,7 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Esperando para combinar"</string>
   <string name="screen_session_verification_ready_subtitle">"Compare um conjunto único de emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Compare os emojis únicos, garantindo que apareçam na mesma ordem."</string>
+  <string name="screen_session_verification_request_success_title">"Dispositivo verificado"</string>
   <string name="screen_session_verification_they_dont_match">"Eles não combinam"</string>
   <string name="screen_session_verification_they_match">"Eles combinam"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Aceite a solicitação para iniciar o processo de verificação em sua outra sessão para continuar."</string>

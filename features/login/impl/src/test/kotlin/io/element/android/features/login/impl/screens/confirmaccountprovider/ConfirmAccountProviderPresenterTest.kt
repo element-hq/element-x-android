@@ -11,10 +11,10 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
-import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
@@ -44,7 +44,7 @@ class ConfirmAccountProviderPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.isAccountCreation).isFalse()
             assertThat(initialState.submitEnabled).isTrue()
-            assertThat(initialState.accountProvider).isEqualTo(defaultAccountProvider)
+            assertThat(initialState.accountProvider.url).isEqualTo(FakeEnterpriseService.A_FAKE_HOMESERVER)
             assertThat(initialState.loginFlow).isEqualTo(AsyncData.Uninitialized)
         }
     }
@@ -350,7 +350,7 @@ class ConfirmAccountProviderPresenterTest {
 
     private fun createConfirmAccountProviderPresenter(
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(),
+        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOidcActionFlow: DefaultOidcActionFlow = DefaultOidcActionFlow(),
         defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),

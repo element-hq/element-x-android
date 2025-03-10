@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Decline chat"</string>
   <string name="screen_invites_empty_list">"No Invites"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) invited you"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Yes, decline &amp; block"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Are you sure you want to decline the invite to join this room? This will also prevent %1$s from contacting you or inviting you to rooms."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Decline invite &amp; block"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Decline and block"</string>
 </resources>

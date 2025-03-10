@@ -7,6 +7,7 @@
 
 package io.element.android.tests.konsist
 
+import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
@@ -43,10 +44,13 @@ class KonsistLicenseTest {
             .scopeFromProject()
             .files
             .filter {
-                it.path.contains("/enterprise/features").not() &&
+                it.moduleName.startsWith("enterprise").not() &&
                     it.path.contains("/fr/gouv/tchap/").not() &&
                     it.nameWithExtension != "locales.kt" &&
                     it.name.startsWith("Template ").not()
+            }
+            .also {
+                assertThat(it).isNotEmpty()
             }
             .assertTrue {
                 publicLicense.containsMatchIn(it.text)
@@ -59,7 +63,7 @@ class KonsistLicenseTest {
             .scopeFromProject()
             .files
             .filter {
-                it.path.contains("/enterprise/features")
+                it.moduleName.startsWith("enterprise")
             }
             .assertTrue {
                 enterpriseLicense.containsMatchIn(it.text)

@@ -14,7 +14,6 @@
   <string name="screen_create_room_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στο δωμάτιο, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχθεί το αίτημα"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Αίτημα συμμετοχής"</string>
   <string name="screen_create_room_room_address_section_footer">"Για να είναι ορατό αυτό το δωμάτιο στον κατάλογο των δημόσιων δωματίων, θα χρειαστείς μια διεύθυνση δωματίου."</string>
-  <string name="screen_create_room_room_address_section_title">"Διεύθυνση δωματίου"</string>
   <string name="screen_create_room_room_name_label">"Όνομα δωματίου"</string>
   <string name="screen_create_room_room_visibility_section_title">"Ορατότητα δωματίου"</string>
   <string name="screen_create_room_title">"Δημιούργησε ένα δωμάτιο"</string>

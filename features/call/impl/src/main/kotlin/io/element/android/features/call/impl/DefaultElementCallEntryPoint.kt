@@ -43,6 +43,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
         avatarUrl: String?,
         timestamp: Long,
         notificationChannelId: String,
+        textContent: String?,
     ) {
         val incomingCallNotificationData = CallNotificationData(
             sessionId = callType.sessionId,
@@ -54,6 +55,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
             avatarUrl = avatarUrl,
             timestamp = timestamp,
             notificationChannelId = notificationChannelId,
+            textContent = textContent,
         )
         activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
     }

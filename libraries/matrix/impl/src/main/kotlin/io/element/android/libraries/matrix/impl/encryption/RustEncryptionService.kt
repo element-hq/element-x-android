@@ -186,11 +186,11 @@ internal class RustEncryptionService(
     }
 
     override suspend fun deviceCurve25519(): String? {
-        return service.curve25519Key()
+        return runCatching { service.curve25519Key() }.getOrNull()
     }
 
     override suspend fun deviceEd25519(): String? {
-        return service.ed25519Key()
+        return runCatching { service.ed25519Key() }.getOrNull()
     }
 
     override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
@@ -209,10 +209,18 @@ internal class RustEncryptionService(
         getUserIdentity(userId).pin()
     }
 
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = runCatching {
+        getUserIdentity(userId).withdrawVerification()
+    }
+
     private suspend fun getUserIdentity(userId: UserId): UserIdentity {
         return service.userIdentity(
             userId = userId.value,
             // requestFromHomeserverIfNeeded = true,
         ) ?: error("User identity not found")
+    }
+
+    fun destroy() {
+        service.destroy()
     }
 }

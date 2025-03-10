@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Yes, cancel"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Are you sure that you want to cancel your request to join this room?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Cancel request to join"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Yes, decline &amp; block"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Are you sure you want to decline the invite to join this room? This will also prevent %1$s from contacting you or inviting you to rooms."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Decline invite &amp; block"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Decline and block"</string>
   <string name="screen_join_room_fail_message">"Joining the room failed."</string>
   <string name="screen_join_room_fail_reason">"This room is either invite-only or there might be restrictions to access at space level."</string>
   <string name="screen_join_room_forget_action">"Forget this room"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Message (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"You will receive an invite to join the room if your request is accepted."</string>
   <string name="screen_join_room_knock_sent_title">"Request to join sent"</string>
+  <string name="screen_join_room_loading_alert_message">"We could not display the room preview. This may be due to network or server issues."</string>
+  <string name="screen_join_room_loading_alert_title">"We couldn’t display this room preview"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s does not support spaces yet. You can access spaces on web."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces are not supported yet"</string>
   <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>

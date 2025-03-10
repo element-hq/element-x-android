@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -88,7 +89,7 @@ class MessagesNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onRoomDetailsClick()
-        fun onEventClick(event: TimelineItem.Event): Boolean
+        fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData)
@@ -119,12 +120,12 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onRoomDetailsClick() }
     }
 
-    private fun onEventClick(event: TimelineItem.Event): Boolean {
+    private fun onEventClick(isLive: Boolean, event: TimelineItem.Event): Boolean {
         // Note: cannot use `callbacks.all { it.onEventClick(event) }` because:
         // - if callbacks is empty, it will return true and we want to return false.
         // - if a callback returns false, the other callback will not be invoked.
         return callbacks.takeIf { it.isNotEmpty() }
-            ?.map { it.onEventClick(event) }
+            ?.map { it.onEventClick(isLive, event) }
             ?.all { it }
             .orFalse()
     }
@@ -138,6 +139,7 @@ class MessagesNode @AssistedInject constructor(
         darkTheme: Boolean,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
+        customTab: Boolean
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
@@ -148,7 +150,13 @@ class MessagesNode @AssistedInject constructor(
             is PermalinkData.RoomLink -> {
                 handleRoomLinkClick(activity, permalink, eventSink)
             }
-            is PermalinkData.FallbackLink,
+            is PermalinkData.FallbackLink -> {
+                if (customTab) {
+                    activity.openUrlInChromeCustomTab(null, darkTheme, url)
+                } else {
+                    activity.openUrlInExternalApp(url)
+                }
+            }
             is PermalinkData.RoomEmailInviteLink -> {
                 activity.openUrlInChromeCustomTab(null, darkTheme, url)
             }
@@ -215,7 +223,7 @@ class MessagesNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val activity = LocalContext.current as Activity
+        val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
@@ -233,7 +241,7 @@ class MessagesNode @AssistedInject constructor(
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventContentClick = this::onEventClick,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
+                onLinkClick = { url, customTab -> onLinkClick(activity, isDark, url, state.timelineState.eventSink, customTab) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,

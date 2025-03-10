@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
@@ -27,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -103,14 +102,14 @@ private fun OnBoardingContent(state: OnBoardingState) {
             ) {
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_title),
-                    color = ElementTheme.materialColors.primary,
+                    color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontHeadingLgBold,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
-                    color = ElementTheme.materialColors.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
                     textAlign = TextAlign.Center
                 )
@@ -136,7 +135,7 @@ private fun OnBoardingButtons(
         if (state.canLoginWithQrCode) {
             Button(
                 text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
-                leadingIcon = IconSource.Vector(Icons.Default.QrCode),
+                leadingIcon = IconSource.Vector(CompoundIcons.QrCode()),
                 onClick = onSignInWithQrCode,
                 modifier = Modifier.fillMaxWidth()
             )

@@ -28,6 +28,7 @@ setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
 
 dependencies {
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
@@ -55,6 +56,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.impl)
     testImplementation(projects.libraries.permissions.test)

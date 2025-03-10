@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -37,24 +38,29 @@ internal fun Indicator(
     Row(
         modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .background(ElementTheme.colors.bgSubtlePrimary)
             .statusBarsPadding()
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val tint = MaterialTheme.colorScheme.primary
         Icon(
             imageVector = CompoundIcons.Offline(),
             contentDescription = null,
-            tint = tint,
+            tint = ElementTheme.colors.iconPrimary,
             modifier = Modifier.size(16.sp.toDp()),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(CommonStrings.common_offline),
             style = ElementTheme.typography.fontBodyMdMedium,
-            color = tint,
+            color = ElementTheme.colors.textPrimary,
         )
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun IndicatorPreview() = ElementPreview {
+    Indicator()
 }

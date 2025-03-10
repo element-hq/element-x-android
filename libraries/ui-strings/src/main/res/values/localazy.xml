@@ -129,6 +129,8 @@
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="action_yes_try_again">"Yes, try again"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_adding_caption">"Adding caption"</string>
@@ -143,7 +145,9 @@
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
+  <string name="common_current_user_canceled_knock">"Request canceled"</string>
   <string name="common_current_user_left_room">"Left room"</string>
+  <string name="common_current_user_rejected_invite">"Invite declined"</string>
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
@@ -193,6 +197,7 @@ Reason: %1$s."</string>
   <string name="common_message_removed">"Message removed"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
@@ -270,6 +275,7 @@ Reason: %1$s."</string>
   <string name="common_verified">"Verified"</string>
   <string name="common_verify_device">"Verify device"</string>
   <string name="common_verify_identity">"Verify identity"</string>
+  <string name="common_verify_user">"Verify user"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
@@ -278,6 +284,7 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity appears to have changed. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity appears to have changed. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s’s verified identity has changed."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s verified identity has changed.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
@@ -296,6 +303,7 @@ Reason: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
+  <string name="error_network_or_server_issue">"This may be due to network or server issues."</string>
   <string name="error_room_address_already_exists">"This room address already exists. Please try editing the room address field or change the room name"</string>
   <string name="error_room_address_invalid_symbols">"Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
@@ -333,6 +341,7 @@ Reason: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not verified one or more of your devices"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
+  <string name="screen_room_event_pill">"Message in %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>

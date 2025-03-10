@@ -13,9 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"Похоже, что-то не так. Время ожидания запроса либо истекло, либо запрос был отклонен."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже емоджи совпадают с емоджи показанными во время другого сеанса."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Убедитесь, что указанные ниже эмодзи соответствуют тем, которые отображаются на устройстве другого пользователя."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Сравните числа"</string>
   <string name="screen_session_verification_complete_subtitle">"Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Теперь вы можете доверять этому пользователя при отправке или получении сообщений."</string>
   <string name="screen_session_verification_enter_recovery_key">"Введите ключ восстановления"</string>
   <string name="screen_session_verification_failed_subtitle">"Время ожидания подтверждения истекло, запрос был отклонён, или при подтверждении произошло несоответствие."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы."</string>
@@ -37,8 +39,14 @@
   <string name="screen_session_verification_they_match">"Они совпадают"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Прежде чем начать проверку, убедитесь, что приложение открыто на другом устройстве."</string>
   <string name="screen_session_verification_use_another_device_title">"Откройте приложение на другом проверенном устройстве"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"Для дополнительной безопасности проверьте этого пользователя, сравнив набор эмодзи на ваших устройствах. Сделайте это, используя надежный способ коммуникации."</string>
+  <string name="screen_session_verification_user_initiator_title">"Проверить этого пользователя?"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Для дополнительной безопасности другой пользователь хочет проверить вашу личность. Вам будет показан набор эмодзи для сравнения."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Вы должны увидеть всплывающее окно на другом устройстве. Начните проверку оттуда прямо сейчас."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Начать проверку на другом устройстве"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Ожидание другого устройства"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Ожидание другого пользователя"</string>
+  <string name="screen_session_verification_waiting_subtitle">"После одобрения вы сможете продолжить проверку."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ожидание принятия запроса"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>

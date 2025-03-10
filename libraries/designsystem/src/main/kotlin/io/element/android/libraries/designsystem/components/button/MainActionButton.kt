@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -58,17 +57,16 @@ fun MainActionButton(
             .widthIn(min = 76.dp, max = 96.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val tintColor = if (enabled) LocalContentColor.current else MaterialTheme.colorScheme.secondary
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
-            tint = tintColor,
+            tint = if (enabled) LocalContentColor.current else ElementTheme.colors.iconDisabled,
         )
         Spacer(modifier = Modifier.height(14.dp))
         Text(
             title,
             style = ElementTheme.typography.fontBodyMdMedium.copy(hyphens = Hyphens.Auto),
-            color = tintColor,
+            color = if (enabled) LocalContentColor.current else ElementTheme.colors.textDisabled,
             overflow = TextOverflow.Visible,
             textAlign = TextAlign.Center,
         )

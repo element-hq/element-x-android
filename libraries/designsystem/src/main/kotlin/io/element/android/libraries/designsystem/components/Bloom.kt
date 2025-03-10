@@ -9,7 +9,6 @@ package io.element.android.libraries.designsystem.components
 
 import android.graphics.Bitmap
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.text.TextPaint
 import androidx.annotation.FloatRange
@@ -85,9 +84,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.unit.toSize
-import coil.imageLoader
-import coil.request.DefaultRequestOptions
-import coil.request.ImageRequest
+import coil3.SingletonImageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
 import io.element.android.compound.theme.ElementTheme
@@ -328,7 +328,7 @@ fun Modifier.avatarBloom(
             ImageRequest.Builder(context)
                 .data(avatarData)
                 // Allow cache and default dispatchers
-                .defaults(DefaultRequestOptions())
+                .defaults(ImageRequest.Defaults())
                 // Needed to be able to read pixels from the Bitmap for the hash
                 .allowHardware(false)
                 // Reduce size so it loads faster for large avatars
@@ -340,9 +340,11 @@ fun Modifier.avatarBloom(
         var blurHash by rememberSaveable(avatarData) { mutableStateOf<String?>(null) }
         LaunchedEffect(avatarData) {
             withContext(Dispatchers.IO) {
-                val drawable =
-                    context.imageLoader.execute(painterRequest).drawable ?: return@withContext
-                val bitmap = (drawable as? BitmapDrawable)?.bitmap ?: return@withContext
+                val bitmap = SingletonImageLoader.get(context)
+                    .execute(painterRequest)
+                    .image
+                    ?.toBitmap()
+                    ?: return@withContext
                 blurHash = BlurHash.encode(
                     bitmap = bitmap,
                     componentX = BloomDefaults.HASH_COMPONENTS,
@@ -477,7 +479,7 @@ internal fun BloomPreview() {
                             }
                             .bloom(
                                 hash = blurhash,
-                                background = ElementTheme.materialColors.background,
+                                background = ElementTheme.colors.bgCanvasDefault,
                                 blurSize = DpSize(430.dp, 430.dp),
                                 offset = DpOffset(24.dp, 24.dp),
                                 clipToSize = if (topAppBarHeight > 0) DpSize(430.dp, topAppBarHeight.toDp()) else DpSize.Zero,
@@ -554,9 +556,9 @@ internal fun BloomInitialsPreview(@PreviewParameter(InitialsColorIntProvider::cl
                         // Workaround to display a very subtle bloom for avatars with very soft colors
                         Color(0xFFF9F9F9)
                     } else {
-                        ElementTheme.materialColors.background
+                        ElementTheme.colors.bgCanvasDefault
                     },
-                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
+                    bottomSoftEdgeColor = ElementTheme.colors.bgCanvasDefault,
                     blurSize = DpSize(256.dp, 256.dp),
                 ),
             contentAlignment = Alignment.Center

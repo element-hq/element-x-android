@@ -8,9 +8,9 @@
 package io.element.android.features.verifysession.impl.outgoing
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -20,7 +20,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.inputs
@@ -45,7 +44,7 @@ class VerifySelfSessionNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = LocalContext.current as Activity
+        val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
         VerifySelfSessionView(
             state = state,
@@ -56,7 +55,6 @@ class VerifySelfSessionNode @AssistedInject constructor(
             onEnterRecoveryKey = callback::onEnterRecoveryKey,
             onResetKey = callback::onResetKey,
             onFinish = callback::onDone,
-            onSuccessLogout = { onSuccessLogout(activity, isDark, it) },
         )
     }
 }

@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn

@@ -240,8 +240,11 @@ class NotificationSettingsPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitLastSequentialItem()
-            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName0"))
-            assertThat(initialState.availablePushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
+            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncData.Success(Distributor(value = "aDistributorValue0", name = "aDistributorName0")))
+            assertThat(initialState.availablePushDistributors).containsExactly(
+                Distributor(value = "aDistributorValue0", name = "aDistributorName0"),
+                Distributor(value = "aDistributorValue1", name = "aDistributorName1"),
+            )
             initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
             val withDialog = awaitItem()
             assertThat(withDialog.showChangePushProviderDialog).isTrue()
@@ -257,8 +260,32 @@ class NotificationSettingsPresenterTest {
             assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
             skipItems(1)
             val lastItem = awaitItem()
-            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName1"))
+            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncData.Success(Distributor(value = "aDistributorValue1", name = "aDistributorName1")))
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - change push provider to the same value is no op`() = runTest {
+        val presenter = createNotificationSettingsPresenter(
+            pushService = createFakePushService(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncData.Success(Distributor(value = "aDistributorValue0", name = "aDistributorName0")))
+            assertThat(initialState.availablePushDistributors).containsExactly(
+                Distributor(value = "aDistributorValue0", name = "aDistributorName0"),
+                Distributor(value = "aDistributorValue1", name = "aDistributorName1"),
+            )
+            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            assertThat(awaitItem().showChangePushProviderDialog).isTrue()
+            // Choose the same value (index 0)
+            initialState.eventSink(NotificationSettingsEvents.SetPushProvider(0))
+            val withNewProvider = awaitItem()
+            assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
+            expectNoEvents()
         }
     }
 

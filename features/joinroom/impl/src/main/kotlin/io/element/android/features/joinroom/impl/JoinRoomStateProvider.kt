@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
@@ -25,10 +26,10 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
         get() = sequenceOf(
             aJoinRoomState(
-                contentState = aLoadingContentState()
+                contentState = ContentState.Loading
             ),
             aJoinRoomState(
-                contentState = anUnknownContentState()
+                contentState = ContentState.UnknownRoom
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(
@@ -41,6 +42,14 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
             ),
             aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
+                joinAction = AsyncAction.Failure(JoinRoomFailures.UnauthorizedJoin)
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
+                joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong"))
+            ),
+            aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
             ),
             aJoinRoomState(
@@ -51,9 +60,6 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             ),
             aJoinRoomState(
                 contentState = aFailureContentState()
-            ),
-            aJoinRoomState(
-                contentState = aFailureContentState(roomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias())
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(
@@ -98,22 +104,41 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     name = "A knocked Room",
                     joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
                 )
-            )
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = "A private room",
+                    joinAuthorisationStatus = JoinAuthorisationStatus.NeedInvite
+                )
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = "A banned room",
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
+                        banSender = InviteSender(
+                            userId = UserId("@alice:domain"),
+                            displayName = "Alice",
+                            avatarData = AvatarData("alice", "Alice", size = AvatarSize.InviteSender),
+                            membershipChangeReason = "spamming"
+                        ),
+                        reason = "spamming",
+                    ),
+                )
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = "A restricted room",
+                    joinAuthorisationStatus = JoinAuthorisationStatus.Restricted,
+                )
+            ),
         )
 }
 
-fun aFailureContentState(
-    roomIdOrAlias: RoomIdOrAlias = A_ROOM_ID.toRoomIdOrAlias()
-): ContentState {
+fun aFailureContentState(): ContentState {
     return ContentState.Failure(
-        roomIdOrAlias = roomIdOrAlias,
         error = Exception("Error"),
     )
 }
-
-fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId.toRoomIdOrAlias())
-
-fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId.toRoomIdOrAlias())
 
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,
@@ -138,19 +163,23 @@ fun aLoadedContentState(
 )
 
 fun aJoinRoomState(
+    roomIdOrAlias: RoomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias(),
     contentState: ContentState = aLoadedContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     joinAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    forgetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockMessage: String = "",
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
+    roomIdOrAlias = roomIdOrAlias,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     joinAction = joinAction,
     knockAction = knockAction,
     cancelKnockAction = cancelKnockAction,
+    forgetAction = forgetAction,
     applicationName = "AppName",
     knockMessage = knockMessage,
     eventSink = eventSink
@@ -160,10 +189,12 @@ internal fun anInviteSender(
     userId: UserId = UserId("@bob:domain"),
     displayName: String = "Bob",
     avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
+    membershipChangeReason: String? = null,
 ) = InviteSender(
     userId = userId,
     displayName = displayName,
     avatarData = avatarData,
+    membershipChangeReason = membershipChangeReason,
 )
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")

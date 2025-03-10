@@ -14,7 +14,6 @@ Puteți modifica acest lucru oricând în setări."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Oricine poate cere să se alăture camerei, dar un administrator sau un moderator va trebui să accepte solicitarea"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Cereți să vă alăturați"</string>
   <string name="screen_create_room_room_address_section_footer">"Pentru ca această cameră să fie vizibilă în directorul de camere publice, veți avea nevoie de o adresă de cameră."</string>
-  <string name="screen_create_room_room_address_section_title">"Adresa camerei"</string>
   <string name="screen_create_room_room_name_label">"Numele camerei"</string>
   <string name="screen_create_room_title">"Creați o cameră"</string>
   <string name="screen_create_room_topic_label">"Subiect (opțional)"</string>

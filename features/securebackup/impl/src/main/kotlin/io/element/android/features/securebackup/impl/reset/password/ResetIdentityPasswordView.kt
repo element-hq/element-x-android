@@ -33,6 +33,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -99,7 +100,7 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
                 Icon(imageVector = image, description)
             }
         },
-        isError = hasError,
+        validity = if (hasError) TextFieldValidity.Invalid else TextFieldValidity.None,
         supportingText = if (hasError) {
             stringResource(R.string.screen_reset_encryption_password_error)
         } else {

@@ -15,6 +15,11 @@ fun Throwable.mapClientException(): ClientException {
         is RustClientException -> {
             when (this) {
                 is RustClientException.Generic -> ClientException.Generic(msg)
+                is RustClientException.MatrixApi -> ClientException.MatrixApi(
+                    kind = kind.map(),
+                    code = code,
+                    message = msg
+                )
             }
         }
         else -> ClientException.Other(message ?: "Unknown error")

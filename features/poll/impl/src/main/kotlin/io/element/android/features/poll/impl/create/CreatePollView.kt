@@ -19,8 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -159,7 +157,7 @@ fun CreatePollView(
                     ListItem(
                         headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
                         leadingContent = ListItemContent.Icon(
-                            iconSource = IconSource.Vector(Icons.Default.Add),
+                            iconSource = IconSource.Vector(CompoundIcons.Plus()),
                         ),
                         style = ListItemStyle.Primary,
                         onClick = {

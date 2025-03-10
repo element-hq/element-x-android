@@ -238,7 +238,17 @@ class DefaultPushHandlerTest {
             unread = 0,
             clientSecret = A_SECRET,
         )
-        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val handleIncomingCallLambda = lambdaRecorder<
+            CallType.RoomCall,
+            EventId,
+            UserId,
+            String?,
+            String?,
+            String?,
+            String,
+            String?,
+            Unit,
+            > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
         val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
         val defaultPushHandler = createDefaultPushHandler(
@@ -266,7 +276,17 @@ class DefaultPushHandlerTest {
             clientSecret = A_SECRET,
         )
         val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
-        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val handleIncomingCallLambda = lambdaRecorder<
+            CallType.RoomCall,
+            EventId,
+            UserId,
+            String?,
+            String?,
+            String?,
+            String,
+            String?,
+            Unit,
+            > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
@@ -294,7 +314,17 @@ class DefaultPushHandlerTest {
             clientSecret = A_SECRET,
         )
         val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
-        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val handleIncomingCallLambda = lambdaRecorder<
+            CallType.RoomCall,
+            EventId,
+            UserId,
+            String?,
+            String?,
+            String?,
+            String,
+            String?,
+            Unit,
+            > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
