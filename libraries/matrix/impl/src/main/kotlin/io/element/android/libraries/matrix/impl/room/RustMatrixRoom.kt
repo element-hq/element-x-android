@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -155,14 +155,14 @@ class RustMatrixRoom(
         })
     }
 
-    override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = mxCallbackFlow {
-        val initial = emptyList<IdentityStateChange>()
+    override val userIdentityStateChangesFlow: Flow<List<UserIdentityStateChange>> = mxCallbackFlow {
+        val initial = emptyList<UserIdentityStateChange>()
         channel.trySend(initial)
         innerRoom.subscribeToIdentityStatusChanges(object : IdentityStatusChangeListener {
             override fun call(identityStatusChange: List<RustIdentityStateChange>) {
                 channel.trySend(
                     identityStatusChange.map {
-                        IdentityStateChange(
+                        UserIdentityStateChange(
                             userId = UserId(it.userId),
                             identityState = it.changedTo.map(),
                         )

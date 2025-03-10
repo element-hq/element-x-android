@@ -37,7 +37,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     data class RoomMemberDetailsInput(
-        val roomMemberId: UserId
+        val roomMemberId: UserId,
     ) : NodeInputs
 
     private val inputs = inputs<RoomMemberDetailsInput>()

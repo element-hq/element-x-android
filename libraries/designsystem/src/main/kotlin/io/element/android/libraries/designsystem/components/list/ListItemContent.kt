@@ -10,10 +10,12 @@ package io.element.android.libraries.designsystem.components.list
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -77,8 +79,9 @@ sealed interface ListItemContent {
     /**
      * Default Icon content for [ListItem]. Sets the Icon component to a predefined size.
      * @param iconSource The icon to display, using [IconSource.getPainter].
+     * @param tintColor The tint color for the icon, if any. Defaults to `null`.
      */
-    data class Icon(val iconSource: IconSource) : ListItemContent
+    data class Icon(val iconSource: IconSource, val tintColor: Color? = null) : ListItemContent
 
     /**
      * Default Text content for [ListItem]. Sets the Text component to a max size and clips overflow.
@@ -119,7 +122,8 @@ sealed interface ListItemContent {
                 IconComponent(
                     modifier = Modifier.size(maxCompactSize),
                     painter = iconSource.getPainter(),
-                    contentDescription = iconSource.contentDescription
+                    contentDescription = iconSource.contentDescription,
+                    tint = tintColor ?: LocalContentColor.current,
                 )
             }
             is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)

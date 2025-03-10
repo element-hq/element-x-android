@@ -197,6 +197,7 @@ fun RoomDetailsView(
                 PreferenceCategory {
                     MembersItem(
                         memberCount = state.memberCount,
+                        hasVerificationViolations = state.hasMemberVerificationViolations,
                         openRoomMemberList = openRoomMemberList,
                     )
                     if (state.canShowKnockRequests) {
@@ -567,12 +568,20 @@ private fun ProfileItem(
 @Composable
 private fun MembersItem(
     memberCount: Long,
+    hasVerificationViolations: Boolean,
     openRoomMemberList: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(CommonStrings.common_people)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
-        trailingContent = ListItemContent.Text(memberCount.toString()),
+        trailingContent = if (hasVerificationViolations) {
+            ListItemContent.Icon(
+                iconSource = IconSource.Vector(CompoundIcons.ErrorSolid()),
+                tintColor = ElementTheme.colors.textCriticalPrimary,
+            )
+        } else {
+            ListItemContent.Text(memberCount.toString())
+        },
         onClick = openRoomMemberList,
     )
 }

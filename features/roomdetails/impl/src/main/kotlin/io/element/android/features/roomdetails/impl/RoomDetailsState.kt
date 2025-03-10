@@ -45,6 +45,7 @@ data class RoomDetailsState(
     val canShowKnockRequests: Boolean,
     val knockRequestsCount: Int?,
     val canShowSecurityAndPrivacy: Boolean,
+    val hasMemberVerificationViolations: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {

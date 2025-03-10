@@ -50,6 +50,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(pinnedMessagesCount = 3),
             aRoomDetailsState(knockRequestsCount = null, canShowKnockRequests = true),
             aRoomDetailsState(knockRequestsCount = 4, canShowKnockRequests = true),
+            aRoomDetailsState(hasMemberVerificationViolations = true),
             // Add other state here
         )
 }
@@ -110,6 +111,7 @@ fun aRoomDetailsState(
     canShowKnockRequests: Boolean = false,
     knockRequestsCount: Int? = null,
     canShowSecurityAndPrivacy: Boolean = true,
+    hasMemberVerificationViolations: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -137,6 +139,7 @@ fun aRoomDetailsState(
     canShowKnockRequests = canShowKnockRequests,
     knockRequestsCount = knockRequestsCount,
     canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
+    hasMemberVerificationViolations = hasMemberVerificationViolations,
     eventSink = eventSink
 )
 

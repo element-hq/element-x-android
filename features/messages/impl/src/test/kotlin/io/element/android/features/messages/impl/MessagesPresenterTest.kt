@@ -7,9 +7,6 @@
 
 package io.element.android.features.messages.impl
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
@@ -67,6 +64,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -87,8 +85,8 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
-import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -107,9 +105,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createMessagesPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.roomName).isEqualTo(AsyncData.Success(""))
@@ -137,9 +133,7 @@ class MessagesPresenterTest {
         )
         assertThat(room.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             runCurrent()
             assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
             cancelAndIgnoreRemainingEvents()
@@ -166,9 +160,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
@@ -202,9 +194,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
@@ -225,9 +215,7 @@ class MessagesPresenterTest {
             onForwardEventClickLambda = onForwardEventClickLambda,
         )
         val presenter = createMessagesPresenter(navigator = navigator)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -240,9 +228,7 @@ class MessagesPresenterTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
         val presenter = createMessagesPresenter(clipboardHelper = clipboardHelper)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyText, event))
             skipItems(2)
@@ -267,9 +253,7 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             matrixRoom = matrixRoom,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyLink, event))
             skipItems(2)
@@ -283,9 +267,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
             awaitItem()
@@ -303,9 +285,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action reply to an event with no id does nothing`() = runTest {
         val presenter = createMessagesPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             skipItems(1)
@@ -318,9 +298,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
@@ -360,9 +338,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
@@ -403,9 +379,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
@@ -439,9 +413,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
             awaitItem()
@@ -463,9 +435,7 @@ class MessagesPresenterTest {
             onEditPollClickLambda = onEditPollClickLambda
         )
         val presenter = createMessagesPresenter(navigator = navigator)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditPoll, aMessageEvent(content = aTimelineItemPollContent())))
             awaitItem()
@@ -477,9 +447,7 @@ class MessagesPresenterTest {
     fun `present - handle action end poll`() = runTest {
         val timelineEventSink = EventsRecorder<TimelineEvents>()
         val presenter = createMessagesPresenter(timelineEventSink = timelineEventSink)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent(content = aTimelineItemPollContent())))
             delay(1)
@@ -509,9 +477,7 @@ class MessagesPresenterTest {
             matrixRoom = matrixRoom,
             coroutineDispatchers = coroutineDispatchers,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Redact, messageEvent))
@@ -529,9 +495,7 @@ class MessagesPresenterTest {
             onReportContentClickLambda = onReportContentClickLambda
         )
         val presenter = createMessagesPresenter(navigator = navigator)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -542,9 +506,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle dismiss action`() = runTest {
         val presenter = createMessagesPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.Dismiss)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -558,9 +520,7 @@ class MessagesPresenterTest {
             onShowEventDebugInfoClickLambda = onShowEventDebugInfoClickLambda
         )
         val presenter = createMessagesPresenter(navigator = navigator)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewSource, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -582,9 +542,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
@@ -615,9 +573,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             (initialState.composerState.textEditorState as TextEditorState.Markdown).state.hasFocus = true
@@ -640,9 +596,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             (initialState.composerState.textEditorState as TextEditorState.Markdown).state.hasFocus = true
@@ -673,9 +627,7 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
@@ -710,9 +662,7 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
@@ -739,9 +689,7 @@ class MessagesPresenterTest {
         )
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
@@ -773,15 +721,15 @@ class MessagesPresenterTest {
             )
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+
             val loadingState = consumeItemsUntilPredicate { state ->
                 state.inviteProgress.isLoading()
             }.last()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
+
             val failureState = consumeItemsUntilPredicate { state ->
                 state.inviteProgress.isFailure()
             }.last()
@@ -806,9 +754,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.userEventPermissions.canSendMessage).isTrue()
@@ -832,9 +778,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             // Default value
             assertThat(awaitItem().userEventPermissions.canSendMessage).isTrue()
             assertThat(awaitItem().userEventPermissions.canSendMessage).isFalse()
@@ -852,9 +796,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOwn }.last()
             assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
             assertThat(initialState.userEventPermissions.canRedactOther).isFalse()
@@ -873,9 +815,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOther }.last()
             assertThat(initialState.userEventPermissions.canRedactOwn).isFalse()
             assertThat(initialState.userEventPermissions.canRedactOther).isTrue()
@@ -889,9 +829,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val poll = aMessageEvent(
                 content = aTimelineItemPollContent()
@@ -925,9 +863,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
             )
@@ -965,9 +901,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
             )
@@ -1000,7 +934,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder) },
         )
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
             awaitItem()
@@ -1030,7 +964,7 @@ class MessagesPresenterTest {
                 initialState = mapOf(FeatureFlags.MediaCaptionWarning.key to false)
             )
         )
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
             awaitItem()
@@ -1057,7 +991,7 @@ class MessagesPresenterTest {
                 caption = null,
             )
         )
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
             awaitItem()
@@ -1087,7 +1021,7 @@ class MessagesPresenterTest {
                 caption = null,
             )
         )
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
             awaitItem()
@@ -1126,7 +1060,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(
             matrixRoom = room,
         )
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
@@ -1140,7 +1074,7 @@ class MessagesPresenterTest {
             content = aTimelineItemTextContent()
         )
         val presenter = createMessagesPresenter()
-        presenter.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewInTimeline, messageEvent))
@@ -1172,6 +1106,7 @@ class MessagesPresenterTest {
                 textEditorState = aTextEditorStateMarkdown(initialText = "", initialFocus = false)
             )
         },
+        encryptionService: FakeEncryptionService = FakeEncryptionService(),
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
         return MessagesPresenter(
@@ -1197,6 +1132,7 @@ class MessagesPresenterTest {
             htmlConverterProvider = FakeHtmlConverterProvider(),
             timelineController = TimelineController(matrixRoom),
             permalinkParser = permalinkParser,
+            encryptionService = encryptionService,
             analyticsService = analyticsService,
         )
     }

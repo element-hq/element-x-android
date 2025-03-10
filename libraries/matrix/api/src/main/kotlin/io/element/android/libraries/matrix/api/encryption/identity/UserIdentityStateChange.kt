@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.api.encryption.identity
 
 import io.element.android.libraries.matrix.api.core.UserId
 
-data class IdentityStateChange(
+data class UserIdentityStateChange(
     val userId: UserId,
     val identityState: IdentityState,
 )

@@ -15,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.ui.room.IdentityRoomMember
+import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn

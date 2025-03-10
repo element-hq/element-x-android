@@ -30,6 +30,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -44,10 +45,12 @@ import io.element.android.libraries.matrix.ui.room.canHandleKnockRequestsAsState
 import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
+import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -65,6 +68,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
 ) : Presenter<RoomDetailsState> {
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
@@ -154,6 +158,12 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val hasMemberVerificationViolations by produceState(false) {
+            room.roomMemberIdentityStateChange()
+                .onEach { identities -> value = identities.any { it.identityState == IdentityState.VerificationViolation } }
+                .launchIn(this)
+        }
+
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
@@ -180,6 +190,7 @@ class RoomDetailsPresenter @Inject constructor(
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
+            hasMemberVerificationViolations = hasMemberVerificationViolations,
             eventSink = ::handleEvents,
         )
     }

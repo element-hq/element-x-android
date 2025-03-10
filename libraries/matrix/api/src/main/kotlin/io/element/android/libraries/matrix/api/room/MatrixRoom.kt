@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -61,7 +61,7 @@ interface MatrixRoom : Closeable {
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
-    val identityStateChangesFlow: Flow<List<IdentityStateChange>>
+    val userIdentityStateChangesFlow: Flow<List<UserIdentityStateChange>>
 
     /**
      * The current knock requests in the room as a Flow.

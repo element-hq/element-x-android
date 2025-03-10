@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -170,11 +170,11 @@ class FakeMatrixRoom(
         _roomTypingMembersFlow.tryEmit(typingMembers)
     }
 
-    private val _identityStateChangesFlow: MutableSharedFlow<List<IdentityStateChange>> = MutableSharedFlow(replay = 1)
-    override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = _identityStateChangesFlow
+    private val _userIdentityStateChangesFlow: MutableSharedFlow<List<UserIdentityStateChange>> = MutableSharedFlow(replay = 1)
+    override val userIdentityStateChangesFlow: Flow<List<UserIdentityStateChange>> = _userIdentityStateChangesFlow
 
-    fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
-        _identityStateChangesFlow.tryEmit(identityStateChanges)
+    fun emitUserIdentityStateChanges(userIdentityStateChanges: List<UserIdentityStateChange>) {
+        _userIdentityStateChangesFlow.tryEmit(userIdentityStateChanges)
     }
 
     private val _knockRequestsFlow: MutableSharedFlow<List<KnockRequest>> = MutableSharedFlow(replay = 1)

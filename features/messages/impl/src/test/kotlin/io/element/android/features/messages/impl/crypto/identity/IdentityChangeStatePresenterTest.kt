@@ -12,7 +12,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentityStateChange
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -49,9 +49,9 @@ class IdentityChangeStatePresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-            room.emitIdentityStateChanges(
+            room.emitUserIdentityStateChanges(
                 listOf(
-                    IdentityStateChange(
+                    UserIdentityStateChange(
                         userId = A_USER_ID_2,
                         identityState = IdentityState.PinViolation,
                     ),
@@ -75,9 +75,9 @@ class IdentityChangeStatePresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-            room.emitIdentityStateChanges(
+            room.emitUserIdentityStateChanges(
                 listOf(
-                    IdentityStateChange(
+                    UserIdentityStateChange(
                         userId = A_USER_ID_2,
                         identityState = IdentityState.PinViolation,
                     ),
@@ -115,9 +115,9 @@ class IdentityChangeStatePresenterTest {
             presenter.test {
                 val initialState = awaitItem()
                 assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-                room.emitIdentityStateChanges(
+                room.emitUserIdentityStateChanges(
                     listOf(
-                        IdentityStateChange(
+                        UserIdentityStateChange(
                             userId = A_USER_ID_2,
                             identityState = IdentityState.PinViolation,
                         ),
