@@ -1,0 +1,77 @@
+name: Pull Request
+on:
+  pull_request:
+    types: [ opened, edited, labeled, unlabeled, synchronize ]
+  workflow_call:
+    secrets:
+      ELEMENT_BOT_TOKEN:
+        required: true
+
+jobs:
+  prevent-blocked:
+    name: Prevent blocked
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Add notice
+        uses: actions/github-script@v7
+        if: contains(github.event.pull_request.labels.*.name, 'X-Blocked')
+        with:
+          script: |
+            core.setFailed("PR has been labeled with X-Blocked; it cannot be merged.");
+
+  community-prs:
+    name: Label Community PRs
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check membership
+        if: github.event.pull_request.user.login != 'renovate[bot]'
+        uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
+        id: teams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          organization: element-hq
+          team: Core Team
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+      - name: Add label
+        if: steps.teams.outputs.isTeamMember == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Z-Community-PR']
+            });
+
+  close-if-fork-develop:
+    name: Forbid develop branch fork contributions
+    runs-on: ubuntu-latest
+    if: >
+      github.event.action == 'opened' &&
+      github.event.pull_request.head.ref == 'develop' &&
+      github.event.pull_request.head.repo.full_name != github.repository
+    steps:
+      - name: Close pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Thanks for opening this pull request, unfortunately we do not accept contributions from the main" +
+                " branch of your fork, please re-open once you switch to an alternative branch for everyone's sanity.",
+            });
+            
+            github.rest.pulls.update({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            });
