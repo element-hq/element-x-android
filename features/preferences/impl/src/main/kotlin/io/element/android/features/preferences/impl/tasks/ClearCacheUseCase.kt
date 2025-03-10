@@ -5,13 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalCoilApi::class)
-
 package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
-import coil.Coil
-import coil.annotation.ExperimentalCoilApi
+import coil3.SingletonImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
@@ -43,7 +40,7 @@ class DefaultClearCacheUseCase @Inject constructor(
         // Clear Matrix cache
         matrixClient.clearCache()
         // Clear Coil cache
-        Coil.imageLoader(context).let {
+        SingletonImageLoader.get(context).let {
             it.diskCache?.clear()
             it.memoryCache?.clear()
         }

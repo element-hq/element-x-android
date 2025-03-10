@@ -15,13 +15,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockView
 import io.element.android.features.lockscreen.impl.unlock.di.PinUnlockBindings
-import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -38,19 +37,21 @@ class PinUnlockActivity : AppCompatActivity() {
     @Inject lateinit var presenter: PinUnlockPresenter
     @Inject lateinit var lockScreenService: LockScreenService
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var enterpriseService: EnterpriseService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         bindings<PinUnlockBindings>().inject(this)
         setContent {
-            ElementThemeApp(appPreferencesStore) {
+            ElementThemeApp(
+                appPreferencesStore = appPreferencesStore,
+                enterpriseService = enterpriseService,
+            ) {
                 val state = presenter.present()
-                val isDark = ElementTheme.isLightTheme.not()
                 PinUnlockView(
                     state = state,
                     isInAppUnlock = false,
-                    onSuccessLogout = { onSuccessLogout(this, isDark, it) },
                 )
             }
         }

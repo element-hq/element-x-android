@@ -314,7 +314,7 @@ internal enum class ButtonStyle {
             contentColor = if (destructive) {
                 ElementTheme.colors.textCriticalPrimary
             } else {
-                if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.materialColors.primary
+                if (LocalContentColor.current.isSpecified) LocalContentColor.current else ElementTheme.colors.textPrimary
             },
             disabledContainerColor = Color.Transparent,
             disabledContentColor = getDisabledContentColor(destructive),

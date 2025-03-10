@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
 import androidx.core.content.res.ResourcesCompat
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta

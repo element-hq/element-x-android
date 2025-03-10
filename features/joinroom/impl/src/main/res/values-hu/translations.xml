@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Igen, visszavonás"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Biztos, hogy visszavonja a szobához való csatlakozási kérését?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Csatlakozási kérés visszavonása"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Igen, elutasítás és blokkolás"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez a szobához? Ez azt is megakadályozza, hogy %1$s kapcsolatba lépjen Önnel, vagy szobákba hívja."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Meghívó elutasítása és blokkolás"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Elutasítás és blokkolás"</string>
   <string name="screen_join_room_fail_message">"A szobához való csatlakozás sikertelen."</string>
   <string name="screen_join_room_fail_reason">"Ebbe a szobába csak meghívóval vagy tértagsággal lehet belépni."</string>
   <string name="screen_join_room_forget_action">"Szoba elfelejtése"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Üzenet (nem kötelező)"</string>
   <string name="screen_join_room_knock_sent_description">"Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz."</string>
   <string name="screen_join_room_knock_sent_title">"Csatlakozási kérés elküldve"</string>
+  <string name="screen_join_room_loading_alert_message">"Nem tudtuk megjeleníteni a szoba előnézetét. Ennek az oka hálózati vagy kiszolgálóprobléma is lehet."</string>
+  <string name="screen_join_room_loading_alert_title">"Nem tudtuk megjeleníteni a szoba előnézetét"</string>
   <string name="screen_join_room_space_not_supported_description">"Az %1$s még nem támogatja a tereket. A tereket a weben érheti el."</string>
   <string name="screen_join_room_space_not_supported_title">"A terek még nem támogatottak"</string>
   <string name="screen_join_room_subtitle_knock">"Kattintson az alábbi gombra, és a szoba adminisztrátora értesítést kap. A jóváhagyást követően csatlakozhat a beszélgetéshez."</string>

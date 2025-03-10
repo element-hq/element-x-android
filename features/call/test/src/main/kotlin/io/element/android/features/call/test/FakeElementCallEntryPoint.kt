@@ -11,10 +11,20 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeElementCallEntryPoint(
-    var startCallResult: (CallType) -> Unit = {},
-    var handleIncomingCallResult: (CallType.RoomCall, EventId, UserId, String?, String?, String?, String) -> Unit = { _, _, _, _, _, _, _ -> }
+    var startCallResult: (CallType) -> Unit = { lambdaError() },
+    var handleIncomingCallResult: (
+        CallType.RoomCall,
+        EventId,
+        UserId,
+        String?,
+        String?,
+        String?,
+        String,
+        String?,
+    ) -> Unit = { _, _, _, _, _, _, _, _ -> lambdaError() }
 ) : ElementCallEntryPoint {
     override fun startCall(callType: CallType) {
         startCallResult(callType)
@@ -28,8 +38,18 @@ class FakeElementCallEntryPoint(
         senderName: String?,
         avatarUrl: String?,
         timestamp: Long,
-        notificationChannelId: String
+        notificationChannelId: String,
+        textContent: String?,
     ) {
-        handleIncomingCallResult(callType, eventId, senderId, roomName, senderName, avatarUrl, notificationChannelId)
+        handleIncomingCallResult(
+            callType,
+            eventId,
+            senderId,
+            roomName,
+            senderName,
+            avatarUrl,
+            notificationChannelId,
+            textContent,
+        )
     }
 }

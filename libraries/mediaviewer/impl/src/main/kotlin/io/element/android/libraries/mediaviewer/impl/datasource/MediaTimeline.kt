@@ -12,6 +12,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -44,7 +45,7 @@ class LiveMediaTimeline @Inject constructor(
     override suspend fun getTimeline(): Result<Timeline> = mutex.withLock {
         val currentTimeline = timeline
         if (currentTimeline == null) {
-            room.mediaTimeline(null)
+            room.createTimeline(CreateTimelineParams.MediaOnly)
                 .onSuccess { timeline = it }
         } else {
             Result.success(currentTimeline)
@@ -58,14 +59,22 @@ class LiveMediaTimeline @Inject constructor(
 
 /**
  * A class that will provide a media timeline that is focused on a particular event.
+ * Optionally, the timeline will only contain the pinned events.
  */
 class FocusedMediaTimeline(
     private val room: MatrixRoom,
     private val eventId: EventId,
+    private val onlyPinnedEvents: Boolean,
     initialMediaItem: MediaItem.Event,
 ) : MediaTimeline {
     override suspend fun getTimeline(): Result<Timeline> {
-        return room.mediaTimeline(eventId)
+        return room.createTimeline(
+            createTimelineParams = if (onlyPinnedEvents) {
+                CreateTimelineParams.PinnedOnly
+            } else {
+                CreateTimelineParams.MediaOnlyFocused(eventId)
+            },
+        )
     }
 
     override val cache = persistentListOf(

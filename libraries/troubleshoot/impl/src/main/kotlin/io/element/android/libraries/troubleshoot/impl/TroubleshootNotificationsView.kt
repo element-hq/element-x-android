@@ -98,7 +98,7 @@ private fun ColumnScope.TroubleshootTestView(
                 Icon(
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    imageVector = CompoundIcons.Error(),
+                    imageVector = CompoundIcons.ErrorSolid(),
                     tint = ElementTheme.colors.textCriticalPrimary
                 )
             }

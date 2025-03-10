@@ -50,7 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.REACTION_IMAGE_ASPECT_RATIO
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
@@ -175,7 +175,7 @@ private fun AggregatedReactionButton(
     val textColor = if (isHighlighted) {
         MaterialTheme.colorScheme.inversePrimary
     } else {
-        MaterialTheme.colorScheme.primary
+        ElementTheme.colors.textPrimary
     }
 
     val roundedCornerShape = RoundedCornerShape(corner = CornerSize(percent = 50))
@@ -254,12 +254,12 @@ private fun SenderRow(
                     text = name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Text(
                     text = sentTime,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = ElementTheme.typography.fontBodySmRegular,
@@ -268,7 +268,7 @@ private fun SenderRow(
             if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
                 Text(
                     text = userId,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = ElementTheme.typography.fontBodySmRegular,

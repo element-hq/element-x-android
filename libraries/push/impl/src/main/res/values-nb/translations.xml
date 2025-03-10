@@ -27,6 +27,7 @@
     <item quantity="one">"%d ny melding"</item>
     <item quantity="other">"%d nye meldinger"</item>
   </plurals>
+  <string name="notification_reaction_body">"Reagerte med %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marker som lest"</string>
   <string name="notification_room_action_quick_reply">"Raskt svar"</string>
   <string name="notification_room_invite_body">"Invitert deg til å bli med i rommet"</string>

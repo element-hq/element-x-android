@@ -9,7 +9,7 @@ package io.element.android.appnav.root
 
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
-import io.element.android.appnav.di.MatrixClientsHolder
+import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.features.login.api.LoginUserStory
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -31,7 +31,7 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.RootNavStateFlowFact
 class RootNavStateFlowFactory @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val cacheService: CacheService,
-    private val matrixClientsHolder: MatrixClientsHolder,
+    private val matrixSessionCache: MatrixSessionCache,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val loginUserStory: LoginUserStory,
     private val sessionPreferencesStoreFactory: SessionPreferencesStoreFactory,
@@ -63,7 +63,7 @@ class RootNavStateFlowFactory @Inject constructor(
         val initialCacheIndex = savedStateMap.getCacheIndexOrDefault()
         return cacheService.clearedCacheEventFlow
             .onEach { sessionId ->
-                matrixClientsHolder.remove(sessionId)
+                matrixSessionCache.remove(sessionId)
                 // Ensure image loader will be recreated with the new MatrixClient
                 imageLoaderHolder.remove(sessionId)
                 // Also remove cached value for SessionPreferencesStore

@@ -35,7 +35,7 @@ class LogoutPresenter @Inject constructor(
     @Composable
     override fun present(): LogoutState {
         val localCoroutineScope = rememberCoroutineScope()
-        val logoutAction: MutableState<AsyncAction<String?>> = remember {
+        val logoutAction: MutableState<AsyncAction<Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -91,7 +91,7 @@ class LogoutPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.logout(
-        logoutAction: MutableState<AsyncAction<String?>>,
+        logoutAction: MutableState<AsyncAction<Unit>>,
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {

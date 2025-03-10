@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +38,7 @@ internal fun TimelineItemDaySeparatorView(
         Text(
             text = model.formattedDate,
             style = ElementTheme.typography.fontBodyMdMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = ElementTheme.colors.textPrimary,
         )
     }
 }

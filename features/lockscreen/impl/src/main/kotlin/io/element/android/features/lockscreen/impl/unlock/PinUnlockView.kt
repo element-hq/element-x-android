@@ -25,14 +25,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -44,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.components.PinEntryTextField
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
@@ -68,7 +64,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PinUnlockView(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
-    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -90,12 +85,7 @@ fun PinUnlockView(
             AsyncAction.Loading -> {
                 ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
             }
-            is AsyncAction.Success -> {
-                val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
-                LaunchedEffect(state) {
-                    latestOnSuccessLogout(state.signOutAction.data)
-                }
-            }
+            is AsyncAction.Success,
             is AsyncAction.Confirming,
             is AsyncAction.Failure,
             AsyncAction.Uninitialized -> Unit
@@ -299,13 +289,13 @@ private fun PinUnlockHeader(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (isInAppUnlock) {
-            BigIcon(style = BigIcon.Style.Default(Icons.Filled.Lock))
+            BigIcon(style = BigIcon.Style.Default(CompoundIcons.LockSolid()))
         } else {
             Icon(
                 modifier = Modifier
                     .size(32.dp),
                 tint = ElementTheme.colors.iconPrimary,
-                imageVector = Icons.Filled.Lock,
+                imageVector = CompoundIcons.LockSolid(),
                 contentDescription = null,
             )
         }
@@ -316,7 +306,7 @@ private fun PinUnlockHeader(
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = ElementTheme.typography.fontHeadingMdBold,
-            color = MaterialTheme.colorScheme.primary,
+            color = ElementTheme.colors.textPrimary,
         )
         Spacer(Modifier.height(8.dp))
         val remainingAttempts = state.remainingAttempts.dataOrNull()
@@ -330,9 +320,9 @@ private fun PinUnlockHeader(
             ""
         }
         val subtitleColor = if (state.showWrongPinTitle) {
-            MaterialTheme.colorScheme.error
+            ElementTheme.colors.textCriticalPrimary
         } else {
-            MaterialTheme.colorScheme.secondary
+            ElementTheme.colors.textSecondary
         }
         Text(
             text = subtitle,
@@ -370,7 +360,6 @@ internal fun PinUnlockViewInAppPreview(@PreviewParameter(PinUnlockStateProvider:
         PinUnlockView(
             state = state,
             isInAppUnlock = true,
-            onSuccessLogout = {},
         )
     }
 }
@@ -382,7 +371,6 @@ internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::clas
         PinUnlockView(
             state = state,
             isInAppUnlock = false,
-            onSuccessLogout = {},
         )
     }
 }

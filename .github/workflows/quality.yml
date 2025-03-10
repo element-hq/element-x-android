@@ -31,7 +31,7 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-  checkScreesnhot:
+  checkScreenshot:
     name: Search for invalid screenshot files
     runs-on: ubuntu-latest
     steps:
@@ -144,7 +144,7 @@ jobs:
       - name: Build Fdroid Debug
         run: ./gradlew :app:compileFdroidDebugKotlin $CI_GRADLE_ARG_PROPERTIES
       - name: Run lint
-        run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug lintDebug $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -307,7 +307,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@12.3.3
+        uses: danger/danger-js@12.3.4
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

@@ -16,5 +16,6 @@ data class CreateRoomRootState(
     val applicationName: String,
     val userListState: UserListState,
     val startDmAction: AsyncAction<RoomId>,
+    val isRoomDirectorySearchEnabled: Boolean,
     val eventSink: (CreateRoomRootEvents) -> Unit,
 )

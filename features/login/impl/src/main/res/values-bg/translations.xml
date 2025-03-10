@@ -12,6 +12,7 @@
   <string name="screen_change_account_provider_subtitle">"Използвайте друг доставчик на акаунт, като например собствен частен сървър или работен акаунт."</string>
   <string name="screen_change_account_provider_title">"Промяна на доставчика на акаунт"</string>
   <string name="screen_change_server_subtitle">"Какъв е адресът на вашия сървър?"</string>
+  <string name="screen_create_account_title">"Създаване на акаунт"</string>
   <string name="screen_login_error_deactivated_account">"Този акаунт бе деактивиран."</string>
   <string name="screen_login_error_invalid_credentials">"Неправилно потребителско име и/или парола"</string>
   <string name="screen_login_form_header">"Въведете своите данни"</string>

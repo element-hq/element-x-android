@@ -25,4 +25,5 @@ data class CallNotificationData(
     val avatarUrl: String?,
     val notificationChannelId: String,
     val timestamp: Long,
+    val textContent: String?,
 ) : Parcelable

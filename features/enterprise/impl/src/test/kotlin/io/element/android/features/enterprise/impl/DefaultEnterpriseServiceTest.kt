@@ -20,6 +20,12 @@ class DefaultEnterpriseServiceTest {
     }
 
     @Test
+    fun `defaultHomeserver should return null`() {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat<String?>(defaultEnterpriseService.defaultHomeserver()).isNull()
+    }
+
+    @Test
     fun `isEnterpriseUser always return false`() = runTest {
         val defaultEnterpriseService = DefaultEnterpriseService()
         assertThat(defaultEnterpriseService.isEnterpriseUser(A_SESSION_ID)).isFalse()

@@ -519,7 +519,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items forward images and videos`() {
         `present - snackbar displayed when there is no more items forward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
             expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
         )
     }
@@ -527,7 +527,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items forward files and audio`() {
         `present - snackbar displayed when there is no more items forward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.MEDIA),
             expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
         )
     }
@@ -547,7 +547,7 @@ class MediaViewerPresenterTest {
             awaitFirstItem()
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
-                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                    if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
                             fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
@@ -568,7 +568,7 @@ class MediaViewerPresenterTest {
             // data source claims that there is no more items to load forward
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
-                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                    if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
                             fileItems = persistentListOf(anImage, aBackwardLoadingIndicator),
@@ -590,7 +590,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items backward images and videos`() {
         `present - snackbar displayed when there is no more items backward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos,
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.MEDIA),
             expectedSnackbarResId = R.string.screen_media_details_no_more_media_to_show,
         )
     }
@@ -598,7 +598,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - snackbar displayed when there is no more items backward files and audio`() {
         `present - snackbar displayed when there is no more items backward`(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios,
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.MEDIA),
             expectedSnackbarResId = R.string.screen_media_details_no_more_files_to_show,
         )
     }
@@ -618,7 +618,7 @@ class MediaViewerPresenterTest {
             awaitFirstItem()
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
-                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                    if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
                             fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
@@ -640,7 +640,7 @@ class MediaViewerPresenterTest {
             // data source claims that there is no more items to load backward
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
-                    if (mode == MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                    if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
                             fileItems = persistentListOf(aForwardLoadingIndicator, anImage),

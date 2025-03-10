@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.element.android.libraries.matrix.api.MatrixClient
 
 class FakeLoggedInImageLoaderFactory(

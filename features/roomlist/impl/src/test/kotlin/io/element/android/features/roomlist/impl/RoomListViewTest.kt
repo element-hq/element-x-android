@@ -229,21 +229,6 @@ class RoomListViewTest {
             listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.DeclineInvite(invitedRoom)),
         )
     }
-
-    @Test
-    fun `clicking on logout and migrate calls the migration clicked callback`() {
-        val state = aRoomListState(
-            contentState = aRoomsContentState(securityBannerState = SecurityBannerState.NeedsNativeSlidingSyncMigration),
-            eventSink = {},
-        )
-        ensureCalledOnce { callback ->
-            rule.setRoomListView(
-                state = state,
-                onMigrateToNativeSlidingSyncClick = callback,
-            )
-            rule.clickOn(R.string.banner_migrate_to_native_sliding_sync_action)
-        }
-    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomListView(
@@ -255,8 +240,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
     onRoomSettingsClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
-    onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
-    onMigrateToNativeSlidingSyncClick: () -> Unit = EnsureNeverCalled()
 ) {
     setContent {
         RoomListView(
@@ -268,8 +251,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             onCreateRoomClick = onCreateRoomClick,
             onRoomSettingsClick = onRoomSettingsClick,
             onMenuActionClick = onMenuActionClick,
-            onRoomDirectorySearchClick = onRoomDirectorySearchClick,
-            onMigrateToNativeSlidingSyncClick = onMigrateToNativeSlidingSyncClick,
             acceptDeclineInviteView = { },
         )
     }

@@ -17,6 +17,7 @@ android {
 setupAnvil()
 
 dependencies {
+    implementation(libs.compound)
     implementation(projects.anvilannotations)
     api(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)

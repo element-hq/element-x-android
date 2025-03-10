@@ -9,12 +9,11 @@ package io.element.android.libraries.push.test.notifications
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.test.FakeImageLoaderEngine
+import coil3.ImageLoader
+import coil3.test.FakeImageLoaderEngine
+import coil3.test.intercept
 import org.robolectric.RuntimeEnvironment
 
-@OptIn(ExperimentalCoilApi::class)
 class FakeImageLoader {
     private val coilRequests = mutableListOf<Any>()
 

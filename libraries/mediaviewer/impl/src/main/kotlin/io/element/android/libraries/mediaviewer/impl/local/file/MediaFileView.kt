@@ -19,9 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GraphicEq
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -72,13 +69,13 @@ fun MediaFileView(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onBackground),
+                    .background(ElementTheme.colors.iconPrimary),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = if (isAudio) Icons.Outlined.GraphicEq else CompoundIcons.Attachment(),
+                    imageVector = if (isAudio) CompoundIcons.Audio() else CompoundIcons.Attachment(),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.background,
+                    tint = ElementTheme.colors.iconOnSolidPrimary,
                     modifier = Modifier
                         .size(32.dp)
                         .rotate(if (isAudio) 0f else -45f),
@@ -92,7 +89,7 @@ fun MediaFileView(
                     style = ElementTheme.typography.fontBodyLgRegular,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.primary
+                    color = ElementTheme.colors.textPrimary
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -100,7 +97,7 @@ fun MediaFileView(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.primary
+                    color = ElementTheme.colors.textPrimary
                 )
             }
         }

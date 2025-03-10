@@ -25,7 +25,7 @@ internal fun DependencyHandler.implementation(dependency: Any) = add("implementa
 private fun DependencyHandlerScope.implementation(
     dependency: Any,
     config: Action<ExternalModuleDependency>
-) = dependencies.add("implementation",  dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
+) = dependencies.add("implementation", dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
 private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
@@ -114,14 +114,30 @@ fun DependencyHandlerScope.allServicesImpl() {
     implementation(project(":services:toolbox:impl"))
 }
 
-fun DependencyHandlerScope.allEnterpriseImpl(project: Project) = addAll(project, "enterprise", "impl")
+fun DependencyHandlerScope.allEnterpriseImpl(project: Project) = addAll(
+    project = project,
+    modulePrefix = ":enterprise:features",
+    moduleSuffix = ":impl",
+)
 
-fun DependencyHandlerScope.allFeaturesImpl(project: Project) = addAll(project, "features", "impl")
+fun DependencyHandlerScope.allFeaturesImpl(project: Project) = addAll(
+    project = project,
+    modulePrefix = ":features",
+    moduleSuffix = ":impl",
+)
 
-fun DependencyHandlerScope.allFeaturesApi(project: Project) = addAll(project, "features", "api")
+fun DependencyHandlerScope.allFeaturesApi(project: Project) = addAll(
+    project = project,
+    modulePrefix = ":features",
+    moduleSuffix = ":api",
+)
 
-private fun DependencyHandlerScope.addAll(project: Project, prefix: String, suffix: String) {
-    val subProjects = project.rootProject.subprojects.filter { it.path.startsWith(":$prefix") && it.path.endsWith(":$suffix") }
+private fun DependencyHandlerScope.addAll(
+    project: Project,
+    modulePrefix: String,
+    moduleSuffix: String,
+) {
+    val subProjects = project.rootProject.subprojects.filter { it.path.startsWith(modulePrefix) && it.path.endsWith(moduleSuffix) }
     for (p in subProjects) {
         add("implementation", p)
     }

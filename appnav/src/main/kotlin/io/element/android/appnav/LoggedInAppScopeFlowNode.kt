@@ -5,12 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(DelicateCoilApi::class)
+
 package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import coil.Coil
+import coil3.SingletonImageLoader
+import coil3.annotation.DelicateCoilApi
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -69,7 +72,7 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                Coil.setImageLoader(imageLoaderHolder.get(inputs.matrixClient))
+                SingletonImageLoader.setUnsafe(imageLoaderHolder.get(inputs.matrixClient))
             },
         )
     }

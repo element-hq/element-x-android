@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório."</string>
+  <string name="screen_edit_room_address_title">"Endereço da sala"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Erro ao atualizar a configuração de notificação."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"O teu servidor não suporta esta opção em salas cifradas, pelo que poderás não ser notificado em algumas salas."</string>
   <string name="screen_polls_history_title">"Sondagens"</string>
@@ -7,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"Banir pessoas"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remover mensagens"</string>
   <string name="screen_room_change_permissions_everyone">"Toda a gente"</string>
-  <string name="screen_room_change_permissions_invite_people">"Convida pessoas"</string>
+  <string name="screen_room_change_permissions_invite_people">"Convidar pessoas e aceitar pedidos de entrada"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderação de participantes"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mensagens e conteúdo"</string>
   <string name="screen_room_change_permissions_moderators">"Administradores e moderadores"</string>
-  <string name="screen_room_change_permissions_remove_people">"Remover pessoas"</string>
+  <string name="screen_room_change_permissions_remove_people">"Remover pessoas e rejeitar pedidos de entrada"</string>
   <string name="screen_room_change_permissions_room_avatar">"Alterar o ícone da sala"</string>
   <string name="screen_room_change_permissions_room_details">"Detalhes da sala"</string>
   <string name="screen_room_change_permissions_room_name">"Altera o nome da sala"</string>
@@ -54,9 +56,11 @@
   <string name="screen_room_details_notification_mode_default">"Predefinição"</string>
   <string name="screen_room_details_notification_title">"Notificações"</string>
   <string name="screen_room_details_pinned_events_row_title">"Mensagens afixadas"</string>
+  <string name="screen_room_details_profile_row_title">"Perfil"</string>
   <string name="screen_room_details_requests_to_join_title">"Pedidos de entrada"</string>
   <string name="screen_room_details_roles_and_permissions">"Cargos e permissões"</string>
   <string name="screen_room_details_room_name_label">"Nome da sala"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Segurança e privacidade"</string>
   <string name="screen_room_details_security_title">"Segurança"</string>
   <string name="screen_room_details_share_room_title">"Partilhar sala"</string>
   <string name="screen_room_details_title">"Informação da sala"</string>
@@ -99,7 +103,7 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Falha ao restaurar o modo predefinido, tenta novamente."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Falha ao definir o modo, tenta novamente."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"O teu servidor não suporta esta opção em salas cifradas, pelo que não serás notificado nesta sala."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Todas as mensagens"</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Qualquer mensagem"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Menções ou palavras-chave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Nesta sala, notifica-me se"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administradores"</string>
@@ -116,4 +120,37 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Cargos"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detalhes da sala"</string>
   <string name="screen_room_roles_and_permissions_title">"Cargos e permissões"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Adicionar endereço de sala"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador tem que aceitar o pedido."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Pedir para participar"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sim, ativar cifragem"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Uma vez ativada, a cifragem não pode ser desativada. O histórico de mensagens só será visível a membros a partir do momento em que foram convidados ou que entraram na sala.
+Ninguém além dos membros poderão ler quaisquer mensagens. Isto pode impedir que robôs (\"bots\") e pontes (\"bridges\") funcionem devidamente.
+Não recomendamos ativar a cifragem em salas que qualquer pessoa possa encontrar e entrar."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Ativar cifragem?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Uma vez ativada, a cifragem não pode ser desativada."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Cifragem"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Ativar cifragem ponta-a-ponta"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Qualquer pessoa pode encontrar a sala e entrar"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Qualquer pessoa"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Só é possível entrar tendo um convite"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Apenas por convite"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Acesso à sala"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Os espaços ainda não estão implementados"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membros do espaço"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Endereço da sala"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permite que esta sala seja encontrada através do diretório público do %1$s."</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visível no diretório público de salas"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Qualquer pessoa"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Quem pode ler o histórico de mensagens"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Apenas membros, desde o momento em que forem convidados"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Apenas membros, desde o memento em que esta opção for selecionada"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.
+Podes escolher publicar a sala no diretório público do teu servidor."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Publicar sala"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.
+Além disso, é necessário ter endereço para publicar a sala no diretório público do %1$s."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilidade da sala"</string>
+  <string name="screen_security_and_privacy_title">"Segurança e privacidade"</string>
 </resources>

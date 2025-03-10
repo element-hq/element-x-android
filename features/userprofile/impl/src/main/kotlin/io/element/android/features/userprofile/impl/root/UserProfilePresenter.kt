@@ -121,7 +121,11 @@ class UserProfilePresenter @AssistedInject constructor(
                 }
                 UserProfileEvents.StartDM -> {
                     coroutineScope.launch {
-                        startDMAction.execute(userId, startDmActionState)
+                        startDMAction.execute(
+                            matrixUser = userProfile ?: MatrixUser(userId),
+                            createIfDmDoesNotExist = startDmActionState.value is AsyncAction.Confirming,
+                            actionState = startDmActionState,
+                        )
                     }
                 }
                 UserProfileEvents.ClearStartDMState -> {

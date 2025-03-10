@@ -46,6 +46,7 @@ class RoomAliasResolverPresenter @AssistedInject constructor(
         fun handleEvents(event: RoomAliasResolverEvents) {
             when (event) {
                 RoomAliasResolverEvents.Retry -> coroutineScope.resolveAlias(resolveState)
+                RoomAliasResolverEvents.DismissError -> resolveState.value = AsyncData.Uninitialized
             }
         }
 
@@ -60,7 +61,7 @@ class RoomAliasResolverPresenter @AssistedInject constructor(
         suspend {
             matrixClient.resolveRoomAlias(roomAlias)
                 .getOrThrow()
-                .getOrElse { error("Failed to resolve room alias $roomAlias") }
+                .getOrElse { throw RoomAliasResolverFailures.UnknownAlias }
         }.runCatchingUpdatingState(resolveState)
     }
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktiviteler"</string>
+  <string name="emoji_picker_category_flags">"Bayraklar"</string>
+  <string name="emoji_picker_category_foods">"Yiyecek ve İçecek"</string>
+  <string name="emoji_picker_category_nature">"Hayvanlar ve Doğa"</string>
+  <string name="emoji_picker_category_objects">"Nesneler"</string>
+  <string name="emoji_picker_category_people">"İfadeler ve İnsanlar"</string>
+  <string name="emoji_picker_category_places">"Seyahat ve Yerler"</string>
+  <string name="emoji_picker_category_symbols">"Simgeler"</string>
+  <string name="screen_report_content_block_user">"Kullanıcıyı engelle"</string>
+  <string name="screen_report_content_block_user_hint">"Bu kullanıcıdan gelen mevcut ve gelecekteki tüm mesajları gizlemek isteyip istemediğinizi işaretleyin"</string>
+  <string name="screen_report_content_explanation">"Bu mesaj ana sunucunuzun yöneticisine bildirilecektir. Şifrelenmiş mesajları okuyamayacaklardır."</string>
+  <string name="screen_report_content_hint">"Bu içeriğin bildirilme nedeni"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Fotoğraf çek"</string>
+  <string name="screen_room_attachment_source_camera_video">"Video kaydet"</string>
+  <string name="screen_room_attachment_source_files">"Ek"</string>
+  <string name="screen_room_attachment_source_gallery">"Fotoğraf ve Video Kütüphanesi"</string>
+  <string name="screen_room_attachment_source_location">"Konum"</string>
+  <string name="screen_room_attachment_source_poll">"Anket"</string>
+  <string name="screen_room_attachment_text_formatting">"Metin Biçimlendirme"</string>
+  <string name="screen_room_encrypted_history_banner">"Mesaj geçmişi şu anda kullanılamıyor."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Mesaj geçmişi bu odada kullanılamıyor. Mesaj geçmişinizi görmek için bu cihazı doğrulayın."</string>
+  <string name="screen_room_invite_again_alert_message">"Onları geri davet etmek ister misin?"</string>
+  <string name="screen_room_invite_again_alert_title">"Bu sohbette yalnızsın"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Tüm odaya bildir"</string>
+  <string name="screen_room_mentions_at_room_title">"Herkes"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Tekrar gönder"</string>
+  <string name="screen_room_retry_send_menu_title">"Mesajınız gönderilemedi"</string>
+  <string name="screen_room_timeline_add_reaction">"Emoji ekle"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Bu, %1$s odasının başlangıcıdır."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Bu konuşmanın başlangıcıdır."</string>
+  <string name="screen_room_timeline_legacy_call">"Desteklenmeyen çağrı. Arayanın yeni Element X uygulamasını kullanıp kullanamayacağını sorun."</string>
+  <string name="screen_room_timeline_less_reactions">"Daha az göster"</string>
+  <string name="screen_room_timeline_message_copied">"Mesaj kopyalandı"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Bu odada gönderi yapma izniniz yok"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Daha az göster"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Daha fazla göster"</string>
+  <string name="screen_room_timeline_read_marker_title">"Yeni"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d oda değişikliği"</item>
+    <item quantity="other">"%1$d oda değişikliği"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s ve %3$d diğer"</item>
+    <item quantity="other">"%1$s, %2$s ve %3$d diğer"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s yazıyor"</item>
+    <item quantity="other">"%1$s yazıyor"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s ve %2$s"</string>
+</resources>

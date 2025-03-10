@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +51,7 @@ internal fun UserRow(
                 text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.colors.textPrimary,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
             // Id
@@ -60,7 +59,7 @@ internal fun UserRow(
                 subtext?.let {
                     Text(
                         text = subtext,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = ElementTheme.colors.textSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = ElementTheme.typography.fontBodySmRegular,

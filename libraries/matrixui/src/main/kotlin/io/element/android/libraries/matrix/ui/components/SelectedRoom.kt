@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
@@ -65,21 +66,21 @@ fun SelectedRoom(
             )
         }
         Surface(
-            color = MaterialTheme.colorScheme.primary,
+            color = ElementTheme.colors.iconPrimary,
             modifier = Modifier
-                    .clip(CircleShape)
-                    .size(20.dp)
-                    .align(Alignment.TopEnd)
-                    .clickable(
-                            indication = ripple(),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = { onRemoveRoom(roomInfo) }
-                    ),
+                .clip(CircleShape)
+                .size(20.dp)
+                .align(Alignment.TopEnd)
+                .clickable(
+                    indication = ripple(),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = { onRemoveRoom(roomInfo) }
+                ),
         ) {
             Icon(
                 imageVector = CompoundIcons.Close(),
                 contentDescription = stringResource(id = CommonStrings.action_remove),
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = ElementTheme.colors.iconOnSolidPrimary,
                 modifier = Modifier.padding(2.dp)
             )
         }

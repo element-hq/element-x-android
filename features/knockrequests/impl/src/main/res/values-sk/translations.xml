@@ -24,7 +24,7 @@
   <string name="screen_knock_requests_list_empty_state_description">"Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Žiadna čakajúca žiadosť o pripojenie"</string>
   <string name="screen_knock_requests_list_initial_loading_title">"Načítavajú sa žiadosti o pripojenie…"</string>
-  <string name="screen_knock_requests_list_title">"Žiadosti o pripojenie"</string>
+  <string name="screen_knock_requests_list_title">"Žiadosti o vstup"</string>
   <plurals name="screen_room_multiple_knock_requests_title">
     <item quantity="one">"%1$s +%2$d ďalší chcú vstúpiť do tejto miestnosti"</item>
     <item quantity="few">"%1$s +%2$d ďalší chcú vstúpiť do tejto miestnosti"</item>

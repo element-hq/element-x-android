@@ -8,6 +8,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.features.createroom.impl.userlist.aRecentDirectRoomList
 import io.element.android.features.createroom.impl.userlist.aUserListState
@@ -49,6 +50,12 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                     recentDirectRooms = aRecentDirectRoomList()
                 )
             ),
+            aCreateRoomRootState(
+                startDmAction = ConfirmingStartDmWithMatrixUser(aMatrixUser()),
+            ),
+            aCreateRoomRootState(
+                isRoomDirectorySearchEnabled = true,
+            ),
         )
 }
 
@@ -56,11 +63,13 @@ fun aCreateRoomRootState(
     applicationName: String = "Element X Preview",
     userListState: UserListState = aUserListState(),
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    isRoomDirectorySearchEnabled: Boolean = false,
     eventSink: (CreateRoomRootEvents) -> Unit = {},
 ) = CreateRoomRootState(
     isDebugBuild = false,
     applicationName = applicationName,
     userListState = userListState,
     startDmAction = startDmAction,
+    isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
     eventSink = eventSink,
 )

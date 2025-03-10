@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ano, zrušit"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Opravdu chcete zrušit svou žádost o vstup do této místnosti?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Zrušit žádost o vstup"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ano, odmítnout a zablokovat"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Opravdu chcete odmítnout pozvánku do této místnosti? Tím také zabráníte tomu, aby vás %1$s kontaktoval(a) nebo pozval(a) do místností."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Odmítnout pozvání a zablokovat"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Odmítnout a zablokovat"</string>
   <string name="screen_join_room_fail_message">"Vstup do místnosti se nezdařil."</string>
   <string name="screen_join_room_fail_reason">"Tato místnost je buď určena pouze pro zvané, nebo do ní může být omezen přístup na úrovni prostoru."</string>
   <string name="screen_join_room_forget_action">"Zapomenout na tuto místnost"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Zpráva (nepovinné)"</string>
   <string name="screen_join_room_knock_sent_description">"Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti."</string>
   <string name="screen_join_room_knock_sent_title">"Žádost o vstup odeslána"</string>
+  <string name="screen_join_room_loading_alert_message">"Náhled místnosti se nám nepodařilo zobrazit. To může být způsobeno problémy se sítí nebo serverem."</string>
+  <string name="screen_join_room_loading_alert_title">"Náhled této místnosti jsme nemohli zobrazit"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s zatím nepodporuje prostory. Prostory můžete používat na webu."</string>
   <string name="screen_join_room_space_not_supported_title">"Prostory zatím nejsou podporovány"</string>
   <string name="screen_join_room_subtitle_knock">"Klikněte na tlačítko níže a správce místnosti bude informován. Po schválení se budete moci připojit ke konverzaci."</string>

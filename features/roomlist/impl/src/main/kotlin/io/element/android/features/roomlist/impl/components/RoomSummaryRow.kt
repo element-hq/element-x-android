@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -213,7 +212,7 @@ private fun NameAndTimestampRow(
             style = ElementTheme.typography.fontBodyLgMedium,
             text = name ?: stringResource(id = CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = MaterialTheme.roomListRoomName(),
+            color = ElementTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -224,7 +223,7 @@ private fun NameAndTimestampRow(
             color = if (isHighlighted) {
                 ElementTheme.colors.unreadIndicator
             } else {
-                MaterialTheme.roomListRoomMessageDate()
+                ElementTheme.roomListRoomMessageDate()
             },
         )
     }
@@ -249,7 +248,7 @@ private fun InviteSubtitle(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.roomListRoomMessage(),
+            color = ElementTheme.roomListRoomMessage(),
             modifier = modifier,
         )
     }
@@ -270,7 +269,7 @@ private fun LastMessageAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             text = attributedLastMessage,
-            color = MaterialTheme.roomListRoomMessage(),
+            color = ElementTheme.roomListRoomMessage(),
             style = ElementTheme.typography.fontBodyMdRegular,
             minLines = 2,
             maxLines = 2,
@@ -317,7 +316,7 @@ private fun InviteNameAndIndicatorRow(
             style = ElementTheme.typography.fontBodyLgMedium,
             text = name ?: stringResource(id = CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = MaterialTheme.roomListRoomName(),
+            color = ElementTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

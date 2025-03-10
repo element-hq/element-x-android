@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_migrate_to_native_sliding_sync_action">"Вийти та оновити"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше."</string>
-  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш домашній сервер більше не підтримує старий протокол. Будь ласка, вийдіть і увійдіть знову, щоб продовжити використання програми."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="banner_set_up_recovery_content">"Відновіть свою криптографічну ідентичність та історію повідомлень за допомогою ключа відновлення, якщо ви втратили всі наявні пристрої."</string>
   <string name="banner_set_up_recovery_submit">"Налаштувати відновлення"</string>
   <string name="banner_set_up_recovery_title">"Налаштуйте відновлення для захисту свого облікового запису"</string>

@@ -16,8 +16,6 @@
   <string name="screen_media_details_filename">"Nome del file"</string>
   <string name="screen_media_details_no_more_files_to_show">"Nessun altro file da mostrare"</string>
   <string name="screen_media_details_no_more_media_to_show">"Non ci sono più contenuti multimediali da mostrare"</string>
-  <string name="screen_media_details_redact_confirmation_message">"Questo file verrà rimosso dalla stanza e i membri non ne avranno accesso."</string>
-  <string name="screen_media_details_redact_confirmation_title">"Eliminare il file?"</string>
   <string name="screen_media_details_uploaded_by">"Caricato da"</string>
   <string name="screen_media_details_uploaded_on">"Caricato il"</string>
 </resources>

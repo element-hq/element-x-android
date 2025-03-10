@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.matrix.api
 
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -23,10 +25,9 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
-import io.element.android.libraries.matrix.api.room.PendingRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
-import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -53,7 +54,7 @@ interface MatrixClient : Closeable {
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun getPendingRoom(roomId: RoomId): PendingRoom?
+    suspend fun getPendingRoom(roomId: RoomId): RoomPreview?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
@@ -83,12 +84,11 @@ interface MatrixClient : Closeable {
 
     /**
      * Logout the user.
-     * Returns an optional URL. When the URL is there, it should be presented to the user after logout for
-     * Relying Party (RP) initiated logout on their account page.
+     *
      * @param userInitiated if false, the logout came from the HS, no request will be made and the session entry will be kept in the store.
      * @param ignoreSdkError if true, the SDK will ignore any error and delete the session data anyway.
      */
-    suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String?
+    suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean)
 
     /**
      * Retrieve the user profile, will also eventually emit a new value to [userProfile].
@@ -144,7 +144,11 @@ interface MatrixClient : Closeable {
      * Execute generic GET requests through the SDKs internal HTTP client.
      */
     suspend fun getUrl(url: String): Result<String>
-    suspend fun getRoomPreviewInfo(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreviewInfo>
+
+    /**
+     * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
+     */
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
 
     /**
      * Returns the currently used sliding sync version.
@@ -172,11 +176,12 @@ fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<Ma
 }
 
 /**
- * Returns a room alias from a room alias name.
+ * Returns a room alias from a room alias name, or null if the name is not valid.
  * @param name the room alias name ie. the local part of the room alias.
  */
-fun MatrixClient.roomAliasFromName(name: String): Result<RoomAlias> {
-    return runCatching {
-        RoomAlias("#$name:${userIdServerName()}")
-    }
+fun MatrixClient.roomAliasFromName(name: String): RoomAlias? {
+    return name.takeIf { it.isNotEmpty() }
+        ?.let { "#$it:${userIdServerName()}" }
+        ?.takeIf { MatrixPatterns.isRoomAlias(it) }
+        ?.let { tryOrNull { RoomAlias(it) } }
 }

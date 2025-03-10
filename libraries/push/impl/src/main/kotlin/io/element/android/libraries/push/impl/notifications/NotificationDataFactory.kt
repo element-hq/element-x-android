@@ -12,7 +12,7 @@ import android.graphics.Typeface
 import android.text.style.StyleSpan
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId

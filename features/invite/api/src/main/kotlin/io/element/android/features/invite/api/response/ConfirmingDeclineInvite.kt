@@ -11,4 +11,5 @@ import io.element.android.libraries.architecture.AsyncAction
 
 data class ConfirmingDeclineInvite(
     val inviteData: InviteData,
+    val blockUser: Boolean,
 ) : AsyncAction.Confirming

@@ -21,8 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -100,17 +98,17 @@ fun LoginPasswordView(
 
         Column(
             modifier = Modifier
-                    .fillMaxSize()
-                    .imePadding()
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .verticalScroll(state = scrollState)
-                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
+                .fillMaxSize()
+                .imePadding()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .verticalScroll(state = scrollState)
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
         ) {
             // Title
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                iconStyle = BigIcon.Style.Default(Icons.Filled.AccountCircle),
+                iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = R.string.screen_account_provider_signin_title,
                     state.accountProvider.title
@@ -139,8 +137,8 @@ fun LoginPasswordView(
                         onClick = ::submit,
                         enabled = state.submitEnabled || isLoading,
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(TestTags.loginContinue)
+                            .fillMaxWidth()
+                            .testTag(TestTags.loginContinue)
                     )
                     Spacer(modifier = Modifier.height(48.dp))
                 }

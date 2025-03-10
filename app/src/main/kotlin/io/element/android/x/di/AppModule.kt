@@ -73,23 +73,26 @@ object AppModule {
         @ApplicationContext context: Context,
         buildType: BuildType,
         enterpriseService: EnterpriseService,
-    ) = BuildMeta(
-        isDebuggable = BuildConfig.DEBUG,
-        buildType = buildType,
-        applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name),
-        productionApplicationName = ApplicationConfig.PRODUCTION_APPLICATION_NAME,
-        desktopApplicationName = ApplicationConfig.DESKTOP_APPLICATION_NAME,
-        applicationId = BuildConfig.APPLICATION_ID,
-        isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
-        // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
-        lowPrivacyLoggingEnabled = false,
-        versionName = BuildConfig.VERSION_NAME,
-        versionCode = context.getVersionCodeFromManifest(),
-        gitRevision = BuildConfig.GIT_REVISION,
-        gitBranchName = BuildConfig.GIT_BRANCH_NAME,
-        flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
-        flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-    )
+    ): BuildMeta {
+        val applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name)
+        return BuildMeta(
+            isDebuggable = BuildConfig.DEBUG,
+            buildType = buildType,
+            applicationName = applicationName,
+            productionApplicationName = if (enterpriseService.isEnterpriseBuild) applicationName else ApplicationConfig.PRODUCTION_APPLICATION_NAME,
+            desktopApplicationName = if (enterpriseService.isEnterpriseBuild) applicationName else ApplicationConfig.DESKTOP_APPLICATION_NAME,
+            applicationId = BuildConfig.APPLICATION_ID,
+            isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
+            // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
+            lowPrivacyLoggingEnabled = false,
+            versionName = BuildConfig.VERSION_NAME,
+            versionCode = context.getVersionCodeFromManifest(),
+            gitRevision = BuildConfig.GIT_REVISION,
+            gitBranchName = BuildConfig.GIT_BRANCH_NAME,
+            flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+            flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+        )
+    }
 
     @Provides
     @SingleIn(AppScope::class)

@@ -7,9 +7,9 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import coil.ImageLoader
-import coil.fetch.Fetcher
-import coil.request.Options
+import coil3.ImageLoader
+import coil3.fetch.Fetcher
+import coil3.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
 
@@ -24,7 +24,6 @@ internal class AvatarDataFetcherFactory(
         return CoilMediaFetcher(
             mediaLoader = client.mediaLoader,
             mediaData = data.toMediaRequestData(),
-            options = options
         )
     }
 }

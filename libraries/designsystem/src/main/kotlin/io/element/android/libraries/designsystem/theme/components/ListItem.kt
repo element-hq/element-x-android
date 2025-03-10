@@ -193,14 +193,14 @@ sealed interface ListItemStyle {
 
     @Composable
     fun leadingIconColor() = when (this) {
-        Default -> ListItemDefaultColors.icon
+        Default -> ListItemDefaultColors.leadingIcon
         Primary -> ElementTheme.colors.iconPrimary
         Destructive -> ElementTheme.colors.iconCriticalPrimary
     }
 
     @Composable
     fun trailingIconColor() = when (this) {
-        Default -> ListItemDefaultColors.icon
+        Default -> ListItemDefaultColors.trailingIcon
         Primary -> ElementTheme.colors.iconPrimary
         Destructive -> ElementTheme.colors.iconCriticalPrimary
     }
@@ -210,15 +210,16 @@ object ListItemDefaultColors {
     val headline: Color @Composable get() = ElementTheme.colors.textPrimary
     val headlineDisabled: Color @Composable get() = ElementTheme.colors.textDisabled
     val supportingText: Color @Composable get() = ElementTheme.materialColors.onSurfaceVariant
-    val icon: Color @Composable get() = ElementTheme.colors.iconTertiary
+    val leadingIcon: Color @Composable get() = ElementTheme.colors.iconSecondary
+    val trailingIcon: Color @Composable get() = ElementTheme.colors.iconPrimary
     val iconDisabled: Color @Composable get() = ElementTheme.colors.iconDisabled
 
     val colors: ListItemColors
         @Composable get() = ListItemDefaults.colors(
             headlineColor = headline,
             supportingColor = supportingText,
-            leadingIconColor = icon,
-            trailingIconColor = icon,
+            leadingIconColor = leadingIcon,
+            trailingIconColor = trailingIcon,
             disabledHeadlineColor = headlineDisabled,
             disabledLeadingIconColor = iconDisabled,
             disabledTrailingIconColor = iconDisabled,

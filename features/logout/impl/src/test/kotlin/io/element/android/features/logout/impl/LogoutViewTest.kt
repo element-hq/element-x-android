@@ -15,11 +15,9 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
-import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressTag
 import org.junit.Rule
@@ -97,21 +95,6 @@ class LogoutViewTest {
     }
 
     @Test
-    fun `success logout invoke onSuccessLogout`() {
-        val data = "data"
-        val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        ensureCalledOnceWithParam<String?>(data) { callback ->
-            rule.setLogoutView(
-                aLogoutState(
-                    logoutAction = AsyncAction.Success(data),
-                    eventSink = eventsRecorder
-                ),
-                onSuccessLogout = callback,
-            )
-        }
-    }
-
-    @Test
     fun `last session setting button invoke onChangeRecoveryKeyClicked`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
@@ -131,14 +114,12 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogou
     state: LogoutState,
     onChangeRecoveryKeyClick: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
-    onSuccessLogout: (logoutUrlResult: String?) -> Unit = EnsureNeverCalledWithParam()
 ) {
     setContent {
         LogoutView(
             state = state,
             onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
             onBackClick = onBackClick,
-            onSuccessLogout = onSuccessLogout,
         )
     }
 }

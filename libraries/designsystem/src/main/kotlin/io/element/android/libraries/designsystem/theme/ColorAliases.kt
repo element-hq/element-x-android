@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.designsystem.theme
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.annotations.CoreColorToken
@@ -24,13 +23,13 @@ import kotlinx.collections.immutable.persistentMapOf
  * Room list.
  */
 @Composable
-fun MaterialTheme.roomListRoomName() = colorScheme.primary
+fun ElementTheme.roomListRoomName() = colors.textPrimary
 
 @Composable
-fun MaterialTheme.roomListRoomMessage() = colorScheme.secondary
+fun ElementTheme.roomListRoomMessage() = colors.textSecondary
 
 @Composable
-fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
+fun ElementTheme.roomListRoomMessageDate() = colors.textSecondary
 
 val SemanticColors.unreadIndicator
     get() = iconAccentTertiary
@@ -181,9 +180,9 @@ internal fun ColorAliasesPreview() = ElementPreview {
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
         colors = persistentMapOf(
-            "roomListRoomName" to MaterialTheme.roomListRoomName(),
-            "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
-            "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
+            "roomListRoomName" to ElementTheme.roomListRoomName(),
+            "roomListRoomMessage" to ElementTheme.roomListRoomMessage(),
+            "roomListRoomMessageDate" to ElementTheme.roomListRoomMessageDate(),
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,

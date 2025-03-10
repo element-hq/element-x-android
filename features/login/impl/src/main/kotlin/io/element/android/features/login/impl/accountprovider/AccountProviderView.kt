@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,7 +67,7 @@ fun AccountProviderView(
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Medium,
                         imageVector = CompoundIcons.Search(),
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = ElementTheme.colors.iconPrimary,
                     )
                 }
                 Text(
@@ -77,7 +76,7 @@ fun AccountProviderView(
                         .weight(1f),
                     text = item.title,
                     style = ElementTheme.typography.fontBodyLgMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = ElementTheme.colors.textPrimary,
                 )
                 if (item.isPublic) {
                     Icon(
@@ -96,7 +95,7 @@ fun AccountProviderView(
                         .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
                     text = item.subtitle,
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = ElementTheme.colors.textSecondary,
                 )
             }
         }

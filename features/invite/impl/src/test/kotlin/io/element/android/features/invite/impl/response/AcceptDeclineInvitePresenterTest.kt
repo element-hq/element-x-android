@@ -17,12 +17,14 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakePendingRoom
+import io.element.android.libraries.matrix.test.room.FakeRoomPreview
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -61,7 +63,7 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
                 state.eventSink(
                     InternalAcceptDeclineInviteEvents.CancelDeclineInvite
                 )
@@ -77,9 +79,11 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteFailure = lambdaRecorder { ->
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
-        val client = FakeMatrixClient().apply {
-            getPendingRoomResults[A_ROOM_ID] = FakePendingRoom(declineInviteResult = declineInviteFailure)
-        }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
+            }
+        )
         val presenter = createAcceptDeclineInvitePresenter(client = client)
         presenter.test {
             val inviteData = anInviteData()
@@ -89,9 +93,9 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -120,9 +124,11 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteSuccess = lambdaRecorder { ->
             Result.success(Unit)
         }
-        val client = FakeMatrixClient().apply {
-            getPendingRoomResults[A_ROOM_ID] = FakePendingRoom(declineInviteResult = declineInviteSuccess)
-        }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
+            }
+        )
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
             notificationCleaner = fakeNotificationCleaner,
@@ -135,9 +141,9 @@ class AcceptDeclineInvitePresenterTest {
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId)
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -150,6 +156,80 @@ class AcceptDeclineInvitePresenterTest {
         clearMembershipNotificationForRoomLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value(A_ROOM_ID))
+    }
+
+    @Test
+    fun `present - declining invite with block success flow`() = runTest {
+        val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ ->
+            Result.success(Unit)
+        }
+        val fakeNotificationCleaner = FakeNotificationCleaner(
+            clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda
+        )
+        val declineInviteSuccess = lambdaRecorder { -> Result.success(Unit) }
+        val ignoreUserSuccess = lambdaRecorder { _: UserId -> Result.success(Unit) }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
+            },
+            ignoreUserResult = ignoreUserSuccess
+        )
+        val presenter = createAcceptDeclineInvitePresenter(
+            client = client,
+            notificationCleaner = fakeNotificationCleaner,
+        )
+        presenter.test {
+            val inviteData = anInviteData()
+            awaitItem().also { state ->
+                state.eventSink(
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = true)
+                )
+            }
+            awaitItem().also { state ->
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, true))
+                state.eventSink(
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                )
+            }
+            assertThat(awaitItem().declineAction.isLoading()).isTrue()
+            awaitItem().also { state ->
+                assertThat(state.declineAction).isInstanceOf(AsyncAction.Success::class.java)
+            }
+            cancelAndConsumeRemainingEvents()
+        }
+        declineInviteSuccess.assertions().isCalledOnce()
+        ignoreUserSuccess.assertions().isCalledOnce().with(value(A_USER_ID))
+        clearMembershipNotificationForRoomLambda.assertions()
+            .isCalledOnce()
+            .with(value(A_SESSION_ID), value(A_ROOM_ID))
+    }
+
+    @Test
+    fun `present - declining invite with block error flow`() = runTest {
+        val declineInviteFailure = lambdaRecorder { ->
+            Result.failure<Unit>(RuntimeException("Failed to leave room"))
+        }
+        val client = FakeMatrixClient(
+            getRoomPreviewResult = { _, _ ->
+                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
+            }
+        )
+        val presenter = createAcceptDeclineInvitePresenter(client = client)
+        presenter.test {
+            val inviteData = anInviteData()
+            awaitItem().also { state ->
+                state.eventSink(
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = true)
+                )
+            }
+            awaitItem().also { state ->
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, true))
+                state.eventSink(
+                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                )
+            }
+            assertThat(awaitItem().declineAction.isLoading()).isTrue()
+        }
     }
 
     @Test
@@ -233,12 +313,14 @@ class AcceptDeclineInvitePresenterTest {
     private fun anInviteData(
         roomId: RoomId = A_ROOM_ID,
         name: String = A_ROOM_NAME,
-        isDm: Boolean = false
+        isDm: Boolean = false,
+        senderId: UserId = A_USER_ID,
     ): InviteData {
         return InviteData(
             roomId = roomId,
             roomName = name,
-            isDm = isDm
+            isDm = isDm,
+            senderId = senderId,
         )
     }
 

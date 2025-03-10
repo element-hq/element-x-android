@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +24,7 @@ fun TimelineItemStateView(
 ) {
     Text(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.secondary,
+        color = ElementTheme.colors.textSecondary,
         style = ElementTheme.typography.fontBodyMdRegular,
         text = content.body,
         textAlign = TextAlign.Center,

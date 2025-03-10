@@ -127,6 +127,7 @@ fun aRoomMember(
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.USER,
+    membershipChangeReason: String? = null,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -137,6 +138,7 @@ fun aRoomMember(
     normalizedPowerLevel = normalizedPowerLevel,
     isIgnored = isIgnored,
     role = role,
+    membershipChangeReason = membershipChangeReason,
 )
 
 fun aRoomMemberList() = persistentListOf(

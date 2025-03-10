@@ -9,13 +9,13 @@ package io.element.android.libraries.designsystem.background
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun LightGradientBackground(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    backgroundColor: Color = ElementTheme.colors.bgCanvasDefault,
     firstColor: Color = Color(0x1E0DBD8B),
     secondColor: Color = Color(0x001273EB),
     ratio: Float = 642 / 775f,

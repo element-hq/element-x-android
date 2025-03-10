@@ -54,6 +54,7 @@ class DefaultElementCallEntryPointTest {
             avatarUrl = "avatarUrl",
             timestamp = 0,
             notificationChannelId = "notificationChannelId",
+            textContent = "textContent",
         )
 
         registerIncomingCallLambda.assertions().isCalledOnce()

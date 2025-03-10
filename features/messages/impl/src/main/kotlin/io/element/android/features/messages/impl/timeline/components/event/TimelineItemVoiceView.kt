@@ -91,7 +91,7 @@ fun TimelineItemVoiceView(
         Spacer(Modifier.width(8.dp))
         Text(
             text = state.time,
-            color = ElementTheme.materialColors.secondary,
+            color = ElementTheme.colors.textSecondary,
             style = ElementTheme.typography.fontBodySmMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

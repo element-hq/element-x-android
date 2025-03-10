@@ -139,7 +139,7 @@ class JoinRoomViewTest {
     }
 
     @Test
-    fun `clicking on Accept invitation IsInvited room emits the expected Event`() {
+    fun `clicking on Accept when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
@@ -152,7 +152,7 @@ class JoinRoomViewTest {
     }
 
     @Test
-    fun `clicking on Decline invitation on IsInvited room emits the expected Event`() {
+    fun `clicking on Decline when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
@@ -161,7 +161,20 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite)
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(false))
+    }
+
+    @Test
+    fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(true))
     }
 
     @Test
@@ -178,7 +191,7 @@ class JoinRoomViewTest {
     }
 
     @Test
-    fun `clicking on Go back when a space is displayed invokes the expected callback`() {
+    fun `clicking on ok when a space is displayed invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
         ensureCalledOnce {
             rule.setJoinRoomView(
@@ -188,8 +201,37 @@ class JoinRoomViewTest {
                 ),
                 onBackClick = it
             )
-            rule.clickOn(CommonStrings.action_go_back)
+            rule.clickOn(CommonStrings.action_ok)
         }
+    }
+
+    @Test
+    fun `clicking on ok when user is unauthorized the expected callback`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        ensureCalledOnce {
+            rule.setJoinRoomView(
+                aJoinRoomState(
+                    contentState = aLoadedContentState(),
+                    joinAction = AsyncAction.Failure(JoinRoomFailures.UnauthorizedJoin),
+                    eventSink = eventsRecorder,
+                ),
+                onBackClick = it
+            )
+            rule.clickOn(CommonStrings.action_ok)
+        }
+    }
+
+    @Test
+    fun `clicking on forget when user is banned invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(null, null)),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(R.string.screen_join_room_forget_action)
+        eventsRecorder.assertSingle(JoinRoomEvents.ForgetRoom)
     }
 }
 
@@ -199,6 +241,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
     onJoinSuccess: () -> Unit = EnsureNeverCalled(),
     onKnockSuccess: () -> Unit = EnsureNeverCalled(),
     onCancelKnockSuccess: () -> Unit = EnsureNeverCalled(),
+    onForgetSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         JoinRoomView(
@@ -206,7 +249,8 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
             onBackClick = onBackClick,
             onJoinSuccess = onJoinSuccess,
             onKnockSuccess = onKnockSuccess,
-            onCancelKnockSuccess = onCancelKnockSuccess
+            onForgetSuccess = onForgetSuccess,
+            onCancelKnockSuccess = onCancelKnockSuccess,
         )
     }
 }

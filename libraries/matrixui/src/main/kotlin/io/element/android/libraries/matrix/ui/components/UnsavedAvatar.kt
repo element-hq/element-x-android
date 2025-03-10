@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -67,7 +67,7 @@ fun UnsavedAvatar(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(40.dp),
-                tint = MaterialTheme.colorScheme.secondary,
+                tint = ElementTheme.colors.iconSecondary,
             )
         }
     }

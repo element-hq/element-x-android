@@ -129,6 +129,8 @@
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>
   <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd väldid hilisemat sundkorras uuendust."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Saadaval on uuendus"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
@@ -193,6 +195,7 @@ Põhjus: %1$s."</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
   <string name="common_mute">"Summutatud"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
   <string name="common_offline">"Võrgust väljas"</string>
@@ -270,6 +273,7 @@ Põhjus: %1$s."</string>
   <string name="common_verified">"Verifitseeritud"</string>
   <string name="common_verify_device">"Verifitseeri seade"</string>
   <string name="common_verify_identity">"Verifitseeri võrguidentiteet"</string>
+  <string name="common_verify_user">"Verifitseeri kasutaja"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
@@ -278,6 +282,7 @@ Põhjus: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet tundub olema muutunud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet tundub olema muutunud. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s kasutaja verifitseeritud identiteet on muutunud."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on muutunud. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Võta verifitseerimine tagasi"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
@@ -296,6 +301,7 @@ Põhjus: %1$s."</string>
   <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
   <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
+  <string name="error_network_or_server_issue">"See võib olla põhjustatud võrgu- või serverivigadest."</string>
   <string name="error_room_address_already_exists">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
   <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
@@ -333,12 +339,13 @@ Põhjus: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
+  <string name="screen_room_event_pill">"Sõnum jututoas %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laadime sõnumit…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
-  <string name="screen_roomlist_knock_event_sent_description">"Liitumispäring on saadetud"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Liitumispalve on saadetud"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
   <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>

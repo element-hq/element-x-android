@@ -31,6 +31,7 @@
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_user_menu">"Menu użytkownika"</string>
+  <string name="a11y_view_details">"Wyświetl szczegóły"</string>
   <string name="a11y_voice_message_record">"Nagraj wiadomość głosową."</string>
   <string name="a11y_voice_message_stop_recording">"Zatrzymaj nagrywanie"</string>
   <string name="action_accept">"Akceptuj"</string>
@@ -130,6 +131,8 @@
   <string name="action_view_source">"Wyświetl źródło"</string>
   <string name="action_yes">"Tak"</string>
   <string name="action_yes_try_again">"Tak, spróbuj ponownie"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Dostępna aktualizacja"</string>
   <string name="common_about">"O programie"</string>
   <string name="common_acceptable_use_policy">"Polityka użytkowania"</string>
   <string name="common_adding_caption">"Dodawanie opisu"</string>
@@ -151,6 +154,7 @@
   <string name="common_device_id">"ID urządzenia"</string>
   <string name="common_direct_chat">"Czat prywatny"</string>
   <string name="common_do_not_show_this_again">"Nie pokazuj ponownie"</string>
+  <string name="common_download_failed">"Błąd pobierania"</string>
   <string name="common_downloading">"Pobieram"</string>
   <string name="common_edited_suffix">"(edytowane)"</string>
   <string name="common_editing">"Edytowanie"</string>
@@ -168,6 +172,8 @@ Powód: %1$s."</string>
   <string name="common_favourite">"Ulubione"</string>
   <string name="common_favourited">"Ulubione"</string>
   <string name="common_file">"Plik"</string>
+  <string name="common_file_deleted">"Plik usunięty"</string>
+  <string name="common_file_saved">"Plik zapisany"</string>
   <string name="common_file_saved_on_disk_android">"Plik zapisany do folderu Pobrane"</string>
   <string name="common_forward_message">"Przekaż wiadomość"</string>
   <string name="common_frequently_used">"Często używane"</string>
@@ -180,6 +186,7 @@ Powód: %1$s."</string>
   <string name="common_light">"Jasny"</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
   <string name="common_loading">"Ładowanie…"</string>
+  <string name="common_loading_more">"Ładuję więcej…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d członek"</item>
     <item quantity="few">"%1$d członki"</item>
@@ -191,6 +198,7 @@ Powód: %1$s."</string>
   <string name="common_message_removed">"Wiadomość usunięta"</string>
   <string name="common_modern">"Nowoczesny"</string>
   <string name="common_mute">"Wycisz"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Brak wyników"</string>
   <string name="common_no_room_name">"Brak nazwy pokoju"</string>
   <string name="common_offline">"Offline"</string>
@@ -227,7 +235,7 @@ Powód: %1$s."</string>
   <string name="common_saved_changes">"Zapisano zmiany"</string>
   <string name="common_saving">"Zapisywanie"</string>
   <string name="common_screen_lock">"Blokada ekranu"</string>
-  <string name="common_search_for_someone">"Wyszukaj kogoś"</string>
+  <string name="common_search_for_someone">"Szukaj osób"</string>
   <string name="common_search_results">"Wyniki wyszukiwania"</string>
   <string name="common_security">"Bezpieczeństwo"</string>
   <string name="common_seen_by">"Wyświetlone przez"</string>
@@ -269,6 +277,7 @@ Powód: %1$s."</string>
   <string name="common_verified">"Zweryfikowano"</string>
   <string name="common_verify_device">"Weryfikuj urządzenie"</string>
   <string name="common_verify_identity">"Zweryfikuj tożsamość"</string>
+  <string name="common_verify_user">"Zweryfikuj użytkownika"</string>
   <string name="common_video">"Film"</string>
   <string name="common_voice_message">"Wiadomość głosowa"</string>
   <string name="common_waiting">"Oczekiwanie…"</string>
@@ -277,6 +286,8 @@ Powód: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Tożsamość %1$s mogła ulec zmianie. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Wygląda na to, że tożsamość %1$s %2$s uległa zmianie. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Zweryfikowana tożsamość %1$s %2$s uległa zmianie.  %3$s"</string>
+  <string name="crypto_identity_change_withdraw_verification_action">"Wycofaj weryfikację"</string>
   <string name="dialog_title_confirmation">"Potwierdzenie"</string>
   <string name="dialog_title_error">"Błąd"</string>
   <string name="dialog_title_success">"Sukces"</string>
@@ -293,6 +304,7 @@ Powód: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s nie uzyskało uprawnienia do dostępu do twojej lokalizacji. Możesz włączyć dostęp w Ustawieniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nie ma uprawnień dostępu do Twojej lokalizacji. Włącz dostęp poniżej."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nie ma uprawnień dostępu do Twojego mikrofonu. Włącz dostęp, aby nagrać wiadomość głosową."</string>
+  <string name="error_network_or_server_issue">"Może to być spowodowane problemami z siecią lub serwerem."</string>
   <string name="error_room_address_already_exists">"Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju"</string>
   <string name="error_room_address_invalid_symbols">"Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Niektóre wiadomości nie zostały wysłane"</string>

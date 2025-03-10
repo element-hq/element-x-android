@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.messagecomposer.observeRoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
@@ -78,6 +79,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -154,7 +156,9 @@ class MessagesPresenter @AssistedInject constructor(
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
-
+        val roomMemberIdentityStateChanges by produceState(persistentListOf()) {
+            observeRoomMemberIdentityStateChange(room)
+        }
         LaunchedEffect(Unit) {
             // Remove the unread flag on entering but don't send read receipts
             // as those will be handled by the timeline.
@@ -212,6 +216,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomAvatar = roomAvatar,
             heroes = heroes,
             composerState = composerState,
+            roomMemberIdentityStateChanges = roomMemberIdentityStateChanges,
             userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
