@@ -13,6 +13,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.rageshake.api.reporter.BugReporter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.TracingService
@@ -38,4 +39,6 @@ interface AppBindings {
     fun analyticsService(): AnalyticsService
 
     fun enterpriseService(): EnterpriseService
+
+    fun buildMeta(): BuildMeta
 }

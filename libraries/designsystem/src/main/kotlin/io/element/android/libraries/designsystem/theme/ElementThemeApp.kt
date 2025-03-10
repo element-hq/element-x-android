@@ -9,16 +9,39 @@ package io.element.android.libraries.designsystem.theme
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+
+val LocalBuildMeta = staticCompositionLocalOf {
+    BuildMeta(
+        isDebuggable = true,
+        buildType = BuildType.DEBUG,
+        applicationName = "MyApp",
+        productionApplicationName = "MyAppProd",
+        desktopApplicationName = "MyAppDesktop",
+        applicationId = "AppId",
+        isEnterpriseBuild = false,
+        lowPrivacyLoggingEnabled = false,
+        versionName = "aVersion",
+        versionCode = 123,
+        gitRevision = "aRevision",
+        gitBranchName = "aBranch",
+        flavorDescription = "aFlavor",
+        flavorShortDescription = "aFlavorShort",
+    )
+}
 
 /**
  * Theme to use for all the regular screens of the application.
@@ -31,6 +54,7 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
     enterpriseService: EnterpriseService,
+    buildMeta: BuildMeta,
     content: @Composable () -> Unit,
 ) {
     val theme by remember {
@@ -48,10 +72,14 @@ fun ElementThemeApp(
     }
     val compoundLight = remember { enterpriseService.semanticColorsLight() }
     val compoundDark = remember { enterpriseService.semanticColorsDark() }
-    ElementTheme(
-        darkTheme = theme.isDark(),
-        content = content,
-        compoundLight = compoundLight,
-        compoundDark = compoundDark,
-    )
+    CompositionLocalProvider(
+        LocalBuildMeta provides buildMeta,
+    ) {
+        ElementTheme(
+            darkTheme = theme.isDark(),
+            content = content,
+            compoundLight = compoundLight,
+            compoundDark = compoundDark,
+        )
+    }
 }

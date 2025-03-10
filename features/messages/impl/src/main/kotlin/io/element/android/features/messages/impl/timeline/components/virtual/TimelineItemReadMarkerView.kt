@@ -37,13 +37,13 @@ internal fun TimelineItemReadMarkerView(
         Text(
             text = stringResource(id = R.string.screen_room_timeline_read_marker_title).uppercase(),
             style = ElementTheme.typography.fontBodySmMedium,
-            color = ElementTheme.colors.textSecondary,
+            color = ElementTheme.colors.textActionAccent,
         )
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 2.dp),
-            color = ElementTheme.colors.borderInteractivePrimary,
+            color = ElementTheme.colors.textActionAccent,
         )
     }
 }
