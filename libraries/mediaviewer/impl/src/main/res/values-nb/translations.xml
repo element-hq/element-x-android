@@ -6,7 +6,7 @@
   <string name="screen_media_browser_files_empty_state_subtitle">"Dokumenter, lydfiler og talemeldinger som lastes opp til dette rommet, vises her."</string>
   <string name="screen_media_browser_files_empty_state_title">"Ingen filer lastet opp ennå"</string>
   <string name="screen_media_browser_list_loading_files">"Laster inn filer…"</string>
-  <string name="screen_media_browser_list_loading_media">"Laster inn media…"</string>
+  <string name="screen_media_browser_list_loading_media">"Laster inn medier…"</string>
   <string name="screen_media_browser_list_mode_files">"Filer"</string>
   <string name="screen_media_browser_list_mode_media">"Mediefiler"</string>
   <string name="screen_media_browser_media_empty_state_subtitle">"Bilder og videoer som lastes opp til dette rommet, vises her."</string>
