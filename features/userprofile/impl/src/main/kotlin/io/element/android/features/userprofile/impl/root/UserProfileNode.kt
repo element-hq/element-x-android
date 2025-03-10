@@ -75,6 +75,7 @@ class UserProfileNode @AssistedInject constructor(
             onOpenDm = ::onStartDM,
             onStartCall = callback::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
+            onVerifyClick = callback::onVerifyUser,
         )
     }
 }

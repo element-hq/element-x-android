@@ -79,6 +79,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             onOpenDm = ::onStartDM,
             onStartCall = ::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
+            onVerifyClick = callback::onVerifyUser,
         )
     }
 }

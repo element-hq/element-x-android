@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -50,6 +51,7 @@ fun UserProfileView(
     onStartCall: (RoomId) -> Unit,
     goBack: () -> Unit,
     openAvatarPreview: (username: String, url: String) -> Unit,
+    onVerifyClick: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -82,7 +84,7 @@ fun UserProfileView(
             )
             Spacer(modifier = Modifier.height(26.dp))
             if (!state.isCurrentUser) {
-                VerifyUserSection(state)
+                VerifyUserSection(state, onVerifyClick = { onVerifyClick(state.userId) })
                 BlockUserSection(state)
                 BlockUserDialogs(state)
             }
@@ -116,14 +118,15 @@ fun UserProfileView(
 }
 
 @Composable
-private fun VerifyUserSection(state: UserProfileState) {
+private fun VerifyUserSection(
+    state: UserProfileState,
+    onVerifyClick: () -> Unit,
+) {
     if (state.isVerified.dataOrNull() == false) {
         ListItem(
-            headlineContent = { Text(stringResource(CommonStrings.common_verify_identity)) },
-            supportingContent = { Text(stringResource(R.string.screen_room_member_details_verify_button_subtitle)) },
+            headlineContent = { Text(stringResource(CommonStrings.common_verify_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-            enabled = false,
-            onClick = { },
+            onClick = onVerifyClick,
         )
     }
 }
@@ -139,6 +142,7 @@ internal fun UserProfileViewPreview(
         goBack = {},
         onOpenDm = {},
         onStartCall = {},
-        openAvatarPreview = { _, _ -> }
+        openAvatarPreview = { _, _ -> },
+        onVerifyClick = {},
     )
 }

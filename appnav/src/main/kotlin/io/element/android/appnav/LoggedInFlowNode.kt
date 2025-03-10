@@ -73,10 +73,13 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -84,6 +87,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
 import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -127,8 +131,18 @@ class LoggedInFlowNode @AssistedInject constructor(
     )
 
     private val verificationListener = object : SessionVerificationServiceListener {
-        override fun onIncomingSessionRequest(sessionVerificationRequestDetails: SessionVerificationRequestDetails) {
-            backstack.singleTop(NavTarget.IncomingVerificationRequest(sessionVerificationRequestDetails))
+        override fun onIncomingSessionRequest(verificationRequest: VerificationRequest.Incoming) {
+            // Without this launch the rendering and actual state of this Appyx node's children gets out of sync, resulting in a crash.
+            // This might be because this method is called back from Rust in a background thread.
+            MainScope().launch {
+                // Wait until the app is in foreground to display the incoming verification request
+                appNavigationStateService.appNavigationState.first { it.isInForeground }
+
+                // Wait for the UI to be ready
+                delay(500.milliseconds)
+
+                backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
+            }
         }
     }
 
@@ -218,7 +232,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
 
         @Parcelize
-        data class IncomingVerificationRequest(val data: SessionVerificationRequestDetails) : NavTarget
+        data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
