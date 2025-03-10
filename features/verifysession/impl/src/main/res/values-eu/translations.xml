@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Ezin duzu baieztatu?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Sortu berreskuratze-gako berria"</string>
+  <string name="screen_identity_confirmation_subtitle">"Egiaztatu gailua mezularitza segurua konfiguratzeko."</string>
+  <string name="screen_identity_confirmation_title">"Berretsi zure identitatea"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Erabili beste gailu bat"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Erabili berreskuratze-gakoa"</string>
+  <string name="screen_identity_confirmed_subtitle">"Orain mezuak modu seguruan irakurri edo bidal ditzakezu, eta txateatzen duzun edonor ere fida daiteke gailu honetaz."</string>
+  <string name="screen_identity_confirmed_title">"Gailua egiaztatu da"</string>
+  <string name="screen_identity_use_another_device">"Erabili beste gailu bat"</string>
+  <string name="screen_identity_waiting_on_other_device">"Beste gailuaren zain…"</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Egiaztatu ondorengo emojiak bat datozela beste saioan erakusten direnekin."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Alderatu emojiak"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Egiaztatu beheko zenbakiak zure beste saioan erakutsitakoekin bat datozela."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Konparatu zenbakiak"</string>
+  <string name="screen_session_verification_complete_subtitle">"Saio berria egiaztatu da. Zifratutako mezu guztiak atzitu ditzake, eta gainerako erabiltzaileek fidagarritzat izango dute."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Sartu berreskuratze-gakoa"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Frogatu zeu zarela zifratutako mezuen historia atzitzeko."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Ireki lehendik hasita dagoen saio bat"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Saiatu berriro egiaztatzen"</string>
+  <string name="screen_session_verification_positive_button_initial">"Prest nago"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Bat etorriko zain…"</string>
+  <string name="screen_session_verification_request_details_timestamp">"Saioa hasita"</string>
+  <string name="screen_session_verification_request_failure_title">"Egiaztapenak huts egin du"</string>
+  <string name="screen_session_verification_request_success_title">"Gailua egiaztatu da"</string>
+  <string name="screen_session_verification_they_dont_match">"Ez datoz bat"</string>
+  <string name="screen_session_verification_they_match">"Bat datoz"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Jarraitzeko, onartu zure beste saioan egiaztapen-prozesua hasteko eskaera."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Eskaera onartzeko zain"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Saioa amaitzen…"</string>
+</resources>

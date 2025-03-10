@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"拒絕聊天"</string>
   <string name="screen_invites_empty_list">"沒有邀請"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀請您"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"是的，拒絕並封鎖"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"您確定要拒絕加入此聊天室的邀請嗎？這也會防止 %1$s 聯絡您或邀請您加入聊天室。"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"拒絕邀請並封鎖"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"拒絕並封鎖"</string>
 </resources>

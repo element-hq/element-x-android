@@ -13,6 +13,7 @@
   <string name="screen_session_verification_cancelled_subtitle">"Noe virker ikke riktig. Enten ble forespørselen tidsavbrutt eller forespørselen ble avslått."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bekreft at emojiene nedenfor samsvarer med de som vises på den andre sesjonen din."</string>
   <string name="screen_session_verification_compare_emojis_title">"Sammenlign emojier"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Bekreft at emojiene nedenfor stemmer overens med de som vises på den andre brukerens enhet."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Kontroller at tallene nedenfor stemmer overens med dem som vises på den andre sesjonen."</string>
   <string name="screen_session_verification_compare_numbers_title">"Sammenlign tallene"</string>
   <string name="screen_session_verification_complete_subtitle">"Den nye sesjonen din er nå bekreftet. Den har tilgang til de krypterte meldingene dine, og andre brukere vil se den som klarert."</string>
@@ -27,6 +28,7 @@
   <string name="screen_session_verification_request_accepted_subtitle">"Sammenlign de unike emojiene, og sørg for at de vises i samme rekkefølge."</string>
   <string name="screen_session_verification_request_details_timestamp">"Logget inn"</string>
   <string name="screen_session_verification_request_failure_subtitle">"Enten ble forespørselen tidsavbrutt, forespørselen ble avslått eller det var en feil i verifiseringen."</string>
+  <string name="screen_session_verification_request_failure_title">"Verifisering mislyktes"</string>
   <string name="screen_session_verification_request_footer">"Bare fortsett hvis du startet denne verifiseringen."</string>
   <string name="screen_session_verification_request_subtitle">"Bekreft den andre enheten for å holde meldingsloggen din sikker."</string>
   <string name="screen_session_verification_request_success_subtitle">"Nå kan du lese eller sende meldinger sikkert på den andre enheten din."</string>
@@ -34,6 +36,15 @@
   <string name="screen_session_verification_request_title">"Verifisering forespurt"</string>
   <string name="screen_session_verification_they_dont_match">"De matcher ikke"</string>
   <string name="screen_session_verification_they_match">"De matcher"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Sørg for at du har appen åpen på den andre enheten før du starter verifiseringen herfra."</string>
+  <string name="screen_session_verification_use_another_device_title">"Åpne appen på en annen bekreftet enhet"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"For ekstra sikkerhet, verifiser denne brukeren ved å sammenligne et sett med emojier på enhetene dine. Gjør dette ved å bruke en pålitelig måte å kommunisere på."</string>
+  <string name="screen_session_verification_user_initiator_title">"Vil du verifisere denne brukeren?"</string>
+  <string name="screen_session_verification_waiting_another_device_subtitle">"Du skal se en popup på den andre enheten. Start bekreftelsen derfra nå."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Start verifiseringen på den andre enheten"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Venter på den andre enheten"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Venter på den andre brukeren"</string>
+  <string name="screen_session_verification_waiting_subtitle">"Når du er akseptert, kan du fortsette med verifiseringen."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Godta forespørselen om å starte bekreftelsesprosessen i den andre sesjonen for å fortsette."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Venter på å godta forespørselen"</string>
   <string name="screen_signout_in_progress_dialog_content">"Logger ut…"</string>

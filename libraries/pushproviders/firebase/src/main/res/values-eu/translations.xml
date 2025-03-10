@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Ziurtatu Firebase erabilgarri dagoela."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase ez dago erabilgarri."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase eskuragarri dago."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Egiaztatu Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Ziurtatu Firebaseren tokena erabilgarri dagoela."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Ez da Firebaseren tokena ezagutzen."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebaseren tokena: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Egiaztatu Firebaseren tokena"</string>
+</resources>

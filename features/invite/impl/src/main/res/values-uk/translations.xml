@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Відхилити бесіду"</string>
   <string name="screen_invites_empty_list">"Немає запрошень"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Так, відхилити та заблокувати"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ви впевнені, що хочете відхилити запрошення приєднатися до цієї кімнати? Це також завадить %1$s зв\'язатися з вами або запрошувати вас в кімнати."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Відхилити запрошення та заблокувати"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Відхилити та заблокувати"</string>
 </resources>

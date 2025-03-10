@@ -14,6 +14,8 @@
   <string name="screen_media_browser_title">"媒體與檔案"</string>
   <string name="screen_media_details_file_format">"檔案格式"</string>
   <string name="screen_media_details_filename">"檔案名稱"</string>
+  <string name="screen_media_details_no_more_files_to_show">"無可顯示的檔案"</string>
+  <string name="screen_media_details_no_more_media_to_show">"無可顯示的媒體"</string>
   <string name="screen_media_details_uploaded_by">"上傳者："</string>
   <string name="screen_media_details_uploaded_on">"上傳於"</string>
 </resources>

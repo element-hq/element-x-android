@@ -195,6 +195,7 @@ Syy: %1$s."</string>
   <string name="common_message_removed">"Viesti poistettu"</string>
   <string name="common_modern">"Moderni"</string>
   <string name="common_mute">"Mykistä"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ei tuloksia"</string>
   <string name="common_no_room_name">"Nimetön huone"</string>
   <string name="common_offline">"Ei yhteyttä"</string>
@@ -258,7 +259,7 @@ Syy: %1$s."</string>
   <string name="common_unable_to_decrypt">"Salauksen purkaminen ei onnistunut"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Lähetetty suojaamattomasta laitteesta"</string>
   <string name="common_unable_to_decrypt_no_access">"Sinulla ei ole oikeutta lukea tätä viestiä"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Lähettäjän vahvistettu identiteetti on vaihtunut"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Lähettäjän vahvistettu identiteetti on muuttunut"</string>
   <string name="common_unable_to_invite_message">"Kutsujen ei voitu lähettää yhdelle tai useammalle käyttäjälle."</string>
   <string name="common_unable_to_invite_title">"Kutsujen lähettäminen ei onnistunut"</string>
   <string name="common_unlock">"Avaa"</string>
@@ -272,6 +273,7 @@ Syy: %1$s."</string>
   <string name="common_verified">"Vahvistettu"</string>
   <string name="common_verify_device">"Vahvista laite"</string>
   <string name="common_verify_identity">"Vahvista identiteetti"</string>
+  <string name="common_verify_user">"Vahvista käyttäjä"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Ääniviesti"</string>
   <string name="common_waiting">"Odotetaan…"</string>
@@ -280,6 +282,7 @@ Syy: %1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Käyttäjän %1$s identiteetti näyttää muuttuneen. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Käyttäjän %1$s %2$s identiteetti näyttää muuttuneen. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Käyttäjän %1$s vahvistettu identiteetti on muuttunut."</string>
   <string name="crypto_identity_change_verification_violation_new">"Käyttäjän %1$s %2$s vahvistettu identiteetti on muuttunut. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Peruuta vahvistus"</string>
   <string name="dialog_title_confirmation">"Vahvistus"</string>
@@ -298,6 +301,7 @@ Syy: %1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen asetuksista."</string>
   <string name="error_missing_location_rationale_android">"%1$s -sovelluksella ei ole lupaa sijaintiisi. Voit sallia sen painamalla alla olevaa nappia."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s -sovelluksella ei ole lupaa käyttää mikrofoniasi. Anna lupa, jotta voit nauhoittaa ääniviestejä."</string>
+  <string name="error_network_or_server_issue">"Tämä voi johtua verkko- tai palvelinongelmista."</string>
   <string name="error_room_address_already_exists">"Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä"</string>
   <string name="error_room_address_invalid_symbols">"Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Joitakin viestejä ei ole lähetetty"</string>
@@ -335,6 +339,7 @@ Syy: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Viestiäsi ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi."</string>
   <string name="screen_room_error_failed_processing_media">"Median käsittely epäonnistui, yritä uudelleen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Käyttäjän tietojen hakeminen epäonnistui"</string>
+  <string name="screen_room_event_pill">"Viesti huoneessa %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"Kiinnitetty viesti %1$s"</string>
   <string name="screen_room_pinned_banner_loading_description">"Viestiä ladataan…"</string>

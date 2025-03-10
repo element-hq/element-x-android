@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"პაროლის ჩვენება"</string>
   <string name="a11y_start_call">"დარეკვა"</string>
   <string name="a11y_user_menu">"მომხმარებლის მენიუ"</string>
+  <string name="a11y_view_details">"დეტალების ნახვა"</string>
   <string name="a11y_voice_message_record">"ხმოვანი შეტყობინების ჩაწერა."</string>
   <string name="a11y_voice_message_stop_recording">"ჩაწერის შეწყვეტა"</string>
   <string name="action_accept">"მიღება"</string>
@@ -49,6 +50,7 @@
   <string name="action_decline">"უარყოფა"</string>
   <string name="action_delete_poll">"გამოკითხვის წაშლა"</string>
   <string name="action_disable">"გამორთვა"</string>
+  <string name="action_discard">"გაუქმება"</string>
   <string name="action_done">"მზადაა"</string>
   <string name="action_edit">"რედაქტირება"</string>
   <string name="action_edit_poll">"გამოკითხვის რედაქტირება"</string>
@@ -57,6 +59,7 @@
   <string name="action_enter_pin">"შეიყვანეთ PIN"</string>
   <string name="action_forgot_password">"დაგავიწყდათ პაროლი?"</string>
   <string name="action_forward">"გადაგზავნა"</string>
+  <string name="action_go_back">"დაბრუნება"</string>
   <string name="action_invite">"მოწვევა"</string>
   <string name="action_invite_friends">"ხალხის მოწვევა"</string>
   <string name="action_invite_friends_to_app">"ადამიანების დამატება %1$s"</string>
@@ -65,6 +68,7 @@
   <string name="action_join">"გაწევრიანება"</string>
   <string name="action_learn_more">"შეიტყვეთ მეტი"</string>
   <string name="action_leave">"დატოვება"</string>
+  <string name="action_leave_conversation">"საუბრის დატოვება"</string>
   <string name="action_leave_room">"ოთახის დატოვება"</string>
   <string name="action_load_more">"მეტის ჩატვირთვა"</string>
   <string name="action_manage_account">"ანგარიშის მართვა"</string>
@@ -83,6 +87,7 @@
   <string name="action_reply_in_thread">"პასუხი თემაში"</string>
   <string name="action_report_bug">"ხარვეზის შეტყობინება"</string>
   <string name="action_report_content">"კონტენტის რეპორტი"</string>
+  <string name="action_reset">"განულება"</string>
   <string name="action_retry">"ხელახლა ცდა"</string>
   <string name="action_retry_decryption">"გაშიფვრის ხელახლა ცდა"</string>
   <string name="action_save">"შენახვა"</string>
@@ -110,6 +115,7 @@
   <string name="common_analytics">"ანალიტიკა"</string>
   <string name="common_appearance">"გარეგნობა"</string>
   <string name="common_audio">"აუდიო"</string>
+  <string name="common_blocked_users">"დაბლოკილი მომხმარებლები"</string>
   <string name="common_bubbles">"ბუშტები"</string>
   <string name="common_chat_backup">"ჩატის სარეზერვო ასლი"</string>
   <string name="common_copyright">"საავტორო უფლება"</string>
@@ -126,6 +132,9 @@
   <string name="common_enter_your_pin">"შეიყვანეთ თქვენი PIN"</string>
   <string name="common_error">"შეცდომა"</string>
   <string name="common_everyone">"ყველა"</string>
+  <string name="common_failed">"ვერ შესრულდა"</string>
+  <string name="common_favourite">"რჩეული"</string>
+  <string name="common_favourited">"რჩეულები"</string>
   <string name="common_file">"ფაილი"</string>
   <string name="common_file_saved_on_disk_android">"ფაილი შენახულია ჩამოტვირთვებში"</string>
   <string name="common_forward_message">"შეტყობინების გადაგზავნა"</string>
@@ -150,6 +159,7 @@
   <string name="common_mute">"დადუმება"</string>
   <string name="common_no_results">"შედეგი არ არის"</string>
   <string name="common_offline">"ხაზგარეშე"</string>
+  <string name="common_or">"ან"</string>
   <string name="common_password">"პაროლი"</string>
   <string name="common_people">"ხალხი"</string>
   <string name="common_permalink">"მუდმივი ბმული"</string>
@@ -177,6 +187,8 @@
   <string name="common_room">"ოთახი"</string>
   <string name="common_room_name">"ოთახის სახელი"</string>
   <string name="common_room_name_placeholder">"მაგ. თქვენი პროექტის სახელი"</string>
+  <string name="common_saved_changes">"შენახული ცვლილებები"</string>
+  <string name="common_saving">"შენახვა"</string>
   <string name="common_screen_lock">"ეკრანის დაბლოკვა"</string>
   <string name="common_search_for_someone">"ვიღაცის ძებნა"</string>
   <string name="common_search_results">"ძიების შედეგები"</string>
@@ -219,6 +231,8 @@
   <string name="dialog_title_error">"შეცდომა"</string>
   <string name="dialog_title_success">"წარმატება"</string>
   <string name="dialog_title_warning">"გაფრთხილება"</string>
+  <string name="dialog_unsaved_changes_description_android">"თქვენი ცვლილებები არაა შენახული. დარწმუნებული ხართ დაბრუნებაში?"</string>
+  <string name="dialog_unsaved_changes_title">"შენახვა?"</string>
   <string name="error_failed_creating_the_permalink">"მუდმივი ბმულის შექმნა ვერ მოხერხდა"</string>
   <string name="error_failed_loading_map">"ვერ გამოვიდა რუკის %1$s ჩატვირთვა. გთხოვთ, მოგვიანებით სცადოთ."</string>
   <string name="error_failed_loading_messages">"შეტყობინებების ჩატვირთვა ვერ მოხერხდა"</string>

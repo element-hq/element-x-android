@@ -195,6 +195,7 @@ Motivo:. %1$s"</string>
   <string name="common_message_removed">"Messaggio rimosso"</string>
   <string name="common_modern">"Moderno"</string>
   <string name="common_mute">"Silenzia"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
   <string name="common_offline">"Non in linea"</string>
@@ -272,6 +273,7 @@ Motivo:. %1$s"</string>
   <string name="common_verified">"Verificato"</string>
   <string name="common_verify_device">"Verifica dispositivo"</string>
   <string name="common_verify_identity">"Verifica l\'identità"</string>
+  <string name="common_verify_user">"Verifica utente"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Messaggio vocale"</string>
   <string name="common_waiting">"In attesa…"</string>
@@ -280,6 +282,7 @@ Motivo:. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s sembra essere cambiata. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L\'identità di %1$s %2$s sembra essere cambiata. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"L\'identità verificata di %1$s è cambiata."</string>
   <string name="crypto_identity_change_verification_violation_new">"L\'identità %2$s verificata di %1$s è cambiata. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ritira verifica"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
@@ -298,6 +301,7 @@ Motivo:. %1$s"</string>
   <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
   <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s non ha l\'autorizzazione di accedere al microfono. Attiva l\'accesso per registrare un messaggio vocale."</string>
+  <string name="error_network_or_server_issue">"Ciò può essere dovuto a problemi di rete o server."</string>
   <string name="error_room_address_already_exists">"L\'indirizzo di questa stanza esiste già. Prova a modificare il campo dell\'indirizzo o a cambiare il nome della stanza"</string>
   <string name="error_room_address_invalid_symbols">"Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
@@ -335,6 +339,7 @@ Motivo:. %1$s"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Il tuo messaggio non è stato inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
+  <string name="screen_room_event_pill">"Messaggio in %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
   <string name="screen_room_pinned_banner_loading_description">"Caricamento messaggio…"</string>

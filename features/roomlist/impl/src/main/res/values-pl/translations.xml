@@ -40,7 +40,6 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_main_space_title">"Wszystkie czaty"</string>
   <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Przeglądaj wszystkie pokoje"</string>
   <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
   <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>

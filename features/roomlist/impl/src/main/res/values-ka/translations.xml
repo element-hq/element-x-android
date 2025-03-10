@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_set_up_recovery_submit">"აღდგენის დაყენება"</string>
-  <string name="confirm_recovery_key_banner_message">"თქვენი ჩეთების სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული. თქვენ უნდა შეიყვანოთ თქვენი აღდგენის გასაღები, რათა შეინარჩუნოთ წვდომა ჩეთების სარეზერვო ასლზე."</string>
-  <string name="confirm_recovery_key_banner_title">"შეიყვანეთ აღდგენის გასაღები"</string>
+  <string name="confirm_recovery_key_banner_message">"დაადასტურეთ თქვენი აღდგენის გასაღები რათა გქონდეთ წვდომა გასაღებების დამგროვებელთან და შეტყობინებების ისტორიასთან."</string>
+  <string name="confirm_recovery_key_banner_title">"თქვენი გასაღების დამგროვებელი არაა სინქრონიზებული"</string>
   <string name="screen_invites_decline_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ მოწვევაზე %1$s-ში?"</string>
   <string name="screen_invites_decline_chat_title">"მოწვევაზე უარის თქმა"</string>
   <string name="screen_invites_decline_direct_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ ჩატზე %1$s-თან?"</string>
@@ -14,9 +14,24 @@
   <string name="screen_roomlist_a11y_create_message">"ახალი საუბრისა ან ოთახის შექმნა"</string>
   <string name="screen_roomlist_empty_message">"დაიწყეთ ვინმესთვის შეტყობინების გაგზავნით."</string>
   <string name="screen_roomlist_empty_title">"არც ერთი ჩატი ჯერ არაა."</string>
+  <string name="screen_roomlist_filter_favourites">"რჩეულები"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"თქვენ შეგიძლიათ ოთახის რჩეულებში დამატება ოთახების პარამეტრებში.
+ახლა კი შეგიძლიათ ფილტრების მოხსნა სხვა ოთახების გამოსაჩენად"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"თქვენ ჯერ არ გაქვთ რჩეული ჩატები"</string>
   <string name="screen_roomlist_filter_invites">"მოწვევები"</string>
+  <string name="screen_roomlist_filter_low_priority">"დაბალი პრიორიტეტი"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"თქვენ შეგიძლიათ წაშალოთ ფილტრები სხვა ჩეთების გამოსაჩენად"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"თქვენ არ გაქვთ ოთახები ამ არჩევნისთვის"</string>
   <string name="screen_roomlist_filter_people">"ხალხი"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"თქვენ ჯერ არ გაქვთ პირადი შეტყობინებები"</string>
+  <string name="screen_roomlist_filter_rooms">"ოთახები"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"თქვენ ჯერ არც ერთ ოთახში არ ხართ"</string>
+  <string name="screen_roomlist_filter_unreads">"წაუკითხავი"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"გილოცავთ!
+თქვენ არ გაქვთ წაუკითხავი შეტყობინებები!"</string>
   <string name="screen_roomlist_main_space_title">"ჩატები"</string>
+  <string name="screen_roomlist_mark_as_read">"წაკითხულად მონიშვნა"</string>
+  <string name="screen_roomlist_mark_as_unread">"წაუკითხავად მონიშვნა"</string>
   <string name="session_verification_banner_message">"როგორც ჩანს, ახალ მოწყობილობას იყენებთ. დაადასტურეთ სხვა მოწყობილობით თქვენს დაშიფრულ შეტყობინებებზე წვდომისთვის."</string>
   <string name="session_verification_banner_title">"დაადასტურეთ, რომ ეს თქვენ ხართ"</string>
 </resources>

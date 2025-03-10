@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Este archivo se eliminará de la sala y los miembros no tendrán acceso a él."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"¿Borrar archivo?"</string>
+  <string name="screen_media_browser_download_error_message">"Verifica tu conexión a Internet e inténtalo de nuevo."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Los documentos, archivos de audio y mensajes de voz subidos a esta sala se mostrarán aquí."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Aún no se ha subido ningún archivo"</string>
+  <string name="screen_media_browser_list_loading_files">"Cargando archivos…"</string>
+  <string name="screen_media_browser_list_loading_media">"Cargando medios…"</string>
+  <string name="screen_media_browser_list_mode_files">"Archivos"</string>
+  <string name="screen_media_browser_list_mode_media">"Medios"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Las imágenes y vídeos subidos a esta sala se mostrarán aquí."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Aún no se ha subido ningún medio"</string>
+  <string name="screen_media_browser_title">"Medios y archivos"</string>
+  <string name="screen_media_details_file_format">"Formato de archivo"</string>
+  <string name="screen_media_details_filename">"Nombre del archivo"</string>
+  <string name="screen_media_details_no_more_files_to_show">"No hay más archivos que mostrar"</string>
+  <string name="screen_media_details_no_more_media_to_show">"No hay más medios que mostrar"</string>
+  <string name="screen_media_details_uploaded_by">"Subido por"</string>
+  <string name="screen_media_details_uploaded_on">"Subido el"</string>
+</resources>
