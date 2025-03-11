@@ -30,10 +30,10 @@ import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun MatrixRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMemberIdentityStateChange>> {
-    return syncUpdateFlow
+    return roomInfoFlow
         .filter {
             // Room cannot become unencrypted, so we can just apply a filter here.
-            isEncrypted
+            it.isEncrypted == true
         }
         .distinctUntilChanged()
         .flatMapLatest {

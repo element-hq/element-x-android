@@ -100,6 +100,7 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
 
+        val isEncrypted by remember { derivedStateOf { roomInfo?.isEncrypted == true } }
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
@@ -140,7 +141,7 @@ class RoomDetailsPresenter @Inject constructor(
                 }
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
-                        client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
+                        client.notificationSettingsService().unmuteRoom(room.roomId, isEncrypted, room.isOneToOne)
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
@@ -169,7 +170,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,
-            isEncrypted = room.isEncrypted,
+            isEncrypted = isEncrypted,
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
             canShowNotificationSettings = canShowNotificationSettings.value,

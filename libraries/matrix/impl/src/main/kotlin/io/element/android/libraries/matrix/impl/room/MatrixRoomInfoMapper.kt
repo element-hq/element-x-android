@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomHero
+import uniffi.matrix_sdk_base.EncryptionState
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
@@ -37,6 +38,11 @@ class MatrixRoomInfoMapper {
             topic = it.topic,
             avatarUrl = it.avatarUrl,
             isDirect = it.isDirect,
+            isEncrypted = when (it.encryptionState) {
+                EncryptionState.ENCRYPTED -> true
+                EncryptionState.NOT_ENCRYPTED -> false
+                EncryptionState.UNKNOWN -> null
+            },
             joinRule = it.joinRule?.map(),
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,

@@ -28,6 +28,7 @@ data class MatrixRoomInfo(
     val topic: String?,
     val avatarUrl: String?,
     val isDirect: Boolean,
+    val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
     val isSpace: Boolean,
     val isTombstoned: Boolean,

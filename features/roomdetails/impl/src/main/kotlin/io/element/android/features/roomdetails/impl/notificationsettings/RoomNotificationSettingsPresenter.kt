@@ -82,7 +82,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             getDefaultRoomNotificationMode(defaultRoomNotificationMode)
             fetchNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
             observeNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
-            shouldDisplayMentionsOnlyDisclaimer = room.isEncrypted && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
+            shouldDisplayMentionsOnlyDisclaimer = room.isEncrypted == true && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {
@@ -143,16 +143,18 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         roomNotificationSettings: MutableState<AsyncData<RoomNotificationSettings>>
     ) = launch {
         suspend {
+            val isEncrypted = room.isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
             pendingModeState.value = null
-            notificationSettingsService.getRoomNotificationSettings(room.roomId, room.isEncrypted, room.isOneToOne).getOrThrow()
+            notificationSettingsService.getRoomNotificationSettings(room.roomId, isEncrypted, room.isOneToOne).getOrThrow()
         }.runCatchingUpdatingState(roomNotificationSettings)
     }
 
     private fun CoroutineScope.getDefaultRoomNotificationMode(
         defaultRoomNotificationMode: MutableState<RoomNotificationMode?>
     ) = launch {
+        val isEncrypted = room.isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
         defaultRoomNotificationMode.value = notificationSettingsService.getDefaultRoomNotificationMode(
-            room.isEncrypted,
+            isEncrypted,
             room.isOneToOne
         ).getOrThrow()
     }

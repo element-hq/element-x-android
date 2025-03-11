@@ -50,7 +50,7 @@ interface MatrixRoom : Closeable {
     val alternativeAliases: List<RoomAlias>
     val topic: String?
     val avatarUrl: String?
-    val isEncrypted: Boolean
+    val isEncrypted: Boolean?
     val isSpace: Boolean
     val isDirect: Boolean
     val isPublic: Boolean
@@ -453,4 +453,6 @@ interface MatrixRoom : Closeable {
      * Update the join rule for this room.
      */
     suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
+
+    suspend fun getUpdatedIsEncrypted(): Result<Boolean>
 }

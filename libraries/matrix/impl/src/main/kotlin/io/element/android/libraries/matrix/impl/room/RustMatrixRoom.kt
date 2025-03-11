@@ -101,6 +101,7 @@ import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
+import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
@@ -316,8 +317,14 @@ class RustMatrixRoom(
     override val avatarUrl: String?
         get() = runCatching { roomListItem.avatarUrl() ?: innerRoom.avatarUrl() }.getOrDefault(null)
 
-    override val isEncrypted: Boolean
-        get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
+    override val isEncrypted: Boolean?
+        get() = runCatching {
+            when (innerRoom.encryptionState()) {
+                EncryptionState.ENCRYPTED -> true
+                EncryptionState.NOT_ENCRYPTED -> false
+                EncryptionState.UNKNOWN -> null
+            }
+        }.getOrNull()
 
     override val canonicalAlias: RoomAlias?
         get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
@@ -377,6 +384,7 @@ class RustMatrixRoom(
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatching {
+            val isEncrypted = isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
             notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
         }.map {
             _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)
@@ -863,6 +871,12 @@ class RustMatrixRoom(
     override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.updateJoinRules(joinRule.map())
+        }
+    }
+
+    override suspend fun getUpdatedIsEncrypted(): Result<Boolean> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.latestEncryptionState() == EncryptionState.ENCRYPTED
         }
     }
 
