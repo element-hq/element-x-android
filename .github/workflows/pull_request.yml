@@ -35,7 +35,7 @@ jobs:
         with:
           username: ${{ github.event.pull_request.user.login }}
           organization: element-hq
-          team: Core Team
+          team: Vector Core
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
       - name: Add label
         if: steps.teams.outputs.isTeamMember == 'false'
