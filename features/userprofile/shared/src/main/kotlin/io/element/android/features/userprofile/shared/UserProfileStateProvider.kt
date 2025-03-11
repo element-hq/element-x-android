@@ -30,6 +30,7 @@ open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState>
             aUserProfileState(startDmActionState = AsyncAction.Loading),
             aUserProfileState(canCall = true),
             aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser())),
+            aUserProfileState(verificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
         )
 }
 
