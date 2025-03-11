@@ -39,6 +39,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomcall.api.hasPermissionToJoin
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
@@ -189,7 +190,10 @@ fun RoomDetailsView(
                 }
 
                 state.roomMemberDetailsState?.let { dmMemberDetails ->
-                    ProfileItem(onClick = { onProfileClick(dmMemberDetails.userId) })
+                    ProfileItem(
+                        verificationState = dmMemberDetails.verificationState,
+                        onClick = { onProfileClick(dmMemberDetails.userId) }
+                    )
                 }
             }
 
@@ -556,11 +560,23 @@ private fun FavoriteItem(
 
 @Composable
 private fun ProfileItem(
+    verificationState: UserProfileVerificationState,
     onClick: () -> Unit,
 ) {
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
         headlineContent = { Text(stringResource(id = R.string.screen_room_details_profile_row_title)) },
+        trailingContent = when (verificationState) {
+            UserProfileVerificationState.VERIFIED -> ListItemContent.Icon(
+                iconSource = IconSource.Vector(CompoundIcons.Verified()),
+                tintColor = ElementTheme.colors.iconSuccessPrimary,
+            )
+            UserProfileVerificationState.VERIFICATION_VIOLATION -> ListItemContent.Icon(
+                iconSource = IconSource.Vector(CompoundIcons.ErrorSolid()),
+                tintColor = ElementTheme.colors.iconCriticalPrimary,
+            )
+            else -> null
+        },
         onClick = onClick,
     )
 }
