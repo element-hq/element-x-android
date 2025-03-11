@@ -24,6 +24,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.createroom.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -70,10 +71,11 @@ fun UserProfileView(
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
                 userName = state.userName,
-                isUserVerified = state.isVerified,
+                verificationState = state.verificationState,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)
                 },
+                withdrawVerificationClick = { state.eventSink(UserProfileEvents.WithdrawVerification) },
             )
             UserProfileMainActionsSection(
                 isCurrentUser = state.isCurrentUser,
@@ -122,7 +124,7 @@ private fun VerifyUserSection(
     state: UserProfileState,
     onVerifyClick: () -> Unit,
 ) {
-    if (state.isVerified.dataOrNull() == false) {
+    if (state.verificationState == UserProfileVerificationState.UNVERIFIED) {
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.common_verify_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
