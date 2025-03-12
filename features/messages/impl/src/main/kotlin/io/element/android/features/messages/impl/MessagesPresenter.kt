@@ -78,6 +78,7 @@ import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -184,11 +185,15 @@ class MessagesPresenter @AssistedInject constructor(
 
         var dmUserVerificationState by remember { mutableStateOf<IdentityState?>(null) }
 
-        LifecycleResumeEffect(Unit) {
-            if (room.isDm && room.isEncrypted) {
+        val membersState by room.membersStateFlow.collectAsState()
+        val dmRoomMember by room.getDirectRoomMember(membersState)
+
+        // TODO use `RoomInfo.isEncrypted` as a key here once it's available
+        LifecycleResumeEffect(dmRoomMember) {
+            if (room.isEncrypted) {
+                val dmRoomMemberId = dmRoomMember?.userId
                 localCoroutineScope.launch {
-                    val dmUserId = room.getMembers().getOrNull()?.find { it.userId != room.sessionId }?.userId
-                    dmUserId?.let { dmUserVerificationState = encryptionService.getUserIdentity(it).getOrNull() }
+                    dmRoomMemberId?.let { dmUserVerificationState = encryptionService.getUserIdentity(it).getOrNull() }
                 }
             }
             onPauseOrDispose {}

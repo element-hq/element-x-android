@@ -1099,8 +1099,8 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            getMembersResult = { Result.success(listOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))) }
         ).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
             givenRoomInfo(aRoomInfo(id = roomId, name = "", isDirect = true))
         }
         val encryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(IdentityState.Verified) })

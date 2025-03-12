@@ -24,6 +24,11 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import io.element.android.libraries.architecture.Presenter
 
+/**
+ * Composable that provides a fake [LifecycleOwner] to the composition.
+ *
+ * **WARNING: DO NOT USE OUTSIDE TESTS.**
+ */
 @OptIn(InternalComposeApi::class)
 @Stable
 @Composable
@@ -33,10 +38,15 @@ fun <T> withFakeLifecycleOwner(
 ): T {
     currentComposer.startProvider(LocalLifecycleOwner provides lifecycleOwner)
     val state = block()
-    currentComposer.endProviders()
+    currentComposer.endProvider()
     return state
 }
 
+/**
+ * Test a [Presenter] with a fake [LifecycleOwner].
+ *
+ * **WARNING: DO NOT USE OUTSIDE TESTS.**
+ */
 suspend fun <T> Presenter<T>.testWithLifecycleOwner(
     lifecycleOwner: FakeLifecycleOwner = FakeLifecycleOwner(),
     block: suspend TurbineTestContext<T>.() -> Unit

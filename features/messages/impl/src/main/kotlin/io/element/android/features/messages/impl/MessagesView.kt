@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -190,7 +191,7 @@ fun MessagesView(
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
-                    isDmUserVerified = state.dmUserVerificationState == IdentityState.Verified,
+                    isDmUserVerified = state.dmUserVerificationState?.let { it == IdentityState.Verified },
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
@@ -457,7 +458,7 @@ private fun MessagesViewTopBar(
     roomAvatar: AvatarData?,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
-    isDmUserVerified: Boolean,
+    isDmUserVerified: Boolean?,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -489,8 +490,13 @@ private fun MessagesViewTopBar(
                     )
                 }
 
-                if (isDmUserVerified) {
-                    Icon(imageVector = CompoundIcons.Verified(), tint = ElementTheme.colors.iconSuccessPrimary, contentDescription = null)
+                if (isDmUserVerified == true) {
+                    Icon(
+                        modifier = Modifier.requiredWidthIn(min = 24.dp),
+                        imageVector = CompoundIcons.Verified(),
+                        tint = ElementTheme.colors.iconSuccessPrimary,
+                        contentDescription = null
+                    )
                 }
             }
         },
