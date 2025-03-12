@@ -45,7 +45,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.duration
@@ -378,19 +377,6 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-            }
-            is TimelineItemStickerContent -> {
-                /* Sticker may have an empty url and no thumbnail
-                   if encrypted on certain bridges */
-                event.content.preferredMediaSource?.let { preferredMediaSource ->
-                    buildMediaViewerNavTarget(
-                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
-                        event = event,
-                        content = event.content,
-                        mediaSource = preferredMediaSource,
-                        thumbnailSource = event.content.thumbnailSource,
-                    )
-                }
             }
             is TimelineItemVideoContent -> {
                 buildMediaViewerNavTarget(
