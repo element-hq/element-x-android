@@ -211,6 +211,9 @@ dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
+# Element Call
+element_call_embedded = "io.github.hughns:element-call-embedded:1.1.39"
+
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
 google_autoservice_annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice" }
