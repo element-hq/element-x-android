@@ -70,8 +70,10 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun TimelineView(
@@ -174,6 +176,17 @@ fun TimelineView(
                 focusRequestState = state.focusRequestState,
                 onClearFocusRequestState = ::clearFocusRequestState
             )
+
+            val isCloseToStartOfLoadedTimeline by remember { derivedStateOf {
+                lazyListState.firstVisibleItemIndex + lazyListState.layoutInfo.visibleItemsInfo.size >= lazyListState.layoutInfo.totalItemsCount - 10
+            } }
+            LaunchedEffect(isCloseToStartOfLoadedTimeline) {
+                // Only back paginate when we're close to the start of the loaded timeline items and the user is actively scrolling
+                if (lazyListState.isScrollInProgress && isCloseToStartOfLoadedTimeline) {
+                    Timber.d("Prefetching pagination with ${lazyListState.layoutInfo.totalItemsCount} items")
+                    state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+                }
+            }
 
             TimelineScrollHelper(
                 hasAnyEvent = state.hasAnyEvent,
