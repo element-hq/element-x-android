@@ -47,10 +47,8 @@ fun aDeveloperSettingsState(
 
 fun aCustomElementCallBaseUrlState(
     baseUrl: String? = null,
-    defaultUrl: String = "https://call.element.io",
     validator: (String?) -> Boolean = { true },
 ) = CustomElementCallBaseUrlState(
     baseUrl = baseUrl,
-    defaultUrl = defaultUrl,
     validator = validator,
 )
