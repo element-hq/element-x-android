@@ -64,8 +64,7 @@ class DefaultClearCacheUseCaseTest {
             pushService = pushService,
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.EventCache.key to isEventCacheEnabled)
-            )
-
+            ),
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
