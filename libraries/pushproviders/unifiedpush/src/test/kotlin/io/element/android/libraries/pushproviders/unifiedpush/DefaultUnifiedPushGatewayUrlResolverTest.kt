@@ -18,7 +18,7 @@ class DefaultUnifiedPushGatewayUrlResolverTest {
             gatewayResult = UnifiedPushGatewayResolverResult.ErrorInvalidUrl,
             instance = "",
         )
-        assertThat(result).isEqualTo(UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL)
+        assertThat(result).isEqualTo(A_UNIFIED_PUSH_GATEWAY)
     }
 
     @Test
@@ -28,7 +28,7 @@ class DefaultUnifiedPushGatewayUrlResolverTest {
             gatewayResult = UnifiedPushGatewayResolverResult.NoMatrixGateway,
             instance = "",
         )
-        assertThat(result).isEqualTo(UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL)
+        assertThat(result).isEqualTo(A_UNIFIED_PUSH_GATEWAY)
     }
 
     @Test
@@ -77,7 +77,9 @@ class DefaultUnifiedPushGatewayUrlResolverTest {
 
     private fun createDefaultUnifiedPushGatewayUrlResolver(
         unifiedPushStore: UnifiedPushStore = FakeUnifiedPushStore(),
+        defaultPushGatewayHttpUrlProvider: DefaultPushGatewayHttpUrlProvider = FakeDefaultPushGatewayHttpUrlProvider(),
     ) = DefaultUnifiedPushGatewayUrlResolver(
         unifiedPushStore = unifiedPushStore,
+        defaultPushGatewayHttpUrlProvider = defaultPushGatewayHttpUrlProvider,
     )
 }
