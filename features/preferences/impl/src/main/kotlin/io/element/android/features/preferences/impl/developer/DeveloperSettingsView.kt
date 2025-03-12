@@ -136,22 +136,20 @@ private fun ElementCallCategory(
 ) {
     PreferenceCategory(title = "Element Call", showTopDivider = true) {
         val callUrlState = state.customElementCallBaseUrlState
-        fun isUsingDefaultUrl(value: String?): Boolean {
-            return value.isNullOrEmpty() || value == callUrlState.defaultUrl
-        }
 
-        val supportingText = if (isUsingDefaultUrl(callUrlState.baseUrl)) {
+        val supportingText = if (callUrlState.baseUrl.isNullOrEmpty()) {
             stringResource(R.string.screen_advanced_settings_element_call_base_url_description)
         } else {
             callUrlState.baseUrl
         }
         PreferenceTextField(
             headline = stringResource(R.string.screen_advanced_settings_element_call_base_url),
-            value = callUrlState.baseUrl ?: callUrlState.defaultUrl,
+            value = callUrlState.baseUrl,
+            placeholder = "https://...",
             supportingText = supportingText,
             validation = callUrlState.validator,
             onValidationErrorMessage = stringResource(R.string.screen_advanced_settings_element_call_base_url_validation_error),
-            displayValue = { value -> !isUsingDefaultUrl(value) },
+            displayValue = { value -> !value.isNullOrEmpty() },
             keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, keyboardType = KeyboardType.Uri),
             onChange = { state.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl(it)) }
         )
