@@ -14,7 +14,6 @@ import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
-import io.element.android.x.BuildConfig
 import io.element.android.x.di.AppBindings
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,7 +30,7 @@ class TracingInitializer : Initializer<Unit> {
         val preferencesStore = appBindings.preferencesStore()
         val logLevel = runBlocking { preferencesStore.getTracingLogLevelFlow().first() }
         val tracingConfiguration = TracingConfiguration(
-            writesToLogcat = BuildConfig.DEBUG,
+            writesToLogcat = true,
             writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),
