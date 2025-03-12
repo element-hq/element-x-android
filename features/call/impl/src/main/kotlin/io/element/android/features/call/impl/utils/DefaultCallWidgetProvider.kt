@@ -11,7 +11,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
@@ -24,7 +23,6 @@ class DefaultCallWidgetProvider @Inject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,
-    private val elementCallBaseUrlProvider: ElementCallBaseUrlProvider,
 ) : CallWidgetProvider {
     override suspend fun getWidget(
         sessionId: SessionId,
