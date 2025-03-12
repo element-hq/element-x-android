@@ -177,9 +177,11 @@ fun TimelineView(
                 onClearFocusRequestState = ::clearFocusRequestState
             )
 
-            val isCloseToStartOfLoadedTimeline by remember { derivedStateOf {
+            val isCloseToStartOfLoadedTimeline by remember {
+                derivedStateOf {
                 lazyListState.firstVisibleItemIndex + lazyListState.layoutInfo.visibleItemsInfo.size >= lazyListState.layoutInfo.totalItemsCount - 10
-            } }
+            }
+            }
             LaunchedEffect(isCloseToStartOfLoadedTimeline) {
                 // Only back paginate when we're close to the start of the loaded timeline items and the user is actively scrolling
                 if (lazyListState.isScrollInProgress && isCloseToStartOfLoadedTimeline) {
