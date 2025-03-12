@@ -80,7 +80,7 @@ interface MatrixClient : Closeable {
     /**
      * Will close the client and delete the cache data.
      */
-    suspend fun clearCache()
+    suspend fun clearCache(isEventCacheEnabled: Boolean)
 
     /**
      * Logout the user.

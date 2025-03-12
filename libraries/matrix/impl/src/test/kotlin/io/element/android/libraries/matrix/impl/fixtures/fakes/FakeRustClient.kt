@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.Encryption
@@ -31,6 +33,8 @@ class FakeRustClient(
     private val notificationSettings: NotificationSettings = FakeRustNotificationSettings(),
     private val encryption: Encryption = FakeRustEncryption(),
     private val session: Session = aRustSession(),
+    private val clearCachesResult: () -> Unit = { lambdaError() },
+    private val closeResult: () -> Unit = {},
 ) : Client(NoPointer) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
@@ -53,4 +57,6 @@ class FakeRustClient(
     ) = Unit
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
+    override suspend fun clearCaches() = simulateLongTask { clearCachesResult() }
+    override fun close() = closeResult()
 }

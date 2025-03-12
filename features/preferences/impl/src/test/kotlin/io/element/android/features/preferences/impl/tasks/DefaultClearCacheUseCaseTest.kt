@@ -12,6 +12,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.test.FakeFtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePushService
@@ -27,8 +29,19 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DefaultClearCacheUseCaseTest {
     @Test
-    fun `execute clear cache should do all the expected tasks`() = runTest {
-        val clearCacheLambda = lambdaRecorder<Unit> { }
+    fun `execute clear cache should do all the expected tasks no event cache`() {
+        `execute clear cache should do all the expected tasks`(isEventCacheEnabled = false)
+    }
+
+    @Test
+    fun `execute clear cache should do all the expected tasks with event cache`() {
+        `execute clear cache should do all the expected tasks`(isEventCacheEnabled = true)
+    }
+
+    private fun `execute clear cache should do all the expected tasks`(
+        isEventCacheEnabled: Boolean,
+    ) = runTest {
+        val clearCacheLambda = lambdaRecorder<Boolean, Unit> { }
         val matrixClient = FakeMatrixClient(
             clearCacheLambda = clearCacheLambda,
         )
@@ -49,10 +62,14 @@ class DefaultClearCacheUseCaseTest {
             okHttpClient = { OkHttpClient.Builder().build() },
             ftueService = ftueService,
             pushService = pushService,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.EventCache.key to isEventCacheEnabled)
+            )
+
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
-            clearCacheLambda.assertions().isCalledOnce()
+            clearCacheLambda.assertions().isCalledOnce().with(value(isEventCacheEnabled))
             resetFtueLambda.assertions().isCalledOnce()
             setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
                 .with(value(matrixClient.sessionId), value(false))

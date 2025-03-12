@@ -497,9 +497,15 @@ class RustMatrixClient(
         return baseDirectory.getCacheSize()
     }
 
-    override suspend fun clearCache() {
-        close()
-        deleteSessionDirectory(deleteCryptoDb = false)
+    override suspend fun clearCache(isEventCacheEnabled: Boolean) {
+        if (isEventCacheEnabled) {
+            innerClient.clearCaches()
+            close()
+        } else {
+            // Legacy way to clear the cache
+            close()
+            deleteSessionDirectory(deleteCryptoDb = false)
+        }
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {

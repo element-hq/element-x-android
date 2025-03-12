@@ -15,6 +15,8 @@ import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
 import kotlinx.coroutines.withContext
@@ -35,10 +37,12 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
     private val pushService: PushService,
+    private val featureFlagService: FeatureFlagService,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Clear Matrix cache
-        matrixClient.clearCache()
+        val isEventCacheEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.EventCache)
+        matrixClient.clearCache(isEventCacheEnabled)
         // Clear Coil cache
         SingletonImageLoader.get(context).let {
             it.diskCache?.clear()
