@@ -36,7 +36,7 @@ class RustNotificationService(
         }
     }
 
-    fun destroy() {
-        notificationClient.destroy()
+    fun close() {
+        notificationClient.close()
     }
 }
