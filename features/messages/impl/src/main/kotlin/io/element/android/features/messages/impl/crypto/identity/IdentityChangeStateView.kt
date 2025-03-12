@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.encryption.identity.isAViolation
+import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable

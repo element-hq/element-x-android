@@ -15,6 +15,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.R
 import io.element.android.features.userprofile.shared.UserProfileView
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -200,7 +201,7 @@ class UserProfileViewTest {
     fun `on verify user clicked - the right callback is called`() = runTest {
         ensureCalledOnceWithParam(A_USER_ID) { callback ->
             rule.setUserProfileView(
-                state = aUserProfileState(userId = A_USER_ID, isVerified = AsyncData.Success(false)),
+                state = aUserProfileState(userId = A_USER_ID, verificationState = UserProfileVerificationState.UNVERIFIED),
                 onVerifyClick = callback,
             )
             rule.clickOn(CommonStrings.common_verify_user)

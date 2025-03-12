@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
-import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -24,6 +23,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -34,7 +34,6 @@ data class MessagesState(
     val heroes: ImmutableList<AvatarData>,
     val userEventPermissions: UserEventPermissions,
     val composerState: MessageComposerState,
-    val roomMemberIdentityStateChanges: ImmutableList<RoomMemberIdentityStateChange>,
     val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,
     val timelineProtectionState: TimelineProtectionState,
@@ -52,5 +51,6 @@ data class MessagesState(
     val roomCallState: RoomCallState,
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
+    val dmUserVerificationState: IdentityState?,
     val eventSink: (MessagesEvents) -> Unit
 )

@@ -187,6 +187,9 @@ class IncomingVerificationPresenterTest {
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidCancel)
             // The screen is dismissed
             skipItems(2)
+
+            advanceUntilIdle()
+
             onFinishLambda.assertions().isCalledOnce()
         }
     }

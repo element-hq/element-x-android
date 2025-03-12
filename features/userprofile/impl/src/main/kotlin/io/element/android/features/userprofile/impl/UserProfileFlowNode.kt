@@ -66,6 +66,8 @@ class UserProfileFlowNode @AssistedInject constructor(
         data class VerifyUser(val userId: UserId) : NavTarget
     }
 
+    private val inputs = inputs<UserProfileEntryPoint.Params>()
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
@@ -86,7 +88,7 @@ class UserProfileFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.VerifyUser(userId))
                     }
                 }
-                val params = UserProfileNode.UserProfileInputs(userId = inputs<UserProfileEntryPoint.Params>().userId)
+                val params = UserProfileNode.UserProfileInputs(userId = inputs.userId)
                 createNode<UserProfileNode>(buildContext, listOf(callback, params))
             }
             is NavTarget.AvatarPreview -> {
