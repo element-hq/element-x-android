@@ -17,4 +17,6 @@ interface EnterpriseService {
 
     fun semanticColorsLight(): SemanticColors
     fun semanticColorsDark(): SemanticColors
+
+    fun firebasePushGateway(): String?
 }

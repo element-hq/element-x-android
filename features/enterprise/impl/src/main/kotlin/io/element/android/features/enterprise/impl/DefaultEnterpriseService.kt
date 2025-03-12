@@ -27,4 +27,6 @@ class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
     override fun semanticColorsLight(): SemanticColors = compoundColorsLight
 
     override fun semanticColorsDark(): SemanticColors = compoundColorsDark
+
+    override fun firebasePushGateway(): String? = null
 }

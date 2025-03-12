@@ -19,6 +19,7 @@ class FakeEnterpriseService(
     private val defaultHomeserverResult: () -> String? = { A_FAKE_HOMESERVER },
     private val semanticColorsLightResult: () -> SemanticColors = { lambdaError() },
     private val semanticColorsDarkResult: () -> SemanticColors = { lambdaError() },
+    private val firebasePushGatewayResult: () -> String? = { lambdaError() },
 ) : EnterpriseService {
     override suspend fun isEnterpriseUser(sessionId: SessionId): Boolean = simulateLongTask {
         isEnterpriseUserResult(sessionId)
@@ -34,6 +35,10 @@ class FakeEnterpriseService(
 
     override fun semanticColorsDark(): SemanticColors {
         return semanticColorsDarkResult()
+    }
+
+    override fun firebasePushGateway(): String? {
+        return firebasePushGatewayResult()
     }
 
     companion object {
