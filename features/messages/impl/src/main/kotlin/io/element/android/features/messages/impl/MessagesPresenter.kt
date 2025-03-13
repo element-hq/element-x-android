@@ -169,9 +169,10 @@ class MessagesPresenter @AssistedInject constructor(
 
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
-        LaunchedEffect(hasDismissedInviteDialog, composerState.textEditorState.hasFocus(), syncUpdateFlow.value) {
+        val composerHasFocus by remember { derivedStateOf { composerState.textEditorState.hasFocus() } }
+        LaunchedEffect(hasDismissedInviteDialog, composerHasFocus, roomInfo) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDm && room.activeMemberCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerHasFocus && roomInfo?.isDm == true && roomInfo?.activeMembersCount == 1L
             }
         }
         val isOnline by syncService.isOnline().collectAsState()

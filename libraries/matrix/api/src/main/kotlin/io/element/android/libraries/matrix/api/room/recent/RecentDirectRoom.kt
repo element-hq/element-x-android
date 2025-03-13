@@ -32,7 +32,7 @@ suspend fun MatrixClient.getRecentDirectRooms(
     getRecentlyVisitedRooms().getOrNull()?.let { roomIds ->
         roomIds
             .mapNotNull { roomId -> getRoom(roomId) }
-            .filter { it.isDm && it.isJoined() }
+            .filter { it.isDm() && it.isJoined() }
             .map { room ->
                 val otherUser = room.getMembers().getOrNull()
                     ?.firstOrNull { it.userId != sessionId }

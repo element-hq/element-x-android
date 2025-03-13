@@ -73,6 +73,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -82,6 +83,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
@@ -141,7 +143,7 @@ class RustMatrixRoom(
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
             }
         })
-    }
+    }.shareIn(sessionCoroutineScope, started = SharingStarted.Lazily, replay = 1)
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         val initial = emptyList<UserId>()

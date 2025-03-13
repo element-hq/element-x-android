@@ -125,7 +125,6 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
             assertThat(initialState.memberCount).isEqualTo(room.joinedMemberCount)
-            assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
             assertThat(initialState.canShowPinnedMessages).isTrue()
             assertThat(initialState.pinnedMessagesCount).isNull()
             assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
@@ -181,8 +180,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aMatrixRoom(
-            isEncrypted = true,
-            isDirect = true,
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -196,6 +193,13 @@ class RoomDetailsPresenterTest {
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenRoomInfo(
+                aRoomInfo(
+                    isEncrypted = true,
+                    isDirect = true,
+                )
+            )
         }
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
@@ -287,8 +291,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aMatrixRoom(
-            isEncrypted = true,
-            isDirect = true,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC,
@@ -309,6 +311,13 @@ class RoomDetailsPresenterTest {
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenRoomInfo(
+                aRoomInfo(
+                    isEncrypted = true,
+                    isDirect = true,
+                )
+            )
         }
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
@@ -329,7 +338,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aMatrixRoom(
-            isEncrypted = true,
             isDirect = true,
             topic = null,
             canSendStateResult = { _, stateEventType ->
@@ -352,6 +360,14 @@ class RoomDetailsPresenterTest {
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
+                    topic = null,
+                )
+            )
         }
 
         val presenter = createRoomDetailsPresenter(room)

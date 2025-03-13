@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import kotlinx.coroutines.flow.first
+
 /**
  * Returns whether the room with the provided info is a DM.
  * A DM is a room with at most 2 active members (one of them may have left).
@@ -19,9 +21,9 @@ fun isDm(isDirect: Boolean, activeMembersCount: Int): Boolean {
 }
 
 /**
- * Returns whether the [MatrixRoom] is a DM.
+ * Returns whether the [MatrixRoom] is a DM, with an updated state from the latest [MatrixRoomInfo].
  */
-val MatrixRoom.isDm get() = isDm(isDirect, activeMemberCount.toInt())
+suspend fun MatrixRoom.isDm() = roomInfoFlow.first().isDm
 
 /**
  * Returns whether the [MatrixRoomInfo] is from a DM.

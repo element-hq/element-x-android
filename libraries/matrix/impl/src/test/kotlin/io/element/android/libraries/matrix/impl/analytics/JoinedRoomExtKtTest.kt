@@ -11,11 +11,13 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class JoinedRoomExtKtTest {
     @Test
-    fun `test room size mapping`() {
+    fun `test room size mapping`() = runTest {
         mapOf(
             listOf(0L, 1L) to JoinedRoom.RoomSize.One,
             listOf(2L, 2L) to JoinedRoom.RoomSize.Two,
@@ -25,7 +27,10 @@ class JoinedRoomExtKtTest {
             listOf(1001L, 2000L) to JoinedRoom.RoomSize.MoreThanAThousand
         ).forEach { (joinedMemberCounts, expectedRoomSize) ->
             joinedMemberCounts.forEach { joinedMemberCount ->
-                assertThat(aMatrixRoom(joinedMemberCount = joinedMemberCount).toAnalyticsJoinedRoom(null))
+                val room = aMatrixRoom().apply {
+                    givenRoomInfo(aRoomInfo(joinedMembersCount = joinedMemberCount))
+                }
+                assertThat(room.toAnalyticsJoinedRoom(null))
                     .isEqualTo(
                         JoinedRoom(
                             isDM = false,
@@ -39,8 +44,9 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test isDirect parameter mapping`() {
-        assertThat(aMatrixRoom(isDirect = true).toAnalyticsJoinedRoom(null))
+    fun `test isDirect parameter mapping`() = runTest {
+        val room = aMatrixRoom().apply { givenRoomInfo(aRoomInfo(isDirect = true)) }
+        assertThat(room.toAnalyticsJoinedRoom(null))
             .isEqualTo(
                 JoinedRoom(
                     isDM = true,
@@ -52,8 +58,9 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test isSpace parameter mapping`() {
-        assertThat(aMatrixRoom(isSpace = true).toAnalyticsJoinedRoom(null))
+    fun `test isSpace parameter mapping`() = runTest {
+        val room = aMatrixRoom().apply { givenRoomInfo(aRoomInfo(isSpace = true)) }
+        assertThat(room.toAnalyticsJoinedRoom(null))
             .isEqualTo(
                 JoinedRoom(
                     isDM = false,
@@ -65,8 +72,9 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test trigger parameter mapping`() {
-        assertThat(aMatrixRoom().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+    fun `test trigger parameter mapping`() = runTest {
+        val room = aMatrixRoom().apply { givenRoomInfo(aRoomInfo(isDirect = false, isSpace = false)) }
+        assertThat(room.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             .isEqualTo(
                 JoinedRoom(
                     isDM = false,
@@ -81,11 +89,11 @@ class JoinedRoomExtKtTest {
         isDirect: Boolean = false,
         isSpace: Boolean = false,
         joinedMemberCount: Long = 0
-    ): MatrixRoom {
+    ): FakeMatrixRoom {
         return FakeMatrixRoom(
             isDirect = isDirect,
             isSpace = isSpace,
-            joinedMemberCount = joinedMemberCount
+            joinedMemberCount = joinedMemberCount,
         )
     }
 }

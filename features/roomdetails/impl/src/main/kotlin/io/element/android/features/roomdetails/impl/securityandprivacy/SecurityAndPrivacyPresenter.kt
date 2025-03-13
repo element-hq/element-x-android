@@ -59,7 +59,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val roomInfo = room.roomInfoFlow.collectAsState(null)
 
-        val isEncrypted by remember { derivedStateOf { roomInfo.value?.isEncrypted == true }}
+        val isEncrypted by remember { derivedStateOf { roomInfo.value?.isEncrypted == true } }
 
         val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {

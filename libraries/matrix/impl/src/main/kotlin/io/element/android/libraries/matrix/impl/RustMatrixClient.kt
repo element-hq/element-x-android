@@ -241,16 +241,6 @@ class RustMatrixClient(
 
             // Force a refresh of the profile
             getUserProfile()
-
-            // And emit a new value
-            _userProfile.emit(
-                MatrixUser(
-                    userId = sessionId,
-                    // TODO cache for displayName?
-                    displayName = null,
-                    avatarUrl = innerClient.cachedAvatarUrl(),
-                )
-            )
         }
     }
 

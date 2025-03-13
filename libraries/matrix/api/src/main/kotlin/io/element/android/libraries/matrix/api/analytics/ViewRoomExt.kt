@@ -9,8 +9,9 @@ package io.element.android.libraries.matrix.api.analytics
 
 import im.vector.app.features.analytics.plan.ViewRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import kotlinx.coroutines.flow.first
 
-fun MatrixRoom.toAnalyticsViewRoom(
+suspend fun MatrixRoom.toAnalyticsViewRoom(
     trigger: ViewRoom.Trigger? = null,
     selectedSpace: MatrixRoom? = null,
     viaKeyboard: Boolean? = null,
@@ -18,7 +19,7 @@ fun MatrixRoom.toAnalyticsViewRoom(
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
-        isDM = isDirect,
+        isDM = roomInfoFlow.first().isDirect,
         isSpace = isSpace,
         trigger = trigger,
         activeSpace = activeSpace,

@@ -34,6 +34,7 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -231,11 +232,11 @@ class TimelinePresenter @AssistedInject constructor(
 
         val typingNotificationState = typingNotificationPresenter.present()
         val roomCallState = roomCallStatePresenter.present()
-        val timelineRoomInfo by remember(typingNotificationState, roomCallState) {
+        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
-                    name = room.displayName,
-                    isDm = room.isDm,
+                    name = roomInfo?.name ?: room.displayName,
+                    isDm = roomInfo?.isDm.orFalse(),
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
                     roomCallState = roomCallState,

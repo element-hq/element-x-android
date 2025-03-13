@@ -67,9 +67,9 @@ fun MatrixRoom.canPinUnpin(updateKey: Long): State<Boolean> {
 }
 
 @Composable
-fun MatrixRoom.isDmAsState(updateKey: Long): State<Boolean> {
-    return produceState(initialValue = false, key1 = updateKey) {
-        value = isDm
+fun MatrixRoom.isDmAsState(): State<Boolean> {
+    return produceState(initialValue = false) {
+        roomInfoFlow.collect { value = it.isDm }
     }
 }
 

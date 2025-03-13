@@ -37,6 +37,7 @@ class MatrixRoomInfoMapper {
             rawName = it.rawName,
             topic = it.topic,
             avatarUrl = it.avatarUrl,
+            isPublic = it.isPublic,
             isDirect = it.isDirect,
             isEncrypted = when (it.encryptionState) {
                 EncryptionState.ENCRYPTED -> true

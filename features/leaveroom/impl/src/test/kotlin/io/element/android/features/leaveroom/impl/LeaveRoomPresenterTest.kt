@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -52,7 +53,9 @@ class LeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom()
+                    result = FakeMatrixRoom().apply {
+                        givenRoomInfo(aRoomInfo(isDirect = false, isPublic = true, joinedMembersCount = 10))
+                    }
                 )
             }
         )
@@ -72,7 +75,9 @@ class LeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(isPublic = false),
+                    result = FakeMatrixRoom().apply {
+                        givenRoomInfo(aRoomInfo(isPublic = false))
+                    },
                 )
             }
         )
@@ -92,7 +97,9 @@ class LeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(joinedMemberCount = 1),
+                    result = FakeMatrixRoom().apply {
+                        givenRoomInfo(aRoomInfo(joinedMembersCount = 1))
+                    },
                 )
             }
         )
@@ -112,7 +119,9 @@ class LeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true),
+                    result = FakeMatrixRoom().apply {
+                        givenRoomInfo(aRoomInfo(isDirect = true, activeMembersCount = 2))
+                    },
                 )
             }
         )

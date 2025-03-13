@@ -37,6 +37,7 @@ class RustNotificationSettingsServiceTest {
         client = FakeRustClient(
             notificationSettings = notificationSettings,
         ),
+        sessionCoroutineScope = this,
         dispatchers = testCoroutineDispatchers(),
     )
 }

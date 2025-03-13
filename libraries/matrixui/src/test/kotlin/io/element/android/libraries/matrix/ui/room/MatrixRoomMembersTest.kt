@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -31,14 +32,20 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emits other member for encrypted DM with 2 joined members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(
+                isDirect = true,
+                joinedMembersCount = 2,
+            ))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1, roomMember2))
             )
         }.test {
+            // Skip initial item with outdated info
+            skipItems(1)
+            // Check the updated info
             assertThat(awaitItem().value).isEqualTo(roomMember2)
         }
     }
@@ -64,13 +71,20 @@ class MatrixRoomMembersTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
             isEncrypted = false,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(
+                isDirect = true,
+                activeMembersCount = 2,
+            ))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1, roomMember2))
             )
         }.test {
+            // Skip initial item with outdated info
+            skipItems(1)
+            // Check the updated info
             assertThat(awaitItem().value).isEqualTo(roomMember2)
         }
     }
@@ -132,9 +146,12 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit the other member if there are 2 active members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(
+                isDirect = true,
+                activeMembersCount = 2,
+            ))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(
@@ -146,6 +163,9 @@ class MatrixRoomMembersTest {
                 )
             )
         }.test {
+            // Skip initial item with outdated info
+            skipItems(1)
+            // Check the updated info
             assertThat(awaitItem().value).isEqualTo(roomMember2)
         }
     }

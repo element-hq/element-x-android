@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -78,11 +79,19 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
+        val isRoomEncrypted by produceState(room.isEncrypted) {
+            room.roomInfoFlow.collect { value = it.isEncrypted }
+        }
+
         LaunchedEffect(Unit) {
             getDefaultRoomNotificationMode(defaultRoomNotificationMode)
             fetchNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
             observeNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
-            shouldDisplayMentionsOnlyDisclaimer = room.isEncrypted == true && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
+        }
+
+        LaunchedEffect(isRoomEncrypted) {
+            shouldDisplayMentionsOnlyDisclaimer = isRoomEncrypted == true
+                && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {

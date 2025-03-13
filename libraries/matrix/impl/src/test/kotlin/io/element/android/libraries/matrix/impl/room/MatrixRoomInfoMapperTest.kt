@@ -33,6 +33,7 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
+import uniffi.matrix_sdk_base.EncryptionState
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility as RustRoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
@@ -48,6 +49,7 @@ class MatrixRoomInfoMapperTest {
                     rawName = "rawName",
                     topic = "topic",
                     avatarUrl = AN_AVATAR_URL,
+                    encryptionState = EncryptionState.ENCRYPTED,
                     isDirect = true,
                     isPublic = false,
                     isSpace = false,
@@ -84,7 +86,9 @@ class MatrixRoomInfoMapperTest {
                 rawName = "rawName",
                 topic = "topic",
                 avatarUrl = AN_AVATAR_URL,
+                isPublic = false,
                 isDirect = true,
+                isEncrypted = true,
                 isSpace = false,
                 isTombstoned = false,
                 isFavorite = false,
@@ -130,6 +134,7 @@ class MatrixRoomInfoMapperTest {
                     rawName = null,
                     topic = null,
                     avatarUrl = null,
+                    encryptionState = EncryptionState.UNKNOWN,
                     isDirect = false,
                     isPublic = true,
                     joinRule = null,
@@ -165,6 +170,8 @@ class MatrixRoomInfoMapperTest {
                 rawName = null,
                 topic = null,
                 avatarUrl = null,
+                isEncrypted = null,
+                isPublic = true,
                 isDirect = false,
                 joinRule = null,
                 isSpace = false,

@@ -245,6 +245,7 @@ class SecurityAndPrivacyPresenterTest {
                 aRoomInfo(
                     joinRule = JoinRule.Public,
                     historyVisibility = RoomHistoryVisibility.WorldReadable,
+                    isEncrypted = true,
                 )
             )
             // Saved settings are updated 3 times to match the edited settings

@@ -27,6 +27,7 @@ data class MatrixRoomInfo(
     val rawName: String?,
     val topic: String?,
     val avatarUrl: String?,
+    val isPublic: Boolean,
     val isDirect: Boolean,
     val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
@@ -76,4 +77,42 @@ data class MatrixRoomInfo(
 ) {
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases
+
+    companion object {
+        fun fromRoom(matrixRoom: MatrixRoom) = MatrixRoomInfo(
+            id = matrixRoom.roomId,
+            name = matrixRoom.displayName,
+            rawName = matrixRoom.displayName,
+            topic = matrixRoom.topic,
+            avatarUrl = matrixRoom.avatarUrl,
+            isPublic = matrixRoom.isPublic,
+            isDirect = matrixRoom.isDirect,
+            isEncrypted = matrixRoom.isEncrypted,
+            joinRule = null,
+            isSpace = matrixRoom.isSpace,
+            isTombstoned = false,
+            isFavorite = false,
+            canonicalAlias = TODO(),
+            alternativeAliases = TODO(),
+            currentUserMembership = TODO(),
+            inviter = TODO(),
+            activeMembersCount = TODO(),
+            invitedMembersCount = TODO(),
+            joinedMembersCount = TODO(),
+            userPowerLevels = TODO(),
+            highlightCount = TODO(),
+            notificationCount = TODO(),
+            userDefinedNotificationMode = TODO(),
+            hasRoomCall = TODO(),
+            activeRoomCallParticipants = TODO(),
+            isMarkedUnread = TODO(),
+            numUnreadMessages = TODO(),
+            numUnreadNotifications = TODO(),
+            numUnreadMentions = TODO(),
+            heroes = TODO(),
+            pinnedEventIds = TODO(),
+            creator = TODO(),
+            historyVisibility = TODO()
+        )
+    }
 }

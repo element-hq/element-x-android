@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.canHandleKnockRequestsAsState
 import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.services.analytics.api.AnalyticsService
@@ -101,6 +102,7 @@ class RoomDetailsPresenter @Inject constructor(
         val canInvite by getCanInvite(membersState)
 
         val isEncrypted by remember { derivedStateOf { roomInfo?.isEncrypted == true } }
+        val isDm by room.isDmAsState()
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
@@ -180,7 +182,7 @@ class RoomDetailsPresenter @Inject constructor(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
-            displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
+            displayRolesAndPermissionsSettings = !isDm && isUserAdmin,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,

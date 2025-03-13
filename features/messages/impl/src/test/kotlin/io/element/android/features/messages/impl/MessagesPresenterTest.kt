@@ -95,6 +95,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -536,15 +537,15 @@ class MessagesPresenterTest {
     fun `present - shows prompt to reinvite users in DM`() = runTest {
         val room = FakeMatrixRoom(
             sessionId = A_SESSION_ID,
-            isDirect = true,
-            activeMemberCount = 1L,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 1, activeMembersCount = 1))
+        }
         val presenter = createMessagesPresenter(matrixRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
@@ -552,7 +553,8 @@ class MessagesPresenterTest {
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
             (initialState.composerState.textEditorState as TextEditorState.Markdown).state.hasFocus = true
-            skipItems(1)
+            // Skip intermediate states
+            skipItems(2)
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
@@ -567,20 +569,22 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
         val room = FakeMatrixRoom(
             sessionId = A_SESSION_ID,
-            isDirect = false,
-            activeMemberCount = 1L,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = false, joinedMembersCount = 1, activeMembersCount = 1))
+        }
         val presenter = createMessagesPresenter(matrixRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             (initialState.composerState.textEditorState as TextEditorState.Markdown).state.hasFocus = true
+            // Skip intermediate events
+            skipItems(1)
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -598,12 +602,16 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 2, activeMembersCount = 2))
+        }
         val presenter = createMessagesPresenter(matrixRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             (initialState.composerState.textEditorState as TextEditorState.Markdown).state.hasFocus = true
+            // Skip intermediate events
+            skipItems(1)
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }

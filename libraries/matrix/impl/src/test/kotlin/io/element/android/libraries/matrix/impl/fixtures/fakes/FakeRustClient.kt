@@ -35,11 +35,11 @@ class FakeRustClient(
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
-    override fun getNotificationSettings(): NotificationSettings = notificationSettings
+    override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
     override fun session(): Session = session
     override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeRustTaskHandle()
-    override fun cachedAvatarUrl(): String? = null
+    override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeRustSyncServiceBuilder()
     override fun roomDirectorySearch(): RoomDirectorySearch = FakeRustRoomDirectorySearch()
