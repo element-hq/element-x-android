@@ -12,6 +12,7 @@ import android.system.Os
 import androidx.startup.Initializer
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.x.di.AppBindings
@@ -28,9 +29,10 @@ class TracingInitializer : Initializer<Unit> {
         val bugReporter = appBindings.bugReporter()
         Timber.plant(tracingService.createTimberTree(ELEMENT_X_TARGET))
         val preferencesStore = appBindings.preferencesStore()
+        val featureFlagService = appBindings.featureFlagService()
         val logLevel = runBlocking { preferencesStore.getTracingLogLevelFlow().first() }
         val tracingConfiguration = TracingConfiguration(
-            writesToLogcat = true,
+            writesToLogcat = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.PrintLogsToLogcat) },
             writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),

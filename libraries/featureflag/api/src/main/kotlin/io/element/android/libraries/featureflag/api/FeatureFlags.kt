@@ -168,4 +168,14 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    PrintLogsToLogcat(
+        key = "feature.print_logs_to_logcat",
+        title = "Print logs to logcat",
+        description = "Print logs to logcat in addition to log files. Requires an app restart to take effect." +
+            "\n\nWARNING: this will make the logs visible in the device logs and may affect performance. " +
+            "It's not intended for daily usage in release builds.",
+        defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
+        // False so it's displayed in the developer options screen
+        isFinished = false,
+    )
 }
