@@ -49,7 +49,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context, message: PushMessage, instance: String) {
-        Timber.tag(loggerTag.value).d("New message, correctly decrypted: ${message.decrypted}")
+        Timber.tag(loggerTag.value).d("New message, decrypted: ${message.decrypted}")
         coroutineScope.launch {
             val pushData = pushParser.parse(message.content, instance)
             if (pushData == null) {
