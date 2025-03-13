@@ -11,11 +11,12 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
+import android.text.TextPaint
+import android.text.TextUtils
 import android.text.style.ReplacementSpan
 import androidx.core.text.getSpans
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 class MentionSpan(
@@ -23,9 +24,6 @@ class MentionSpan(
     val rawValue: String,
     val type: Type,
 ) : ReplacementSpan() {
-    companion object {
-        private const val MAX_LENGTH = 20
-    }
 
     var backgroundColor: Int = 0
     var textColor: Int = 0
@@ -33,11 +31,11 @@ class MentionSpan(
     var endPadding: Int = 0
     var typeface: Typeface = Typeface.DEFAULT
 
-    private var textWidth = 0
-    private val backgroundPaint = Paint().apply {
-        isAntiAlias = true
-        color = backgroundColor
-    }
+    private var measuredTextWidth = 0
+
+    private val backgroundPaint = Paint()
+    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+
 
     var text: String = text
         set(value) {
@@ -59,29 +57,65 @@ class MentionSpan(
             Type.ROOM -> mentionSpanTheme.otherTextColor
             Type.EVERYONE -> mentionSpanTheme.currentUserTextColor
         }
-        backgroundPaint.color = backgroundColor
         val (startPaddingPx, endPaddingPx) = mentionSpanTheme.paddingValuesPx.value
         startPadding = startPaddingPx
         endPadding = endPaddingPx
         typeface = mentionSpanTheme.typeface.value
     }
 
-    override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        paint.typeface = typeface
-        textWidth = paint.measureText(mentionText, 0, mentionText.length).roundToInt()
-        return textWidth + startPadding + endPadding
+    override fun getSize(
+        paint: Paint,
+        text: CharSequence?,
+        start: Int,
+        end: Int,
+        fm: Paint.FontMetricsInt?
+    ): Int {
+        textPaint.set(paint)
+        textPaint.typeface = typeface
+        // Measure the full text width without truncation
+        measuredTextWidth = textPaint.measureText(mentionText, 0, mentionText.length).roundToInt()
+        return measuredTextWidth + startPadding + endPadding
     }
 
-    override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
+    override fun draw(
+        canvas: Canvas,
+        text: CharSequence?,
+        start: Int,
+        end: Int,
+        x: Float,
+        top: Int,
+        y: Int,
+        bottom: Int,
+        paint: Paint
+    ) {
         // Extra vertical space to add below the baseline (y). This helps us center the span vertically
         val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
 
-        val rect = RectF(x, top.toFloat(), x + textWidth + startPadding + endPadding, y.toFloat() + extraVerticalSpace)
+        val availableWidth = (canvas.width - x).coerceAtLeast(0f)
+        val measuredWidth = measuredTextWidth + startPadding + endPadding
+        val pillWidth = minOf(availableWidth, measuredWidth.toFloat())
+
+        backgroundPaint.color = backgroundColor
+        val rect = RectF(x, top.toFloat(), x + pillWidth, y.toFloat() + extraVerticalSpace)
         val radius = rect.height() / 2
         canvas.drawRoundRect(rect, radius, radius, backgroundPaint)
-        paint.color = textColor
-        paint.typeface = typeface
-        canvas.drawText(mentionText, 0, mentionText.length, x + startPadding, y.toFloat(), paint)
+
+        textPaint.set(paint)
+        textPaint.color = textColor
+        textPaint.typeface = typeface
+
+        val availableWidthForText = availableWidth - startPadding - endPadding
+        val textToDraw = if (measuredTextWidth > availableWidthForText) {
+            TextUtils.ellipsize(
+                mentionText,
+                textPaint,
+                availableWidthForText,
+                TextUtils.TruncateAt.END
+            )
+        } else {
+            mentionText
+        }
+        canvas.drawText(textToDraw, 0, textToDraw.length, x + startPadding, y.toFloat(), textPaint)
     }
 
     private fun getActualText(text: String): CharSequence {
@@ -89,21 +123,18 @@ class MentionSpan(
             val mentionText = text.orEmpty()
             when (type) {
                 Type.USER -> {
-                    if (text.firstOrNull() != '@') {
+                    if (mentionText.firstOrNull() != '@') {
                         append("@")
                     }
                 }
                 Type.ROOM -> {
-                    if (text.firstOrNull() != '#') {
+                    if (mentionText.firstOrNull() != '#') {
                         append("#")
                     }
                 }
                 Type.EVERYONE -> Unit
             }
-            append(mentionText.substring(0, min(mentionText.length, MAX_LENGTH)))
-            if (mentionText.length > MAX_LENGTH) {
-                append("…")
-            }
+            append(mentionText)
         }
     }
 
