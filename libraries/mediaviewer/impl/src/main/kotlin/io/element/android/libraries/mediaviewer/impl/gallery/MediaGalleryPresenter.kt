@@ -139,7 +139,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         }
 
         return MediaGalleryState(
-            roomName = roomInfo?.name ?: room.displayName,
+            roomName = roomInfo?.name.orEmpty(),
             mode = mode,
             groupedMediaItems = groupedMediaItems,
             mediaBottomSheetState = mediaBottomSheetState,

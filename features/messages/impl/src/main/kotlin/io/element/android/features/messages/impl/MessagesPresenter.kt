@@ -276,7 +276,7 @@ class MessagesPresenter @AssistedInject constructor(
         return AvatarData(
             id = id.value,
             name = name,
-            url = avatarUrl ?: room.avatarUrl,
+            url = avatarUrl ?: room.info.avatarUrl,
             size = AvatarSize.TimelineRoom
         )
     }

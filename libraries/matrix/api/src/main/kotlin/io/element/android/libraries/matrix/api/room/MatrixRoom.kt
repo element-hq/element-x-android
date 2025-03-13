@@ -45,22 +45,14 @@ import java.io.File
 interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
-    val displayName: String
-    val canonicalAlias: RoomAlias?
-    val alternativeAliases: List<RoomAlias>
-    val topic: String?
-    val avatarUrl: String?
-    val isEncrypted: Boolean?
-    val isSpace: Boolean
-    val isPublic: Boolean
-    val activeMemberCount: Long
-    val joinedMemberCount: Long
 
     val roomCoroutineScope: CoroutineScope
 
-    val roomInfoFlow: Flow<MatrixRoomInfo>
+    val roomInfoFlow: StateFlow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
     val identityStateChangesFlow: Flow<List<IdentityStateChange>>
+
+    val info: MatrixRoomInfo get() = roomInfoFlow.value
 
     /**
      * The current knock requests in the room as a Flow.
@@ -71,7 +63,7 @@ interface MatrixRoom : Closeable {
      * A one-to-one is a room with exactly 2 members.
      * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
      */
-    val isOneToOne: Boolean get() = activeMemberCount == 2L
+    val isOneToOne: Boolean get() = info.activeMembersCount == 2L
 
     /**
      * The current loaded members as a StateFlow.

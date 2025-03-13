@@ -83,14 +83,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
 import org.matrix.rustcomponents.sdk.TimelineFilter
@@ -115,7 +114,6 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,
-    private val roomListItem: RoomListItem,
     private val innerRoom: InnerRoom,
     innerTimeline: InnerTimeline,
     private val notificationSettingsService: NotificationSettingsService,
@@ -127,22 +125,17 @@ class RustMatrixRoom(
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    initialRoomInfo: MatrixRoomInfo,
 ) : MatrixRoom {
     override val roomId = RoomId(innerRoom.id())
 
-    override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
-        runCatching { innerRoom.roomInfo() }
-            .getOrNull()
-            ?.let(matrixRoomInfoMapper::map)
-            ?.let { initial ->
-                channel.trySend(initial)
-            }
+    override val roomInfoFlow: StateFlow<MatrixRoomInfo> = mxCallbackFlow {
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
             }
         })
-    }.shareIn(sessionCoroutineScope, started = SharingStarted.Lazily, replay = 1)
+    }.stateIn(sessionCoroutineScope, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         val initial = emptyList<UserId>()
@@ -310,42 +303,6 @@ class RustMatrixRoom(
         liveTimeline.close()
     }
 
-    override val displayName: String
-        get() = runCatching { innerRoom.displayName() ?: "" }.getOrDefault("")
-
-    override val topic: String?
-        get() = runCatching { innerRoom.topic() }.getOrDefault(null)
-
-    override val avatarUrl: String?
-        get() = runCatching { roomListItem.avatarUrl() ?: innerRoom.avatarUrl() }.getOrDefault(null)
-
-    override val isEncrypted: Boolean?
-        get() = runCatching {
-            when (innerRoom.encryptionState()) {
-                EncryptionState.ENCRYPTED -> true
-                EncryptionState.NOT_ENCRYPTED -> false
-                EncryptionState.UNKNOWN -> null
-            }
-        }.getOrNull()
-
-    override val canonicalAlias: RoomAlias?
-        get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
-
-    override val alternativeAliases: List<RoomAlias>
-        get() = runCatching { innerRoom.alternativeAliases().map { RoomAlias(it) } }.getOrDefault(emptyList())
-
-    override val isPublic: Boolean
-        get() = runCatching { innerRoom.isPublic() }.getOrDefault(false)
-
-    override val isSpace: Boolean
-        get() = runCatching { innerRoom.isSpace() }.getOrDefault(false)
-
-    override val joinedMemberCount: Long
-        get() = runCatching { innerRoom.joinedMembersCount().toLong() }.getOrDefault(0)
-
-    override val activeMemberCount: Long
-        get() = runCatching { innerRoom.activeMembersCount().toLong() }.getOrDefault(0)
-
     override suspend fun updateMembers() {
         val useCache = membersStateFlow.value is MatrixRoomMembersState.Unknown
         val source = if (useCache) {
@@ -383,7 +340,7 @@ class RustMatrixRoom(
         val currentRoomNotificationSettings = currentState.roomNotificationSettings()
         _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatching {
-            val isEncrypted = isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
+            val isEncrypted = roomInfoFlow.value.isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
             notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
         }.map {
             _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(it)

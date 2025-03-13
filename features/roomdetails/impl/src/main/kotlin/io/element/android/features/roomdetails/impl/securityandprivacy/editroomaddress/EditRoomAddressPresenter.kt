@@ -9,6 +9,8 @@ package io.element.android.features.roomdetails.impl.securityandprivacy.editroom
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.api.roomAliasFromName
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
@@ -45,15 +48,16 @@ class EditRoomAddressPresenter @AssistedInject constructor(
     @Composable
     override fun present(): EditRoomAddressState {
         val coroutineScope = rememberCoroutineScope()
+        val roomInfo by room.roomInfoFlow.collectAsState()
         val homeserverName = remember { client.userIdServerName() }
         val roomAddressValidity = remember {
             mutableStateOf<RoomAddressValidity>(RoomAddressValidity.Unknown)
         }
-        val savedRoomAddress = remember { room.firstAliasMatching(homeserverName)?.addressName() }
+        val savedRoomAddress by remember { derivedStateOf { roomInfo.firstAliasMatching(homeserverName)?.addressName() } }
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         var newRoomAddress by remember {
             mutableStateOf(
-                savedRoomAddress ?: roomAliasHelper.roomAliasNameFromRoomDisplayName(room.displayName)
+                savedRoomAddress ?: roomAliasHelper.roomAliasNameFromRoomDisplayName(roomInfo.name.orEmpty())
             )
         }
 
@@ -97,8 +101,9 @@ class EditRoomAddressPresenter @AssistedInject constructor(
         newRoomAddress: String,
     ) = launch {
         suspend {
-            val savedCanonicalAlias = room.canonicalAlias
-            val savedAliasFromHomeserver = room.firstAliasMatching(serverName)
+            val roomInfo = room.info
+            val savedCanonicalAlias = roomInfo.canonicalAlias
+            val savedAliasFromHomeserver = roomInfo.firstAliasMatching(serverName)
             val newRoomAlias = client.roomAliasFromName(newRoomAddress) ?: throw IllegalArgumentException("Invalid room address")
 
             // First publish the new alias in the room directory
@@ -112,7 +117,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
             when {
                 // Allow to update the canonical alias only if the saved canonical alias matches the homeserver or if there is no canonical alias
                 savedCanonicalAlias == null || savedCanonicalAlias.matchesServer(serverName) -> {
-                    val newAlternativeAliases = room.alternativeAliases.filter { it != savedAliasFromHomeserver }
+                    val newAlternativeAliases = roomInfo.alternativeAliases.filter { it != savedAliasFromHomeserver }
                     room.updateCanonicalAlias(newRoomAlias, newAlternativeAliases).getOrThrow()
                 }
                 // Otherwise, only update the alternative aliases and keep the current canonical alias
@@ -121,7 +126,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
                         // New alias is added first, so we make sure we pick it first
                         add(newRoomAlias)
                         // Add all other aliases, except the one we just removed from the room directory
-                        addAll(room.alternativeAliases.filter { it != savedAliasFromHomeserver })
+                        addAll(roomInfo.alternativeAliases.filter { it != savedAliasFromHomeserver })
                     }
                     room.updateCanonicalAlias(savedCanonicalAlias, newAlternativeAliases).getOrThrow()
                 }
@@ -134,7 +139,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
 /**
  * Returns the first alias that matches the given server name, or null if none match.
  */
-private fun MatrixRoom.firstAliasMatching(serverName: String): RoomAlias? {
+private fun MatrixRoomInfo.firstAliasMatching(serverName: String): RoomAlias? {
     // Check if the canonical alias matches the homeserver
     if (canonicalAlias?.matchesServer(serverName) == true) {
         return canonicalAlias

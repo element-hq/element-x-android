@@ -235,7 +235,7 @@ class TimelinePresenter @AssistedInject constructor(
         val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
-                    name = roomInfo?.name ?: room.displayName,
+                    name = roomInfo?.name,
                     isDm = roomInfo?.isDm.orFalse(),
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,

@@ -152,7 +152,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             imageUriString = null,
             imageMimeType = null,
             threadId = threadId,
-            roomName = room.displayName,
+            roomName = room.info.name,
             roomIsDm = room.isDm(),
             outGoingMessage = true,
         )

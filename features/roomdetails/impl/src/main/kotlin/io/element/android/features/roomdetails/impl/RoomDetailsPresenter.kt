@@ -73,22 +73,22 @@ class RoomDetailsPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
-        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
         val isUserAdmin = room.isOwnUserAdmin()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
+        val roomAvatar by remember { derivedStateOf { roomInfo.avatarUrl } }
 
-        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.displayName).trim() } }
-        val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
-        val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
-        val joinRule by remember { derivedStateOf { roomInfo?.joinRule } }
+        val roomName by remember { derivedStateOf { roomInfo.name?.trim().orEmpty() } }
+        val roomTopic by remember { derivedStateOf { roomInfo.topic } }
+        val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
+        val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
         var canShowMediaGallery by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             canShowMediaGallery = featureFlagService.isFeatureEnabled(FeatureFlags.MediaGallery)
         }
-        val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size } }
+        val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -101,7 +101,8 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
 
-        val isEncrypted by remember { derivedStateOf { roomInfo?.isEncrypted == true } }
+        val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias }}
+        val isEncrypted by remember { derivedStateOf { roomInfo.isEncrypted == true } }
         val isDm by room.isDmAsState()
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
@@ -111,6 +112,7 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember, currentMember)
         val roomCallState = roomCallStatePresenter.present()
+        val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -168,10 +170,10 @@ class RoomDetailsPresenter @Inject constructor(
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
-            roomAlias = room.canonicalAlias,
+            roomAlias = canonicalAlias,
             roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
-            memberCount = room.joinedMemberCount,
+            memberCount = joinedMemberCount,
             isEncrypted = isEncrypted,
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
