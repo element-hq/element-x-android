@@ -38,8 +38,8 @@ import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
-import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
@@ -79,17 +79,17 @@ internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent):
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
     val mentionSpanTheme = LocalMentionSpanTheme.current
     val formattedBody = content.formattedBody ?: content.pillifiedBody
-    val textWithMentions = remember(formattedBody, mentionSpanTheme, lastCacheUpdate) {
-        updateMentionSpans(formattedBody, userProfileCache)
-        mentionSpanTheme.updateMentionStyles(formattedBody)
+    val textWithMentions = remember(formattedBody, mentionSpanTheme, lastCacheUpdate, ElementTheme.isLightTheme) {
+        updateMentionSpans(formattedBody, userProfileCache, mentionSpanTheme)
         formattedBody
     }
     return SpannableString(textWithMentions)
 }
 
-private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCache): Boolean {
+private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCache, mentionSpanTheme: MentionSpanTheme): Boolean {
     var changedContents = false
     for (mentionSpan in text.getMentionSpans()) {
+        mentionSpan.update(mentionSpanTheme)
         when (mentionSpan.type) {
             MentionSpan.Type.USER -> {
                 val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
