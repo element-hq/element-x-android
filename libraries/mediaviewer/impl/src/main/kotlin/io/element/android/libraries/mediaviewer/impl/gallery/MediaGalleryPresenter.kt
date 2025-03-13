@@ -64,7 +64,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var mode by remember { mutableStateOf(MediaGalleryMode.Images) }
 
-        val roomInfo by room.roomInfoFlow.collectAsState(null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
@@ -139,7 +139,7 @@ class MediaGalleryPresenter @AssistedInject constructor(
         }
 
         return MediaGalleryState(
-            roomName = roomInfo?.name.orEmpty(),
+            roomName = roomInfo.name.orEmpty(),
             mode = mode,
             groupedMediaItems = groupedMediaItems,
             mediaBottomSheetState = mediaBottomSheetState,

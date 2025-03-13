@@ -52,8 +52,6 @@ interface MatrixRoom : Closeable {
     val roomTypingMembersFlow: Flow<List<UserId>>
     val identityStateChangesFlow: Flow<List<IdentityStateChange>>
 
-    val info: MatrixRoomInfo get() = roomInfoFlow.value
-
     /**
      * The current knock requests in the room as a Flow.
      */
@@ -63,7 +61,7 @@ interface MatrixRoom : Closeable {
      * A one-to-one is a room with exactly 2 members.
      * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
      */
-    val isOneToOne: Boolean get() = info.activeMembersCount == 2L
+    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
 
     /**
      * The current loaded members as a StateFlow.
@@ -73,6 +71,11 @@ interface MatrixRoom : Closeable {
     val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
     val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+
+    /**
+     * Get the latest room info we have received from the SDK stream.
+     */
+    fun info(): MatrixRoomInfo = roomInfoFlow.value
 
     /**
      * Try to load the room members and update the membersFlow.

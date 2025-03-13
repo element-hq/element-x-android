@@ -25,7 +25,6 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -36,7 +35,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
@@ -101,7 +99,7 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
 
-        val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias }}
+        val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias } }
         val isEncrypted by remember { derivedStateOf { roomInfo.isEncrypted == true } }
         val isDm by room.isDmAsState()
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
@@ -186,7 +184,7 @@ class RoomDetailsPresenter @Inject constructor(
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !isDm && isUserAdmin,
             isPublic = joinRule == JoinRule.Public,
-            heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
+            heroes = roomInfo.heroes.toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
             canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,

@@ -128,7 +128,7 @@ class MessagesPresenter @AssistedInject constructor(
     override fun present(): MessagesState {
         htmlConverterProvider.Update(currentUserId = room.sessionId)
 
-        val roomInfo by room.roomInfoFlow.collectAsState(null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
@@ -147,13 +147,13 @@ class MessagesPresenter @AssistedInject constructor(
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
         val roomName: AsyncData<String> by remember {
-            derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
+            derivedStateOf { roomInfo.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
         val roomAvatar: AsyncData<AvatarData> by remember {
-            derivedStateOf { roomInfo?.avatarData()?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
+            derivedStateOf { AsyncData.Success(roomInfo.avatarData()) }
         }
         val heroes by remember {
-            derivedStateOf { roomInfo?.heroes().orEmpty().toPersistentList() }
+            derivedStateOf { roomInfo.heroes().toPersistentList() }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -172,7 +172,7 @@ class MessagesPresenter @AssistedInject constructor(
         val composerHasFocus by remember { derivedStateOf { composerState.textEditorState.hasFocus() } }
         LaunchedEffect(hasDismissedInviteDialog, composerHasFocus, roomInfo) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerHasFocus && roomInfo?.isDm == true && roomInfo?.activeMembersCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerHasFocus && roomInfo.isDm && roomInfo.activeMembersCount == 1L
             }
         }
         val isOnline by syncService.isOnline().collectAsState()
@@ -276,7 +276,7 @@ class MessagesPresenter @AssistedInject constructor(
         return AvatarData(
             id = id.value,
             name = name,
-            url = avatarUrl ?: room.info.avatarUrl,
+            url = avatarUrl ?: room.info().avatarUrl,
             size = AvatarSize.TimelineRoom
         )
     }

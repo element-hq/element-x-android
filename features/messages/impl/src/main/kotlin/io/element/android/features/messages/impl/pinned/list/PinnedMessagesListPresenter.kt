@@ -90,7 +90,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         val timelineRoomInfo = remember(isDm) {
             TimelineRoomInfo(
                 isDm = isDm,
-                name = room.info.name,
+                name = room.info().name,
                 // We don't need to compute those values
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,

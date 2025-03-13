@@ -56,17 +56,15 @@ class SecurityAndPrivacyPresenterTest {
     fun `present - room info change updates saved and edited settings`() = runTest {
         val room = FakeMatrixRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
+            initialRoomInfo = aRoomInfo(
+                joinRule = JoinRule.Public,
+                historyVisibility = RoomHistoryVisibility.WorldReadable,
+                canonicalAlias = A_ROOM_ALIAS,
+            )
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
-            skipItems(2)
-            room.givenRoomInfo(
-                aRoomInfo(
-                    joinRule = JoinRule.Public,
-                    historyVisibility = RoomHistoryVisibility.WorldReadable,
-                    canonicalAlias = A_ROOM_ALIAS,
-                )
-            )
+            skipItems(1)
             with(awaitItem()) {
                 assertThat(editedSettings).isEqualTo(savedSettings)
                 assertThat(editedSettings.roomAccess).isEqualTo(SecurityAndPrivacyRoomAccess.Anyone)
@@ -151,6 +149,7 @@ class SecurityAndPrivacyPresenterTest {
                 assertThat(canBeSaved).isTrue()
                 eventSink(SecurityAndPrivacyEvents.ToggleEncryptionState)
             }
+            skipItems(1)
             with(awaitItem()) {
                 assertThat(editedSettings.isEncrypted).isFalse()
                 assertThat(canBeSaved).isFalse()
@@ -162,7 +161,8 @@ class SecurityAndPrivacyPresenterTest {
     fun `present - room visibility loading and change`() = runTest {
         val room = FakeMatrixRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
-            roomVisibilityResult = { Result.success(RoomVisibility.Private) }
+            roomVisibilityResult = { Result.success(RoomVisibility.Private) },
+            initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared)
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
@@ -212,7 +212,8 @@ class SecurityAndPrivacyPresenterTest {
             updateJoinRuleResult = updateJoinRuleLambda,
             updateRoomVisibilityResult = updateRoomVisibilityLambda,
             updateRoomHistoryVisibilityResult = updateRoomHistoryVisibilityLambda,
-            roomVisibilityResult = { Result.success(RoomVisibility.Private) }
+            roomVisibilityResult = { Result.success(RoomVisibility.Private) },
+            initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite, historyVisibility = RoomHistoryVisibility.Shared)
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
@@ -276,7 +277,8 @@ class SecurityAndPrivacyPresenterTest {
             updateJoinRuleResult = updateJoinRuleLambda,
             updateRoomVisibilityResult = updateRoomVisibilityLambda,
             updateRoomHistoryVisibilityResult = updateRoomHistoryVisibilityLambda,
-            roomVisibilityResult = { Result.success(RoomVisibility.Private) }
+            roomVisibilityResult = { Result.success(RoomVisibility.Private) },
+            initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
         )
         val presenter = createSecurityAndPrivacyPresenter(room = room)
         presenter.test {
@@ -312,7 +314,7 @@ class SecurityAndPrivacyPresenterTest {
                 )
             )
             // Saved settings are updated 2 times to match the edited settings
-            skipItems(2)
+            skipItems(3)
             with(awaitItem()) {
                 assertThat(saveAction).isInstanceOf(AsyncAction.Failure::class.java)
                 assertThat(savedSettings.isVisibleInRoomDirectory).isNotEqualTo(editedSettings.isVisibleInRoomDirectory)
@@ -329,7 +331,8 @@ class SecurityAndPrivacyPresenterTest {
         serverName: String = "matrix.org",
         room: MatrixRoom = FakeMatrixRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
-            roomVisibilityResult = { Result.success(RoomVisibility.Private) }
+            roomVisibilityResult = { Result.success(RoomVisibility.Private) },
+            initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
         ),
         navigator: SecurityAndPrivacyNavigator = FakeSecurityAndPrivacyNavigator(),
     ): SecurityAndPrivacyPresenter {

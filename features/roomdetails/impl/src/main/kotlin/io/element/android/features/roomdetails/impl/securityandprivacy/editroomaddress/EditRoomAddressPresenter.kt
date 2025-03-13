@@ -101,7 +101,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
         newRoomAddress: String,
     ) = launch {
         suspend {
-            val roomInfo = room.info
+            val roomInfo = room.info()
             val savedCanonicalAlias = roomInfo.canonicalAlias
             val savedAliasFromHomeserver = roomInfo.firstAliasMatching(serverName)
             val newRoomAlias = client.roomAliasFromName(newRoomAddress) ?: throw IllegalArgumentException("Invalid room address")

@@ -39,7 +39,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
     @Composable
     override fun present(): RolesAndPermissionsState {
         val coroutineScope = rememberCoroutineScope()
-        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
         val roomMembers by room.membersStateFlow.collectAsState()
         // Get the list of active room members (joined or invited), in order to filter members present in the power
         // level state Event.
@@ -109,8 +109,8 @@ class RolesAndPermissionsPresenter @Inject constructor(
         }
     }
 
-    private fun MatrixRoomInfo?.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
-        return this?.userPowerLevels.orEmpty().count { (userId, level) ->
+    private fun MatrixRoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
+        return this.userPowerLevels.count { (userId, level) ->
             RoomMember.Role.forPowerLevel(level) == role && userId in userIds
         }
     }

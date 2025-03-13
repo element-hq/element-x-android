@@ -1061,8 +1061,6 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
-            activeMemberCount = 2,
-            isEncrypted = true,
             canUserTriggerRoomNotificationResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {

@@ -96,7 +96,7 @@ class TimelinePresenter @AssistedInject constructor(
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
-        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
@@ -235,12 +235,12 @@ class TimelinePresenter @AssistedInject constructor(
         val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
-                    name = roomInfo?.name,
-                    isDm = roomInfo?.isDm.orFalse(),
+                    name = roomInfo.name,
+                    isDm = roomInfo.isDm.orFalse(),
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
                     roomCallState = roomCallState,
-                    pinnedEventIds = roomInfo?.pinnedEventIds.orEmpty(),
+                    pinnedEventIds = roomInfo.pinnedEventIds.orEmpty(),
                     typingNotificationState = typingNotificationState,
                 )
             }
