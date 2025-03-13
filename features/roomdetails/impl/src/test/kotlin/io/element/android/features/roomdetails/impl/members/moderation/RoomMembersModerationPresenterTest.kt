@@ -35,7 +35,6 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when room is DM is false`() = runTest {
         val room = FakeMatrixRoom(
-            isDirect = true,
             isPublic = true,
             activeMemberCount = 2,
             canKickResult = { Result.success(true) },
@@ -53,7 +52,6 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when user can kick other users, FF is enabled and room is not a DM returns true`() = runTest {
         val room = FakeMatrixRoom(
-            isDirect = false,
             activeMemberCount = 10,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
@@ -69,7 +67,6 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when user can ban other users, FF is enabled and room is not a DM returns true`() = runTest {
         val room = FakeMatrixRoom(
-            isDirect = false,
             activeMemberCount = 10,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },

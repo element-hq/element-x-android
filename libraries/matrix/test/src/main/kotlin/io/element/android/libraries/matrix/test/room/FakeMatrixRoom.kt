@@ -74,7 +74,6 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
     override val isSpace: Boolean = false,
-    override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),

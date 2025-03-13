@@ -90,8 +90,8 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(isRoomEncrypted) {
-            shouldDisplayMentionsOnlyDisclaimer = isRoomEncrypted == true
-                && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
+            shouldDisplayMentionsOnlyDisclaimer = isRoomEncrypted == true &&
+                !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {

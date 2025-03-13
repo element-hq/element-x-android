@@ -52,7 +52,6 @@ interface MatrixRoom : Closeable {
     val avatarUrl: String?
     val isEncrypted: Boolean?
     val isSpace: Boolean
-    val isDirect: Boolean
     val isPublic: Boolean
     val activeMemberCount: Long
     val joinedMemberCount: Long

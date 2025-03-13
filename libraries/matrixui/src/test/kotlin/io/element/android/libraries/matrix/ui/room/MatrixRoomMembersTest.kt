@@ -54,8 +54,6 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room is not a dm`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = false,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -70,7 +68,6 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emits other member even if the room is not encrypted`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = false,
         ).apply {
             givenRoomInfo(aRoomInfo(
                 isDirect = true,
@@ -93,14 +90,15 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room has only 1 member`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1))
             )
         }.test {
+            skipItems(1)
             assertThat(awaitItem().value).isNull()
         }
     }
@@ -109,14 +107,15 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room has only 3 members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1, roomMember2, roomMember3))
             )
         }.test {
+            skipItems(1)
             assertThat(awaitItem().value).isNull()
         }
     }
@@ -125,9 +124,9 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the other member is not active`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(
@@ -138,6 +137,7 @@ class MatrixRoomMembersTest {
                 )
             )
         }.test {
+            skipItems(1)
             assertThat(awaitItem().value).isNull()
         }
     }

@@ -84,7 +84,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
@@ -340,9 +339,6 @@ class RustMatrixRoom(
 
     override val isSpace: Boolean
         get() = runCatching { innerRoom.isSpace() }.getOrDefault(false)
-
-    override val isDirect: Boolean
-        get() = runCatching { runBlocking { innerRoom.isDirect() } }.getOrDefault(false)
 
     override val joinedMemberCount: Long
         get() = runCatching { innerRoom.joinedMembersCount().toLong() }.getOrDefault(0)

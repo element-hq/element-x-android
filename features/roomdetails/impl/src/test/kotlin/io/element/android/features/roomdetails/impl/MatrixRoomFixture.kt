@@ -51,7 +51,6 @@ fun aMatrixRoom(
     avatarUrl = avatarUrl,
     isEncrypted = isEncrypted,
     isPublic = isPublic,
-    isDirect = isDirect,
     notificationSettingsService = notificationSettingsService,
     canInviteResult = canInviteResult,
     canBanResult = canBanResult,
@@ -73,6 +72,8 @@ fun aMatrixRoom(
                 topic = topic,
                 avatarUrl = avatarUrl,
                 isDirect = isDirect,
+                isPublic = isPublic,
+                isEncrypted = isEncrypted,
                 joinRule = joinRule,
             )
         )
