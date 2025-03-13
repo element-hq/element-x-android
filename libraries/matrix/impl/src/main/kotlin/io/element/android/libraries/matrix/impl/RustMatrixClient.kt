@@ -151,8 +151,7 @@ class RustMatrixClient(
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(innerSyncService)
     private val innerNotificationClient = runBlocking { innerClient.notificationClient(notificationProcessSetup) }
     private val notificationService = RustNotificationService(innerNotificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(innerClient, dispatchers)
-        .apply { start() }
+    private val notificationSettingsService = RustNotificationSettingsService(innerClient, sessionCoroutineScope, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = innerClient,
         syncService = rustSyncService,
@@ -216,7 +215,7 @@ class RustMatrixClient(
             userId = sessionId,
             // TODO cache for displayName?
             displayName = null,
-            avatarUrl = innerClient.cachedAvatarUrl(),
+            avatarUrl = null,
         )
     )
 
@@ -237,8 +236,21 @@ class RustMatrixClient(
         sessionDelegate.bindClient(this)
 
         sessionCoroutineScope.launch {
+            // Start notification settings
+            notificationSettingsService.start()
+
             // Force a refresh of the profile
             getUserProfile()
+
+            // And emit a new value
+            _userProfile.emit(
+                MatrixUser(
+                    userId = sessionId,
+                    // TODO cache for displayName?
+                    displayName = null,
+                    avatarUrl = innerClient.cachedAvatarUrl(),
+                )
+            )
         }
     }
 
@@ -479,10 +491,10 @@ class RustMatrixClient(
         appCoroutineScope.launch {
             roomFactory.destroy()
             rustSyncService.destroy()
+            notificationSettingsService.destroy()
         }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
-        notificationSettingsService.destroy()
         verificationService.destroy()
 
         sessionDelegate.clearCurrentClient()

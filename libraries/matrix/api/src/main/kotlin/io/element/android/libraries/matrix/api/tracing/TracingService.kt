@@ -10,6 +10,5 @@ package io.element.android.libraries.matrix.api.tracing
 import timber.log.Timber
 
 interface TracingService {
-    fun setupTracing(tracingConfiguration: TracingConfiguration)
     fun createTimberTree(target: String): Timber.Tree
 }
