@@ -1095,28 +1095,25 @@ class MessagesPresenterTest {
     fun `present - when room is encrypted and a DM, the DM user's identity state is fetched onResume`() = runTest {
         val room = FakeMatrixRoom(
             sessionId = A_SESSION_ID,
-            isEncrypted = true,
-            isDirect = true,
-            activeMemberCount = 2L,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
+            initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
         ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
-            givenRoomInfo(aRoomInfo(id = roomId, name = "", isDirect = true))
         }
         val encryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(IdentityState.Verified) })
 
         val presenter = createMessagesPresenter(matrixRoom = room, encryptionService = encryptionService)
         val lifecycleOwner = FakeLifecycleOwner()
         presenter.testWithLifecycleOwner(lifecycleOwner) {
-            skipItems(1)
-
             val initialState = awaitItem()
             assertThat(initialState.dmUserVerificationState).isNull()
+
+            skipItems(1)
             ensureAllEventsConsumed()
 
             lifecycleOwner.givenState(Lifecycle.State.RESUMED)

@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -167,10 +168,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - when user's identity is verified, the value in the state is VERIFIED`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.Verified) },
@@ -186,10 +187,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - when user's identity is unknown, the value in the state is UNKNOWN`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -205,10 +206,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - when user's identity is pinned, the value in the state is UNVERIFIED`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.Pinned) },
@@ -224,10 +225,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - when user's identity is pin violation, the value in the state is UNVERIFIED`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.PinViolation) },
@@ -243,10 +244,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - when user's identity has a verification violation, the value in the state is VERIFICATION_VIOLATION`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(IdentityState.VerificationViolation) },
@@ -262,10 +263,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - user identity updates in real time if the room is encrypted`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -291,10 +292,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - user identity can't update in real time if the room is not encrypted`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = false,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = false),
         )
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = { Result.success(null) },
@@ -315,10 +316,10 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - handles WithdrawVerification action`() = runTest {
         val room = FakeMatrixRoom(
-            isEncrypted = true,
             getUpdatedMemberResult = { Result.success(aRoomMember(A_USER_ID)) },
             userDisplayNameResult = { Result.success("A custom name") },
             userAvatarUrlResult = { Result.success("A custom avatar") },
+            initialRoomInfo = aRoomInfo(isEncrypted = true),
         )
         val withdrawVerificationResult = lambdaRecorder<UserId, Result<Unit>> { Result.success(Unit) }
         val encryptionService = FakeEncryptionService(
