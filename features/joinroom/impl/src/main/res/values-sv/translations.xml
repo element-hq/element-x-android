@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Du bannades från det här rummet av %1$s."</string>
+  <string name="screen_join_room_ban_message">"Du bannades från det här rummet"</string>
+  <string name="screen_join_room_ban_reason">"Anledning: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Avbryt begäran"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, avbryt"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Är du säker på att du vill avbryta din begäran om att gå med i det här rummet?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Avbryt begäran om att gå med"</string>
+  <string name="screen_join_room_fail_message">"Misslyckades att gå med i rummet."</string>
+  <string name="screen_join_room_fail_reason">"Detta rum är antingen endast för inbjudna eller så kan det finnas begränsningar för åtkomst på utrymmesnivå."</string>
   <string name="screen_join_room_forget_action">"Glöm det här rummet"</string>
   <string name="screen_join_room_invite_required_message">"Du behöver en inbjudan för att gå med i detta rum"</string>
   <string name="screen_join_room_join_action">"Gå med i rummet"</string>
+  <string name="screen_join_room_join_restricted_message">"Du kan behöva bli inbjuden eller vara medlem i ett utrymme för att gå med."</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
   <string name="screen_join_room_knock_message_description">"Meddelande (valfritt)"</string>
   <string name="screen_join_room_knock_sent_description">"Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras."</string>

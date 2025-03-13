@@ -19,5 +19,12 @@ Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilità della stanza"</string>
   <string name="screen_create_room_title">"Crea una stanza"</string>
   <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
+  <string name="screen_room_directory_search_title">"Elenco delle stanze"</string>
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Accedi alla stanza tramite indirizzo"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Indirizzo non valido"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Inserisci…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Stanza trovata"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Stanza non trovata"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"ad esempio #room -name:matrix.org"</string>
 </resources>

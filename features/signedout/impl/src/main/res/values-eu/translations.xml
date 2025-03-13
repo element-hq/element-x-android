@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Pasahitza beste saio batean aldatu duzu"</string>
+  <string name="screen_signed_out_reason_2">"Saioa beste saio batetik ezabatu duzu"</string>
+  <string name="screen_signed_out_reason_3">"Zerbitzariaren administratzaileak zure sarbidea baliogabetu du"</string>
+  <string name="screen_signed_out_subtitle">"Litekeena da saioa amaitu izana ondorengo arrazoietako bat dela eta. Hasi saioa berriro %s erabiltzen jarraitzeko."</string>
+  <string name="screen_signed_out_title">"Saioa amaitu duzu"</string>
+</resources>

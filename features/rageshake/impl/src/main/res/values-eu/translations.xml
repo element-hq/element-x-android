@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Erantsi pantaila-argazkia"</string>
+  <string name="screen_bug_report_contact_me">"Galderarik baduzu, nirekin jar zaitezke harremanetan."</string>
+  <string name="screen_bug_report_contact_me_title">"Jarri nirekin harremanetan"</string>
+  <string name="screen_bug_report_edit_screenshot">"Editatu pantaila-argazkia"</string>
+  <string name="screen_bug_report_editor_description">"Deskribatu arazoa. Zer egin duzu? Zer espero zenuen gertatzea? Benetan gertatu dena. Eman ahalik eta xehetasun gehien."</string>
+  <string name="screen_bug_report_editor_placeholder">"Deskribatu arazoa…"</string>
+  <string name="screen_bug_report_editor_supporting">"Ahal izanez gero, idatzi deskribapena ingelesez."</string>
+  <string name="screen_bug_report_error_description_too_short">"Deskribapena laburregia da; eman gertatutakoari buruzko xehetasun gehiago. Eskerrik asko!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Bidali kraskaduraren erregistroak"</string>
+  <string name="screen_bug_report_include_logs">"Baimendu erregistroak"</string>
+  <string name="screen_bug_report_include_screenshot">"Bidali pantaila-argazkia"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s kraskatu zen azkenekoz erabili zenean. Gurekin partekatu nahi al duzu kraskatzearen txostena?"</string>
+  <string name="screen_bug_report_view_logs">"Ikusi erregistroak"</string>
+</resources>

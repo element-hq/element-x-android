@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Has sido vetado de esta sala por %1$s."</string>
+  <string name="screen_join_room_ban_message">"Has sido vetado de esta sala"</string>
+  <string name="screen_join_room_ban_reason">"Motivo: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"Cancelar solicitud"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Sí, cancelar"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"¿Estás seguro de que deseas cancelar tu solicitud de unión a esta sala?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Cancelar solicitud de unión"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Sí, rechazar y bloquear"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"¿Estás seguro de que deseas rechazar la invitación para unirte a esta sala? Esto también impedirá que %1$s pueda contactar contigo o invitarte a salas."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Rechazar invitación y bloquear"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Rechazar y bloquear"</string>
+  <string name="screen_join_room_fail_message">"No se pudo unir a la sala."</string>
+  <string name="screen_join_room_fail_reason">"O bien solo se puede acceder a esta sala con invitación, o puede que haya restricciones de acceso a nivel de espacio."</string>
+  <string name="screen_join_room_forget_action">"Olvidar esta sala"</string>
+  <string name="screen_join_room_invite_required_message">"Necesitas una invitación para unirte a esta sala"</string>
+  <string name="screen_join_room_join_action">"Unirse a la sala"</string>
+  <string name="screen_join_room_join_restricted_message">"Es posible que necesites ser invitado o ser miembro de un espacio para poder unirte."</string>
+  <string name="screen_join_room_knock_action">"Enviar solicitud de unión"</string>
+  <string name="screen_join_room_knock_message_description">"Mensaje (opcional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Recibirás una invitación para unirte a la sala si se acepta tu solicitud."</string>
+  <string name="screen_join_room_knock_sent_title">"Solicitud de unión enviada"</string>
+  <string name="screen_join_room_loading_alert_message">"No hemos podido mostrar la vista previa de la sala. Esto puede deberse a problemas de red o del servidor."</string>
+  <string name="screen_join_room_loading_alert_title">"No hemos podido mostrar la vista previa de esta sala"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s aún no admite los espacios. Puedes acceder a los espacios en la web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Todavía no se admiten los espacios"</string>
+  <string name="screen_join_room_subtitle_knock">"Haz clic en el botón que aparece a continuación y se notificará a un administrador de la sala. Podrás unirte a la conversación una vez que hayas sido aprobado."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Debes ser miembro de esta sala para ver el historial de mensajes."</string>
+  <string name="screen_join_room_title_knock">"¿Quieres unirte a esta sala?"</string>
+  <string name="screen_join_room_title_no_preview">"La vista previa no está disponible"</string>
+</resources>

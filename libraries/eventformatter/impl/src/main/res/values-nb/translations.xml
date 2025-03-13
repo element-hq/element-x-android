@@ -43,6 +43,14 @@
   <string name="state_event_room_name_changed_by_you">"Du endret romnavnet til: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s fjernet romnavnet"</string>
   <string name="state_event_room_name_removed_by_you">"Du fjernet romnavnet"</string>
+  <string name="state_event_room_none">"%1$s gjorde ingen endringer"</string>
+  <string name="state_event_room_none_by_you">"Du har ikke gjort noen endringer"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s endret de festede meldingene"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Du endret de festede meldingene"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s festet en melding"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Du festet en melding"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s løsnet en melding"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Du løsnet en melding"</string>
   <string name="state_event_room_reject">"%1$s avviste invitasjonen"</string>
   <string name="state_event_room_reject_by_you">"Du avviste invitasjonen"</string>
   <string name="state_event_room_remove">"%1$s fjernet %2$s"</string>

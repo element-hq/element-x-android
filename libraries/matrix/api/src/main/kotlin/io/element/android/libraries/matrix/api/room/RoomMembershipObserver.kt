@@ -25,4 +25,12 @@ class RoomMembershipObserver {
     suspend fun notifyUserLeftRoom(roomId: RoomId) {
         _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.LEFT))
     }
+
+    suspend fun notifyUserDeclinedInvite(roomId: RoomId) {
+        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.INVITATION_REJECTED))
+    }
+
+    suspend fun notifyUserCanceledKnock(roomId: RoomId) {
+        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.KNOCK_RETRACTED))
+    }
 }

@@ -31,10 +31,10 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
@@ -109,13 +109,19 @@ private fun NotificationSettingsContentView(
     val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
-        PreferenceText(
-            icon = CompoundIcons.NotificationsOffSolid(),
-            title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
-            subtitle = stringResource(
-                id = R.string.screen_notification_settings_system_notifications_action_required,
-                stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
-            ),
+        ListItem(
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.NotificationsOffSolid())),
+            headlineContent = {
+                Text(stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off))
+            },
+            supportingContent = {
+                Text(
+                    stringResource(
+                        id = R.string.screen_notification_settings_system_notifications_action_required,
+                        stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
+                    )
+                )
+            },
             onClick = {
                 context.startNotificationSettingsIntent()
             }
@@ -131,10 +137,14 @@ private fun NotificationSettingsContentView(
     if (systemSettings.appNotificationsEnabled) {
         if (!state.fullScreenIntentPermissionsState.permissionGranted) {
             PreferenceCategory {
-                PreferenceText(
-                    icon = CompoundIcons.VoiceCallSolid(),
-                    title = stringResource(id = R.string.full_screen_intent_banner_title),
-                    subtitle = stringResource(R.string.full_screen_intent_banner_message),
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCallSolid())),
+                    headlineContent = {
+                        Text(stringResource(id = R.string.full_screen_intent_banner_title))
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.full_screen_intent_banner_message))
+                    },
                     onClick = {
                         state.fullScreenIntentPermissionsState.openFullScreenIntentSettings()
                     }
@@ -142,15 +152,22 @@ private fun NotificationSettingsContentView(
             }
         }
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
-            PreferenceText(
-                title = stringResource(id = R.string.screen_notification_settings_group_chats),
-                subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(id = R.string.screen_notification_settings_group_chats))
+                },
+                supportingContent = {
+                    Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode))
+                },
                 onClick = onGroupChatsClick
             )
-
-            PreferenceText(
-                title = stringResource(id = R.string.screen_notification_settings_direct_chats),
-                subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(id = R.string.screen_notification_settings_direct_chats))
+                },
+                supportingContent = {
+                    Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode))
+                },
                 onClick = onDirectChatsClick
             )
         }
@@ -180,9 +197,10 @@ private fun NotificationSettingsContentView(
             )
         }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
-            PreferenceText(
-                modifier = Modifier,
-                title = stringResource(id = R.string.troubleshoot_notifications_entry_point_title),
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
+                },
                 onClick = onTroubleshootNotificationsClick
             )
         }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Gehitu aukera"</string>
+  <string name="screen_create_poll_anonymous_desc">"Erakutsi emaitzak inkesta amaitutakoan soilik"</string>
+  <string name="screen_create_poll_anonymous_headline">"Ezkutatu botoak"</string>
+  <string name="screen_create_poll_answer_hint">"%1$d. aukera"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
+  <string name="screen_create_poll_question_desc">"Galdera edo gaia"</string>
+  <string name="screen_create_poll_question_hint">"Zeri buruzko inkesta da?"</string>
+  <string name="screen_create_poll_title">"Sortu inkesta"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Ziur inkesta hau ezabatu nahi duzula?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Ezabatu inkesta"</string>
+  <string name="screen_edit_poll_title">"Editatu inkesta"</string>
+  <string name="screen_polls_history_empty_ongoing">"Ezin da abian dagoen inkestarik aurkitu."</string>
+  <string name="screen_polls_history_empty_past">"Ezin da iraungitako inkestarik aurkitu."</string>
+  <string name="screen_polls_history_filter_ongoing">"Abian direnak"</string>
+  <string name="screen_polls_history_filter_past">"Iraungitakoak"</string>
+  <string name="screen_polls_history_title">"Inkestak"</string>
+</resources>

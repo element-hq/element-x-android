@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invites_decline_chat_message">"Ziur %1$s(e)ra batzeko gonbidapena baztertu nahi duzula?"</string>
+  <string name="screen_invites_decline_chat_title">"Baztertu gonbidapena"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Ziur %1$s(r)en txat pribatua baztertu nahi duzula?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Baztertu txata"</string>
+  <string name="screen_invites_empty_list">"Ez dago gonbidapenik"</string>
+  <string name="screen_invites_invited_you">"%1$s(e)k (%2$s) gonbidatu zaitu"</string>
+</resources>

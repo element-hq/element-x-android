@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import android.view.HapticFeedbackConstants
 import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -41,6 +42,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -59,6 +61,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -106,6 +109,7 @@ fun TimelineView(
     }
 
     val context = LocalContext.current
+    val view = LocalView.current
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = remember {
         val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
@@ -114,6 +118,16 @@ fun TimelineView(
 
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
+    }
+
+    fun onLinkLongClick(link: String) {
+        view.performHapticFeedback(
+            HapticFeedbackConstants.LONG_PRESS
+        )
+        context.copyToClipboard(
+            link,
+            context.getString(CommonStrings.common_copied_to_clipboard)
+        )
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
@@ -141,6 +155,7 @@ fun TimelineView(
                         focusedEventId = state.focusedEventId,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
+                        onLinkLongClick = ::onLinkLongClick,
                         onContentClick = onContentClick,
                         onLongClick = onMessageLongClick,
                         inReplyToClick = ::inReplyToClick,

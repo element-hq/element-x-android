@@ -19,6 +19,7 @@ To můžete kdykoli změnit v nastavení místnosti."</string>
   <string name="screen_create_room_room_visibility_section_title">"Viditelnost místnosti"</string>
   <string name="screen_create_room_title">"Vytvořit místnost"</string>
   <string name="screen_create_room_topic_label">"Téma (nepovinné)"</string>
+  <string name="screen_room_directory_search_title">"Adresář místností"</string>
   <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>
   <string name="screen_start_chat_join_room_by_address_action">"Vstoupit do místnosti pomocí adresy"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Neplatná adresa"</string>

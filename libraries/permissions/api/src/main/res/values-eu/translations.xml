@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Aplikazioak kamera erabiltzeko, eman baimena sistemaren ezarpenetan."</string>
+  <string name="dialog_permission_generic">"Eman baimena sistemaren ezarpenetan."</string>
+  <string name="dialog_permission_microphone">"Aplikazioak mikrofonoa erabiltzeko, eman baimena sistemaren ezarpenetan."</string>
+  <string name="dialog_permission_notification">"Aplikazioak jakinarazpenak bistaratzeko, eman baimena sistemaren ezarpenetan."</string>
+</resources>

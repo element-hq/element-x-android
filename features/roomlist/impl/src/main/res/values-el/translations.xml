@@ -40,7 +40,6 @@
   <string name="screen_roomlist_main_space_title">"Συνομιλίες"</string>
   <string name="screen_roomlist_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="screen_roomlist_mark_as_unread">"Επισήμανση ως μη αναγνωσμένου"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Περιήγηση σε όλα τα δωμάτια"</string>
   <string name="session_verification_banner_message">"Φαίνεται ότι χρησιμοποιείς μια νέα συσκευή. Επαλήθευσε με άλλη συσκευή για πρόσβαση στα κρυπτογραφημένα σου μηνύματα."</string>
   <string name="session_verification_banner_title">"Επαλήθευσε ότι είσαι εσύ"</string>
 </resources>

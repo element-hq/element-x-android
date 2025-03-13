@@ -22,6 +22,7 @@ import io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockView
 import io.element.android.features.lockscreen.impl.unlock.di.PinUnlockBindings
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ class PinUnlockActivity : AppCompatActivity() {
     @Inject lateinit var lockScreenService: LockScreenService
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var enterpriseService: EnterpriseService
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -47,6 +49,7 @@ class PinUnlockActivity : AppCompatActivity() {
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
                 enterpriseService = enterpriseService,
+                buildMeta = buildMeta,
             ) {
                 val state = presenter.present()
                 PinUnlockView(

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Slett"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d siffer angitt"</item>
+    <item quantity="other">"%1$d sifre angitt"</item>
+  </plurals>
   <string name="a11y_hide_password">"Skjul passord"</string>
   <string name="a11y_jump_to_bottom">"Hopp til bunnen"</string>
   <string name="a11y_notifications_mentions_only">"Bare omtaler"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reager med %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reager med andre emojier"</string>
   <string name="a11y_read_receipts_multiple">"Lest av %1$s og %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Lest av %1$s og %2$d andre"</item>
+    <item quantity="other">"Lest av %1$s og %2$d andre"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Lest av %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Trykk for å vise alle"</string>
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
@@ -21,6 +29,7 @@
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
+  <string name="a11y_view_details">"Vis detaljer"</string>
   <string name="a11y_voice_message_record">"Ta opp talemelding."</string>
   <string name="a11y_voice_message_stop_recording">"Stopp opptaket"</string>
   <string name="action_accept">"Godta"</string>
@@ -112,8 +121,13 @@
   <string name="action_start_verification">"Start verifisering"</string>
   <string name="action_static_map_load">"Trykk for å laste inn kart"</string>
   <string name="action_take_photo">"Ta bilde"</string>
+  <string name="action_tap_for_options">"Trykk for alternativer"</string>
+  <string name="action_try_again">"Prøv igjen"</string>
+  <string name="action_unpin">"Løsne"</string>
+  <string name="action_view_in_timeline">"Vis i tidslinjen"</string>
   <string name="action_view_source">"Vis kilde"</string>
   <string name="action_yes">"Ja"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
@@ -144,9 +158,13 @@
   <string name="common_encryption_enabled">"Kryptering aktivert"</string>
   <string name="common_enter_your_pin">"Skriv inn PIN-koden din"</string>
   <string name="common_error">"Feil"</string>
+  <string name="common_error_registering_pusher_android">"Det har oppstått en feil, og vil kanskje ikke motta varsler om nye meldinger. Vennligst feilsøk varslinger fra innstillingene.
+
+Årsak: %1$s."</string>
   <string name="common_everyone">"Alle"</string>
   <string name="common_failed">"Mislyktes"</string>
   <string name="common_favourite">"Favoritt"</string>
+  <string name="common_favourited">"Favoritt"</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_saved_on_disk_android">"Fil lagret i Nedlastinger"</string>
   <string name="common_forward_message">"Videresend melding"</string>
@@ -164,6 +182,7 @@
     <item quantity="other">"%1$d medlemmer"</item>
   </plurals>
   <string name="common_message">"Melding"</string>
+  <string name="common_message_actions">"Meldingshandlinger"</string>
   <string name="common_message_layout">"Meldingsoppsett"</string>
   <string name="common_message_removed">"Melding fjernet"</string>
   <string name="common_modern">"Moderne"</string>
@@ -229,6 +248,7 @@
   <string name="common_topic">"Emne"</string>
   <string name="common_topic_placeholder">"Hva er dette rommet for?"</string>
   <string name="common_unable_to_decrypt">"Kan ikke dekryptere"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Sendt fra en usikker enhet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har ikke tilgang til denne meldingen"</string>
   <string name="common_unable_to_decrypt_verification_violation">"Avsenderens verifiserte identitet er endret"</string>
   <string name="common_unable_to_invite_message">"Invitasjoner kunne ikke sendes til en eller flere brukere."</string>
@@ -239,6 +259,7 @@
   <string name="common_username">"Brukernavn"</string>
   <string name="common_verification_cancelled">"Verifisering kansellert"</string>
   <string name="common_verification_complete">"Verifisering fullført"</string>
+  <string name="common_verification_failed">"Verifisering mislyktes"</string>
   <string name="common_verified">"Verifisert"</string>
   <string name="common_verify_device">"Verifiser enhet"</string>
   <string name="common_verify_identity">"Verifiser identiteten"</string>
@@ -247,6 +268,7 @@
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
   <string name="common_you">"Du"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s identiteten ser ut til å ha endret seg. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Bekreftelse"</string>
   <string name="dialog_title_error">"Feil"</string>
@@ -254,31 +276,72 @@
   <string name="dialog_title_warning">"Advarsel"</string>
   <string name="dialog_unsaved_changes_description_android">"Endringene dine er ikke lagret. Er du sikker på at du vil gå tilbake?"</string>
   <string name="dialog_unsaved_changes_title">"Lagre endringer?"</string>
+  <string name="error_account_creation_not_possible">"Hjemmeserveren din må oppgraderes for å støtte Matrix Authentication Service og kontooppretting."</string>
   <string name="error_failed_creating_the_permalink">"Opprettelse av permalenken mislyktes"</string>
   <string name="error_failed_loading_map">"%1$s kunne ikke laste inn kartet. Prøv igjen senere."</string>
   <string name="error_failed_loading_messages">"Kunne ikke laste inn meldinger"</string>
   <string name="error_failed_locating_user">"%1$s fikk ikke tilgang til lokasjonen din. Vennligst prøv igjen senere."</string>
+  <string name="error_failed_uploading_voice_message">"Kunne ikke laste opp talemeldingen din."</string>
+  <string name="error_message_not_found">"Melding ikke funnet"</string>
   <string name="error_missing_location_auth_android">"%1$s har ikke tilgang til lokasjonen din. Du kan aktivere tilgang i Innstillinger."</string>
   <string name="error_missing_location_rationale_android">"%1$s har ikke tilgang til lokasjonen din. Aktiver tilgang nedenfor."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s har ikke tilgang til mikrofonen din. Aktiver tilgang til å ta opp en talemelding."</string>
+  <string name="error_network_or_server_issue">"Dette kan skyldes nettverks- eller serverproblemer."</string>
+  <string name="error_room_address_already_exists">"Denne romadressen finnes allerede. Prøv å redigere romadressefeltet eller endre romnavnet"</string>
+  <string name="error_room_address_invalid_symbols">"Noen tegn er ikke tillatt. Bare bokstaver, sifre og følgende symboler støttes! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Noen meldinger er ikke sendt"</string>
   <string name="error_unknown">"Beklager, det oppstod en feil"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Ektheten til denne krypterte meldingen kan ikke garanteres på denne enheten."</string>
+  <string name="event_shield_reason_previously_verified">"Kryptert av en tidligere verifisert bruker."</string>
   <string name="event_shield_reason_sent_in_clear">"Ikke kryptert."</string>
+  <string name="event_shield_reason_unknown_device">"Kryptert av en ukjent eller slettet enhet."</string>
+  <string name="event_shield_reason_unsigned_device">"Kryptert med en enhet som ikke er verifisert av eieren."</string>
+  <string name="event_shield_reason_unverified_identity">"Kryptert av en ubekreftet bruker."</string>
   <string name="invite_friends_rich_title">"🔐️ Bli med meg på %1$s"</string>
   <string name="invite_friends_text">"Hei, snakk med meg på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Opplasting av medier mislyktes, vennligst prøv igjen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Festet melding"</item>
+    <item quantity="other">"%1$d Festede meldinger"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Festede meldinger"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du er i ferd med å gå til %1$s kontoen din for å tilbakestille identiteten din. Etterpå blir du tatt tilbake til appen."</string>
+  <string name="screen_reset_identity_confirmation_title">"Kan du ikke bekrefte? Gå til kontoen din for å tilbakestille identiteten din."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Trekk tilbake verifikasjon og send"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan trekke tilbake verifiseringen og sende denne meldingen likevel, eller du kan avbryte for nå og prøve igjen senere etter at du har reverifisert %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Meldingen din ble ikke sendt fordi %1$ss verifiserte identitet er endret"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send melding uansett"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Meldingen din ble ikke sendt fordi %1$s ikke har bekreftet alle enhetene"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere av enhetene dine er ikke verifisert. Du kan sende meldingen likevel, eller du kan avbryte og prøve igjen senere etter at du har verifisert alle enhetene dine."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Meldingen din ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine"</string>
   <string name="screen_room_error_failed_processing_media">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brukerdetaljer"</string>
+  <string name="screen_room_event_pill">"Melding i %1$s"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Festede meldinger"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Laster inn melding…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Vis alle"</string>
+  <string name="screen_room_title">"Chat"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Forespørsel om å bli med sendt"</string>
   <string name="screen_share_location_title">"Del lokasjon"</string>
   <string name="screen_share_my_location_action">"Del min lokasjon"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Åpne i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åpne i OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Del denne lokasjonen"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er endret."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>
   <string name="screen_view_location_title">"Lokasjon"</string>
   <string name="settings_version_number">"Versjon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiske meldinger er ikke tilgjengelige på denne enheten"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Du må verifisere denne enheten for å få tilgang til historiske meldinger"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har ikke tilgang til denne meldingen"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Kan ikke dekryptere meldingen"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Denne meldingen ble blokkert enten fordi du ikke har bekreftet enheten din, eller fordi avsenderen må bekrefte identiteten din."</string>
 </resources>

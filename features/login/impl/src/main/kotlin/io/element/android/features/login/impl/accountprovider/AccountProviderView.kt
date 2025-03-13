@@ -83,9 +83,9 @@ fun AccountProviderView(
                         modifier = Modifier
                             .padding(start = 10.dp)
                             .size(16.dp),
-                        resourceId = R.drawable.ic_public,
+                        imageVector = CompoundIcons.Public(),
                         contentDescription = null,
-                        tint = Color.Unspecified,
+                        tint = ElementTheme.colors.iconSecondary,
                     )
                 }
             }

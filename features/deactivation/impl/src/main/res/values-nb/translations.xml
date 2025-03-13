@@ -5,8 +5,10 @@
   <string name="screen_deactivate_account_delete_all_messages_notice">"Advarsel: Fremtidige brukere vil kunne se ufullstendige samtaler."</string>
   <string name="screen_deactivate_account_description">"Deaktivering av kontoen din er %1$s , det vil:"</string>
   <string name="screen_deactivate_account_description_bold_part">"irreversibel"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s kontoen din (du kan ikke logge på igjen, og ID-en din kan ikke brukes på nytt)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Deaktiver permanent"</string>
   <string name="screen_deactivate_account_list_item_2">"Fjern deg fra alle chatterom."</string>
   <string name="screen_deactivate_account_list_item_3">"Slett kontoinformasjonen din fra vår identitetsserver."</string>
+  <string name="screen_deactivate_account_list_item_4">"Meldingene dine vil fortsatt være synlige for registrerte brukere, men vil ikke være tilgjengelige for nye eller uregistrerte brukere hvis du velger å slette dem."</string>
   <string name="screen_deactivate_account_title">"Deaktiver kontoen"</string>
 </resources>

@@ -42,7 +42,7 @@ class UserProfileNode @AssistedInject constructor(
 
     private val inputs = inputs<UserProfileInputs>()
     private val callback = inputs<UserProfileNodeHelper.Callback>()
-    private val presenter = presenterFactory.create(inputs.userId)
+    private val presenter = presenterFactory.create(userId = inputs.userId)
     private val userProfileNodeHelper = UserProfileNodeHelper(inputs.userId)
 
     init {
@@ -75,6 +75,7 @@ class UserProfileNode @AssistedInject constructor(
             onOpenDm = ::onStartDM,
             onStartCall = callback::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
+            onVerifyClick = callback::onVerifyUser,
         )
     }
 }

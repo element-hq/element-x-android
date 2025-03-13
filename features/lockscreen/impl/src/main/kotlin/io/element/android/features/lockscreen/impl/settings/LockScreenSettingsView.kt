@@ -11,16 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun LockScreenSettingsView(
@@ -35,15 +36,19 @@ fun LockScreenSettingsView(
         modifier = modifier
     ) {
         PreferenceCategory(showTopDivider = false) {
-            PreferenceText(
-                title = stringResource(id = R.string.screen_app_lock_settings_change_pin),
-                onClick = onChangePinClick
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(id = R.string.screen_app_lock_settings_change_pin))
+                },
+                onClick = onChangePinClick,
             )
             PreferenceDivider()
             if (state.showRemovePinOption) {
-                PreferenceText(
-                    title = stringResource(id = R.string.screen_app_lock_settings_remove_pin),
-                    tintColor = ElementTheme.colors.textCriticalPrimary,
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(id = R.string.screen_app_lock_settings_remove_pin))
+                    },
+                    style = ListItemStyle.Destructive,
                     onClick = {
                         state.eventSink(LockScreenSettingsEvents.OnRemovePin)
                     }

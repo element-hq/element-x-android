@@ -16,7 +16,6 @@ import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
@@ -25,7 +24,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class VerifySelfSessionViewTest {
@@ -103,16 +101,16 @@ class VerifySelfSessionViewTest {
     }
 
     @Test
-    fun `back key pressed - on Completed step does nothing`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Completed,
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.pressBackKey()
-        eventsRecorder.assertEmpty()
+    fun `back key pressed - on Completed exits the flow`() {
+        ensureCalledOnce { callback ->
+            rule.setVerifySelfSessionView(
+                onBack = callback,
+                state = aVerifySelfSessionState(
+                    step = VerifySelfSessionState.Step.Completed,
+                ),
+            )
+            rule.pressBackKey()
+        }
     }
 
     @Test
@@ -127,38 +125,6 @@ class VerifySelfSessionViewTest {
                 onFinished = callback,
             )
             rule.clickOn(CommonStrings.action_continue)
-        }
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on enter recovery key calls the expected callback`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
-        ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
-                aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Initial(true),
-                    eventSink = eventsRecorder
-                ),
-                onEnterRecoveryKey = callback,
-            )
-            rule.clickOn(R.string.screen_session_verification_enter_recovery_key)
-        }
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on learn more invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
-        ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
-                aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Initial(true),
-                    eventSink = eventsRecorder
-                ),
-                onLearnMoreClick = callback,
-            )
-            rule.clickOn(CommonStrings.action_learn_more)
         }
     }
 
@@ -194,48 +160,18 @@ class VerifySelfSessionViewTest {
         eventsRecorder.assertSingle(VerifySelfSessionViewEvents.DeclineVerification)
     }
 
-    @Test
-    fun `clicking on 'Skip' emits the expected event`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Initial(canEnterRecoveryKey = true),
-                displaySkipButton = true,
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.clickOn(CommonStrings.action_skip)
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.SkipVerification)
-    }
-
-    @Test
-    fun `on Skipped step - onFinished callback is called immediately`() {
-        ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
-                aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Skipped,
-                    displaySkipButton = true,
-                    eventSink = EnsureNeverCalledWithParam(),
-                ),
-                onFinished = callback,
-            )
-        }
-    }
-
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
         state: VerifySelfSessionState,
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
-        onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
-        onResetKey: () -> Unit = EnsureNeverCalled(),
+        onBack: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             VerifySelfSessionView(
                 state = state,
                 onLearnMoreClick = onLearnMoreClick,
-                onEnterRecoveryKey = onEnterRecoveryKey,
                 onFinish = onFinished,
-                onResetKey = onResetKey,
+                onBack = onBack,
             )
         }
     }

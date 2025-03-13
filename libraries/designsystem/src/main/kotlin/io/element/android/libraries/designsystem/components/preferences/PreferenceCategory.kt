@@ -47,10 +47,6 @@ internal fun PreferenceCategoryPreview() = ElementThemedPreview {
     PreferenceCategory(
         title = "Category title",
     ) {
-        PreferenceText(
-            title = "Title",
-            icon = CompoundIcons.ChatProblem(),
-        )
         PreferenceSwitch(
             title = "Switch",
             icon = CompoundIcons.Threads(),

@@ -13,7 +13,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
-import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
+import uniffi.matrix_sdk.RoomPaginationStatus
 
 class FakeRustTimeline : Timeline(NoPointer) {
     private var listener: TimelineListener? = null
@@ -32,7 +32,7 @@ class FakeRustTimeline : Timeline(NoPointer) {
         return FakeRustTaskHandle()
     }
 
-    fun emitPaginationStatus(status: LiveBackPaginationStatus) {
+    fun emitPaginationStatus(status: RoomPaginationStatus) {
         paginationStatusListener!!.onUpdate(status)
     }
 

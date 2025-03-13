@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Exekutatu testak"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Egin probak berriro"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Proba batzuek huts egin dute. Aztertu xehetasunak."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Saiatu konpontzen"</string>
+  <string name="troubleshoot_notifications_screen_success">"Proba guztiak arrakastaz gainditu dira."</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Proba batzuek zure arreta eskatzen dute. Aztertu xehetasunak."</string>
+</resources>

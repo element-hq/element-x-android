@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(ფოტოც შეიცვალა)"</string>
   <string name="state_event_avatar_url_changed">"%1$s პროფილის ფოტო შეცვალა"</string>
   <string name="state_event_avatar_url_changed_by_you">"თქვენ შეცვალეთ პროფილის ფოტო"</string>
+  <string name="state_event_demoted_to_member">"%1$s დაქვეითდა წევრამდე"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s დაქვეითდა მოდერატორამდე"</string>
   <string name="state_event_display_name_changed_from">"%1$s თავისი ნაჩვენები სახელი შეცვალა %2$s დან %3$s ზე"</string>
   <string name="state_event_display_name_changed_from_by_you">"თქვენ შეცვალეთ თქვენი ნაჩვენები სახელი %1$s -დან %2$s -ზე"</string>
   <string name="state_event_display_name_removed">"%1$s წაშალა თავისი ნაჩვენები სახელი (იყო %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"თქვენ წაშალეთ ნაჩვენები სახელი (იყო %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s თავისი ნაჩვენები სახელი შეცვალა %2$s"</string>
   <string name="state_event_display_name_set_by_you">"თქვენი ახალი ნაჩვენები სახელი - %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s დაწინაურდა ადმინისტრატორამდე"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s დაწინაურდა მოდერატორამდე"</string>
   <string name="state_event_room_avatar_changed">"%1$s ოთახის ფოტო შეცვალა"</string>
   <string name="state_event_room_avatar_changed_by_you">"თქვენ შეცვალეთ ოთახის ფოტო"</string>
   <string name="state_event_room_avatar_removed">"%1$s წაშალა ოთახის ფოტო"</string>
@@ -39,6 +43,8 @@
   <string name="state_event_room_name_changed_by_you">"თქვენ შეცვალეთ ოთახის სახელი: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s წაშალა ოთახის სახელი"</string>
   <string name="state_event_room_name_removed_by_you">"თქვენ წაშალეთ ოთახის სახელი"</string>
+  <string name="state_event_room_none">"%1$s ცვლილებები არ შეიტანა"</string>
+  <string name="state_event_room_none_by_you">"თქვენ არაფერი არ შეგიცვლიათ"</string>
   <string name="state_event_room_reject">"%1$s მოწვევაზე უარი თქვა"</string>
   <string name="state_event_room_reject_by_you">"თქვენ უარი თქვით მოწვევაზე"</string>
   <string name="state_event_room_remove">"%1$s გააგდო %2$s"</string>

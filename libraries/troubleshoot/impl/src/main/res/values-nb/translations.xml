@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Kjør tester"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Kjør tester igjen"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Noen tester mislyktes. Vennligst sjekk detaljene."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Kjør testene for å avdekke eventuelle problemer i konfigurasjonen som kan føre til at varslene ikke oppfører seg som forventet."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"Forsøk å fikse"</string>
   <string name="troubleshoot_notifications_screen_success">"Alle testene ble bestått."</string>
+  <string name="troubleshoot_notifications_screen_title">"Feilsøk varsler"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Noen tester krever din oppmerksomhet. Vennligst sjekk detaljene."</string>
 </resources>

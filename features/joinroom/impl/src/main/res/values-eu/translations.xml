@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Utzi eskaera bertan behera"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Bai, utzi bertan behera"</string>
+  <string name="screen_join_room_join_action">"Sartu gelan"</string>
+  <string name="screen_join_room_knock_action">"Bidali batzeko eskaera"</string>
+  <string name="screen_join_room_knock_message_description">"Mezua (aukerakoa)"</string>
+  <string name="screen_join_room_knock_sent_title">"Sartzeko eskaera bidali da"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ez da oraindik guneekin bateragarria. Webgunean sar zaitezke guneetara."</string>
+  <string name="screen_join_room_space_not_supported_title">"Oraindik ez da guneekin bateragarria"</string>
+  <string name="screen_join_room_subtitle_knock">"Klikatu beheko botoia eta gelako administratzaileari jakinaraziko zaio. Elkarrizketara batu ahal izango zara onartutakoan."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Gela honetako kide izan behar zara mezuen historia ikusteko."</string>
+  <string name="screen_join_room_title_knock">"Gela honetan sartu nahi?"</string>
+  <string name="screen_join_room_title_no_preview">"Aurrebista ez dago erabilgarri"</string>
+</resources>

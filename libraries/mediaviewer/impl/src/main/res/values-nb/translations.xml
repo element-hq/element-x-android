@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Denne filen vil bli fjernet fra rommet, og medlemmene vil ikke lenger ha tilgang til den."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Vil du slette filen?"</string>
+  <string name="screen_media_browser_download_error_message">"Sjekk internettforbindelsen din og prøv igjen."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Dokumenter, lydfiler og talemeldinger som lastes opp til dette rommet, vises her."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Ingen filer lastet opp ennå"</string>
+  <string name="screen_media_browser_list_loading_files">"Laster inn filer…"</string>
+  <string name="screen_media_browser_list_loading_media">"Laster inn medier…"</string>
+  <string name="screen_media_browser_list_mode_files">"Filer"</string>
+  <string name="screen_media_browser_list_mode_media">"Mediefiler"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Bilder og videoer som lastes opp til dette rommet, vises her."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Ingen mediefiler lastet opp ennå"</string>
+  <string name="screen_media_browser_title">"Medier og filer"</string>
+  <string name="screen_media_details_file_format">"Filformat"</string>
+  <string name="screen_media_details_filename">"Filnavn"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Ingen flere filer å vise"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Ikke flere mediefiler å vise"</string>
+  <string name="screen_media_details_uploaded_by">"Lastet opp av"</string>
+  <string name="screen_media_details_uploaded_on">"Lastet opp den"</string>
+</resources>

@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Sí, aceptar todas"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"¿Estás seguro de que quieres aceptar todas las solicitudes de unión?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Aceptar todas las solicitudes"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Aceptar todas"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"No pudimos aceptar todas las solicitudes. ¿Quieres volver a intentarlo?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"No se pudieron aceptar todas las solicitudes"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Aceptando todas las solicitudes de unión"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"No pudimos aceptar esta solicitud. ¿Quieres volver a intentarlo?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"No se pudo aceptar la solicitud"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Aceptando solicitud de unión"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Sí, rechazar y vetar"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"¿Estás seguro de que quieres rechazar y vetar a %1$s? Este usuario no podrá volver a solicitar acceso para unirse a esta sala."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Rechazar y vetar el acceso"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Rechazando y vetando acceso"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Sí, rechazar"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"¿Estás seguro de que deseas rechazar la solicitud de %1$s para unirse a esta sala?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Rechazar el acceso"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Rechazar y vetar"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"No pudimos rechazar esta solicitud. ¿Quieres volver a intentarlo?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"No se pudo rechazar la solicitud"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Rechazando solicitud de unión"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Cuando alguien pida unirse a la sala, podrás ver su solicitud aquí."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"No hay ninguna solicitud de unión pendiente"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Cargando solicitudes de unión…"</string>
+  <string name="screen_knock_requests_list_title">"Solicitudes de unión"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s y %2$d más quieren unirse a esta sala"</item>
+    <item quantity="other">"%1$s y otros %2$d más quieren unirse a esta sala"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Ver todo"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Aceptar"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s quiere unirse a esta sala"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Ver"</string>
 </resources>

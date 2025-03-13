@@ -24,12 +24,14 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Meldingshistorikk er ikke tilgjengelig i dette rommet. Bekreft denne enheten for å se meldingshistorikken din."</string>
   <string name="screen_room_invite_again_alert_message">"Vil du invitere dem tilbake?"</string>
   <string name="screen_room_invite_again_alert_title">"Du er alene i denne chatten"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Varsle hele rommet"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send igjen"</string>
   <string name="screen_room_retry_send_menu_title">"Meldingen din ble ikke sendt"</string>
   <string name="screen_room_timeline_add_reaction">"Legg til emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Dette er begynnelsen på %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Dette er begynnelsen på denne samtalen."</string>
+  <string name="screen_room_timeline_legacy_call">"Anrop som ikke støttes. Spør om den som ringer kan bruke den nye Element X-appen."</string>
   <string name="screen_room_timeline_less_reactions">"Vis mindre"</string>
   <string name="screen_room_timeline_message_copied">"Melding kopiert"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Du har ikke tillatelse til å legge ut innlegg i dette rommet"</string>
@@ -40,4 +42,13 @@
     <item quantity="one">"%1$d romendring"</item>
     <item quantity="other">"%1$d romendringer"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s og %3$d annet"</item>
+    <item quantity="other">"%1$s, %2$s og %3$d andre"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s skriver"</item>
+    <item quantity="other">"%1$s skriver"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s og %2$s"</string>
 </resources>

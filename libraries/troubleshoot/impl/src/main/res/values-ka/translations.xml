@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"ტესტების გაშვება"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"ტესტების ისევ გაშვება"</string>
+  <string name="troubleshoot_notifications_screen_failure">"ზოგიერთი ტესტი წარუმატებელია. გთხოვთ შეამოწმოთ დეტალები."</string>
+  <string name="troubleshoot_notifications_screen_notice">"ჩაატარეთ ტესტები თქვენს კონფიგურაციაში იმ პრობლემების აღმოსაჩენად, რომლებიც გამოიწვევენ შეტყობინებების არასწორ ქცევას."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"შეკეთების მცდელობა"</string>
+  <string name="troubleshoot_notifications_screen_success">"ყველა ტესტი წარმატებით დასრულდა."</string>
+  <string name="troubleshoot_notifications_screen_title">"პრობლემების გადაჭრის შეტყობინებები"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"ზოგიერთი ტესტი ითხოვს თქვენს ყურადღებას. გთხოვთ შეამოწმოთ დეტალები."</string>
+</resources>

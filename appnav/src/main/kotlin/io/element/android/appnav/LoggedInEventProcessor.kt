@@ -10,34 +10,33 @@ package io.element.android.appnav
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoggedInEventProcessor @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
-    roomMembershipObserver: RoomMembershipObserver,
+    private val roomMembershipObserver: RoomMembershipObserver,
 ) {
     private var observingJob: Job? = null
 
-    private val displayLeftRoomMessage = roomMembershipObserver.updates
-        .map { !it.isUserInRoom }
-
     fun observeEvents(coroutineScope: CoroutineScope) {
-        observingJob = coroutineScope.launch {
-            displayLeftRoomMessage
-                .filter { it }
-                .onEach {
-                    displayMessage(CommonStrings.common_current_user_left_room)
+        observingJob = roomMembershipObserver.updates
+            .filter { !it.isUserInRoom }
+            .onEach {
+                when (it.change) {
+                    MembershipChange.LEFT -> displayMessage(CommonStrings.common_current_user_left_room)
+                    MembershipChange.INVITATION_REJECTED -> displayMessage(CommonStrings.common_current_user_rejected_invite)
+                    MembershipChange.KNOCK_RETRACTED -> displayMessage(CommonStrings.common_current_user_canceled_knock)
+                    else -> Unit
                 }
-                .launchIn(this)
-        }
+            }
+            .launchIn(coroutineScope)
     }
 
     fun stopObserving() {

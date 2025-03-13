@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -88,6 +90,7 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -188,6 +191,7 @@ fun MessagesView(
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
+                    isDmUserVerified = state.dmUserVerificationState?.let { it == IdentityState.Verified },
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
@@ -427,7 +431,7 @@ private fun MessagesViewComposerBottomSheetContents(
                     onLinkClick = onLinkClick,
                 )
             }
-            val verificationViolation = state.roomMemberIdentityStateChanges.firstOrNull {
+            val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                 it.identityState == IdentityState.VerificationViolation
             }
             if (verificationViolation != null) {
@@ -454,6 +458,7 @@ private fun MessagesViewTopBar(
     roomAvatar: AvatarData?,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
+    isDmUserVerified: Boolean?,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -463,22 +468,36 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
-            val titleModifier = Modifier
-                .clip(roundedCornerShape)
-                .clickable { onRoomDetailsClick() }
-            if (roomName != null && roomAvatar != null) {
-                RoomAvatarAndNameRow(
-                    roomName = roomName,
-                    roomAvatar = roomAvatar,
-                    heroes = heroes,
-                    modifier = titleModifier
-                )
-            } else {
-                IconTitlePlaceholdersRowMolecule(
-                    iconSize = AvatarSize.TimelineRoom.dp,
-                    modifier = titleModifier
-                )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val roundedCornerShape = RoundedCornerShape(8.dp)
+                val titleModifier = Modifier
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() }
+                if (roomName != null && roomAvatar != null) {
+                    RoomAvatarAndNameRow(
+                        roomName = roomName,
+                        roomAvatar = roomAvatar,
+                        heroes = heroes,
+                        modifier = titleModifier
+                    )
+                } else {
+                    IconTitlePlaceholdersRowMolecule(
+                        iconSize = AvatarSize.TimelineRoom.dp,
+                        modifier = titleModifier
+                    )
+                }
+
+                if (isDmUserVerified == true) {
+                    Icon(
+                        modifier = Modifier.requiredWidthIn(min = 24.dp),
+                        imageVector = CompoundIcons.Verified(),
+                        tint = ElementTheme.colors.iconSuccessPrimary,
+                        contentDescription = null
+                    )
+                }
             }
         },
         actions = {

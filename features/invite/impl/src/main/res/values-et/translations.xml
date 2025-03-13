@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Keeldu vestlusest"</string>
   <string name="screen_invites_empty_list">"Kutseid pole"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Jah, keeldu ja blokeeri"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Kas sa oled kindel, et soovid keelduda kutsest sellesse jututuppa? Samaga kaob kasutajal %1$s võimalus sinuga suhelda ja saata sulle jututubade kutseid."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Keeldu kutsest ja blokeeri"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Keeldu ja blokeeri"</string>
 </resources>

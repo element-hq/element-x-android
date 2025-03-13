@@ -29,7 +29,6 @@ Você não tem nenhuma mensagem não lida!"</string>
   <string name="screen_roomlist_main_space_title">"Conversas"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como lido"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lido"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Navegar por todas as salas"</string>
   <string name="session_verification_banner_message">"Parece que você está usando um novo dispositivo. Verifique com outro dispositivo para acessar suas mensagens criptografadas."</string>
   <string name="session_verification_banner_title">"Verifique se é você"</string>
 </resources>

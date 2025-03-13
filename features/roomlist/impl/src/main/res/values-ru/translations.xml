@@ -40,7 +40,6 @@
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>
   <string name="screen_roomlist_mark_as_unread">"Отметить как непрочитанное"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Просмотреть все комнаты"</string>
   <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям пройдите подтверждение с другим устройством."</string>
   <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
 </resources>

@@ -41,4 +41,13 @@
     <item quantity="one">"%1$dოთახის ცვლილება"</item>
     <item quantity="other">"%1$dოთახის ცვლილებები"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s და %3$d სხვა"</item>
+    <item quantity="other">"%1$s%2$sდა %3$d სხვა"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s წერს"</item>
+    <item quantity="other">"%1$s წერენ"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s და %2$s"</string>
 </resources>

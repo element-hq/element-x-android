@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Ez da push banatzailerik aurkitu."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"Banatzaile %1$d aurkitu da: %2$s."</item>
+    <item quantity="other">"%1$d banatzailea aurkitu dira: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Egiaztatu UnifiedPush"</string>
+</resources>

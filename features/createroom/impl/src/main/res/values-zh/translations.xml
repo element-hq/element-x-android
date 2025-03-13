@@ -19,5 +19,6 @@
   <string name="screen_create_room_room_visibility_section_title">"房间可见性"</string>
   <string name="screen_create_room_title">"创建聊天室"</string>
   <string name="screen_create_room_topic_label">"主题（可选）"</string>
+  <string name="screen_room_directory_search_title">"聊天室目录"</string>
   <string name="screen_start_chat_error_starting_chat">"在开始聊天时发生了错误"</string>
 </resources>

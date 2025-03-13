@@ -40,7 +40,6 @@
   <string name="screen_roomlist_main_space_title">"全部聊天"</string>
   <string name="screen_roomlist_mark_as_read">"标记为已读"</string>
   <string name="screen_roomlist_mark_as_unread">"标记为未读"</string>
-  <string name="screen_roomlist_room_directory_button_title">"浏览所有聊天室"</string>
   <string name="session_verification_banner_message">"您似乎正在使用新设备。使用另一台设备进行验证以访问您的加密消息。"</string>
   <string name="session_verification_banner_title">"验证是你本人"</string>
 </resources>

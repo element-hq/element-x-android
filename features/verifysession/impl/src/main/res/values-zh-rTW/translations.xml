@@ -13,9 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比對表情符號"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"確認下方的表情符號與其他使用者裝置上顯示的表情符號相符。"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"確認以下數字是否與其他作業階段中顯示的數字相符。"</string>
   <string name="screen_session_verification_compare_numbers_title">"比較數字"</string>
   <string name="screen_session_verification_complete_subtitle">"新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。"</string>
+  <string name="screen_session_verification_complete_user_subtitle">"現在，您可以在傳送或接收訊息時信任此使用者的身份。"</string>
   <string name="screen_session_verification_enter_recovery_key">"輸入復原金鑰"</string>
   <string name="screen_session_verification_failed_subtitle">"請求逾時、請求被拒或是驗證不符。"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"為了存取被加密的歷史訊息，您需要證明這是您本人。"</string>
@@ -37,8 +39,14 @@
   <string name="screen_session_verification_they_match">"一樣"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"從這裡開始驗證之前，請確保您在其他裝置中開啟了應用程式。"</string>
   <string name="screen_session_verification_use_another_device_title">"在另外一個已驗證的裝置上開啟應用程式"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"為了提昇安全性，請透過比較您裝置上的一組表情符號來驗證此使用者。請透過可信的通訊方式來執行此動作。"</string>
+  <string name="screen_session_verification_user_initiator_title">"驗證此使用者？"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"為了提昇安全性，另一個使用者希望驗證您的身份。您將會看到一組表情符號以進行比較。"</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"您應該會在其他裝置上看到一個彈出式視窗。立刻從那裡開始驗證。"</string>
   <string name="screen_session_verification_waiting_another_device_title">"在其他裝置上開始驗證"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"正在等待其他裝置"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"正在等帶齊他使用者"</string>
+  <string name="screen_session_verification_waiting_subtitle">"接受後，您就可以繼續進行驗證。"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"準備開始驗證，請到您的其他工作階段接受請求。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受請求"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>

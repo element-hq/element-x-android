@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Refuser l’invitation"</string>
   <string name="screen_invites_empty_list">"Aucune invitation"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vous a invité(e)"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Oui, refuser et bloquer"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Êtes-vous sûr de vouloir refuser l’invitation à rejoindre ce salon ? Cela empêchera également %1$s de vous contacter ou de vous inviter dans les salons."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Refuser l’invitation et bloquer"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Refuser et bloquer"</string>
 </resources>

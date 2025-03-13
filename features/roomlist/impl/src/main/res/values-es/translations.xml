@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Recupera tu identidad criptográfica y tu historial de mensajes con una clave de recuperación si has perdido todos tus dispositivos actuales."</string>
   <string name="banner_set_up_recovery_submit">"Configurar la recuperación"</string>
-  <string name="confirm_recovery_key_banner_message">"La copia de seguridad del chat no está sincronizada en este momento. Debes confirmar tu clave de recuperación para mantener el acceso a la copia de seguridad del chat."</string>
-  <string name="confirm_recovery_key_banner_title">"Confirma tu clave de recuperación"</string>
+  <string name="banner_set_up_recovery_title">"Configura la recuperación para proteger tu cuenta"</string>
+  <string name="confirm_recovery_key_banner_message">"Confirma tu clave de recuperación para mantener el acceso a tu almacén de claves y al historial de mensajes."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Introduce tu clave de recuperación"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"¿Olvidaste tu clave de recuperación?"</string>
+  <string name="confirm_recovery_key_banner_title">"Tu almacén de claves no está sincronizado"</string>
+  <string name="full_screen_intent_banner_message">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
+  <string name="full_screen_intent_banner_title">"Mejora tu experiencia de llamada"</string>
   <string name="screen_invites_decline_chat_message">"¿Estás seguro de que quieres rechazar la invitación a unirte a %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Rechazar la invitación"</string>
-  <string name="screen_invites_decline_direct_chat_message">"¿Estás seguro de que quieres rechazar este chat privado con%1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_message">"¿Estás seguro de que quieres rechazar este chat privado con %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Rechazar el chat"</string>
   <string name="screen_invites_empty_list">"Sin invitaciones"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) te invitó"</string>
+  <string name="screen_join_room_knock_sent_title">"Solicitud de unión enviada"</string>
   <string name="screen_migration_message">"Este proceso solo se hace una vez, gracias por esperar."</string>
   <string name="screen_migration_title">"Configura tu cuenta"</string>
   <string name="screen_roomlist_a11y_create_message">"Crear una nueva conversación o sala"</string>
@@ -19,6 +26,7 @@
 Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Aún no tienes chats favoritos"</string>
   <string name="screen_roomlist_filter_invites">"Invitaciones"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"No tienes ninguna invitación pendiente."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioridad baja"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puedes deseleccionar filtros para ver tus otros chats."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"No tienes chats para esta selección"</string>
@@ -29,7 +37,7 @@ Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_filter_unreads">"No leídos"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"¡Felicidades!
 ¡No tienes ningún mensaje sin leer!"</string>
-  <string name="screen_roomlist_main_space_title">"Todos los chats"</string>
+  <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como leído"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como no leído"</string>
   <string name="session_verification_banner_message">"Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados."</string>

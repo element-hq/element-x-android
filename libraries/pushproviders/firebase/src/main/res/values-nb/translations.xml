@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Sørg for at Firebase er tilgjengelig."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase er ikke tilgjengelig."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase er tilgjengelig."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Sjekk Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Sørg for at Firebase-token er tilgjengelig."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase-token er ikke kjent."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase-token: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Sjekk Firebase-token"</string>
+</resources>

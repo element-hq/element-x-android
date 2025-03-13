@@ -28,3 +28,21 @@ fun Boolean.toSecondaryEnabledColor(): Color {
         ElementTheme.colors.textDisabled
     }
 }
+
+@Composable
+fun Boolean.toIconEnabledColor(): Color {
+    return if (this) {
+        ElementTheme.colors.iconPrimary
+    } else {
+        ElementTheme.colors.iconDisabled
+    }
+}
+
+@Composable
+fun Boolean.toIconSecondaryEnabledColor(): Color {
+    return if (this) {
+        ElementTheme.colors.iconSecondary
+    } else {
+        ElementTheme.colors.iconDisabled
+    }
+}

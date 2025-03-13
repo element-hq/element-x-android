@@ -10,5 +10,6 @@ Você pode mudar isso a qualquer momento nas configurações da sala."</string>
   <string name="screen_create_room_room_name_label">"Nome da sala"</string>
   <string name="screen_create_room_title">"Criar uma sala"</string>
   <string name="screen_create_room_topic_label">"Tópico (opcional)"</string>
+  <string name="screen_room_directory_search_title">"Diretório de salas"</string>
   <string name="screen_start_chat_error_starting_chat">"Ocorreu um erro ao tentar iniciar um chat"</string>
 </resources>

@@ -39,6 +39,7 @@
   <string name="screen_session_verification_they_match">"Вони збігаються"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Перш ніж починати перевірку звідси, переконайтеся, що програму відкрито на іншому пристрої."</string>
   <string name="screen_session_verification_use_another_device_title">"Відкрийте додаток на іншому перевіреному пристрої"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"Для додаткової безпеки верифікуйте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування."</string>
   <string name="screen_session_verification_user_initiator_title">"Верифікувати цього користувача?"</string>
   <string name="screen_session_verification_user_responder_subtitle">"Для додаткової безпеки інший користувач хоче верифікувати вашу особистість. Вам буде показано набір емоджі для порівняння."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Ви повинні побачити спливаюче вікно на іншому пристрої. Почніть перевірку звідти."</string>

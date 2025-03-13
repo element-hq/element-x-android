@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Ziur saioa amaitu nahi duzula?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Amaitu saioa"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Amaitu saioa"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Saioa amaitzen…"</string>
+  <string name="screen_signout_key_backup_disabled_title">"Babeskopia desaktibatu duzu"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Itxaron eragiketa amaitu arte saioa amaitu baino lehen."</string>
+  <string name="screen_signout_preference_item">"Amaitu saioa"</string>
+  <string name="screen_signout_recovery_disabled_title">"Berreskuratzea ez da konfiguratu"</string>
+  <string name="screen_signout_save_recovery_key_title">"Gorde al duzu berreskuratze-gakoa?"</string>
+</resources>

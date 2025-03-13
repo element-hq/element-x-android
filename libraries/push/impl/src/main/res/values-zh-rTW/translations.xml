@@ -12,7 +12,7 @@
     <item quantity="other">"%d 個通知"</item>
   </plurals>
   <string name="notification_fallback_content">"通知"</string>
-  <string name="notification_incoming_call">"來電"</string>
+  <string name="notification_incoming_call">"📹 來電"</string>
   <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒絕"</string>

@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
+  <string name="common_current_user_canceled_knock">"Žádost zrušena"</string>
   <string name="common_current_user_left_room">"Místnost opuštěna"</string>
+  <string name="common_current_user_rejected_invite">"Pozvánka odmítnuta"</string>
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>

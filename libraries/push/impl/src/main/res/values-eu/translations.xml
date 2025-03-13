@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Deia"</string>
+  <string name="notification_channel_listening_for_events">"Gertaerei adi"</string>
+  <string name="notification_channel_noisy">"Jakinarazpen zaratatsuak"</string>
+  <string name="notification_channel_silent">"Jakinarazpen isilak"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: mezu %2$d"</item>
+    <item quantity="other">"%1$s: %2$d mezu"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"jakinarazpen %d"</item>
+    <item quantity="other">"%d jakinarazpen"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Jakinarazpena"</string>
+  <string name="notification_incoming_call">"Deia jasotzen"</string>
+  <string name="notification_inline_reply_failed">"** Huts egin du bidalketak - ireki gela"</string>
+  <string name="notification_invitation_action_join">"Elkartu"</string>
+  <string name="notification_invitation_action_reject">"Baztertu"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"Gonbidapen %d"</item>
+    <item quantity="other">"%d gonbidapen"</item>
+  </plurals>
+  <string name="notification_invite_body">"Txatetzera gonbidatu zaitu"</string>
+  <string name="notification_mentioned_you_body">"Aipatu zaitu: %1$s"</string>
+  <string name="notification_new_messages">"Mezu berriak"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"Mezu berri %d"</item>
+    <item quantity="other">"%d mezu berri"</item>
+  </plurals>
+  <string name="notification_reaction_body">"%1$s (r)ekin erreakzionatu du"</string>
+  <string name="notification_room_action_mark_as_read">"Markatu irakurritzat"</string>
+  <string name="notification_room_action_quick_reply">"Erantzun azkarra"</string>
+  <string name="notification_room_invite_body">"Gelan sartzera gonbidatu zaitu"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s(e)k gelan sartzera gonbidatu zaitu"</string>
+  <string name="notification_sender_me">"Neu"</string>
+  <string name="notification_sender_mention_reply">"%1$s(e)k aipatu zaitu edo erantzun dizu"</string>
+  <string name="notification_test_push_notification_content">"Jakinarazpena ikusten ari zara! Klikatu!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"Irakurri gabeko mezu %den jakinarazpena"</item>
+    <item quantity="other">"Irakurri gabeko %d mezuren jakinarazpena"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_in_room">"%1$s %2$s gelan"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s %2$s gelan eta %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"Gela %d"</item>
+    <item quantity="other">"%d gela"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Atzeko planoko sinkronizazioa"</string>
+  <string name="push_distributor_firebase_android">"Google Services"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Ez da baliozko Google Play Servicerik aurkitu. Litekeena da jakinarazpenak behar bezala ez ibiltzea."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Lortu uneko hornitzailearen izena."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ez da push hornitzailerik hautatu."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Uneko push hornitzailea: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Uneko push hornitzailea"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ez da push hornitzailerik aurkitu."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Push hornitzaile %1$d aurkitu da: %2$s"</item>
+    <item quantity="other">"%1$d push hornitzaile aurkitu dira: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detektatu push hornitzaileak"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Egiaztatu aplikazioak jakinarazpena bistaratu dezakeela."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Ez da klikik egin jakinarazpenean."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Ezin da jakinarazpena bistaratu."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Klik egin da jakinarazpenean!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Bistaratu jakinarazpena"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klikatu jakinarazpenean probarekin jarraitzeko."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Errorea: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Errorea, ezin da push-a probatu."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Errorea, denbora agortu da push-aren zain."</string>
+</resources>

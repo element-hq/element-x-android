@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Jarduerak"</string>
+  <string name="emoji_picker_category_flags">"Banderak"</string>
+  <string name="emoji_picker_category_foods">"Jana eta edana"</string>
+  <string name="emoji_picker_category_nature">"Animaliak eta natura"</string>
+  <string name="emoji_picker_category_objects">"Objektuak"</string>
+  <string name="emoji_picker_category_people">"Irribartxoak eta jendea"</string>
+  <string name="emoji_picker_category_places">"Bidaiak eta tokiak"</string>
+  <string name="emoji_picker_category_symbols">"Ikurrak"</string>
+  <string name="screen_report_content_block_user">"Blokeatu erabiltzailea"</string>
+  <string name="screen_report_content_explanation">"Mezua zure zerbitzariko administratzaileari jakinaraziko zaio. Ezingo dute zifratutako mezurik irakurri."</string>
+  <string name="screen_report_content_hint">"Edukia salatzeko arrazoia"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Egin argazkia"</string>
+  <string name="screen_room_attachment_source_camera_video">"Grabatu bideoa"</string>
+  <string name="screen_room_attachment_source_files">"Eranskina"</string>
+  <string name="screen_room_attachment_source_gallery">"Argazki- eta bideo-liburutegia"</string>
+  <string name="screen_room_attachment_source_location">"Kokapena"</string>
+  <string name="screen_room_attachment_source_poll">"Inkesta"</string>
+  <string name="screen_room_attachment_text_formatting">"Testuaren formatua"</string>
+  <string name="screen_room_encrypted_history_banner">"Mezuen historia ez dago erabilgarri gaur-gaurkoz."</string>
+  <string name="screen_room_invite_again_alert_message">"Berriro gonbidatu nahi al dituzu?"</string>
+  <string name="screen_room_invite_again_alert_title">"Bakarrik zaude txat honetan"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Jakinarazi gela osoari"</string>
+  <string name="screen_room_mentions_at_room_title">"Guztiak"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Bidali berriro"</string>
+  <string name="screen_room_timeline_add_reaction">"Gehitu emojia"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Hauxe da %1$s(r)en hasiera"</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Hau da elkarrizketaren hasiera."</string>
+  <string name="screen_room_timeline_legacy_call">"Deia ez da bateragarria. Galdetu deika ari denari Element X aplikazio berria erabil dezakeen."</string>
+  <string name="screen_room_timeline_less_reactions">"Erakutsi gutxiago"</string>
+  <string name="screen_room_timeline_message_copied">"Mezua kopiatu da"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Ez duzu gela honetara mezuak bidaltzeko baimenik"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Erakutsi gutxiago"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Erakutsi gehiago"</string>
+  <string name="screen_room_timeline_read_marker_title">"Berria"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"Gela aldaketa %1$d"</item>
+    <item quantity="other">"%1$d gela aldaketa"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s, eta beste %3$d"</item>
+    <item quantity="other">"%1$s, %2$s, eta beste %3$d"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s idazten ari da"</item>
+    <item quantity="other">"%1$s idazten ari dira"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s eta %2$s"</string>
+</resources>

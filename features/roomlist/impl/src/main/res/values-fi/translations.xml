@@ -40,7 +40,6 @@ Sinulla ei ole lukemattomia viestejä!"</string>
   <string name="screen_roomlist_main_space_title">"Keskustelut"</string>
   <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
   <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Selaa kaikkia huoneita"</string>
   <string name="session_verification_banner_message">"Vaikuttaisi siltä, että käytät uutta laitetta. Vahvista toisella laitteella nähdäksesi salatut viestit."</string>
   <string name="session_verification_banner_title">"Vahvista, että se olet sinä"</string>
 </resources>

@@ -10,6 +10,7 @@ package io.element.android.features.roomdetails.impl.members
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
@@ -24,7 +25,12 @@ data class RoomMemberListState(
 )
 
 data class RoomMembers(
-    val invited: ImmutableList<RoomMember>,
-    val joined: ImmutableList<RoomMember>,
-    val banned: ImmutableList<RoomMember>,
+    val invited: ImmutableList<RoomMemberWithIdentityState>,
+    val joined: ImmutableList<RoomMemberWithIdentityState>,
+    val banned: ImmutableList<RoomMemberWithIdentityState>,
+)
+
+data class RoomMemberWithIdentityState(
+    val roomMember: RoomMember,
+    val identityState: IdentityState?,
 )

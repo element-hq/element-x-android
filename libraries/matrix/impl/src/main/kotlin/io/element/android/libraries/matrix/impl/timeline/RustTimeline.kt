@@ -73,7 +73,7 @@ import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.UploadParameters
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
+import uniffi.matrix_sdk.RoomPaginationStatus
 import java.io.File
 import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
@@ -148,8 +148,8 @@ class RustTimeline(
             .onEach { backPaginationStatus ->
                 updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
                     when (backPaginationStatus) {
-                        is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
-                        is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                        is RoomPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitTimelineStart)
+                        is RoomPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
                     }
                 }
             }

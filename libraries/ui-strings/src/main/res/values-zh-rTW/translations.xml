@@ -27,6 +27,7 @@
   <string name="a11y_show_password">"顯示密碼"</string>
   <string name="a11y_start_call">"開始通話"</string>
   <string name="a11y_user_menu">"使用者選單"</string>
+  <string name="a11y_view_details">"檢視詳細資訊"</string>
   <string name="a11y_voice_message_record">"錄製語音訊息。"</string>
   <string name="a11y_voice_message_stop_recording">"停止錄音"</string>
   <string name="action_accept">"接受"</string>
@@ -123,7 +124,7 @@
   <string name="action_try_again">"再試一次"</string>
   <string name="action_unpin">"取消釘選"</string>
   <string name="action_view_in_timeline">"在時間軸中檢視"</string>
-  <string name="action_view_source">"檢視原始碼"</string>
+  <string name="action_view_source">"檢視來源"</string>
   <string name="action_yes">"是"</string>
   <string name="action_yes_try_again">"是的，再試一次"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"您的伺服器現在支援新的、更快的協定。立即登出並重新登入以進行升級。現在這樣做將協助您避免在稍後移除舊協定時被強制登出。"</string>
@@ -181,6 +182,7 @@
   <string name="common_light">"淺色"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
   <string name="common_loading">"載入中…"</string>
+  <string name="common_loading_more">"載入更多……"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 位成員"</item>
   </plurals>
@@ -190,6 +192,7 @@
   <string name="common_message_removed">"訊息已移除"</string>
   <string name="common_modern">"現代"</string>
   <string name="common_mute">"關閉通知"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"查無結果"</string>
   <string name="common_no_room_name">"無聊天室名稱"</string>
   <string name="common_offline">"離線"</string>
@@ -266,6 +269,7 @@
   <string name="common_verified">"已驗證"</string>
   <string name="common_verify_device">"驗證裝置"</string>
   <string name="common_verify_identity">"驗證身份"</string>
+  <string name="common_verify_user">"驗證使用者"</string>
   <string name="common_video">"影片"</string>
   <string name="common_voice_message">"語音訊息"</string>
   <string name="common_waiting">"等待中…"</string>
@@ -274,6 +278,7 @@
   <string name="crypto_identity_change_pin_violation">"%1$s 的身份似乎已變更。%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 身份似乎已變更。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"（%1$s）"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s 的已驗證身份變更了。"</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 驗證身份已變更。%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回驗證"</string>
   <string name="dialog_title_confirmation">"確認"</string>
@@ -292,6 +297,7 @@
   <string name="error_missing_location_auth_android">"%1$s 沒有權限存取您的位置。您可以到設定中開啟權限。"</string>
   <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s 沒有權限存取您的麥克風。您需要開啟權限才能錄製語音訊息。"</string>
+  <string name="error_network_or_server_issue">"這可能是因為網路或伺服器的問題所致。"</string>
   <string name="error_room_address_already_exists">"此聊天室地址已存在。請嘗試編輯聊天室地址欄位或變更聊天室名稱"</string>
   <string name="error_room_address_invalid_symbols">"不允許使用部份字元。僅支援字母、數字與以下符號 ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>

@@ -7,6 +7,7 @@
   <string name="rich_text_editor_composer_caption_placeholder">"Légende facultative…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Message chiffré…"</string>
   <string name="rich_text_editor_composer_placeholder">"Message…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Message non chiffré…"</string>
   <string name="rich_text_editor_create_link">"Créer un lien"</string>
   <string name="rich_text_editor_edit_link">"Modifier le lien"</string>
   <string name="rich_text_editor_format_bold">"Appliquer le format gras"</string>

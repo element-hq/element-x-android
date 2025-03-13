@@ -110,7 +110,7 @@ class RingingCallNotificationCreator @Inject constructor(
         )
 
         return NotificationCompat.Builder(context, notificationChannelId)
-            .setSmallIcon(CommonDrawables.ic_notification_small)
+            .setSmallIcon(CommonDrawables.ic_notification)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
             .setStyle(NotificationCompat.CallStyle.forIncomingCall(caller, declineIntent, answerIntent).setIsVideo(true))

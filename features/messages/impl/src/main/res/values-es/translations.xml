@@ -19,7 +19,7 @@
   <string name="screen_room_attachment_source_gallery">"Biblioteca de fotos y vídeos"</string>
   <string name="screen_room_attachment_source_location">"Ubicación"</string>
   <string name="screen_room_attachment_source_poll">"Encuesta"</string>
-  <string name="screen_room_attachment_text_formatting">"Formato de Texto"</string>
+  <string name="screen_room_attachment_text_formatting">"Formato de texto"</string>
   <string name="screen_room_encrypted_history_banner">"El historial de mensajes no está disponible en este momento."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"El historial de mensajes no está disponible en esta sala. Verifica este dispositivo para ver tu historial de mensajes."</string>
   <string name="screen_room_invite_again_alert_message">"¿Quieres volver a invitarlos?"</string>
@@ -31,6 +31,7 @@
   <string name="screen_room_timeline_add_reaction">"Añadir emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Este es el principio de %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
+  <string name="screen_room_timeline_legacy_call">"Llamada no compatible. Pregunta a la persona que llama si puede utilizar la nueva aplicación Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Mostrar menos"</string>
   <string name="screen_room_timeline_message_copied">"Mensaje copiado"</string>
   <string name="screen_room_timeline_no_permission_to_post">"No tienes permiso para publicar en esta sala"</string>
