@@ -616,6 +616,10 @@ class FakeMatrixRoom(
         updateJoinRuleResult(joinRule)
     }
 
+    override suspend fun getUpdatedIsEncrypted(): Result<Boolean> = simulateLongTask {
+        Result.success(isEncrypted)
+    }
+
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
