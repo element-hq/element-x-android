@@ -78,10 +78,7 @@ class MediaViewerNode @AssistedInject constructor(
             }
             when (timelineMode) {
                 null -> timelineMediaGalleryDataSource
-                Timeline.Mode.LIVE -> {
-                    // Even if the timelineMediaGalleryDataSource does not know the eventId, the SDK will create the timeline faster
-                    timelineMediaGalleryDataSource
-                }
+                Timeline.Mode.LIVE,
                 Timeline.Mode.FOCUSED_ON_EVENT -> {
                     // Does timelineMediaGalleryDataSource knows the eventId?
                     val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
