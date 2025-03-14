@@ -53,13 +53,9 @@ class DefaultHtmlConverterProvider @Inject constructor(
                 context = context,
                 mentionDisplayHandler = object : MentionDisplayHandler {
                     override fun resolveAtRoomMentionDisplay(): TextDisplay {
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(text = "@room", url = "#")
-                        return if (mentionSpan != null) {
-                            mentionSpan.update(mentionSpanTheme)
-                            TextDisplay.Custom(mentionSpan)
-                        } else {
-                            TextDisplay.Plain
-                        }
+                        val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                        mentionSpan.update(mentionSpanTheme)
+                        return TextDisplay.Custom(mentionSpan)
                     }
 
                     override fun resolveMentionDisplay(text: String, url: String): TextDisplay {

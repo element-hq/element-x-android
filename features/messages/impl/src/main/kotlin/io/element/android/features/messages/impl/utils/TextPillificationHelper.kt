@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
@@ -32,7 +32,6 @@ interface TextPillificationHelper {
 @ContributesBinding(RoomScope::class)
 class DefaultTextPillificationHelper @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
-    private val permalinkBuilder: PermalinkBuilder,
     private val permalinkParser: PermalinkParser,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) : TextPillificationHelper {
@@ -55,34 +54,27 @@ class DefaultTextPillificationHelper @Inject constructor(
                     val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val userId = UserId(match.value)
-                        val permalink = permalinkBuilder.permalinkForUser(userId).getOrNull() ?: continue
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
-                        if (mentionSpan != null) {
-                            roomMemberProfilesCache.getDisplayName(userId)?.let { mentionSpan.text = it }
-                            text.replace(match.start, match.end, "@ ")
-                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
+                        val displayNameOrId = roomMemberProfilesCache.getDisplayName(userId) ?: userId.value
+                        val mentionSpan = mentionSpanProvider.createUserMentionSpan(displayNameOrId, userId)
+                        text.replace(match.start, match.end, "@ ")
+                        text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
                 MatrixPatternType.ROOM_ALIAS -> {
                     val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
-                        val permalink = permalinkBuilder.permalinkForRoomAlias(RoomAlias(match.value)).getOrNull() ?: continue
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
-                        if (mentionSpan != null) {
-                            text.replace(match.start, match.end, "@ ")
-                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
+                        val roomAlias = RoomAlias(match.value)
+                        val mentionSpan = mentionSpanProvider.createRoomMentionSpan(match.value, roomAlias.toRoomIdOrAlias())
+                        text.replace(match.start, match.end, "@ ")
+                        text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
                 MatrixPatternType.AT_ROOM -> {
                     val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "")
-                        if (mentionSpan != null) {
-                            text.replace(match.start, match.end, "@ ")
-                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
+                        val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                        text.replace(match.start, match.end, "@ ")
+                        text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
                 else -> Unit

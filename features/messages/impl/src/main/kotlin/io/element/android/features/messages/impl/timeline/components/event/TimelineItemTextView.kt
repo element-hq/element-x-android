@@ -39,6 +39,7 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.compose.EditorStyledText
 
@@ -90,18 +91,17 @@ private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCach
     var changedContents = false
     for (mentionSpan in text.getMentionSpans()) {
         mentionSpan.update(mentionSpanTheme)
-        when (mentionSpan.type) {
-            MentionSpan.Type.USER -> {
-                val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
+        when (val mentionType = mentionSpan.type) {
+            is MentionType.User -> {
+                val displayName = cache.getDisplayName(mentionType.userId) ?: mentionType.userId.value
                 if (mentionSpan.text != displayName) {
                     changedContents = true
                     mentionSpan.text = displayName
                 }
             }
-            // There's no need to do anything for `@room` pills
-            MentionSpan.Type.EVERYONE -> Unit
-            // Nothing yet for room mentions
-            MentionSpan.Type.ROOM -> Unit
+            MentionType.Everyone -> Unit
+            is MentionType.Message -> Unit
+            is MentionType.Room -> Unit
         }
     }
     return changedContents

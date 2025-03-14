@@ -22,13 +22,14 @@ import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.text.getSpans
-import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.textcomposer.components.markdown.StableCharSequence
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import kotlinx.parcelize.Parcelize
@@ -98,19 +99,23 @@ class MarkdownTextEditorState(
                         val start = charSequence.getSpanStart(mention)
                         val end = charSequence.getSpanEnd(mention)
                         when (mention.type) {
-                            MentionSpan.Type.USER -> {
-                                permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull()?.let { link ->
-                                    replace(start, end, "[${mention.rawValue}]($link)")
-                                }
-                            }
-                            MentionSpan.Type.EVERYONE -> {
-                                replace(start, end, "@room")
-                            }
-                            MentionSpan.Type.ROOM -> {
-                                permalinkBuilder.permalinkForRoomAlias(RoomAlias(mention.rawValue)).getOrNull()?.let { link ->
+                            is MentionType.User -> {
+                                permalinkBuilder.permalinkForUser(mention.type.userId).getOrNull()?.let { link ->
                                     replace(start, end, "[${mention.text}]($link)")
                                 }
                             }
+                            is MentionType.Everyone -> {
+                                replace(start, end, "@room")
+                            }
+                            is MentionType.Room -> {
+                                val roomIdOrAlias = mention.type.roomIdOrAlias
+                                if (roomIdOrAlias is RoomIdOrAlias.Alias) {
+                                    permalinkBuilder.permalinkForRoomAlias(roomIdOrAlias.roomAlias).getOrNull()?.let { link ->
+                                        replace(start, end, "[${mention.text}]($link)")
+                                    }
+                                }
+                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -125,9 +130,9 @@ class MarkdownTextEditorState(
         val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
-                MentionSpan.Type.USER -> IntentionalMention.User(UserId(mentionSpan.rawValue))
-                MentionSpan.Type.EVERYONE -> IntentionalMention.Room
-                MentionSpan.Type.ROOM -> null
+                is MentionType.User -> IntentionalMention.User(mentionSpan.type.userId)
+                is MentionType.Everyone -> IntentionalMention.Room
+                else -> null
             }
         }
     }

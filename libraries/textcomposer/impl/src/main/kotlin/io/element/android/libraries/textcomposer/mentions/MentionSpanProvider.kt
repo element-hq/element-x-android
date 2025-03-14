@@ -7,12 +7,15 @@
 
 package io.element.android.libraries.textcomposer.mentions
 
-import androidx.compose.runtime.Stable
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import javax.inject.Inject
 
-@Stable
+/**
+ * Provider for [MentionSpan]s.
+ */
 open class MentionSpanProvider @Inject constructor(
     private val permalinkParser: PermalinkParser,
 ) {
@@ -22,29 +25,56 @@ open class MentionSpanProvider @Inject constructor(
     }
 
     fun getMentionSpanFor(text: String, permalinkData: PermalinkData): MentionSpan? {
-        return when {
-            permalinkData is PermalinkData.UserLink -> {
+        return when (permalinkData) {
+            is PermalinkData.UserLink -> {
                 MentionSpan(
                     text = text,
-                    rawValue = permalinkData.userId.toString(),
-                    type = MentionSpan.Type.USER,
+                    type = MentionType.User(userId = permalinkData.userId)
                 )
             }
-            text == "@room" && permalinkData is PermalinkData.FallbackLink -> {
+            is PermalinkData.RoomLink -> {
+                val eventId = permalinkData.eventId
+                val mentionType = if (eventId != null) {
+                    MentionType.Message(roomIdOrAlias = permalinkData.roomIdOrAlias, eventId = eventId)
+                } else {
+                    MentionType.Room(roomIdOrAlias = permalinkData.roomIdOrAlias)
+                }
                 MentionSpan(
                     text = text,
-                    rawValue = "@room",
-                    type = MentionSpan.Type.EVERYONE,
-                )
-            }
-            permalinkData is PermalinkData.RoomLink -> {
-                MentionSpan(
-                    text = text,
-                    rawValue = permalinkData.roomIdOrAlias.identifier,
-                    type = MentionSpan.Type.ROOM,
+                    type = mentionType
                 )
             }
             else -> null
         }
+    }
+
+    /**
+     * Create a mention span for a user mention.
+     */
+    fun createUserMentionSpan(displayName: String, userId: UserId): MentionSpan {
+        return MentionSpan(
+            text = displayName,
+            type = MentionType.User(userId = userId)
+        )
+    }
+
+    /**
+     * Create a mention span for a room mention.
+     */
+    fun createRoomMentionSpan(roomName: String, roomIdOrAlias: RoomIdOrAlias): MentionSpan {
+        return MentionSpan(
+            text = roomName,
+            type = MentionType.Room(roomIdOrAlias)
+        )
+    }
+
+    /**
+     * Create a mention span for @room (everyone).
+     */
+    fun createEveryoneMentionSpan(): MentionSpan {
+        return MentionSpan(
+            text = "@room",
+            type = MentionType.Everyone
+        )
     }
 }

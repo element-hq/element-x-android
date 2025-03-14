@@ -16,13 +16,16 @@ import android.text.TextUtils
 import android.text.style.ReplacementSpan
 import androidx.core.text.getSpans
 import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlin.math.roundToInt
 
 class MentionSpan(
     text: String,
-    val rawValue: String,
-    val type: Type,
+    val type: MentionType,
 ) : ReplacementSpan() {
 
     var backgroundColor: Int = 0
@@ -46,17 +49,25 @@ class MentionSpan(
     private var mentionText: CharSequence = getActualText(text)
 
     fun update(mentionSpanTheme: MentionSpanTheme) {
-        val isCurrentUser = rawValue == mentionSpanTheme.currentUserId?.value
+        val isCurrentUser = when (type) {
+            is MentionType.User -> type.userId == mentionSpanTheme.currentUserId
+            else -> false
+        }
+        
         backgroundColor = when (type) {
-            Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
-            Type.ROOM -> mentionSpanTheme.otherBackgroundColor
-            Type.EVERYONE -> mentionSpanTheme.currentUserBackgroundColor
+            is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
+            is MentionType.Everyone -> mentionSpanTheme.currentUserBackgroundColor
+            is MentionType.Room -> mentionSpanTheme.otherBackgroundColor
+            is MentionType.Message -> mentionSpanTheme.otherBackgroundColor
         }
+        
         textColor = when (type) {
-            Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
-            Type.ROOM -> mentionSpanTheme.otherTextColor
-            Type.EVERYONE -> mentionSpanTheme.currentUserTextColor
+            is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
+            is MentionType.Everyone -> mentionSpanTheme.currentUserTextColor
+            is MentionType.Room -> mentionSpanTheme.otherTextColor
+            is MentionType.Message -> mentionSpanTheme.otherTextColor
         }
+        
         val (startPaddingPx, endPaddingPx) = mentionSpanTheme.paddingValuesPx.value
         startPadding = startPaddingPx
         endPadding = endPaddingPx
@@ -122,27 +133,28 @@ class MentionSpan(
         return buildString {
             val mentionText = text.orEmpty()
             when (type) {
-                Type.USER -> {
+                is MentionType.User -> {
                     if (mentionText.firstOrNull() != '@') {
                         append("@")
                     }
                 }
-                Type.ROOM -> {
+                is MentionType.Room -> {
                     if (mentionText.firstOrNull() != '#') {
                         append("#")
                     }
                 }
-                Type.EVERYONE -> Unit
+                else -> Unit
             }
             append(mentionText)
         }
     }
+}
 
-    enum class Type {
-        USER,
-        ROOM,
-        EVERYONE,
-    }
+sealed class MentionType {
+    data class User(val userId: UserId) : MentionType()
+    data class Room(val roomIdOrAlias: RoomIdOrAlias) : MentionType()
+    data class Message(val roomIdOrAlias: RoomIdOrAlias, val eventId: EventId) : MentionType()
+    data object Everyone : MentionType()
 }
 
 fun CharSequence.getMentionSpans(): List<MentionSpan> {
