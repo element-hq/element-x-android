@@ -123,7 +123,6 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     val body = messageType.body.trimEnd()
                     TimelineItemTextContent(
                         body = body,
-                        pillifiedBody = textPillificationHelper.pillify(body),
                         htmlDocument = null,
                         plainText = body,
                         formattedBody = null,
@@ -228,11 +227,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is TextMessageType -> {
                 val body = messageType.body.trimEnd()
+                val formattedBody = parseHtml(messageType.formatted) ?: textPillificationHelper.pillify(body).safeLinkify()
                 TimelineItemTextContent(
                     body = body,
-                    pillifiedBody = textPillificationHelper.pillify(body).safeLinkify(),
                     htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
-                    formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
+                    formattedBody = formattedBody,
                     isEdited = content.isEdited,
                 )
             }
@@ -240,9 +239,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
-                    pillifiedBody = textPillificationHelper.pillify(body),
                     htmlDocument = null,
-                    formattedBody = body.withLinks(),
+                    formattedBody = textPillificationHelper.pillify(body).safeLinkify(),
                     isEdited = content.isEdited,
                 )
             }
@@ -263,6 +261,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
         if (formattedBody == null || formattedBody.format != MessageFormat.HTML) return null
         val result = htmlConverterProvider.provide()
             .fromHtmlToSpans(formattedBody.body.trimEnd())
+            .let { textPillificationHelper.pillify(it, false) }
             .safeLinkify()
         return if (prefix != null) {
             buildSpannedString {

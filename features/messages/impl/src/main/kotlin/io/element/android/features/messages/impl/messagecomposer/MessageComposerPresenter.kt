@@ -380,12 +380,20 @@ class MessageComposerPresenter @AssistedInject constructor(
                 if (permalinkData is PermalinkData.UserLink) {
                     val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
                     val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
-                    mentionSpan.update(mentionSpanTheme)
-                    TextDisplay.Custom(mentionSpan)
+                    if(mentionSpan != null) {
+                        mentionSpan.update(mentionSpanTheme)
+                        TextDisplay.Custom(mentionSpan)
+                    }else {
+                        TextDisplay.Plain
+                    }
                 } else {
                     val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                    mentionSpan.update(mentionSpanTheme)
-                    TextDisplay.Custom(mentionSpan)
+                    if (mentionSpan != null) {
+                        mentionSpan.update(mentionSpanTheme)
+                        TextDisplay.Custom(mentionSpan)
+                    }else {
+                        TextDisplay.Plain
+                    }
                 }
             }
         }

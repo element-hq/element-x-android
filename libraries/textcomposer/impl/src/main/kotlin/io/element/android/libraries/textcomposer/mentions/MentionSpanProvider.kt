@@ -16,7 +16,7 @@ import javax.inject.Inject
 open class MentionSpanProvider @Inject constructor(
     private val permalinkParser: PermalinkParser,
 ) {
-    fun getMentionSpanFor(text: String, url: String): MentionSpan {
+    fun getMentionSpanFor(text: String, url: String): MentionSpan? {
         val permalinkData = permalinkParser.parse(url)
         return when {
             permalinkData is PermalinkData.UserLink -> {
@@ -40,13 +40,7 @@ open class MentionSpanProvider @Inject constructor(
                     type = MentionSpan.Type.ROOM,
                 )
             }
-            else -> {
-                MentionSpan(
-                    text = text,
-                    rawValue = text,
-                    type = MentionSpan.Type.ROOM,
-                )
-            }
+            else -> null
         }
     }
 }

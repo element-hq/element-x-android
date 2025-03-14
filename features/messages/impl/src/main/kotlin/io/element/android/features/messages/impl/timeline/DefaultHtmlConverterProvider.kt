@@ -26,6 +26,7 @@ import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
 import io.element.android.wysiwyg.utils.HtmlConverter
+import timber.log.Timber
 import uniffi.wysiwyg_composer.newMentionDetector
 import javax.inject.Inject
 
@@ -53,18 +54,30 @@ class DefaultHtmlConverterProvider @Inject constructor(
                 mentionDisplayHandler = object : MentionDisplayHandler {
                     override fun resolveAtRoomMentionDisplay(): TextDisplay {
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(text = "@room", url = "#")
-                        mentionSpan.update(mentionSpanTheme)
-                        return TextDisplay.Custom(mentionSpan)
+                        return if (mentionSpan != null) {
+                            mentionSpan.update(mentionSpanTheme)
+                            TextDisplay.Custom(mentionSpan)
+                        } else {
+                            TextDisplay.Plain
+                        }
                     }
 
                     override fun resolveMentionDisplay(text: String, url: String): TextDisplay {
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                        mentionSpan.update(mentionSpanTheme)
-                        return TextDisplay.Custom(mentionSpan)
+                        return if (mentionSpan != null) {
+                            mentionSpan.update(mentionSpanTheme)
+                            TextDisplay.Custom(mentionSpan)
+                        } else {
+                            TextDisplay.Plain
+                        }
                     }
                 },
                 isEditor = false,
-                isMention = { _, url -> mentionDetector?.isMention(url).orFalse() }
+                isMention = { _, url ->
+                    mentionDetector?.isMention(url).orFalse().also {
+                        Timber.d("$url isMention: $it")
+                    }
+                }
             ).apply {
                 configureWith(editorStyle)
             }

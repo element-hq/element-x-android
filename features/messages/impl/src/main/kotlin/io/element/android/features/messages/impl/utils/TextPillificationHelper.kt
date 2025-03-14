@@ -9,6 +9,8 @@ package io.element.android.features.messages.impl.utils
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.util.Patterns
 import androidx.core.text.getSpans
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
@@ -24,7 +26,7 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import javax.inject.Inject
 
 interface TextPillificationHelper {
-    fun pillify(text: CharSequence): CharSequence
+    fun pillify(text: CharSequence, pillifyMatrixPatterns: Boolean = true): CharSequence
 }
 
 @ContributesBinding(RoomScope::class)
@@ -35,44 +37,71 @@ class DefaultTextPillificationHelper @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) : TextPillificationHelper {
     @Suppress("LoopWithTooManyJumpStatements")
-    override fun pillify(text: CharSequence): CharSequence {
-        val matches = MatrixPatterns.findPatterns(text, permalinkParser).sortedByDescending { it.end }
-        if (matches.isEmpty()) return text
+    override fun pillify(text: CharSequence, pillifyMatrixPatterns: Boolean): CharSequence {
+        return SpannableStringBuilder(text).apply {
+            if (pillifyMatrixPatterns) {
+                pillifyMatrixPatterns(this)
+            }
+            pillifyPermalinks(this)
+        }
+    }
 
-        val spannable = SpannableStringBuilder(text)
+    private fun pillifyMatrixPatterns(text: SpannableStringBuilder) {
+        val matches = MatrixPatterns.findPatterns(text, permalinkParser).sortedByDescending { it.end }
+        if (matches.isEmpty()) return
         for (match in matches) {
             when (match.type) {
                 MatrixPatternType.USER_ID -> {
-                    val mentionSpanExists = spannable.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
+                    val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val userId = UserId(match.value)
                         val permalink = permalinkBuilder.permalinkForUser(userId).getOrNull() ?: continue
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
-                        roomMemberProfilesCache.getDisplayName(userId)?.let { mentionSpan.text = it }
-                        spannable.replace(match.start, match.end, "@ ")
-                        spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (mentionSpan != null) {
+                            roomMemberProfilesCache.getDisplayName(userId)?.let { mentionSpan.text = it }
+                            text.replace(match.start, match.end, "@ ")
+                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                     }
                 }
                 MatrixPatternType.ROOM_ALIAS -> {
-                    val mentionSpanExists = spannable.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
+                    val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val permalink = permalinkBuilder.permalinkForRoomAlias(RoomAlias(match.value)).getOrNull() ?: continue
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
-                        spannable.replace(match.start, match.end, "@ ")
-                        spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (mentionSpan != null) {
+                            text.replace(match.start, match.end, "@ ")
+                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                     }
                 }
                 MatrixPatternType.AT_ROOM -> {
-                    val mentionSpanExists = spannable.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
+                    val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "")
-                        spannable.replace(match.start, match.end, "@ ")
-                        spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (mentionSpan != null) {
+                            text.replace(match.start, match.end, "@ ")
+                            text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                     }
                 }
                 else -> Unit
             }
         }
-        return spannable
+    }
+
+    private fun pillifyPermalinks(text: SpannableStringBuilder) {
+        for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
+            val start = match.range.first
+            val end = match.range.last + 1
+            val mentionSpanExists = text.getSpans<MentionSpan>(start, end).isNotEmpty()
+            if (!mentionSpanExists) {
+                val url = text.substring(match.range)
+                val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, url)
+                if (mentionSpan != null) {
+                    text.setSpan(mentionSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+        }
     }
 }
