@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.textcomposer.components.markdown.StableCharSequence
@@ -55,8 +56,7 @@ class MarkdownTextEditorState(
         when (resolvedSuggestion) {
             is ResolvedSuggestion.AtRoom -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val replaceText = "@room"
-                val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
+                val roomPill = mentionSpanProvider.createEveryoneMentionSpan()
                 currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(roomPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -65,9 +65,8 @@ class MarkdownTextEditorState(
             }
             is ResolvedSuggestion.Member -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val text = resolvedSuggestion.roomMember.displayName?.prependIndent("@") ?: resolvedSuggestion.roomMember.userId.value
-                val link = permalinkBuilder.permalinkForUser(resolvedSuggestion.roomMember.userId).getOrNull() ?: return
-                val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
+                val userName = resolvedSuggestion.roomMember.displayName ?: resolvedSuggestion.roomMember.userId.value
+                val mentionPill = mentionSpanProvider.createUserMentionSpan(userName, resolvedSuggestion.roomMember.userId)
                 currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -77,8 +76,7 @@ class MarkdownTextEditorState(
             is ResolvedSuggestion.Alias -> {
                 val currentText = SpannableStringBuilder(text.value())
                 val text = resolvedSuggestion.roomAlias.value
-                val link = permalinkBuilder.permalinkForRoomAlias(resolvedSuggestion.roomAlias).getOrNull() ?: return
-                val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
+                val mentionPill = mentionSpanProvider.createRoomMentionSpan(text, resolvedSuggestion.roomAlias.toRoomIdOrAlias())
                 currentText.replace(suggestion.start, suggestion.end, "# ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

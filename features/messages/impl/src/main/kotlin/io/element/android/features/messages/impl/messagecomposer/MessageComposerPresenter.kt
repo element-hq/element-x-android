@@ -376,24 +376,12 @@ class MessageComposerPresenter @AssistedInject constructor(
         val mentionSpanTheme = LocalMentionSpanTheme.current
         val resolveMentionDisplay = remember(mentionSpanTheme) {
             { text: String, url: String ->
-                val permalinkData = permalinkParser.parse(url)
-                if (permalinkData is PermalinkData.UserLink) {
-                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, permalinkData)
-                    if(mentionSpan != null) {
-                        mentionSpan.update(mentionSpanTheme)
-                        TextDisplay.Custom(mentionSpan)
-                    }else {
-                        TextDisplay.Plain
-                    }
-                } else {
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, permalinkData)
-                    if (mentionSpan != null) {
-                        mentionSpan.update(mentionSpanTheme)
-                        TextDisplay.Custom(mentionSpan)
-                    }else {
-                        TextDisplay.Plain
-                    }
+                val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                if(mentionSpan != null) {
+                    mentionSpan.update(mentionSpanTheme)
+                    TextDisplay.Custom(mentionSpan)
+                }else {
+                    TextDisplay.Plain
                 }
             }
         }
