@@ -18,6 +18,10 @@ open class MentionSpanProvider @Inject constructor(
 ) {
     fun getMentionSpanFor(text: String, url: String): MentionSpan? {
         val permalinkData = permalinkParser.parse(url)
+        return getMentionSpanFor(text, permalinkData)
+    }
+
+    fun getMentionSpanFor(text: String, permalinkData: PermalinkData): MentionSpan? {
         return when {
             permalinkData is PermalinkData.UserLink -> {
                 MentionSpan(

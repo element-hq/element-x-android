@@ -379,7 +379,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                 val permalinkData = permalinkParser.parse(url)
                 if (permalinkData is PermalinkData.UserLink) {
                     val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, permalinkData)
                     if(mentionSpan != null) {
                         mentionSpan.update(mentionSpanTheme)
                         TextDisplay.Custom(mentionSpan)
@@ -387,7 +387,7 @@ class MessageComposerPresenter @AssistedInject constructor(
                         TextDisplay.Plain
                     }
                 } else {
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, permalinkData)
                     if (mentionSpan != null) {
                         mentionSpan.update(mentionSpanTheme)
                         TextDisplay.Custom(mentionSpan)
