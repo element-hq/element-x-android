@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -83,9 +84,12 @@ import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
+val topAppBarHeight = 88.dp
+
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
+    textFileViewer: TextFileViewer,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -143,6 +147,7 @@ fun MediaViewerView(
                             showOverlay = showOverlay,
                             bottomPaddingInPixels = bottomPaddingInPixels,
                             data = dataForPage,
+                            textFileViewer = textFileViewer,
                             onDismiss = onBackClick,
                             onRetry = {
                                 state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
@@ -267,6 +272,7 @@ private fun MediaViewerPage(
     showOverlay: Boolean,
     bottomPaddingInPixels: Int,
     data: MediaViewerPageData.MediaViewerData,
+    textFileViewer: TextFileViewer,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
@@ -316,6 +322,7 @@ private fun MediaViewerPage(
                     localMediaViewState = localMediaViewState,
                     localMedia = downloadedMedia.dataOrNull(),
                     mediaInfo = data.mediaInfo,
+                    textFileViewer = textFileViewer,
                     onClick = {
                         if (playableState is PlayableState.NotPlayable) {
                             currentOnShowOverlayChange(!currentShowOverlay)
@@ -563,6 +570,7 @@ private fun ErrorView(
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
+        textFileViewer = { _, _ -> },
         onBackClick = {}
     )
 }

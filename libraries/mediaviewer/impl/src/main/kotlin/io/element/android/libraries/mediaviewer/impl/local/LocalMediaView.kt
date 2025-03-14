@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.local
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
@@ -19,6 +20,7 @@ import io.element.android.libraries.mediaviewer.impl.local.audio.MediaAudioView
 import io.element.android.libraries.mediaviewer.impl.local.file.MediaFileView
 import io.element.android.libraries.mediaviewer.impl.local.image.MediaImageView
 import io.element.android.libraries.mediaviewer.impl.local.pdf.MediaPdfView
+import io.element.android.libraries.mediaviewer.impl.local.txt.TxtFileView
 import io.element.android.libraries.mediaviewer.impl.local.video.MediaVideoView
 
 @Composable
@@ -26,6 +28,7 @@ fun LocalMediaView(
     localMedia: LocalMedia?,
     bottomPaddingInPixels: Int,
     onClick: () -> Unit,
+    textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
@@ -44,6 +47,11 @@ fun LocalMediaView(
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
+            modifier = modifier,
+        )
+        mimeType == MimeTypes.PlainText -> TxtFileView(
+            localMedia = localMedia,
+            textFileViewer = textFileViewer,
             modifier = modifier,
         )
         mimeType == MimeTypes.Pdf -> MediaPdfView(

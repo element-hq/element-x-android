@@ -115,7 +115,7 @@ fun ViewFileView(
 }
 
 @Composable
-private fun FileContent(
+internal fun FileContent(
     lines: ImmutableList<String>,
     colorationMode: ColorationMode,
     modifier: Modifier = Modifier,

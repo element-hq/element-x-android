@@ -17,6 +17,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
@@ -42,6 +43,7 @@ class MediaViewerNode @AssistedInject constructor(
     coroutineDispatchers: CoroutineDispatchers,
     systemClock: SystemClock,
     pagerKeysHandler: PagerKeysHandler,
+    private val textFileViewer: TextFileViewer,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val inputs = inputs<MediaViewerEntryPoint.Params>()
@@ -128,6 +130,7 @@ class MediaViewerNode @AssistedInject constructor(
             val state = presenter.present()
             MediaViewerView(
                 state = state,
+                textFileViewer = textFileViewer,
                 modifier = modifier,
                 onBackClick = ::onDone
             )
