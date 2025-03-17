@@ -72,6 +72,8 @@ import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -143,7 +145,8 @@ fun TimelineView(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .nestedScroll(nestedScrollConnection),
+                    .nestedScroll(nestedScrollConnection)
+                    .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
@@ -220,6 +223,8 @@ private fun TimelinePrefetchingHelper(
     lazyListState: LazyListState,
     prefetch: () -> Unit,
 ) {
+    val latestPrefetch by rememberUpdatedState(prefetch)
+
     // We're using snapshot flows for these because using `LaunchedEffect` with `derivedState` doesn't seem to be responsive enough
     val firstVisibleItemIndexFlow = snapshotFlow {
         lazyListState.firstVisibleItemIndex
@@ -231,19 +236,22 @@ private fun TimelinePrefetchingHelper(
         lazyListState.isScrollInProgress
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(latestPrefetch) {
         val isCloseToStartOfLoadedTimelineFlow = combine(layoutInfoFlow, firstVisibleItemIndexFlow) { layoutInfo, firstVisibleItemIndex ->
             firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
         }
 
-        combine(isCloseToStartOfLoadedTimelineFlow, isScrollingFlow) { needsPrefetch, isScrolling ->
+        combine(
+            isCloseToStartOfLoadedTimelineFlow,
+            isScrollingFlow,
+        ) { needsPrefetch, isScrolling ->
             needsPrefetch && isScrolling
         }
             .distinctUntilChanged()
             .collectLatest { needsPrefetch ->
                 if (needsPrefetch) {
                     Timber.d("Prefetching pagination with ${lazyListState.layoutInfo.totalItemsCount} items")
-                    prefetch()
+                    latestPrefetch()
                 }
             }
     }
@@ -274,7 +282,7 @@ private fun BoxScope.TimelineScrollHelper(
         coroutineScope.launch {
             if (lazyListState.firstVisibleItemIndex > 10) {
                 lazyListState.scrollToItem(0)
-            } else {
+            } else if (lazyListState.firstVisibleItemIndex != 0) {
                 lazyListState.animateScrollToItem(0)
             }
         }
