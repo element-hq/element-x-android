@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Etkö voi vahvistaa?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Luo uusi palautusavain"</string>
+  <string name="screen_identity_confirmation_subtitle">"Vahvista tämä laite suojattua viestintää varten."</string>
+  <string name="screen_identity_confirmation_title">"Vahvista identiteettisi"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Käytä toista laitetta"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Käytä palautusavainta"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nyt voit lukea ja lähettää viestejä turvallisesti, ja kaikki, joiden kanssa keskustelet, voivat myös luottaa tähän laitteeseen."</string>
+  <string name="screen_identity_confirmed_title">"Laite vahvistettu"</string>
+  <string name="screen_identity_use_another_device">"Käytä toista laitetta"</string>
+  <string name="screen_identity_waiting_on_other_device">"Odotetaan toista laitetta…"</string>
   <string name="screen_notification_optin_subtitle">"Voit muuttaa asetuksia myöhemmin."</string>
   <string name="screen_notification_optin_title">"Salli ilmoitukset ja älä koskaan missaa viestejä"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Syötä palautusavain"</string>
   <string name="screen_welcome_bullet_1">"Puhelut, kyselyt, haku ja paljon muuta lisätään myöhemmin tänä vuonna."</string>
   <string name="screen_welcome_bullet_2">"Salattujen huoneiden viestihistoria ei ole vielä käytettävissä."</string>
   <string name="screen_welcome_bullet_3">"Haluaisimme kuulla mielipiteesi, kerro mitä mieltä olet asetuksien kautta."</string>

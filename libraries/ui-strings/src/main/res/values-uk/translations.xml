@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
   <string name="common_creating_room">"Створення кімнати…"</string>
+  <string name="common_current_user_canceled_knock">"Запит скасовано"</string>
   <string name="common_current_user_left_room">"Виходить з кімнати"</string>
+  <string name="common_current_user_rejected_invite">"Запрошення відхилено"</string>
   <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифрування"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>

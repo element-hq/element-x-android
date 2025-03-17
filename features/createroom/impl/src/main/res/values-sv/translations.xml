@@ -21,4 +21,10 @@ Du kan ändra detta när som helst i rumsinställningarna."</string>
   <string name="screen_create_room_topic_label">"Ämne (valfritt)"</string>
   <string name="screen_room_directory_search_title">"Rumskatalog"</string>
   <string name="screen_start_chat_error_starting_chat">"Ett fel uppstod när du försökte starta en chatt"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Gå med i rum med adress"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Inte en giltig adress"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Ange …"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Matchande rum hittades"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Rummet hittades inte"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"t.ex. #rumsnamn:matrix.org"</string>
 </resources>

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"無法確認？"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"建立新的復原金鑰"</string>
+  <string name="screen_identity_confirmation_subtitle">"驗證這部裝置以設定安全通訊。"</string>
+  <string name="screen_identity_confirmation_title">"確認這是你本人"</string>
+  <string name="screen_identity_confirmation_use_another_device">"使用另一部裝置"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"使用復原金鑰"</string>
+  <string name="screen_identity_confirmed_subtitle">"您可以安全地讀取和發送訊息了，與您聊天的人也可以信任這部裝置。"</string>
+  <string name="screen_identity_confirmed_title">"裝置已驗證"</string>
+  <string name="screen_identity_use_another_device">"使用另一部裝置"</string>
+  <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置…"</string>
   <string name="screen_notification_optin_subtitle">"您稍後仍可變更設定。"</string>
   <string name="screen_notification_optin_title">"允許通知，永遠不會錯誤任何訊息"</string>
+  <string name="screen_session_verification_enter_recovery_key">"輸入復原金鑰"</string>
   <string name="screen_welcome_bullet_1">"通話、投票、搜尋等更多功能將在今年登場。"</string>
   <string name="screen_welcome_bullet_2">"在這次的更新，您無法查看聊天室內被加密的歷史訊息。"</string>
   <string name="screen_welcome_bullet_3">"我們很樂意聽取您的意見，請到設定頁面告訴我們您的想法。"</string>

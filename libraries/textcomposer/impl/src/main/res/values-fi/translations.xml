@@ -7,6 +7,7 @@
   <string name="rich_text_editor_composer_caption_placeholder">"Lisää kuvateksti"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Salattu viesti…"</string>
   <string name="rich_text_editor_composer_placeholder">"Viesti…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Salaamaton viesti…"</string>
   <string name="rich_text_editor_create_link">"Luo linkki"</string>
   <string name="rich_text_editor_edit_link">"Muokkaa linkkiä"</string>
   <string name="rich_text_editor_format_bold">"Käytä lihavoitua muotoa"</string>
