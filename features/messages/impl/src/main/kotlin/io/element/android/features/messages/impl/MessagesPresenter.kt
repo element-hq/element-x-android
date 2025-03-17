@@ -187,13 +187,17 @@ class MessagesPresenter @AssistedInject constructor(
 
         val membersState by room.membersStateFlow.collectAsState()
         val dmRoomMember by room.getDirectRoomMember(membersState)
+        val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
         // TODO use `RoomInfo.isEncrypted` as a key here once it's available
-        LifecycleResumeEffect(dmRoomMember) {
+        LifecycleResumeEffect(dmRoomMember, roomMemberIdentityStateChanges) {
             if (room.isEncrypted) {
                 val dmRoomMemberId = dmRoomMember?.userId
                 localCoroutineScope.launch {
-                    dmRoomMemberId?.let { dmUserVerificationState = encryptionService.getUserIdentity(it).getOrNull() }
+                    dmRoomMemberId?.let { userId ->
+                        dmUserVerificationState = roomMemberIdentityStateChanges.find { it.identityRoomMember.userId == userId }?.identityState
+                            ?: encryptionService.getUserIdentity(userId).getOrNull()
+                    }
                 }
             }
             onPauseOrDispose {}

@@ -81,7 +81,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     currentPinnedMessageIndex = 0,
                 ),
             ),
-            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.Verified)
+            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.Verified),
+            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.VerificationViolation),
         )
 }
 
