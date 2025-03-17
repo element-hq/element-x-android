@@ -28,6 +28,9 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.isRedacted
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
@@ -49,6 +52,7 @@ import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -245,8 +249,30 @@ class TimelinePresenter @AssistedInject constructor(
                 )
             }
         }
+        val hideRedactedMessages by sessionPreferencesStore.hideRedactedMessages().collectAsState(initial = false)
+        var timelineItemsToShow = timelineItems
+
+        if (hideRedactedMessages) {
+            val itemsWithoutRedacted = timelineItems.filter { item ->
+                when (item) {
+                    is TimelineItem.Event -> !item.content.isRedacted()
+                    else -> true
+                }
+            }
+            timelineItemsToShow = itemsWithoutRedacted.filterIndexed { index, item ->
+                if (item is TimelineItem.Virtual && item.model is TimelineItemDaySeparatorModel) {
+                    if (index > 0) {
+                        val previous = itemsWithoutRedacted[index - 1]
+                        // Skip the current day separator if the previous item is a day separator or a typing notification.
+                        !(previous is TimelineItem.Virtual &&
+                            (previous.model is TimelineItemDaySeparatorModel || previous.model is TimelineItemTypingNotificationModel))
+                    } else true
+                } else true
+            }.toImmutableList()
+        }
+
         return TimelineState(
-            timelineItems = timelineItems,
+            timelineItems = timelineItemsToShow,
             timelineRoomInfo = timelineRoomInfo,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
