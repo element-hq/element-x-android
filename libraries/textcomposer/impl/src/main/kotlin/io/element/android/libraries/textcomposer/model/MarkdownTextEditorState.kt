@@ -99,7 +99,7 @@ class MarkdownTextEditorState(
                         when (mention.type) {
                             is MentionType.User -> {
                                 permalinkBuilder.permalinkForUser(mention.type.userId).getOrNull()?.let { link ->
-                                    replace(start, end, "[${mention.text}]($link)")
+                                    replace(start, end, "[${mention.originalText}]($link)")
                                 }
                             }
                             is MentionType.Everyone -> {
@@ -109,7 +109,7 @@ class MarkdownTextEditorState(
                                 val roomIdOrAlias = mention.type.roomIdOrAlias
                                 if (roomIdOrAlias is RoomIdOrAlias.Alias) {
                                     permalinkBuilder.permalinkForRoomAlias(roomIdOrAlias.roomAlias).getOrNull()?.let { link ->
-                                        replace(start, end, "[${mention.text}]($link)")
+                                        replace(start, end, "[${mention.originalText}]($link)")
                                     }
                                 }
                             }

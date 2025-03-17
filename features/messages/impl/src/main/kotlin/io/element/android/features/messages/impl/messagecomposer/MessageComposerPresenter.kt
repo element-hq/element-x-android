@@ -114,7 +114,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
-    private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory

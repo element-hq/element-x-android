@@ -33,7 +33,6 @@ interface TextPillificationHelper {
 class DefaultTextPillificationHelper @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkParser: PermalinkParser,
-    private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) : TextPillificationHelper {
     @Suppress("LoopWithTooManyJumpStatements")
     override fun pillify(text: CharSequence, pillifyMatrixPatterns: Boolean): CharSequence {
@@ -54,8 +53,7 @@ class DefaultTextPillificationHelper @Inject constructor(
                     val mentionSpanExists = text.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val userId = UserId(match.value)
-                        val displayNameOrId = roomMemberProfilesCache.getDisplayName(userId) ?: userId.value
-                        val mentionSpan = mentionSpanProvider.createUserMentionSpan(displayNameOrId, userId)
+                        val mentionSpan = mentionSpanProvider.createUserMentionSpan(match.value, userId)
                         text.replace(match.start, match.end, "@ ")
                         text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }

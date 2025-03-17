@@ -23,8 +23,14 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlin.math.roundToInt
 
+/**
+ * A span that represents a mention (user, room, etc.) in text.
+ * 
+ * @param originalText The original text that this span is replacing
+ * @param type The type of mention this span represents
+ */
 class MentionSpan(
-    text: String,
+    val originalText: String,
     val type: MentionType,
 ) : ReplacementSpan() {
 
@@ -39,15 +45,13 @@ class MentionSpan(
     private val backgroundPaint = Paint()
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 
+    // The formatted display text, will be set by the formatter
+    var displayText: CharSequence = originalText
+        private set
 
-    var text: String = text
-        set(value) {
-            field = value
-            mentionText = getActualText(text)
-        }
-
-    private var mentionText: CharSequence = getActualText(text)
-
+    /**
+     * Updates the visual properties of this span.
+     */
     fun update(mentionSpanTheme: MentionSpanTheme) {
         val isCurrentUser = when (type) {
             is MentionType.User -> type.userId == mentionSpanTheme.currentUserId
@@ -74,6 +78,13 @@ class MentionSpan(
         typeface = mentionSpanTheme.typeface.value
     }
 
+    /**
+     * Updates the display text using a formatter.
+     */
+    fun updateDisplayText(formatter: MentionSpanFormatter) {
+        displayText = formatter.formatDisplayText(type)
+    }
+
     override fun getSize(
         paint: Paint,
         text: CharSequence?,
@@ -84,7 +95,7 @@ class MentionSpan(
         textPaint.set(paint)
         textPaint.typeface = typeface
         // Measure the full text width without truncation
-        measuredTextWidth = textPaint.measureText(mentionText, 0, mentionText.length).roundToInt()
+        measuredTextWidth = textPaint.measureText(displayText, 0, displayText.length).roundToInt()
         return measuredTextWidth + startPadding + endPadding
     }
 
@@ -118,38 +129,21 @@ class MentionSpan(
         val availableWidthForText = availableWidth - startPadding - endPadding
         val textToDraw = if (measuredTextWidth > availableWidthForText) {
             TextUtils.ellipsize(
-                mentionText,
+                displayText,
                 textPaint,
                 availableWidthForText,
                 TextUtils.TruncateAt.END
             )
         } else {
-            mentionText
+            displayText
         }
         canvas.drawText(textToDraw, 0, textToDraw.length, x + startPadding, y.toFloat(), textPaint)
     }
-
-    private fun getActualText(text: String): CharSequence {
-        return buildString {
-            val mentionText = text.orEmpty()
-            when (type) {
-                is MentionType.User -> {
-                    if (mentionText.firstOrNull() != '@') {
-                        append("@")
-                    }
-                }
-                is MentionType.Room -> {
-                    if (mentionText.firstOrNull() != '#') {
-                        append("#")
-                    }
-                }
-                else -> Unit
-            }
-            append(mentionText)
-        }
-    }
 }
 
+/**
+ * Sealed class representing different types of mentions.
+ */
 sealed class MentionType {
     data class User(val userId: UserId) : MentionType()
     data class Room(val roomIdOrAlias: RoomIdOrAlias) : MentionType()
@@ -157,6 +151,9 @@ sealed class MentionType {
     data object Everyone : MentionType()
 }
 
+/**
+ * Extension function to get all MentionSpans from a CharSequence.
+ */
 fun CharSequence.getMentionSpans(): List<MentionSpan> {
     return if (this is android.text.Spanned) {
         val customMentionSpans = getSpans<CustomMentionSpan>()

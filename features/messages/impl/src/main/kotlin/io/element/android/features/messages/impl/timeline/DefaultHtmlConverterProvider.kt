@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
@@ -30,8 +31,8 @@ import timber.log.Timber
 import uniffi.wysiwyg_composer.newMentionDetector
 import javax.inject.Inject
 
-@ContributesBinding(SessionScope::class)
-@SingleIn(SessionScope::class)
+@ContributesBinding(RoomScope::class)
+@SingleIn(RoomScope::class)
 class DefaultHtmlConverterProvider @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
 ) : HtmlConverterProvider {
@@ -47,7 +48,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
         val editorStyle = ElementRichTextEditorStyle.textStyle()
         val mentionSpanTheme = LocalMentionSpanTheme.current
         val context = LocalContext.current
-
+        
         htmlConverter.value = remember(editorStyle, mentionSpanTheme) {
             StyledHtmlConverter(
                 context = context,

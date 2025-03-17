@@ -73,11 +73,13 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanFormatter
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanFormatter
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -99,6 +101,8 @@ class MessagesFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
+    private val roomInfoCache: RoomInfoCache,
+    private val mentionSpanFormatter: MentionSpanFormatter,
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
@@ -174,6 +178,14 @@ class MessagesFlowNode @AssistedInject constructor(
         room.membersStateFlow
             .onEach { membersState ->
                 roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+            }
+            .launchIn(lifecycleScope)
+
+        matrixClient.roomListService
+            .allRooms
+            .summaries
+            .onEach {
+                roomInfoCache.replace(it)
             }
             .launchIn(lifecycleScope)
 
@@ -479,8 +491,8 @@ class MessagesFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         mentionSpanTheme.updateStyles(currentUserId = room.sessionId)
         CompositionLocalProvider(
-            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
             LocalMentionSpanTheme provides mentionSpanTheme,
+            LocalMentionSpanFormatter provides mentionSpanFormatter
         ) {
             BackstackWithOverlayBox(modifier)
         }

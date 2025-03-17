@@ -39,7 +39,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 /**
@@ -111,6 +114,16 @@ val LocalMentionSpanTheme = staticCompositionLocalOf {
         val mentionSpanTheme = remember { MentionSpanTheme() }
         val provider = remember {
             MentionSpanProvider(
+                mentionSpanFormatter = object : MentionSpanFormatter {
+                    override fun formatDisplayText(mentionType: MentionType): CharSequence {
+                        return when (mentionType) {
+                            is MentionType.User -> mentionType.userId.value
+                            is MentionType.Room -> mentionType.roomIdOrAlias.identifier
+                            is MentionType.Message -> "\uD83D\uDCAC️ > ${mentionType.roomIdOrAlias.identifier}"
+                            is MentionType.Everyone -> "@room"
+                        }
+                    }
+                },
                 permalinkParser = object : PermalinkParser {
                     override fun parse(uriString: String): PermalinkData {
                         return when (uriString) {

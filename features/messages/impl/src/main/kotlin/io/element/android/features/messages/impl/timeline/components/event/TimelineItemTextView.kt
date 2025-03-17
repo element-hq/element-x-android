@@ -33,11 +33,12 @@ import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanFormatter
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanFormatter
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
@@ -76,35 +77,21 @@ fun TimelineItemTextView(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
-    val userProfileCache = LocalRoomMemberProfilesCache.current
-    val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
     val mentionSpanTheme = LocalMentionSpanTheme.current
+    val mentionSpanFormatter = LocalMentionSpanFormatter.current
     val formattedBody = content.formattedBody ?: content.pillifiedBody
-    val textWithMentions = remember(formattedBody, mentionSpanTheme, lastCacheUpdate, ElementTheme.isLightTheme) {
-        updateMentionSpans(formattedBody, userProfileCache, mentionSpanTheme)
+    val textWithMentions = remember(formattedBody, mentionSpanFormatter, mentionSpanTheme, ElementTheme.isLightTheme) {
+        updateMentionSpans(formattedBody, mentionSpanTheme, mentionSpanFormatter)
         formattedBody
     }
     return SpannableString(textWithMentions)
 }
 
-private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCache, mentionSpanTheme: MentionSpanTheme): Boolean {
-    var changedContents = false
+private fun updateMentionSpans(text: CharSequence, mentionSpanTheme: MentionSpanTheme, mentionSpanFormatter: MentionSpanFormatter?) {
     for (mentionSpan in text.getMentionSpans()) {
         mentionSpan.update(mentionSpanTheme)
-        when (val mentionType = mentionSpan.type) {
-            is MentionType.User -> {
-                val displayName = cache.getDisplayName(mentionType.userId) ?: mentionType.userId.value
-                if (mentionSpan.text != displayName) {
-                    changedContents = true
-                    mentionSpan.text = displayName
-                }
-            }
-            MentionType.Everyone -> Unit
-            is MentionType.Message -> Unit
-            is MentionType.Room -> Unit
-        }
+        mentionSpanFormatter?.let { mentionSpan.updateDisplayText(it) }
     }
-    return changedContents
 }
 
 @PreviewsDayNight
