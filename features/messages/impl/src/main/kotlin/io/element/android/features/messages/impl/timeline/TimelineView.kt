@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -72,6 +73,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -177,17 +182,8 @@ fun TimelineView(
                 onClearFocusRequestState = ::clearFocusRequestState
             )
 
-            val isCloseToStartOfLoadedTimeline by remember {
-                derivedStateOf {
-                lazyListState.firstVisibleItemIndex + lazyListState.layoutInfo.visibleItemsInfo.size >= lazyListState.layoutInfo.totalItemsCount - 10
-            }
-            }
-            LaunchedEffect(isCloseToStartOfLoadedTimeline) {
-                // Only back paginate when we're close to the start of the loaded timeline items and the user is actively scrolling
-                if (lazyListState.isScrollInProgress && isCloseToStartOfLoadedTimeline) {
-                    Timber.d("Prefetching pagination with ${lazyListState.layoutInfo.totalItemsCount} items")
-                    state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
-                }
+            TimelinePrefetchingHelper(lazyListState = lazyListState) {
+                state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
             }
 
             TimelineScrollHelper(
@@ -216,6 +212,41 @@ private fun MessageShieldDialog(state: TimelineState) {
         content = messageShield.toText(),
         onDismiss = { state.eventSink.invoke(TimelineEvents.HideShieldDialog) },
     )
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@Composable
+private fun TimelinePrefetchingHelper(
+    lazyListState: LazyListState,
+    prefetch: () -> Unit,
+) {
+    // We're using snapshot flows for these because using `LaunchedEffect` with `derivedState` doesn't seem to be responsive enough
+    val firstVisibleItemIndexFlow = snapshotFlow {
+        lazyListState.firstVisibleItemIndex
+    }
+    val layoutInfoFlow = snapshotFlow {
+        lazyListState.layoutInfo
+    }
+    val isScrollingFlow = snapshotFlow {
+        lazyListState.isScrollInProgress
+    }
+
+    LaunchedEffect(Unit) {
+        val isCloseToStartOfLoadedTimelineFlow = combine(layoutInfoFlow, firstVisibleItemIndexFlow) { layoutInfo, firstVisibleItemIndex ->
+            firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
+        }
+
+        combine(isCloseToStartOfLoadedTimelineFlow, isScrollingFlow) { needsPrefetch, isScrolling ->
+            needsPrefetch && isScrolling
+        }
+            .distinctUntilChanged()
+            .collectLatest { needsPrefetch ->
+                if (needsPrefetch) {
+                    Timber.d("Prefetching pagination with ${lazyListState.layoutInfo.totalItemsCount} items")
+                    prefetch()
+                }
+            }
+    }
 }
 
 @Composable
