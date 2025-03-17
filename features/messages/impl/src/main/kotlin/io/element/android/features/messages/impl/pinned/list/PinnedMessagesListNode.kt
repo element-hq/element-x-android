@@ -109,13 +109,13 @@ class PinnedMessagesListNode @AssistedInject constructor(
                 onBackClick = ::navigateUp,
                 onEventClick = ::onEventClick,
                 onUserDataClick = ::onUserDataClick,
-                onLinkClick = { url -> onLinkClick(context, url) },
+                onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(
                         HapticFeedbackConstants.LONG_PRESS
                     )
                     context.copyToClipboard(
-                        it,
+                        it.url,
                         context.getString(CommonStrings.common_copied_to_clipboard)
                     )
                 },

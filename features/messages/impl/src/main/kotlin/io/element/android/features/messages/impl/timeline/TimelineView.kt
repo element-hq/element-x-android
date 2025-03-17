@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -92,7 +93,7 @@ fun TimelineView(
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -134,12 +135,12 @@ fun TimelineView(
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
     }
 
-    fun onLinkLongClick(link: String) {
+    fun onLinkLongClick(link: Link) {
         view.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
         )
         context.copyToClipboard(
-            link,
+            link.url,
             context.getString(CommonStrings.common_copied_to_clipboard)
         )
     }

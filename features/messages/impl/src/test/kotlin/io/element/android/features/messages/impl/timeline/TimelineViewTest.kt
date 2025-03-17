@@ -34,6 +34,7 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.setSafeContent
+import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import org.junit.Rule
@@ -175,7 +176,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
-    onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onMessageClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onMessageLongClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onSwipeToReply: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),

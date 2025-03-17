@@ -46,7 +46,7 @@ coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.6.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.38.2"
+wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
