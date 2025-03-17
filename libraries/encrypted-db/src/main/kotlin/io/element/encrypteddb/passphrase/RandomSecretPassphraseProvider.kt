@@ -8,8 +8,7 @@
 package io.element.encrypteddb.passphrase
 
 import android.content.Context
-import androidx.security.crypto.EncryptedFile
-import io.element.android.libraries.androidutils.file.EncryptedFileFactory
+import io.element.encrypteddb.crypto.EncryptedFile
 import java.io.File
 import java.security.SecureRandom
 
@@ -25,7 +24,7 @@ class RandomSecretPassphraseProvider(
     private val secretSize: Int = 256,
 ) : PassphraseProvider {
     override fun getPassphrase(): ByteArray {
-        val encryptedFile = EncryptedFileFactory(context).create(file)
+        val encryptedFile = EncryptedFile(context, file)
         return if (!file.exists()) {
             val secret = generateSecret()
             encryptedFile.openFileOutput().use { it.write(secret) }

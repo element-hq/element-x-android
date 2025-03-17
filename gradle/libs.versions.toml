@@ -81,6 +81,7 @@ google_firebase_bom = "com.google.firebase:firebase-bom:33.10.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+google_tink = "com.google.crypto.tink:tink-android:1.16.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -100,7 +101,6 @@ androidx_browser = "androidx.browser:browser:1.8.0"
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
-androidx_security_crypto = "androidx.security:security-crypto:1.1.0-alpha06"
 androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 androidx_biometric = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
