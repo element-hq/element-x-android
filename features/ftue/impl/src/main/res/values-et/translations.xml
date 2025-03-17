@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Kas kinnitamine pole võimalik?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Loo uus taastevõti"</string>
+  <string name="screen_identity_confirmation_subtitle">"Krüptitud sõnumivahetuse tagamiseks verifitseeri see seade."</string>
+  <string name="screen_identity_confirmation_title">"Kinnita, et see oled sina"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Kasuta teist seadet"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Kasuta taastevõtit"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nüüd saad saata või lugeda sõnumeid turvaliselt ning kõik sinu vestluspartnerid võivad usaldada seda seadet."</string>
+  <string name="screen_identity_confirmed_title">"Seade on verifitseeritud"</string>
+  <string name="screen_identity_use_another_device">"Kasuta teist seadet"</string>
+  <string name="screen_identity_waiting_on_other_device">"Ootame teise seadme järgi…"</string>
   <string name="screen_notification_optin_subtitle">"Sa võid seadistusi hiljem alati muuta."</string>
   <string name="screen_notification_optin_title">"Luba teavitused ja kunagi ei jää sul sõnumid märkamata"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Sisesta taastevõti"</string>
   <string name="screen_welcome_bullet_1">"Kõned, küsitlused, otsing ja palju muud lisanduvad hiljem selle aasta jooksul."</string>
   <string name="screen_welcome_bullet_2">"Krüptitud jututubade sõnumite ajalugu pole veel saadaval."</string>
   <string name="screen_welcome_bullet_3">"Me soovime teada mida sa arvad. Seadistuste lehel olevast valikust võid saata meile oma kommentaare."</string>

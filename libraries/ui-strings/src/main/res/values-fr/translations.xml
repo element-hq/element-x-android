@@ -16,7 +16,7 @@
   <string name="a11y_poll">"Sondage"</string>
   <string name="a11y_poll_end">"Sondage terminé"</string>
   <string name="a11y_react_with">"Réagir avec %1$s"</string>
-  <string name="a11y_react_with_other_emojis">"Réagir avec d’autres emojis"</string>
+  <string name="a11y_react_with_other_emojis">"Réagir avec d’autres émojis"</string>
   <string name="a11y_read_receipts_multiple">"Lu par %1$s et %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
     <item quantity="one">"Lu par %1$s et %2$d autre"</item>
@@ -287,6 +287,10 @@ Raison : %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"L’identité vérifiée de l’utilisateur %1$s a changé."</string>
   <string name="crypto_identity_change_verification_violation_new">"L’identité vérifiée de %1$s %2$s a changé. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Révoquer la vérification"</string>
+  <string name="dialog_confirm_link_message">"Le lien \"%1$s\" vous redirige vers un autre site \"%2$s\".
+
+Êtes-vous sûr de vouloir continuer ?"</string>
+  <string name="dialog_confirm_link_title">"Veuillez vérifier ce lien"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>

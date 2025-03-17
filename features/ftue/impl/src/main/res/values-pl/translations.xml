@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Nie możesz potwierdzić?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Utwórz nowy klucz przywracania"</string>
+  <string name="screen_identity_confirmation_subtitle">"Zweryfikuj to urządzenie, aby skonfigurować bezpieczne przesyłanie wiadomości."</string>
+  <string name="screen_identity_confirmation_title">"Potwierdź, że to Ty"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Użyj innego urządzenia"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Użyj klucza przywracania"</string>
+  <string name="screen_identity_confirmed_subtitle">"Teraz możesz bezpiecznie czytać i wysyłać wiadomości, każdy z kim czatujesz również może ufać temu urządzeniu."</string>
+  <string name="screen_identity_confirmed_title">"Urządzenie zweryfikowane"</string>
+  <string name="screen_identity_use_another_device">"Użyj innego urządzenia"</string>
+  <string name="screen_identity_waiting_on_other_device">"Oczekiwanie na inne urządzenie…"</string>
   <string name="screen_notification_optin_subtitle">"Możesz zmienić ustawienia później."</string>
   <string name="screen_notification_optin_title">"Zezwól na powiadomienia i nie przegap żadnej wiadomości"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Wprowadź klucz przywracania"</string>
   <string name="screen_welcome_bullet_1">"Połączenia, ankiety, wyszukiwanie i inne zostaną dodane później w tym roku."</string>
   <string name="screen_welcome_bullet_2">"Historia wiadomości dla pokoi szyfrowanych nie jest jeszcze dostępna."</string>
   <string name="screen_welcome_bullet_3">"Chętnie poznamy Twoją opinię. Daj nam znać, co myślisz na stronie ustawień."</string>

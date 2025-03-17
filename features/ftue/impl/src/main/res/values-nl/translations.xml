@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Kan ik dit niet bevestigen?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Maak een nieuwe herstelsleutel"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifieer dit apparaat om beveiligde berichten in te stellen."</string>
+  <string name="screen_identity_confirmation_title">"Bevestig dat jij het bent"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Gebruik een ander apparaat"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Gebruik de herstelsleutel"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nu kun je veilig berichten lezen of verzenden, en iedereen met wie je chat kan dit apparaat ook vertrouwen."</string>
+  <string name="screen_identity_confirmed_title">"Apparaat geverifieerd"</string>
+  <string name="screen_identity_use_another_device">"Gebruik een ander apparaat"</string>
+  <string name="screen_identity_waiting_on_other_device">"Wachten op ander apparaat…"</string>
   <string name="screen_notification_optin_subtitle">"Je kunt je instellingen later wijzigen."</string>
   <string name="screen_notification_optin_title">"Sta meldingen toe en mis nooit meer een bericht"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Voer herstelsleutel in"</string>
   <string name="screen_welcome_bullet_1">"Oproepen, peilingen, zoekopdrachten en meer zullen later dit jaar worden toegevoegd."</string>
   <string name="screen_welcome_bullet_2">"Berichtgeschiedenis voor versleutelde kamers is nog niet beschikbaar."</string>
   <string name="screen_welcome_bullet_3">"We horen graag van je, laat ons weten wat je ervan vindt via de instellingenpagina."</string>

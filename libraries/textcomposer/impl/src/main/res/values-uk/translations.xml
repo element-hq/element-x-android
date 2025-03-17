@@ -7,6 +7,7 @@
   <string name="rich_text_editor_composer_caption_placeholder">"Необов\'язковий підпис…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Зашифроване повідомлення…"</string>
   <string name="rich_text_editor_composer_placeholder">"Повідомлення…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Незашифроване повідомлення…"</string>
   <string name="rich_text_editor_create_link">"Створити посилання"</string>
   <string name="rich_text_editor_edit_link">"Редагувати посилання"</string>
   <string name="rich_text_editor_format_bold">"Жирний формат"</string>
