@@ -38,6 +38,9 @@ class AdvancedSettingsPresenter @Inject constructor(
         val doesCompressMedia by sessionPreferencesStore
             .doesCompressMedia()
             .collectAsState(initial = true)
+        val hideRedactedMessages by sessionPreferencesStore
+            .hideRedactedMessages()
+            .collectAsState(initial = false)
         val theme by remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }
@@ -55,6 +58,9 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetCompressMedia -> localCoroutineScope.launch {
                     sessionPreferencesStore.setCompressMedia(event.compress)
                 }
+                is AdvancedSettingsEvents.SetHideRedactedMessages -> localCoroutineScope.launch {
+                    sessionPreferencesStore.setHideRedactedMessages(event.hide)
+                }
                 AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
                 AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
                 is AdvancedSettingsEvents.SetTheme -> localCoroutineScope.launch {
@@ -68,6 +74,7 @@ class AdvancedSettingsPresenter @Inject constructor(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             doesCompressMedia = doesCompressMedia,
+            hideRedactedMessages = hideRedactedMessages,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
             eventSink = { handleEvents(it) }

@@ -54,6 +54,18 @@ fun AdvancedSettingsView(
         )
         ListItem(
             headlineContent = {
+                Text(text = stringResource(id = CommonStrings.action_hide_deleted_messages))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_hide_deleted_messages_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.hideRedactedMessages,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetHideRedactedMessages(!state.hideRedactedMessages)) }
+        )
+        ListItem(
+            headlineContent = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))
             },
             supportingContent = {

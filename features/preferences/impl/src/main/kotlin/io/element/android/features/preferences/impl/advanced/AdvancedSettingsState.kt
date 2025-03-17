@@ -13,6 +13,7 @@ data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
     val doesCompressMedia: Boolean,
+    val hideRedactedMessages: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit

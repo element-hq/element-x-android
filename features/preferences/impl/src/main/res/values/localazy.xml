@@ -8,6 +8,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
+  <string name="screen_advanced_settings_hide_deleted_messages_description">"When enabled, this setting hides placeholders for deleted messages."</string>
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimise media quality"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push notification provider"</string>

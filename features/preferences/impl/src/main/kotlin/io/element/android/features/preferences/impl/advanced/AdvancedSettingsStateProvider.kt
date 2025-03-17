@@ -18,6 +18,7 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSharePresenceEnabled = true),
             aAdvancedSettingsState(doesCompressMedia = true),
+            aAdvancedSettingsState(hideRedactedMessages = true),
         )
 }
 
@@ -25,12 +26,14 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSharePresenceEnabled: Boolean = false,
     doesCompressMedia: Boolean = false,
+    hideRedactedMessages: Boolean = false,
     showChangeThemeDialog: Boolean = false,
     eventSink: (AdvancedSettingsEvents) -> Unit = {},
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSharePresenceEnabled,
     doesCompressMedia = doesCompressMedia,
+    hideRedactedMessages = hideRedactedMessages,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
     eventSink = eventSink

@@ -42,6 +42,7 @@ class DefaultSessionPreferencesStore(
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
     private val compressMedia = booleanPreferencesKey("compressMedia")
+    private val hideRedactedMessagesKey = booleanPreferencesKey("hideRedactedMessages")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -84,6 +85,9 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setCompressMedia(compress: Boolean) = update(compressMedia, compress)
     override fun doesCompressMedia(): Flow<Boolean> = get(compressMedia) { true }
+
+    override suspend fun setHideRedactedMessages(hide: Boolean) = update(hideRedactedMessagesKey, hide)
+    override fun hideRedactedMessages(): Flow<Boolean> = get(hideRedactedMessagesKey) { false }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

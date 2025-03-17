@@ -31,5 +31,8 @@ interface SessionPreferencesStore {
     suspend fun setCompressMedia(compress: Boolean)
     fun doesCompressMedia(): Flow<Boolean>
 
+    suspend fun setHideRedactedMessages(hide: Boolean)
+    fun hideRedactedMessages(): Flow<Boolean>
+
     suspend fun clear()
 }
