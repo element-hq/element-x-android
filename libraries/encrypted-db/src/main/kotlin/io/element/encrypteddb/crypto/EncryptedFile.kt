@@ -28,11 +28,33 @@ internal class EncryptedFile(
     private val context: Context,
     private val file: File
 ) {
+    companion object {
+        /**
+         * The file content is encrypted using StreamingAead with AES-GCM, with the file name as associated data.
+         */
+        private const val KEYSET_ENCRYPTION_SCHEME = "AES256_GCM_HKDF_4KB"
+
+        /**
+         * The keyset is stored in a shared preference file with this name.
+         */
+        private const val KEYSET_PREF_FILE_NAME = "__androidx_security_crypto_encrypted_file_pref__"
+
+        /**
+         * The keyset is stored in a shared preference with this key, inside the specified file.
+         */
+        private const val KEYSET_ALIAS = "__androidx_security_crypto_encrypted_file_keyset__"
+
+        /**
+         * The URI referencing the master key in the Android Keystore used to encrypt/decrypt the keyset.
+         */
+        private const val MASTER_KEY_URI = "android-keystore://_androidx_security_master_key_"
+    }
+
     private val androidKeysetManager by lazy {
         val keysetManagerBuilder = AndroidKeysetManager.Builder()
-            .withKeyTemplate(KeyTemplates.get("AES256_GCM_HKDF_4KB"))
-            .withSharedPref(context, "__androidx_security_crypto_encrypted_file_keyset__", "__androidx_security_crypto_encrypted_file_pref__")
-            .withMasterKeyUri("android-keystore://_androidx_security_master_key_")
+            .withKeyTemplate(KeyTemplates.get(KEYSET_ENCRYPTION_SCHEME))
+            .withSharedPref(context, KEYSET_ALIAS, KEYSET_PREF_FILE_NAME)
+            .withMasterKeyUri(MASTER_KEY_URI)
 
         keysetManagerBuilder.build()
     }
