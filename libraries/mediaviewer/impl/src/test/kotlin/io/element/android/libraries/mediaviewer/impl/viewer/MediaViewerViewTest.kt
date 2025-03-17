@@ -252,6 +252,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     setContent {
         MediaViewerView(
             state = state,
+            textFileViewer = { _, _ -> },
             onBackClick = onBackClick,
         )
     }
