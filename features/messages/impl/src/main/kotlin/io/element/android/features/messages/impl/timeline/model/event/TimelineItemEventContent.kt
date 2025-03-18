@@ -92,6 +92,11 @@ fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
     else -> false
 }
 
+/**
+ * Whether the event content has been redacted.
+ */
+fun TimelineItemEventContent.isRedacted(): Boolean = this is TimelineItemRedactedContent
+
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
     return when (this) {
         is TimelineItemAudioContent -> duration
