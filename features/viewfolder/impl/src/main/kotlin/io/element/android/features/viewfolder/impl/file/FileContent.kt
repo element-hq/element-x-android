@@ -23,11 +23,13 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -43,7 +45,7 @@ internal fun FileContent(
             item {
                 Spacer(Modifier.size(80.dp))
                 Text(
-                    text = "Empty file",
+                    text = stringResource(CommonStrings.common_empty_file),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.fillMaxWidth()
@@ -75,8 +77,8 @@ private fun LineRow(
             .fillMaxWidth()
             .clickable(onClick = {
                 context.copyToClipboard(
-                    line,
-                    "Line copied to clipboard",
+                    text = line,
+                    toastMessage = context.getString(CommonStrings.common_line_copied_to_clipboard),
                 )
             })
     ) {
