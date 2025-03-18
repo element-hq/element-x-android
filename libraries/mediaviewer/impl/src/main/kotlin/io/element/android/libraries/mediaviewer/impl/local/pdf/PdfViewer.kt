@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.mediaviewer.impl.viewer.topAppBarHeight
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import me.saket.telephoto.zoomable.zoomable
@@ -126,7 +127,7 @@ private fun PdfPagesContentView(
     ) {
         // Add a fake item to the top so that the first item is not at the top of the screen.
         item {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(topAppBarHeight))
         }
         items(pdfPages.size) { index ->
             val pdfPage = pdfPages[index]
