@@ -20,7 +20,7 @@ import io.element.android.libraries.mediaviewer.impl.local.audio.MediaAudioView
 import io.element.android.libraries.mediaviewer.impl.local.file.MediaFileView
 import io.element.android.libraries.mediaviewer.impl.local.image.MediaImageView
 import io.element.android.libraries.mediaviewer.impl.local.pdf.MediaPdfView
-import io.element.android.libraries.mediaviewer.impl.local.txt.TxtFileView
+import io.element.android.libraries.mediaviewer.impl.local.txt.TextFileView
 import io.element.android.libraries.mediaviewer.impl.local.video.MediaVideoView
 
 @Composable
@@ -49,7 +49,7 @@ fun LocalMediaView(
             localMedia = localMedia,
             modifier = modifier,
         )
-        mimeType == MimeTypes.PlainText -> TxtFileView(
+        mimeType == MimeTypes.PlainText -> TextFileView(
             localMedia = localMedia,
             textFileViewer = textFileViewer,
             modifier = modifier,

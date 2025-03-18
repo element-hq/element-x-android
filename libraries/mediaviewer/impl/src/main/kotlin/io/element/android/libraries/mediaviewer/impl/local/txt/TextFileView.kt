@@ -32,7 +32,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun TxtFileView(
+fun TextFileView(
     localMedia: LocalMedia?,
     textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
@@ -55,7 +55,7 @@ fun TxtFileView(
             }
         }
     }
-    TxtFileViewContent(
+    TextFileContentView(
         data = data.value,
         textFileViewer = textFileViewer,
         modifier = modifier,
@@ -63,7 +63,7 @@ fun TxtFileView(
 }
 
 @Composable
-private fun TxtFileViewContent(
+private fun TextFileContentView(
     data: AsyncData<ImmutableList<String>>,
     textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
@@ -95,10 +95,10 @@ private fun TxtFileViewContent(
 
 @PreviewsDayNight
 @Composable
-internal fun TxtFileViewPreview(
-    @PreviewParameter(TxtFileProvider::class) text: AsyncData<ImmutableList<String>>,
+internal fun TextFileContentViewPreview(
+    @PreviewParameter(TextFileContentProvider::class) text: AsyncData<ImmutableList<String>>,
 ) = ElementPreview {
-    TxtFileViewContent(
+    TextFileContentView(
         data = text,
         textFileViewer = { lines, modifier ->
             Text(

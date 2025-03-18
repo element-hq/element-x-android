@@ -12,7 +12,7 @@ import io.element.android.libraries.architecture.AsyncData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-open class TxtFileProvider : PreviewParameterProvider<AsyncData<ImmutableList<String>>> {
+open class TextFileContentProvider : PreviewParameterProvider<AsyncData<ImmutableList<String>>> {
     override val values: Sequence<AsyncData<ImmutableList<String>>>
         get() = sequenceOf(
             AsyncData.Uninitialized,
