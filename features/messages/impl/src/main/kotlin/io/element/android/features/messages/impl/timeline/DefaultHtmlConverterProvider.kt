@@ -18,7 +18,6 @@ import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
@@ -36,7 +35,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
     @Composable
-    override fun Update(currentUserId: UserId) {
+    override fun Update() {
         val isInEditMode = LocalInspectionMode.current
         val mentionDetector = remember(isInEditMode) {
             if (isInEditMode) null else newMentionDetector()

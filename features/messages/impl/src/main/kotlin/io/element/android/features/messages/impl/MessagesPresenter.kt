@@ -123,7 +123,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
-        htmlConverterProvider.Update(currentUserId = room.sessionId)
+        htmlConverterProvider.Update()
 
         val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()

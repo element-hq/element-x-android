@@ -13,7 +13,7 @@ import io.element.android.wysiwyg.utils.HtmlConverter
 
 interface HtmlConverterProvider {
     @Composable
-    fun Update(currentUserId: UserId)
+    fun Update()
 
     fun provide(): HtmlConverter
 }
