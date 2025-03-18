@@ -14,9 +14,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -32,16 +29,8 @@ import io.element.android.features.messages.impl.utils.containsOnlyEmojis
 import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanFormatter
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
-import io.element.android.libraries.textcomposer.mentions.MentionSpan
-import io.element.android.libraries.textcomposer.mentions.MentionSpanFormatter
-import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
-import io.element.android.libraries.textcomposer.mentions.MentionType
-import io.element.android.libraries.textcomposer.mentions.getMentionSpans
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
@@ -77,21 +66,10 @@ fun TimelineItemTextView(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
-    val mentionSpanTheme = LocalMentionSpanTheme.current
-    val mentionSpanFormatter = LocalMentionSpanFormatter.current
     val formattedBody = content.formattedBody ?: content.pillifiedBody
-    val textWithMentions = remember(formattedBody, mentionSpanFormatter, mentionSpanTheme, ElementTheme.isLightTheme) {
-        updateMentionSpans(formattedBody, mentionSpanTheme, mentionSpanFormatter)
-        formattedBody
-    }
-    return SpannableString(textWithMentions)
-}
-
-private fun updateMentionSpans(text: CharSequence, mentionSpanTheme: MentionSpanTheme, mentionSpanFormatter: MentionSpanFormatter?) {
-    for (mentionSpan in text.getMentionSpans()) {
-        mentionSpan.update(mentionSpanTheme)
-        mentionSpanFormatter?.let { mentionSpan.updateDisplayText(it) }
-    }
+    val mentionSpanUpdater = LocalMentionSpanUpdater.current
+    val bodyWithUpdatedMentions = mentionSpanUpdater.rememberMentionSpans(formattedBody)
+    return SpannableString(bodyWithUpdatedMentions)
 }
 
 @PreviewsDayNight

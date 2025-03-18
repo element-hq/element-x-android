@@ -20,6 +20,7 @@ import javax.inject.Inject
 open class MentionSpanProvider @Inject constructor(
     private val permalinkParser: PermalinkParser,
     private val mentionSpanFormatter: MentionSpanFormatter,
+    private val mentionSpanTheme: MentionSpanTheme,
 ) {
     /**
      * Creates a mention span from a text and URL.
@@ -40,7 +41,7 @@ open class MentionSpanProvider @Inject constructor(
      * @param permalinkData The permalink data associated with the mention
      * @return A mention span based on the permalink data, null if the permalink data is not supported
      */
-    fun getMentionSpanFor(text: String, permalinkData: PermalinkData): MentionSpan? {
+    private fun getMentionSpanFor(text: String, permalinkData: PermalinkData): MentionSpan? {
         return when (permalinkData) {
             is PermalinkData.UserLink -> {
                 createUserMentionSpan(text, permalinkData.userId)
@@ -70,6 +71,7 @@ open class MentionSpanProvider @Inject constructor(
             type = MentionType.User(userId = userId)
         ).apply {
             updateDisplayText(mentionSpanFormatter)
+            updateTheme(mentionSpanTheme)
         }
     }
 
@@ -86,6 +88,7 @@ open class MentionSpanProvider @Inject constructor(
             type = MentionType.Room(roomIdOrAlias)
         ).apply {
             updateDisplayText(mentionSpanFormatter)
+            updateTheme(mentionSpanTheme)
         }
     }
 
@@ -95,7 +98,6 @@ open class MentionSpanProvider @Inject constructor(
      * @param displayText The display text for the message
      * @param roomIdOrAlias The room ID or alias where the message is located
      * @param eventId The event ID of the message
-     * @param currentRoomId Optional current room ID for context
      * @return A mention span for the message
      */
     fun createMessageMentionSpan(
@@ -107,6 +109,7 @@ open class MentionSpanProvider @Inject constructor(
             originalText = displayText,
             type = MentionType.Message(roomIdOrAlias, eventId)
         ).apply {
+            updateTheme(mentionSpanTheme)
             updateDisplayText(mentionSpanFormatter)
         }
     }
@@ -120,8 +123,9 @@ open class MentionSpanProvider @Inject constructor(
         return MentionSpan(
             originalText = "@room",
             type = MentionType.Everyone
-        ).also { span ->
-            span.updateDisplayText(mentionSpanFormatter)
+        ).apply {
+            updateTheme(mentionSpanTheme)
+            updateDisplayText(mentionSpanFormatter)
         }
     }
 }

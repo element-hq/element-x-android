@@ -77,10 +77,9 @@ import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanFormatter
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
-import io.element.android.libraries.textcomposer.mentions.MentionSpanFormatter
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -102,7 +101,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomInfoCache: RoomInfoCache,
-    private val mentionSpanFormatter: MentionSpanFormatter,
+    private val mentionSpanUpdater: MentionSpanUpdater,
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
@@ -489,10 +488,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        mentionSpanTheme.updateStyles(currentUserId = room.sessionId)
+        mentionSpanTheme.updateStyles()
         CompositionLocalProvider(
-            LocalMentionSpanTheme provides mentionSpanTheme,
-            LocalMentionSpanFormatter provides mentionSpanFormatter
+            LocalMentionSpanUpdater provides mentionSpanUpdater
         ) {
             BackstackWithOverlayBox(modifier)
         }

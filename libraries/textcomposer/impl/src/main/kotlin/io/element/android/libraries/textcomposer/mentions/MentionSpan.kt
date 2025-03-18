@@ -15,9 +15,7 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.ReplacementSpan
 import androidx.core.text.getSpans
-import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
@@ -34,11 +32,11 @@ class MentionSpan(
     val type: MentionType,
 ) : ReplacementSpan() {
 
-    var backgroundColor: Int = 0
-    var textColor: Int = 0
-    var startPadding: Int = 0
-    var endPadding: Int = 0
-    var typeface: Typeface = Typeface.DEFAULT
+    private var backgroundColor: Int = 0
+    private var textColor: Int = 0
+    private var startPadding: Int = 0
+    private var endPadding: Int = 0
+    private var typeface: Typeface = Typeface.DEFAULT
 
     private var measuredTextWidth = 0
 
@@ -46,13 +44,12 @@ class MentionSpan(
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 
     // The formatted display text, will be set by the formatter
-    var displayText: CharSequence = originalText
-        private set
+    private var displayText: CharSequence = originalText
 
     /**
      * Updates the visual properties of this span.
      */
-    fun update(mentionSpanTheme: MentionSpanTheme) {
+    fun updateTheme(mentionSpanTheme: MentionSpanTheme) {
         val isCurrentUser = when (type) {
             is MentionType.User -> type.userId == mentionSpanTheme.currentUserId
             else -> false

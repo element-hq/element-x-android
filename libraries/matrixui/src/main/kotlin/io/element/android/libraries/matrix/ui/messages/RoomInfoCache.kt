@@ -15,33 +15,35 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.withContext
-import java.util.LinkedHashMap
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
 class RoomInfoCache @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
 ) {
-    private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, MatrixRoomInfo>())
-
-    private val _lastCacheUpdate = MutableStateFlow(0L)
-    val lastCacheUpdate: StateFlow<Long> = _lastCacheUpdate
+    private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, String?>())
+    val updateFlow = cache.runningFold(0) { acc, _ -> acc + 1 }
 
     suspend fun replace(items: List<RoomSummary>) = withContext(dispatchers.computation) {
-        val cachedValues = LinkedHashMap<RoomIdOrAlias, MatrixRoomInfo>(items.size *2)
-        items.forEach { summary ->
-            cachedValues[summary.info.id.toRoomIdOrAlias()] = summary.info
-            val canonicalAlias = summary.info.canonicalAlias
-            if(canonicalAlias != null) {
-                cachedValues[canonicalAlias.toRoomIdOrAlias()] = summary.info
+        val roomInfoByIdOrAlias = LinkedHashMap<RoomIdOrAlias, String?>(items.size * 2)
+        items
+            // makes sure to always have the same order
+            .sortedBy { summary -> summary.roomId.value }
+            .forEach { summary ->
+                roomInfoByIdOrAlias[summary.info.id.toRoomIdOrAlias()] = summary.info.name
+                val canonicalAlias = summary.info.canonicalAlias
+                if (canonicalAlias != null) {
+                    roomInfoByIdOrAlias[canonicalAlias.toRoomIdOrAlias()] = summary.info.name
+                }
             }
+        if (roomInfoByIdOrAlias != cache.value) {
+            cache.value = roomInfoByIdOrAlias
         }
-        cache.value = cachedValues
     }
 
     fun getDisplayName(roomIdOrAlias: RoomIdOrAlias): String? {
-        return cache.value[roomIdOrAlias]?.name
+        return cache.value[roomIdOrAlias]
     }
 }

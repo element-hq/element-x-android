@@ -45,7 +45,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -54,7 +53,6 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -63,7 +61,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -372,12 +369,10 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
         }
 
-        val mentionSpanTheme = LocalMentionSpanTheme.current
-        val resolveMentionDisplay = remember(mentionSpanTheme) {
+        val resolveMentionDisplay = remember {
             { text: String, url: String ->
                 val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
                 if(mentionSpan != null) {
-                    mentionSpan.update(mentionSpanTheme)
                     TextDisplay.Custom(mentionSpan)
                 }else {
                     TextDisplay.Plain

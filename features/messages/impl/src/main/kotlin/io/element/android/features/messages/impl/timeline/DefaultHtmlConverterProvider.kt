@@ -17,17 +17,14 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
 import io.element.android.wysiwyg.utils.HtmlConverter
-import timber.log.Timber
 import uniffi.wysiwyg_composer.newMentionDetector
 import javax.inject.Inject
 
@@ -46,23 +43,20 @@ class DefaultHtmlConverterProvider @Inject constructor(
         }
 
         val editorStyle = ElementRichTextEditorStyle.textStyle()
-        val mentionSpanTheme = LocalMentionSpanTheme.current
         val context = LocalContext.current
         
-        htmlConverter.value = remember(editorStyle, mentionSpanTheme) {
+        htmlConverter.value = remember(editorStyle) {
             StyledHtmlConverter(
                 context = context,
                 mentionDisplayHandler = object : MentionDisplayHandler {
                     override fun resolveAtRoomMentionDisplay(): TextDisplay {
                         val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
-                        mentionSpan.update(mentionSpanTheme)
                         return TextDisplay.Custom(mentionSpan)
                     }
 
                     override fun resolveMentionDisplay(text: String, url: String): TextDisplay {
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
                         return if (mentionSpan != null) {
-                            mentionSpan.update(mentionSpanTheme)
                             TextDisplay.Custom(mentionSpan)
                         } else {
                             TextDisplay.Plain
@@ -71,9 +65,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
                 },
                 isEditor = false,
                 isMention = { _, url ->
-                    mentionDetector?.isMention(url).orFalse().also {
-                        Timber.d("$url isMention: $it")
-                    }
+                    mentionDetector?.isMention(url).orFalse()
                 }
             ).apply {
                 configureWith(editorStyle)

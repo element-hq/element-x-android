@@ -14,6 +14,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,13 +25,10 @@ class RoomMemberProfilesCache @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
-
-    private val _lastCacheUpdate = MutableStateFlow(0L)
-    val lastCacheUpdate: StateFlow<Long> = _lastCacheUpdate
+    val updateFlow = cache.runningFold(0) { acc, _ -> acc + 1 }
 
     suspend fun replace(items: List<RoomMember>) = withContext(coroutineDispatchers.computation) {
         cache.value = items.associateBy { it.userId }
-        _lastCacheUpdate.tryEmit(_lastCacheUpdate.value + 1)
     }
 
     fun getDisplayName(userId: UserId): String? {

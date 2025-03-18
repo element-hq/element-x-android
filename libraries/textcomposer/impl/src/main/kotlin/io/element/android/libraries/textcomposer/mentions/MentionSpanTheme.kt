@@ -15,11 +15,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -34,27 +32,29 @@ import io.element.android.libraries.designsystem.theme.currentUserMentionPillBac
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
 import io.element.android.libraries.designsystem.theme.mentionPillBackground
 import io.element.android.libraries.designsystem.theme.mentionPillText
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 /**
  * Theme used for mention spans.
  * To make this work, you need to:
- * 1. Provide [LocalMentionSpanTheme] in a composable that wraps the ones where you want to use mentions.
- * 2. Call [MentionSpanTheme.updateStyles] with the current [UserId] so the colors and sizes are computed.
- * 3. Use either [MentionSpanTheme.updateMentionStyles] or [MentionSpan.update] to update the styles of the mention spans.
+ * 1. Call [MentionSpanTheme.updateStyles] so the colors and sizes are computed.
+ * 2. Use either [MentionSpanTheme.updateMentionStyles] or [MentionSpan.updateTheme] to update the styles of the mention spans.
  */
 @Stable
-class MentionSpanTheme @Inject constructor() {
-    internal var currentUserId: UserId? = null
+@SingleIn(SessionScope::class)
+class MentionSpanTheme (val currentUserId: UserId) {
+
+    @Inject constructor(matrixClient: MatrixClient) : this(matrixClient.sessionId)
+
     internal var currentUserTextColor: Int = 0
     internal var currentUserBackgroundColor: Int = Color.WHITE
     internal var otherTextColor: Int = 0
@@ -69,8 +69,7 @@ class MentionSpanTheme @Inject constructor() {
      */
     @Suppress("ComposableNaming")
     @Composable
-    fun updateStyles(currentUserId: UserId) {
-        this.currentUserId = currentUserId
+    fun updateStyles() {
         currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
         currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
         otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
@@ -96,24 +95,18 @@ fun MentionSpanTheme.updateMentionStyles(charSequence: CharSequence) {
     val spanned = charSequence as? Spanned ?: return
     val mentionSpans = spanned.getMentionSpans()
     for (span in mentionSpans) {
-        span.update(this)
+        span.updateTheme(this)
     }
 }
 
-/**
- * Composition local containing the current [MentionSpanTheme].
- */
-val LocalMentionSpanTheme = staticCompositionLocalOf {
-    MentionSpanTheme()
-}
-
- @PreviewsDayNight
- @Composable
- internal fun MentionSpanThemePreview() {
+@PreviewsDayNight
+@Composable
+internal fun MentionSpanThemePreview() {
     ElementPreview {
-        val mentionSpanTheme = remember { MentionSpanTheme() }
+        val mentionSpanTheme = remember { MentionSpanTheme(UserId("@me:matrix.org")) }
         val provider = remember {
             MentionSpanProvider(
+                mentionSpanTheme = mentionSpanTheme,
                 mentionSpanFormatter = object : MentionSpanFormatter {
                     override fun formatDisplayText(mentionType: MentionType): CharSequence {
                         return when (mentionType) {
@@ -146,36 +139,31 @@ val LocalMentionSpanTheme = staticCompositionLocalOf {
         fun mentionSpanMe() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@me:matrix.org")
         fun mentionSpanOther() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@other:matrix.org")
         fun mentionSpanRoom() = provider.getMentionSpanFor("room:matrix.org", "https://matrix.to/#/#room:matrix.org")
-        fun mentionSpanEveryone() = provider.getMentionSpanFor("@room", "@room")
-        mentionSpanTheme.updateStyles(currentUserId = UserId("@me:matrix.org"))
+        fun mentionSpanEveryone() = provider.createEveryoneMentionSpan()
+        mentionSpanTheme.updateStyles()
 
-        CompositionLocalProvider(
-            LocalMentionSpanTheme provides mentionSpanTheme
-        ) {
-            AndroidView(factory = { context ->
-                TextView(context).apply {
-                    includeFontPadding = false
-                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    text = buildSpannedString {
-                        append("This is a ")
-                        append("@mention", mentionSpanMe(), 0)
-                        append(" to the current user and this is a ")
-                        append("@mention", mentionSpanOther(), 0)
-                        append(" to other user. This is for everyone in the ")
-                        append("@room", mentionSpanEveryone(), 0)
-                        append(". This one is for a link to another room: ")
-                        append("#room:matrix.org", mentionSpanRoom(), 0)
-                        append("\n\n")
-                        append("This ")
-                        append("mention", mentionSpanMe(), 0)
-                        append(" didn't have an '@' and it was automatically added, same as this ")
-                        append("room:matrix.org", mentionSpanRoom(), 0)
-                        append(" one, which had no leading '#'.")
-                    }
-                    mentionSpanTheme.updateMentionStyles(text)
-                    setTextColor(textColor)
+        AndroidView(factory = { context ->
+            TextView(context).apply {
+                includeFontPadding = false
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                text = buildSpannedString {
+                    append("This is a ")
+                    append("@mention", mentionSpanMe(), 0)
+                    append(" to the current user and this is a ")
+                    append("@mention", mentionSpanOther(), 0)
+                    append(" to other user. This is for everyone in the ")
+                    append("@room", mentionSpanEveryone(), 0)
+                    append(". This one is for a link to another room: ")
+                    append("#room:matrix.org", mentionSpanRoom(), 0)
+                    append("\n\n")
+                    append("This ")
+                    append("mention", mentionSpanMe(), 0)
+                    append(" didn't have an '@' and it was automatically added, same as this ")
+                    append("room:matrix.org", mentionSpanRoom(), 0)
+                    append(" one, which had no leading '#'.")
                 }
-            })
-        }
+                setTextColor(textColor)
+            }
+        })
     }
- }
+}

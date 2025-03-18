@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.textcomposer.mentions
 
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -33,6 +32,7 @@ class DefaultMentionSpanFormatter @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomInfoCache: RoomInfoCache,
 ): MentionSpanFormatter {
+
     /**
      * Format the display text for a mention span.
      *
@@ -74,6 +74,3 @@ class DefaultMentionSpanFormatter @Inject constructor(
         return "$BUBBLE_ICON > $roomMention"
     }
 }
-
-val LocalMentionSpanFormatter = staticCompositionLocalOf<MentionSpanFormatter?> { null }
-
