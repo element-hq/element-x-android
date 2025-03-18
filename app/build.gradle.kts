@@ -10,6 +10,7 @@
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.android.build.gradle.tasks.GenerateBuildConfig
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import config.BuildTimeConfig
 import extension.AssetCopyTask
 import extension.ComponentMergingStrategy
