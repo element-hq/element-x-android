@@ -150,4 +150,3 @@ private val colorDebug = Color(0xFF299999)
 private val colorInfo = Color(0xFFABC023)
 private val colorWarning = Color(0xFFBBB529)
 private val colorError = Color(0xFFFF6B68)
-
