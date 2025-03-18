@@ -34,9 +34,9 @@ class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<Timel
             aTimelineItemEvent(
                 messageShield = MessageShield.UnknownDevice(isCritical = true),
             ),
-            aTimelineItemEvent(
-                content = aTimelineItemRedactedContent(),
-                messageShield = MessageShield.SentInClear(isCritical = true),
-            ),
+            // aTimelineItemEvent(
+            //    content = aTimelineItemRedactedContent(),
+            //    messageShield = MessageShield.SentInClear(isCritical = true),
+            //),
         )
 }
