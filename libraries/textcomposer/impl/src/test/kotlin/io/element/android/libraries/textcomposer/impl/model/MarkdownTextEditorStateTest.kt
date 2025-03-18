@@ -37,7 +37,7 @@ class MarkdownTextEditorStateTest {
         val suggestion = aRoomAliasSuggestion()
         val permalinkBuilder = FakePermalinkBuilder()
         val mentionSpanProvider = aMentionSpanProvider()
-        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(suggestion, mentionSpanProvider)
         assertThat(state.getMentions()).isEmpty()
     }
 
@@ -50,7 +50,7 @@ class MarkdownTextEditorStateTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
         val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.failure(IllegalStateException("Failed")) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
-        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(suggestion, mentionSpanProvider)
     }
 
     @Test
@@ -62,7 +62,7 @@ class MarkdownTextEditorStateTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
         val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.success("https://matrix.to/#/${A_ROOM_ALIAS.value}") })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
-        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(suggestion, mentionSpanProvider)
     }
 
     @Test
@@ -73,7 +73,7 @@ class MarkdownTextEditorStateTest {
         val permalinkBuilder = FakePermalinkBuilder()
         val mentionSpanProvider = aMentionSpanProvider()
 
-        state.insertSuggestion(mention, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(mention, mentionSpanProvider)
 
         assertThat(state.getMentions()).isEmpty()
     }
@@ -89,7 +89,7 @@ class MarkdownTextEditorStateTest {
         val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.failure(IllegalStateException("Failed")) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
-        state.insertSuggestion(mention, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(mention, mentionSpanProvider)
 
         val mentions = state.getMentions()
         assertThat(mentions).isEmpty()
@@ -106,7 +106,7 @@ class MarkdownTextEditorStateTest {
         val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/${member.userId}") })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
-        state.insertSuggestion(mention, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(mention, mentionSpanProvider)
 
         val mentions = state.getMentions()
         assertThat(mentions).isNotEmpty()
@@ -123,7 +123,7 @@ class MarkdownTextEditorStateTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.FallbackLink(Uri.EMPTY, false) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
-        state.insertSuggestion(mention, mentionSpanProvider, permalinkBuilder)
+        state.insertSuggestion(mention, mentionSpanProvider)
 
         val mentions = state.getMentions()
         assertThat(mentions).isNotEmpty()

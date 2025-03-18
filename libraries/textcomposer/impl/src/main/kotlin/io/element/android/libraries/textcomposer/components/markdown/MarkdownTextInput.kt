@@ -32,7 +32,6 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
-import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -124,10 +123,9 @@ fun MarkdownTextInput(
         },
         update = { editText ->
             editText.applyStyleInCompose(richTextEditorStyle)
-
+            val text = state.text.value()
+            mentionSpanUpdater.updateMentionSpans(text)
             if (state.text.needsDisplaying()) {
-                val text = state.text.value()
-                mentionSpanUpdater.updateMentionSpans(text)
                 editText.updateEditableText(text)
                 if (canUpdateState) {
                     state.text.update(editText.editableText, false)

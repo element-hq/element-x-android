@@ -356,7 +356,6 @@ class MessageComposerPresenter @AssistedInject constructor(
                             markdownTextEditorState.insertSuggestion(
                                 resolvedSuggestion = event.resolvedSuggestion,
                                 mentionSpanProvider = mentionSpanProvider,
-                                permalinkBuilder = permalinkBuilder,
                             )
                             suggestionSearchTrigger.value = null
                         }
@@ -380,6 +379,13 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
         }
 
+        val resolveAtRoomMentionDisplay = remember {
+            {
+                val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                TextDisplay.Custom(mentionSpan)
+            }
+        }
+
         return MessageComposerState(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
@@ -390,6 +396,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
+            resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
             eventSink = { handleEvents(it) },
         )
     }

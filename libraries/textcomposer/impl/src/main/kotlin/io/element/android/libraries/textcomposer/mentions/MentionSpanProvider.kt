@@ -54,6 +54,13 @@ open class MentionSpanProvider @Inject constructor(
                     createRoomMentionSpan(text, permalinkData.roomIdOrAlias)
                 }
             }
+            is PermalinkData.FallbackLink -> {
+                if (text == "@room") {
+                    createEveryoneMentionSpan()
+                } else {
+                    null
+                }
+            }
             else -> null
         }
     }

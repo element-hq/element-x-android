@@ -156,7 +156,6 @@ class MarkdownTextInputTest {
             state.insertSuggestion(
                 ResolvedSuggestion.Member(roomMember = aRoomMember()),
                 MentionSpanProvider(permalinkParser = permalinkParser),
-                permalinkBuilder,
             )
         }
         rule.awaitIdle()

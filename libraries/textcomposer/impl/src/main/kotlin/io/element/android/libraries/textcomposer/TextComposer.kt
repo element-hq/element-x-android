@@ -103,6 +103,7 @@ fun TextComposer(
     onReceiveSuggestion: (Suggestion?) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
+    resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -174,7 +175,7 @@ fun TextComposer(
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
                             resolveMentionDisplay = resolveMentionDisplay,
-                            resolveRoomMentionDisplay = { resolveMentionDisplay("@room", "#") },
+                            resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
                             onError = onError,
                             onTyping = onTyping,
                             onSelectRichContent = onSelectRichContent,
@@ -776,6 +777,7 @@ private fun ATextComposer(
         onTyping = {},
         onReceiveSuggestion = {},
         resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
+        resolveAtRoomMentionDisplay = { TextDisplay.Plain },
         onSelectRichContent = null,
     )
 }
