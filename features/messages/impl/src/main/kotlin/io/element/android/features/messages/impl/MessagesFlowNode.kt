@@ -73,7 +73,7 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -100,7 +100,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
-    private val roomInfoCache: RoomInfoCache,
+    private val roomNamesCache: RoomNamesCache,
     private val mentionSpanUpdater: MentionSpanUpdater,
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
@@ -184,7 +184,7 @@ class MessagesFlowNode @AssistedInject constructor(
             .allRooms
             .summaries
             .onEach {
-                roomInfoCache.replace(it)
+                roomNamesCache.replace(it)
             }
             .launchIn(lifecycleScope)
 

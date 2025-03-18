@@ -11,7 +11,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.messages.RoomInfoCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ interface MentionSpanFormatter {
 @ContributesBinding(RoomScope::class)
 class DefaultMentionSpanFormatter @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
-    private val roomInfoCache: RoomInfoCache,
+    private val roomNamesCache: RoomNamesCache,
 ): MentionSpanFormatter {
 
     /**
@@ -59,7 +59,7 @@ class DefaultMentionSpanFormatter @Inject constructor(
     }
 
     private fun formatRoomMention(roomIdOrAlias: RoomIdOrAlias): String {
-        val displayName = roomInfoCache.getDisplayName(roomIdOrAlias)
+        val displayName = roomNamesCache.getDisplayName(roomIdOrAlias)
         return if (displayName != null) {
             "#$displayName"
         } else {

@@ -68,8 +68,8 @@ fun TimelineItemTextView(
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
     val formattedBody = content.formattedBody ?: content.pillifiedBody
     val mentionSpanUpdater = LocalMentionSpanUpdater.current
-    val bodyWithUpdatedMentions = mentionSpanUpdater.rememberMentionSpans(formattedBody)
-    return SpannableString(bodyWithUpdatedMentions)
+    val bodyWithResolvedMentions = mentionSpanUpdater.rememberMentionSpans(formattedBody)
+    return SpannableString(bodyWithResolvedMentions)
 }
 
 @PreviewsDayNight

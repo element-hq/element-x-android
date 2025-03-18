@@ -12,7 +12,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.runningFold
@@ -20,27 +19,23 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
-class RoomInfoCache @Inject constructor(
+class RoomNamesCache @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
 ) {
     private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, String?>())
     val updateFlow = cache.runningFold(0) { acc, _ -> acc + 1 }
 
     suspend fun replace(items: List<RoomSummary>) = withContext(dispatchers.computation) {
-        val roomInfoByIdOrAlias = LinkedHashMap<RoomIdOrAlias, String?>(items.size * 2)
+        val roomNamesByRoomIdOrAlias = LinkedHashMap<RoomIdOrAlias, String?>(items.size * 2)
         items
-            // makes sure to always have the same order
-            .sortedBy { summary -> summary.roomId.value }
             .forEach { summary ->
-                roomInfoByIdOrAlias[summary.info.id.toRoomIdOrAlias()] = summary.info.name
+                roomNamesByRoomIdOrAlias[summary.info.id.toRoomIdOrAlias()] = summary.info.name
                 val canonicalAlias = summary.info.canonicalAlias
                 if (canonicalAlias != null) {
-                    roomInfoByIdOrAlias[canonicalAlias.toRoomIdOrAlias()] = summary.info.name
+                    roomNamesByRoomIdOrAlias[canonicalAlias.toRoomIdOrAlias()] = summary.info.name
                 }
             }
-        if (roomInfoByIdOrAlias != cache.value) {
-            cache.value = roomInfoByIdOrAlias
-        }
+        cache.value = roomNamesByRoomIdOrAlias
     }
 
     fun getDisplayName(roomIdOrAlias: RoomIdOrAlias): String? {
