@@ -191,7 +191,7 @@ fun MessagesView(
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
-                    isDmUserVerified = state.dmUserVerificationState?.let { it == IdentityState.Verified },
+                    dmUserIdentityState = state.dmUserVerificationState,
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
@@ -458,7 +458,7 @@ private fun MessagesViewTopBar(
     roomAvatar: AvatarData?,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
-    isDmUserVerified: Boolean?,
+    dmUserIdentityState: IdentityState?,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -490,13 +490,24 @@ private fun MessagesViewTopBar(
                     )
                 }
 
-                if (isDmUserVerified == true) {
-                    Icon(
-                        modifier = Modifier.requiredWidthIn(min = 24.dp),
-                        imageVector = CompoundIcons.Verified(),
-                        tint = ElementTheme.colors.iconSuccessPrimary,
-                        contentDescription = null
-                    )
+                when (dmUserIdentityState) {
+                    IdentityState.Verified -> {
+                        Icon(
+                            modifier = Modifier.requiredWidthIn(min = 16.dp),
+                            imageVector = CompoundIcons.Verified(),
+                            tint = ElementTheme.colors.iconSuccessPrimary,
+                            contentDescription = null,
+                        )
+                    }
+                    IdentityState.VerificationViolation -> {
+                        Icon(
+                            modifier = Modifier.requiredWidthIn(min = 16.dp),
+                            imageVector = CompoundIcons.ErrorSolid(),
+                            tint = ElementTheme.colors.iconCriticalPrimary,
+                            contentDescription = null,
+                        )
+                    }
+                    else -> Unit
                 }
             }
         },
