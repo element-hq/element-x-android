@@ -18,6 +18,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.services.analytics.api.AnalyticsStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -27,22 +28,6 @@ import javax.inject.Inject
  * Also accessed via reflection by the instrumentation tests @see [im.vector.app.ClearCurrentSessionRule].
  */
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_analytics")
-
-/**
- * Local storage for:
- * - user consent (Boolean);
- * - did ask user consent (Boolean);
- * - analytics Id (String).
- */
-interface AnalyticsStore {
-    val userConsentFlow: Flow<Boolean>
-    val didAskUserConsentFlow: Flow<Boolean>
-    val analyticsIdFlow: Flow<String>
-    suspend fun setUserConsent(newUserConsent: Boolean)
-    suspend fun setDidAskUserConsent(newValue: Boolean = true)
-    suspend fun setAnalyticsId(newAnalyticsId: String)
-    suspend fun reset()
-}
 
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsStore @Inject constructor(
