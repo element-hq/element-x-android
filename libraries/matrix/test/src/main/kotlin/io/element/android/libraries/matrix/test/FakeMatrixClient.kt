@@ -78,7 +78,7 @@ class FakeMatrixClient(
         )
     },
     private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
-    private val clearCacheLambda: (Boolean) -> Unit = { lambdaError() },
+    private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
@@ -167,8 +167,8 @@ class FakeMatrixClient(
         return 0
     }
 
-    override suspend fun clearCache(isEventCacheEnabled: Boolean) = simulateLongTask {
-        clearCacheLambda(isEventCacheEnabled)
+    override suspend fun clearCache() = simulateLongTask {
+        clearCacheLambda()
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) = simulateLongTask {

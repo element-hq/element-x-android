@@ -37,12 +37,10 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
     private val pushService: PushService,
-    private val featureFlagService: FeatureFlagService,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Clear Matrix cache
-        val isEventCacheEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.EventCache)
-        matrixClient.clearCache(isEventCacheEnabled)
+        matrixClient.clearCache()
         // Clear Coil cache
         SingletonImageLoader.get(context).let {
             it.diskCache?.clear()

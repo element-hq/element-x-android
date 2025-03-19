@@ -44,7 +44,7 @@ class RustMatrixClientTest {
                 closeResult = closeResult,
             )
         ).use { sut ->
-            sut.clearCache(isEventCacheEnabled = true)
+            sut.clearCache()
             clearCachesResult.assertions().isCalledOnce()
             closeResult.assertions().isCalledOnce()
         }
