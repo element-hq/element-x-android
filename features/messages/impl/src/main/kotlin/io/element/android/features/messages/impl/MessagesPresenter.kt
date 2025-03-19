@@ -164,6 +164,11 @@ class MessagesPresenter @AssistedInject constructor(
             // as those will be handled by the timeline.
             withContext(dispatchers.io) {
                 room.setUnreadFlag(isUnread = false)
+
+                // If for some reason the encryption state is unknown, fetch it
+                if (roomInfo.isEncrypted == null) {
+                    room.getUpdatedIsEncrypted()
+                }
             }
         }
 
