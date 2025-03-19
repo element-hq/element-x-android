@@ -142,7 +142,7 @@ class TimelineViewTest {
     @Test
     fun `scrolling near to the start of the loaded items triggers a pre-fetch`() {
         val eventsRecorder = EventsRecorder<TimelineEvents>()
-        val items = List<TimelineItem>(20) {
+        val items = List<TimelineItem>(200) {
             aTimelineItemEvent(
                 eventId = EventId("\$event_$it"),
                 content = aTimelineItemUnknownContent(),
@@ -158,7 +158,10 @@ class TimelineViewTest {
             ),
         )
 
-        rule.onNodeWithTag("timeline").performScrollToIndex(10)
+        rule.onNodeWithTag("timeline").performScrollToIndex(180)
+
+        rule.mainClock.advanceTimeBy(1000)
+
         eventsRecorder.assertList(
             listOf(
                 TimelineEvents.OnScrollFinished(firstIndex = 0),

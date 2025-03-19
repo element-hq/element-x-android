@@ -76,11 +76,16 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun TimelineView(
@@ -139,6 +144,10 @@ fun TimelineView(
         )
     }
 
+    fun prefetchMoreItems() {
+        state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+    }
+
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -185,9 +194,10 @@ fun TimelineView(
                 onClearFocusRequestState = ::clearFocusRequestState
             )
 
-            TimelinePrefetchingHelper(lazyListState = lazyListState) {
-                state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
-            }
+            TimelinePrefetchingHelper(
+                lazyListState = lazyListState,
+                prefetch = ::prefetchMoreItems
+            )
 
             TimelineScrollHelper(
                 hasAnyEvent = state.hasAnyEvent,
@@ -217,7 +227,7 @@ private fun MessageShieldDialog(state: TimelineState) {
     )
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @Composable
 private fun TimelinePrefetchingHelper(
     lazyListState: LazyListState,
@@ -225,25 +235,25 @@ private fun TimelinePrefetchingHelper(
 ) {
     val latestPrefetch by rememberUpdatedState(prefetch)
 
-    // We're using snapshot flows for these because using `LaunchedEffect` with `derivedState` doesn't seem to be responsive enough
-    val firstVisibleItemIndexFlow = snapshotFlow {
-        lazyListState.firstVisibleItemIndex
-    }
-    val layoutInfoFlow = snapshotFlow {
-        lazyListState.layoutInfo
-    }
-    val isScrollingFlow = snapshotFlow {
-        lazyListState.isScrollInProgress
-    }
+    LaunchedEffect(Unit) {
+        // We're using snapshot flows for these because using `LaunchedEffect` with `derivedState` doesn't seem to be responsive enough
+        val firstVisibleItemIndexFlow = snapshotFlow { lazyListState.firstVisibleItemIndex }
+        val layoutInfoFlow = snapshotFlow { lazyListState.layoutInfo }
+        val isScrollingFlow = snapshotFlow { lazyListState.isScrollInProgress }
+            // This value changes too frequently, so we debounce it to avoid unnecessary prefetching. It's the equivalent of a conditional 'throttleLatest'
+            .conflate()
+            .transform { isScrolling ->
+                emit(isScrolling)
+                if (isScrolling) delay(100.milliseconds)
+            }
 
-    LaunchedEffect(latestPrefetch) {
         val isCloseToStartOfLoadedTimelineFlow = combine(layoutInfoFlow, firstVisibleItemIndexFlow) { layoutInfo, firstVisibleItemIndex ->
             firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
         }
 
         combine(
-            isCloseToStartOfLoadedTimelineFlow,
-            isScrollingFlow,
+            isCloseToStartOfLoadedTimelineFlow.distinctUntilChanged(),
+            isScrollingFlow.distinctUntilChanged(),
         ) { needsPrefetch, isScrolling ->
             needsPrefetch && isScrolling
         }
