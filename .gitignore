@@ -43,6 +43,7 @@ captures/
 .idea/.name
 .idea/androidTestResultsUserPreferences.xml
 .idea/assetWizardSettings.xml
+.idea/AndroidProjectSystem.xml
 .idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
 .idea/deploymentTargetSelector.xml
