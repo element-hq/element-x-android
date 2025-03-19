@@ -57,7 +57,7 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val homeserverName = remember { matrixClient.userIdServerName() }
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val roomInfo = room.roomInfoFlow.collectAsState(null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
 
         val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
@@ -66,12 +66,13 @@ class SecurityAndPrivacyPresenter @AssistedInject constructor(
 
         val savedSettings by remember {
             derivedStateOf {
+                val historyVisibility = roomInfo.historyVisibility.map()
                 SecurityAndPrivacySettings(
-                    roomAccess = roomInfo.value?.joinRule.map(),
-                    isEncrypted = room.isEncrypted,
+                    roomAccess = roomInfo.joinRule.map(),
+                    isEncrypted = roomInfo.isEncrypted == true,
                     isVisibleInRoomDirectory = savedIsVisibleInRoomDirectory.value,
-                    historyVisibility = roomInfo.value?.historyVisibility.map(),
-                    address = roomInfo.value?.firstDisplayableAlias(homeserverName)?.value,
+                    historyVisibility = historyVisibility,
+                    address = roomInfo.firstDisplayableAlias(homeserverName)?.value,
                 )
             }
         }

@@ -12,10 +12,7 @@ import org.matrix.rustcomponents.sdk.OidcPrompt as RustOidcPrompt
 
 internal fun OidcPrompt.toRustPrompt(): RustOidcPrompt {
     return when (this) {
-        OidcPrompt.None -> RustOidcPrompt.None
-        OidcPrompt.Login -> RustOidcPrompt.Login
-        OidcPrompt.Consent -> RustOidcPrompt.Consent
-        OidcPrompt.SelectAccount -> RustOidcPrompt.SelectAccount
+        OidcPrompt.Login -> RustOidcPrompt.Unknown("consent")
         OidcPrompt.Create -> RustOidcPrompt.Create
         is OidcPrompt.Unknown -> RustOidcPrompt.Unknown(value)
     }

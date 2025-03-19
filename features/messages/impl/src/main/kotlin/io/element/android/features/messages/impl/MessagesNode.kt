@@ -59,11 +59,14 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val coroutineScope: CoroutineScope,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
     messageComposerPresenterFactory: MessageComposerPresenter.Factory,
@@ -108,7 +111,7 @@ class MessagesNode @AssistedInject constructor(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                analyticsService.capture(room.toAnalyticsViewRoom())
+                coroutineScope.launch { analyticsService.capture(room.toAnalyticsViewRoom()) }
             },
             onDestroy = {
                 mediaPlayer.close()

@@ -67,9 +67,9 @@ fun MatrixRoom.canPinUnpin(updateKey: Long): State<Boolean> {
 }
 
 @Composable
-fun MatrixRoom.isDmAsState(updateKey: Long): State<Boolean> {
-    return produceState(initialValue = false, key1 = updateKey) {
-        value = isDm
+fun MatrixRoom.isDmAsState(): State<Boolean> {
+    return produceState(initialValue = false) {
+        roomInfoFlow.collect { value = it.isDm }
     }
 }
 
@@ -105,25 +105,25 @@ fun MatrixRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
 
 @Composable
 fun MatrixRoom.isOwnUserAdmin(): Boolean {
-    val roomInfo by roomInfoFlow.collectAsState(initial = null)
-    val powerLevel = roomInfo?.userPowerLevels?.get(sessionId) ?: 0L
+    val roomInfo by roomInfoFlow.collectAsState()
+    val powerLevel = roomInfo.userPowerLevels[sessionId] ?: 0L
     return RoomMember.Role.forPowerLevel(powerLevel) == RoomMember.Role.ADMIN
 }
 
 @Composable
 fun MatrixRoom.rawName(): String? {
-    val roomInfo by roomInfoFlow.collectAsState(initial = null)
-    return roomInfo?.rawName
+    val roomInfo by roomInfoFlow.collectAsState()
+    return roomInfo.rawName
 }
 
 @Composable
 fun MatrixRoom.topic(): String? {
-    val roomInfo by roomInfoFlow.collectAsState(initial = null)
-    return roomInfo?.topic
+    val roomInfo by roomInfoFlow.collectAsState()
+    return roomInfo.topic
 }
 
 @Composable
 fun MatrixRoom.avatarUrl(): String? {
-    val roomInfo by roomInfoFlow.collectAsState(initial = null)
-    return roomInfo?.avatarUrl
+    val roomInfo by roomInfoFlow.collectAsState()
+    return roomInfo.avatarUrl
 }

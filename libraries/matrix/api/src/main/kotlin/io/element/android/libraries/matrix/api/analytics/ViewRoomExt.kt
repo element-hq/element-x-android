@@ -18,8 +18,8 @@ fun MatrixRoom.toAnalyticsViewRoom(
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
-        isDM = isDirect,
-        isSpace = isSpace,
+        isDM = info().isDirect,
+        isSpace = info().isSpace,
         trigger = trigger,
         activeSpace = activeSpace,
         viaKeyboard = viaKeyboard
@@ -27,5 +27,5 @@ fun MatrixRoom.toAnalyticsViewRoom(
 }
 
 private fun MatrixRoom.toActiveSpace(): ViewRoom.ActiveSpace {
-    return if (isPublic) ViewRoom.ActiveSpace.Public else ViewRoom.ActiveSpace.Private
+    return if (info().isPublic) ViewRoom.ActiveSpace.Public else ViewRoom.ActiveSpace.Private
 }

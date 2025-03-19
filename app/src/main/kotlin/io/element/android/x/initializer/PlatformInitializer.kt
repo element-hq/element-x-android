@@ -22,10 +22,11 @@ import timber.log.Timber
 
 private const val ELEMENT_X_TARGET = "elementx"
 
-class TracingInitializer : Initializer<Unit> {
+class PlatformInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         val appBindings = context.bindings<AppBindings>()
         val tracingService = appBindings.tracingService()
+        val platformService = appBindings.platformService()
         val bugReporter = appBindings.bugReporter()
         Timber.plant(tracingService.createTimberTree(ELEMENT_X_TARGET))
         val preferencesStore = appBindings.preferencesStore()
@@ -38,7 +39,7 @@ class TracingInitializer : Initializer<Unit> {
             extraTargets = listOf(ELEMENT_X_TARGET),
         )
         bugReporter.setCurrentTracingLogLevel(logLevel.name)
-        tracingService.setupTracing(tracingConfiguration)
+        platformService.init(tracingConfiguration)
         // Also set env variable for rust back trace
         Os.setenv("RUST_BACKTRACE", "1", true)
     }

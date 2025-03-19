@@ -20,17 +20,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
-    override fun setupTracing(tracingConfiguration: TracingConfiguration) {
-        val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
-            writeToStdoutOrSystem = tracingConfiguration.writesToLogcat,
-            logLevel = tracingConfiguration.logLevel.toRustLogLevel(),
-            extraTargets = tracingConfiguration.extraTargets,
-            writeToFiles = tracingConfiguration.writesToFilesConfiguration.toTracingFileConfiguration(),
-        )
-        org.matrix.rustcomponents.sdk.setupTracing(rustTracingConfiguration)
-        Timber.d("setupTracing: $rustTracingConfiguration")
-    }
-
     override fun createTimberTree(target: String): Timber.Tree {
         return RustTracingTree(target = target, retrieveFromStackTrace = buildMeta.isDebuggable)
     }
@@ -57,3 +46,10 @@ private fun WriteToFilesConfiguration.toTracingFileConfiguration(): TracingFileC
         )
     }
 }
+
+fun TracingConfiguration.map(): org.matrix.rustcomponents.sdk.TracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
+    writeToStdoutOrSystem = writesToLogcat,
+    logLevel = logLevel.toRustLogLevel(),
+    extraTargets = extraTargets,
+    writeToFiles = writesToFilesConfiguration.toTracingFileConfiguration(),
+)

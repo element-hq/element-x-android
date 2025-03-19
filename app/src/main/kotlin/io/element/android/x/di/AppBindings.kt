@@ -17,6 +17,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
@@ -26,6 +27,8 @@ interface AppBindings {
     fun snackbarDispatcher(): SnackbarDispatcher
 
     fun tracingService(): TracingService
+
+    fun platformService(): InitPlatformService
 
     fun bugReporter(): BugReporter
 

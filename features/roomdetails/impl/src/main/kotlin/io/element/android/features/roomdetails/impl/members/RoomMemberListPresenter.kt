@@ -183,7 +183,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
     }
 
     private suspend fun RoomMember.withIdentityState(identityStates: ImmutableMap<UserId, IdentityState>): RoomMemberWithIdentityState {
-        return if (!room.isEncrypted) {
+        return if (room.info().isEncrypted != true) {
             RoomMemberWithIdentityState(this, null)
         } else {
             val identityState = identityStates[userId] ?: encryptionService.getUserIdentity(userId).getOrNull()

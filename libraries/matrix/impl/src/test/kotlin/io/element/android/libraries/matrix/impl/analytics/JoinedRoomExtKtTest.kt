@@ -9,13 +9,14 @@ package io.element.android.libraries.matrix.impl.analytics
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class JoinedRoomExtKtTest {
     @Test
-    fun `test room size mapping`() {
+    fun `test room size mapping`() = runTest {
         mapOf(
             listOf(0L, 1L) to JoinedRoom.RoomSize.One,
             listOf(2L, 2L) to JoinedRoom.RoomSize.Two,
@@ -39,7 +40,7 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test isDirect parameter mapping`() {
+    fun `test isDirect parameter mapping`() = runTest {
         assertThat(aMatrixRoom(isDirect = true).toAnalyticsJoinedRoom(null))
             .isEqualTo(
                 JoinedRoom(
@@ -52,7 +53,7 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test isSpace parameter mapping`() {
+    fun `test isSpace parameter mapping`() = runTest {
         assertThat(aMatrixRoom(isSpace = true).toAnalyticsJoinedRoom(null))
             .isEqualTo(
                 JoinedRoom(
@@ -65,8 +66,8 @@ class JoinedRoomExtKtTest {
     }
 
     @Test
-    fun `test trigger parameter mapping`() {
-        assertThat(aMatrixRoom().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+    fun `test trigger parameter mapping`() = runTest {
+        assertThat(aMatrixRoom(isDirect = false, isSpace = false, joinedMemberCount = 1).toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
             .isEqualTo(
                 JoinedRoom(
                     isDM = false,
@@ -81,11 +82,9 @@ class JoinedRoomExtKtTest {
         isDirect: Boolean = false,
         isSpace: Boolean = false,
         joinedMemberCount: Long = 0
-    ): MatrixRoom {
-        return FakeMatrixRoom(
-            isDirect = isDirect,
-            isSpace = isSpace,
-            joinedMemberCount = joinedMemberCount
-        )
+    ): FakeMatrixRoom {
+        return FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo(isDirect = isDirect, isSpace = isSpace, joinedMembersCount = joinedMemberCount))
+        }
     }
 }

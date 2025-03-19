@@ -106,10 +106,10 @@ class ChangeRolesPresenter @AssistedInject constructor(
 
         val hasPendingChanges = usersWithRole.value != selectedUsers.value
 
-        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
             // An admin can't remove or demote another admin
-            val powerLevel = roomInfo?.userPowerLevels?.get(userId) ?: 0L
+            val powerLevel = roomInfo.userPowerLevels[userId] ?: 0L
             return RoomMember.Role.forPowerLevel(powerLevel) != RoomMember.Role.ADMIN
         }
 
