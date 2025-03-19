@@ -69,13 +69,14 @@ class TimelineItemContentMessageFactory @Inject constructor(
         return when (val messageType = content.type) {
             is EmoteMessageType -> {
                 val emoteBody = "* $senderDisambiguatedDisplayName ${messageType.body.trimEnd()}"
+                val formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisambiguatedDisplayName") ?: textPillificationHelper.pillify(emoteBody).safeLinkify()
                 TimelineItemEmoteContent(
                     body = emoteBody,
                     htmlDocument = messageType.formatted?.toHtmlDocument(
                         permalinkParser = permalinkParser,
                         prefix = "* $senderDisambiguatedDisplayName",
                     ),
-                    formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisambiguatedDisplayName") ?: emoteBody.withLinks(),
+                    formattedBody = formattedBody,
                     isEdited = content.isEdited,
                 )
             }
@@ -125,7 +126,6 @@ class TimelineItemContentMessageFactory @Inject constructor(
                         body = body,
                         htmlDocument = null,
                         plainText = body,
-                        formattedBody = null,
                         isEdited = content.isEdited,
                     )
                 } else {
@@ -218,10 +218,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is NoticeMessageType -> {
                 val body = messageType.body.trimEnd()
+                val formattedBody = parseHtml(messageType.formatted) ?: textPillificationHelper.pillify(body).safeLinkify()
                 TimelineItemNoticeContent(
                     body = body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
-                    formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
+                    formattedBody = formattedBody,
                     isEdited = content.isEdited,
                 )
             }

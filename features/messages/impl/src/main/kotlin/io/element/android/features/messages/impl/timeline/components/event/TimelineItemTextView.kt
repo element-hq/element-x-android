@@ -40,7 +40,7 @@ fun TimelineItemTextView(
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
-    val emojiOnly = (content.formattedBody == null || content.formattedBody.toString() == content.body) &&
+    val emojiOnly = content.formattedBody.toString() == content.body &&
         content.body.replace(" ", "").containsOnlyEmojis()
     val textStyle = when {
         emojiOnly -> ElementTheme.typography.fontHeadingXlRegular
@@ -50,10 +50,10 @@ fun TimelineItemTextView(
         LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides textStyle
     ) {
-        val body = getTextWithResolvedMentions(content)
+        val text = getTextWithResolvedMentions(content)
         Box(modifier.semantics { contentDescription = content.plainText }) {
             EditorStyledText(
-                text = body,
+                text = text,
                 onLinkClickedListener = onLinkClick,
                 style = ElementRichTextEditorStyle.textStyle(),
                 onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
@@ -66,9 +66,8 @@ fun TimelineItemTextView(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
-    val formattedBody = content.formattedBody ?: content.pillifiedBody
     val mentionSpanUpdater = LocalMentionSpanUpdater.current
-    val bodyWithResolvedMentions = mentionSpanUpdater.rememberMentionSpans(formattedBody)
+    val bodyWithResolvedMentions = mentionSpanUpdater.rememberMentionSpans(content.formattedBody)
     return SpannableString(bodyWithResolvedMentions)
 }
 
@@ -87,7 +86,7 @@ internal fun TimelineItemTextViewPreview(
 @Composable
 internal fun TimelineItemTextViewWithLinkifiedUrlPreview() = ElementPreview {
     val content = aTimelineItemTextContent(
-        pillifiedBody = LinkifyHelper.linkify("The link should end after the first '?' (url: github.com/element-hq/element-x-android/README?)?.")
+        formattedBody = LinkifyHelper.linkify("The link should end after the first '?' (url: github.com/element-hq/element-x-android/README?)?.")
     )
     TimelineItemTextView(
         content = content,
@@ -99,7 +98,7 @@ internal fun TimelineItemTextViewWithLinkifiedUrlPreview() = ElementPreview {
 @Composable
 internal fun TimelineItemTextViewWithLinkifiedUrlAndNestedParenthesisPreview() = ElementPreview {
     val content = aTimelineItemTextContent(
-        pillifiedBody = LinkifyHelper.linkify("The link should end after the '(ME)' ((url: github.com/element-hq/element-x-android/READ(ME)))!")
+        formattedBody = LinkifyHelper.linkify("The link should end after the '(ME)' ((url: github.com/element-hq/element-x-android/READ(ME)))!")
     )
     TimelineItemTextView(
         content = content,

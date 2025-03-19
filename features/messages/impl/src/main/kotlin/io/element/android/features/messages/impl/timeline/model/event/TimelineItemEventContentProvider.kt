@@ -61,7 +61,6 @@ class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineIt
 fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
     body = "Emote",
     htmlDocument = null,
-    formattedBody = null,
     isEdited = false,
 )
 
@@ -72,7 +71,6 @@ fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
 fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
     body = "Notice",
     htmlDocument = null,
-    formattedBody = null,
     isEdited = false,
 )
 
@@ -80,12 +78,11 @@ fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 
 fun aTimelineItemTextContent(
     body: String = "Text",
-    pillifiedBody: CharSequence = body,
+    formattedBody: CharSequence = body,
 ) = TimelineItemTextContent(
     body = body,
-    pillifiedBody = pillifiedBody,
     htmlDocument = null,
-    formattedBody = null,
+    formattedBody = formattedBody,
     isEdited = false,
 )
 
