@@ -14,7 +14,6 @@ import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.ReplacementSpan
-import android.text.style.URLSpan
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -28,7 +27,7 @@ import kotlin.math.roundToInt
  */
 class MentionSpan(
     val type: MentionType,
-) : ReplacementSpan(){
+) : ReplacementSpan() {
 
     private val backgroundPaint = Paint()
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
@@ -151,14 +150,14 @@ sealed class MentionType {
  */
 fun CharSequence.getMentionSpans(start: Int = 0, end: Int = length): List<MentionSpan> {
     return if (this is android.text.Spanned) {
+        // If we have custom mention spans created by the RTE, we need to extract the provided spans and filter them
         val customMentionSpans = getSpans<CustomMentionSpan>(start, end)
-        if (customMentionSpans.isNotEmpty()) {
-            // If we have custom mention spans created by the RTE, we need to extract the provided spans and filter them
-            customMentionSpans.map { it.providedSpan }.filterIsInstance<MentionSpan>()
-        } else {
-            // Otherwise try to get the spans directly
-            getSpans<MentionSpan>(start, end).toList()
-        }
+            .map { it.providedSpan }
+            .filterIsInstance<MentionSpan>()
+        // Collect all direct mention spans
+        val directMentionSpans = getSpans<MentionSpan>(start, end)
+        // Return the union of both
+        customMentionSpans + directMentionSpans
     } else {
         emptyList()
     }
