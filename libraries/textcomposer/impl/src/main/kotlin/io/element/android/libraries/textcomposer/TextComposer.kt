@@ -473,7 +473,7 @@ private fun TextInputBox(
         ) {
             if (isRoomEncrypted == false) {
                 Icon(
-                    modifier = Modifier.padding(top = 5.dp).size(width = 16.dp, height = 22.dp),
+                    modifier = Modifier.padding(bottom = 5.dp).size(width = 16.dp, height = 22.dp).align(Alignment.Bottom),
                     imageVector = CompoundIcons.LockOff(),
                     contentDescription = null,
                     tint = ElementTheme.colors.iconInfoPrimary,
