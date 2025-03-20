@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.textcomposer
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,12 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -575,7 +579,13 @@ private fun aTextEditorStateMarkdownList() = persistentListOf(
 )
 
 private fun aTextEditorStateRichList() = persistentListOf(
-    aTextEditorStateMarkdown(initialText = "", initialFocus = true, isRoomEncrypted = false),
+    aTextEditorStateRich(initialText = "", initialFocus = true, isRoomEncrypted = false),
+    aTextEditorStateRich(initialText = "Unencrypted message...", initialFocus = true, isRoomEncrypted = false),
+    aTextEditorStateRich(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+        initialFocus = true,
+        isRoomEncrypted = false,
+    ),
     aTextEditorStateRich(initialFocus = true),
     aTextEditorStateRich(initialText = "A message", initialFocus = true),
     aTextEditorStateRich(
@@ -585,7 +595,17 @@ private fun aTextEditorStateRichList() = persistentListOf(
     aTextEditorStateRich(initialText = "A message without focus", initialFocus = false),
 )
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 520,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 520,
+)
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
     PreviewColumn(
@@ -600,7 +620,17 @@ internal fun TextComposerSimplePreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 820,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 820,
+)
 @Composable
 internal fun TextComposerFormattingPreview() = ElementPreview {
     PreviewColumn(
@@ -616,7 +646,17 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 760,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 760,
+)
 @Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     PreviewColumn(
@@ -631,7 +671,17 @@ internal fun TextComposerEditPreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 760,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 760,
+)
 @Composable
 internal fun TextComposerEditCaptionPreview() = ElementPreview {
     PreviewColumn(
@@ -649,7 +699,17 @@ internal fun TextComposerEditCaptionPreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 760,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 760,
+)
 @Composable
 internal fun TextComposerAddCaptionPreview() = ElementPreview {
     PreviewColumn(
@@ -668,7 +728,17 @@ internal fun TextComposerAddCaptionPreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 760,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 760,
+)
 @Composable
 internal fun MarkdownTextComposerEditPreview() = ElementPreview {
     PreviewColumn(
@@ -683,7 +753,17 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    fontScale = 1f,
+    heightDp = 1140,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    fontScale = 1f,
+    heightDp = 1140,
+)
 @Composable
 internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
