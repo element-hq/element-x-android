@@ -57,6 +57,8 @@ internal class MapTilerStaticMapUrlBuilder(
         // to keep the perceived content size constant at the expense of sharpness.
         return "$MAPTILER_BASE_URL/$mapId/static/$lon,$lat,$finalZoom/${finalWidth}x${finalHeight}$scale.webp?key=$apiKey&attribution=bottomleft"
     }
+
+    override fun isServiceAvailable() = apiKey.isNotEmpty()
 }
 
 private fun coerceWidthAndHeight(width: Int, height: Int, is2x: Boolean): Pair<Int, Int> {
