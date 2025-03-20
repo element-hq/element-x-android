@@ -21,13 +21,11 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.textcomposer.components.markdown.StableCharSequence
-import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -63,8 +61,7 @@ class MarkdownTextEditorState(
             }
             is ResolvedSuggestion.Member -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val userName = resolvedSuggestion.roomMember.displayName ?: resolvedSuggestion.roomMember.userId.value
-                val mentionSpan = mentionSpanProvider.createUserMentionSpan(userName, resolvedSuggestion.roomMember.userId)
+                val mentionSpan = mentionSpanProvider.createUserMentionSpan(resolvedSuggestion.roomMember.userId)
                 currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionSpan, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -73,8 +70,7 @@ class MarkdownTextEditorState(
             }
             is ResolvedSuggestion.Alias -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val text = resolvedSuggestion.roomAlias.value
-                val mentionSpan = mentionSpanProvider.createRoomMentionSpan(text, resolvedSuggestion.roomAlias.toRoomIdOrAlias())
+                val mentionSpan = mentionSpanProvider.createRoomMentionSpan(resolvedSuggestion.roomAlias.toRoomIdOrAlias())
                 currentText.replace(suggestion.start, suggestion.end, "# ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionSpan, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -97,7 +93,7 @@ class MarkdownTextEditorState(
                         when (mention.type) {
                             is MentionType.User -> {
                                 permalinkBuilder.permalinkForUser(mention.type.userId).getOrNull()?.let { link ->
-                                    replace(start, end, "[${mention.originalText}]($link)")
+                                    replace(start, end, "[${mention.type.userId}]($link)")
                                 }
                             }
                             is MentionType.Everyone -> {
@@ -107,7 +103,7 @@ class MarkdownTextEditorState(
                                 val roomIdOrAlias = mention.type.roomIdOrAlias
                                 if (roomIdOrAlias is RoomIdOrAlias.Alias) {
                                     permalinkBuilder.permalinkForRoomAlias(roomIdOrAlias.roomAlias).getOrNull()?.let { link ->
-                                        replace(start, end, "[${mention.originalText}]($link)")
+                                        replace(start, end, "[${roomIdOrAlias.roomAlias}]($link)")
                                     }
                                 }
                             }
@@ -123,7 +119,7 @@ class MarkdownTextEditorState(
 
     fun getMentions(): List<IntentionalMention> {
         val text = SpannableString(text.value())
-        val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
+        val mentionSpans = text.getMentionSpans()
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
                 is MentionType.User -> IntentionalMention.User(mentionSpan.type.userId)

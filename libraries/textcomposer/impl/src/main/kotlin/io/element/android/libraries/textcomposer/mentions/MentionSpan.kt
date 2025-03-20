@@ -14,6 +14,7 @@ import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.ReplacementSpan
+import android.text.style.URLSpan
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -23,14 +24,14 @@ import kotlin.math.roundToInt
 
 /**
  * A span that represents a mention (user, room, etc.) in text.
- * 
- * @param originalText The original text that this span is replacing
- * @param type The type of mention this span represents
+ * @param type The type of mention this span represents.
  */
 class MentionSpan(
-    val originalText: String,
     val type: MentionType,
-) : ReplacementSpan() {
+) : ReplacementSpan(){
+
+    private val backgroundPaint = Paint()
+    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 
     private var backgroundColor: Int = 0
     private var textColor: Int = 0
@@ -40,11 +41,8 @@ class MentionSpan(
 
     private var measuredTextWidth = 0
 
-    private val backgroundPaint = Paint()
-    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-
     // The formatted display text, will be set by the formatter
-    private var displayText: CharSequence = originalText
+    private var displayText: CharSequence = ""
 
     /**
      * Updates the visual properties of this span.
@@ -54,21 +52,21 @@ class MentionSpan(
             is MentionType.User -> type.userId == mentionSpanTheme.currentUserId
             else -> false
         }
-        
+
         backgroundColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
             is MentionType.Everyone -> mentionSpanTheme.currentUserBackgroundColor
             is MentionType.Room -> mentionSpanTheme.otherBackgroundColor
             is MentionType.Message -> mentionSpanTheme.otherBackgroundColor
         }
-        
+
         textColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
             is MentionType.Everyone -> mentionSpanTheme.currentUserTextColor
             is MentionType.Room -> mentionSpanTheme.otherTextColor
             is MentionType.Message -> mentionSpanTheme.otherTextColor
         }
-        
+
         val (startPaddingPx, endPaddingPx) = mentionSpanTheme.paddingValuesPx.value
         startPadding = startPaddingPx
         endPadding = endPaddingPx
@@ -151,15 +149,15 @@ sealed class MentionType {
 /**
  * Extension function to get all MentionSpans from a CharSequence.
  */
-fun CharSequence.getMentionSpans(): List<MentionSpan> {
+fun CharSequence.getMentionSpans(start: Int = 0, end: Int = length): List<MentionSpan> {
     return if (this is android.text.Spanned) {
-        val customMentionSpans = getSpans<CustomMentionSpan>()
+        val customMentionSpans = getSpans<CustomMentionSpan>(start, end)
         if (customMentionSpans.isNotEmpty()) {
             // If we have custom mention spans created by the RTE, we need to extract the provided spans and filter them
             customMentionSpans.map { it.providedSpan }.filterIsInstance<MentionSpan>()
         } else {
             // Otherwise try to get the spans directly
-            getSpans<MentionSpan>().toList()
+            getSpans<MentionSpan>(start, end).toList()
         }
     } else {
         emptyList()

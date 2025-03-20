@@ -627,8 +627,8 @@ class MessageComposerPresenter @AssistedInject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
-            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
+            val markdownWithMentions = pillificationHelper.pillify(markdown, false)
+            markdownTextEditorState.text.update(markdownWithMentions, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -696,7 +696,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            val pillifiedContent = pillificationHelper.pillify(content)
+            val pillifiedContent = pillificationHelper.pillify(content, false)
             markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()
