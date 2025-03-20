@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DefaultClearCacheUseCaseTest {
     @Test
-    fun `execute clear cache should do all the expected tasks no event cache`() = runTest {
+    fun `execute clear cache should do all the expected tasks`() = runTest {
         val clearCacheLambda = lambdaRecorder<Unit> { }
         val matrixClient = FakeMatrixClient(
             clearCacheLambda = clearCacheLambda,
