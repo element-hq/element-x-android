@@ -13,7 +13,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -153,6 +152,8 @@ fun TextComposer(
         stringResource(id = CommonStrings.action_reply_in_thread)
     } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
+    } else if (state.isRoomEncrypted == false) {
+        stringResource(id = R.string.rich_text_editor_composer_unencrypted_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
@@ -169,6 +170,7 @@ fun TextComposer(
                             state = state.richTextEditorState,
                             subcomposing = subcomposing,
                             placeholder = placeholder,
+                            isRoomEncrypted = state.isRoomEncrypted,
                             composerMode = composerMode,
                             onResetComposerMode = onResetComposerMode,
                             resolveMentionDisplay = resolveMentionDisplay,
@@ -188,6 +190,7 @@ fun TextComposer(
                         onResetComposerMode = onResetComposerMode,
                         placeholder = placeholder,
                         showPlaceholder = state.state.text.value().isEmpty(),
+                        isRoomEncrypted = state.isRoomEncrypted,
                         subcomposing = subcomposing,
                     ) {
                         MarkdownTextInput(
@@ -437,8 +440,9 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     placeholder: String,
     showPlaceholder: Boolean,
+    isRoomEncrypted: Boolean?,
     subcomposing: Boolean,
-    textInput: @Composable BoxScope.() -> Unit,
+    textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -459,42 +463,54 @@ private fun TextInputBox(
             )
         }
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
-        Box(
-            modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
-            contentAlignment = Alignment.CenterStart,
+        Row(
+            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            // Placeholder
-            if (showPlaceholder) {
-                Text(
-                    text = placeholder,
-                    style = defaultTypography.copy(
-                        color = ElementTheme.colors.textSecondary,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+            if (isRoomEncrypted == false) {
+                Icon(
+                    modifier = Modifier.padding(top = 5.dp).size(width = 16.dp, height = 22.dp),
+                    imageVector = CompoundIcons.LockOff(),
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconInfoPrimary,
                 )
             }
-
-            textInput()
-
-            if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
-                var showBottomSheet by remember { mutableStateOf(false) }
-                Icon(
-                    modifier = Modifier
-                        .clickable { showBottomSheet = true }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                        .align(Alignment.CenterEnd),
-                    imageVector = CompoundIcons.InfoSolid(),
-                    tint = ElementTheme.colors.iconCriticalPrimary,
-                    contentDescription = null,
-                )
-                if (showBottomSheet) {
-                    CaptionWarningBottomSheet(
-                        onDismiss = { showBottomSheet = false },
+            Box(
+                modifier = Modifier
+                    // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
+                    .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                // Placeholder
+                if (showPlaceholder) {
+                    Text(
+                        text = placeholder,
+                        style = defaultTypography.copy(
+                            color = ElementTheme.colors.textSecondary,
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
+                }
+
+                textInput()
+
+                if (showPlaceholder && composerMode.showCaptionCompatibilityWarning()) {
+                    var showBottomSheet by remember { mutableStateOf(false) }
+                    Icon(
+                        modifier = Modifier
+                            .clickable { showBottomSheet = true }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .align(Alignment.CenterEnd),
+                        imageVector = CompoundIcons.InfoSolid(),
+                        tint = ElementTheme.colors.iconCriticalPrimary,
+                        contentDescription = null,
+                    )
+                    if (showBottomSheet) {
+                        CaptionWarningBottomSheet(
+                            onDismiss = { showBottomSheet = false },
+                        )
+                    }
                 }
             }
         }
@@ -507,6 +523,7 @@ private fun TextInput(
     subcomposing: Boolean,
     placeholder: String,
     composerMode: MessageComposerMode,
+    isRoomEncrypted: Boolean?,
     onResetComposerMode: () -> Unit,
     resolveRoomMentionDisplay: () -> TextDisplay,
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
@@ -519,6 +536,7 @@ private fun TextInput(
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,
         showPlaceholder = state.messageHtml.isEmpty(),
+        isRoomEncrypted = isRoomEncrypted,
         subcomposing = subcomposing,
     ) {
         RichTextEditor(
@@ -540,6 +558,13 @@ private fun TextInput(
 }
 
 private fun aTextEditorStateMarkdownList() = persistentListOf(
+    aTextEditorStateMarkdown(initialText = "", initialFocus = true, isRoomEncrypted = false),
+    aTextEditorStateMarkdown(initialText = "Unencrypted message...", initialFocus = true, isRoomEncrypted = false),
+    aTextEditorStateMarkdown(
+        initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+        initialFocus = true,
+        isRoomEncrypted = false,
+    ),
     aTextEditorStateMarkdown(initialText = "", initialFocus = true),
     aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
     aTextEditorStateMarkdown(
@@ -550,6 +575,7 @@ private fun aTextEditorStateMarkdownList() = persistentListOf(
 )
 
 private fun aTextEditorStateRichList() = persistentListOf(
+    aTextEditorStateMarkdown(initialText = "", initialFocus = true, isRoomEncrypted = false),
     aTextEditorStateRich(initialFocus = true),
     aTextEditorStateRich(initialText = "A message", initialFocus = true),
     aTextEditorStateRich(

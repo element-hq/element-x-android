@@ -141,6 +141,8 @@ class MessageComposerPresenter @AssistedInject constructor(
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
+        val roomInfo by room.roomInfoFlow.collectAsState()
+
         val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
@@ -242,9 +244,9 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val textEditorState by rememberUpdatedState(
             if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState)
+                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
             } else {
-                TextEditorState.Markdown(markdownTextEditorState)
+                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
             }
         )
 
