@@ -28,6 +28,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -96,6 +97,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val mentionSpanTheme: MentionSpanTheme,
@@ -409,7 +411,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 NavTarget.LocationViewer(
                     location = event.content.location,
                     description = event.content.description,
-                )
+                ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
         }
