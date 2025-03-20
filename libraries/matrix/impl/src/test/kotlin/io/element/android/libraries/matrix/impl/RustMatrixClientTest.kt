@@ -17,10 +17,12 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.Client
 import java.io.File
 
 class RustMatrixClientTest {
@@ -32,10 +34,27 @@ class RustMatrixClientTest {
         }
     }
 
+    @Test
+    fun `clear cache invokes the method clearCaches from the client and close it`() = runTest {
+        val clearCachesResult = lambdaRecorder<Unit> { }
+        val closeResult = lambdaRecorder<Unit> { }
+        createRustMatrixClient(
+            client = FakeRustClient(
+                clearCachesResult = clearCachesResult,
+                closeResult = closeResult,
+            )
+        ).use { sut ->
+            sut.clearCache()
+            clearCachesResult.assertions().isCalledOnce()
+            closeResult.assertions().isCalledOnce()
+        }
+    }
+
     private fun TestScope.createRustMatrixClient(
+        client: Client = FakeRustClient(),
         sessionStore: SessionStore = InMemorySessionStore(),
     ) = RustMatrixClient(
-        innerClient = FakeRustClient(),
+        innerClient = client,
         baseDirectory = File(""),
         sessionStore = sessionStore,
         appCoroutineScope = backgroundScope,
