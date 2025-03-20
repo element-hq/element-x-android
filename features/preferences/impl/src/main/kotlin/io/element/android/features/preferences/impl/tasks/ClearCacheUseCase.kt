@@ -15,8 +15,6 @@ import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
 import kotlinx.coroutines.withContext
