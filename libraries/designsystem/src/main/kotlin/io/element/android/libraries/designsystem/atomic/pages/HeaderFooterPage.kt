@@ -10,12 +10,14 @@ package io.element.android.libraries.designsystem.atomic.pages
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
@@ -64,53 +66,45 @@ fun HeaderFooterPage(
     ) { padding ->
         Box {
             background()
-            if (isScrollable) {
-                // Render in a LazyColumn
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues = paddingValues)
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .imePadding()
-                ) {
-                    // Header
-                    item {
-                        header()
-                    }
-                    // Content
-                    item {
-                        content()
-                    }
-                    // Footer
-                    item {
-                        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                            footer()
+
+            // Render in a Column
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .run {
+                        if (isScrollable) {
+                            verticalScroll(rememberScrollState())
+                        } else {
+                            Modifier
                         }
                     }
-                }
-            } else {
-                // Render in a Column
+                    .padding(paddingValues = paddingValues)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .imePadding()
+            ) {
+                // Header
+                header()
+
+                // Content
                 Column(
-                    modifier = Modifier
-                        .padding(paddingValues = paddingValues)
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .imePadding()
+                    modifier = if (isScrollable) Modifier.fillMaxSize() else Modifier.weight(1f),
                 ) {
-                    // Header
-                    header()
-                    // Content
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                    ) {
-                        content()
-                    }
-                    // Footer
-                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        footer()
-                    }
+                    content()
+                }
+
+                // Spacer (only needed for scrollable content)
+                if (isScrollable) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+
+                // Footer
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    footer()
                 }
             }
         }
@@ -157,5 +151,49 @@ internal fun HeaderFooterPagePreview() = ElementPreview {
                 )
             }
         }
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun HeaderFooterPageScrollablePreview() = ElementPreview {
+    HeaderFooterPage(
+        content = {
+            Box(
+                Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Content",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        header = {
+            Box(
+                Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Header",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        footer = {
+            Box(
+                Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Footer",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        isScrollable = true,
     )
 }
