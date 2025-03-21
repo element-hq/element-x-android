@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -35,6 +37,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -67,7 +70,8 @@ fun IncomingVerificationView(
                         step is Step.Completed -> Unit
                         else -> BackButton(onClick = { state.eventSink(IncomingVerificationViewEvents.GoBack) })
                     }
-                }
+                },
+                colors = topAppBarColors(containerColor = Color.Transparent),
             )
         },
         header = {
@@ -77,7 +81,8 @@ fun IncomingVerificationView(
             IncomingVerificationBottomMenu(
                 state = state,
             )
-        }
+        },
+        isScrollable = true,
     ) {
         IncomingVerificationContent(
             step = step,
@@ -222,7 +227,11 @@ private fun IncomingVerificationBottomMenu(
         }
         is Step.Verifying -> {
             if (step.isWaiting) {
-                // Show nothing
+                // Add invisible buttons to keep the same screen layout
+                VerificationBottomMenu {
+                    InvisibleButton()
+                    InvisibleButton()
+                }
             } else {
                 VerificationBottomMenu {
                     Button(

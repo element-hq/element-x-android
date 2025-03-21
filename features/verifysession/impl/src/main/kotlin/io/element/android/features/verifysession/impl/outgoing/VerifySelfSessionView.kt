@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -91,7 +93,8 @@ fun VerifySelfSessionView(
                         { BackButton(onClick = ::cancelOrResetFlow) }
                     } else {
                         {}
-                    }
+                    },
+                    colors = topAppBarColors(containerColor = Color.Transparent)
                 )
             },
             header = {
@@ -103,7 +106,8 @@ fun VerifySelfSessionView(
                     onCancelClick = ::cancelOrResetFlow,
                     onContinueClick = onFinish,
                 )
-            }
+            },
+            isScrollable = true,
         ) {
             VerifySelfSessionContent(
                 flowState = step,
@@ -124,13 +128,13 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
         }
         Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Loading
         Step.Canceled -> BigIcon.Style.AlertSolid
-        Step.Ready -> BigIcon.Style.Default(CompoundIcons.Reaction())
+        Step.Ready -> BigIcon.Style.Default(CompoundIcons.ReactionSolid())
         Step.Completed -> BigIcon.Style.SuccessSolid
         is Step.Verifying -> {
             if (step.state is AsyncData.Loading<Unit>) {
                 BigIcon.Style.Loading
             } else {
-                BigIcon.Style.Default(CompoundIcons.Reaction())
+                BigIcon.Style.Default(CompoundIcons.ReactionSolid())
             }
         }
         is Step.Exit -> return
@@ -272,7 +276,11 @@ private fun VerifySelfSessionBottomMenu(
         is Step.AwaitingOtherDeviceResponse -> Unit
         is Step.Verifying -> {
             if (isVerifying) {
-                // Show nothing
+                // Add invisible buttons to keep the same screen layout
+                VerificationBottomMenu {
+                    InvisibleButton()
+                    InvisibleButton()
+                }
             } else {
                 VerificationBottomMenu {
                     Button(

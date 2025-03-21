@@ -85,7 +85,7 @@ fun JoinRoomView(
     ) {
         HeaderFooterPage(
             containerColor = Color.Transparent,
-            paddingValues = PaddingValues(
+            contentPadding = PaddingValues(
                 horizontal = 16.dp,
                 vertical = 32.dp
             ),
