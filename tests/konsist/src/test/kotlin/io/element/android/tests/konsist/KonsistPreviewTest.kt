@@ -68,6 +68,7 @@ class KonsistPreviewTest {
                 "DefaultRoomListTopBarWithIndicatorPreview",
                 "FocusedEventPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
+                "HeaderFooterPageScrollablePreview",
                 "IconsCompoundPreview",
                 "IconsOtherPreview",
                 "MarkdownTextComposerEditPreview",
