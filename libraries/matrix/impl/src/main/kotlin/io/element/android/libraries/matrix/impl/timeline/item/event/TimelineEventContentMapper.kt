@@ -110,7 +110,6 @@ class TimelineEventContentMapper(
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
                 is TimelineItemContent.CallNotify -> CallNotifyContent
-                else -> UnknownContent
             }
         }
     }
