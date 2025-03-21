@@ -274,8 +274,6 @@ private fun RustSessionVerificationData.map(): SessionVerificationData {
                         emoji.use { sessionVerificationEmoji ->
                             VerificationEmoji(
                                 number = sessionVerificationData.indices[index].toInt(),
-                                emoji = sessionVerificationEmoji.symbol(),
-                                description = sessionVerificationEmoji.description(),
                             )
                         }
                     },
