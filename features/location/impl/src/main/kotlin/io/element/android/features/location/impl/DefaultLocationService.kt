@@ -7,19 +7,18 @@
 
 package io.element.android.features.location.impl
 
-import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.R
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
+import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultLocationService @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val stringProvider: StringProvider,
 ) : LocationService {
     override fun isServiceAvailable(): Boolean {
-        return context.getString(R.string.maptiler_api_key).isNotEmpty()
+        return stringProvider.getString(R.string.maptiler_api_key).isNotEmpty()
     }
 }
