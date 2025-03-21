@@ -110,7 +110,7 @@ fun VerifySelfSessionView(
                     onContinueClick = onFinish,
                 )
             },
-            paddingValues = padding,
+            contentPadding = padding,
             isScrollable = true,
         ) {
             VerifySelfSessionContent(

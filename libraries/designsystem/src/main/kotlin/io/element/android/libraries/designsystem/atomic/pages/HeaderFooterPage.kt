@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * @param modifier Classical modifier.
- * @param paddingValues padding values to apply to the content.
+ * @param contentPadding padding values to apply to the content.
  * @param containerColor color of the container. Set to [Color.Transparent] if you provide a background in the [modifier].
  * @param isScrollable if the whole content should be scrollable.
  * @param background optional background component.
@@ -48,7 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues = PaddingValues(20.dp),
+    contentPadding: PaddingValues = PaddingValues(20.dp),
     containerColor: Color = ElementTheme.colors.bgCanvasDefault,
     isScrollable: Boolean = false,
     background: @Composable () -> Unit = {},
@@ -61,20 +60,20 @@ fun HeaderFooterPage(
         modifier = modifier,
         topBar = topBar,
         containerColor = containerColor,
-    ) { padding ->
+    ) { insetsPadding ->
         val layoutDirection = LocalLayoutDirection.current
-        val contentPadding = remember(padding, layoutDirection) {
+        val contentInsetsPadding = remember(insetsPadding, layoutDirection) {
             PaddingValues(
-                start = padding.calculateStartPadding(layoutDirection),
-                top = padding.calculateTopPadding(),
-                end = padding.calculateEndPadding(layoutDirection),
+                start = insetsPadding.calculateStartPadding(layoutDirection),
+                top = insetsPadding.calculateTopPadding(),
+                end = insetsPadding.calculateEndPadding(layoutDirection),
             )
         }
-        val footerPadding = remember(padding, layoutDirection) {
+        val footerInsetsPadding = remember(insetsPadding, layoutDirection) {
             PaddingValues(
-                start = padding.calculateStartPadding(layoutDirection),
-                end = padding.calculateEndPadding(layoutDirection),
-                bottom = padding.calculateBottomPadding(),
+                start = insetsPadding.calculateStartPadding(layoutDirection),
+                end = insetsPadding.calculateEndPadding(layoutDirection),
+                bottom = insetsPadding.calculateBottomPadding(),
             )
         }
         Box {
@@ -84,8 +83,8 @@ fun HeaderFooterPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues = paddingValues)
-                    .consumeWindowInsets(padding)
+                    .padding(paddingValues = contentPadding)
+                    .consumeWindowInsets(insetsPadding)
                     .imePadding(),
             ) {
                 // Content
@@ -100,7 +99,7 @@ fun HeaderFooterPage(
                             }
                         }
                         // Apply insets here so if the content is scrollable it can get below the top app bar if needed
-                        .padding(contentPadding)
+                        .padding(contentInsetsPadding)
                         .weight(1f)
                 ) {
                     // Header
@@ -113,7 +112,7 @@ fun HeaderFooterPage(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .padding(footerPadding)
+                        .padding(footerInsetsPadding)
                 ) {
                     footer()
                 }
