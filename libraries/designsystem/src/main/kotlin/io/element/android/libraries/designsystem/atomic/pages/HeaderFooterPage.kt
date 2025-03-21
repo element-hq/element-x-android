@@ -10,7 +10,8 @@ package io.element.android.libraries.designsystem.atomic.pages
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -55,15 +57,26 @@ fun HeaderFooterPage(
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
-    val topBar = remember { movableContentOf(topBar) }
-    val header = remember { movableContentOf(header) }
-    val footer = remember { movableContentOf(footer) }
-    val content = remember { movableContentOf(content) }
     Scaffold(
         modifier = modifier,
         topBar = topBar,
         containerColor = containerColor,
     ) { padding ->
+        val layoutDirection = LocalLayoutDirection.current
+        val contentPadding = remember(padding, layoutDirection) {
+            PaddingValues(
+                start = padding.calculateStartPadding(layoutDirection),
+                top = padding.calculateTopPadding(),
+                end = padding.calculateEndPadding(layoutDirection),
+            )
+        }
+        val footerPadding = remember(padding, layoutDirection) {
+            PaddingValues(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding(),
+            )
+        }
         Box {
             background()
 
@@ -71,31 +84,28 @@ fun HeaderFooterPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .run {
-                        if (isScrollable) {
-                            verticalScroll(rememberScrollState())
-                        } else {
-                            Modifier
-                        }
-                    }
                     .padding(paddingValues = paddingValues)
-                    .padding(padding)
                     .consumeWindowInsets(padding)
-                    .imePadding()
+                    .imePadding(),
             ) {
-                // Header
-                header()
-
                 // Content
                 Column(
-                    modifier = if (isScrollable) Modifier.fillMaxSize() else Modifier.weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .run {
+                            if (isScrollable) {
+                                verticalScroll(rememberScrollState())
+                            } else {
+                                Modifier
+                            }
+                        }
+                        // Apply insets here so if the content is scrollable it can get below the top app bar if needed
+                        .padding(contentPadding)
+                        .weight(1f)
                 ) {
+                    // Header
+                    header()
                     content()
-                }
-
-                // Spacer (only needed for scrollable content)
-                if (isScrollable) {
-                    Spacer(modifier = Modifier.weight(1f))
                 }
 
                 // Footer
@@ -103,6 +113,7 @@ fun HeaderFooterPage(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
+                        .padding(footerPadding)
                 ) {
                     footer()
                 }
@@ -117,8 +128,7 @@ internal fun HeaderFooterPagePreview() = ElementPreview {
     HeaderFooterPage(
         content = {
             Box(
-                Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -160,8 +170,7 @@ internal fun HeaderFooterPageScrollablePreview() = ElementPreview {
     HeaderFooterPage(
         content = {
             Box(
-                Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
