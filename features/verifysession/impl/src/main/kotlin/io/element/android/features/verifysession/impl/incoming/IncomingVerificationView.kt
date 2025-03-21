@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -226,7 +227,11 @@ private fun IncomingVerificationBottomMenu(
         }
         is Step.Verifying -> {
             if (step.isWaiting) {
-                // Show nothing
+                // Add invisible buttons to keep the same screen layout
+                VerificationBottomMenu {
+                    InvisibleButton()
+                    InvisibleButton()
+                }
             } else {
                 VerificationBottomMenu {
                     Button(

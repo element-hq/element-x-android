@@ -276,7 +276,11 @@ private fun VerifySelfSessionBottomMenu(
         is Step.AwaitingOtherDeviceResponse -> Unit
         is Step.Verifying -> {
             if (isVerifying) {
-                // Show nothing
+                // Add invisible buttons to keep the same screen layout
+                VerificationBottomMenu {
+                    InvisibleButton()
+                    InvisibleButton()
+                }
             } else {
                 VerificationBottomMenu {
                     Button(

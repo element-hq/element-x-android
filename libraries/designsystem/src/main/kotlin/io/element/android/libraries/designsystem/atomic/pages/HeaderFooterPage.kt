@@ -100,11 +100,13 @@ fun HeaderFooterPage(
                         }
                         // Apply insets here so if the content is scrollable it can get below the top app bar if needed
                         .padding(contentInsetsPadding)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     // Header
                     header()
-                    content()
+                    Box(modifier = Modifier.weight(1f)) {
+                        content()
+                    }
                 }
 
                 // Footer
