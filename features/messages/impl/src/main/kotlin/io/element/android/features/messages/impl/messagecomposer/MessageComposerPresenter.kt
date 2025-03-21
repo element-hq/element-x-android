@@ -30,6 +30,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
@@ -104,6 +105,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val roomAliasSuggestionsDataSource: RoomAliasSuggestionsDataSource,
@@ -155,7 +157,8 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
+            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing) &&
+                locationService.isServiceAvailable()
         }
 
         val canCreatePoll = remember { mutableStateOf(false) }

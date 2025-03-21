@@ -49,6 +49,7 @@ dependencies {
     testImplementation(projects.libraries.testtags)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

@@ -18,6 +18,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -1536,6 +1538,7 @@ class MessageComposerPresenterTest {
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this.pickerProvider,
         featureFlagService: FeatureFlagService = this.featureFlagService,
+        locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
@@ -1558,6 +1561,7 @@ class MessageComposerPresenterTest {
         mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
+        locationService = locationService,
         messageComposerContext = DefaultMessageComposerContext(),
         richTextEditorStateFactory = TestRichTextEditorStateFactory(),
         roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),

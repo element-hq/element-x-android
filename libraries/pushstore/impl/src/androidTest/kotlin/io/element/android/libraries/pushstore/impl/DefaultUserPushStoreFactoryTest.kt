@@ -10,7 +10,6 @@ package io.element.android.libraries.pushstore.impl
 import androidx.test.platform.app.InstrumentationRegistry
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
-import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -28,7 +27,7 @@ class DefaultUserPushStoreFactoryTest {
     fun testParallelCreation() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
         val sessionId = SessionId("@alice:server.org")
-        val userPushStoreFactory = DefaultUserPushStoreFactory(context, NoOpSessionObserver())
+        val userPushStoreFactory = DefaultUserPushStoreFactory(context)
         var userPushStore1: UserPushStore? = null
         val thread1 = thread {
             userPushStore1 = userPushStoreFactory.getOrCreate(sessionId)
