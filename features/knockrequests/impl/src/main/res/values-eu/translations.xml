@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Bai, onartu guztiak"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Onartu eskaera guztiak"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Onartu guztiak"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Bai, ukatu eta ezarri debekua"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Bai, ukatu"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Ukatu sarbidea"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Ukatu eta ezarri debekua"</string>
+  <string name="screen_knock_requests_list_title">"Sartzeko eskaerak"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s + beste %2$d gelara batu nahi dute"</item>
+    <item quantity="other">"%1$s + beste %2$d gelara batu nahi dute"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Ikusi guztiak"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Onartu"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s(e)k gela honetara sartu nahi du"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Ikusi"</string>
+</resources>

@@ -7,34 +7,43 @@
 
 package io.element.android.features.roomdetails.impl
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.lambda.lambdaError
 
 fun aMatrixRoom(
+    sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
     rawName: String? = displayName,
     topic: String? = A_ROOM_TOPIC,
     avatarUrl: String? = AN_AVATAR_URL,
+    canonicalAlias: RoomAlias? = A_ROOM_ALIAS,
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
+    activeMemberCount: Long = 1,
+    joinedMemberCount: Long = 1,
+    invitedMemberCount: Long = 0,
     notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
-    emitRoomInfo: Boolean = false,
     canInviteResult: (UserId) -> Result<Boolean> = { lambdaError() },
     canBanResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    canKickResult: (UserId) -> Result<Boolean> = { lambdaError() },
     canSendStateResult: (UserId, StateEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
     userDisplayNameResult: (UserId) -> Result<String?> = { lambdaError() },
     userAvatarUrlResult: () -> Result<String?> = { lambdaError() },
@@ -44,17 +53,20 @@ fun aMatrixRoom(
     removeAvatarResult: () -> Result<Unit> = { lambdaError() },
     canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
     getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
+    userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
+    kickUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
+    banUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
+    unBanUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
+    updateCanonicalAliasResult: (RoomAlias?, List<RoomAlias>) -> Result<Unit> = { _, _ -> lambdaError() },
+    publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
+    removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
 ) = FakeMatrixRoom(
+    sessionId = sessionId,
     roomId = roomId,
-    displayName = displayName,
-    topic = topic,
-    avatarUrl = avatarUrl,
-    isEncrypted = isEncrypted,
-    isPublic = isPublic,
-    isDirect = isDirect,
     notificationSettingsService = notificationSettingsService,
     canInviteResult = canInviteResult,
     canBanResult = canBanResult,
+    canKickResult = canKickResult,
     canSendStateResult = canSendStateResult,
     userDisplayNameResult = userDisplayNameResult,
     userAvatarUrlResult = userAvatarUrlResult,
@@ -64,17 +76,25 @@ fun aMatrixRoom(
     removeAvatarResult = removeAvatarResult,
     canUserJoinCallResult = canUserJoinCallResult,
     getUpdatedMemberResult = getUpdatedMemberResult,
-).apply {
-    if (emitRoomInfo) {
-        givenRoomInfo(
-            aRoomInfo(
-                name = displayName,
-                rawName = rawName,
-                topic = topic,
-                avatarUrl = avatarUrl,
-                isDirect = isDirect,
-                joinRule = joinRule,
-            )
-        )
-    }
-}
+    userRoleResult = userRoleResult,
+    kickUserResult = kickUserResult,
+    banUserResult = banUserResult,
+    unBanUserResult = unBanUserResult,
+    updateCanonicalAliasResult = updateCanonicalAliasResult,
+    publishRoomAliasInRoomDirectoryResult = publishRoomAliasInRoomDirectoryResult,
+    removeRoomAliasFromRoomDirectoryResult = removeRoomAliasFromRoomDirectoryResult,
+    initialRoomInfo = aRoomInfo(
+        name = displayName,
+        rawName = rawName,
+        topic = topic,
+        avatarUrl = avatarUrl,
+        canonicalAlias = canonicalAlias,
+        isDirect = isDirect,
+        isPublic = isPublic,
+        isEncrypted = isEncrypted,
+        joinRule = joinRule,
+        joinedMembersCount = joinedMemberCount,
+        activeMembersCount = activeMemberCount,
+        invitedMembersCount = invitedMemberCount,
+    )
+)

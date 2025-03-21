@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Sì, annulla"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Sei sicuro di voler annullare la tua richiesta di accesso a questa stanza?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Annulla la richiesta di accesso"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Sì, rifiuta e blocca"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Sei sicuro di voler rifiutare l\'invito a entrare in questa stanza? Ciò impedirà a %1$s di contattarti o invitarti nuovamente in una stanza."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Rifiuta invito e blocca"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Rifiuta e blocca"</string>
   <string name="screen_join_room_fail_message">"L\'accesso alla stanza non è riuscito."</string>
   <string name="screen_join_room_fail_reason">"Questa stanza è solo su invito o potrebbero esserci delle restrizioni all\'accesso al livello dello spazio."</string>
   <string name="screen_join_room_forget_action">"Dimentica questa stanza"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Messaggio (opzionale)"</string>
   <string name="screen_join_room_knock_sent_description">"Riceverai un invito a entrare nella stanza se la tua richiesta viene accettata."</string>
   <string name="screen_join_room_knock_sent_title">"Richiesta di accesso inviata"</string>
+  <string name="screen_join_room_loading_alert_message">"Non è stato possibile visualizzare l\'anteprima della stanza. Ciò può essere dovuto a problemi di rete o del server."</string>
+  <string name="screen_join_room_loading_alert_title">"Non è stato possibile visualizzare l\'anteprima di questa stanza"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s non supporta ancora gli spazi. Puoi accedere agli spazi sul web."</string>
   <string name="screen_join_room_space_not_supported_title">"Gli spazi non sono ancora supportati"</string>
   <string name="screen_join_room_subtitle_knock">"Clicca sul pulsante qui sotto e un amministratore della stanza riceverà una notifica. Potrai partecipare alla conversazione una volta approvato."</string>

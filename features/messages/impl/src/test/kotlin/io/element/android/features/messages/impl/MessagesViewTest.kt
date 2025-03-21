@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMess
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -50,6 +51,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.testtags.TestTags
@@ -126,6 +128,9 @@ class MessagesViewTest {
     fun `clicking on an Event invoke expected callback`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
         val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            ),
             eventSink = eventsRecorder
         )
         val timelineItem = state.timelineState.timelineItems.first()
@@ -181,6 +186,9 @@ class MessagesViewTest {
                 canRedactOther = userHasPermissionToRedactOther,
                 canSendReaction = userHasPermissionToSendReaction,
                 canPinUnpin = userCanPinEvent,
+            ),
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
             ),
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
@@ -349,7 +357,10 @@ class MessagesViewTest {
     fun `clicking on a reaction emits the expected Event`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>()
         val state = aMessagesState(
-            eventSink = eventsRecorder
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            ),
+            eventSink = eventsRecorder,
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
         rule.setMessagesView(
@@ -363,6 +374,9 @@ class MessagesViewTest {
     fun `long clicking on a reaction emits the expected Event`() {
         val eventsRecorder = EventsRecorder<ReactionSummaryEvents>()
         val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            ),
             reactionSummaryState = aReactionSummaryState(
                 target = null,
                 eventSink = eventsRecorder,
@@ -380,6 +394,9 @@ class MessagesViewTest {
     fun `clicking on more reaction emits the expected Event`() {
         val eventsRecorder = EventsRecorder<CustomReactionEvents>()
         val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            ),
             customReactionState = aCustomReactionState(
                 eventSink = eventsRecorder,
             ),
@@ -396,7 +413,11 @@ class MessagesViewTest {
     @Test
     fun `clicking on more reaction from action list emits the expected Event`() {
         val eventsRecorder = EventsRecorder<CustomReactionEvents>()
-        val state = aMessagesState()
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+            ),
+        )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
         val stateWithActionListState = state.copy(
             actionListState = anActionListState(
@@ -538,7 +559,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                knockRequestsBannerView = {}
+                knockRequestsBannerView = {},
             )
         }
     }

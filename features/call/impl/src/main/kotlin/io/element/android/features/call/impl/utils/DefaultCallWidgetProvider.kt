@@ -38,7 +38,8 @@ class DefaultCallWidgetProvider @Inject constructor(
         val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
             ?: elementCallBaseUrlProvider.provides(matrixClient)
             ?: ElementCallConfig.DEFAULT_BASE_URL
-        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
+        val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
+        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = isEncrypted)
         val callUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
             clientId = clientId,

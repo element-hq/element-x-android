@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Nem tudja megerősíteni?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Új helyreállítási kulcs létrehozása"</string>
+  <string name="screen_identity_confirmation_subtitle">"A biztonságos üzenetkezelés beállításához ellenőrizze ezt az eszközt."</string>
+  <string name="screen_identity_confirmation_title">"Erősítse meg, hogy Ön az"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Másik eszköz használata"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Helyreállítási kulcs használata"</string>
+  <string name="screen_identity_confirmed_subtitle">"Mostantól biztonságosan olvashat vagy küldhet üzeneteket, és bármelyik csevegőpartnere megbízhat ebben az eszközben."</string>
+  <string name="screen_identity_confirmed_title">"Eszköz ellenőrizve"</string>
+  <string name="screen_identity_use_another_device">"Másik eszköz használata"</string>
+  <string name="screen_identity_waiting_on_other_device">"Várakozás a másik eszközre…"</string>
   <string name="screen_notification_optin_subtitle">"A beállításokat később is módosíthatja."</string>
   <string name="screen_notification_optin_title">"Értesítések engedélyezése, hogy soha ne maradjon le egyetlen üzenetről sem"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Adja meg a helyreállítási kulcsot"</string>
   <string name="screen_welcome_bullet_1">"A hívások, szavazások, keresések és egyebek az év további részében kerülnek hozzáadásra."</string>
   <string name="screen_welcome_bullet_2">"A titkosított szobák üzenetelőzményei nem lesznek elérhetők ebben a frissítésben."</string>
   <string name="screen_welcome_bullet_3">"Szeretnénk hallani a véleményét, ossza meg velünk a beállítások oldalon."</string>

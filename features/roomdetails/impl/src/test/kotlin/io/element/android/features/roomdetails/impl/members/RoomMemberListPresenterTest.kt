@@ -19,6 +19,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.EventsRecorder
@@ -59,7 +60,8 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val loadedMembersState = awaitItem()
             assertThat(loadedMembersState.roomMembers.isLoading()).isFalse()
-            assertThat(loadedMembersState.roomMembers.dataOrNull()?.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.invited)
+                .isEqualTo(listOf(RoomMemberWithIdentityState(aVictor(), null), RoomMemberWithIdentityState(aWalter(), null)))
             assertThat(loadedMembersState.roomMembers.dataOrNull()?.joined).isNotEmpty()
         }
     }
@@ -129,7 +131,7 @@ class RoomMemberListPresenterTest {
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
             assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
-            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.dataOrNull()!!.joined.first().displayName)
+            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.dataOrNull()!!.joined.first().roomMember.displayName)
                 .isEqualTo("Alice")
         }
     }
@@ -259,11 +261,13 @@ private fun TestScope.createPresenter(
     ),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
     roomMembersModerationStateLambda: () -> RoomMembersModerationState = { aRoomMembersModerationState() },
+    encryptedService: FakeEncryptionService = FakeEncryptionService(),
     navigator: RoomMemberListNavigator = object : RoomMemberListNavigator {}
 ) = RoomMemberListPresenter(
     room = matrixRoom,
     roomMemberListDataSource = roomMemberListDataSource,
     coroutineDispatchers = coroutineDispatchers,
     roomMembersModerationPresenter = { roomMembersModerationStateLambda() },
-    navigator = navigator
+    encryptionService = encryptedService,
+    navigator = navigator,
 )

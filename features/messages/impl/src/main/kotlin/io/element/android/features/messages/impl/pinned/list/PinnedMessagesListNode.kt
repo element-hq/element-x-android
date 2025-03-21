@@ -8,10 +8,12 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import android.content.Context
+import android.view.HapticFeedbackConstants
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -23,6 +25,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -30,6 +33,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(RoomScope::class)
 class PinnedMessagesListNode @AssistedInject constructor(
@@ -98,6 +102,7 @@ class PinnedMessagesListNode @AssistedInject constructor(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
             val context = LocalContext.current
+            val view = LocalView.current
             val state = presenter.present()
             PinnedMessagesListView(
                 state = state,
@@ -105,6 +110,15 @@ class PinnedMessagesListNode @AssistedInject constructor(
                 onEventClick = ::onEventClick,
                 onUserDataClick = ::onUserDataClick,
                 onLinkClick = { url -> onLinkClick(context, url) },
+                onLinkLongClick = {
+                    view.performHapticFeedback(
+                        HapticFeedbackConstants.LONG_PRESS
+                    )
+                    context.copyToClipboard(
+                        it,
+                        context.getString(CommonStrings.common_copied_to_clipboard)
+                    )
+                },
                 modifier = modifier
             )
         }

@@ -65,7 +65,7 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
-      - uses: rnkdsh/action-upload-diawi@v1.5.6
+      - uses: rnkdsh/action-upload-diawi@v1.5.7
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true
@@ -89,7 +89,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
         if: ${{ matrix.variant == 'release' }}
-        run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew bundleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
         if: ${{ matrix.variant == 'nightly' }}
         run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES

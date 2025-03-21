@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import kotlinx.coroutines.CoroutineScope
@@ -202,25 +203,36 @@ internal class RustEncryptionService(
     }
 
     override suspend fun isUserVerified(userId: UserId): Result<Boolean> = runCatching {
-        getUserIdentity(userId).isVerified()
+        getUserIdentityInternal(userId).isVerified()
     }
 
     override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatching {
-        getUserIdentity(userId).pin()
+        getUserIdentityInternal(userId).pin()
     }
 
     override suspend fun withdrawVerification(userId: UserId): Result<Unit> = runCatching {
-        getUserIdentity(userId).withdrawVerification()
+        getUserIdentityInternal(userId).withdrawVerification()
     }
 
-    private suspend fun getUserIdentity(userId: UserId): UserIdentity {
+    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = runCatching {
+        val identity = getUserIdentityInternal(userId)
+        val isVerified = identity.isVerified()
+        when {
+            identity.hasVerificationViolation() -> IdentityState.VerificationViolation
+            isVerified -> IdentityState.Verified
+            !isVerified -> IdentityState.Pinned
+            else -> null
+        }
+    }
+
+    suspend fun getUserIdentityInternal(userId: UserId): UserIdentity {
         return service.userIdentity(
             userId = userId.value,
             // requestFromHomeserverIfNeeded = true,
         ) ?: error("User identity not found")
     }
 
-    fun destroy() {
-        service.destroy()
+    fun close() {
+        service.close()
     }
 }

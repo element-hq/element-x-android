@@ -46,6 +46,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconColorButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -54,8 +55,6 @@ import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
-import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
@@ -141,10 +140,9 @@ fun TextComposer(
                     Spacer(modifier = Modifier.width(16.dp))
                 }
                 else -> {
-                    ComposerOptionsButton(
-                        modifier = Modifier
-                            .size(48.dp),
-                        onClick = onAddAttachment
+                    IconColorButton(
+                        onClick = onAddAttachment,
+                        imageVector = CompoundIcons.Plus(),
                     )
                 }
             }
@@ -285,7 +283,10 @@ fun TextComposer(
             modifier = layoutModifier,
             textInput = textInput,
             dismissTextFormattingButton = {
-                DismissTextFormattingButton(onClick = onDismissTextFormatting)
+                IconColorButton(
+                    onClick = onDismissTextFormatting,
+                    imageVector = CompoundIcons.Close(),
+                )
             },
             textFormatting = textFormattingOptions,
             sendButton = sendButton,

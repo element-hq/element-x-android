@@ -27,6 +27,7 @@ class FirebasePushProvider @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
     private val firebaseTokenRotator: FirebaseTokenRotator,
+    private val firebaseGatewayProvider: FirebaseGatewayProvider,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
     override val name = FirebaseConfig.NAME
@@ -48,7 +49,7 @@ class FirebasePushProvider @Inject constructor(
         return pusherSubscriber.registerPusher(
             matrixClient = matrixClient,
             pushKey = pushKey,
-            gateway = FirebaseConfig.PUSHER_HTTP_URL,
+            gateway = firebaseGatewayProvider.getFirebaseGateway(),
         )
     }
 
@@ -60,7 +61,7 @@ class FirebasePushProvider @Inject constructor(
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
             Result.success(Unit)
         } else {
-            pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
+            pusherSubscriber.unregisterPusher(matrixClient, pushKey, firebaseGatewayProvider.getFirebaseGateway())
         }
     }
 
@@ -72,7 +73,7 @@ class FirebasePushProvider @Inject constructor(
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
         return firebaseStore.getFcmToken()?.let { fcmToken ->
             CurrentUserPushConfig(
-                url = FirebaseConfig.PUSHER_HTTP_URL,
+                url = firebaseGatewayProvider.getFirebaseGateway(),
                 pushKey = fcmToken
             )
         }

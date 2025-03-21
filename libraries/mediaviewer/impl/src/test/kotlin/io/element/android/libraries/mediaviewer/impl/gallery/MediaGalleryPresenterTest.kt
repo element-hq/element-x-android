@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
@@ -51,7 +52,7 @@ class MediaGalleryPresenterTest {
                 startLambda = startLambda,
             ),
             room = FakeMatrixRoom(
-                displayName = A_ROOM_NAME,
+                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
@@ -70,7 +71,7 @@ class MediaGalleryPresenterTest {
     fun `present - change mode`() = runTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
-                displayName = A_ROOM_NAME,
+                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
@@ -100,7 +101,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
-                displayName = A_ROOM_NAME,
+                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                 createTimelineResult = { Result.success(FakeTimeline()) },
                 canRedactOwnResult = { Result.success(canDeleteOwn) }
             )
@@ -143,7 +144,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
                 sessionId = A_USER_ID,
-                displayName = A_ROOM_NAME,
+                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                 createTimelineResult = { Result.success(FakeTimeline()) },
                 canRedactOtherResult = { Result.success(canDeleteOther) }
             )
@@ -176,7 +177,7 @@ class MediaGalleryPresenterTest {
     fun `present - delete bottom sheet`() = runTest {
         val presenter = createMediaGalleryPresenter(
             room = FakeMatrixRoom(
-                displayName = A_ROOM_NAME,
+                initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )

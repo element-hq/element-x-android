@@ -29,6 +29,7 @@
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
+  <string name="a11y_view_details">"Visa detaljer"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
   <string name="action_accept">"Godkänn"</string>
@@ -144,13 +145,16 @@
   <string name="common_copied_to_clipboard">"Kopierad till klippbordet"</string>
   <string name="common_copyright">"Upphovsrätt"</string>
   <string name="common_creating_room">"Skapar rum …"</string>
+  <string name="common_current_user_canceled_knock">"Begäran avbruten"</string>
   <string name="common_current_user_left_room">"Lämnade rummet"</string>
+  <string name="common_current_user_rejected_invite">"Inbjudan avvisad"</string>
   <string name="common_dark">"Mörkt"</string>
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
   <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
   <string name="common_do_not_show_this_again">"Visa inte detta igen"</string>
+  <string name="common_download_failed">"Nedladdningen misslyckades"</string>
   <string name="common_downloading">"Laddar ner"</string>
   <string name="common_edited_suffix">"(redigerad)"</string>
   <string name="common_editing">"Redigerar"</string>
@@ -168,6 +172,8 @@ Anledning:%1$s."</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favoriter"</string>
   <string name="common_file">"Fil"</string>
+  <string name="common_file_deleted">"Fil borttagen"</string>
+  <string name="common_file_saved">"Fil sparad"</string>
   <string name="common_file_saved_on_disk_android">"Fil sparad i Download"</string>
   <string name="common_forward_message">"Vidarebefordra meddelande"</string>
   <string name="common_frequently_used">"Används ofta"</string>
@@ -180,6 +186,7 @@ Anledning:%1$s."</string>
   <string name="common_light">"Ljust"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
+  <string name="common_loading_more">"Laddar mer …"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d medlem"</item>
     <item quantity="other">"%1$d medlemmar"</item>
@@ -190,6 +197,7 @@ Anledning:%1$s."</string>
   <string name="common_message_removed">"Meddelande borttaget"</string>
   <string name="common_modern">"Modernt"</string>
   <string name="common_mute">"Tysta"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Inga resultat"</string>
   <string name="common_no_room_name">"Inget rumsnamn"</string>
   <string name="common_offline">"Frånkopplad"</string>
@@ -267,6 +275,7 @@ Anledning:%1$s."</string>
   <string name="common_verified">"Verifierad"</string>
   <string name="common_verify_device">"Verifiera enheten"</string>
   <string name="common_verify_identity">"Verifiera identitet"</string>
+  <string name="common_verify_user">"Verifiera användare"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Röstmeddelande"</string>
   <string name="common_waiting">"Väntar …"</string>
@@ -275,6 +284,7 @@ Anledning:%1$s."</string>
   <string name="crypto_identity_change_pin_violation">"Identitet för %1$s verkar ha ändrats. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Identitet för %1$s %2$s verkar ha förändrats. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Verifierad identitet för %1$s har ändrats."</string>
   <string name="crypto_identity_change_verification_violation_new">"Verifierad identitet för %1$s %2$s har ändrats.%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Återkalla verifiering"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
@@ -293,6 +303,7 @@ Anledning:%1$s."</string>
   <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
   <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s är inte behörig att komma åt din mikrofon. Aktivera åtkomst för att spela in ett röstmeddelande."</string>
+  <string name="error_network_or_server_issue">"Detta kan bero på nätverks- eller serverproblem."</string>
   <string name="error_room_address_already_exists">"Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn"</string>
   <string name="error_room_address_invalid_symbols">"Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
@@ -330,6 +341,7 @@ Anledning:%1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ditt meddelande skickades inte eftersom du inte har verifierat en eller flera av dina enheter"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
+  <string name="screen_room_event_pill">"Meddelande i %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Fästa meddelanden"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>

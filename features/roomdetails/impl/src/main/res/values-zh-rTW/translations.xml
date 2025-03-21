@@ -9,11 +9,11 @@
   <string name="screen_room_change_permissions_ban_people">"管理黑名單"</string>
   <string name="screen_room_change_permissions_delete_messages">"移除訊息"</string>
   <string name="screen_room_change_permissions_everyone">"所有人"</string>
-  <string name="screen_room_change_permissions_invite_people">"邀請夥伴"</string>
+  <string name="screen_room_change_permissions_invite_people">"邀請夥伴並接受加入請求"</string>
   <string name="screen_room_change_permissions_member_moderation">"成員管理"</string>
   <string name="screen_room_change_permissions_messages_and_content">"訊息與內容"</string>
   <string name="screen_room_change_permissions_moderators">"管理員和版主"</string>
-  <string name="screen_room_change_permissions_remove_people">"踢出成員"</string>
+  <string name="screen_room_change_permissions_remove_people">"移除夥伴並拒絕加入請求"</string>
   <string name="screen_room_change_permissions_room_avatar">"變更聊天室大頭照"</string>
   <string name="screen_room_change_permissions_room_details">"聊天室資訊"</string>
   <string name="screen_room_change_permissions_room_name">"變更聊天室名稱"</string>
@@ -56,6 +56,7 @@
   <string name="screen_room_details_notification_mode_default">"預設"</string>
   <string name="screen_room_details_notification_title">"通知"</string>
   <string name="screen_room_details_pinned_events_row_title">"釘選訊息"</string>
+  <string name="screen_room_details_profile_row_title">"設定檔"</string>
   <string name="screen_room_details_requests_to_join_title">"請求加入"</string>
   <string name="screen_room_details_roles_and_permissions">"身份與權限"</string>
   <string name="screen_room_details_room_name_label">"聊天室名稱"</string>

@@ -23,11 +23,11 @@ internal fun aDecimalsSessionVerificationData(
 }
 
 private fun aVerificationEmojiList() = listOf(
-    VerificationEmoji(number = 27, emoji = "🍕", description = "Pizza"),
-    VerificationEmoji(number = 54, emoji = "🚀", description = "Rocket"),
-    VerificationEmoji(number = 54, emoji = "🚀", description = "Rocket"),
-    VerificationEmoji(number = 42, emoji = "📕", description = "Book"),
-    VerificationEmoji(number = 48, emoji = "🔨", description = "Hammer"),
-    VerificationEmoji(number = 48, emoji = "🔨", description = "Hammer"),
-    VerificationEmoji(number = 63, emoji = "📌", description = "Pin"),
+    VerificationEmoji(number = 27),
+    VerificationEmoji(number = 54),
+    VerificationEmoji(number = 54),
+    VerificationEmoji(number = 42),
+    VerificationEmoji(number = 48),
+    VerificationEmoji(number = 48),
+    VerificationEmoji(number = 63),
 )

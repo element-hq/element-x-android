@@ -26,12 +26,12 @@ class RoomCallStatePresenter @Inject constructor(
 ) : Presenter<RoomCallState> {
     @Composable
     override fun present(): RoomCallState {
-        val roomInfo by room.roomInfoFlow.collectAsState(null)
+        val roomInfo by room.roomInfoFlow.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canJoinCall by room.canCall(updateKey = syncUpdateFlow.value)
         val isUserInTheCall by remember {
             derivedStateOf {
-                room.sessionId in roomInfo?.activeRoomCallParticipants.orEmpty()
+                room.sessionId in roomInfo.activeRoomCallParticipants
             }
         }
         val currentCall by currentCallService.currentCall.collectAsState()
@@ -41,7 +41,7 @@ class RoomCallStatePresenter @Inject constructor(
             }
         }
         val callState = when {
-            roomInfo?.hasRoomCall == true -> RoomCallState.OnGoing(
+            roomInfo.hasRoomCall -> RoomCallState.OnGoing(
                 canJoinCall = canJoinCall,
                 isUserInTheCall = isUserInTheCall,
                 isUserLocallyInTheCall = isUserLocallyInTheCall,

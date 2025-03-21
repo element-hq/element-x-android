@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Asegurarse de que Firebase esté disponible."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase no está disponible."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase está disponible."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Verificar Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Asegurarse de que el token de Firebase esté disponible."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Se desconoce el token de Firebase."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Token de Firebase: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Verificar token de Firebase"</string>
+</resources>

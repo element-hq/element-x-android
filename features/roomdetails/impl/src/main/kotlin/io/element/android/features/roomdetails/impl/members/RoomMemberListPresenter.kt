@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -24,13 +25,23 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
+import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 class RoomMemberListPresenter @AssistedInject constructor(
@@ -38,6 +49,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomMembersModerationPresenter: Presenter<RoomMembersModerationState>,
+    private val encryptionService: EncryptionService,
     @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
     @AssistedFactory
@@ -60,12 +72,20 @@ class RoomMemberListPresenter @AssistedInject constructor(
 
         val roomModerationState = roomMembersModerationPresenter.present()
 
+        val roomMemberIdentityStates by produceState(persistentMapOf<UserId, IdentityState>()) {
+            room.roomMemberIdentityStateChange()
+                .onEach { identities ->
+                    value = identities.associateBy({ it.identityRoomMember.userId }, { it.identityState }).toPersistentMap()
+                }
+                .launchIn(this)
+        }
+
         // Ensure we load the latest data when entering this screen
         LaunchedEffect(Unit) {
             room.updateMembers()
         }
 
-        LaunchedEffect(membersState) {
+        LaunchedEffect(membersState, roomMemberIdentityStates) {
             if (membersState is MatrixRoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
@@ -84,11 +104,17 @@ class RoomMemberListPresenter @AssistedInject constructor(
                     return@withContext
                 }
                 val result = RoomMembers(
-                    invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                    invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList())
+                        .map { it.withIdentityState(roomMemberIdentityStates) }
+                        .toImmutableList(),
                     joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
                         .sortedWith(PowerLevelRoomMemberComparator())
+                        .map { it.withIdentityState(roomMemberIdentityStates) }
                         .toImmutableList(),
-                    banned = members.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
+                    banned = members.getOrDefault(RoomMembershipState.BAN, emptyList())
+                        .sortedBy { it.userId.value }
+                        .map { it.withIdentityState(roomMemberIdentityStates) }
+                        .toImmutableList(),
                 )
                 roomMembers = if (membersState is MatrixRoomMembersState.Pending) {
                     AsyncData.Loading(result)
@@ -108,11 +134,17 @@ class RoomMemberListPresenter @AssistedInject constructor(
                         SearchBarResultState.NoResultsFound()
                     } else {
                         val result = RoomMembers(
-                            invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                            invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList())
+                                .map { it.withIdentityState(roomMemberIdentityStates) }
+                                .toImmutableList(),
                             joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
                                 .sortedWith(PowerLevelRoomMemberComparator())
+                                .map { it.withIdentityState(roomMemberIdentityStates) }
                                 .toImmutableList(),
-                            banned = results.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
+                            banned = results.getOrDefault(RoomMembershipState.BAN, emptyList())
+                                .sortedBy { it.userId.value }
+                                .map { it.withIdentityState(roomMemberIdentityStates) }
+                                .toImmutableList(),
                         )
                         SearchBarResultState.Results(
                             if (membersState is MatrixRoomMembersState.Pending) {
@@ -148,5 +180,14 @@ class RoomMemberListPresenter @AssistedInject constructor(
             moderationState = roomModerationState,
             eventSink = { handleEvents(it) },
         )
+    }
+
+    private suspend fun RoomMember.withIdentityState(identityStates: ImmutableMap<UserId, IdentityState>): RoomMemberWithIdentityState {
+        return if (room.info().isEncrypted != true) {
+            RoomMemberWithIdentityState(this, null)
+        } else {
+            val identityState = identityStates[userId] ?: encryptionService.getUserIdentity(userId).getOrNull()
+            RoomMemberWithIdentityState(this, identityState)
+        }
     }
 }

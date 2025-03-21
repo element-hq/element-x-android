@@ -38,11 +38,11 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -85,10 +85,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): PinnedMessagesListState {
-        val timelineRoomInfo = remember {
+        val isDm by room.isDmAsState()
+
+        val timelineRoomInfo = remember(isDm) {
             TimelineRoomInfo(
-                isDm = room.isDm,
-                name = room.displayName,
+                isDm = isDm,
+                name = room.info().name,
                 // We don't need to compute those values
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,

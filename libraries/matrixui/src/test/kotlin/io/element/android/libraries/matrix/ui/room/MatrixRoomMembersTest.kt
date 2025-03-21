@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -31,8 +32,10 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emits other member for encrypted DM with 2 joined members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
+            initialRoomInfo = aRoomInfo(
+                isDirect = true,
+                joinedMembersCount = 2,
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -47,8 +50,7 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room is not a dm`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = false,
+            initialRoomInfo = aRoomInfo(isDirect = false)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -63,8 +65,10 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emits other member even if the room is not encrypted`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = false,
-            isDirect = true,
+            initialRoomInfo = aRoomInfo(
+                isDirect = true,
+                activeMembersCount = 2,
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -79,8 +83,7 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room has only 1 member`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
+            initialRoomInfo = aRoomInfo(isDirect = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -95,9 +98,9 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the room has only 3 members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true))
+        }
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1, roomMember2, roomMember3))
@@ -111,8 +114,7 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit null if the other member is not active`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
+            initialRoomInfo = aRoomInfo(isDirect = true),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(
@@ -132,8 +134,10 @@ class MatrixRoomMembersTest {
     fun `getDirectRoomMember emit the other member if there are 2 active members`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
-            isEncrypted = true,
-            isDirect = true,
+            initialRoomInfo = aRoomInfo(
+                isDirect = true,
+                activeMembersCount = 2,
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             matrixRoom.getDirectRoomMember(

@@ -42,6 +42,7 @@ import io.element.android.compound.tokens.generated.internal.DarkColorTokens
 import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.lowHorizontalPaddingValue
@@ -66,17 +67,24 @@ fun SuperButton(
         }
     }
     val isLightTheme = ElementTheme.isLightTheme
-    val colors = remember(isLightTheme) {
-        if (isLightTheme) {
-            listOf(
-                LightColorTokens.colorBlue900,
-                LightColorTokens.colorGreen1100,
-            )
-        } else {
-            listOf(
-                DarkColorTokens.colorBlue900,
-                DarkColorTokens.colorGreen1100,
-            )
+    val colors = if (LocalBuildMeta.current.isEnterpriseBuild) {
+        listOf(
+            ElementTheme.colors.textActionAccent,
+            ElementTheme.colors.textActionAccent,
+        )
+    } else {
+        remember(isLightTheme) {
+            if (isLightTheme) {
+                listOf(
+                    LightColorTokens.colorBlue900,
+                    LightColorTokens.colorGreen1100,
+                )
+            } else {
+                listOf(
+                    DarkColorTokens.colorBlue900,
+                    DarkColorTokens.colorGreen1100,
+                )
+            }
         }
     }
 

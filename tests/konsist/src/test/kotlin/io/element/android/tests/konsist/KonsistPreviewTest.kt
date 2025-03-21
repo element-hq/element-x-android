@@ -66,7 +66,9 @@ class KonsistPreviewTest {
                 "CallScreenPipViewPreview",
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",
+                "FocusedEventPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
+                "HeaderFooterPageScrollablePreview",
                 "IconsCompoundPreview",
                 "IconsOtherPreview",
                 "MarkdownTextComposerEditPreview",
@@ -128,6 +130,7 @@ class KonsistPreviewTest {
                 "TimelineVideoWithCaptionRowPreview",
                 "TimelineViewMessageShieldPreview",
                 "UserAvatarColorsPreview",
+                "UserProfileHeaderSectionWithVerificationViolationPreview",
                 "VoiceItemViewPlayPreview",
             )
             .assertTrue(

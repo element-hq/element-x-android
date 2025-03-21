@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -998,7 +999,6 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         var canUserTriggerRoomNotificationResult = true
         val room = FakeMatrixRoom(
-            isDirect = false,
             canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1007,6 +1007,7 @@ class MessageComposerPresenterTest {
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
+            givenRoomInfo(aRoomInfo(isDirect = false))
         }
         val flagsService = FakeFeatureFlagService(
             mapOf(
@@ -1060,15 +1061,18 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
-            isDirect = true,
-            activeMemberCount = 2,
-            isEncrypted = true,
             canUserTriggerRoomNotificationResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
+                )
+            )
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
                 )
             )
         }

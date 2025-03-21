@@ -70,7 +70,7 @@ class FirebasePushProviderTest {
         assertThat(result).isEqualTo(Result.success(Unit))
         registerPusherResultLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL))
+            .with(value(matrixClient), value("aToken"), value(A_FIREBASE_GATEWAY))
     }
 
     @Test
@@ -117,7 +117,7 @@ class FirebasePushProviderTest {
         assertThat(result).isEqualTo(Result.success(Unit))
         unregisterPusherResultLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL))
+            .with(value(matrixClient), value("aToken"), value(A_FIREBASE_GATEWAY))
     }
 
     @Test
@@ -164,7 +164,7 @@ class FirebasePushProviderTest {
             ),
         )
         val result = firebasePushProvider.getCurrentUserPushConfig()
-        assertThat(result).isEqualTo(CurrentUserPushConfig(FirebaseConfig.PUSHER_HTTP_URL, "aToken"))
+        assertThat(result).isEqualTo(CurrentUserPushConfig(A_FIREBASE_GATEWAY, "aToken"))
     }
 
     @Test
@@ -194,12 +194,14 @@ class FirebasePushProviderTest {
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         isPlayServiceAvailable: IsPlayServiceAvailable = FakeIsPlayServiceAvailable(false),
         firebaseTokenRotator: FirebaseTokenRotator = FakeFirebaseTokenRotator(),
+        firebaseGatewayProvider: FirebaseGatewayProvider = FakeFirebaseGatewayProvider()
     ): FirebasePushProvider {
         return FirebasePushProvider(
             firebaseStore = firebaseStore,
             pusherSubscriber = pusherSubscriber,
             isPlayServiceAvailable = isPlayServiceAvailable,
             firebaseTokenRotator = firebaseTokenRotator,
+            firebaseGatewayProvider = firebaseGatewayProvider,
         )
     }
 }

@@ -40,7 +40,6 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
   <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Összes szoba böngészése"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
 </resources>

@@ -30,7 +30,7 @@
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
   <string name="a11y_view_details">"Vaata üksikasju"</string>
-  <string name="a11y_voice_message_record">"Salvesta häälsõnum"</string>
+  <string name="a11y_voice_message_record">"Salvesta häälsõnum."</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
   <string name="action_accept">"Nõustu"</string>
   <string name="action_add_caption">"Lisa selgitus"</string>
@@ -145,7 +145,9 @@
   <string name="common_copied_to_clipboard">"Kopeeritud lõikelauale"</string>
   <string name="common_copyright">"Autoriõigused"</string>
   <string name="common_creating_room">"Loome jututoa…"</string>
+  <string name="common_current_user_canceled_knock">"Päring on tühistatud"</string>
   <string name="common_current_user_left_room">"Lahkus jututoast"</string>
+  <string name="common_current_user_rejected_invite">"Keeldusid kutsest"</string>
   <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
@@ -285,6 +287,10 @@ Põhjus: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s kasutaja verifitseeritud identiteet on muutunud."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on muutunud. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Võta verifitseerimine tagasi"</string>
+  <string name="dialog_confirm_link_message">"%1$s link viib sind teise veebisaiti %2$s
+
+Kas sa oled kindel, et soovid jätkata?"</string>
+  <string name="dialog_confirm_link_title">"Palun kontrolli seda linki mõttega"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>

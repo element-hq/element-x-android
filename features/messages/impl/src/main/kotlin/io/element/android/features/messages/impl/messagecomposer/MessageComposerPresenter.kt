@@ -202,7 +202,7 @@ class MessageComposerPresenter @AssistedInject constructor(
 
             suspend fun canSendRoomMention(): Boolean {
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !room.isDm && userCanSendAtRoom
+                return !room.isDm() && userCanSendAtRoom
             }
 
             // This will trigger a search immediately when `@` is typed

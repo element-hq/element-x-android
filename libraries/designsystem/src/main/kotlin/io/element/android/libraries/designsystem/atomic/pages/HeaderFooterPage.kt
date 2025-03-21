@@ -10,18 +10,21 @@ package io.element.android.libraries.designsystem.atomic.pages
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -31,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * @param modifier Classical modifier.
- * @param paddingValues padding values to apply to the content.
+ * @param contentPadding padding values to apply to the content.
  * @param containerColor color of the container. Set to [Color.Transparent] if you provide a background in the [modifier].
  * @param isScrollable if the whole content should be scrollable.
  * @param background optional background component.
@@ -44,7 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues = PaddingValues(20.dp),
+    contentPadding: PaddingValues = PaddingValues(20.dp),
     containerColor: Color = ElementTheme.colors.bgCanvasDefault,
     isScrollable: Boolean = false,
     background: @Composable () -> Unit = {},
@@ -53,64 +56,67 @@ fun HeaderFooterPage(
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
-    val topBar = remember { movableContentOf(topBar) }
-    val header = remember { movableContentOf(header) }
-    val footer = remember { movableContentOf(footer) }
-    val content = remember { movableContentOf(content) }
     Scaffold(
         modifier = modifier,
         topBar = topBar,
         containerColor = containerColor,
-    ) { padding ->
+    ) { insetsPadding ->
+        val layoutDirection = LocalLayoutDirection.current
+        val contentInsetsPadding = remember(insetsPadding, layoutDirection) {
+            PaddingValues(
+                start = insetsPadding.calculateStartPadding(layoutDirection),
+                top = insetsPadding.calculateTopPadding(),
+                end = insetsPadding.calculateEndPadding(layoutDirection),
+            )
+        }
+        val footerInsetsPadding = remember(insetsPadding, layoutDirection) {
+            PaddingValues(
+                start = insetsPadding.calculateStartPadding(layoutDirection),
+                end = insetsPadding.calculateEndPadding(layoutDirection),
+                bottom = insetsPadding.calculateBottomPadding(),
+            )
+        }
         Box {
             background()
-            if (isScrollable) {
-                // Render in a LazyColumn
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues = paddingValues)
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .imePadding()
-                ) {
-                    // Header
-                    item {
-                        header()
-                    }
-                    // Content
-                    item {
-                        content()
-                    }
-                    // Footer
-                    item {
-                        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                            footer()
-                        }
-                    }
-                }
-            } else {
-                // Render in a Column
+
+            // Render in a Column
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = contentPadding)
+                    .consumeWindowInsets(insetsPadding)
+                    .imePadding(),
+            ) {
+                // Content
                 Column(
                     modifier = Modifier
-                        .padding(paddingValues = paddingValues)
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .imePadding()
+                        .fillMaxWidth()
+                        .run {
+                            if (isScrollable) {
+                                verticalScroll(rememberScrollState())
+                            } else {
+                                Modifier
+                            }
+                        }
+                        // Apply insets here so if the content is scrollable it can get below the top app bar if needed
+                        .padding(contentInsetsPadding)
+                        .weight(1f),
                 ) {
                     // Header
                     header()
-                    // Content
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                    ) {
+                    Box(modifier = Modifier.weight(1f)) {
                         content()
                     }
-                    // Footer
-                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        footer()
-                    }
+                }
+
+                // Footer
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .padding(footerInsetsPadding)
+                ) {
+                    footer()
                 }
             }
         }
@@ -123,8 +129,7 @@ internal fun HeaderFooterPagePreview() = ElementPreview {
     HeaderFooterPage(
         content = {
             Box(
-                Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -157,5 +162,48 @@ internal fun HeaderFooterPagePreview() = ElementPreview {
                 )
             }
         }
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun HeaderFooterPageScrollablePreview() = ElementPreview {
+    HeaderFooterPage(
+        content = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Content",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        header = {
+            Box(
+                Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Header",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        footer = {
+            Box(
+                Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Footer",
+                    style = ElementTheme.typography.fontHeadingXlBold
+                )
+            }
+        },
+        isScrollable = true,
     )
 }

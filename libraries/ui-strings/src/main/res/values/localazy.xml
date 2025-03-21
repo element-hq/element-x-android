@@ -160,6 +160,7 @@
   <string name="common_editing">"Editing"</string>
   <string name="common_editing_caption">"Editing caption"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Empty file"</string>
   <string name="common_encryption">"Encryption"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_enter_your_pin">"Enter your PIN"</string>
@@ -184,6 +185,7 @@ Reason: %1$s."</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_light">"Light"</string>
+  <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
@@ -287,6 +289,10 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s’s verified identity has changed."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s verified identity has changed.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
+  <string name="dialog_confirm_link_message">"The link %1$s is taking you to another site %2$s
+
+Are you sure you want to continue?"</string>
+  <string name="dialog_confirm_link_title">"Double-check this link"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>

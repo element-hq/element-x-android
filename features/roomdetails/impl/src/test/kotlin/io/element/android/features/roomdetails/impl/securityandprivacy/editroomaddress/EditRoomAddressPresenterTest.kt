@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.roomdetails.impl.aMatrixRoom
 import io.element.android.features.roomdetails.impl.securityandprivacy.FakeSecurityAndPrivacyNavigator
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.libraries.architecture.AsyncAction
@@ -31,7 +32,9 @@ import java.util.Optional
 class EditRoomAddressPresenterTest {
     @Test
     fun `present - initial state no address`() = runTest {
-        val presenter = createEditRoomAddressPresenter()
+        val presenter = createEditRoomAddressPresenter(
+            room = aMatrixRoom(displayName = "")
+        )
         presenter.test {
             with(awaitItem()) {
                 assertThat(homeserverName).isEqualTo("matrix.org")
@@ -45,7 +48,7 @@ class EditRoomAddressPresenterTest {
 
     @Test
     fun `present - initial state address matching own homeserver`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canonicalAlias = RoomAlias("#canonical:matrix.org"),
         )
         val presenter = createEditRoomAddressPresenter(room = room)
@@ -62,7 +65,8 @@ class EditRoomAddressPresenterTest {
 
     @Test
     fun `present - initial state address not matching own homeserver`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
+            displayName = "",
             canonicalAlias = RoomAlias("#canonical:notmatrix.org"),
         )
         val presenter = createEditRoomAddressPresenter(room = room)
@@ -190,7 +194,7 @@ class EditRoomAddressPresenterTest {
 
         val navigator = FakeSecurityAndPrivacyNavigator(closeEditRoomAddressLambda = closeEditAddressLambda)
         val canonicalAlias = RoomAlias("#canonical:matrix.org")
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canonicalAlias = canonicalAlias,
             updateCanonicalAliasResult = updateCanonicalAliasResult,
             publishRoomAliasInRoomDirectoryResult = publishAliasInRoomDirectoryResult,
@@ -240,7 +244,7 @@ class EditRoomAddressPresenterTest {
 
         val navigator = FakeSecurityAndPrivacyNavigator(closeEditRoomAddressLambda = closeEditAddressLambda)
         val canonicalAlias = RoomAlias("#canonical:notmatrix.org")
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canonicalAlias = canonicalAlias,
             updateCanonicalAliasResult = updateCanonicalAliasResult,
             publishRoomAliasInRoomDirectoryResult = publishAliasInRoomDirectoryResult,
@@ -314,6 +318,7 @@ class EditRoomAddressPresenterTest {
             with(awaitItem()) {
                 eventSink(EditRoomAddressEvents.Save)
             }
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Loading::class.java)
             with(awaitItem()) {
                 assertThat(saveAction).isInstanceOf(AsyncAction.Failure::class.java)
                 eventSink(EditRoomAddressEvents.DismissError)

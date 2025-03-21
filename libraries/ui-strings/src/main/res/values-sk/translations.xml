@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Skopírované do schránky"</string>
   <string name="common_copyright">"Autorské práva"</string>
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
+  <string name="common_current_user_canceled_knock">"Žiadosť bola zrušená"</string>
   <string name="common_current_user_left_room">"Opustil/a miestnosť"</string>
+  <string name="common_current_user_rejected_invite">"Pozvánka bola odmietnutá"</string>
   <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
@@ -289,6 +291,10 @@ Dôvod: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Overená totožnosť používateľa %1$s sa zmenila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Overená identita používateľa %1$s %2$s sa zmenila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušiť overenie"</string>
+  <string name="dialog_confirm_link_message">"Odkaz %1$s vás presmeruje na inú stránku %2$s
+
+Naozaj chcete pokračovať?"</string>
+  <string name="dialog_confirm_link_title">"Dôkladne skontrolujte tento odkaz"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>

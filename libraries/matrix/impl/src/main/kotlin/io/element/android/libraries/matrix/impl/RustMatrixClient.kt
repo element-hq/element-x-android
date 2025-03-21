@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
-import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
@@ -151,8 +150,7 @@ class RustMatrixClient(
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(innerSyncService)
     private val innerNotificationClient = runBlocking { innerClient.notificationClient(notificationProcessSetup) }
     private val notificationService = RustNotificationService(innerNotificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(innerClient, dispatchers)
-        .apply { start() }
+    private val notificationSettingsService = RustNotificationSettingsService(innerClient, sessionCoroutineScope, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = innerClient,
         syncService = rustSyncService,
@@ -216,7 +214,7 @@ class RustMatrixClient(
             userId = sessionId,
             // TODO cache for displayName?
             displayName = null,
-            avatarUrl = innerClient.cachedAvatarUrl(),
+            avatarUrl = null,
         )
     )
 
@@ -237,6 +235,9 @@ class RustMatrixClient(
         sessionDelegate.bindClient(this)
 
         sessionCoroutineScope.launch {
+            // Start notification settings
+            notificationSettingsService.start()
+
             // Force a refresh of the profile
             getUserProfile()
         }
@@ -479,18 +480,18 @@ class RustMatrixClient(
         appCoroutineScope.launch {
             roomFactory.destroy()
             rustSyncService.destroy()
+            notificationSettingsService.destroy()
         }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
-        notificationSettingsService.destroy()
         verificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
-        innerRoomListService.destroy()
-        notificationService.destroy()
+        innerRoomListService.close()
+        notificationService.close()
         notificationProcessSetup.destroy()
-        encryptionService.destroy()
-        innerClient.destroy()
+        encryptionService.close()
+        innerClient.close()
     }
 
     override suspend fun getCacheSize(): Long {
@@ -498,8 +499,8 @@ class RustMatrixClient(
     }
 
     override suspend fun clearCache() {
+        innerClient.clearCaches()
         close()
-        deleteSessionDirectory(deleteCryptoDb = false)
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
@@ -524,7 +525,7 @@ class RustMatrixClient(
             }
             close()
 
-            deleteSessionDirectory(deleteCryptoDb = true)
+            deleteSessionDirectory()
             if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
             }
@@ -573,7 +574,7 @@ class RustMatrixClient(
                 }
             }
             close()
-            deleteSessionDirectory(deleteCryptoDb = true)
+            deleteSessionDirectory()
             sessionStore.removeSession(sessionId.value)
         }.onFailure {
             Timber.e(it, "Failed to deactivate account")
@@ -661,25 +662,9 @@ class RustMatrixClient(
         }
     }
 
-    private suspend fun deleteSessionDirectory(
-        deleteCryptoDb: Boolean = false,
-    ): Boolean = withContext(sessionDispatcher) {
-        val sessionPaths = sessionPathsProvider.provides(sessionId) ?: return@withContext false
-        // Always delete the cache directory
-        sessionPaths.cacheDirectory.deleteRecursively()
-        if (deleteCryptoDb) {
-            // Delete the folder and all its content
-            sessionPaths.fileDirectory.deleteRecursively()
-        } else {
-            // Do not delete the crypto database files.
-            sessionPaths.fileDirectory.listFiles().orEmpty()
-                .filterNot { it.name.contains("matrix-sdk-crypto") }
-                .forEach { file ->
-                    Timber.w("Deleting file ${file.name}...")
-                    file.safeDelete()
-                }
-            true
-        }
+    private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
+        // Delete all the files for this session
+        sessionPathsProvider.provides(sessionId)?.deleteRecursively()
     }
 }
 

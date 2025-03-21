@@ -31,7 +31,6 @@ dependencies {
     implementation(libs.androidx.activity.activity)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.exifinterface)
-    implementation(libs.androidx.security.crypto)
     api(libs.androidx.browser)
 
     testImplementation(projects.tests.testutils)

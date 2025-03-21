@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Onaylayamıyor musunuz?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Yeni bir kurtarma anahtarı oluştur"</string>
+  <string name="screen_identity_confirmation_subtitle">"Güvenli mesajlaşmayı ayarlamak için bu cihazı doğrulayın."</string>
+  <string name="screen_identity_confirmation_title">"Kimliğinizi doğrulayın"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Başka bir cihaz kullan"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Kurtarma anahtarı kullan"</string>
+  <string name="screen_identity_confirmed_subtitle">"Artık mesajları güvenli bir şekilde okuyabilir veya gönderebilirsiniz ve sohbet ettiğiniz herkes de bu cihaza güvenebilir."</string>
+  <string name="screen_identity_confirmed_title">"Cihaz doğrulandı"</string>
+  <string name="screen_identity_use_another_device">"Başka bir cihaz kullan"</string>
+  <string name="screen_identity_waiting_on_other_device">"Diğer cihazda bekleniyor…"</string>
   <string name="screen_notification_optin_subtitle">"Ayarlarınızı daha sonra değiştirebilirsiniz."</string>
   <string name="screen_notification_optin_title">"Bildirimlere izin verin ve hiçbir mesajı kaçırmayın"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Kurtarma anahtarını girin"</string>
   <string name="screen_welcome_bullet_1">"Çağrılar, anketler, arama ve daha fazlası bu yıl içinde eklenecek."</string>
   <string name="screen_welcome_bullet_2">"Şifrelenmiş odalar için mesaj geçmişi henüz mevcut değil."</string>
   <string name="screen_welcome_bullet_3">"Düşüncelerinizi bizimle paylaşmanızı çok isteriz. Ayarlar sayfasından düşüncelerinizi bize iletin."</string>
