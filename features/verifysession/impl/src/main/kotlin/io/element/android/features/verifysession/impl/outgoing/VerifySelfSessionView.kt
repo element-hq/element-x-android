@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.InvisibleButton
@@ -106,7 +107,6 @@ fun VerifySelfSessionView(
                     onContinueClick = onFinish,
                 )
             },
-            contentPadding = padding,
             isScrollable = true,
         ) {
             VerifySelfSessionContent(
