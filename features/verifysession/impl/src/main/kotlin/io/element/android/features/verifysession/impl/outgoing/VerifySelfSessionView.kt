@@ -132,13 +132,13 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
         }
         Step.AwaitingOtherDeviceResponse -> BigIcon.Style.Loading
         Step.Canceled -> BigIcon.Style.AlertSolid
-        Step.Ready -> BigIcon.Style.Default(CompoundIcons.Reaction())
+        Step.Ready -> BigIcon.Style.Default(CompoundIcons.ReactionSolid())
         Step.Completed -> BigIcon.Style.SuccessSolid
         is Step.Verifying -> {
             if (step.state is AsyncData.Loading<Unit>) {
                 BigIcon.Style.Loading
             } else {
-                BigIcon.Style.Default(CompoundIcons.Reaction())
+                BigIcon.Style.Default(CompoundIcons.ReactionSolid())
             }
         }
         is Step.Exit -> return
