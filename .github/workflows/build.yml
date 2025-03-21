@@ -92,4 +92,4 @@ jobs:
         run: ./gradlew bundleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
         if: ${{ matrix.variant == 'nightly' }}
-        run: ./gradlew bundleGplayNightly -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
