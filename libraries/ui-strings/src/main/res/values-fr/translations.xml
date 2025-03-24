@@ -59,6 +59,7 @@
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_disable">"Désactiver"</string>
   <string name="action_discard">"Annuler"</string>
+  <string name="action_dismiss">"Ignorer"</string>
   <string name="action_done">"Terminé"</string>
   <string name="action_edit">"Modifier"</string>
   <string name="action_edit_caption">"Modifier la légende"</string>
@@ -160,6 +161,7 @@
   <string name="common_editing">"Édition"</string>
   <string name="common_editing_caption">"Modification de la légende"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Fichier vide"</string>
   <string name="common_encryption">"Chiffrement"</string>
   <string name="common_encryption_enabled">"Chiffrement activé"</string>
   <string name="common_enter_your_pin">"Saisissez votre code PIN"</string>
@@ -184,6 +186,7 @@ Raison : %1$s."</string>
   <string name="common_invite_unknown_profile">"Cet identifiant Matrix est introuvable, il est donc possible que l’invitation ne soit pas reçue."</string>
   <string name="common_leaving_room">"Quitter le salon…"</string>
   <string name="common_light">"Clair"</string>
+  <string name="common_line_copied_to_clipboard">"Ligne copiée dans le presse-papiers"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
   <string name="common_loading">"Chargement…"</string>
   <string name="common_loading_more">"Chargement…"</string>
@@ -200,6 +203,7 @@ Raison : %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
+  <string name="common_not_encrypted">"Non chiffré"</string>
   <string name="common_offline">"Hors ligne"</string>
   <string name="common_open_source_licenses">"Licences open source"</string>
   <string name="common_or">"ou"</string>
@@ -261,7 +265,7 @@ Raison : %1$s."</string>
   <string name="common_unable_to_decrypt">"Échec de déchiffrement"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Envoyé depuis un appareil non sécurisé"</string>
   <string name="common_unable_to_decrypt_no_access">"Vous ne pouvez pas voir ce message"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"L’identité vérifiée de l’expéditeur a changé"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"L’identité vérifiée de l’expéditeur a été réinitialisée"</string>
   <string name="common_unable_to_invite_message">"Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs."</string>
   <string name="common_unable_to_invite_title">"Impossible d’envoyer une ou plusieurs invitations"</string>
   <string name="common_unlock">"Déverrouillage"</string>
@@ -281,11 +285,11 @@ Raison : %1$s."</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
-  <string name="crypto_identity_change_pin_violation">"L’identité de %1$s semble avoir changé. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s semble avoir changé. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"L’identité de %1$s a été réinitialisée. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s a été réinitialisée. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"L’identité vérifiée de l’utilisateur %1$s a changé."</string>
-  <string name="crypto_identity_change_verification_violation_new">"L’identité vérifiée de %1$s %2$s a changé. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"L’identité de %1$s a été réinitialisée."</string>
+  <string name="crypto_identity_change_verification_violation_new">"L’identité de %1$s %2$s a été réinitialisée. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Révoquer la vérification"</string>
   <string name="dialog_confirm_link_message">"Le lien \"%1$s\" vous redirige vers un autre site \"%2$s\".
 
@@ -337,7 +341,7 @@ Raison : %1$s."</string>
   <string name="screen_reset_identity_confirmation_title">"Vous ne pouvez pas confirmer ? Accédez à votre compte pour réinitialiser votre identité."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Révoquer la verification et envoyer"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Vous pouvez révoquer la verification et envoyer ce message, ou vous pouvez annuler pour l’instant et réessayer plus tard après avoir vérifié à nouveau %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Votre message n’a pas été envoyé car l’identité vérifiée de %1$s a changé"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Votre message n’a pas été envoyé car l’identité vérifiée de %1$s a été réinitialisée"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Envoyer le message quand même"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s utilise un ou plusieurs appareils non vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler pour l’instant et réessayer plus tard après que %2$s vérifie tous ses appareils."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils"</string>
@@ -358,7 +362,7 @@ Raison : %1$s."</string>
   <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a changé."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message non envoyé car vous n’avez pas vérifié tous vos appareils."</string>
   <string name="screen_view_location_title">"Position"</string>

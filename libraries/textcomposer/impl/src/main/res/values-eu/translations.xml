@@ -4,7 +4,9 @@
   <string name="rich_text_editor_bullet_list">"Buleten zerrenda bai/ez"</string>
   <string name="rich_text_editor_close_formatting_options">"Itxi formatu aukerak"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Gehitu testua"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Zifratutako mezua…"</string>
   <string name="rich_text_editor_composer_placeholder">"Mezua…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Zifratu gabeko mezua…"</string>
   <string name="rich_text_editor_create_link">"Sortu esteka"</string>
   <string name="rich_text_editor_edit_link">"Editatu esteka"</string>
   <string name="rich_text_editor_format_bold">"Aplikatu formatu lodia"</string>

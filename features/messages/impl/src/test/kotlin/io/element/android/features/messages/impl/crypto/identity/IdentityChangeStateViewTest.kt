@@ -44,7 +44,7 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("identity appears to have changed", substring = true).assertExists("should display pin violation warning")
+        rule.onNodeWithText("identity was reset", substring = true).assertExists("should display pin violation warning")
         rule.onNodeWithText("@alice:localhost", substring = true).assertExists("should display user mxid")
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
@@ -67,7 +67,7 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("verified identity has changed", substring = true).assertExists("should display verification violation warning")
+        rule.onNodeWithText("identity was reset", substring = true).assertExists("should display verification violation warning")
         rule.onNodeWithText("@alice:localhost", substring = true).assertExists("should display user mxid")
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
@@ -92,8 +92,7 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("identity appears to have changed", substring = true).assertDoesNotExist()
-        rule.onNodeWithText("verified identity has changed", substring = true).assertDoesNotExist()
+        rule.onNodeWithText("identity was reset", substring = true).assertDoesNotExist()
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setIdentityChangeStateView(

@@ -291,6 +291,10 @@
   <string name="crypto_identity_change_profile_pin_violation">"Верифікована ідентичність %1$s змінилася."</string>
   <string name="crypto_identity_change_verification_violation_new">"Верифіковано особистість %1$s %2$s змінилася. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Відкликати верифікацію"</string>
+  <string name="dialog_confirm_link_message">"Посилання %1$s спрямовує вас на інший сайт %2$s
+
+Ви впевнені, що хочете продовжити?"</string>
+  <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>

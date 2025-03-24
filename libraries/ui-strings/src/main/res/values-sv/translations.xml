@@ -59,6 +59,7 @@
   <string name="action_delete_poll">"Radera omröstning"</string>
   <string name="action_disable">"Inaktivera"</string>
   <string name="action_discard">"Kassera"</string>
+  <string name="action_dismiss">"Avfärda"</string>
   <string name="action_done">"Klar"</string>
   <string name="action_edit">"Redigera"</string>
   <string name="action_edit_caption">"Redigera bildtext"</string>
@@ -160,6 +161,7 @@
   <string name="common_editing">"Redigerar"</string>
   <string name="common_editing_caption">"Redigera bildtext"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Tom fil"</string>
   <string name="common_encryption">"Kryptering"</string>
   <string name="common_encryption_enabled">"Kryptering aktiverad"</string>
   <string name="common_enter_your_pin">"Ange din PIN-kod"</string>
@@ -184,6 +186,7 @@ Anledning:%1$s."</string>
   <string name="common_invite_unknown_profile">"Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot."</string>
   <string name="common_leaving_room">"Lämnar rummet"</string>
   <string name="common_light">"Ljust"</string>
+  <string name="common_line_copied_to_clipboard">"Rad kopierad till klippbordet"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
   <string name="common_loading_more">"Laddar mer …"</string>
@@ -200,6 +203,7 @@ Anledning:%1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Inga resultat"</string>
   <string name="common_no_room_name">"Inget rumsnamn"</string>
+  <string name="common_not_encrypted">"Inte krypterad"</string>
   <string name="common_offline">"Frånkopplad"</string>
   <string name="common_open_source_licenses">"Licenser för öppen källkod"</string>
   <string name="common_or">"eller"</string>
@@ -261,7 +265,7 @@ Anledning:%1$s."</string>
   <string name="common_unable_to_decrypt">"Kan inte avkryptera"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Skickad från en osäker enhet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har inte tillgång till det här meddelandet"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Avsändarens verifierade identitet har ändrats"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Avsändarens verifierade identitet återställdes"</string>
   <string name="common_unable_to_invite_message">"Inbjudan kunde inte skickas till en eller flera användare."</string>
   <string name="common_unable_to_invite_title">"Kunde inte skicka inbjudningar"</string>
   <string name="common_unlock">"Lås upp"</string>
@@ -281,12 +285,16 @@ Anledning:%1$s."</string>
   <string name="common_waiting">"Väntar …"</string>
   <string name="common_waiting_for_decryption_key">"Väntar på detta meddelande"</string>
   <string name="common_you">"Du"</string>
-  <string name="crypto_identity_change_pin_violation">"Identitet för %1$s verkar ha ändrats. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Identitet för %1$s %2$s verkar ha förändrats. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Identitet för %1$s återställdes. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identitet för %1$s %2$s återställdes. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Verifierad identitet för %1$s har ändrats."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Verifierad identitet för %1$s %2$s har ändrats.%3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Verifierad identitet för %1$s återställdes."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Verifierad identitet för %1$s %2$s återställdes.%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Återkalla verifiering"</string>
+  <string name="dialog_confirm_link_message">"Länken %1$s tar dig till en annan webbplats %2$s
+
+Är du säker på att du vill fortsätta?"</string>
+  <string name="dialog_confirm_link_title">"Dubbelkolla den här länken"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>
@@ -333,7 +341,7 @@ Anledning:%1$s."</string>
   <string name="screen_reset_identity_confirmation_title">"Kan du inte bekräfta? Gå till ditt konto för att återställa din identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Dra tillbaka verifieringen och skicka"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan dra tillbaka din verifiering och skicka det här meddelandet ändå, eller så kan du avbryta för tillfället och försöka igen senare efter att ha verifierat %1$s igen."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Ditt meddelande skickades inte eftersom verifierad identitet för %1$s har ändrats"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ditt meddelande skickades inte eftersom verifierad identitet för %1$s återställdes"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Skicka meddelandet ändå"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s använder en eller flera overifierade enheter. Du kan skicka meddelandet ändå, eller så kan du avbryta för tillfället och försöka igen senare efter att %2$s har verifierat alla sina enheter."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ditt meddelande skickades inte eftersom %1$s inte har verifierat alla enheter"</string>
@@ -354,7 +362,7 @@ Anledning:%1$s."</string>
   <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Dela den här platsen"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meddelandet skickades inte eftersom verifierad identitet för %1$s har ändrats."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meddelandet skickades inte eftersom verifierad identitet för %1$s återställdes."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelandet skickades inte eftersom %1$s inte har verifierat alla enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meddelandet skickades inte eftersom du inte har verifierat en eller flera av dina enheter."</string>
   <string name="screen_view_location_title">"Plats"</string>

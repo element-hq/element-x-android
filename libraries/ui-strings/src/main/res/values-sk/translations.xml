@@ -162,6 +162,7 @@
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_editing_caption">"Úprava titulku"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Prázdny súbor"</string>
   <string name="common_encryption">"Šifrovanie"</string>
   <string name="common_encryption_enabled">"Šifrovanie zapnuté"</string>
   <string name="common_enter_your_pin">"Zadajte svoj PIN"</string>
@@ -186,6 +187,7 @@ Dôvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_light">"Svetlý"</string>
+  <string name="common_line_copied_to_clipboard">"Riadok skopírovaný do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
   <string name="common_loading_more">"Načítava sa viac…"</string>
