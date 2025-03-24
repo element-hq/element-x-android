@@ -33,6 +33,8 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.preferences.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.services.analyticsproviders.posthog)
+    implementation(projects.services.analyticsproviders.sentry)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
