@@ -66,8 +66,7 @@ class LinkViewTest {
                 aLinkState(
                     linkClick = AsyncAction.Success(aLink),
                     eventSink = eventsRecorder,
-
-                    ),
+                ),
                 onLinkValid = callback,
             )
         }
