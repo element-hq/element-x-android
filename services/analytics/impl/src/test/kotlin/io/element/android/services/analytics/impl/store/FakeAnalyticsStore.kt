@@ -7,6 +7,7 @@
 
 package io.element.android.services.analytics.impl.store
 
+import io.element.android.services.analytics.api.store.AnalyticsStore
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.MutableStateFlow
 
