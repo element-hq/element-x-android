@@ -35,6 +35,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Sartu…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Berreskuratze-gakoa galdu duzu?"</string>
   <string name="screen_recovery_key_confirm_success">"Berreskuratze-gakoa berretsi da"</string>
+  <string name="screen_recovery_key_confirm_title">"Sartu zure berreskuratze-gakoa"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Berreskuratze-gakoa kopiatu da"</string>
   <string name="screen_recovery_key_generating_key">"Sortzen…"</string>
   <string name="screen_recovery_key_save_action">"Gorde berreskuratze-gakoa"</string>

@@ -162,6 +162,7 @@
   <string name="common_editing">"Úpravy"</string>
   <string name="common_editing_caption">"Úprava titulku"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Prázdný soubor"</string>
   <string name="common_encryption">"Šifrování"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
@@ -186,6 +187,7 @@ Důvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_light">"Světlý"</string>
+  <string name="common_line_copied_to_clipboard">"Řádek zkopírován do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_loading_more">"Načítání dalších…"</string>
@@ -291,6 +293,10 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Ověřená identita %1$s se změnila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Ověřená identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
+  <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
+
+Opravdu chcete pokračovat?"</string>
+  <string name="dialog_confirm_link_title">"Zkontrolujte tento odkaz"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
