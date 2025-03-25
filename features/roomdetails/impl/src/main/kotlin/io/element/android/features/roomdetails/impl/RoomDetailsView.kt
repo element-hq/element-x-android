@@ -469,14 +469,14 @@ private fun RoomBadge.toMatrixBadgeData(): MatrixBadgeAtom.MatrixBadgeData {
             MatrixBadgeAtom.MatrixBadgeData(
                 text = stringResource(R.string.screen_room_details_badge_not_encrypted),
                 icon = CompoundIcons.LockOff(),
-                type = MatrixBadgeAtom.Type.Neutral,
+                type = MatrixBadgeAtom.Type.Info,
             )
         }
         RoomBadge.PUBLIC -> {
             MatrixBadgeAtom.MatrixBadgeData(
                 text = stringResource(R.string.screen_room_details_badge_public),
                 icon = CompoundIcons.Public(),
-                type = MatrixBadgeAtom.Type.Neutral,
+                type = MatrixBadgeAtom.Type.Info,
             )
         }
     }
