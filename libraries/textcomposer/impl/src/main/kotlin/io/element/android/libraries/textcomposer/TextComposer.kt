@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.textcomposer
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,7 +43,9 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
@@ -757,7 +760,15 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
     }
 }
 
-@PreviewsDayNight
+@Preview(
+    name = DAY_MODE_NAME,
+    heightDp = 800,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    heightDp = 800,
+)
 @Composable
 internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
