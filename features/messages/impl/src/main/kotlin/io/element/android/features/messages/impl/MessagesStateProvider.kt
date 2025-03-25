@@ -12,6 +12,8 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
+import io.element.android.features.messages.impl.link.LinkState
+import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -103,6 +105,7 @@ fun aMessagesState(
     ),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     identityChangeState: IdentityChangeState = anIdentityChangeState(),
+    linkState: LinkState = aLinkState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
@@ -124,6 +127,7 @@ fun aMessagesState(
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,
+    linkState = linkState,
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,

@@ -89,3 +89,12 @@ fun String.withoutAccents(): String {
     return Normalizer.normalize(this, Normalizer.Form.NFD)
         .replace("\\p{Mn}+".toRegex(), "")
 }
+
+private const val RTL_OVERRIDE_CHAR = '\u202E'
+private const val LTR_OVERRIDE_CHAR = '\u202D'
+
+fun String.ensureEndsLeftToRight() = if (containsRtLOverride()) "$this$LTR_OVERRIDE_CHAR" else this
+
+fun String.containsRtLOverride() = contains(RTL_OVERRIDE_CHAR)
+
+fun String.filterDirectionOverrides() = filterNot { it == RTL_OVERRIDE_CHAR || it == LTR_OVERRIDE_CHAR }
