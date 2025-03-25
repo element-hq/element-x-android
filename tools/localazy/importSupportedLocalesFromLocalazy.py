@@ -36,6 +36,8 @@ def normalizeForResourceConfigurations(locale):
             return "pt-rBR"
         case "zh#Hans":
             return "zh-rCN"
+        case "en_US":
+            return "en-rUS"
         case _:
             return locale
 
