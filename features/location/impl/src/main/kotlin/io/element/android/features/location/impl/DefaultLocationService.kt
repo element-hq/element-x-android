@@ -14,8 +14,7 @@ import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLocationService @Inject constructor(
-) : LocationService {
+class DefaultLocationService @Inject constructor() : LocationService {
     override fun isServiceAvailable(): Boolean {
         return BuildConfig.MAPTILER_API_KEY.isNotEmpty()
     }
