@@ -15,7 +15,10 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanFormatter
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.tests.testutils.WarmUpRule
 import org.junit.Rule
 import org.junit.Test
@@ -28,22 +31,22 @@ class IntentionalMentionSpanProviderTest {
     val warmUpRule = WarmUpRule()
 
     private val permalinkParser = FakePermalinkParser()
-    private val mentionSpanProvider = MentionSpanProvider(
-        permalinkParser = permalinkParser,
-    )
+    private val mentionSpanProvider = aMentionSpanProvider(permalinkParser)
 
     @Test
     fun `getting mention span for a user returns a MentionSpan of type USER`() {
         permalinkParser.givenResult(PermalinkData.UserLink(A_USER_ID))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@me:matrix.org", "https://matrix.to/#/${A_USER_ID.value}")
-        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.USER)
+        assertThat(mentionSpan?.type).isInstanceOf(MentionType.User::class.java)
+        val userType = mentionSpan?.type as MentionType.User
+        assertThat(userType.userId).isEqualTo(A_USER_ID)
     }
 
     @Test
     fun `getting mention span for everyone in the room returns a MentionSpan of type EVERYONE`() {
         permalinkParser.givenResult(PermalinkData.FallbackLink(uri = Uri.EMPTY))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")
-        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.EVERYONE)
+        assertThat(mentionSpan?.type).isEqualTo(MentionType.Everyone)
     }
 
     @Test
@@ -54,6 +57,8 @@ class IntentionalMentionSpanProviderTest {
             )
         )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("#room:matrix.org", "https://matrix.to/#/#room:matrix.org")
-        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.ROOM)
+        assertThat(mentionSpan?.type).isInstanceOf(MentionType.Room::class.java)
+        val roomType = mentionSpan?.type as MentionType.Room
+        assertThat(roomType.roomIdOrAlias).isEqualTo(RoomAlias("#room:matrix.org").toRoomIdOrAlias())
     }
 }

@@ -41,7 +41,8 @@ class MentionSpan(
     private var measuredTextWidth = 0
 
     // The formatted display text, will be set by the formatter
-    private var displayText: CharSequence = ""
+    var displayText: CharSequence = ""
+        private set
 
     /**
      * Updates the visual properties of this span.
@@ -136,13 +137,13 @@ class MentionSpan(
 }
 
 /**
- * Sealed class representing different types of mentions.
+ * Sealed interface representing different types of mentions.
  */
-sealed class MentionType {
-    data class User(val userId: UserId) : MentionType()
-    data class Room(val roomIdOrAlias: RoomIdOrAlias) : MentionType()
-    data class Message(val roomIdOrAlias: RoomIdOrAlias, val eventId: EventId) : MentionType()
-    data object Everyone : MentionType()
+sealed interface MentionType {
+    data class User(val userId: UserId) : MentionType
+    data class Room(val roomIdOrAlias: RoomIdOrAlias) : MentionType
+    data class Message(val roomIdOrAlias: RoomIdOrAlias, val eventId: EventId) : MentionType
+    data object Everyone : MentionType
 }
 
 /**

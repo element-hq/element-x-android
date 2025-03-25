@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
+import io.element.android.libraries.textcomposer.impl.mentions.aMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -146,7 +147,6 @@ class MarkdownTextInputTest {
     @Test
     fun `inserting a mention replaces the existing text with a span`() = runTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(A_SESSION_ID) })
-        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/$A_SESSION_ID") })
         val state = aMarkdownTextEditorState(initialText = "@", initialFocus = true)
         state.currentSuggestion = Suggestion(0, 1, SuggestionType.Mention, "")
         rule.setMarkdownTextInput(state = state)
@@ -155,7 +155,7 @@ class MarkdownTextInputTest {
             editor = it.findEditor()
             state.insertSuggestion(
                 ResolvedSuggestion.Member(roomMember = aRoomMember()),
-                MentionSpanProvider(permalinkParser = permalinkParser),
+                aMentionSpanProvider(permalinkParser),
             )
         }
         rule.awaitIdle()

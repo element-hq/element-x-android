@@ -38,7 +38,8 @@ class DefaultMentionSpanUpdater @Inject constructor(
         val isLightTheme = ElementTheme.isLightTheme
         val roomInfoCacheUpdate by roomNamesCache.updateFlow.collectAsState(0)
         val roomMemberProfilesCacheUpdate by roomMemberProfilesCache.updateFlow.collectAsState(0)
-        return remember(roomInfoCacheUpdate, roomMemberProfilesCacheUpdate, isLightTheme) {
+        return remember(text, roomInfoCacheUpdate, roomMemberProfilesCacheUpdate, isLightTheme) {
+            println("rememberMentionSpans $text $roomInfoCacheUpdate $roomMemberProfilesCacheUpdate $isLightTheme")
             updateMentionSpans(text)
             text
         }

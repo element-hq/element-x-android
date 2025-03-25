@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -80,6 +81,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenterFac
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -1538,8 +1540,11 @@ class MessageComposerPresenterTest {
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         permalinkParser: PermalinkParser = FakePermalinkParser(),
-        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkParser),
-        roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
+        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(
+            permalinkParser = permalinkParser,
+            mentionSpanFormatter = FakeMentionSpanFormatter(),
+            mentionSpanTheme = MentionSpanTheme(A_USER_ID)
+        ),
         textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
@@ -1564,7 +1569,6 @@ class MessageComposerPresenterTest {
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
-        roomMemberProfilesCache = roomMemberProfilesCache,
         suggestionsProcessor = SuggestionsProcessor(),
     ).apply {
         isTesting = true

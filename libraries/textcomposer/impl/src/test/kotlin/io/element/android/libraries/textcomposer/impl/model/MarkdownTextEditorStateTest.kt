@@ -12,16 +12,21 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.textcomposer.impl.mentions.aMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
-import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -31,6 +36,9 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MarkdownTextEditorStateTest {
+
+    private val theme = MentionSpanTheme(currentUserId = A_USER_ID)
+
     @Test
     fun `insertMention - room alias - getMentions return empty list`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
@@ -48,7 +56,6 @@ class MarkdownTextEditorStateTest {
         }
         val suggestion = aRoomAliasSuggestion()
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
-        val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.failure(IllegalStateException("Failed")) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
         state.insertSuggestion(suggestion, mentionSpanProvider)
     }
@@ -60,7 +67,6 @@ class MarkdownTextEditorStateTest {
         }
         val suggestion = aRoomAliasSuggestion()
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
-        val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.success("https://matrix.to/#/${A_ROOM_ALIAS.value}") })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
         state.insertSuggestion(suggestion, mentionSpanProvider)
     }
@@ -70,29 +76,9 @@ class MarkdownTextEditorStateTest {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
         val member = aRoomMember()
         val mention = ResolvedSuggestion.Member(member)
-        val permalinkBuilder = FakePermalinkBuilder()
         val mentionSpanProvider = aMentionSpanProvider()
-
         state.insertSuggestion(mention, mentionSpanProvider)
-
         assertThat(state.getMentions()).isEmpty()
-    }
-
-    @Test
-    fun `insertSuggestion - with member but failed PermalinkBuilder result`() {
-        val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
-            currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
-        }
-        val member = aRoomMember()
-        val mention = ResolvedSuggestion.Member(member)
-        val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
-        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.failure(IllegalStateException("Failed")) })
-        val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
-
-        state.insertSuggestion(mention, mentionSpanProvider)
-
-        val mentions = state.getMentions()
-        assertThat(mentions).isEmpty()
     }
 
     @Test
@@ -103,7 +89,6 @@ class MarkdownTextEditorStateTest {
         val member = aRoomMember()
         val mention = ResolvedSuggestion.Member(member)
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
-        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/${member.userId}") })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
         state.insertSuggestion(mention, mentionSpanProvider)
@@ -119,7 +104,6 @@ class MarkdownTextEditorStateTest {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
         }
         val mention = ResolvedSuggestion.AtRoom
-        val permalinkBuilder = FakePermalinkBuilder()
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.FallbackLink(Uri.EMPTY, false) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
@@ -177,16 +161,10 @@ class MarkdownTextEditorStateTest {
         assertThat(mentions.lastOrNull()).isInstanceOf(IntentionalMention.Room::class.java)
     }
 
-    private fun aMentionSpanProvider(
-        permalinkParser: FakePermalinkParser = FakePermalinkParser(),
-    ): MentionSpanProvider {
-        return MentionSpanProvider(permalinkParser)
-    }
-
     private fun aMarkdownTextWithMentions(): CharSequence {
-        val userMentionSpan = MentionSpan("@Alice", "@alice:matrix.org", MentionSpan.Type.USER)
-        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.EVERYONE)
-        val roomMentionSpan = MentionSpan("#room:domain.org", "#room:domain.org", MentionSpan.Type.ROOM)
+        val userMentionSpan = MentionSpan(MentionType.User(UserId("@alice:matrix.org")))
+        val atRoomMentionSpan = MentionSpan(MentionType.Everyone)
+        val roomMentionSpan = MentionSpan(MentionType.Room(RoomAlias("#room:domain.org").toRoomIdOrAlias()))
         return buildSpannedString {
             append("Hello ")
             inSpans(userMentionSpan) {

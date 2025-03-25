@@ -91,7 +91,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
-            formattedBody = null,
+            formattedBody = SpannedString("body"),
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -125,7 +125,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
-            formattedBody = null,
+            formattedBody = "body",
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -143,8 +143,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
-            formattedBody = null,
-            pillifiedBody = SpannableString("body"),
+            formattedBody = SpannedString("body"),
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -223,7 +222,7 @@ class TimelineItemContentMessageFactoryTest {
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
-        assertThat((result as TimelineItemTextContent).formattedBody).isNull()
+        assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(SpannedString("body"))
     }
 
     @Test
@@ -638,7 +637,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             htmlDocument = null,
             plainText = "body",
-            formattedBody = null,
+            formattedBody = SpannedString("body"),
             isEdited = false,
         )
         assertThat(result).isEqualTo(expected)
@@ -672,7 +671,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "* Bob body",
             htmlDocument = null,
             plainText = "* Bob body",
-            formattedBody = null,
+            formattedBody = SpannedString("* Bob body"),
             isEdited = false,
         )
         assertThat(result).isEqualTo(expected)
