@@ -7,27 +7,24 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
-import kotlinx.coroutines.flow.skip
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
-class RoomNamesCache @Inject constructor(
-    private val dispatchers: CoroutineDispatchers,
-) {
+class RoomNamesCache @Inject constructor() {
     private val cache = MutableStateFlow(mapOf<RoomIdOrAlias, String?>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 
-    suspend fun replace(items: List<RoomSummary>) = withContext(dispatchers.computation) {
+    suspend fun replace(items: List<RoomSummary>) = coroutineScope {
         val roomNamesByRoomIdOrAlias = LinkedHashMap<RoomIdOrAlias, String?>(items.size * 2)
         items
             .forEach { summary ->

@@ -155,8 +155,8 @@ class TimelineTextViewTest {
         return DefaultMentionSpanUpdater(
             formatter = mentionSpanFormatter,
             theme = mentionSpanTheme,
-            roomMemberProfilesCache = RoomMemberProfilesCache(coroutineDispatchers),
-            roomNamesCache = RoomNamesCache(coroutineDispatchers),
+            roomMemberProfilesCache = RoomMemberProfilesCache(),
+            roomNamesCache = RoomNamesCache(),
         )
     }
 

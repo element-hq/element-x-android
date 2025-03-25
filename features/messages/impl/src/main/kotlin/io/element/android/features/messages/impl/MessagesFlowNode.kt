@@ -57,6 +57,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
@@ -73,8 +74,8 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
@@ -85,6 +86,7 @@ import io.element.android.services.analyticsproviders.api.trackers.captureIntera
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -107,6 +109,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val timelineController: TimelineController,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val dateFormatter: DateFormatter,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -174,9 +177,17 @@ class MessagesFlowNode @AssistedInject constructor(
                 timelineController.close()
             }
         )
+        setupCacheUpdaters()
+
+        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
+    }
+
+    private fun setupCacheUpdaters() {
         room.membersStateFlow
             .onEach { membersState ->
-                roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                withContext(coroutineDispatchers.computation) {
+                    roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                }
             }
             .launchIn(lifecycleScope)
 
@@ -184,11 +195,11 @@ class MessagesFlowNode @AssistedInject constructor(
             .allRooms
             .summaries
             .onEach {
-                roomNamesCache.replace(it)
+                withContext(coroutineDispatchers.computation) {
+                    roomNamesCache.replace(it)
+                }
             }
             .launchIn(lifecycleScope)
-
-        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

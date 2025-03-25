@@ -7,28 +7,22 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.fold
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningFold
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
-class RoomMemberProfilesCache @Inject constructor(
-    private val coroutineDispatchers: CoroutineDispatchers,
-) {
+class RoomMemberProfilesCache @Inject constructor() {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 
-    suspend fun replace(items: List<RoomMember>) = withContext(coroutineDispatchers.computation) {
+    suspend fun replace(items: List<RoomMember>) = coroutineScope {
         cache.value = items.associateBy { it.userId }
     }
 
