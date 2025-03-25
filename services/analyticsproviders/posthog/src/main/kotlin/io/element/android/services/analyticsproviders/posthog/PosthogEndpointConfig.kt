@@ -10,4 +10,6 @@ package io.element.android.services.analyticsproviders.posthog
 data class PosthogEndpointConfig(
     val host: String,
     val apiKey: String,
-)
+) {
+    val isValid = host.isNotBlank() && apiKey.isNotBlank()
+}
