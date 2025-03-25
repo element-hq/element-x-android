@@ -25,7 +25,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
