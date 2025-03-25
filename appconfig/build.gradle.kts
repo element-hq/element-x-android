@@ -1,3 +1,6 @@
+import config.BuildTimeConfig
+import extension.buildConfigFieldStr
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -10,6 +13,17 @@ plugins {
 
 android {
     namespace = "io.element.android.appconfig"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigFieldStr(
+            name = "URL_POLICY",
+            value = BuildTimeConfig.URL_POLICY ?: "https://element.io/cookie-policy",
+        )
+    }
 }
 
 dependencies {
