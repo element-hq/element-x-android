@@ -9,7 +9,6 @@ package io.element.android.features.messages.test.timeline
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.utils.HtmlConverter
 
 class FakeHtmlConverterProvider(

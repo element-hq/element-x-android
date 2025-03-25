@@ -19,13 +19,11 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.textcomposer.impl.mentions.aMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
-import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -37,13 +35,10 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MarkdownTextEditorStateTest {
 
-    private val theme = MentionSpanTheme(currentUserId = A_USER_ID)
-
     @Test
     fun `insertMention - room alias - getMentions return empty list`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
         val suggestion = aRoomAliasSuggestion()
-        val permalinkBuilder = FakePermalinkBuilder()
         val mentionSpanProvider = aMentionSpanProvider()
         state.insertSuggestion(suggestion, mentionSpanProvider)
         assertThat(state.getMentions()).isEmpty()

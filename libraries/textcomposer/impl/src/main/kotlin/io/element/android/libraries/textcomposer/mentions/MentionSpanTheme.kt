@@ -51,8 +51,7 @@ import javax.inject.Inject
  */
 @Stable
 @SingleIn(SessionScope::class)
-class MentionSpanTheme (val currentUserId: UserId) {
-
+class MentionSpanTheme(val currentUserId: UserId) {
     @Inject constructor(matrixClient: MatrixClient) : this(matrixClient.sessionId)
 
     internal var currentUserTextColor: Int = 0

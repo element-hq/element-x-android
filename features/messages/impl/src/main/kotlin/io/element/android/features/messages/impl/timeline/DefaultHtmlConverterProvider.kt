@@ -43,7 +43,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
 
         val editorStyle = ElementRichTextEditorStyle.textStyle()
         val context = LocalContext.current
-        
+
         htmlConverter.value = remember(editorStyle) {
             StyledHtmlConverter(
                 context = context,

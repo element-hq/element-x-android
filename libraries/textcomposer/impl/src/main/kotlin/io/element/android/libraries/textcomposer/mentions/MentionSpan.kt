@@ -28,7 +28,6 @@ import kotlin.math.roundToInt
 class MentionSpan(
     val type: MentionType,
 ) : ReplacementSpan() {
-
     private val backgroundPaint = Paint()
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 

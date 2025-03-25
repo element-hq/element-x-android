@@ -30,7 +30,8 @@ class DefaultHtmlConverterProviderTest {
             permalinkParser = FakePermalinkParser(),
             mentionSpanFormatter = FakeMentionSpanFormatter(),
             mentionSpanTheme = MentionSpanTheme(A_USER_ID)
-        ))
+        )
+    )
 
     @Test
     fun `calling provide without calling Update first should throw an exception`() {

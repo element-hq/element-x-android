@@ -15,8 +15,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import javax.inject.Inject
 
 interface MentionSpanUpdater {
@@ -32,7 +32,6 @@ class DefaultMentionSpanUpdater @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
 ) : MentionSpanUpdater {
-
     @Composable
     override fun rememberMentionSpans(text: CharSequence): CharSequence {
         val isLightTheme = ElementTheme.isLightTheme
@@ -66,4 +65,3 @@ private object NoOpMentionSpanUpdater : MentionSpanUpdater {
 }
 
 val LocalMentionSpanUpdater = staticCompositionLocalOf<MentionSpanUpdater> { NoOpMentionSpanUpdater }
-

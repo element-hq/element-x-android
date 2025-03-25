@@ -371,9 +371,9 @@ class MessageComposerPresenter @AssistedInject constructor(
         val resolveMentionDisplay = remember {
             { text: String, url: String ->
                 val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                if(mentionSpan != null) {
+                if (mentionSpan != null) {
                     TextDisplay.Custom(mentionSpan)
-                }else {
+                } else {
                     TextDisplay.Plain
                 }
             }

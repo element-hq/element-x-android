@@ -16,7 +16,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)

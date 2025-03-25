@@ -35,10 +35,8 @@ import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -150,8 +148,7 @@ class TimelineTextViewTest {
         return completable.await()
     }
 
-    private fun TestScope.aMentionSpanUpdater(): MentionSpanUpdater {
-        val coroutineDispatchers = testCoroutineDispatchers()
+    private fun aMentionSpanUpdater(): MentionSpanUpdater {
         return DefaultMentionSpanUpdater(
             formatter = mentionSpanFormatter,
             theme = mentionSpanTheme,

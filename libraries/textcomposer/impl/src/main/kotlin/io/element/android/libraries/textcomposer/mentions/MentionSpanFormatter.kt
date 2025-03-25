@@ -11,8 +11,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import javax.inject.Inject
 
 private const val EVERYONE_DISPLAY_TEXT = "@room"
@@ -31,8 +31,7 @@ interface MentionSpanFormatter {
 class DefaultMentionSpanFormatter @Inject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
-): MentionSpanFormatter {
-
+) : MentionSpanFormatter {
     /**
      * Format the display text for a mention span.
      *

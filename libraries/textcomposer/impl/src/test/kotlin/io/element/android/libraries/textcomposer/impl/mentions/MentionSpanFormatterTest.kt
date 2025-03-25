@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MentionSpanFormatterTest {
-
     private val roomMemberProfilesCache = RoomMemberProfilesCache()
     private val roomNamesCache = RoomNamesCache()
     private val formatter = DefaultMentionSpanFormatter(
