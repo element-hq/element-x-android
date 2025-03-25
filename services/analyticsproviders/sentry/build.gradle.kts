@@ -1,3 +1,5 @@
+import config.BuildTimeConfig
+import extension.buildConfigFieldStr
 import extension.readLocalProperty
 import extension.setupAnvil
 
@@ -19,13 +21,15 @@ android {
     }
 
     defaultConfig {
-        buildConfigField(
-            type = "String",
+        buildConfigFieldStr(
             name = "SENTRY_DSN",
-            value = (System.getenv("ELEMENT_ANDROID_SENTRY_DSN")
-                ?: readLocalProperty("services.analyticsproviders.sentry.dsn")
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.SERVICES_SENTRY_DSN
+            } else {
+                System.getenv("ELEMENT_ANDROID_SENTRY_DSN")
+                    ?: readLocalProperty("services.analyticsproviders.sentry.dsn")
+            }
                 ?: ""
-            ).let { "\"$it\"" }
         )
     }
 }
