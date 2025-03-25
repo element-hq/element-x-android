@@ -43,7 +43,7 @@ fun IdentityChangeStateView(
             onLinkClick = onLinkClick,
             textId = CommonStrings.crypto_identity_change_pin_violation_new,
             isCritical = false,
-            submitTextId = CommonStrings.action_ok,
+            submitTextId = CommonStrings.action_dismiss,
             onSubmitClick = { state.eventSink(IdentityChangeEvent.PinIdentity(identityChangeViolation.identityRoomMember.userId)) },
             modifier = modifier,
         )
