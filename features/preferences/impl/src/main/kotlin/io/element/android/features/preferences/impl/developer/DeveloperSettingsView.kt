@@ -145,7 +145,7 @@ private fun ElementCallCategory(
         PreferenceTextField(
             headline = stringResource(R.string.screen_advanced_settings_element_call_base_url),
             value = callUrlState.baseUrl,
-            placeholder = "https://...",
+            placeholder = "https://.../room",
             supportingText = supportingText,
             validation = callUrlState.validator,
             onValidationErrorMessage = stringResource(R.string.screen_advanced_settings_element_call_base_url_validation_error),
