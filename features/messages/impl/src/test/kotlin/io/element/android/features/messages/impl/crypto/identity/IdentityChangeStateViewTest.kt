@@ -48,7 +48,7 @@ class IdentityChangeStateViewTest {
         rule.onNodeWithText("@alice:localhost", substring = true).assertExists("should display user mxid")
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
-        rule.clickOn(res = CommonStrings.action_ok)
+        rule.clickOn(res = CommonStrings.action_dismiss)
         eventsRecorder.assertSingle(IdentityChangeEvent.PinIdentity(UserId("@alice:localhost")))
     }
 
