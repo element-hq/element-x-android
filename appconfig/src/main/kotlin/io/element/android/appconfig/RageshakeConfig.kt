@@ -9,6 +9,11 @@ package io.element.android.appconfig
 
 object RageshakeConfig {
     /**
+     * Whether the rageshake feature is enabled.
+     */
+    const val IS_ENABLED = BuildConfig.SERVICES_RAGESHAKE_IS_ENABLED
+
+    /**
      * The URL to submit bug reports to.
      */
     const val BUG_REPORT_URL = "https://riot.im/bugreports/submit"

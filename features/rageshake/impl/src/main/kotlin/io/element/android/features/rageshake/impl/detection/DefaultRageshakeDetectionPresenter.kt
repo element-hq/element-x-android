@@ -75,7 +75,8 @@ class DefaultRageshakeDetectionPresenter @Inject constructor(
         LaunchedEffect(preferencesState.sensitivity) {
             rageShake.setSensitivity(preferencesState.sensitivity)
         }
-        val shouldStart = preferencesState.isEnabled &&
+        val shouldStart = preferencesState.isFeatureEnabled &&
+            preferencesState.isEnabled &&
             preferencesState.isSupported &&
             isStarted.value &&
             !takeScreenshot.value &&

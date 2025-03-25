@@ -1,4 +1,5 @@
 import config.BuildTimeConfig
+import extension.buildConfigFieldBoolean
 import extension.buildConfigFieldStr
 
 /*
@@ -22,6 +23,10 @@ android {
         buildConfigFieldStr(
             name = "URL_POLICY",
             value = BuildTimeConfig.URL_POLICY ?: "https://element.io/cookie-policy",
+        )
+        buildConfigFieldBoolean(
+            name = "SERVICES_RAGESHAKE_IS_ENABLED",
+            value = BuildTimeConfig.SERVICES_RAGESHAKE_IS_ENABLED,
         )
     }
 }
