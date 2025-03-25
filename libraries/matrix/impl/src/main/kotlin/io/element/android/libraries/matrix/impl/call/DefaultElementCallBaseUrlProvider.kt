@@ -39,5 +39,11 @@ class DefaultElementCallBaseUrlProvider @Inject constructor(
             }
             ?.call
             ?.widgetUrl
+            ?.let { url ->
+                if (!url.endsWith("/room")) {
+                    Timber.w("The Element Call URL in `element.json` may not have a valid format. It should end with the `/room` path.")
+                }
+                url
+            }
     }
 }
