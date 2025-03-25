@@ -19,3 +19,14 @@ fun VariantDimension.buildConfigFieldStr(
         value = "\"$value\""
     )
 }
+
+fun VariantDimension.buildConfigFieldBoolean(
+    name: String,
+    value: Boolean,
+) {
+    buildConfigField(
+        type = "boolean",
+        name = name,
+        value = value.toString()
+    )
+}
