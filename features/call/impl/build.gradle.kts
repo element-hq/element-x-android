@@ -1,3 +1,4 @@
+import extension.readLocalProperty
 import extension.setupAnvil
 
 /*
@@ -22,6 +23,49 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+
+    defaultConfig {
+        buildConfigField(
+            type = "String",
+            name = "SENTRY_DSN",
+            value = (System.getenv("ELEMENT_CALL_SENTRY_DSN")
+                ?: readLocalProperty("features.call.sentry.dsn")
+                ?: ""
+                ).let { "\"$it\"" }
+        )
+        buildConfigField(
+            type = "String",
+            name = "POSTHOG_USER_ID",
+            value = (System.getenv("ELEMENT_CALL_POSTHOG_USER_ID")
+                ?: readLocalProperty("features.call.posthog.userid")
+                ?: ""
+                ).let { "\"$it\"" }
+        )
+        buildConfigField(
+            type = "String",
+            name = "POSTHOG_API_HOST",
+            value = (System.getenv("ELEMENT_CALL_POSTHOG_API_HOST")
+                ?: readLocalProperty("features.call.posthog.api.host")
+                ?: ""
+                ).let { "\"$it\"" }
+        )
+        buildConfigField(
+            type = "String",
+            name = "POSTHOG_API_KEY",
+            value = (System.getenv("ELEMENT_CALL_POSTHOG_API_KEY")
+                ?: readLocalProperty("features.call.posthog.api.key")
+                ?: ""
+                ).let { "\"$it\"" }
+        )
+        buildConfigField(
+            type = "String",
+            name = "RAGESHAKE_URL",
+            value = (System.getenv("ELEMENT_CALL_RAGESHAKE_URL")
+                ?: readLocalProperty("features.call.regeshake.url")
+                ?: ""
+                ).let { "\"$it\"" }
+        )
     }
 }
 
