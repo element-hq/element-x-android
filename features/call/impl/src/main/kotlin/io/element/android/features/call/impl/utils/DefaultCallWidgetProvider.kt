@@ -49,12 +49,7 @@ class DefaultCallWidgetProvider @Inject constructor(
 
         CallWidgetProvider.GetWidgetResult(
             driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
-            url = if (callUrl.startsWith(EMBEDDED_CALL_WIDGET_BASE_URL)) {
-                // The call URL based on the embedded base URL has an incorrect `/room` path we need to remove
-                callUrl.replace("/room#", "#")
-            } else {
-                callUrl
-            }
+            url = callUrl,
         )
     }
 }
