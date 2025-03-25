@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsPro
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.services.analytics.api.store.AnalyticsStore
-import io.element.android.services.analyticsproviders.sentry.SentryConfig
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.EncryptionSystem
 import org.matrix.rustcomponents.sdk.VirtualElementCallWidgetOptions
@@ -47,7 +46,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             posthogApiKey = callAnalyticsCredentialsProvider.posthogApiKey.takeIf { isAnalyticsEnabled },
             rageshakeSubmitUrl = callAnalyticsCredentialsProvider.rageshakeSubmitUrl,
             sentryDsn = callAnalyticsCredentialsProvider.sentryDsn.takeIf { isAnalyticsEnabled },
-            sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) SentryConfig.ENV_RELEASE else SentryConfig.ENV_DEBUG,
+            sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) "RELEASE" else "DEBUG",
             parentUrl = null,
             hideHeader = true,
         )
