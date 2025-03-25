@@ -14,7 +14,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.services.analytics.api.store.AnalyticsStore
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.EncryptionSystem
 import org.matrix.rustcomponents.sdk.VirtualElementCallWidgetOptions
@@ -26,10 +26,10 @@ import org.matrix.rustcomponents.sdk.Intent as CallIntent
 class DefaultCallWidgetSettingsProvider @Inject constructor(
     private val buildMeta: BuildMeta,
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
-    private val analyticsStore: AnalyticsStore,
+    private val analyticsService: AnalyticsService,
 ) : CallWidgetSettingsProvider {
     override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
-        val isAnalyticsEnabled = analyticsStore.userConsentFlow.first()
+        val isAnalyticsEnabled = analyticsService.getUserConsent().first()
         val options = VirtualElementCallWidgetOptions(
             elementCallUrl = baseUrl,
             widgetId = widgetId,
