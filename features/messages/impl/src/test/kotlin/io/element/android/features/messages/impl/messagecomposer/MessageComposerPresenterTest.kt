@@ -61,7 +61,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -1011,16 +1010,10 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
-            )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // A null suggestion (no suggestion was received) returns nothing
@@ -1078,16 +1071,10 @@ class MessageComposerPresenterTest {
                 )
             )
         }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
-            )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // An empty suggestion returns the joined members that are not the current user, but not the room
@@ -1293,11 +1280,11 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isNull()
             }
-
             assert(loadDraftLambda)
                 .isCalledOnce()
                 .with(value(A_ROOM_ID), value(false))
@@ -1327,7 +1314,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isTrue()
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -1360,7 +1348,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(anEditMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1406,7 +1395,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(aReplyMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1580,8 +1570,7 @@ class MessageComposerPresenterTest {
     }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
+        skipItems(1)
         return awaitItem()
     }
 }

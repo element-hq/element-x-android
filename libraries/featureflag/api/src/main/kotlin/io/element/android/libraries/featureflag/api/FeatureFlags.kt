@@ -54,20 +54,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = true,
     ),
-    Mentions(
-        key = "feature.mentions",
-        title = "Mentions",
-        description = "Type `@` to get mention suggestions and insert them",
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    RoomAliasSuggestions(
-        key = "feature.roomAliasSuggestions",
-        title = "Room alias suggestions",
-        description = "Type `#` to get room alias suggestions and insert them",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     MarkAsUnread(
         key = "feature.markAsUnread",
         title = "Mark as unread",
