@@ -7,13 +7,13 @@
 
 package io.element.android.libraries.textcomposer
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -37,14 +37,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconColorButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -281,6 +285,7 @@ fun TextComposer(
     if (showTextFormatting && textFormattingOptions != null) {
         TextFormattingLayout(
             modifier = layoutModifier,
+            isRoomEncrypted = state.isRoomEncrypted,
             textInput = textInput,
             dismissTextFormattingButton = {
                 IconColorButton(
@@ -295,6 +300,7 @@ fun TextComposer(
         StandardLayout(
             voiceMessageState = voiceMessageState,
             enableVoiceMessages = enableVoiceMessages,
+            isRoomEncrypted = state.isRoomEncrypted,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
@@ -330,6 +336,7 @@ fun TextComposer(
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
     enableVoiceMessages: Boolean,
+    isRoomEncrypted: Boolean?,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
@@ -337,58 +344,85 @@ private fun StandardLayout(
     endButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.Bottom,
-    ) {
-        if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
-            if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
+    Column(modifier = modifier) {
+        if (isRoomEncrypted == false) {
+            Spacer(Modifier.height(16.dp))
+            NotEncryptedBadge()
+            Spacer(Modifier.height(4.dp))
+        }
+        Row(verticalAlignment = Alignment.Bottom) {
+            if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
+                if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                            .size(48.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        voiceDeleteButton()
+                    }
+                } else {
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center,
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
                 ) {
-                    voiceDeleteButton()
+                    voiceRecording()
                 }
             } else {
-                Spacer(modifier = Modifier.width(16.dp))
+                Box(
+                    Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, start = 3.dp)
+                ) {
+                    composerOptionsButton()
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
+                ) {
+                    textInput()
+                }
             }
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 8.dp, top = 8.dp)
-                    .weight(1f)
-            ) {
-                voiceRecording()
-            }
-        } else {
             Box(
                 Modifier
-                    .padding(bottom = 5.dp, top = 5.dp, start = 3.dp)
+                    .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                    .size(48.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                composerOptionsButton()
+                endButton()
             }
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 8.dp, top = 8.dp)
-                    .weight(1f)
-            ) {
-                textInput()
-            }
-        }
-        Box(
-            Modifier
-                .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                .size(48.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            endButton()
         }
     }
 }
 
 @Composable
+private fun NotEncryptedBadge() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = CompoundIcons.LockOff(),
+            contentDescription = null,
+            tint = ElementTheme.colors.iconInfoPrimary,
+        )
+        Spacer(Modifier.width(4.dp))
+        Text(
+            text = stringResource(CommonStrings.common_not_encrypted),
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+    }
+}
+
+@Composable
 private fun TextFormattingLayout(
+    isRoomEncrypted: Boolean?,
     textInput: @Composable () -> Unit,
     dismissTextFormattingButton: @Composable () -> Unit,
     textFormatting: @Composable () -> Unit,
@@ -399,6 +433,10 @@ private fun TextFormattingLayout(
         modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        if (isRoomEncrypted == false) {
+            NotEncryptedBadge()
+            Spacer(Modifier.height(8.dp))
+        }
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -438,7 +476,7 @@ private fun TextInputBox(
     placeholder: String,
     showPlaceholder: Boolean,
     subcomposing: Boolean,
-    textInput: @Composable BoxScope.() -> Unit,
+    textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -539,24 +577,26 @@ private fun TextInput(
     }
 }
 
-private fun aTextEditorStateMarkdownList() = persistentListOf(
-    aTextEditorStateMarkdown(initialText = "", initialFocus = true),
-    aTextEditorStateMarkdown(initialText = "A message", initialFocus = true),
+private fun aTextEditorStateMarkdownList(isRoomEncrypted: Boolean? = null) = persistentListOf(
+    aTextEditorStateMarkdown(initialText = "", initialFocus = true, isRoomEncrypted = isRoomEncrypted),
+    aTextEditorStateMarkdown(initialText = "A message", initialFocus = true, isRoomEncrypted = isRoomEncrypted),
     aTextEditorStateMarkdown(
         initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
         initialFocus = true,
+        isRoomEncrypted = isRoomEncrypted,
     ),
-    aTextEditorStateMarkdown(initialText = "A message without focus", initialFocus = false),
+    aTextEditorStateMarkdown(initialText = "A message without focus", initialFocus = false, isRoomEncrypted = isRoomEncrypted),
 )
 
-private fun aTextEditorStateRichList() = persistentListOf(
-    aTextEditorStateRich(initialFocus = true),
-    aTextEditorStateRich(initialText = "A message", initialFocus = true),
+private fun aTextEditorStateRichList(isRoomEncrypted: Boolean? = null) = persistentListOf(
+    aTextEditorStateRich(initialFocus = true, isRoomEncrypted = isRoomEncrypted),
+    aTextEditorStateRich(initialText = "A message", initialFocus = true, isRoomEncrypted = isRoomEncrypted),
     aTextEditorStateRich(
         initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-        initialFocus = true
+        initialFocus = true,
+        isRoomEncrypted = isRoomEncrypted,
     ),
-    aTextEditorStateRich(initialText = "A message without focus", initialFocus = false),
+    aTextEditorStateRich(initialText = "A message without focus", initialFocus = false, isRoomEncrypted = isRoomEncrypted),
 )
 
 @PreviewsDayNight
@@ -564,6 +604,21 @@ private fun aTextEditorStateRichList() = persistentListOf(
 internal fun TextComposerSimplePreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateMarkdownList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Normal,
+            enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerSimpleNotEncryptedPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateMarkdownList(isRoomEncrypted = false),
     ) { _, textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -592,9 +647,40 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
+internal fun TextComposerFormattingNotEncryptedPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList(isRoomEncrypted = false)
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            showTextFormatting = true,
+            composerMode = MessageComposerMode.Normal,
+            enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
 internal fun TextComposerEditPreview() = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeEdit(),
+            enableVoiceMessages = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerEditNotEncryptedPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList(isRoomEncrypted = false)
     ) { _, textEditorState ->
         ATextComposer(
             state = textEditorState,
@@ -674,6 +760,31 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
     }
 }
 
+@Preview(
+    name = DAY_MODE_NAME,
+    heightDp = 800,
+)
+@Preview(
+    name = NIGHT_MODE_NAME,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    heightDp = 800,
+)
+@Composable
+internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateRichList(isRoomEncrypted = false)
+    ) { _, textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = aMessageComposerModeReply(
+                replyToDetails = inReplyToDetails,
+            ),
+            enableVoiceMessages = true,
+        )
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun TextComposerCaptionPreview() = ElementPreview {
@@ -734,6 +845,47 @@ internal fun TextComposerVoicePreview() = ElementPreview {
     }
 }
 
+@PreviewsDayNight
+@Composable
+internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
+    PreviewColumn(
+        items = persistentListOf(
+            VoiceMessageState.Recording(61.seconds, createFakeWaveform()),
+            VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = false,
+                showCursor = false,
+                waveform = createFakeWaveform(),
+                time = 0.seconds,
+                playbackProgress = 0.0f
+            ),
+            VoiceMessageState.Preview(
+                isSending = false,
+                isPlaying = true,
+                showCursor = true,
+                waveform = createFakeWaveform(),
+                time = 3.seconds,
+                playbackProgress = 0.2f
+            ),
+            VoiceMessageState.Preview(
+                isSending = true,
+                isPlaying = false,
+                showCursor = false,
+                waveform = createFakeWaveform(),
+                time = 61.seconds,
+                playbackProgress = 0.0f
+            ),
+        )
+    ) { _, voiceMessageState ->
+        ATextComposer(
+            state = aTextEditorStateRich(initialFocus = true, isRoomEncrypted = false),
+            voiceMessageState = voiceMessageState,
+            composerMode = MessageComposerMode.Normal,
+            enableVoiceMessages = true,
+        )
+    }
+}
+
 @Composable
 private fun <T> PreviewColumn(
     items: ImmutableList<T>,
@@ -741,6 +893,7 @@ private fun <T> PreviewColumn(
 ) {
     Column {
         items.forEachIndexed { index, item ->
+            HorizontalDivider()
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)
             ) {

@@ -160,6 +160,7 @@
   <string name="common_editing">"Muutmine"</string>
   <string name="common_editing_caption">"Muudame selgitust"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Tühi fail"</string>
   <string name="common_encryption">"Krüptimine"</string>
   <string name="common_encryption_enabled">"Krüptimine on kasutusel"</string>
   <string name="common_enter_your_pin">"Sisesta oma PIN-kood"</string>
@@ -184,6 +185,7 @@ Põhjus: %1$s."</string>
   <string name="common_invite_unknown_profile">"Sellist Matrix\'i kasutajatunnust ei õnnestu leida, seega sõnumit ilmselt keegi kätte ei saa."</string>
   <string name="common_leaving_room">"Oled lahkumas jututoast"</string>
   <string name="common_light">"Hele"</string>
+  <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>

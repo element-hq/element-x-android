@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -96,6 +97,7 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
+    private val linkPresenter: Presenter<LinkState>,
     @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
@@ -136,6 +138,7 @@ class MessagesPresenter @AssistedInject constructor(
         val timelineProtectionState = timelineProtectionPresenter.present()
         val identityChangeState = identityChangeStatePresenter.present()
         val actionListState = actionListPresenter.present()
+        val linkState = linkPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
@@ -245,6 +248,7 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState = timelineState,
             timelineProtectionState = timelineProtectionState,
             identityChangeState = identityChangeState,
+            linkState = linkState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,

@@ -12,15 +12,19 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 class FakeStringProvider(
     private val defaultResult: String = "A string"
 ) : StringProvider {
+    var lastResIdParam: Int? = null
     override fun getString(resId: Int): String {
+        lastResIdParam = resId
         return defaultResult
     }
 
     override fun getString(resId: Int, vararg formatArgs: Any?): String {
+        lastResIdParam = resId
         return defaultResult + formatArgs.joinToString()
     }
 
     override fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any?): String {
+        lastResIdParam = resId
         return defaultResult + " ($quantity) " + formatArgs.joinToString()
     }
 }

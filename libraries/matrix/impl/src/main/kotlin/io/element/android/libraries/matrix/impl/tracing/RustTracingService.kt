@@ -51,5 +51,7 @@ fun TracingConfiguration.map(): org.matrix.rustcomponents.sdk.TracingConfigurati
     writeToStdoutOrSystem = writesToLogcat,
     logLevel = logLevel.toRustLogLevel(),
     extraTargets = extraTargets,
+    // WARNING: this should be used only to debug issues, changes to this value should *never* be published
+    traceLogPacks = emptyList(),
     writeToFiles = writesToFilesConfiguration.toTracingFileConfiguration(),
 )

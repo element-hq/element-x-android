@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.link.Link
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,8 +65,8 @@ fun TimelineItemImageView(
     hideMediaContent: Boolean,
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
-    onLinkClick: (String) -> Unit,
-    onLinkLongClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onShowContentClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,

@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Скопировано в буфер обмена"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
+  <string name="common_current_user_canceled_knock">"Запрос отменен"</string>
   <string name="common_current_user_left_room">"Покинул комнату"</string>
+  <string name="common_current_user_rejected_invite">"Приглашение отклонено"</string>
   <string name="common_dark">"Тёмное"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
@@ -160,6 +162,7 @@
   <string name="common_editing">"Редактирование"</string>
   <string name="common_editing_caption">"Редактирование подписи"</string>
   <string name="common_emote">"%1$s%2$s"</string>
+  <string name="common_empty_file">"Пустой файл"</string>
   <string name="common_encryption">"Шифрование"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
@@ -184,6 +187,7 @@
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
   <string name="common_leaving_room">"Покидание комнаты"</string>
   <string name="common_light">"Светлое"</string>
+  <string name="common_line_copied_to_clipboard">"Строка скопирована в буфер обмена"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_loading_more">"Загрузить больше…"</string>
@@ -289,6 +293,10 @@
   <string name="crypto_identity_change_profile_pin_violation">"Проверенная личность пользователя %1$s изменилась."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s подтвержденная личность изменилась. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Вывод верификации"</string>
+  <string name="dialog_confirm_link_message">"Ссылка %1$s ведет вас на другой сайт %2$s
+
+Вы действительно хотите продолжить?"</string>
+  <string name="dialog_confirm_link_title">"Перепроверьте эту ссылку"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>

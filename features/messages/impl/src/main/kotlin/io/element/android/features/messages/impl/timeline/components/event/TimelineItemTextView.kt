@@ -41,12 +41,13 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    onLinkClick: (String) -> Unit,
-    onLinkLongClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {

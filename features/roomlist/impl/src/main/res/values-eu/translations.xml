@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_set_up_recovery_submit">"Konfiguratu berreskurapena"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Sartu zure berreskuratze-gakoa"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Berreskuratze-gakoa ahaztu al duzu?"</string>
   <string name="full_screen_intent_banner_message">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
   <string name="full_screen_intent_banner_title">"Hobetu deien esperientzia"</string>
