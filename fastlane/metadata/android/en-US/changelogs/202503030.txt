@@ -1,0 +1,2 @@
+Main changes in this version: improvements to the event cache, Element Call now uses an embedded implementation, several bugfixes.
+Full changelog: https://github.com/element-hq/element-x-android/releases
