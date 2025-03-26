@@ -9,6 +9,7 @@ package io.element.android.features.analytics.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -36,6 +37,7 @@ class AnalyticsOptInPresenter @Inject constructor(
 
         return AnalyticsOptInState(
             applicationName = buildMeta.applicationName,
+            hasPolicyLink = AnalyticsConfig.POLICY_LINK.isNotEmpty(),
             eventSink = ::handleEvents
         )
     }
