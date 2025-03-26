@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.rageshake.test.crash
+package io.element.android.features.rageshake.impl.crash
 
-import io.element.android.features.rageshake.api.crash.CrashDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

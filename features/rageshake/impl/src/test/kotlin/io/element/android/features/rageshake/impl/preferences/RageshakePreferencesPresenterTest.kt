@@ -12,9 +12,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
-import io.element.android.features.rageshake.test.rageshake.A_SENSITIVITY
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.impl.rageshake.A_SENSITIVITY
+import io.element.android.features.rageshake.impl.rageshake.FakeRageShake
+import io.element.android.features.rageshake.impl.rageshake.FakeRageshakeDataStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

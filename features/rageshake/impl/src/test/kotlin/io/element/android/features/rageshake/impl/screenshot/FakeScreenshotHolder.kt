@@ -5,10 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.rageshake.test.screenshot
+package io.element.android.features.rageshake.impl.screenshot
 
 import android.graphics.Bitmap
-import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 
 const val A_SCREENSHOT_URI = "file://content/uri"
 

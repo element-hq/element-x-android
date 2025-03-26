@@ -12,9 +12,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
+import io.element.android.features.rageshake.impl.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
-import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
-import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
+import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule

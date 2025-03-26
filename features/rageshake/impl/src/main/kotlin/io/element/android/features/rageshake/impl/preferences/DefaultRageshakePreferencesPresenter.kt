@@ -19,8 +19,8 @@ import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.features.rageshake.api.rageshake.RageShake
-import io.element.android.features.rageshake.api.rageshake.RageshakeDataStore
+import io.element.android.features.rageshake.impl.rageshake.RageShake
+import io.element.android.features.rageshake.impl.rageshake.RageshakeDataStore
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

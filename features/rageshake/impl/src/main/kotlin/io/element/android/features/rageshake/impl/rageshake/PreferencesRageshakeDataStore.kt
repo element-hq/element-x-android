@@ -15,7 +15,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.rageshake.api.rageshake.RageshakeDataStore
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
