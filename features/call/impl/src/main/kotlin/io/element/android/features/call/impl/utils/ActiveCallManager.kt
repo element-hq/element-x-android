@@ -8,8 +8,11 @@
 package io.element.android.features.call.impl.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.PowerManager
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
@@ -17,6 +20,7 @@ import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
@@ -74,6 +78,7 @@ interface ActiveCallManager {
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultActiveCallManager @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val coroutineScope: CoroutineScope,
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
@@ -82,6 +87,18 @@ class DefaultActiveCallManager @Inject constructor(
     private val defaultCurrentCallService: DefaultCurrentCallService,
 ) : ActiveCallManager {
     private var timedOutCallJob: Job? = null
+    private val activeWakeLock: PowerManager.WakeLock? = run {
+        val powerManager = context.getSystemService<PowerManager>()
+
+        if (powerManager?.isWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK) == true) {
+            powerManager.newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK,
+                "${context.packageName}:IncomingCallWakeLock",
+            )
+        } else {
+            null
+        }
+    }
 
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
@@ -111,6 +128,12 @@ class DefaultActiveCallManager @Inject constructor(
             delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
             incomingCallTimedOut(displayMissedCallNotification = true)
         }
+
+        // Acquire a wake lock to keep the device awake during the incoming call, so we can process the room info data
+        if (activeWakeLock?.isHeld == true) {
+            activeWakeLock.release()
+        }
+        activeWakeLock?.acquire(ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L)
     }
 
     /**
@@ -121,6 +144,9 @@ class DefaultActiveCallManager @Inject constructor(
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
         activeCall.value = null
+        if (activeWakeLock?.isHeld == true) {
+            activeWakeLock.release()
+        }
 
         cancelIncomingCallNotification()
 
@@ -135,12 +161,18 @@ class DefaultActiveCallManager @Inject constructor(
             return
         }
         cancelIncomingCallNotification()
+        if (activeWakeLock?.isHeld == true) {
+            activeWakeLock.release()
+        }
         timedOutCallJob?.cancel()
         activeCall.value = null
     }
 
     override fun joinedCall(callType: CallType) {
         cancelIncomingCallNotification()
+        if (activeWakeLock?.isHeld == true) {
+            activeWakeLock.release()
+        }
         timedOutCallJob?.cancel()
 
         activeCall.value = ActiveCall(
@@ -201,6 +233,7 @@ class DefaultActiveCallManager @Inject constructor(
                     ?.getRoom(callType.roomId)
                     ?.roomInfoFlow
                     ?.map {
+                        Timber.d("Has room call status changed for ringing call: ${it.hasRoomCall}")
                         it.hasRoomCall to (callType.sessionId in it.activeRoomCallParticipants)
                     }
                     ?: flowOf()

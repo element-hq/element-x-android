@@ -290,6 +290,7 @@ class DefaultActiveCallManagerTest {
         notificationManagerCompat: NotificationManagerCompat = mockk(relaxed = true),
         coroutineScope: CoroutineScope = this,
     ) = DefaultActiveCallManager(
+        context = InstrumentationRegistry.getInstrumentation().targetContext,
         coroutineScope = coroutineScope,
         onMissedCallNotificationHandler = onMissedCallNotificationHandler,
         ringingCallNotificationCreator = RingingCallNotificationCreator(
