@@ -8,7 +8,6 @@
 package io.element.android.features.call.impl.utils
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.net.http.SslError
 import android.webkit.JavascriptInterface
 import android.webkit.SslErrorHandler
@@ -17,6 +16,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.net.toUri
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
@@ -125,12 +125,11 @@ class WebViewWidgetMessageInterceptor(
             }
 
             override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
-                println("Intercepting: ${request.url}")
                 return assetLoader.shouldInterceptRequest(request.url)
             }
 
             override fun shouldInterceptRequest(view: WebView?, url: String): WebResourceResponse? {
-                return assetLoader.shouldInterceptRequest(Uri.parse(url))
+                return assetLoader.shouldInterceptRequest(url.toUri())
             }
         }
 
