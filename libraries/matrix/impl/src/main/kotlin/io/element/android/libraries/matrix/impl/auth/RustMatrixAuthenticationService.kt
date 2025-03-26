@@ -189,12 +189,12 @@ class RustMatrixAuthenticationService @Inject constructor(
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val oAuthAuthenticationData = client.urlForOidc(
+                val oAuthAuthorizationData = client.urlForOidc(
                     oidcConfiguration = oidcConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
                 )
-                val url = oAuthAuthenticationData.loginUrl()
-                pendingOAuthAuthorizationData = oAuthAuthenticationData
+                val url = oAuthAuthorizationData.loginUrl()
+                pendingOAuthAuthorizationData = oAuthAuthorizationData
                 OidcDetails(url)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()

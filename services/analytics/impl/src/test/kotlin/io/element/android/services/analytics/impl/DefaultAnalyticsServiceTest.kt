@@ -18,7 +18,7 @@ import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
-import io.element.android.services.analytics.api.store.AnalyticsStore
+import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analytics.impl.store.FakeAnalyticsStore
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.test.FakeAnalyticsProvider

@@ -8,15 +8,13 @@
 package io.element.android.libraries.matrix.impl.widget
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.RageshakeConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.services.analytics.api.store.AnalyticsStore
-import io.element.android.services.analyticsproviders.posthog.PosthogEndpointConfigProvider
-import io.element.android.services.analyticsproviders.sentry.SentryConfig
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.EncryptionSystem
 import org.matrix.rustcomponents.sdk.VirtualElementCallWidgetOptions
@@ -27,12 +25,11 @@ import org.matrix.rustcomponents.sdk.Intent as CallIntent
 @ContributesBinding(AppScope::class)
 class DefaultCallWidgetSettingsProvider @Inject constructor(
     private val buildMeta: BuildMeta,
-    private val posthogEndpointConfigProvider: PosthogEndpointConfigProvider,
-    private val analyticsStore: AnalyticsStore,
+    private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
+    private val analyticsService: AnalyticsService,
 ) : CallWidgetSettingsProvider {
     override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
-        val analyticsEnabled = analyticsStore.userConsentFlow.first()
-        val posthogEndpointConfig = posthogEndpointConfigProvider.provide()
+        val isAnalyticsEnabled = analyticsService.getUserConsent().first()
         val options = VirtualElementCallWidgetOptions(
             elementCallUrl = baseUrl,
             widgetId = widgetId,
@@ -44,12 +41,12 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
             encryption = if (encrypted) EncryptionSystem.PerParticipantKeys else EncryptionSystem.Unencrypted,
             intent = CallIntent.START_CALL,
             hideScreensharing = false,
-            posthogUserId = null,
-            posthogApiHost = posthogEndpointConfig.host.takeIf { analyticsEnabled },
-            posthogApiKey = posthogEndpointConfig.apiKey.takeIf { analyticsEnabled },
-            rageshakeSubmitUrl = RageshakeConfig.BUG_REPORT_URL,
-            sentryDsn = SentryConfig.DSN.takeIf { analyticsEnabled },
-            sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) SentryConfig.ENV_RELEASE else SentryConfig.ENV_DEBUG,
+            posthogUserId = callAnalyticsCredentialsProvider.posthogUserId.takeIf { isAnalyticsEnabled },
+            posthogApiHost = callAnalyticsCredentialsProvider.posthogApiHost.takeIf { isAnalyticsEnabled },
+            posthogApiKey = callAnalyticsCredentialsProvider.posthogApiKey.takeIf { isAnalyticsEnabled },
+            rageshakeSubmitUrl = callAnalyticsCredentialsProvider.rageshakeSubmitUrl,
+            sentryDsn = callAnalyticsCredentialsProvider.sentryDsn.takeIf { isAnalyticsEnabled },
+            sentryEnvironment = if (buildMeta.buildType == BuildType.RELEASE) "RELEASE" else "DEBUG",
             parentUrl = null,
             hideHeader = true,
         )

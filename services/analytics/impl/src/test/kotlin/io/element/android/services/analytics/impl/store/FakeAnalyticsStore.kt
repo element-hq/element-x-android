@@ -7,11 +7,10 @@
 
 package io.element.android.services.analytics.impl.store
 
-import io.element.android.services.analytics.api.store.AnalyticsStore
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeAnalyticsStore(
+internal class FakeAnalyticsStore(
     defaultUserConsent: Boolean = false,
     defaultDidAskUserConsent: Boolean = false,
     defaultAnalyticsId: String = "",

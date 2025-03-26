@@ -17,8 +17,8 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.store.AnalyticsStore
 import io.element.android.services.analytics.impl.log.analyticsTag
+import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
