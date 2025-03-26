@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.appconfig.isEnabled
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -35,7 +36,7 @@ class OnBoardingPresenter @Inject constructor(
             productionApplicationName = buildMeta.productionApplicationName,
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = OnBoardingConfig.CAN_CREATE_ACCOUNT,
-            canReportBug = RageshakeConfig.IS_ENABLED,
+            canReportBug = RageshakeConfig.isEnabled,
         )
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.appconfig.isEnabled
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -164,7 +165,7 @@ class RoomListPresenter @Inject constructor(
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
-            canReportBug = RageshakeConfig.IS_ENABLED,
+            canReportBug = RageshakeConfig.isEnabled,
             searchState = searchState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,

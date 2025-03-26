@@ -1,5 +1,4 @@
 import config.BuildTimeConfig
-import extension.buildConfigFieldBoolean
 import extension.buildConfigFieldStr
 
 /*
@@ -24,9 +23,21 @@ android {
             name = "URL_POLICY",
             value = BuildTimeConfig.URL_POLICY ?: "https://element.io/cookie-policy",
         )
-        buildConfigFieldBoolean(
-            name = "SERVICES_RAGESHAKE_IS_ENABLED",
-            value = BuildTimeConfig.SERVICES_RAGESHAKE_IS_ENABLED,
+        buildConfigFieldStr(
+            name = "BUG_REPORT_URL",
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.BUG_REPORT_URL ?: ""
+            } else {
+                "https://riot.im/bugreports/submit"
+            },
+        )
+        buildConfigFieldStr(
+            name = "BUG_REPORT_APP_NAME",
+            value = if (isEnterpriseBuild) {
+                BuildTimeConfig.BUG_REPORT_APP_NAME ?: ""
+            } else {
+                "element-x-android"
+            },
         )
     }
 }

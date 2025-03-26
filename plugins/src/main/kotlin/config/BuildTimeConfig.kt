@@ -29,5 +29,6 @@ object BuildTimeConfig {
     val SERVICES_POSTHOG_HOST: String? = null
     val SERVICES_POSTHOG_APIKEY: String? = null
     val SERVICES_SENTRY_DSN: String? = null
-    const val SERVICES_RAGESHAKE_IS_ENABLED: Boolean = true
+    val BUG_REPORT_URL: String? = null
+    val BUG_REPORT_APP_NAME: String? = null
 }

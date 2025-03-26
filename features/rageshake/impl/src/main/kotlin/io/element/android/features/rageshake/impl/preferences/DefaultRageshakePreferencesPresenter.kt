@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.appconfig.isEnabled
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
@@ -52,7 +53,7 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
         }
 
         return RageshakePreferencesState(
-            isFeatureEnabled = RageshakeConfig.IS_ENABLED,
+            isFeatureEnabled = RageshakeConfig.isEnabled,
             isEnabled = isEnabled.value,
             isSupported = isSupported.value,
             sensitivity = sensitivity.value,
