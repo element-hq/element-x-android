@@ -7,8 +7,6 @@
 
 package io.element.android.features.rageshake.api
 
-// TODO Use this interface to check if the feature is available in other modules
-// instead of accessing directly RageshakeConfig.isEnabled
 fun interface RageshakeFeatureAvailability {
     fun isAvailable(): Boolean
 }

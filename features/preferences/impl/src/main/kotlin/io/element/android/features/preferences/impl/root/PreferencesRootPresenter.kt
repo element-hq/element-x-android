@@ -16,10 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.element.android.appconfig.RageshakeConfig
-import io.element.android.appconfig.isEnabled
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
@@ -46,6 +45,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
+    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -81,6 +81,7 @@ class PreferencesRootPresenter @Inject constructor(
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
+        val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
         LaunchedEffect(Unit) {
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
@@ -116,7 +117,7 @@ class PreferencesRootPresenter @Inject constructor(
             accountManagementUrl = accountManagementUrl.value,
             devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
-            canReportBug = RageshakeConfig.isEnabled,
+            canReportBug = canReportBug,
             showDeveloperSettings = showDeveloperSettings,
             canDeactivateAccount = canDeactivateAccount,
             showNotificationSettings = showNotificationSettings.value,
