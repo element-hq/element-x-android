@@ -22,14 +22,17 @@ object ModulesConfig {
         // Is Sentry configuration available?
         val withSentry = BuildTimeConfig.SERVICES_SENTRY_DSN.isNullOrEmpty().not()
         if (withPosthog || withSentry) {
+            println("Analytics enabled with Posthog: $withPosthog, Sentry: $withSentry")
             AnalyticsConfig.Enabled(
                 withPosthog = withPosthog,
                 withSentry = withSentry,
             )
         } else {
+            println("Analytics disabled")
             AnalyticsConfig.Disabled
         }
     } else {
+        println("Analytics enabled with Posthog and Sentry")
         AnalyticsConfig.Enabled(
             withPosthog = true,
             withSentry = true,
