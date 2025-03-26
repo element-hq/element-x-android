@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Nemôžete potvrdiť?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Vytvoriť nový kľúč na obnovenie"</string>
+  <string name="screen_identity_confirmation_subtitle">"Ak chcete nastaviť zabezpečené správy, overte toto zariadenie."</string>
+  <string name="screen_identity_confirmation_title">"Potvrďte, že ste to vy"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Použite iné zariadenie"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Použiť kľúč na obnovenie"</string>
+  <string name="screen_identity_confirmed_subtitle">"Teraz môžete bezpečne čítať alebo odosielať správy a tomuto zariadeniu môže dôverovať aj ktokoľvek, s kým konverzujete."</string>
+  <string name="screen_identity_confirmed_title">"Zariadenie overené"</string>
+  <string name="screen_identity_use_another_device">"Použite iné zariadenie"</string>
+  <string name="screen_identity_waiting_on_other_device">"Čaká sa na druhom zariadení…"</string>
   <string name="screen_notification_optin_subtitle">"Svoje nastavenia môžete neskôr zmeniť."</string>
   <string name="screen_notification_optin_title">"Povoľte oznámenia a nikdy nezmeškajte žiadnu správu"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Zadajte kľúč na obnovenie"</string>
   <string name="screen_welcome_bullet_1">"Hovory, ankety, vyhľadávanie a ďalšie funkcie pribudnú neskôr v tomto roku."</string>
   <string name="screen_welcome_bullet_2">"História správ pre zašifrované miestnosti nebude v tejto aktualizácii k dispozícii."</string>
   <string name="screen_welcome_bullet_3">"Radi by sme od vás počuli, dajte nám vedieť, čo si myslíte, prostredníctvom stránky nastavení."</string>

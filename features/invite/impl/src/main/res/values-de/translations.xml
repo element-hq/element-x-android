@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Einladung ablehnen"</string>
   <string name="screen_invites_empty_list">"Keine Einladungen"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, ablehnen und blockieren"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Sind Sie sicher, dass Sie die Einladung zu diesem Raum ablehnen möchten? Dadurch wird auch verhindert, dass %1$s Sie kontaktiert oder in Räume einlädt."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Einladung ablehnen und blockieren"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Ablehnen und blockieren"</string>
 </resources>

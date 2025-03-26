@@ -164,7 +164,9 @@ class MediaViewerPresenter @AssistedInject constructor(
     ) {
         val isRenderingLoadingBackward by remember {
             derivedStateOf {
-                currentIndex.intValue == data.value.lastIndex && data.value.lastOrNull() is MediaViewerPageData.Loading
+                currentIndex.intValue == data.value.lastIndex &&
+                    data.value.size > 1 &&
+                    data.value.lastOrNull() is MediaViewerPageData.Loading
             }
         }
         if (isRenderingLoadingBackward) {
@@ -186,7 +188,9 @@ class MediaViewerPresenter @AssistedInject constructor(
     ) {
         val isRenderingLoadingForward by remember {
             derivedStateOf {
-                currentIndex.intValue == 0 && data.value.firstOrNull() is MediaViewerPageData.Loading
+                currentIndex.intValue == 0 &&
+                    data.value.size > 1 &&
+                    data.value.firstOrNull() is MediaViewerPageData.Loading
             }
         }
         if (isRenderingLoadingForward) {

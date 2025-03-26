@@ -229,6 +229,7 @@ Compose:
       - LocalRoomMemberProfilesCache
       - LocalMentionSpanUpdater
       - LocalAnalyticsService
+      - LocalBuildMeta
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

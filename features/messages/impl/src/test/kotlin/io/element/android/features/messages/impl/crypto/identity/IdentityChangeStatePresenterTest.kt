@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -44,7 +45,9 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the room emits identity change, the presenter emits new state`() = runTest {
-        val room = FakeMatrixRoom(isEncrypted = true)
+        val room = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo(isEncrypted = true))
+        }
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
@@ -67,10 +70,7 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the clear room emits identity change, the presenter does not emit new state`() = runTest {
-        val room = FakeMatrixRoom(
-            isEncrypted = false,
-            enableEncryptionResult = { Result.success(Unit) }
-        )
+        val room = FakeMatrixRoom(enableEncryptionResult = { Result.success(Unit) })
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
@@ -85,8 +85,9 @@ class IdentityChangeStatePresenterTest {
             )
             // No item emitted.
             expectNoEvents()
-            // Room become encrypted.
-            room.enableEncryption()
+            // Room becomes encrypted.
+            room.givenRoomInfo(aRoomInfo(isEncrypted = true))
+
             val finalItem = awaitItem()
             assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
             val value = finalItem.roomMemberIdentityStateChanges.first()
@@ -99,7 +100,7 @@ class IdentityChangeStatePresenterTest {
     @Test
     fun `present - when the room emits identity change, the presenter emits new state with member details`() =
         runTest {
-            val room = FakeMatrixRoom(isEncrypted = true).apply {
+            val room = FakeMatrixRoom().apply {
                 givenRoomMembersState(
                     MatrixRoomMembersState.Ready(
                         listOf(
@@ -110,6 +111,7 @@ class IdentityChangeStatePresenterTest {
                         ).toImmutableList()
                     )
                 )
+                givenRoomInfo(aRoomInfo(isEncrypted = true))
             }
             val presenter = createIdentityChangeStatePresenter(room)
             presenter.test {

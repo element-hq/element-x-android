@@ -9,6 +9,7 @@ package io.element.android.features.roomdetails.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -21,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
@@ -35,11 +37,13 @@ import io.element.android.features.roomdetails.impl.notificationsettings.RoomNot
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
+import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.designsystem.utils.OpenUrlInTabView
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -47,6 +51,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.services.analytics.api.AnalyticsService
@@ -65,6 +70,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val mediaGalleryEntryPoint: MediaGalleryEntryPoint,
+    private val verifySessionEntryPoint: VerifySessionEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -118,6 +124,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object SecurityAndPrivacy : NavTarget
+
+        @Parcelize
+        data class VerifyUser(val userId: UserId) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -166,6 +175,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openSecurityAndPrivacy() {
                         backstack.push(NavTarget.SecurityAndPrivacy)
+                    }
+
+                    override fun openDmUserProfile(userId: UserId) {
+                        backstack.push(NavTarget.RoomMemberDetails(userId))
                     }
 
                     override fun onJoinCall() {
@@ -223,6 +236,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun onStartCall(dmRoomId: RoomId) {
                         elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
+                    }
+
+                    override fun onVerifyUser(userId: UserId) {
+                        backstack.push(NavTarget.VerifyUser(userId))
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)
@@ -301,11 +318,37 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             NavTarget.SecurityAndPrivacy -> {
                 createNode<SecurityAndPrivacyFlowNode>(buildContext)
             }
+            is NavTarget.VerifyUser -> {
+                val params = VerifySessionEntryPoint.Params(
+                    showDeviceVerifiedScreen = true,
+                    verificationRequest = VerificationRequest.Outgoing.User(userId = navTarget.userId,)
+                )
+                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                    .params(params)
+                    .callback(object : VerifySessionEntryPoint.Callback {
+                        override fun onDone() {
+                            backstack.pop()
+                        }
+
+                        override fun onBack() {
+                            backstack.pop()
+                        }
+
+                        override fun onLearnMoreAboutEncryption() {
+                            learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
+                        }
+                    })
+                    .build()
+            }
         }
     }
+
+    private val learnMoreUrl = mutableStateOf<String?>(null)
 
     @Composable
     override fun View(modifier: Modifier) {
         BackstackWithOverlayBox(modifier)
+
+        OpenUrlInTabView(learnMoreUrl)
     }
 }

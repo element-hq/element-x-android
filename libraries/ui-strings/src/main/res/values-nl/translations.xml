@@ -29,9 +29,11 @@
   <string name="a11y_show_password">"Wachtwoord weergeven"</string>
   <string name="a11y_start_call">"Begin een oproep"</string>
   <string name="a11y_user_menu">"Gebruikersmenu"</string>
+  <string name="a11y_view_details">"Details bekijken"</string>
   <string name="a11y_voice_message_record">"Spraakbericht opnemen."</string>
   <string name="a11y_voice_message_stop_recording">"Opnemen stoppen"</string>
   <string name="action_accept">"Accepteren"</string>
+  <string name="action_add_caption">"Beschrijving toevoegen"</string>
   <string name="action_add_to_timeline">"Toevoegen aan tijdlijn"</string>
   <string name="action_back">"Terug"</string>
   <string name="action_call">"Bellen"</string>
@@ -73,7 +75,7 @@
   <string name="action_learn_more">"Meer informatie"</string>
   <string name="action_leave">"Verlaten"</string>
   <string name="action_leave_conversation">"Gesprek verlaten"</string>
-  <string name="action_leave_room">"Ruimte verlaten"</string>
+  <string name="action_leave_room">"Kamer verlaten"</string>
   <string name="action_load_more">"Meer laden"</string>
   <string name="action_manage_account">"Account beheren"</string>
   <string name="action_manage_devices">"Apparaten beheren"</string>

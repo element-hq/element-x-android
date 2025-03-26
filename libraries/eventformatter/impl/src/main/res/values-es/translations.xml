@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Te uniste a la sala"</string>
   <string name="state_event_room_knock">"%1$s solicitó unirse"</string>
   <string name="state_event_room_knock_accepted">"%1$s permitió que %2$s se uniera"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s te permitió unirte"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Permitiste que %1$s se uniera"</string>
   <string name="state_event_room_knock_by_you">"Solicitaste unirte"</string>
   <string name="state_event_room_knock_denied">"%1$s rechazó la solicitud de %2$s para unirse"</string>
   <string name="state_event_room_knock_denied_by_you">"Rechazaste la solicitud de %1$s para unirte"</string>
@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Eliminaste el nombre de la sala"</string>
   <string name="state_event_room_none">"%1$s no hizo cambios"</string>
   <string name="state_event_room_none_by_you">"No has hecho ningún cambio"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s cambió los mensajes fijados"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Has cambiado los mensajes fijados"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s fijó un mensaje"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Has fijado un mensaje"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s desprendió un mensaje"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Desprendiste un mensaje"</string>
   <string name="state_event_room_reject">"%1$s rechazó la invitación"</string>
   <string name="state_event_room_reject_by_you">"Rechazaste la invitación"</string>
   <string name="state_event_room_remove">"%1$s echó a %2$s"</string>

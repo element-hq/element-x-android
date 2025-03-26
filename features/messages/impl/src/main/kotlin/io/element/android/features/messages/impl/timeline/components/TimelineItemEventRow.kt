@@ -94,6 +94,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -117,7 +118,8 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
@@ -138,6 +140,7 @@ fun TimelineItemEventRow(
             onLongClick = onLongClick,
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,
             modifier = contentModifier,
             onContentLayoutChange = onContentLayoutChange

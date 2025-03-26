@@ -22,17 +22,24 @@ internal fun TimelineItemEventRowTimestampPreview(
     @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
 ) = ElementPreview {
     Column {
-        val oldContent = event.content as TimelineItemTextContent
-        listOf(
-            "Text",
-            "Text longer, displayed on 1 line",
-            "Text which should be rendered on several lines",
-        ).forEach { str ->
-            ATimelineItemEventRow(
-                event = event.copy(
-                    content = oldContent.copy(
-                        body = str,
+        when (event.content) {
+            is TimelineItemTextContent -> listOf(
+                "Text",
+                "Text longer, displayed on 1 line",
+                "Text which should be rendered on several lines",
+            ).forEach { str ->
+                ATimelineItemEventRow(
+                    event = event.copy(
+                        content = event.content.copy(
+                            body = str,
+                        ),
+                        reactionsState = aTimelineItemReactions(count = 0),
                     ),
+                )
+            }
+            else -> ATimelineItemEventRow(
+                event = event.copy(
+                    content = event.content,
                     reactionsState = aTimelineItemReactions(count = 0),
                 ),
             )

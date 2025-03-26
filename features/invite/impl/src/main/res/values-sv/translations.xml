@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Avböj chatt"</string>
   <string name="screen_invites_empty_list">"Inga inbjudningar"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) bjöd in dig"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, avvisa och blockera"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Är du säker på att du vill avvisa inbjudan att gå med i det här rummet? Detta kommer också att hindra %1$s från att kontakta dig eller bjuda in dig till rum."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Avvisa inbjudan och blockera"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Avvisa och blockera"</string>
 </resources>

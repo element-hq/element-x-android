@@ -34,7 +34,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MarkdownTextEditorStateTest {
-
     @Test
     fun `insertMention - room alias - getMentions return empty list`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)

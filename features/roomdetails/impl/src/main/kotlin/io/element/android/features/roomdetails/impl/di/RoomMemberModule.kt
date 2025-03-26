@@ -14,6 +14,7 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 @Module
@@ -23,6 +24,7 @@ object RoomMemberModule {
     fun provideRoomMemberDetailsPresenterFactory(
         room: MatrixRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory,
+        encryptionService: EncryptionService,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
@@ -30,6 +32,7 @@ object RoomMemberModule {
                     roomMemberId = roomMemberId,
                     room = room,
                     userProfilePresenterFactory = userProfilePresenterFactory,
+                    encryptionService = encryptionService,
                 )
             }
         }

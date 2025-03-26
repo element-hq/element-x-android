@@ -9,8 +9,10 @@ package io.element.android.features.location.api.internal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -28,12 +29,12 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.BooleanProvider
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun StaticMapPlaceholder(
     showProgress: Boolean,
+    canReload: Boolean,
     contentDescription: String?,
     width: Dp,
     height: Dp,
@@ -54,7 +55,7 @@ internal fun StaticMapPlaceholder(
         )
         if (showProgress) {
             CircularProgressIndicator()
-        } else {
+        } else if (canReload) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -70,14 +71,24 @@ internal fun StaticMapPlaceholder(
 
 @PreviewsDayNight
 @Composable
-internal fun StaticMapPlaceholderPreview(
-    @PreviewParameter(BooleanProvider::class) values: Boolean
-) = ElementPreview {
-    StaticMapPlaceholder(
-        showProgress = values,
-        contentDescription = null,
-        width = 400.dp,
-        height = 400.dp,
-        onLoadMapClick = {},
-    )
+internal fun StaticMapPlaceholderPreview() = ElementPreview {
+    Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        listOf(
+            true to false,
+            false to true,
+            false to false,
+        ).forEach { (showProgress, canReload) ->
+            StaticMapPlaceholder(
+                showProgress = showProgress,
+                canReload = canReload,
+                contentDescription = null,
+                width = 400.dp,
+                height = 200.dp,
+                onLoadMapClick = {},
+            )
+        }
+    }
 }

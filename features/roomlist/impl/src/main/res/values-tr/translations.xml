@@ -40,7 +40,6 @@ Okunmamış mesajınız yok!"</string>
   <string name="screen_roomlist_main_space_title">"Sohbetler"</string>
   <string name="screen_roomlist_mark_as_read">"Okundu olarak işaretle"</string>
   <string name="screen_roomlist_mark_as_unread">"Okunmamış olarak işaretle"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Tüm odalara göz at"</string>
   <string name="session_verification_banner_message">"Görünüşe göre yeni bir cihaz kullanıyorsunuz. Şifrelenmiş mesajlarınıza erişmek için başka bir cihazla doğrulayın."</string>
   <string name="session_verification_banner_title">"Siz olduğunuzu doğrulayın"</string>
 </resources>

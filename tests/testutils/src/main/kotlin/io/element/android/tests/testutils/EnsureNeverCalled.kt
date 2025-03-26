@@ -38,3 +38,9 @@ class EnsureNeverCalledWithTwoParamsAndResult<T, U, R> : (T, U) -> R {
         lambdaError("Should not be called and is called with $p1 and $p2")
     }
 }
+
+class EnsureNeverCalledWithThreeParams<T, U, V> : (T, U, V) -> Unit {
+    override fun invoke(p1: T, p2: U, p3: V) {
+        lambdaError("Should not be called and is called with $p1, $p2 and $p3")
+    }
+}

@@ -26,7 +26,7 @@ class IncomingVerificationStateMachine @Inject constructor(
     init {
         spec {
             inState<State.Initial> {
-                on { _: Event.AcceptIncomingRequest, state ->
+                on<Event.AcceptIncomingRequest> { _, state ->
                     state.override { State.AcceptingIncomingVerification.andLogStateChange() }
                 }
             }
@@ -39,23 +39,23 @@ class IncomingVerificationStateMachine @Inject constructor(
                 }
             }
             inState<State.ChallengeReceived> {
-                on { _: Event.AcceptChallenge, state ->
+                on<Event.AcceptChallenge> { _, state ->
                     state.override { State.AcceptingChallenge(state.snapshot.data).andLogStateChange() }
                 }
-                on { _: Event.DeclineChallenge, state ->
+                on<Event.DeclineChallenge> { _, state ->
                     state.override { State.RejectingChallenge(state.snapshot.data).andLogStateChange() }
                 }
             }
             inState<State.AcceptingChallenge> {
-                onEnterEffect { _ ->
+                onEnterEffect {
                     sessionVerificationService.approveVerification()
                 }
-                on { _: Event.DidAcceptChallenge, state ->
+                on<Event.DidAcceptChallenge> { _, state ->
                     state.override { State.Completed.andLogStateChange() }
                 }
             }
             inState<State.RejectingChallenge> {
-                onEnterEffect { _ ->
+                onEnterEffect {
                     sessionVerificationService.declineVerification()
                 }
             }
@@ -66,7 +66,7 @@ class IncomingVerificationStateMachine @Inject constructor(
             }
             inState {
                 logReceivedEvents()
-                on { _: Event.Cancel, state: MachineState<State> ->
+                on<Event.Cancel> { _, state: MachineState<State> ->
                     when (state.snapshot) {
                         State.Completed, State.Canceled -> state.noChange()
                         else -> {
@@ -75,7 +75,7 @@ class IncomingVerificationStateMachine @Inject constructor(
                         }
                     }
                 }
-                on { _: Event.DidCancel, state: MachineState<State> ->
+                on<Event.DidCancel> { _, state: MachineState<State> ->
                     when (state.snapshot) {
                         is State.RejectingChallenge -> {
                             state.override { State.Failure.andLogStateChange() }
@@ -91,7 +91,7 @@ class IncomingVerificationStateMachine @Inject constructor(
                         State.Failure -> state.noChange()
                     }
                 }
-                on { _: Event.DidFail, state: MachineState<State> ->
+                on<Event.DidFail> { _, state: MachineState<State> ->
                     state.override { State.Failure.andLogStateChange() }
                 }
             }
@@ -128,6 +128,11 @@ class IncomingVerificationStateMachine @Inject constructor(
 
         /** Verification failure. */
         data object Failure : State
+
+        fun isPending(): Boolean = when (this) {
+            AcceptingIncomingVerification, RejectingIncomingVerification, Failure, is ChallengeReceived, is AcceptingChallenge, is RejectingChallenge -> true
+            is Initial, Canceling, Canceled, Completed -> false
+        }
     }
 
     sealed interface Event {

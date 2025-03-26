@@ -28,6 +28,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -45,7 +46,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.duration
@@ -100,6 +100,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
@@ -401,19 +402,6 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = event.content.thumbnailSource,
                 )
             }
-            is TimelineItemStickerContent -> {
-                /* Sticker may have an empty url and no thumbnail
-                   if encrypted on certain bridges */
-                event.content.preferredMediaSource?.let { preferredMediaSource ->
-                    buildMediaViewerNavTarget(
-                        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
-                        event = event,
-                        content = event.content,
-                        mediaSource = preferredMediaSource,
-                        thumbnailSource = event.content.thumbnailSource,
-                    )
-                }
-            }
             is TimelineItemVideoContent -> {
                 buildMediaViewerNavTarget(
                     mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode),
@@ -445,7 +433,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 NavTarget.LocationViewer(
                     location = event.content.location,
                     description = event.content.description,
-                )
+                ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
         }

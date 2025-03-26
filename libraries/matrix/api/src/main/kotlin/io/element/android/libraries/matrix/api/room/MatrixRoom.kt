@@ -45,21 +45,10 @@ import java.io.File
 interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
-    val displayName: String
-    val canonicalAlias: RoomAlias?
-    val alternativeAliases: List<RoomAlias>
-    val topic: String?
-    val avatarUrl: String?
-    val isEncrypted: Boolean
-    val isSpace: Boolean
-    val isDirect: Boolean
-    val isPublic: Boolean
-    val activeMemberCount: Long
-    val joinedMemberCount: Long
 
     val roomCoroutineScope: CoroutineScope
 
-    val roomInfoFlow: Flow<MatrixRoomInfo>
+    val roomInfoFlow: StateFlow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
     val identityStateChangesFlow: Flow<List<IdentityStateChange>>
 
@@ -72,7 +61,7 @@ interface MatrixRoom : Closeable {
      * A one-to-one is a room with exactly 2 members.
      * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
      */
-    val isOneToOne: Boolean get() = activeMemberCount == 2L
+    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
 
     /**
      * The current loaded members as a StateFlow.
@@ -82,6 +71,11 @@ interface MatrixRoom : Closeable {
     val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
     val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+
+    /**
+     * Get the latest room info we have received from the SDK stream.
+     */
+    fun info(): MatrixRoomInfo = roomInfoFlow.value
 
     /**
      * Try to load the room members and update the membersFlow.
@@ -453,4 +447,6 @@ interface MatrixRoom : Closeable {
      * Update the join rule for this room.
      */
     suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
+
+    suspend fun getUpdatedIsEncrypted(): Result<Boolean>
 }

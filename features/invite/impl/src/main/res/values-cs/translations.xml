@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Odmítnout chat"</string>
   <string name="screen_invites_empty_list">"Žádné pozvánky"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval(a)"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ano, odmítnout a zablokovat"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Opravdu chcete odmítnout pozvánku do této místnosti? Tím také zabráníte tomu, aby vás %1$s kontaktoval(a) nebo pozval(a) do místností."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Odmítnout pozvání a zablokovat"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Odmítnout a zablokovat"</string>
 </resources>

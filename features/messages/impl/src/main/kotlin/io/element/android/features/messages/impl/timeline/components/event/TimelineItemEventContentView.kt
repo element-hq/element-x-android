@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
+import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemEventContentView(
@@ -39,7 +40,8 @@ fun TimelineItemEventContentView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
-    onLinkClick: (url: String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
@@ -60,6 +62,7 @@ fun TimelineItemEventContentView(
             content = content,
             modifier = modifier,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
@@ -78,6 +81,7 @@ fun TimelineItemEventContentView(
             onLongClick = onLongClick,
             onShowContentClick = onShowContentClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier,
         )
@@ -96,6 +100,7 @@ fun TimelineItemEventContentView(
             onLongClick = onLongClick,
             onShowContentClick = onShowContentClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )

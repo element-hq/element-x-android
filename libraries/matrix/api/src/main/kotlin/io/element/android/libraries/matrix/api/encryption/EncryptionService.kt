@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.encryption
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -75,6 +76,11 @@ interface EncryptionService {
      * user trust from verified to TOFU verified.
      */
     suspend fun withdrawVerification(userId: UserId): Result<Unit>
+
+    /**
+     * Get the identity state of a user, if known.
+     */
+    suspend fun getUserIdentity(userId: UserId): Result<IdentityState?>
 }
 
 /**

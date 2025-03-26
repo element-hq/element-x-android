@@ -22,6 +22,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
+import java.util.concurrent.atomic.AtomicBoolean
 
 @ContributesNode(RoomScope::class)
 class CreatePollNode @AssistedInject constructor(
@@ -34,7 +35,16 @@ class CreatePollNode @AssistedInject constructor(
 
     private val inputs: Inputs = inputs()
 
-    private val presenter = presenterFactory.create(backNavigator = ::navigateUp, mode = inputs.mode)
+    private var isNavigatingUp = AtomicBoolean(false)
+
+    private val presenter = presenterFactory.create(
+        backNavigator = {
+            if (isNavigatingUp.compareAndSet(false, true)) {
+                navigateUp()
+            }
+        },
+        mode = inputs.mode,
+    )
 
     init {
         lifecycle.subscribe(

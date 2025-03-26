@@ -18,6 +18,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -64,6 +66,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -999,7 +1002,6 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         var canUserTriggerRoomNotificationResult = true
         val room = FakeMatrixRoom(
-            isDirect = false,
             canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1008,6 +1010,7 @@ class MessageComposerPresenterTest {
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
+            givenRoomInfo(aRoomInfo(isDirect = false))
         }
         val flagsService = FakeFeatureFlagService(
             mapOf(
@@ -1061,15 +1064,18 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
-            isDirect = true,
-            activeMemberCount = 2,
-            isEncrypted = true,
             canUserTriggerRoomNotificationResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
+                )
+            )
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
                 )
             )
         }
@@ -1533,6 +1539,7 @@ class MessageComposerPresenterTest {
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this.pickerProvider,
         featureFlagService: FeatureFlagService = this.featureFlagService,
+        locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
@@ -1558,6 +1565,7 @@ class MessageComposerPresenterTest {
         mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
+        locationService = locationService,
         messageComposerContext = DefaultMessageComposerContext(),
         richTextEditorStateFactory = TestRichTextEditorStateFactory(),
         roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),

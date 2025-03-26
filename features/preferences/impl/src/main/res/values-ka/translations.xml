@@ -7,10 +7,16 @@
   <string name="screen_advanced_settings_element_call_base_url_description">"დააყენეთ საბაზისო URL Element-ის ზარებისათვის."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"გამორთეთ მდიდარი ტექსტის რედაქტორი, რათა ხელით აკრიფოთ Markdown."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"წაკითხვის შეტყობინებები"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"გამორთვის შემთხვევაში სხვები ვერ მიიღებენ თქვენი წაკითხვის შეტყობინებებს. თქვენ მაინც მიიღებთ სხვების წაკითხვის შეტყობინებებს."</string>
+  <string name="screen_advanced_settings_share_presence">"მყოფობის გაზიარება"</string>
+  <string name="screen_advanced_settings_share_presence_description">"გამორთვის შემთხვევაში თქვენ ვერ მიიღებთ და ვერ გაგზავნით წაკითხვის ან წერის შეტყობინებებს."</string>
   <string name="screen_advanced_settings_view_source_description">"ჩართეთ ოპცია რათა შეტყობინების წყაროს დროის ისტორია ნახოთ."</string>
+  <string name="screen_blocked_users_empty">"თქვენ არ დაგიბლოკავთ მომხმარებლები"</string>
   <string name="screen_blocked_users_unblock_alert_action">"განბლოკვა"</string>
   <string name="screen_blocked_users_unblock_alert_description">"თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Მომხმარებლის განბლოკვა"</string>
+  <string name="screen_blocked_users_unblocking">"განბლოკვა…"</string>
   <string name="screen_edit_profile_display_name">"ნაჩვენები სახელი"</string>
   <string name="screen_edit_profile_display_name_placeholder">"თქვენი ნაჩვენები სახელი"</string>
   <string name="screen_edit_profile_error">"დაფიქსირდა უცნობი შეცდომა და ინფორმაციის შეცვლა ვერ მოხერხდა."</string>
@@ -44,4 +50,6 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"სისტემის პარამეტრები"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"სისტემის შეტყობინებები გამორთულია"</string>
   <string name="screen_notification_settings_title">"შეტყობინებები"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"პრობლემების გადაჭრა"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"პრობლემების გადაჭრის შეტყობინებები"</string>
 </resources>

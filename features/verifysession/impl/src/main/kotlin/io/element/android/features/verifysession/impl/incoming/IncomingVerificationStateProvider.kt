@@ -12,16 +12,32 @@ import io.element.android.features.verifysession.impl.incoming.IncomingVerificat
 import io.element.android.features.verifysession.impl.ui.aDecimalsSessionVerificationData
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.matrix.api.core.FlowId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 open class IncomingVerificationStateProvider : PreviewParameterProvider<IncomingVerificationState> {
     override val values: Sequence<IncomingVerificationState>
         get() = sequenceOf(
             anIncomingVerificationState(),
-            anIncomingVerificationState(step = aStepInitial(isWaiting = true)),
+            anIncomingVerificationState(step = aStepInitial(isWaiting = false), verificationRequest = anIncomingSessionVerificationRequest()),
+            anIncomingVerificationState(step = aStepInitial(isWaiting = false), verificationRequest = anIncomingUserVerificationRequest()),
+            anIncomingVerificationState(step = aStepInitial(isWaiting = true), verificationRequest = anIncomingSessionVerificationRequest()),
+            anIncomingVerificationState(step = aStepInitial(isWaiting = true), verificationRequest = anIncomingUserVerificationRequest()),
             anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = false)),
+            anIncomingVerificationState(
+                step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = false),
+                verificationRequest = anIncomingUserVerificationRequest()
+            ),
             anIncomingVerificationState(step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = true)),
+            anIncomingVerificationState(
+                step = Step.Verifying(data = aEmojisSessionVerificationData(), isWaiting = true),
+                verificationRequest = anIncomingUserVerificationRequest()
+            ),
             anIncomingVerificationState(step = Step.Verifying(data = aDecimalsSessionVerificationData(), isWaiting = false)),
             anIncomingVerificationState(step = Step.Completed),
+            anIncomingVerificationState(step = Step.Completed, verificationRequest = anIncomingUserVerificationRequest()),
             anIncomingVerificationState(step = Step.Failure),
             anIncomingVerificationState(step = Step.Canceled),
             // Add other state here
@@ -37,10 +53,38 @@ internal fun aStepInitial(
     isWaiting = isWaiting,
 )
 
+internal fun anIncomingSessionVerificationRequest() = VerificationRequest.Incoming.OtherSession(
+    details = SessionVerificationRequestDetails(
+        senderProfile = SessionVerificationRequestDetails.SenderProfile(
+            userId = UserId("@alice:example.com"),
+            displayName = "Alice",
+            avatarUrl = null,
+        ),
+        flowId = FlowId("1234"),
+        deviceId = DeviceId("ILAKNDNASDLK"),
+        firstSeenTimestamp = 0,
+    )
+)
+
+internal fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.User(
+    details = SessionVerificationRequestDetails(
+        senderProfile = SessionVerificationRequestDetails.SenderProfile(
+            userId = UserId("@alice:example.com"),
+            displayName = "Alice",
+            avatarUrl = null,
+        ),
+        flowId = FlowId("1234"),
+        deviceId = DeviceId("ILAKNDNASDLK"),
+        firstSeenTimestamp = 0,
+    )
+)
+
 internal fun anIncomingVerificationState(
     step: Step = aStepInitial(),
+    verificationRequest: VerificationRequest.Incoming = anIncomingSessionVerificationRequest(),
     eventSink: (IncomingVerificationViewEvents) -> Unit = {},
 ) = IncomingVerificationState(
     step = step,
+    request = verificationRequest,
     eventSink = eventSink,
 )

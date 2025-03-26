@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemGroupedEventsRow(
@@ -45,7 +46,8 @@ fun TimelineItemGroupedEventsRow(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -59,6 +61,7 @@ fun TimelineItemGroupedEventsRow(
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
@@ -87,6 +90,7 @@ fun TimelineItemGroupedEventsRow(
         inReplyToClick = inReplyToClick,
         onUserDataClick = onUserDataClick,
         onLinkClick = onLinkClick,
+        onLinkLongClick = onLinkLongClick,
         onReactionClick = onReactionClick,
         onReactionLongClick = onReactionLongClick,
         onMoreReactionsClick = onMoreReactionsClick,
@@ -111,7 +115,8 @@ private fun TimelineItemGroupedEventsRowContent(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -125,6 +130,7 @@ private fun TimelineItemGroupedEventsRowContent(
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
@@ -156,6 +162,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         focusedEventId = focusedEventId,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
+                        onLinkLongClick = onLinkLongClick,
                         onContentClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
@@ -199,6 +206,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         isLastOutgoingMessage = false,
         onClick = {},
         onLongClick = {},
+        onLinkLongClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
         onLinkClick = {},
@@ -224,6 +232,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         isLastOutgoingMessage = false,
         onClick = {},
         onLongClick = {},
+        onLinkLongClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
         onLinkClick = {},

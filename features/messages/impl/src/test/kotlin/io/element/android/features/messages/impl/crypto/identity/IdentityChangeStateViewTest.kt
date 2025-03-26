@@ -15,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.ui.room.IdentityRoomMember
+import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
@@ -42,11 +44,11 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("identity appears to have changed", substring = true).assertExists("should display pin violation warning")
+        rule.onNodeWithText("identity was reset", substring = true).assertExists("should display pin violation warning")
         rule.onNodeWithText("@alice:localhost", substring = true).assertExists("should display user mxid")
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
-        rule.clickOn(res = CommonStrings.action_ok)
+        rule.clickOn(res = CommonStrings.action_dismiss)
         eventsRecorder.assertSingle(IdentityChangeEvent.PinIdentity(UserId("@alice:localhost")))
     }
 
@@ -65,7 +67,7 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("verified identity has changed", substring = true).assertExists("should display verification violation warning")
+        rule.onNodeWithText("identity was reset", substring = true).assertExists("should display verification violation warning")
         rule.onNodeWithText("@alice:localhost", substring = true).assertExists("should display user mxid")
         rule.onNodeWithText("Alice", substring = true).assertExists("should display user displayname")
 
@@ -90,8 +92,7 @@ class IdentityChangeStateViewTest {
             ),
         )
 
-        rule.onNodeWithText("identity appears to have changed", substring = true).assertDoesNotExist()
-        rule.onNodeWithText("verified identity has changed", substring = true).assertDoesNotExist()
+        rule.onNodeWithText("identity was reset", substring = true).assertDoesNotExist()
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setIdentityChangeStateView(

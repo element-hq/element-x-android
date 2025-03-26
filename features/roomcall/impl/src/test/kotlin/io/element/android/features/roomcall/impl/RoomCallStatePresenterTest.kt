@@ -58,12 +58,10 @@ class RoomCallStatePresenterTest {
     fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
         val room = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(false) },
-        ).apply {
-            givenRoomInfo(aRoomInfo(hasRoomCall = true))
-        }
+            initialRoomInfo = aRoomInfo(hasRoomCall = true),
+        )
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
-            skipItems(1)
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = false,

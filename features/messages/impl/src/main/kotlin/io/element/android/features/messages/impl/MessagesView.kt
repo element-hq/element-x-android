@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,10 +51,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
+import io.element.android.features.messages.impl.link.LinkEvents
+import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -88,6 +92,7 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -101,6 +106,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
 import kotlin.random.Random
@@ -188,6 +194,7 @@ fun MessagesView(
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     heroes = state.heroes,
                     roomCallState = state.roomCallState,
+                    dmUserIdentityState = state.dmUserVerificationState,
                     onBackClick = { hidingKeyboard { onBackClick() } },
                     onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                     onJoinCallClick = onJoinCallClick,
@@ -203,7 +210,14 @@ fun MessagesView(
                 onContentClick = ::onContentClick,
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = { hidingKeyboard { onUserDataClick(it) } },
-                onLinkClick = onLinkClick,
+                onLinkClick = { link, customTab ->
+                    if (customTab) {
+                        onLinkClick(link.url, true)
+                        // Do not check those links, they are internal link only
+                    } else {
+                        state.linkState.eventSink(LinkEvents.OnLinkClick(link))
+                    }
+                },
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,
                 onMoreReactionsClick = ::onMoreReactionsClick,
@@ -254,6 +268,12 @@ fun MessagesView(
         onUserDataClick = onUserDataClick,
     )
     ReinviteDialog(state = state)
+    LinkView(
+        onLinkValid = { link ->
+            onLinkClick(link.url, false)
+        },
+        state = state.linkState,
+    )
 }
 
 @Composable
@@ -275,7 +295,7 @@ private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClick: (String, Boolean) -> Unit,
+    onLinkClick: (Link, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -349,7 +369,7 @@ private fun MessagesViewContent(
                         state = state.timelineState,
                         timelineProtectionState = state.timelineProtectionState,
                         onUserDataClick = onUserDataClick,
-                        onLinkClick = { url -> onLinkClick(url, false) },
+                        onLinkClick = { link -> onLinkClick(link, false) },
                         onContentClick = onContentClick,
                         onMessageLongClick = onMessageLongClick,
                         onSwipeToReply = onSwipeToReply,
@@ -384,7 +404,7 @@ private fun MessagesViewContent(
                 MessagesViewComposerBottomSheetContents(
                     subcomposing = subcomposing,
                     state = state,
-                    onLinkClick = onLinkClick,
+                    onLinkClick = { url, customTab -> onLinkClick(Link(url), customTab) },
                 )
             },
             sheetContentKey = sheetResizeContentKey.intValue,
@@ -427,7 +447,7 @@ private fun MessagesViewComposerBottomSheetContents(
                     onLinkClick = onLinkClick,
                 )
             }
-            val verificationViolation = state.roomMemberIdentityStateChanges.firstOrNull {
+            val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                 it.identityState == IdentityState.VerificationViolation
             }
             if (verificationViolation != null) {
@@ -454,6 +474,7 @@ private fun MessagesViewTopBar(
     roomAvatar: AvatarData?,
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
+    dmUserIdentityState: IdentityState?,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -463,22 +484,47 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
-            val titleModifier = Modifier
-                .clip(roundedCornerShape)
-                .clickable { onRoomDetailsClick() }
-            if (roomName != null && roomAvatar != null) {
-                RoomAvatarAndNameRow(
-                    roomName = roomName,
-                    roomAvatar = roomAvatar,
-                    heroes = heroes,
-                    modifier = titleModifier
-                )
-            } else {
-                IconTitlePlaceholdersRowMolecule(
-                    iconSize = AvatarSize.TimelineRoom.dp,
-                    modifier = titleModifier
-                )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val roundedCornerShape = RoundedCornerShape(8.dp)
+                val titleModifier = Modifier
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() }
+                if (roomName != null && roomAvatar != null) {
+                    RoomAvatarAndNameRow(
+                        roomName = roomName,
+                        roomAvatar = roomAvatar,
+                        heroes = heroes,
+                        modifier = titleModifier
+                    )
+                } else {
+                    IconTitlePlaceholdersRowMolecule(
+                        iconSize = AvatarSize.TimelineRoom.dp,
+                        modifier = titleModifier
+                    )
+                }
+
+                when (dmUserIdentityState) {
+                    IdentityState.Verified -> {
+                        Icon(
+                            modifier = Modifier.requiredWidthIn(min = 16.dp),
+                            imageVector = CompoundIcons.Verified(),
+                            tint = ElementTheme.colors.iconSuccessPrimary,
+                            contentDescription = null,
+                        )
+                    }
+                    IdentityState.VerificationViolation -> {
+                        Icon(
+                            modifier = Modifier.requiredWidthIn(min = 16.dp),
+                            imageVector = CompoundIcons.ErrorSolid(),
+                            tint = ElementTheme.colors.iconCriticalPrimary,
+                            contentDescription = null,
+                        )
+                    }
+                    else -> Unit
+                }
             }
         },
         actions = {

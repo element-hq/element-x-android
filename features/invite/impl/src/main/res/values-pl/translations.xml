@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Odrzuć czat"</string>
   <string name="screen_invites_empty_list">"Brak zaproszeń"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Tak, odrzuć i zablokuj"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do tego pokoju? %1$s nie będzie mógł się również z Tobą skontaktować, ani zaprosić Cię do pokoju."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Odrzuć zaproszenie i zablokuj"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Odrzuć i zablokuj"</string>
 </resources>

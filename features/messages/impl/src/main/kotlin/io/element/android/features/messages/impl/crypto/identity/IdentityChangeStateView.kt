@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.encryption.identity.isAViolation
+import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -42,7 +43,7 @@ fun IdentityChangeStateView(
             onLinkClick = onLinkClick,
             textId = CommonStrings.crypto_identity_change_pin_violation_new,
             isCritical = false,
-            submitTextId = CommonStrings.action_ok,
+            submitTextId = CommonStrings.action_dismiss,
             onSubmitClick = { state.eventSink(IdentityChangeEvent.PinIdentity(identityChangeViolation.identityRoomMember.userId)) },
             modifier = modifier,
         )

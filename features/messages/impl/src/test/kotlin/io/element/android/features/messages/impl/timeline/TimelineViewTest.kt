@@ -11,14 +11,18 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -30,7 +34,9 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.setSafeContent
+import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -115,8 +121,6 @@ class TimelineViewTest {
         eventsRecorder.assertList(
             listOf(
                 TimelineEvents.OnScrollFinished(0),
-                TimelineEvents.OnScrollFinished(0),
-                TimelineEvents.OnScrollFinished(0),
                 TimelineEvents.ShowShieldDialog(MessageShield.UnverifiedIdentity(true)),
             )
         )
@@ -135,13 +139,44 @@ class TimelineViewTest {
         rule.clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(TimelineEvents.HideShieldDialog)
     }
+
+    @Test
+    fun `scrolling near to the start of the loaded items triggers a pre-fetch`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        val items = List<TimelineItem>(200) {
+            aTimelineItemEvent(
+                eventId = EventId("\$event_$it"),
+                content = aTimelineItemUnknownContent(),
+            )
+        }.toPersistentList()
+
+        rule.setTimelineView(
+            state = aTimelineState(
+                timelineItems = items,
+                eventSink = eventsRecorder,
+                focusedEventIndex = -1,
+                isLive = false,
+            ),
+        )
+
+        rule.onNodeWithTag("timeline").performScrollToIndex(180)
+
+        rule.mainClock.advanceTimeBy(1000)
+
+        eventsRecorder.assertList(
+            listOf(
+                TimelineEvents.OnScrollFinished(firstIndex = 0),
+                TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS),
+            )
+        )
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimelineView(
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
-    onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onMessageClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onMessageLongClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onSwipeToReply: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),

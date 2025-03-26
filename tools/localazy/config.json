@@ -233,7 +233,9 @@
       "name" : ":features:ftue:impl",
       "includeRegex" : [
         "screen_welcome_.*",
-        "screen_notification_optin_.*"
+        "screen_notification_optin_.*",
+        "screen_identity_.*",
+        "screen_session_verification_enter_recovery_key"
       ]
     },
     {

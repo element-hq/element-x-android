@@ -13,6 +13,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -31,6 +32,7 @@ sealed interface PinnedMessagesListState {
         val userEventPermissions: UserEventPermissions,
         val timelineItems: ImmutableList<TimelineItem>,
         val actionListState: ActionListState,
+        val linkState: LinkState,
         val eventSink: (PinnedMessagesListEvents) -> Unit,
     ) : PinnedMessagesListState {
         val loadedPinnedMessagesCount = timelineItems.count { timelineItem -> timelineItem is TimelineItem.Event }

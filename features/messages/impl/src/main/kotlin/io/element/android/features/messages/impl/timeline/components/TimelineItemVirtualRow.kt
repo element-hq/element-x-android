@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationView
+import timber.log.Timber
 
 @Composable
 fun TimelineItemVirtualRow(
@@ -45,6 +46,7 @@ fun TimelineItemVirtualRow(
                 TimelineLoadingMoreIndicator(virtual.model.direction)
                 val latestEventSink by rememberUpdatedState(eventSink)
                 LaunchedEffect(virtual.model.timestamp) {
+                    Timber.d("Pagination triggered by load more indicator")
                     latestEventSink(TimelineEvents.LoadMore(virtual.model.direction))
                 }
             }

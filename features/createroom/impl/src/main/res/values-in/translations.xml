@@ -18,5 +18,6 @@ Anda dapat mengubah ini kapan pun dalam pengaturan ruangan."</string>
   <string name="screen_create_room_room_visibility_section_title">"Keterlihatan ruangan"</string>
   <string name="screen_create_room_title">"Buat ruangan"</string>
   <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
+  <string name="screen_room_directory_search_title">"Direktori ruangan"</string>
   <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
 </resources>

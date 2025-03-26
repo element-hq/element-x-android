@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Fitxategia gelatik kenduko da eta kideek ezingo dute atzitu."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Fitxategia ezabatu?"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Gela honetara igotako dokumentuak, audio-fitxategiak, eta ahots-mezuak hemen erakutsiko dira."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Oraindik ez da fitxategirik igo"</string>
+  <string name="screen_media_browser_list_loading_files">"Fitxategiak kargatzen…"</string>
+  <string name="screen_media_browser_list_loading_media">"Multimedia kargatzen…"</string>
+  <string name="screen_media_browser_list_mode_files">"Fitxategiak"</string>
+  <string name="screen_media_browser_list_mode_media">"Multimedia"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Gela honetara igotako irudiak eta bideoak hemen erakutsiko dira."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Oraindik ez da multimedia fitxategirik igo"</string>
+  <string name="screen_media_browser_title">"Multimedia eta fitxategiak"</string>
+  <string name="screen_media_details_file_format">"Fitxategiaren formatua"</string>
+  <string name="screen_media_details_filename">"Fitxategiaren izena"</string>
+  <string name="screen_media_details_uploaded_by">"Nork igota:"</string>
+  <string name="screen_media_details_uploaded_on">"Noiz igota:"</string>
+</resources>

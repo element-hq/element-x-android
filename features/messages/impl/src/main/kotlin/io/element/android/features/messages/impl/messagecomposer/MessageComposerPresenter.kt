@@ -30,6 +30,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
@@ -101,6 +102,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val roomAliasSuggestionsDataSource: RoomAliasSuggestionsDataSource,
@@ -135,6 +137,8 @@ class MessageComposerPresenter @AssistedInject constructor(
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
+        val roomInfo by room.roomInfoFlow.collectAsState()
+
         val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
@@ -151,7 +155,8 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
+            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing) &&
+                locationService.isServiceAvailable()
         }
 
         val canCreatePoll = remember { mutableStateOf(false) }
@@ -198,7 +203,7 @@ class MessageComposerPresenter @AssistedInject constructor(
 
             suspend fun canSendRoomMention(): Boolean {
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !room.isDm && userCanSendAtRoom
+                return !room.isDm() && userCanSendAtRoom
             }
 
             // This will trigger a search immediately when `@` is typed
@@ -235,9 +240,9 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val textEditorState by rememberUpdatedState(
             if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState)
+                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
             } else {
-                TextEditorState.Markdown(markdownTextEditorState)
+                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
             }
         )
 

@@ -79,8 +79,8 @@ class DefaultFirebaseNewTokenHandlerTest {
         registerPusherResult.assertions()
             .isCalledExactly(2)
             .withSequence(
-                listOf(value(aMatrixClient1), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL)),
-                listOf(value(aMatrixClient3), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL)),
+                listOf(value(aMatrixClient1), value("aToken"), value(A_FIREBASE_GATEWAY)),
+                listOf(value(aMatrixClient3), value("aToken"), value(A_FIREBASE_GATEWAY)),
             )
     }
 
@@ -130,7 +130,7 @@ class DefaultFirebaseNewTokenHandlerTest {
         registerPusherResult.assertions()
         registerPusherResult.assertions()
             .isCalledOnce()
-            .with(value(aMatrixClient1), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL))
+            .with(value(aMatrixClient1), value("aToken"), value(A_FIREBASE_GATEWAY))
     }
 
     private fun createDefaultFirebaseNewTokenHandler(
@@ -139,13 +139,15 @@ class DefaultFirebaseNewTokenHandlerTest {
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
+        firebaseGatewayProvider: FirebaseGatewayProvider = FakeFirebaseGatewayProvider(),
     ): FirebaseNewTokenHandler {
         return DefaultFirebaseNewTokenHandler(
             pusherSubscriber = pusherSubscriber,
             sessionStore = sessionStore,
             userPushStoreFactory = userPushStoreFactory,
             matrixClientProvider = matrixClientProvider,
-            firebaseStore = firebaseStore
+            firebaseStore = firebaseStore,
+            firebaseGatewayProvider = firebaseGatewayProvider,
         )
     }
 }

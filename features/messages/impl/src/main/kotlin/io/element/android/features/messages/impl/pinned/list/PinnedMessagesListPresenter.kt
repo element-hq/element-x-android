@@ -25,6 +25,7 @@ import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
@@ -38,11 +39,11 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -63,6 +64,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
+    private val linkPresenter: Presenter<LinkState>,
     private val snackbarDispatcher: SnackbarDispatcher,
     @Assisted private val actionListPresenter: Presenter<ActionListState>,
     private val appCoroutineScope: CoroutineScope,
@@ -85,10 +87,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): PinnedMessagesListState {
-        val timelineRoomInfo = remember {
+        val isDm by room.isDmAsState()
+
+        val timelineRoomInfo = remember(isDm) {
             TimelineRoomInfo(
-                isDm = room.isDm,
-                name = room.displayName,
+                isDm = isDm,
+                name = room.info().name,
                 // We don't need to compute those values
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,
@@ -104,6 +108,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             )
         }
         val timelineProtectionState = timelineProtectionPresenter.present()
+        val linkState = linkPresenter.present()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
@@ -125,6 +130,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         return pinnedMessagesListState(
             timelineRoomInfo = timelineRoomInfo,
             timelineProtectionState = timelineProtectionState,
+            linkState = linkState,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
             eventSink = ::handleEvents
@@ -221,6 +227,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private fun pinnedMessagesListState(
         timelineRoomInfo: TimelineRoomInfo,
         timelineProtectionState: TimelineProtectionState,
+        linkState: LinkState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
         eventSink: (PinnedMessagesListEvents) -> Unit
@@ -236,6 +243,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                     PinnedMessagesListState.Filled(
                         timelineRoomInfo = timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
+                        linkState = linkState,
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,
                         actionListState = actionListState,
