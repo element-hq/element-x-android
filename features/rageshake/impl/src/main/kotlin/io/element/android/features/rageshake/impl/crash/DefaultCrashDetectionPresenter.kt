@@ -9,8 +9,11 @@ package io.element.android.features.rageshake.impl.crash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.RageshakeConfig
+import io.element.android.appconfig.isEnabled
 import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
@@ -18,6 +21,7 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,12 +29,17 @@ import javax.inject.Inject
 class DefaultCrashDetectionPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val crashDataStore: CrashDataStore,
-) :
-    CrashDetectionPresenter {
+) : CrashDetectionPresenter {
     @Composable
     override fun present(): CrashDetectionState {
         val localCoroutineScope = rememberCoroutineScope()
-        val crashDetected = crashDataStore.appHasCrashed().collectAsState(initial = false)
+        val crashDetected = remember {
+            if (RageshakeConfig.isEnabled) {
+                crashDataStore.appHasCrashed()
+            } else {
+                flowOf(false)
+            }
+        }.collectAsState(false)
 
         fun handleEvents(event: CrashDetectionEvents) {
             when (event) {
