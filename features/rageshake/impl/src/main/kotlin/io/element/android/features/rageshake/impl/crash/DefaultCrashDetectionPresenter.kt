@@ -12,8 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.RageshakeConfig
-import io.element.android.appconfig.isEnabled
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
@@ -29,12 +28,13 @@ import javax.inject.Inject
 class DefaultCrashDetectionPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val crashDataStore: CrashDataStore,
+    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
 ) : CrashDetectionPresenter {
     @Composable
     override fun present(): CrashDetectionState {
         val localCoroutineScope = rememberCoroutineScope()
         val crashDetected = remember {
-            if (RageshakeConfig.isEnabled) {
+            if (rageshakeFeatureAvailability.isAvailable()) {
                 crashDataStore.appHasCrashed()
             } else {
                 flowOf(false)

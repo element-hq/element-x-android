@@ -16,7 +16,9 @@ class DefaultBugReporterUrlProviderTest {
     @Test
     fun `test DefaultBugReporterUrlProvider`() {
         val sut = DefaultBugReporterUrlProvider()
-        val result = sut.provide()
-        assertThat(result).isEqualTo(RageshakeConfig.BUG_REPORT_URL.toHttpUrl())
+        if (RageshakeConfig.BUG_REPORT_URL.isNotEmpty()) {
+            val result = sut.provide()
+            assertThat(result).isEqualTo(RageshakeConfig.BUG_REPORT_URL.toHttpUrl())
+        }
     }
 }

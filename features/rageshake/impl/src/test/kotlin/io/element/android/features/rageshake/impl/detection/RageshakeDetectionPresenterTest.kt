@@ -52,6 +52,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -76,6 +77,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -101,6 +103,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -135,6 +138,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -169,6 +173,7 @@ class RageshakeDetectionPresenterTest {
             preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
+                rageshakeFeatureAvailability = { true },
             )
         )
         moleculeFlow(RecompositionMode.Immediate) {

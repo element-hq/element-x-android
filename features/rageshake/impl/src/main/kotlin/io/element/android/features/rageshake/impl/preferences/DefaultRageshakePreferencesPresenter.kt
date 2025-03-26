@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.RageshakeConfig
-import io.element.android.appconfig.isEnabled
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
@@ -30,6 +30,7 @@ import javax.inject.Inject
 class DefaultRageshakePreferencesPresenter @Inject constructor(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
+    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
 ) : RageshakePreferencesPresenter {
     @Composable
     override fun present(): RageshakePreferencesState {
@@ -37,6 +38,7 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
         val isSupported: MutableState<Boolean> = rememberSaveable {
             mutableStateOf(rageshake.isAvailable())
         }
+        val isFeatureAvailable = remember { rageshakeFeatureAvailability.isAvailable() }
         val isEnabled = rageshakeDataStore
             .isEnabled()
             .collectAsState(initial = false)
@@ -53,7 +55,7 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
         }
 
         return RageshakePreferencesState(
-            isFeatureEnabled = RageshakeConfig.isEnabled,
+            isFeatureEnabled = isFeatureAvailable,
             isEnabled = isEnabled.value,
             isSupported = isSupported.value,
             sensitivity = sensitivity.value,

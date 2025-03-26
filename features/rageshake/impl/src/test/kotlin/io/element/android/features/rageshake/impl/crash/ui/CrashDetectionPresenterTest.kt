@@ -52,6 +52,20 @@ class CrashDetectionPresenterTest {
     }
 
     @Test
+    fun `present - initial state crash is ignored if the feature is not available`() = runTest {
+        val presenter = createPresenter(
+            FakeCrashDataStore(appHasCrashed = true),
+            isFeatureAvailable = false,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.crashDetected).isFalse()
+        }
+    }
+
+    @Test
     fun `present - reset app has crashed`() = runTest {
         val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true)
@@ -86,8 +100,10 @@ class CrashDetectionPresenterTest {
     private fun createPresenter(
         crashDataStore: FakeCrashDataStore = FakeCrashDataStore(),
         buildMeta: BuildMeta = aBuildMeta(),
+        isFeatureAvailable: Boolean = true,
     ) = DefaultCrashDetectionPresenter(
         buildMeta = buildMeta,
         crashDataStore = crashDataStore,
+        rageshakeFeatureAvailability = { isFeatureAvailable },
     )
 }
