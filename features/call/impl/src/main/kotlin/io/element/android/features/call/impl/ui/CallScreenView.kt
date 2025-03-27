@@ -159,7 +159,7 @@ private fun CallWebView(
                 audioManager?.mode = AudioManager.MODE_IN_COMMUNICATION
 
                 audioManager?.enableExternalAudioDevice()
-                
+
                 WebView(context).apply {
                     onWebViewCreate(this)
                     setup(userAgent, onPermissionsRequest)
