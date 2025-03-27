@@ -7,7 +7,9 @@
 
 package io.element.android.features.call.utils
 
+import android.os.PowerManager
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
@@ -49,6 +51,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultActiveCallManagerTest {
@@ -57,10 +60,12 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `registerIncomingCall - sets the incoming call as active`() = runTest {
+        setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         inCancellableScope {
             val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
+            assertThat(manager.activeWakeLock?.isHeld).isFalse()
             assertThat(manager.activeCall.value).isNull()
 
             val callNotificationData = aCallNotificationData()
@@ -78,6 +83,7 @@ class DefaultActiveCallManagerTest {
 
             runCurrent()
 
+            assertThat(manager.activeWakeLock?.isHeld).isTrue()
             verify { notificationManagerCompat.notify(notificationId, any()) }
         }
     }
@@ -128,6 +134,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `incomingCallTimedOut - when there is an active call removes it and adds a missed call notification`() = runTest {
+        setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
         inCancellableScope {
@@ -138,11 +145,13 @@ class DefaultActiveCallManagerTest {
 
             manager.registerIncomingCall(aCallNotificationData())
             assertThat(manager.activeCall.value).isNotNull()
+            assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
             manager.incomingCallTimedOut(displayMissedCallNotification = true)
             advanceTimeBy(1)
 
             assertThat(manager.activeCall.value).isNull()
+            assertThat(manager.activeWakeLock?.isHeld).isFalse()
             addMissedCallNotificationLambda.assertions().isCalledOnce()
             verify { notificationManagerCompat.cancel(notificationId) }
         }
@@ -150,6 +159,7 @@ class DefaultActiveCallManagerTest {
 
     @Test
     fun `hungUpCall - removes existing call if the CallType matches`() = runTest {
+        setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         // Create a cancellable coroutine scope to cancel the test when needed
         inCancellableScope {
@@ -158,9 +168,11 @@ class DefaultActiveCallManagerTest {
             val notificationData = aCallNotificationData()
             manager.registerIncomingCall(notificationData)
             assertThat(manager.activeCall.value).isNotNull()
+            assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
             manager.hungUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
             assertThat(manager.activeCall.value).isNull()
+            assertThat(manager.activeWakeLock?.isHeld).isFalse()
 
             verify { notificationManagerCompat.cancel(notificationId) }
         }
@@ -168,6 +180,7 @@ class DefaultActiveCallManagerTest {
 
     @Test
     fun `hungUpCall - does nothing if the CallType doesn't match`() = runTest {
+        setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         // Create a cancellable coroutine scope to cancel the test when needed
         inCancellableScope {
@@ -175,9 +188,11 @@ class DefaultActiveCallManagerTest {
 
             manager.registerIncomingCall(aCallNotificationData())
             assertThat(manager.activeCall.value).isNotNull()
+            assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
             manager.hungUpCall(CallType.ExternalUrl("https://example.com"))
             assertThat(manager.activeCall.value).isNotNull()
+            assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
             verify(exactly = 0) { notificationManagerCompat.cancel(notificationId) }
         }
@@ -281,6 +296,12 @@ class DefaultActiveCallManagerTest {
         launch(SupervisorJob()) {
             block()
             cancel()
+        }
+    }
+
+    private fun setupShadowPowerManager() {
+        shadowOf(InstrumentationRegistry.getInstrumentation().targetContext.getSystemService<PowerManager>()).apply {
+            setIsWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK, true)
         }
     }
 

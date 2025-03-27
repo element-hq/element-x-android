@@ -87,7 +87,9 @@ class DefaultActiveCallManager @Inject constructor(
     private val defaultCurrentCallService: DefaultCurrentCallService,
 ) : ActiveCallManager {
     private var timedOutCallJob: Job? = null
-    private val activeWakeLock: PowerManager.WakeLock? = run {
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val activeWakeLock: PowerManager.WakeLock? = run {
         val powerManager = context.getSystemService<PowerManager>()
 
         if (powerManager?.isWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK) == true) {
