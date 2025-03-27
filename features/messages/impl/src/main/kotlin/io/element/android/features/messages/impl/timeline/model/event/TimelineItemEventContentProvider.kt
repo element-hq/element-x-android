@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import org.jsoup.nodes.Document
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
@@ -58,32 +59,46 @@ class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineIt
     )
 }
 
-fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
-    body = "Emote",
-    htmlDocument = null,
-    isEdited = false,
+fun aTimelineItemEmoteContent(
+    body: String = "Emote",
+    htmlDocument: Document? = null,
+    formattedBody: CharSequence = body,
+    isEdited: Boolean = false,
+) = TimelineItemEmoteContent(
+    body = body,
+    htmlDocument = htmlDocument,
+    formattedBody = formattedBody,
+    isEdited = isEdited,
 )
 
 fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
     data = UnableToDecryptContent.Data.Unknown
 )
 
-fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
-    body = "Notice",
-    htmlDocument = null,
-    isEdited = false,
+fun aTimelineItemNoticeContent(
+    body: String = "Notice",
+    htmlDocument: Document? = null,
+    formattedBody: CharSequence = body,
+    isEdited: Boolean = false,
+) = TimelineItemNoticeContent(
+    body = body,
+    htmlDocument = htmlDocument,
+    formattedBody = formattedBody,
+    isEdited = isEdited,
 )
 
 fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 
 fun aTimelineItemTextContent(
     body: String = "Text",
+    htmlDocument: Document? = null,
     formattedBody: CharSequence = body,
+    isEdited: Boolean = false,
 ) = TimelineItemTextContent(
     body = body,
-    htmlDocument = null,
+    htmlDocument = htmlDocument,
     formattedBody = formattedBody,
-    isEdited = false,
+    isEdited = isEdited,
 )
 
 fun aTimelineItemUnknownContent() = TimelineItemUnknownContent

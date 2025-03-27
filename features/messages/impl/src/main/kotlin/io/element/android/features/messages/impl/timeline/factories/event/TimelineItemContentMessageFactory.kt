@@ -127,7 +127,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     TimelineItemTextContent(
                         body = body,
                         htmlDocument = null,
-                        plainText = body,
+                        formattedBody = body,
                         isEdited = content.isEdited,
                     )
                 } else {
@@ -223,9 +223,10 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val formattedBody = parseHtml(messageType.formatted) ?: textPillificationHelper.pillify(
                     body
                 ).safeLinkify()
+                val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
                 TimelineItemNoticeContent(
                     body = body,
-                    htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
+                    htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
                 )

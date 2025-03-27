@@ -32,6 +32,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                     event = event.copy(
                         content = event.content.copy(
                             body = str,
+                            formattedBody = str,
                         ),
                         reactionsState = aTimelineItemReactions(count = 0),
                     ),

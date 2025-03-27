@@ -89,7 +89,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemTextContent(
             body = "body",
             htmlDocument = null,
-            plainText = "body",
             isEdited = false,
             formattedBody = SpannedString("body"),
         )
@@ -123,7 +122,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemTextContent(
             body = "body",
             htmlDocument = null,
-            plainText = "body",
             isEdited = false,
             formattedBody = "body",
         )
@@ -141,7 +139,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemTextContent(
             body = "body",
             htmlDocument = null,
-            plainText = "body",
             isEdited = false,
             formattedBody = SpannedString("body"),
         )
@@ -159,7 +156,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemTextContent(
             body = "https://www.example.org",
             htmlDocument = null,
-            plainText = "https://www.example.org",
             isEdited = false,
             formattedBody = buildSpannedString {
                 inSpans(URLSpan("https://www.example.org")) {
@@ -636,7 +632,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemNoticeContent(
             body = "body",
             htmlDocument = null,
-            plainText = "body",
             formattedBody = SpannedString("body"),
             isEdited = false,
         )
@@ -670,7 +665,6 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemEmoteContent(
             body = "* Bob body",
             htmlDocument = null,
-            plainText = "* Bob body",
             formattedBody = SpannedString("* Bob body"),
             isEdited = false,
         )
