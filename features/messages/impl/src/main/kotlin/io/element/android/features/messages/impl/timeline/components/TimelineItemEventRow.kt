@@ -446,7 +446,7 @@ private fun MessageSenderInformation(
                 .testTag(TestTags.timelineItemSenderName)
                 .clip(RoundedCornerShape(6.dp))
                 .clickable(onClick = onClick)
-                .padding(start = 4.dp),
+                .padding(horizontal = 4.dp),
             senderId = senderId,
             senderProfile = senderProfile,
             senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
