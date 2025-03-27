@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.local
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
@@ -26,6 +27,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
@@ -119,7 +121,14 @@ class AndroidLocalMediaActions @Inject constructor(
             when (localMedia.info.mimeType) {
                 MimeTypes.Apk -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (activityContext?.packageManager?.canRequestPackageInstalls() == false) {
+                        if (PermissionChecker.checkPermission(
+                                context,
+                                Manifest.permission.REQUEST_INSTALL_PACKAGES,
+                                -1,
+                                -1,
+                                context.packageName
+                            ) == PermissionChecker.PERMISSION_GRANTED &&
+                            activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
                             activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!).let { }
                         } else {
