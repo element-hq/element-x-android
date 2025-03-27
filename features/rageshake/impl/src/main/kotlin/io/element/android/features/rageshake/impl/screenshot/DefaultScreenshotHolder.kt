@@ -11,7 +11,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.AppScope

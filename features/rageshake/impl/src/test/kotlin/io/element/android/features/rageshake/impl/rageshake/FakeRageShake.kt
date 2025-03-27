@@ -5,9 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.rageshake.test.rageshake
-
-import io.element.android.features.rageshake.api.rageshake.RageShake
+package io.element.android.features.rageshake.impl.rageshake
 
 class FakeRageShake(
     private var isAvailableValue: Boolean = true

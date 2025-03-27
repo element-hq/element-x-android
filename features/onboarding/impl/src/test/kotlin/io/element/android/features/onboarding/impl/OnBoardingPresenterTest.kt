@@ -16,6 +16,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,6 +39,7 @@ class OnBoardingPresenterTest {
         val presenter = OnBoardingPresenter(
             buildMeta = buildMeta,
             featureFlagService = featureFlagService,
+            rageshakeFeatureAvailability = { true },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -46,7 +48,21 @@ class OnBoardingPresenterTest {
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
+            assertThat(initialState.canReportBug).isTrue()
             assertThat(awaitItem().canLoginWithQrCode).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - rageshake not available`() = runTest {
+        val presenter = OnBoardingPresenter(
+            buildMeta = aBuildMeta(),
+            featureFlagService = FakeFeatureFlagService(),
+            rageshakeFeatureAvailability = { false },
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem().canReportBug).isFalse()
         }
     }
 }

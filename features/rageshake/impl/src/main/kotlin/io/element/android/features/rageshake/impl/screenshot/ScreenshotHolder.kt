@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.rageshake.api.screenshot
+package io.element.android.features.rageshake.impl.screenshot
 
 import android.graphics.Bitmap
 

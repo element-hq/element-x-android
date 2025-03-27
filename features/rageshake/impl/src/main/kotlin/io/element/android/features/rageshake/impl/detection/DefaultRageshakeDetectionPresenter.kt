@@ -20,9 +20,9 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionPre
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
-import io.element.android.features.rageshake.api.rageshake.RageShake
 import io.element.android.features.rageshake.api.screenshot.ImageResult
-import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
+import io.element.android.features.rageshake.impl.rageshake.RageShake
+import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -75,7 +75,8 @@ class DefaultRageshakeDetectionPresenter @Inject constructor(
         LaunchedEffect(preferencesState.sensitivity) {
             rageShake.setSensitivity(preferencesState.sensitivity)
         }
-        val shouldStart = preferencesState.isEnabled &&
+        val shouldStart = preferencesState.isFeatureEnabled &&
+            preferencesState.isEnabled &&
             preferencesState.isSupported &&
             isStarted.value &&
             !takeScreenshot.value &&

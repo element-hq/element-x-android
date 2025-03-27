@@ -20,6 +20,7 @@ data class PreferencesRootState(
     val showSecureBackupBadge: Boolean,
     val accountManagementUrl: String?,
     val devicesManagementUrl: String?,
+    val canReportBug: Boolean,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
     val canDeactivateAccount: Boolean,

@@ -19,6 +19,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -105,12 +106,14 @@ class RoomListPresenterTest {
         matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
         val presenter = createRoomListPresenter(
             client = matrixClient,
+            rageshakeFeatureAvailability = { false },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.matrixUser).isEqualTo(MatrixUser(A_USER_ID))
+            assertThat(initialState.canReportBug).isFalse()
             val withUserState = awaitItem()
             assertThat(withUserState.matrixUser.userId).isEqualTo(A_USER_ID)
             assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
@@ -135,6 +138,7 @@ class RoomListPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showAvatarIndicator).isTrue()
+            assertThat(initialState.canReportBug).isTrue()
             sessionVerificationService.emitNeedsSessionVerification(false)
             encryptionService.emitBackupState(BackupState.ENABLED)
             val finalState = awaitItem()
@@ -675,6 +679,7 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
     ) = RoomListPresenter(
         client = client,
         syncService = syncService,
@@ -705,6 +710,7 @@ class RoomListPresenterTest {
         notificationCleaner = notificationCleaner,
         logoutPresenter = { aDirectLogoutState() },
         appPreferencesStore = appPreferencesStore,
+        rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     )
 }
 
