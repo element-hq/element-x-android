@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 interface MentionSpanUpdater {
     fun updateMentionSpans(text: CharSequence): CharSequence
+
     @Composable
     fun rememberMentionSpans(text: CharSequence): CharSequence
 }
@@ -38,7 +39,6 @@ class DefaultMentionSpanUpdater @Inject constructor(
         val roomInfoCacheUpdate by roomNamesCache.updateFlow.collectAsState(0)
         val roomMemberProfilesCacheUpdate by roomMemberProfilesCache.updateFlow.collectAsState(0)
         return remember(text, roomInfoCacheUpdate, roomMemberProfilesCacheUpdate, isLightTheme) {
-            println("rememberMentionSpans $text $roomInfoCacheUpdate $roomMemberProfilesCacheUpdate $isLightTheme")
             updateMentionSpans(text)
             text
         }
