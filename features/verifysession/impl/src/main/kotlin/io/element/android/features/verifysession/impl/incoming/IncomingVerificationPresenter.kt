@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,7 +56,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): IncomingVerificationState {
-        val coroutineScope = rememberCoroutineScope { Dispatchers.IO }
+        val coroutineScope = rememberCoroutineScope()
 
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
 

@@ -1,3 +1,34 @@
+Changes in Element X v25.03.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.03.3 -->
+
+## What's Changed
+### ✨ Features
+* Add 'unencrypted room' badges and labels by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4445
+* Use embedded version of Element Call by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4470
+### 🐛 Bugfixes
+* Fix 'unverified session' flow displayed when creating account by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4467
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4461
+### 🧱 Build
+* Let element enterprise be able to configure id for mapTiler. by @bmarty in https://github.com/element-hq/element-x-android/pull/4446
+### Dependency upgrades
+* chore(deps): update rnkdsh/action-upload-diawi action to v1.5.8 by @renovate in https://github.com/element-hq/element-x-android/pull/4457
+* chore(deps): update plugin licensee to v1.13.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4447
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.8.4 by @renovate in https://github.com/element-hq/element-x-android/pull/4450
+* fix(deps): update dependency com.google.firebase:firebase-bom to v33.11.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4448
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.3.24 by @renovate in https://github.com/element-hq/element-x-android/pull/4394
+* fix(deps): update dependencyanalysis to v2.13.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4464
+* chore(deps): update plugin sonarqube to v6.1.0.5360 by @renovate in https://github.com/element-hq/element-x-android/pull/4468
+* fix(deps): update android.gradle.plugin to v8.9.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4465
+### Others
+* Sync Strings - tweaks to identity change messages by @andybalaam in https://github.com/element-hq/element-x-android/pull/4454
+* Check link click by @bmarty in https://github.com/element-hq/element-x-android/pull/4463
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.03.2...v25.03.3
+
 Changes in Element X v25.03.2
 =============================
 
