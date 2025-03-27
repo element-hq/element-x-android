@@ -75,6 +75,7 @@ dependencies {
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
