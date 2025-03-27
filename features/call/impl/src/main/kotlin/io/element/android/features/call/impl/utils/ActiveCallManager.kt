@@ -42,6 +42,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -59,20 +61,20 @@ interface ActiveCallManager {
      * Registers an incoming call if there isn't an existing active call and posts a [CallState.Ringing] notification.
      * @param notificationData The data for the incoming call notification.
      */
-    fun registerIncomingCall(notificationData: CallNotificationData)
+    suspend fun registerIncomingCall(notificationData: CallNotificationData)
 
     /**
      * Called when the active call has been hung up. It will remove any existing UI and the active call.
      * @param callType The type of call that the user hung up, either an external url one or a room one.
      */
-    fun hungUpCall(callType: CallType)
+    suspend fun hungUpCall(callType: CallType)
 
     /**
      * Called after the user joined a call. It will remove any existing UI and set the call state as [CallState.InCall].
      *
      * @param callType The type of call that the user joined, either an external url one or a room one.
      */
-    fun joinedCall(callType: CallType)
+    suspend fun joinedCall(callType: CallType)
 }
 
 @SingleIn(AppScope::class)
@@ -104,45 +106,48 @@ class DefaultActiveCallManager @Inject constructor(
 
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
+    private val mutex = Mutex()
+
     init {
         observeRingingCall()
         observeCurrentCall()
     }
 
-    override fun registerIncomingCall(notificationData: CallNotificationData) {
-        if (activeCall.value != null) {
-            displayMissedCallNotification(notificationData)
-            Timber.w("Already have an active call, ignoring incoming call: $notificationData")
-            return
-        }
-        activeCall.value = ActiveCall(
-            callType = CallType.RoomCall(
-                sessionId = notificationData.sessionId,
-                roomId = notificationData.roomId,
-            ),
-            callState = CallState.Ringing(notificationData),
-        )
+    override suspend fun registerIncomingCall(notificationData: CallNotificationData) {
+        mutex.withLock {
+            if (activeCall.value != null) {
+                displayMissedCallNotification(notificationData)
+                Timber.w("Already have an active call, ignoring incoming call: $notificationData")
+                return
+            }
+            activeCall.value = ActiveCall(
+                callType = CallType.RoomCall(
+                    sessionId = notificationData.sessionId,
+                    roomId = notificationData.roomId,
+                ),
+                callState = CallState.Ringing(notificationData),
+            )
 
-        timedOutCallJob = coroutineScope.launch {
-            showIncomingCallNotification(notificationData)
+            timedOutCallJob = coroutineScope.launch {
+                showIncomingCallNotification(notificationData)
 
-            // Wait for the ringing call to time out
-            delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
-            incomingCallTimedOut(displayMissedCallNotification = true)
-        }
+                // Wait for the ringing call to time out
+                delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
+                incomingCallTimedOut(displayMissedCallNotification = true)
+            }
 
-        // Acquire a wake lock to keep the device awake during the incoming call, so we can process the room info data
-        if (activeWakeLock?.isHeld == true) {
-            activeWakeLock.release()
+            // Acquire a wake lock to keep the device awake during the incoming call, so we can process the room info data
+            if (activeWakeLock?.isHeld == false) {
+                activeWakeLock.acquire(ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L)
+            }
         }
-        activeWakeLock?.acquire(ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L)
     }
 
     /**
      * Called when the incoming call timed out. It will remove the active call and remove any associated UI, adding a 'missed call' notification.
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun incomingCallTimedOut(displayMissedCallNotification: Boolean) {
+    suspend fun incomingCallTimedOut(displayMissedCallNotification: Boolean) = mutex.withLock {
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
         activeCall.value = null
@@ -157,7 +162,7 @@ class DefaultActiveCallManager @Inject constructor(
         }
     }
 
-    override fun hungUpCall(callType: CallType) {
+    override suspend fun hungUpCall(callType: CallType) = mutex.withLock {
         if (activeCall.value?.callType != callType) {
             Timber.w("Call type $callType does not match the active call type, ignoring")
             return
@@ -170,7 +175,7 @@ class DefaultActiveCallManager @Inject constructor(
         activeCall.value = null
     }
 
-    override fun joinedCall(callType: CallType) {
+    override suspend fun joinedCall(callType: CallType) = mutex.withLock {
         cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
             activeWakeLock.release()
