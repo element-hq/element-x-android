@@ -196,6 +196,7 @@ private fun AttachmentsPreviewBottomActions(
         onDeleteVoiceMessage = {},
         onReceiveSuggestion = {},
         resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
+        resolveAtRoomMentionDisplay = { TextDisplay.Plain },
         onError = {},
         onTyping = {},
         onSelectRichContent = {},

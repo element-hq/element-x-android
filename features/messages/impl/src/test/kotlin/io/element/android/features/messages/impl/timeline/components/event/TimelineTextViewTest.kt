@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
+import android.text.SpannedString
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -18,16 +19,22 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_ID_2
-import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.room.aRoomMember
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
+import io.element.android.libraries.textcomposer.mentions.DefaultMentionSpanUpdater
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
@@ -40,101 +47,100 @@ import org.junit.runner.RunWith
 class TimelineTextViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
+    private val mentionSpanTheme = MentionSpanTheme(currentUserId = A_USER_ID)
+    private val formatLambda = lambdaRecorder<MentionType, CharSequence> { mentionType -> mentionType.toString() }
+    private val mentionSpanFormatter = FakeMentionSpanFormatter(formatLambda)
+
     @Test
     fun `getTextWithResolvedMentions - does nothing for a non spannable CharSequence`() = runTest {
         val charSequence = "Hello <a href=\"https://matrix.to/#/@alice:example.com\">@alice:example.com</a>"
-
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(charSequence))
 
         assertThat(result.getMentionSpans()).isEmpty()
+        assert(formatLambda).isNeverCalled()
     }
 
     @Test
     fun `getTextWithResolvedMentions - does nothing if there are no mentions`() = runTest {
         val charSequence = SpannableString("Hello <a href=\"https://matrix.to/#/@alice:example.com\">@alice:example.com</a>")
-
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(charSequence))
 
         assertThat(result.getMentionSpans()).isEmpty()
+        assert(formatLambda).isNeverCalled()
     }
 
     @Test
     fun `getTextWithResolvedMentions - just returns the body if there is no formattedBody`() = runTest {
         val charSequence = "Hello <a href=\"https://matrix.to/#/@alice:example.com\">@alice:example.com</a>"
-
-        val result = rule.getText(aTextContentWithFormattedBody(body = charSequence, formattedBody = null))
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(body = charSequence, formattedBody = null))
 
         assertThat(result.getMentionSpans()).isEmpty()
         assertThat(result.toString()).isEqualTo(charSequence)
+        assert(formatLambda).isNeverCalled()
     }
 
     @Test
-    fun `getTextWithResolvedMentions - with Room mention does nothing`() = runTest {
+    fun `getTextWithResolvedMentions - with Room mention format correctly`() = runTest {
+        val mentionType = MentionType.Room(roomIdOrAlias = A_ROOM_ID_2.toRoomIdOrAlias())
         val charSequence = buildSpannedString {
             append("Hello ")
-            inSpans(aMentionSpan(rawValue = A_ROOM_ID_2.value, type = MentionSpan.Type.ROOM)) {
+            inSpans(MentionSpan(mentionType)) {
                 append(A_ROOM_ID.value)
             }
         }
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(charSequence))
 
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
-
-        assertThat(result.getMentionSpans().firstOrNull()?.text).isEmpty()
+        val expectedDisplayText = mentionType.toString()
+        assertThat(result.getMentionSpans().firstOrNull()?.displayText.toString()).isEqualTo(expectedDisplayText)
         assertThat(result).isEqualTo(charSequence)
+        assert(formatLambda).isCalledOnce()
     }
 
     @Test
     fun `getTextWithResolvedMentions - replaces MentionSpan's text`() = runTest {
+        val mentionType = MentionType.User(userId = A_USER_ID)
         val charSequence = buildSpannedString {
             append("Hello ")
-            inSpans(aMentionSpan(rawValue = A_USER_ID.value)) {
+            inSpans(MentionSpan(mentionType)) {
                 append("@NotAlice")
             }
         }
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(charSequence))
 
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
-
-        assertThat(result.getMentionSpans().firstOrNull()?.text).isEqualTo("alice")
+        val expectedDisplayText = mentionType.toString()
+        assertThat(result.getMentionSpans().firstOrNull()?.displayText.toString()).isEqualTo(expectedDisplayText)
+        assert(formatLambda).isCalledOnce()
     }
 
     @Test
     fun `getTextWithResolvedMentions - replaces MentionSpan's text inside CustomMentionSpan`() = runTest {
+        val mentionType = MentionType.User(userId = A_USER_ID)
         val charSequence = buildSpannedString {
             append("Hello ")
-            inSpans(CustomMentionSpan(aMentionSpan(rawValue = A_USER_ID.value))) {
+            inSpans(CustomMentionSpan(MentionSpan(mentionType))) {
                 append("@NotAlice")
             }
         }
-
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
-
-        assertThat(result.getMentionSpans().firstOrNull()?.text).isEqualTo("alice")
-    }
-
-    @Test
-    fun `getTextWithResolvedMentions - replaces MentionSpan's text with user id if no display name is cached`() = runTest {
-        val charSequence = buildSpannedString {
-            append("Hello ")
-            inSpans(aMentionSpan(rawValue = A_USER_ID_2.value)) {
-                append("@NotAlice")
-            }
-        }
-
-        val result = rule.getText(aTextContentWithFormattedBody(charSequence))
-
-        assertThat(result.getMentionSpans().firstOrNull()?.text).isEqualTo(A_USER_ID_2.value)
+        val mentionSpanUpdater = aMentionSpanUpdater()
+        val expectedDisplayText = mentionType.toString()
+        val result = rule.getText(mentionSpanUpdater, aTextContentWithFormattedBody(charSequence))
+        assertThat(result.getMentionSpans().firstOrNull()?.displayText.toString()).isEqualTo(expectedDisplayText)
+        assert(formatLambda).isCalledOnce()
     }
 
     private suspend fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.getText(
+        mentionSpanUpdater: MentionSpanUpdater,
         content: TimelineItemTextBasedContent,
     ): CharSequence {
         val completable = CompletableDeferred<CharSequence>()
         setContent {
-            val roomMemberProfilesCache = RoomMemberProfilesCache().apply {
-                replace(listOf(aRoomMember(userId = A_USER_ID, displayName = A_USER_NAME)))
-            }
             CompositionLocalProvider(
-                LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
+                LocalMentionSpanUpdater provides mentionSpanUpdater
             ) {
                 completable.complete(getTextWithResolvedMentions(content = content))
             }
@@ -142,21 +148,20 @@ class TimelineTextViewTest {
         return completable.await()
     }
 
-    private fun aMentionSpan(
-        rawValue: String,
-        text: String = "",
-        type: MentionSpan.Type = MentionSpan.Type.USER
-    ) = MentionSpan(
-        text = text,
-        rawValue = rawValue,
-        type = type,
-    )
+    private fun aMentionSpanUpdater(): MentionSpanUpdater {
+        return DefaultMentionSpanUpdater(
+            formatter = mentionSpanFormatter,
+            theme = mentionSpanTheme,
+            roomMemberProfilesCache = RoomMemberProfilesCache(),
+            roomNamesCache = RoomNamesCache(),
+        )
+    }
 
     private fun aTextContentWithFormattedBody(formattedBody: CharSequence?, body: String = "") =
         TimelineItemTextContent(
             body = body,
             htmlDocument = null,
-            formattedBody = formattedBody,
+            formattedBody = formattedBody ?: SpannedString(body),
             isEdited = false
         )
 }
