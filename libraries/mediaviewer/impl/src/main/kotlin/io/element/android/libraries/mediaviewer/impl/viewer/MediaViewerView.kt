@@ -143,13 +143,10 @@ fun MediaViewerView(
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        val isDisplayed = remember(state.currentIndex, pagerState.settledPage) {
-                            if (state.currentIndex == pagerState.settledPage) {
-                                // If the indexes get out of sync, trust the pagerState
-                                page == pagerState.settledPage
-                            } else {
-                                page == state.currentIndex
-                            }
+                        val isDisplayed = remember(pagerState.settledPage) {
+                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
+                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
+                            page == pagerState.settledPage
                         }
                         MediaViewerPage(
                             isDisplayed = isDisplayed,
