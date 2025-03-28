@@ -187,10 +187,6 @@ class ExoPlayerForPreview(
     override fun setDeviceMuted(muted: Boolean) {}
     override fun setDeviceMuted(muted: Boolean, flags: Int) {}
     override fun setAudioAttributes(audioAttributes: AudioAttributes, handleAudioFocus: Boolean) {}
-    override fun getAudioComponent(): ExoPlayer.AudioComponent? = throw NotImplementedError()
-    override fun getVideoComponent(): ExoPlayer.VideoComponent? = throw NotImplementedError()
-    override fun getTextComponent(): ExoPlayer.TextComponent? = throw NotImplementedError()
-    override fun getDeviceComponent(): ExoPlayer.DeviceComponent? = throw NotImplementedError()
     override fun addAudioOffloadListener(listener: ExoPlayer.AudioOffloadListener) {}
     override fun removeAudioOffloadListener(listener: ExoPlayer.AudioOffloadListener) {}
     override fun getAnalyticsCollector(): AnalyticsCollector = throw NotImplementedError()
