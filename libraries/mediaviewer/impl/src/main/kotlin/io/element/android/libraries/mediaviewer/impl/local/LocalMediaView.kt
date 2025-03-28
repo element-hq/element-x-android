@@ -31,6 +31,7 @@ fun LocalMediaView(
     textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
+    isUserSelected: Boolean = false,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
     mediaInfo: MediaInfo? = localMedia?.info,
 ) {
@@ -47,6 +48,7 @@ fun LocalMediaView(
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
+            autoplay = isUserSelected,
             modifier = modifier,
         )
         mimeType == MimeTypes.PlainText -> TextFileView(

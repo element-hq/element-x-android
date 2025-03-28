@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.aWaveForm
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -202,6 +203,7 @@ fun aMediaViewerState(
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
+    initiallySelectedEventId = EventId("\$a:b"),
     listData = listData.toPersistentList(),
     currentIndex = currentIndex,
     snackbarMessage = null,

@@ -19,6 +19,7 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import kotlinx.collections.immutable.ImmutableList
 
 data class MediaViewerState(
+    val initiallySelectedEventId: EventId?,
     val listData: ImmutableList<MediaViewerPageData>,
     val currentIndex: Int,
     val snackbarMessage: SnackbarMessage?,

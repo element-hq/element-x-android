@@ -33,10 +33,15 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.coroutines.coroutineContext
 
 class MediaViewerDataSource(
     mode: MediaViewerMode,
@@ -75,8 +80,7 @@ class MediaViewerDataSource(
         return remember { dataFlow() }.collectAsState(initialData())
     }
 
-    @VisibleForTesting
-    fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
+    internal fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
                 when (groupedItems) {
@@ -105,7 +109,7 @@ class MediaViewerDataSource(
             }
     }
 
-    private fun initialData(): PersistentList<MediaViewerPageData> {
+    fun initialData(): PersistentList<MediaViewerPageData> {
         val initialMediaItems =
             galleryDataSource.getLastData().dataOrNull()?.getItems(galleryMode).orEmpty()
         return buildMediaViewerPageList(initialMediaItems)

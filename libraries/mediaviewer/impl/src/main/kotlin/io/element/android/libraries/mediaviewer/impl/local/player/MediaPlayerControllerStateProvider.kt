@@ -27,6 +27,7 @@ open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPl
 private fun aMediaPlayerControllerState(
     isVisible: Boolean = true,
     isPlaying: Boolean = false,
+    isReady: Boolean = false,
     progressInMillis: Long = 0,
     // Default to 1 minute and 23 seconds
     durationInMillis: Long = 83_000,
@@ -35,6 +36,7 @@ private fun aMediaPlayerControllerState(
 ) = MediaPlayerControllerState(
     isVisible = isVisible,
     isPlaying = isPlaying,
+    isReady = isReady,
     progressInMillis = progressInMillis,
     durationInMillis = durationInMillis,
     canMute = canMute,

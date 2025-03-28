@@ -16,9 +16,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -85,7 +89,9 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             }
         }.flatMapLatest {
             timelineMediaItemsFactory.timelineItems
-        }.map { timelineItems ->
+        }
+        .distinctUntilChanged()
+        .map { timelineItems ->
             mediaItemsPostProcessor.process(mediaItems = timelineItems)
         }.map {
             mediaTimeline.orCache(it)
