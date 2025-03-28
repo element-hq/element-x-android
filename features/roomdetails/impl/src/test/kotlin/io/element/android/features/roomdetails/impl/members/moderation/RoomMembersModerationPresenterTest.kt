@@ -153,7 +153,7 @@ class RoomMembersModerationPresenterTest {
     }
 
     @Test
-    fun `present - Kick removes the user`() = runTest {
+    fun `present - Kick requires confirmation and then kicks the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
@@ -169,6 +169,10 @@ class RoomMembersModerationPresenterTest {
             skipItems(1)
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
+            val confirmingState = awaitItem()
+            assertThat(confirmingState.kickUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+            // Confirm
+            confirmingState.eventSink(RoomMembersModerationEvents.KickUser)
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.actions).isEmpty()
@@ -289,6 +293,7 @@ class RoomMembersModerationPresenterTest {
             val initialItem = awaitItem()
             // Kick user and fail
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
+            awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
             awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
             skipItems(1)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
