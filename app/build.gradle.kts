@@ -102,7 +102,7 @@ android {
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
-    logger.warnInBox("Building $baseAppName")
+    logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName)")
 
     buildTypes {
         getByName("debug") {
