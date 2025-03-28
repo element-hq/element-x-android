@@ -31,6 +31,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
@@ -61,6 +62,7 @@ fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     localMedia: LocalMedia?,
+    autoplay: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val exoPlayer = rememberExoPlayer()
@@ -70,6 +72,7 @@ fun MediaVideoView(
         bottomPaddingInPixels = bottomPaddingInPixels,
         exoPlayer = exoPlayer,
         localMedia = localMedia,
+        autoplay = autoplay,
         modifier = modifier,
     )
 }
@@ -82,6 +85,7 @@ private fun ExoPlayerMediaVideoView(
     bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
     localMedia: LocalMedia?,
+    autoplay: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -89,6 +93,7 @@ private fun ExoPlayerMediaVideoView(
             MediaPlayerControllerState(
                 isVisible = true,
                 isPlaying = false,
+                isReady = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
                 canMute = true,
@@ -135,6 +140,12 @@ private fun ExoPlayerMediaVideoView(
                         }
                 }
             }
+
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isReady = playbackState == STATE_READY,
+                )
+            }
         }
     }
 
@@ -164,10 +175,15 @@ private fun ExoPlayerMediaVideoView(
             )
         }
     }
-    LaunchedEffect(isDisplayed) {
-        // If not displayed, make sure to pause the video
-        if (!isDisplayed) {
+
+    LaunchedEffect(autoplay, isDisplayed, mediaPlayerControllerState.isReady) {
+        if (autoplay && isDisplayed && mediaPlayerControllerState.isReady && !mediaPlayerControllerState.isPlaying) {
+            // When displayed, start autoplaying from the beginning
+            exoPlayer.play()
+        } else if (!isDisplayed && mediaPlayerControllerState.isPlaying) {
+            // If not displayed, make sure to pause the video
             exoPlayer.pause()
+            exoPlayer.seekTo(0)
         }
     }
     if (localMedia?.uri != null) {
@@ -259,5 +275,6 @@ internal fun MediaVideoViewPreview() = ElementPreview {
         bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),
         localMedia = null,
+        autoplay = false,
     )
 }
