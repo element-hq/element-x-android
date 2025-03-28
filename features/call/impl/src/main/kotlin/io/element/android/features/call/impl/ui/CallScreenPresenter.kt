@@ -62,6 +62,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val activeCallManager: ActiveCallManager,
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -87,7 +88,7 @@ class CallScreenPresenter @AssistedInject constructor(
             coroutineScope.launch {
                 // Sets the call as joined
                 activeCallManager.joinedCall(callType)
-                loadUrl(
+                getRoomCallUrl(
                     inputs = callType,
                     urlState = urlState,
                     callWidgetDriver = callWidgetDriver,
@@ -96,7 +97,7 @@ class CallScreenPresenter @AssistedInject constructor(
                 )
             }
             onDispose {
-                activeCallManager.hungUpCall(callType)
+                appCoroutineScope.launch { activeCallManager.hungUpCall(callType) }
             }
         }
 
@@ -187,7 +188,7 @@ class CallScreenPresenter @AssistedInject constructor(
         )
     }
 
-    private suspend fun loadUrl(
+    private suspend fun getRoomCallUrl(
         inputs: CallType,
         urlState: MutableState<AsyncData<String>>,
         callWidgetDriver: MutableState<MatrixWidgetDriver?>,

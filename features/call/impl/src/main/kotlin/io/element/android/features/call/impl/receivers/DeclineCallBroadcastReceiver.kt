@@ -16,6 +16,8 @@ import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.libraries.architecture.bindings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -27,10 +29,16 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
     }
     @Inject
     lateinit var activeCallManager: ActiveCallManager
+
+    @Inject
+    lateinit var coroutineScope: CoroutineScope
+
     override fun onReceive(context: Context, intent: Intent?) {
         val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
             ?: return
         context.bindings<CallBindings>().inject(this)
-        activeCallManager.hungUpCall(callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        coroutineScope.launch {
+            activeCallManager.hungUpCall(callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        }
     }
 }
