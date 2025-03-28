@@ -8,9 +8,11 @@
 package io.element.android.features.analytics.api.preferences
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.R
@@ -38,6 +40,13 @@ fun AnalyticsPreferencesView(
     )
     Column(modifier) {
         ListItem(
+            modifier = Modifier
+                .toggleable(
+                    value = state.isEnabled,
+                    role = Role.Checkbox,
+                    enabled = true,
+                    onValueChange = { onEnabledChanged(!state.isEnabled) }
+                ),
             headlineContent = {
                 Text(stringResource(id = R.string.screen_analytics_settings_share_data))
             },
@@ -47,10 +56,7 @@ fun AnalyticsPreferencesView(
             leadingContent = null,
             trailingContent = ListItemContent.Switch(
                 checked = state.isEnabled,
-            ),
-            onClick = {
-                onEnabledChanged(!state.isEnabled)
-            }
+            )
         )
         if (state.policyUrl.isNotEmpty()) {
             val linkText = buildAnnotatedStringWithStyledPart(
