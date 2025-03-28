@@ -28,6 +28,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -142,8 +143,16 @@ fun MediaViewerView(
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        val isDisplayed = remember(state.currentIndex, pagerState.settledPage) {
+                            if (state.currentIndex == pagerState.settledPage) {
+                                // If the indexes get out of sync, trust the pagerState
+                                page == pagerState.settledPage
+                            } else {
+                                page == state.currentIndex
+                            }
+                        }
                         MediaViewerPage(
-                            isDisplayed = page == pagerState.settledPage,
+                            isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
                             bottomPaddingInPixels = bottomPaddingInPixels,
                             data = dataForPage,
@@ -157,7 +166,8 @@ fun MediaViewerView(
                             },
                             onShowOverlayChange = {
                                 showOverlay = it
-                            }
+                            },
+                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
@@ -273,6 +283,7 @@ private fun MediaViewerPage(
     bottomPaddingInPixels: Int,
     data: MediaViewerPageData.MediaViewerData,
     textFileViewer: TextFileViewer,
+    isUserSelected: Boolean,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
@@ -328,6 +339,7 @@ private fun MediaViewerPage(
                             currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
+                    isUserSelected = isUserSelected,
                 )
                 ThumbnailView(
                     mediaInfo = data.mediaInfo,
