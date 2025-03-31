@@ -114,6 +114,8 @@ fun RoomMembersModerationView(
                         item {
                             TextFieldListItem(
                                 placeholder = stringResource(id = CommonStrings.common_reason),
+                                label = stringResource(id = CommonStrings.common_reason),
+                                withBorder = true,
                                 text = action.reason,
                                 onTextChange = { newText ->
                                     state.eventSink(
@@ -178,6 +180,8 @@ fun RoomMembersModerationView(
                         item {
                             TextFieldListItem(
                                 placeholder = stringResource(id = CommonStrings.common_reason),
+                                label = stringResource(id = CommonStrings.common_reason),
+                                withBorder = true,
                                 text = action.reason,
                                 onTextChange = { newText ->
                                     state.eventSink(

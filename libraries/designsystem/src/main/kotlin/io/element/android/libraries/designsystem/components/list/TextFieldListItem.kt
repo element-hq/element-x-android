@@ -29,6 +29,8 @@ fun TextFieldListItem(
     modifier: Modifier = Modifier,
     error: String? = null,
     maxLines: Int = 1,
+    withBorder: Boolean = false,
+    label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
@@ -38,12 +40,17 @@ fun TextFieldListItem(
         value = text,
         onValueChange = { onTextChange(it) },
         placeholder = placeholder?.let { @Composable { Text(it) } },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledBorderColor = Color.Transparent,
-            errorBorderColor = Color.Transparent,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-        ),
+        label = label?.let { @Composable { Text(it) } },
+        colors = if (withBorder) {
+            OutlinedTextFieldDefaults.colors()
+        } else {
+            OutlinedTextFieldDefaults.colors(
+                disabledBorderColor = Color.Transparent,
+                errorBorderColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+            )
+        },
         isError = error != null,
         supportingText = error?.let { @Composable { Text(it) } },
         keyboardOptions = keyboardOptions,
@@ -124,3 +131,32 @@ internal fun TextFieldListItemTextFieldValuePreview() {
         )
     }
 }
+
+@Preview("Text field List item with border - empty", group = PreviewGroup.ListItems)
+@Composable
+internal fun TextFieldListItemWithBorderEmptyPreview() {
+    ElementThemedPreview {
+        TextFieldListItem(
+            placeholder = "Placeholder",
+            label = "Label",
+            text = "",
+            withBorder = true,
+            onTextChange = {},
+        )
+    }
+}
+
+@Preview("Text field List item with border - text", group = PreviewGroup.ListItems)
+@Composable
+internal fun TextFieldListItemWithBorderPreview() {
+    ElementThemedPreview {
+        TextFieldListItem(
+            placeholder = "Placeholder",
+            label = "Label",
+            text = "Text",
+            withBorder = true,
+            onTextChange = {},
+        )
+    }
+}
+
