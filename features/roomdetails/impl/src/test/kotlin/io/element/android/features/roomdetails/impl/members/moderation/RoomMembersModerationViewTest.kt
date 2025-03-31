@@ -13,7 +13,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.ui.strings.CommonStrings
