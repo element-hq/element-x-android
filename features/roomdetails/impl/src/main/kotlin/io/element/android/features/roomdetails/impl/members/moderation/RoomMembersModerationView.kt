@@ -102,6 +102,7 @@ fun RoomMembersModerationView(
                                 )
                             )
                         },
+                        applyPaddingToContents = true,
                         onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     ) {
                         item {
@@ -165,6 +166,7 @@ fun RoomMembersModerationView(
                                 )
                             )
                         },
+                        applyPaddingToContents = true,
                         onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     ) {
                         item {
