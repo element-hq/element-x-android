@@ -7,11 +7,11 @@
   <string name="screen_room_change_permissions_ban_people">"Αποκλεισμός ατόμων"</string>
   <string name="screen_room_change_permissions_delete_messages">"Αφαίρεση μηνυμάτων"</string>
   <string name="screen_room_change_permissions_everyone">"Όλοι"</string>
-  <string name="screen_room_change_permissions_invite_people">"Πρόσκληση ατόμων"</string>
+  <string name="screen_room_change_permissions_invite_people">"Προσκάλεσε άτομα και αποδέξου αιτήματα συμμετοχής"</string>
   <string name="screen_room_change_permissions_member_moderation">"Συντονισμός μελών"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Μηνύματα και περιεχόμενο"</string>
   <string name="screen_room_change_permissions_moderators">"Διαχειριστές και συντονιστές"</string>
-  <string name="screen_room_change_permissions_remove_people">"Αφαίρεση ατόμων"</string>
+  <string name="screen_room_change_permissions_remove_people">"Αφαίρεση ατόμων και απόρριψη αιτημάτων συμμετοχής"</string>
   <string name="screen_room_change_permissions_room_avatar">"Αλλαγή avatar δωματίου"</string>
   <string name="screen_room_change_permissions_room_details">"Λεπτομέρειες δωματίου"</string>
   <string name="screen_room_change_permissions_room_name">"Αλλαγή ονόματος δωματίου"</string>

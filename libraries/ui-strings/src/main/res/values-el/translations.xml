@@ -127,6 +127,7 @@
   <string name="action_view_in_timeline">"Προβολή στο χρονοδιάγραμμα"</string>
   <string name="action_view_source">"Προβολή πηγής"</string>
   <string name="action_yes">"Ναι"</string>
+  <string name="action_yes_try_again">"Ναι, δοκιμή ξανά"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Διαθέσιμη αναβάθμιση"</string>
   <string name="common_about">"Σχετικά"</string>
@@ -252,7 +253,7 @@
   <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Στάλθηκε από μια μη ασφαλής συσκευή"</string>
   <string name="common_unable_to_decrypt_no_access">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Η επαληθευμένη ταυτότητα του αποστολέα έχει αλλάξει"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Η επαληθευμένη ταυτότητα του αποστολέα έχει επαναφερθεί"</string>
   <string name="common_unable_to_invite_message">"Δεν ήταν δυνατή η αποστολή προσκλήσεων σε έναν ή περισσότερους χρήστες."</string>
   <string name="common_unable_to_invite_title">"Δεν είναι δυνατή η αποστολή προσκλήσεων"</string>
   <string name="common_unlock">"Ξεκλείδωμα"</string>
@@ -271,8 +272,8 @@
   <string name="common_waiting">"Αναμονή…"</string>
   <string name="common_waiting_for_decryption_key">"Αναμονή για αυτό το μήνυμα"</string>
   <string name="common_you">"Εσύ"</string>
-  <string name="crypto_identity_change_pin_violation">"Η ταυτότητα του χρήστη %1$s φαίνεται να έχει αλλάξει. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Η ταυτότητα του %1$s %2$s φαίνεται να έχει αλλάξει. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Η ταυτότητα του χρήστη %1$s επαναφέρθηκε. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Η ταυτότητα του %1$s %2$s επαναφέρθηκε. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="dialog_title_confirmation">"Επιβεβαίωση"</string>
   <string name="dialog_title_error">"Σφάλμα"</string>
@@ -319,7 +320,7 @@
   <string name="screen_reset_identity_confirmation_title">"Δεν μπορείς να επιβεβαιώσεις; Πήγαινε στον λογαριασμό σου για να επαναφέρεις την ταυτότητά σου."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ανάκληση επαλήθευσης και αποστολή"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Μπορείτε να ανακαλέσεις την επαλήθευσή σου και να στείλεις αυτό το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα μετά την επαλήθευση του χρήστη %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Το μήνυμά σου δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$s έχει αλλάξει"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Το μήνυμά σου δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$s έχει επαναφερθεί"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Αποστολή μηνύματος ούτως ή άλλως"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"Ο χρήστης %1$s χρησιμοποιεί τουλάχιστον μία μη επαληθευμένη συσκευή. Μπορείς να στείλεις το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να δοκιμάσεις ξανά αργότερα αφού ο χρήστης %2$s επαληθεύσει όλες τις συσκευές του."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές"</string>
@@ -339,7 +340,7 @@
   <string name="screen_share_open_google_maps">"Άνοιγμα στο Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Άνοιγμα στο OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Κοινή χρήση αυτής της τοποθεσίας"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$s έχει αλλάξει."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν στάλθηκε γιατί έγινε επαναφορά της επαληθευμένης ταυτότητας του χρήστη %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου."</string>
   <string name="screen_view_location_title">"Τοποθεσία"</string>

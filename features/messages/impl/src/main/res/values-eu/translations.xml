@@ -25,6 +25,7 @@
   <string name="screen_room_mentions_at_room_subtitle">"Jakinarazi gela osoari"</string>
   <string name="screen_room_mentions_at_room_title">"Guztiak"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Bidali berriro"</string>
+  <string name="screen_room_retry_send_menu_title">"Huts egin du mezuaren bidalketak"</string>
   <string name="screen_room_timeline_add_reaction">"Gehitu emojia"</string>
   <string name="screen_room_timeline_beginning_of_room">"Hauxe da %1$s(r)en hasiera"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Hau da elkarrizketaren hasiera."</string>
