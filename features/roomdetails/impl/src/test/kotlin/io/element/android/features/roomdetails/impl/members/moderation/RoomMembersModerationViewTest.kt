@@ -15,6 +15,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -92,7 +93,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "", doAction = false))
     }
 
     @Config(qualifiers = "h1024dp")
@@ -116,7 +117,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "", doAction = false))
     }
 
     @Test
@@ -125,7 +126,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
+            banUserAsyncAction = ConfirmingWithReason(A_REASON),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -142,7 +143,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
+            banUserAsyncAction = ConfirmingWithReason(A_REASON),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -150,7 +151,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = A_REASON, doAction = true))
     }
 
     @Test
