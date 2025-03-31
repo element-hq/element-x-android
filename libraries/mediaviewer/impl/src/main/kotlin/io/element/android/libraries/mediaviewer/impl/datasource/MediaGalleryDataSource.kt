@@ -89,10 +89,10 @@ class TimelineMediaGalleryDataSource @Inject constructor(
         }
         .distinctUntilChanged()
         .map { timelineItems ->
-            mediaItemsPostProcessor.process(mediaItems = timelineItems)
-        }.map {
-            mediaTimeline.orCache(it)
-        }.onEach { groupedMediaItems ->
+            val groupedItems = mediaItemsPostProcessor.process(mediaItems = timelineItems)
+            mediaTimeline.orCache(groupedItems)
+        }
+        .onEach { groupedMediaItems ->
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }
             .onCompletion {
