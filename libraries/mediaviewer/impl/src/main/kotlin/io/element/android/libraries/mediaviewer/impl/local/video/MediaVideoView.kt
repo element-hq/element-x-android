@@ -176,11 +176,14 @@ private fun ExoPlayerMediaVideoView(
         }
     }
 
-    LaunchedEffect(autoplay, isDisplayed, mediaPlayerControllerState.isReady) {
+    var needsAutoPlay by remember { mutableStateOf(autoplay) }
+
+    LaunchedEffect(needsAutoPlay, isDisplayed, mediaPlayerControllerState.isReady) {
         val isReadyAndNotPlaying = mediaPlayerControllerState.isReady && !mediaPlayerControllerState.isPlaying
-        if (autoplay && isDisplayed && isReadyAndNotPlaying) {
+        if (needsAutoPlay && isDisplayed && isReadyAndNotPlaying) {
             // When displayed, start autoplaying from the beginning
             exoPlayer.play()
+            needsAutoPlay = false
         } else if (!isDisplayed && mediaPlayerControllerState.isPlaying) {
             // If not displayed, make sure to pause the video
             exoPlayer.pause()
