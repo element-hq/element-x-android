@@ -178,6 +178,7 @@ Arrazoia: %1$s."</string>
   <string name="common_invite_unknown_profile">"Matrix IDa ezin da topatu eta, beraz, litekeena da gonbidapena ez jasotzea."</string>
   <string name="common_leaving_room">"Gelatik ateratzen"</string>
   <string name="common_light">"Argia"</string>
+  <string name="common_line_copied_to_clipboard">"Lerroa arbelean kopiatu da"</string>
   <string name="common_link_copied_to_clipboard">"Esteka arbelean kopiatu da"</string>
   <string name="common_loading">"Kargatzen…"</string>
   <string name="common_loading_more">"Gehiago kargatzen…"</string>
@@ -186,12 +187,14 @@ Arrazoia: %1$s."</string>
     <item quantity="other">"%1$d kide"</item>
   </plurals>
   <string name="common_message">"Mezua"</string>
+  <string name="common_message_actions">"Mezuen ekintzak"</string>
   <string name="common_message_layout">"Mezuen antolaketa"</string>
   <string name="common_message_removed">"Mezua kendu da"</string>
   <string name="common_modern">"Modernoa"</string>
   <string name="common_mute">"Mututu"</string>
   <string name="common_no_results">"Emaitzarik ez"</string>
   <string name="common_no_room_name">"Gelak ez du izenik"</string>
+  <string name="common_not_encrypted">"Zifratu gabe"</string>
   <string name="common_offline">"Deskonektatuta"</string>
   <string name="common_open_source_licenses">"Kode irekiko lizentziak"</string>
   <string name="common_or">"edo"</string>
@@ -315,4 +318,6 @@ Arrazoia: %1$s."</string>
   <string name="screen_view_location_title">"Kokapena"</string>
   <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"eu"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Iraganeko mezuak ez daude gailu honetan eskuragarri"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Ezin da mezua deszifratu"</string>
 </resources>

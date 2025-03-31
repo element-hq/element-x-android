@@ -41,7 +41,7 @@
   <string name="screen_session_verification_use_another_device_title">"Otevřete aplikaci na jiném ověřeném zařízení"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Pro větší bezpečnost ověřte tohoto uživatele porovnáním sady emotikonů na svých zařízeních. Proveďte to pomocí důvěryhodného způsobu komunikace."</string>
   <string name="screen_session_verification_user_initiator_title">"Ověřte tohoto uživatele?"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"Pro větší bezpečnost chce jiný uživatel ověřit vaši totožnost. Zobrazí se vám sada emotikonů k porovnání."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Pro větší bezpečnost chce jiný uživatel ověřit vaši identitu. Zobrazí se vám sada emotikonů k porovnání."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Na druhém zařízení byste měli vidět vyskakovací okno. Začněte s ověrením tam."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Spusťte ověření na druhém zařízení"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Čekání na druhé zařízení"</string>

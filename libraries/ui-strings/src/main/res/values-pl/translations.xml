@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Skopiowano do schowka"</string>
   <string name="common_copyright">"Prawa autorskie"</string>
   <string name="common_creating_room">"Tworzenie pokoju…"</string>
+  <string name="common_current_user_canceled_knock">"Anulowano żądanie"</string>
   <string name="common_current_user_left_room">"Opuszczono pokój"</string>
+  <string name="common_current_user_rejected_invite">"Odrzucono zaproszenie"</string>
   <string name="common_dark">"Ciemny"</string>
   <string name="common_decryption_error">"Błąd deszyfrowania"</string>
   <string name="common_developer_options">"Opcje programisty"</string>
@@ -160,6 +162,7 @@
   <string name="common_editing">"Edytowanie"</string>
   <string name="common_editing_caption">"Edytowanie opisu"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Pusty plik"</string>
   <string name="common_encryption">"Szyfrowanie"</string>
   <string name="common_encryption_enabled">"Szyfrowanie włączone"</string>
   <string name="common_enter_your_pin">"Wprowadź kod PIN"</string>
@@ -184,6 +187,7 @@ Powód: %1$s."</string>
   <string name="common_invite_unknown_profile">"Nie można znaleźć identyfikatora Matrix ID, zaproszenie mogło nie dotrzeć."</string>
   <string name="common_leaving_room">"Opuszczanie pokoju"</string>
   <string name="common_light">"Jasny"</string>
+  <string name="common_line_copied_to_clipboard">"Wiersz skopiowany do schowka"</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
   <string name="common_loading">"Ładowanie…"</string>
   <string name="common_loading_more">"Ładuję więcej…"</string>
@@ -289,6 +293,10 @@ Powód: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Zweryfikowana tożsamość %1$s uległa zmianie"</string>
   <string name="crypto_identity_change_verification_violation_new">"Zweryfikowana tożsamość %1$s %2$s uległa zmianie.  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Wycofaj weryfikację"</string>
+  <string name="dialog_confirm_link_message">"Link %1$s prowadzi Cię do innej witryny %2$s
+
+Czy na pewno chcesz kontynuować?"</string>
+  <string name="dialog_confirm_link_title">"Sprawdź dwukrotnie ten link"</string>
   <string name="dialog_title_confirmation">"Potwierdzenie"</string>
   <string name="dialog_title_error">"Błąd"</string>
   <string name="dialog_title_success">"Sukces"</string>

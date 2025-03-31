@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Delete"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
   <string name="a11y_pin_field">"PIN field"</string>
   <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="a11y_view_details">"View details"</string>
+  <string name="a11y_voice_message">"Voice message, duration: %1$s"</string>
   <string name="a11y_voice_message_record">"Record voice message."</string>
   <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
   <string name="action_accept">"Accept"</string>
