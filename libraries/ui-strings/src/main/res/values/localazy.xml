@@ -228,6 +228,7 @@ Reason: %1$s."</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
   <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
+  <string name="common_reason">"Reason"</string>
   <string name="common_recovery_key">"Recovery key"</string>
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>

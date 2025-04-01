@@ -38,6 +38,7 @@ fun ListDialog(
     cancelText: String = stringResource(CommonStrings.action_cancel),
     submitText: String = stringResource(CommonStrings.action_ok),
     enabled: Boolean = true,
+    applyPaddingToContents: Boolean = false,
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -61,6 +62,7 @@ fun ListDialog(
             onSubmitClick = onSubmit,
             enabled = enabled,
             listItems = listItems,
+            applyPaddingToContents = applyPaddingToContents,
         )
     }
 }
@@ -72,8 +74,9 @@ private fun ListDialogContent(
     onSubmitClick: () -> Unit,
     cancelText: String,
     submitText: String,
-    title: String? = null,
-    enabled: Boolean = true,
+    title: String?,
+    enabled: Boolean,
+    applyPaddingToContents: Boolean,
     subtitle: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -84,10 +87,12 @@ private fun ListDialogContent(
         onCancelClick = onDismissRequest,
         onSubmitClick = onSubmitClick,
         enabled = enabled,
-        applyPaddingToContents = false,
+        applyPaddingToContents = applyPaddingToContents,
     ) {
+        // No start padding if padding is already applied to the content
+        val horizontalPadding = if (applyPaddingToContents) 0.dp else 8.dp
         LazyColumn(
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(horizontal = horizontalPadding)
         ) { listItems() }
     }
 }
@@ -111,6 +116,8 @@ internal fun ListDialogContentPreview() {
                 onSubmitClick = {},
                 cancelText = "Cancel",
                 submitText = "Save",
+                enabled = true,
+                applyPaddingToContents = false,
             )
         }
     }

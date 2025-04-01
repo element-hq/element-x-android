@@ -96,19 +96,23 @@ class RoomMembersModerationPresenter @Inject constructor(
                     }
                 }
                 is RoomMembersModerationEvents.KickUser -> {
-                    selectedMember?.let {
-                        coroutineScope.kickUser(it.userId, kickUserAsyncAction)
-                    }
-                    selectedMember = null
-                }
-                is RoomMembersModerationEvents.BanUser -> {
-                    if (banUserAsyncAction.value.isConfirming()) {
+                    if (event.needsConfirmation) {
+                        kickUserAsyncAction.value = ConfirmingWithReason(event.reason)
+                    } else {
                         selectedMember?.let {
-                            coroutineScope.banUser(it.userId, banUserAsyncAction)
+                            coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                         }
                         selectedMember = null
+                    }
+                }
+                is RoomMembersModerationEvents.BanUser -> {
+                    if (event.needsConfirmation) {
+                        banUserAsyncAction.value = ConfirmingWithReason(event.reason)
                     } else {
-                        banUserAsyncAction.value = AsyncAction.ConfirmingNoParams
+                        selectedMember?.let {
+                            coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
+                        }
+                        selectedMember = null
                     }
                 }
                 is RoomMembersModerationEvents.UnbanUser -> {
@@ -138,18 +142,26 @@ class RoomMembersModerationPresenter @Inject constructor(
 
     private fun CoroutineScope.kickUser(
         userId: UserId,
+        reason: String,
         kickUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(kickUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.KickMember))
-        room.kickUser(userId)
+        room.kickUser(
+            userId = userId,
+            reason = reason.takeIf { it.isNotBlank() },
+        )
     }
 
     private fun CoroutineScope.banUser(
         userId: UserId,
+        reason: String,
         banUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(banUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.BanMember))
-        room.banUser(userId)
+        room.banUser(
+            userId = userId,
+            reason = reason.takeIf { it.isNotBlank() },
+        )
     }
 
     private fun CoroutineScope.unbanUser(
