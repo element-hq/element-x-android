@@ -10,6 +10,8 @@ package io.element.android.features.roomdetails.impl.members.moderation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
@@ -95,6 +97,56 @@ class RoomMembersModerationViewTest {
         eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "", doAction = false))
     }
 
+    @Test
+    fun `cancelling 'Remove member' confirmation emits the expected event`() {
+        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
+        val roomMember = anAlice()
+        val state = aRoomMembersModerationState(
+            selectedRoomMember = roomMember,
+            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            eventSink = eventsRecorder
+        )
+        rule.setRoomMembersModerationView(
+            state = state,
+        )
+        // Note: the string key semantics is not perfect here :/
+        rule.clickOn(CommonStrings.action_cancel)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.Reset)
+    }
+
+    @Test
+    fun `confirming 'Remove member' reason edition emits the expected event`() {
+        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
+        val roomMember = anAlice()
+        val state = aRoomMembersModerationState(
+            selectedRoomMember = roomMember,
+            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            eventSink = eventsRecorder
+        )
+        rule.setRoomMembersModerationView(
+            state = state,
+        )
+        rule.onNodeWithText(A_REASON).performTextInput("z")
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "z$A_REASON", doAction = false))
+    }
+
+    @Test
+    fun `confirming 'Remove member' confirmation emits the expected event`() {
+        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
+        val roomMember = anAlice()
+        val state = aRoomMembersModerationState(
+            selectedRoomMember = roomMember,
+            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            eventSink = eventsRecorder
+        )
+        rule.setRoomMembersModerationView(
+            state = state,
+        )
+        // Note: the string key semantics is not perfect here :/
+        rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = A_REASON, doAction = true))
+    }
+
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on 'Remove and ban member' emits the expected event`() {
@@ -134,6 +186,22 @@ class RoomMembersModerationViewTest {
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.Reset)
+    }
+
+    @Test
+    fun `confirming 'Remove and ban member' reason edition emits the expected event`() {
+        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
+        val roomMember = anAlice()
+        val state = aRoomMembersModerationState(
+            selectedRoomMember = roomMember,
+            banUserAsyncAction = ConfirmingWithReason(A_REASON),
+            eventSink = eventsRecorder
+        )
+        rule.setRoomMembersModerationView(
+            state = state,
+        )
+        rule.onNodeWithText(A_REASON).performTextInput("z")
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "z$A_REASON", doAction = false))
     }
 
     @Test
