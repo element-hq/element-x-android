@@ -81,6 +81,10 @@ class RustRoomFactory(
         withContext(NonCancellable + dispatcher) {
             mutex.withLock {
                 Timber.d("Destroying room factory")
+                cache.snapshot().values.forEach { (listItem, innerRoom) ->
+                    innerRoom.destroy()
+                    listItem.destroy()
+                }
                 cache.evictAll()
                 isDestroyed = true
             }
