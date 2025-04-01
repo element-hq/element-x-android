@@ -120,6 +120,8 @@ class KonsistPreviewTest {
                 "TextComposerSimpleNotEncryptedPreview",
                 "TextComposerVoicePreview",
                 "TextComposerVoiceNotEncryptedPreview",
+                "TextFieldDialogWithBorderPreview",
+                "TextFieldDialogWithErrorPreview",
                 "TimelineImageWithCaptionRowPreview",
                 "TimelineItemEventRowForDirectRoomPreview",
                 "TimelineItemEventRowShieldPreview",
