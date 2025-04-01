@@ -74,10 +74,10 @@ fun RoomMembersModerationView(
                             onDisplayMemberProfile(action.userId)
                         }
                         is ModerationAction.KickUser -> {
-                            state.eventSink(RoomMembersModerationEvents.KickUser("", false))
+                            state.eventSink(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = true))
                         }
                         is ModerationAction.BanUser -> {
-                            state.eventSink(RoomMembersModerationEvents.BanUser("", false))
+                            state.eventSink(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = true))
                         }
                     }
                 },
@@ -98,7 +98,7 @@ fun RoomMembersModerationView(
                             state.eventSink(
                                 RoomMembersModerationEvents.KickUser(
                                     reason = action.reason,
-                                    doAction = true,
+                                    needsConfirmation = false,
                                 )
                             )
                         },
@@ -121,7 +121,7 @@ fun RoomMembersModerationView(
                                     state.eventSink(
                                         RoomMembersModerationEvents.KickUser(
                                             reason = newText,
-                                            doAction = false,
+                                            needsConfirmation = true,
                                         )
                                     )
                                 },
@@ -164,7 +164,7 @@ fun RoomMembersModerationView(
                             state.eventSink(
                                 RoomMembersModerationEvents.BanUser(
                                     reason = action.reason,
-                                    doAction = true,
+                                    needsConfirmation = false,
                                 )
                             )
                         },
@@ -187,7 +187,7 @@ fun RoomMembersModerationView(
                                     state.eventSink(
                                         RoomMembersModerationEvents.BanUser(
                                             reason = newText,
-                                            doAction = false,
+                                            needsConfirmation = true,
                                         )
                                     )
                                 },

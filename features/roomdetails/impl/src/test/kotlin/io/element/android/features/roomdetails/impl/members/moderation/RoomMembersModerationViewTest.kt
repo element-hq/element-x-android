@@ -94,7 +94,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "", doAction = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = true))
     }
 
     @Test
@@ -127,7 +127,7 @@ class RoomMembersModerationViewTest {
             state = state,
         )
         rule.onNodeWithText(A_REASON).performTextInput("z")
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "z$A_REASON", doAction = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "z$A_REASON", needsConfirmation = true))
     }
 
     @Test
@@ -144,7 +144,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = A_REASON, doAction = true))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = A_REASON, needsConfirmation = false))
     }
 
     @Config(qualifiers = "h1024dp")
@@ -168,7 +168,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "", doAction = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = true))
     }
 
     @Test
@@ -201,7 +201,7 @@ class RoomMembersModerationViewTest {
             state = state,
         )
         rule.onNodeWithText(A_REASON).performTextInput("z")
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "z$A_REASON", doAction = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "z$A_REASON", needsConfirmation = true))
     }
 
     @Test
@@ -218,7 +218,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = A_REASON, doAction = true))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = A_REASON, needsConfirmation = false))
     }
 
     @Test

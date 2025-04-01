@@ -96,23 +96,23 @@ class RoomMembersModerationPresenter @Inject constructor(
                     }
                 }
                 is RoomMembersModerationEvents.KickUser -> {
-                    if (event.doAction) {
+                    if (event.needsConfirmation) {
+                        kickUserAsyncAction.value = ConfirmingWithReason(event.reason)
+                    } else {
                         selectedMember?.let {
                             coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                         }
                         selectedMember = null
-                    } else {
-                        kickUserAsyncAction.value = ConfirmingWithReason(event.reason)
                     }
                 }
                 is RoomMembersModerationEvents.BanUser -> {
-                    if (event.doAction) {
+                    if (event.needsConfirmation) {
+                        banUserAsyncAction.value = ConfirmingWithReason(event.reason)
+                    } else {
                         selectedMember?.let {
                             coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
                         }
                         selectedMember = null
-                    } else {
-                        banUserAsyncAction.value = ConfirmingWithReason(event.reason)
                     }
                 }
                 is RoomMembersModerationEvents.UnbanUser -> {
