@@ -311,6 +311,7 @@ class RoomListPresenter @Inject constructor(
 
     private fun CoroutineScope.clearCacheOfRoom(roomId: RoomId) = launch {
         client.getRoom(roomId)?.use { room ->
+            room.liveTimeline.close()
             room.clearEventCacheStorage()
         }
     }
