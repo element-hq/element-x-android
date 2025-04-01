@@ -15,6 +15,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -94,7 +95,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = true))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser)
     }
 
     @Test
@@ -103,7 +104,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -115,19 +116,21 @@ class RoomMembersModerationViewTest {
     }
 
     @Test
-    fun `confirming 'Remove member' reason edition emits the expected event`() {
+    fun `confirming 'Remove member' reason edition then validation emits the expected event`() {
         val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
             state = state,
         )
-        rule.onNodeWithText(A_REASON).performTextInput("z")
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = "z$A_REASON", needsConfirmation = true))
+        val reason = rule.activity.getString(CommonStrings.common_reason)
+        rule.onNodeWithText(reason).performTextInput(A_REASON)
+        rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.DoKickUser(reason = A_REASON))
     }
 
     @Test
@@ -136,7 +139,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            kickUserAsyncAction = ConfirmingWithReason(A_REASON),
+            kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -144,7 +147,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser(reason = A_REASON, needsConfirmation = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.DoKickUser(reason = ""))
     }
 
     @Config(qualifiers = "h1024dp")
@@ -168,7 +171,7 @@ class RoomMembersModerationViewTest {
         rule.clickOn(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = true))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser)
     }
 
     @Test
@@ -177,7 +180,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = ConfirmingWithReason(A_REASON),
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -194,14 +197,16 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = ConfirmingWithReason(A_REASON),
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
             state = state,
         )
-        rule.onNodeWithText(A_REASON).performTextInput("z")
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = "z$A_REASON", needsConfirmation = true))
+        val reason = rule.activity.getString(CommonStrings.common_reason)
+        rule.onNodeWithText(reason).performTextInput(A_REASON)
+        rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.DoBanUser(reason = A_REASON))
     }
 
     @Test
@@ -210,7 +215,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = ConfirmingWithReason(A_REASON),
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -218,7 +223,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.BanUser(reason = A_REASON, needsConfirmation = false))
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.DoBanUser(reason = ""))
     }
 
     @Test

@@ -173,15 +173,11 @@ class RoomMembersModerationPresenterTest {
         }.test {
             skipItems(1)
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
-            awaitItem().eventSink(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = true))
+            awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.kickUserAsyncAction).isEqualTo(ConfirmingWithReason(""))
-            // Change the reason
-            confirmingState.eventSink(RoomMembersModerationEvents.KickUser(reason = A_REASON, needsConfirmation = true))
-            val confirmingWithReasonState = awaitItem()
-            assertThat(confirmingWithReasonState.kickUserAsyncAction).isEqualTo(ConfirmingWithReason(A_REASON))
+            assertThat(confirmingState.kickUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
             // Confirm
-            confirmingState.eventSink(RoomMembersModerationEvents.KickUser(reason = A_REASON, needsConfirmation = false))
+            confirmingState.eventSink(RoomMembersModerationEvents.DoKickUser(reason = A_REASON))
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.actions).isEmpty()
@@ -215,15 +211,11 @@ class RoomMembersModerationPresenterTest {
         }.test {
             skipItems(1)
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
-            awaitItem().eventSink(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = true))
+            awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.banUserAsyncAction).isEqualTo(ConfirmingWithReason(""))
-            // Change the reason
-            confirmingState.eventSink(RoomMembersModerationEvents.BanUser(reason = A_REASON, needsConfirmation = true))
-            val confirmingWithReasonState = awaitItem()
-            assertThat(confirmingWithReasonState.banUserAsyncAction).isEqualTo(ConfirmingWithReason(A_REASON))
+            assertThat(confirmingState.banUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
             // Confirm
-            confirmingState.eventSink(RoomMembersModerationEvents.BanUser(reason = A_REASON, needsConfirmation = false))
+            confirmingState.eventSink(RoomMembersModerationEvents.DoBanUser(reason = A_REASON))
             skipItems(1)
             val loadingItem = awaitItem()
             assertThat(loadingItem.actions).isEmpty()
@@ -314,7 +306,7 @@ class RoomMembersModerationPresenterTest {
             val initialItem = awaitItem()
             // Kick user and fail
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
-            awaitItem().eventSink(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = false))
+            awaitItem().eventSink(RoomMembersModerationEvents.DoKickUser(reason = ""))
             skipItems(1)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)
@@ -324,7 +316,7 @@ class RoomMembersModerationPresenterTest {
 
             // Ban user and fail
             initialItem.eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
-            awaitItem().eventSink(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = false))
+            awaitItem().eventSink(RoomMembersModerationEvents.DoBanUser(reason = ""))
             skipItems(1)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)

@@ -38,9 +38,8 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ListDialog
+import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.components.list.TextFieldListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -74,10 +73,10 @@ fun RoomMembersModerationView(
                             onDisplayMemberProfile(action.userId)
                         }
                         is ModerationAction.KickUser -> {
-                            state.eventSink(RoomMembersModerationEvents.KickUser(reason = "", needsConfirmation = true))
+                            state.eventSink(RoomMembersModerationEvents.KickUser)
                         }
                         is ModerationAction.BanUser -> {
-                            state.eventSink(RoomMembersModerationEvents.BanUser(reason = "", needsConfirmation = true))
+                            state.eventSink(RoomMembersModerationEvents.BanUser)
                         }
                     }
                 },
@@ -90,45 +89,19 @@ fun RoomMembersModerationView(
 
         when (val action = state.kickUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                if (action is ConfirmingWithReason) {
-                    ListDialog(
-                        title = stringResource(R.string.screen_room_member_list_kick_member_confirmation_title),
-                        submitText = stringResource(R.string.screen_room_member_list_kick_member_confirmation_action),
-                        onSubmit = {
-                            state.eventSink(
-                                RoomMembersModerationEvents.KickUser(
-                                    reason = action.reason,
-                                    needsConfirmation = false,
-                                )
-                            )
-                        },
-                        applyPaddingToContents = true,
-                        onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
-                    ) {
-                        item {
-                            Text(
-                                text = stringResource(R.string.screen_room_member_list_kick_member_confirmation_description),
-                                style = ElementTheme.materialTypography.bodyMedium,
-                            )
-                        }
-                        item {
-                            TextFieldListItem(
-                                placeholder = stringResource(id = CommonStrings.common_reason),
-                                label = stringResource(id = CommonStrings.common_reason),
-                                withBorder = true,
-                                text = action.reason,
-                                onTextChange = { newText ->
-                                    state.eventSink(
-                                        RoomMembersModerationEvents.KickUser(
-                                            reason = newText,
-                                            needsConfirmation = true,
-                                        )
-                                    )
-                                },
-                            )
-                        }
-                    }
-                }
+                TextFieldDialog(
+                    title = stringResource(R.string.screen_room_member_list_kick_member_confirmation_title),
+                    submitText = stringResource(R.string.screen_room_member_list_kick_member_confirmation_action),
+                    onSubmit = { reason ->
+                        state.eventSink(RoomMembersModerationEvents.DoKickUser(reason = reason))
+                    },
+                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    label = stringResource(id = CommonStrings.common_reason),
+                    withBorder = true,
+                    content = stringResource(R.string.screen_room_member_list_kick_member_confirmation_description),
+                    value = "",
+                )
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
@@ -156,45 +129,19 @@ fun RoomMembersModerationView(
 
         when (val action = state.banUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                if (action is ConfirmingWithReason) {
-                    ListDialog(
-                        title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
-                        submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
-                        onSubmit = {
-                            state.eventSink(
-                                RoomMembersModerationEvents.BanUser(
-                                    reason = action.reason,
-                                    needsConfirmation = false,
-                                )
-                            )
-                        },
-                        applyPaddingToContents = true,
-                        onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
-                    ) {
-                        item {
-                            Text(
-                                text = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
-                                style = ElementTheme.materialTypography.bodyMedium,
-                            )
-                        }
-                        item {
-                            TextFieldListItem(
-                                placeholder = stringResource(id = CommonStrings.common_reason),
-                                label = stringResource(id = CommonStrings.common_reason),
-                                withBorder = true,
-                                text = action.reason,
-                                onTextChange = { newText ->
-                                    state.eventSink(
-                                        RoomMembersModerationEvents.BanUser(
-                                            reason = newText,
-                                            needsConfirmation = true,
-                                        )
-                                    )
-                                },
-                            )
-                        }
-                    }
-                }
+                TextFieldDialog(
+                    title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
+                    submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
+                    onSubmit = { reason ->
+                        state.eventSink(RoomMembersModerationEvents.DoBanUser(reason = reason))
+                    },
+                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    label = stringResource(id = CommonStrings.common_reason),
+                    withBorder = true,
+                    content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
+                    value = "",
+                )
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {

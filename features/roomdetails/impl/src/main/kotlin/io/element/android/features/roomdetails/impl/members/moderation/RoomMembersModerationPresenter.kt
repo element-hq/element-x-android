@@ -96,24 +96,22 @@ class RoomMembersModerationPresenter @Inject constructor(
                     }
                 }
                 is RoomMembersModerationEvents.KickUser -> {
-                    if (event.needsConfirmation) {
-                        kickUserAsyncAction.value = ConfirmingWithReason(event.reason)
-                    } else {
-                        selectedMember?.let {
-                            coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
-                        }
-                        selectedMember = null
+                    kickUserAsyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+                is RoomMembersModerationEvents.DoKickUser -> {
+                    selectedMember?.let {
+                        coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                     }
+                    selectedMember = null
                 }
                 is RoomMembersModerationEvents.BanUser -> {
-                    if (event.needsConfirmation) {
-                        banUserAsyncAction.value = ConfirmingWithReason(event.reason)
-                    } else {
-                        selectedMember?.let {
-                            coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
-                        }
-                        selectedMember = null
+                    banUserAsyncAction.value = AsyncAction.ConfirmingNoParams
+                }
+                is RoomMembersModerationEvents.DoBanUser -> {
+                    selectedMember?.let {
+                        coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
                     }
+                    selectedMember = null
                 }
                 is RoomMembersModerationEvents.UnbanUser -> {
                     // We are already confirming when we are reaching this point
