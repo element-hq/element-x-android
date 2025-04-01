@@ -69,10 +69,10 @@ fun DeveloperSettingsView(
                 }
             )
         }
-        PreferenceCategory(title = "Enable trace logs per feature") {
+        PreferenceCategory(title = "Enable trace logs per SDK feature") {
             for (logPack in TraceLogPack.entries) {
                 PreferenceSwitch(
-                    title = logPack.name,
+                    title = logPack.title,
                     isChecked = state.tracingLogPacks.contains(logPack),
                     onCheckedChange = { isChecked -> state.eventSink(DeveloperSettingsEvents.ToggleTracingLogPack(logPack, isChecked)) }
                 )
