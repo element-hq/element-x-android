@@ -37,6 +37,7 @@ fun TextFieldDialog(
     onDismissRequest: () -> Unit,
     value: String?,
     placeholder: String?,
+    modifier: Modifier = Modifier,
     validation: (String?) -> Boolean = { true },
     onValidationErrorMessage: String? = null,
     autoSelectOnDisplay: Boolean = true,
@@ -66,6 +67,7 @@ fun TextFieldDialog(
         enabled = canSubmit,
         applyPaddingToContents = content.isNullOrEmpty().not(),
         submitText = submitText,
+        modifier = modifier,
     ) {
         if (content != null) {
             item {
