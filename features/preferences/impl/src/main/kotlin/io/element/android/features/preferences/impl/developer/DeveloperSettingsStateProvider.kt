@@ -13,6 +13,7 @@ import io.element.android.features.rageshake.api.preferences.aRageshakePreferenc
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
@@ -33,6 +34,7 @@ fun aDeveloperSettingsState(
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
     hideImagesAndVideos: Boolean = false,
+    traceLogPacks: Set<TraceLogPack> = emptySet(),
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
     features = aFeatureUiModelList(),
@@ -42,6 +44,7 @@ fun aDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     hideImagesAndVideos = hideImagesAndVideos,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
+    tracingLogPacks = traceLogPacks,
     eventSink = eventSink,
 )
 

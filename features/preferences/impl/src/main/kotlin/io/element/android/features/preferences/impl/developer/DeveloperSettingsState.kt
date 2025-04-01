@@ -12,6 +12,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.collections.immutable.ImmutableList
 
 data class DeveloperSettingsState(
@@ -22,6 +23,7 @@ data class DeveloperSettingsState(
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val hideImagesAndVideos: Boolean,
     val tracingLogLevel: AsyncData<LogLevelItem>,
+    val tracingLogPacks: Set<TraceLogPack>,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
 

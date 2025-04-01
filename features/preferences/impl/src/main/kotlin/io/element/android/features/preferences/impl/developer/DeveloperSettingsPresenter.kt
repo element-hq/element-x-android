@@ -77,6 +77,7 @@ class DeveloperSettingsPresenter @Inject constructor(
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
         }
         val tracingLogLevel by tracingLogLevelFlow.collectAsState(initial = AsyncData.Uninitialized)
+        val tracingLogPacks by appPreferencesStore.getTracingLogPacksFlow().collectAsState(emptySet())
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries
@@ -121,6 +122,15 @@ class DeveloperSettingsPresenter @Inject constructor(
                 is DeveloperSettingsEvents.SetTracingLogLevel -> coroutineScope.launch {
                     appPreferencesStore.setTracingLogLevel(event.logLevel.toLogLevel())
                 }
+                is DeveloperSettingsEvents.ToggleTracingLogPack -> coroutineScope.launch {
+                    val currentPacks = tracingLogPacks.toMutableSet()
+                    if (currentPacks.contains(event.logPack)) {
+                        currentPacks.remove(event.logPack)
+                    } else {
+                        currentPacks.add(event.logPack)
+                    }
+                    appPreferencesStore.setTracingLogPacks(currentPacks)
+                }
             }
         }
 
@@ -135,6 +145,7 @@ class DeveloperSettingsPresenter @Inject constructor(
             ),
             hideImagesAndVideos = hideImagesAndVideos,
             tracingLogLevel = tracingLogLevel,
+            tracingLogPacks = tracingLogPacks,
             eventSink = ::handleEvents
         )
     }

@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toPersistentList
 
@@ -56,6 +57,7 @@ fun DeveloperSettingsView(
             FeatureListContent(state)
         }
         ElementCallCategory(state = state)
+
         PreferenceCategory(title = "Rust SDK") {
             PreferenceDropdown(
                 title = "Tracing log level",
@@ -67,6 +69,16 @@ fun DeveloperSettingsView(
                 }
             )
         }
+        PreferenceCategory(title = "Enable trace logs per feature") {
+            for (logPack in TraceLogPack.entries) {
+                PreferenceSwitch(
+                    title = logPack.name,
+                    isChecked = state.tracingLogPacks.contains(logPack),
+                    onCheckedChange = { isChecked -> state.eventSink(DeveloperSettingsEvents.ToggleTracingLogPack(logPack, isChecked)) }
+                )
+            }
+        }
+
         PreferenceCategory(title = "Showkase") {
             ListItem(
                 headlineContent = {
