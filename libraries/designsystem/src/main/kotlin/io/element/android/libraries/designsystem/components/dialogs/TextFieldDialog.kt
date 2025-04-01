@@ -20,9 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TextFieldDialog(
@@ -35,7 +41,11 @@ fun TextFieldDialog(
     onValidationErrorMessage: String? = null,
     autoSelectOnDisplay: Boolean = true,
     maxLines: Int = 1,
+    content: String? = null,
+    label: String? = null,
+    withBorder: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    submitText: String = stringResource(CommonStrings.action_ok),
 ) {
     val focusRequester = remember { FocusRequester() }
     var textFieldContents by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -46,7 +56,7 @@ fun TextFieldDialog(
             )
         )
     }
-    var error by rememberSaveable { mutableStateOf<String?>(null) }
+    var error by rememberSaveable { mutableStateOf(if (!validation(value.orEmpty())) onValidationErrorMessage else null) }
     var canRequestFocus by rememberSaveable { mutableStateOf(false) }
     val canSubmit by remember { derivedStateOf { validation(textFieldContents.text) } }
     ListDialog(
@@ -54,10 +64,22 @@ fun TextFieldDialog(
         onSubmit = { onSubmit(textFieldContents.text) },
         onDismissRequest = onDismissRequest,
         enabled = canSubmit,
+        applyPaddingToContents = content.isNullOrEmpty().not(),
+        submitText = submitText,
     ) {
+        if (content != null) {
+            item {
+                Text(
+                    text = content,
+                    style = ElementTheme.materialTypography.bodyMedium,
+                )
+            }
+        }
         item {
             TextFieldListItem(
                 placeholder = placeholder.orEmpty(),
+                label = label,
+                withBorder = withBorder,
                 text = textFieldContents,
                 onTextChange = {
                     error = if (!validation(it.text)) onValidationErrorMessage else null
@@ -82,4 +104,49 @@ fun TextFieldDialog(
             focusRequester.requestFocus()
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextFieldDialogPreview() = ElementPreview {
+    TextFieldDialog(
+        title = "Title",
+        value = "",
+        placeholder = "Placeholder",
+        onSubmit = {},
+        onDismissRequest = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextFieldDialogWithBorderPreview() = ElementPreview {
+    TextFieldDialog(
+        title = "Title",
+        content = "Some content",
+        onSubmit = {},
+        onDismissRequest = {},
+        value = "Value",
+        placeholder = "Placeholder",
+        label = "Label",
+        withBorder = true,
+        onValidationErrorMessage = "Error message",
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextFieldDialogWithErrorPreview() = ElementPreview {
+    TextFieldDialog(
+        title = "Title",
+        content = "Some content",
+        onSubmit = {},
+        validation = { false },
+        onDismissRequest = {},
+        value = "Value",
+        placeholder = "Placeholder",
+        label = "Label",
+        withBorder = true,
+        onValidationErrorMessage = "Error message",
+    )
 }
