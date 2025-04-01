@@ -19,6 +19,7 @@ import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -85,11 +86,13 @@ class TimelineMediaGalleryDataSource @Inject constructor(
             }
         }.flatMapLatest {
             timelineMediaItemsFactory.timelineItems
-        }.map { timelineItems ->
-            mediaItemsPostProcessor.process(mediaItems = timelineItems)
-        }.map {
-            mediaTimeline.orCache(it)
-        }.onEach { groupedMediaItems ->
+        }
+        .distinctUntilChanged()
+        .map { timelineItems ->
+            val groupedItems = mediaItemsPostProcessor.process(mediaItems = timelineItems)
+            mediaTimeline.orCache(groupedItems)
+        }
+        .onEach { groupedMediaItems ->
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }
             .onCompletion {
