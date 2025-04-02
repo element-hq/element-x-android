@@ -8,6 +8,7 @@
 package io.element.android.libraries.preferences.test
 
 import io.element.android.libraries.matrix.api.tracing.LogLevel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ class InMemoryAppPreferencesStore(
     theme: String? = null,
     simplifiedSlidingSyncEnabled: Boolean = false,
     logLevel: LogLevel = LogLevel.INFO,
+    traceLockPacks: Set<TraceLogPack> = emptySet(),
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val hideImagesAndVideos = MutableStateFlow(hideImagesAndVideos)
@@ -26,6 +28,7 @@ class InMemoryAppPreferencesStore(
     private val theme = MutableStateFlow(theme)
     private val simplifiedSlidingSyncEnabled = MutableStateFlow(simplifiedSlidingSyncEnabled)
     private val logLevel = MutableStateFlow(logLevel)
+    private val tracingLogPacks = MutableStateFlow(traceLockPacks)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -65,6 +68,14 @@ class InMemoryAppPreferencesStore(
 
     override fun getTracingLogLevelFlow(): Flow<LogLevel> {
         return logLevel
+    }
+
+    override suspend fun setTracingLogPacks(logPacks: Set<TraceLogPack>) {
+        tracingLogPacks.value = logPacks
+    }
+
+    override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
+        return tracingLogPacks
     }
 
     override suspend fun reset() {
