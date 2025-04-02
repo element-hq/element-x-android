@@ -41,7 +41,7 @@ class PinnedEventsTimelineProvider @Inject constructor(
     private val _timelineStateFlow: MutableStateFlow<AsyncData<Timeline>> =
         MutableStateFlow(AsyncData.Uninitialized)
 
-    override fun activeTimelineFlow(): StateFlow<Timeline?> {
+    override suspend fun activeTimelineFlow(): StateFlow<Timeline?> {
         return _timelineStateFlow
             .mapState { value ->
                 value.dataOrNull()

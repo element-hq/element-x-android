@@ -9,10 +9,10 @@ package io.element.android.features.poll.impl.history
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,7 +26,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,19 +39,23 @@ class PollHistoryPresenter @Inject constructor(
 ) : Presenter<PollHistoryState> {
     @Composable
     override fun present(): PollHistoryState {
-        val timeline = room.liveTimeline
-        val paginationState by timeline.paginationStatus(Timeline.PaginationDirection.BACKWARDS).collectAsState()
-        val pollHistoryItemsFlow = remember {
-            timeline.timelineItems.map { items ->
-                pollHistoryItemFactory.create(items)
-            }
+        val paginationState by produceState(Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true)) {
+            room.liveTimeline()
+                .paginationStatus(Timeline.PaginationDirection.BACKWARDS)
+                .collectLatest { value = it }
         }
         var activeFilter by rememberSaveable {
             mutableStateOf(PollHistoryFilter.ONGOING)
         }
-        val pollHistoryItems by pollHistoryItemsFlow.collectAsState(initial = PollHistoryItems())
+        val pollHistoryItems by produceState(PollHistoryItems()) {
+            room.liveTimeline()
+                .timelineItems
+                .collectLatest { items ->
+                    value = pollHistoryItemFactory.create(items)
+                }
+        }
         LaunchedEffect(paginationState, pollHistoryItems.size) {
-            if (pollHistoryItems.size == 0 && paginationState.canPaginate) loadMore(timeline)
+            if (pollHistoryItems.size == 0 && paginationState.canPaginate) loadMore()
         }
         val isLoading by remember {
             derivedStateOf {
@@ -62,7 +66,7 @@ class PollHistoryPresenter @Inject constructor(
         fun handleEvents(event: PollHistoryEvents) {
             when (event) {
                 is PollHistoryEvents.LoadMore -> {
-                    coroutineScope.loadMore(timeline)
+                    coroutineScope.loadMore()
                 }
                 is PollHistoryEvents.SelectPollAnswer -> appCoroutineScope.launch {
                     sendPollResponseAction.execute(pollStartId = event.pollStartId, answerId = event.answerId)
@@ -85,7 +89,7 @@ class PollHistoryPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.loadMore(pollHistory: Timeline) = launch {
-        pollHistory.paginate(Timeline.PaginationDirection.BACKWARDS)
+    private fun CoroutineScope.loadMore() = launch {
+        room.liveTimeline().paginate(Timeline.PaginationDirection.BACKWARDS)
     }
 }

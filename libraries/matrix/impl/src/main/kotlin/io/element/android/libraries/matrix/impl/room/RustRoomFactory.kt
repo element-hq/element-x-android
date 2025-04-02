@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +27,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -50,6 +50,7 @@ class RustRoomFactory(
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val featureFlagService: FeatureFlagService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val innerClient: Client,
 ) {
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
@@ -57,7 +58,7 @@ class RustRoomFactory(
 
     private data class RustRoomReferences(
         val roomListItem: RoomListItem,
-        val fullRoom: Room,
+        val room: Room,
     )
 
     private val cache = lruCache<RoomId, RustRoomReferences>(
@@ -65,7 +66,7 @@ class RustRoomFactory(
         onEntryRemoved = { evicted, roomId, oldRoom, _ ->
             Timber.d("On room removed from cache: $roomId, evicted: $evicted")
             oldRoom.roomListItem.close()
-            oldRoom.fullRoom.close()
+            oldRoom.room.close()
         }
     )
 
@@ -107,13 +108,15 @@ class RustRoomFactory(
                 Timber.d("No room found for $roomId, returning null")
                 return@withContext null
             }
-            val liveTimeline = roomReferences.fullRoom.timeline()
-            val initialRoomInfo = roomReferences.fullRoom.roomInfo()
+            val initialRoomInfo = roomReferences.room.roomInfo()
             RustMatrixRoom(
                 sessionId = sessionId,
                 deviceId = deviceId,
-                innerRoom = roomReferences.fullRoom,
-                innerTimeline = liveTimeline,
+                innerRoom = roomReferences.room,
+                innerTimelineInitializer = {
+                    roomReferences.roomListItem.initTimeline(eventFilters, "LIVE")
+                    roomReferences.room.timeline()
+                },
                 sessionCoroutineScope = sessionCoroutineScope,
                 notificationSettingsService = notificationSettingsService,
                 coroutineDispatchers = dispatchers,
@@ -155,7 +158,7 @@ class RustRoomFactory(
         )
     }
 
-    private suspend fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
+    private fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
         cache[roomId]?.let {
             Timber.d("Room found in cache for $roomId")
             return it
@@ -165,16 +168,16 @@ class RustRoomFactory(
             Timber.d("Room not found for $roomId")
             return null
         }
-        val fullRoom = try {
-            roomListItem.fullRoomWithTimeline(filter = eventFilters)
+        val room = try {
+            innerClient.getRoom(roomId.value) ?: error("Room not found")
         } catch (e: RoomListException) {
-            Timber.e(e, "Failed to get full room with timeline for $roomId")
+            Timber.e(e, "Failed to get a room for $roomId")
             return null
         }
-        Timber.d("Got full room with timeline for $roomId")
+        Timber.d("Got a room for $roomId")
         return RustRoomReferences(
             roomListItem = roomListItem,
-            fullRoom = fullRoom,
+            room = room,
         ).also {
             cache.put(roomId, it)
         }

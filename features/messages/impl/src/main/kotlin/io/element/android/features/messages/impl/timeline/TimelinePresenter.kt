@@ -307,7 +307,7 @@ class TimelinePresenter @AssistedInject constructor(
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
             if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptId.value = eventId
-                room.liveTimeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+                room.liveTimeline().sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
             }
         }
     }

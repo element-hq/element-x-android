@@ -9,6 +9,8 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.coroutine.suspendLazy
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -70,6 +72,7 @@ import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,7 +118,7 @@ class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,
     private val innerRoom: InnerRoom,
-    innerTimeline: InnerTimeline,
+    private val innerTimelineInitializer: suspend () -> InnerTimeline,
     private val notificationSettingsService: NotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -190,17 +193,20 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val liveTimeline = createTimeline(innerTimeline, mode = Timeline.Mode.LIVE) {
-        _syncUpdateFlow.value = systemClock.epochMillis()
+    private val _liveTimeline by suspendLazy(sessionCoroutineScope.coroutineContext + coroutineDispatchers.io) {
+        createTimeline(innerTimelineInitializer(), mode = Timeline.Mode.LIVE) {
+            _syncUpdateFlow.value = systemClock.epochMillis()
+        }
+            .also { observeTimelineEventsForMemberChanges(it) }
     }
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState> = roomMemberListFetcher.membersFlow
 
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
 
-    init {
+    private fun observeTimelineEventsForMemberChanges(timeline: Timeline) {
         val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
-        val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
+        val membershipChanges = timeline.membershipChangeEventReceived.onStart { emit(Unit) }
         combine(membershipChanges, powerLevelChanges) { _, _ -> }
             // Skip initial one
             .drop(1)
@@ -298,9 +304,17 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun liveTimeline(): Timeline {
+        return _liveTimeline.await()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun destroy() {
         roomCoroutineScope.cancel()
-        liveTimeline.close()
+        if (_liveTimeline.isActive) {
+            _liveTimeline.cancel()
+        }
+        tryOrNull { _liveTimeline.getCompleted() }?.close()
     }
 
     override suspend fun updateMembers() {
@@ -413,7 +427,7 @@ class RustMatrixRoom(
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit> {
-        return liveTimeline.sendMessage(body, htmlBody, intentionalMentions)
+        return liveTimeline().sendMessage(body, htmlBody, intentionalMentions)
     }
 
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
@@ -498,7 +512,7 @@ class RustMatrixRoom(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendImage(file, thumbnailFile, imageInfo, caption, formattedCaption, progressCallback)
+        return liveTimeline().sendImage(file, thumbnailFile, imageInfo, caption, formattedCaption, progressCallback)
     }
 
     override suspend fun sendVideo(
@@ -509,7 +523,7 @@ class RustMatrixRoom(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVideo(file, thumbnailFile, videoInfo, caption, formattedCaption, progressCallback)
+        return liveTimeline().sendVideo(file, thumbnailFile, videoInfo, caption, formattedCaption, progressCallback)
     }
 
     override suspend fun sendAudio(
@@ -519,7 +533,7 @@ class RustMatrixRoom(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendAudio(
+        return liveTimeline().sendAudio(
             file = file,
             audioInfo = audioInfo,
             caption = caption,
@@ -535,7 +549,7 @@ class RustMatrixRoom(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendFile(
+        return liveTimeline().sendFile(
             file,
             fileInfo,
             caption,
@@ -545,15 +559,15 @@ class RustMatrixRoom(
     }
 
     override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> {
-        return liveTimeline.toggleReaction(emoji, eventOrTransactionId)
+        return liveTimeline().toggleReaction(emoji, eventOrTransactionId)
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {
-        return liveTimeline.forwardEvent(eventId, roomIds)
+        return liveTimeline().forwardEvent(eventId, roomIds)
     }
 
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.cancelSend(transactionId)
+        return liveTimeline().cancelSend(transactionId)
     }
 
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = withContext(roomDispatcher) {
@@ -638,7 +652,7 @@ class RustMatrixRoom(
         zoomLevel: Int?,
         assetType: AssetType?,
     ): Result<Unit> {
-        return liveTimeline.sendLocation(body, geoUri, description, zoomLevel, assetType)
+        return liveTimeline().sendLocation(body, geoUri, description, zoomLevel, assetType)
     }
 
     override suspend fun createPoll(
@@ -647,7 +661,7 @@ class RustMatrixRoom(
         maxSelections: Int,
         pollKind: PollKind,
     ): Result<Unit> {
-        return liveTimeline.createPoll(question, answers, maxSelections, pollKind)
+        return liveTimeline().createPoll(question, answers, maxSelections, pollKind)
     }
 
     override suspend fun editPoll(
@@ -657,21 +671,21 @@ class RustMatrixRoom(
         maxSelections: Int,
         pollKind: PollKind,
     ): Result<Unit> {
-        return liveTimeline.editPoll(pollStartId, question, answers, maxSelections, pollKind)
+        return liveTimeline().editPoll(pollStartId, question, answers, maxSelections, pollKind)
     }
 
     override suspend fun sendPollResponse(
         pollStartId: EventId,
         answers: List<String>
     ): Result<Unit> {
-        return liveTimeline.sendPollResponse(pollStartId, answers)
+        return liveTimeline().sendPollResponse(pollStartId, answers)
     }
 
     override suspend fun endPoll(
         pollStartId: EventId,
         text: String
     ): Result<Unit> {
-        return liveTimeline.endPoll(pollStartId, text)
+        return liveTimeline().endPoll(pollStartId, text)
     }
 
     override suspend fun sendVoiceMessage(
@@ -680,7 +694,7 @@ class RustMatrixRoom(
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVoiceMessage(file, audioInfo, waveform, progressCallback)
+        return liveTimeline().sendVoiceMessage(file, audioInfo, waveform, progressCallback)
     }
 
     override suspend fun typingNotice(isTyping: Boolean) = withContext(roomDispatcher) {

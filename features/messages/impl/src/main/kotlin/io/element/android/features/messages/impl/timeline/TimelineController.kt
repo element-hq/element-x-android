@@ -21,13 +21,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -46,12 +50,15 @@ class TimelineController @Inject constructor(
 ) : Closeable, TimelineProvider {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
-    private val liveTimeline = flowOf(room.liveTimeline)
+    private val liveTimeline = callbackFlow {
+        send(room.liveTimeline())
+        awaitClose()
+    }
     private val detachedTimeline = MutableStateFlow<Optional<Timeline>>(Optional.empty())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
-        return currentTimelineFlow.flatMapLatest { it.timelineItems }
+        return currentTimelineFlow.flatMapLatest { it?.timelineItems ?: emptyFlow() }
     }
 
     fun isLive(): Flow<Boolean> {
@@ -59,7 +66,7 @@ class TimelineController @Inject constructor(
     }
 
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Unit)) {
-        currentTimelineFlow.value.run {
+        currentTimelineFlow.value?.run {
             block(this)
         }
     }
@@ -107,7 +114,7 @@ class TimelineController @Inject constructor(
     }
 
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
-        return currentTimelineFlow.value.paginate(direction)
+        return currentTimelineFlow.filterNotNull().first().paginate(direction)
             .onSuccess { hasReachedEnd ->
                 if (direction == Timeline.PaginationDirection.FORWARDS && hasReachedEnd) {
                     focusOnLive()
@@ -120,9 +127,9 @@ class TimelineController @Inject constructor(
             detached.isPresent -> detached.get()
             else -> live
         }
-    }.stateIn(coroutineScope, SharingStarted.Eagerly, room.liveTimeline)
+    }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
-    override fun activeTimelineFlow(): StateFlow<Timeline> {
+    override suspend fun activeTimelineFlow(): StateFlow<Timeline?> {
         return currentTimelineFlow
     }
 }

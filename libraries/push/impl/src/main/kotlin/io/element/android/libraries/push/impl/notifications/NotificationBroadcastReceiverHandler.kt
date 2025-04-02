@@ -159,7 +159,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)
 
         if (threadId != null) {
-            room.liveTimeline.replyMessage(
+            room.liveTimeline().replyMessage(
                 eventId = threadId.asEventId(),
                 body = message,
                 htmlBody = null,
@@ -167,7 +167,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 fromNotification = true,
             )
         } else {
-            room.liveTimeline.sendMessage(
+            room.liveTimeline().sendMessage(
                 body = message,
                 htmlBody = null,
                 intentionalMentions = emptyList()

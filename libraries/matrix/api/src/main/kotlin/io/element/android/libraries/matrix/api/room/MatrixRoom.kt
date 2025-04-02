@@ -100,7 +100,7 @@ interface MatrixRoom : Closeable {
     /**
      * The live timeline of the room. Must be used to send Event to a room.
      */
-    val liveTimeline: Timeline
+    suspend fun liveTimeline(): Timeline
 
     /**
      * Create a new timeline.

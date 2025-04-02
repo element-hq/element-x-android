@@ -70,7 +70,7 @@ class SyncOnNotifiableEvent @Inject constructor(
 
     private suspend fun MatrixRoom.waitsUntilEventIsKnown(eventId: EventId, timeout: Duration) {
         withTimeoutOrNull(timeout) {
-            liveTimeline.timelineItems.first { timelineItems ->
+            liveTimeline().timelineItems.first { timelineItems ->
                 timelineItems.any { timelineItem ->
                     when (timelineItem) {
                         is MatrixTimelineItem.Event -> timelineItem.eventId == eventId
