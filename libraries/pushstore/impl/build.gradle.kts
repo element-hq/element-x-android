@@ -46,5 +46,4 @@ dependencies {
     androidTestImplementation(libs.test.junit)
     androidTestImplementation(libs.test.truth)
     androidTestImplementation(libs.test.runner)
-    androidTestImplementation(projects.libraries.sessionStorage.test)
 }

@@ -13,6 +13,8 @@ import io.element.android.features.rageshake.api.preferences.aRageshakePreferenc
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import kotlinx.collections.immutable.toPersistentList
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
@@ -33,6 +35,7 @@ fun aDeveloperSettingsState(
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
     hideImagesAndVideos: Boolean = false,
+    traceLogPacks: List<TraceLogPack> = emptyList(),
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
     features = aFeatureUiModelList(),
@@ -42,15 +45,14 @@ fun aDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     hideImagesAndVideos = hideImagesAndVideos,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
+    tracingLogPacks = traceLogPacks.toPersistentList(),
     eventSink = eventSink,
 )
 
 fun aCustomElementCallBaseUrlState(
     baseUrl: String? = null,
-    defaultUrl: String = "https://call.element.io",
     validator: (String?) -> Boolean = { true },
 ) = CustomElementCallBaseUrlState(
     baseUrl = baseUrl,
-    defaultUrl = defaultUrl,
     validator = validator,
 )

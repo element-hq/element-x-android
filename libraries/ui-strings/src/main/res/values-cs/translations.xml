@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Profilový obrázek"</string>
   <string name="a11y_delete">"Smazat"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"zadána %1$d číslice"</item>
@@ -7,11 +8,13 @@
     <item quantity="other">"zadáno %1$d číslic"</item>
   </plurals>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
+  <string name="a11y_join_call">"Připojit se k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Přejít dolů"</string>
   <string name="a11y_notifications_mentions_only">"Pouze zmínky"</string>
   <string name="a11y_notifications_muted">"Ztišeno"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastavit"</string>
+  <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
   <string name="a11y_pin_field">"Pole pro PIN"</string>
   <string name="a11y_play">"Přehrát"</string>
   <string name="a11y_poll">"Hlasování"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
   <string name="a11y_view_details">"Zobrazit podrobnosti"</string>
+  <string name="a11y_voice_message">"Hlasová zpráva, délka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
   <string name="action_accept">"Přijmout"</string>
@@ -61,6 +65,7 @@
   <string name="action_delete_poll">"Odstranit hlasování"</string>
   <string name="action_disable">"Zakázat"</string>
   <string name="action_discard">"Vyřadit"</string>
+  <string name="action_dismiss">"Zavřít"</string>
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upravit"</string>
   <string name="action_edit_caption">"Upravit titulek"</string>
@@ -162,6 +167,7 @@
   <string name="common_editing">"Úpravy"</string>
   <string name="common_editing_caption">"Úprava titulku"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Prázdný soubor"</string>
   <string name="common_encryption">"Šifrování"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
@@ -186,6 +192,7 @@ Důvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_light">"Světlý"</string>
+  <string name="common_line_copied_to_clipboard">"Řádek zkopírován do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_loading_more">"Načítání dalších…"</string>
@@ -203,6 +210,7 @@ Důvod: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Žádné výsledky"</string>
   <string name="common_no_room_name">"Žádný název místnosti"</string>
+  <string name="common_not_encrypted">"Nešifrováno"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licence s otevřeným zdrojovým kódem"</string>
   <string name="common_or">"nebo"</string>
@@ -278,19 +286,23 @@ Důvod: %1$s."</string>
   <string name="common_verification_failed">"Ověření se nezdařilo"</string>
   <string name="common_verified">"Ověřeno"</string>
   <string name="common_verify_device">"Ověřit zařízení"</string>
-  <string name="common_verify_identity">"Ověření totožnosti"</string>
+  <string name="common_verify_identity">"Ověření identity"</string>
   <string name="common_verify_user">"Ověřit uživatele"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
   <string name="common_you">"Vy"</string>
-  <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Zdá se, že identita %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Identita uživatele %1$s se změnila. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Ověřená identita %1$s se změnila."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Ověřená identita uživatele %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Identita uživatele %1$s se změnila."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
+  <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
+
+Opravdu chcete pokračovat?"</string>
+  <string name="dialog_confirm_link_title">"Zkontrolujte tento odkaz"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
@@ -369,5 +381,5 @@ Důvod: %1$s."</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Pro přístup k historickým zprávám musíte toto zařízení ověřit"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemáte přístup k této zprávě"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nelze dešifrovat zprávu"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši totožnost."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši identitu."</string>
 </resources>

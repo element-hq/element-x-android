@@ -144,8 +144,8 @@ private fun OnBoardingButtons(
             text = stringResource(id = signInButtonStringRes),
             onClick = onSignIn,
             modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.onBoardingSignIn)
+                .fillMaxWidth()
+                .testTag(TestTags.onBoardingSignIn)
         )
         if (state.canCreateAccount) {
             TextButton(
@@ -155,15 +155,17 @@ private fun OnBoardingButtons(
                     .fillMaxWidth()
             )
         }
-        // Add a report problem text button. Use a Text since we need a special theme here.
-        Text(
-            modifier = Modifier
+        if (state.canReportBug) {
+            // Add a report problem text button. Use a Text since we need a special theme here.
+            Text(
+                modifier = Modifier
                     .padding(16.dp)
                     .clickable(onClick = onReportProblem),
-            text = stringResource(id = CommonStrings.common_report_a_problem),
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
-        )
+                text = stringResource(id = CommonStrings.common_report_a_problem),
+                style = ElementTheme.typography.fontBodySmRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+        }
     }
 }
 

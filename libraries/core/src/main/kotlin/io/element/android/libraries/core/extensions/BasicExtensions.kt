@@ -89,3 +89,31 @@ fun String.withoutAccents(): String {
     return Normalizer.normalize(this, Normalizer.Form.NFD)
         .replace("\\p{Mn}+".toRegex(), "")
 }
+
+private const val RTL_OVERRIDE_CHAR = '\u202E'
+private const val LTR_OVERRIDE_CHAR = '\u202D'
+
+fun String.ensureEndsLeftToRight() = if (containsRtLOverride()) "$this$LTR_OVERRIDE_CHAR" else this
+
+fun String.containsRtLOverride() = contains(RTL_OVERRIDE_CHAR)
+
+fun String.filterDirectionOverrides() = filterNot { it == RTL_OVERRIDE_CHAR || it == LTR_OVERRIDE_CHAR }
+
+/**
+ * This works around https://github.com/element-hq/element-x-android/issues/2105.
+ * @param maxLength Max characters to retrieve. Defaults to `500`.
+ * @param ellipsize Whether to add an ellipsis (`…`) char at the end or not. Defaults to `false`.
+ * @return The string truncated to [maxLength] characters, with an optional ellipsis if larger.
+ */
+fun String.toSafeLength(
+    maxLength: Int = 500,
+    ellipsize: Boolean = false,
+): String {
+    return if (ellipsize) {
+        ellipsize(maxLength)
+    } else if (length > maxLength) {
+        take(maxLength)
+    } else {
+        this
+    }
+}

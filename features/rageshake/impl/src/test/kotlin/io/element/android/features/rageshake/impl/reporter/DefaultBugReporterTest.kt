@@ -8,9 +8,10 @@
 package io.element.android.features.rageshake.impl.reporter
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
-import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
+import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
@@ -138,7 +139,7 @@ class DefaultBugReporterTest {
 
         val foundValues = collectValuesFromFormData(request)
 
-        assertThat(foundValues["app"]).isEqualTo("element-x-android")
+        assertThat(foundValues["app"]).isEqualTo(RageshakeConfig.BUG_REPORT_APP_NAME)
         assertThat(foundValues["can_contact"]).isEqualTo("true")
         assertThat(foundValues["device_id"]).isEqualTo("ABCDEFGH")
         assertThat(foundValues["sdk_sha"]).isEqualTo("123456789")

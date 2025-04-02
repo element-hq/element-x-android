@@ -1,3 +1,5 @@
+import config.BuildTimeConfig
+import extension.buildConfigFieldStr
 import extension.setupAnvil
 
 /*
@@ -18,6 +20,25 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigFieldStr(
+            name = "URL_COPYRIGHT",
+            value = BuildTimeConfig.URL_COPYRIGHT ?: "https://element.io/copyright",
+        )
+        buildConfigFieldStr(
+            name = "URL_ACCEPTABLE_USE",
+            value = BuildTimeConfig.URL_ACCEPTABLE_USE ?: "https://element.io/acceptable-use-policy-terms",
+        )
+        buildConfigFieldStr(
+            name = "URL_PRIVACY",
+            value = BuildTimeConfig.URL_PRIVACY ?: "https://element.io/privacy",
+        )
     }
 }
 

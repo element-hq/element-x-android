@@ -20,6 +20,7 @@ import extension.allEnterpriseImpl
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import extension.buildConfigFieldStr
 import extension.koverDependencies
 import extension.locales
 import extension.setupAnvil
@@ -59,21 +60,27 @@ android {
         splits {
             // Configures multiple APKs based on ABI.
             abi {
-                // Enables building multiple APKs per ABI.
-                isEnable = true
+                val buildingAppBundle = gradle.startParameter.taskNames.any { it.contains("bundle") }
+
+                // Enables building multiple APKs per ABI. This should be disabled when building an AAB.
+                isEnable = !buildingAppBundle
+
                 // By default all ABIs are included, so use reset() and include to specify that we only
                 // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
                 // Resets the list of ABIs that Gradle should create APKs for to none.
                 reset()
-                // Specifies a list of ABIs that Gradle should create APKs for.
-                include("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
-                // Generate a universal APK that includes all ABIs, so user who installs from CI tool can use this one by default.
-                isUniversalApk = true
+
+                if (!buildingAppBundle) {
+                    // Specifies a list of ABIs that Gradle should create APKs for.
+                    include("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
+                    // Generate a universal APK that includes all ABIs, so user who installs from CI tool can use this one by default.
+                    isUniversalApk = true
+                }
             }
         }
 
-        defaultConfig {
-            resourceConfigurations += locales
+        androidResources {
+            localeFilters += locales
         }
     }
 
@@ -96,7 +103,7 @@ android {
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
-    logger.warnInBox("Building $baseAppName")
+    logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName)")
 
     buildTypes {
         getByName("debug") {
@@ -164,13 +171,13 @@ android {
         create("gplay") {
             dimension = "store"
             isDefault = true
-            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"G\"")
-            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"GooglePlay\"")
+            buildConfigFieldStr("SHORT_FLAVOR_DESCRIPTION", "G")
+            buildConfigFieldStr("FLAVOR_DESCRIPTION", "GooglePlay")
         }
         create("fdroid") {
             dimension = "store"
-            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"F\"")
-            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
+            buildConfigFieldStr("SHORT_FLAVOR_DESCRIPTION", "F")
+            buildConfigFieldStr("FLAVOR_DESCRIPTION", "FDroid")
         }
     }
 }
@@ -285,8 +292,8 @@ tasks.withType<GenerateBuildConfig>().configureEach {
     outputs.upToDateWhen { false }
     val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
     val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
-    android.defaultConfig.buildConfigField("String", "GIT_REVISION", "\"$gitRevision\"")
-    android.defaultConfig.buildConfigField("String", "GIT_BRANCH_NAME", "\"$gitBranchName\"")
+    android.defaultConfig.buildConfigFieldStr("GIT_REVISION", gitRevision)
+    android.defaultConfig.buildConfigFieldStr("GIT_BRANCH_NAME", gitBranchName)
 }
 
 licensee {

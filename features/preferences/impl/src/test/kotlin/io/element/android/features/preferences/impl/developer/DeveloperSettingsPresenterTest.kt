@@ -10,7 +10,6 @@
 package io.element.android.features.preferences.impl.developer
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
@@ -81,7 +80,7 @@ class DeveloperSettingsPresenterTest {
         presenter.test {
             skipItems(2)
             awaitItem().also { state ->
-                val feature = state.features.first()
+                val feature = state.features.first { !it.isEnabled }
                 state.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(feature, !feature.isEnabled))
             }
             awaitItem().also { state ->
@@ -130,7 +129,6 @@ class DeveloperSettingsPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.customElementCallBaseUrlState.baseUrl).isEqualTo("https://call.element.ahoy")
-                assertThat(state.customElementCallBaseUrlState.defaultUrl).isEqualTo(ElementCallConfig.DEFAULT_BASE_URL)
             }
         }
     }

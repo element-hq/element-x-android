@@ -8,6 +8,7 @@
 package io.element.android.libraries.preferences.api.store
 
 import io.element.android.libraries.matrix.api.tracing.LogLevel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesStore {
@@ -25,6 +26,9 @@ interface AppPreferencesStore {
 
     suspend fun setTracingLogLevel(logLevel: LogLevel)
     fun getTracingLogLevelFlow(): Flow<LogLevel>
+
+    suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
+    fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
     suspend fun reset()
 }

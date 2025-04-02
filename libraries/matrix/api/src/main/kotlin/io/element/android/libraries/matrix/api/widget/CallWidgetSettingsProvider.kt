@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.api.widget
 import java.util.UUID
 
 interface CallWidgetSettingsProvider {
-    fun provide(
+    suspend fun provide(
         baseUrl: String,
         widgetId: String = UUID.randomUUID().toString(),
         encrypted: Boolean,

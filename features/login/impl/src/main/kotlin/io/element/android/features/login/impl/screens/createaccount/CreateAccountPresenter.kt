@@ -19,16 +19,22 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.seconds
 
 class CreateAccountPresenter @AssistedInject constructor(
     @Assisted private val url: String,
     private val authenticationService: MatrixAuthenticationService,
+    private val clientProvider: MatrixClientProvider,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val messageParser: MessageParser,
     private val buildMeta: BuildMeta,
@@ -73,6 +79,12 @@ class CreateAccountPresenter @AssistedInject constructor(
         }.flatMap { externalSession ->
             authenticationService.importCreatedSession(externalSession)
         }.onSuccess { sessionId ->
+            tryOrNull {
+                // Wait until the session is verified
+                val client = clientProvider.getOrRestore(sessionId).getOrThrow()
+                val sessionVerificationService = client.sessionVerificationService()
+                withTimeout(10.seconds) { sessionVerificationService.sessionVerifiedStatus.first { it.isVerified() } }
+            }
             // We will not navigate to the WaitList screen, so the login user story is done
             defaultLoginUserStory.setLoginFlowIsDone(true)
             loggedInState.value = AsyncAction.Success(sessionId)

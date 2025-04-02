@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Löschen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d eingegebene Ziffer"</item>
     <item quantity="other">"%1$d eingegebene Ziffern"</item>
   </plurals>
   <string name="a11y_hide_password">"Passwort verbergen"</string>
+  <string name="a11y_join_call">"Anruf beitreten"</string>
   <string name="a11y_jump_to_bottom">"Nach unten springen"</string>
   <string name="a11y_notifications_mentions_only">"Nur Erwähnungen"</string>
   <string name="a11y_notifications_muted">"Stummgeschaltet"</string>
   <string name="a11y_page_n">"Seite %1$d"</string>
   <string name="a11y_pause">"Pausieren"</string>
+  <string name="a11y_paused_voice_message">"Sprachnachricht, Dauer:%1$s, aktuelle Position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-Feld"</string>
   <string name="a11y_play">"Abspielen"</string>
   <string name="a11y_poll">"Umfrage"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Anruf starten"</string>
   <string name="a11y_user_menu">"Benutzermenü"</string>
   <string name="a11y_view_details">"Details anzeigen"</string>
+  <string name="a11y_voice_message">"Sprachnachricht, Dauer: %1$s"</string>
   <string name="a11y_voice_message_record">"Sprachnachricht aufnehmen."</string>
   <string name="a11y_voice_message_stop_recording">"Aufnahme beenden"</string>
   <string name="action_accept">"Akzeptieren"</string>
@@ -59,6 +63,7 @@
   <string name="action_delete_poll">"Umfrage löschen"</string>
   <string name="action_disable">"Deaktivieren"</string>
   <string name="action_discard">"Verwerfen"</string>
+  <string name="action_dismiss">"Schließen"</string>
   <string name="action_done">"Erledigt"</string>
   <string name="action_edit">"Bearbeiten"</string>
   <string name="action_edit_caption">"Bildunterschrift bearbeiten"</string>
@@ -160,6 +165,7 @@
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_editing_caption">"Bearbeitung der Bildunterschrift"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Leere Datei"</string>
   <string name="common_encryption">"Verschlüsselung"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
   <string name="common_enter_your_pin">"PIN eingeben"</string>
@@ -184,6 +190,7 @@ Grund: %1$s."</string>
   <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_light">"Hell"</string>
+  <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
@@ -200,6 +207,7 @@ Grund: %1$s."</string>
   <string name="common_name_and_id">"%1$s(%2$s)"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Raumname"</string>
+  <string name="common_not_encrypted">"Nicht verschlüsselt"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open-Source-Lizenzen"</string>
   <string name="common_or">"oder"</string>
@@ -281,12 +289,16 @@ Grund: %1$s."</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
   <string name="common_you">"Sie"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich offenbar geändert. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich offenbar geändert. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Die verifizierte Identität von %1$s hat sich geändert."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Die verifizierte Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Die Identität von %1$s hat sich geändert."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Die Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Verifizierung zurückziehen"</string>
+  <string name="dialog_confirm_link_message">"Der Link%1$s führt Sie zu einer anderen Seite%2$s. 
+
+Möchten Sie wirklich fortfahren?"</string>
+  <string name="dialog_confirm_link_title">"Überprüfen Sie diesen Link noch einmal"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
@@ -333,7 +345,7 @@ Grund: %1$s."</string>
   <string name="screen_reset_identity_confirmation_title">"Kannst du das nicht bestätigen? Gehe zu deinem Konto, um deine Identität zurückzusetzen."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst sie vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Deine Nachricht wurde nicht gesendet, da sich die verifizierte Identität von %1$s geändert hat"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ihre Nachricht wurde nicht gesendet, da die verifizierte Identität von %1$s zurückgesetzt wurde"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Nachricht trotzdem senden"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s verwendet wenigstens ein nicht verifiziertes Gerät. Du kannst die Nachricht trotzdem verschicken, oder vorerst abbrechen und später erneut versuchen, nachdem %2$s alle Geräte verifiziert hat."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Deine Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>

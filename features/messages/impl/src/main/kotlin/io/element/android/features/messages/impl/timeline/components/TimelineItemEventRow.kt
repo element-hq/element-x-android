@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -93,7 +94,9 @@ import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -117,8 +120,8 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onEventClick: () -> Unit,
     onLongClick: () -> Unit,
-    onLinkClick: (String) -> Unit,
-    onLinkLongClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
@@ -313,6 +316,7 @@ private fun TimelineItemEventRowContent(
                 event.senderId,
                 event.senderProfile,
                 event.senderAvatar,
+                onUserDataClick,
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
@@ -320,13 +324,7 @@ private fun TimelineItemEventRowContent(
                         start.linkTo(parent.start)
                     }
                     .padding(horizontal = 16.dp)
-                    .zIndex(1f)
-                    .clickable(onClick = onUserDataClick)
-                    // This is redundant when using talkback
-                    .clearAndSetSemantics {
-                        invisibleToUser()
-                        testTag = TestTags.timelineItemSenderInfo.value
-                    }
+                    .zIndex(1f),
             )
         }
 
@@ -424,13 +422,31 @@ private fun MessageSenderInformation(
     senderId: UserId,
     senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
-    Row(modifier = modifier) {
-        Avatar(senderAvatar)
-        Spacer(modifier = Modifier.width(4.dp))
+    Row(
+        modifier = modifier
+            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
+            .clearAndSetSemantics {
+                invisibleToUser()
+            }
+    ) {
+        Avatar(
+            modifier = Modifier
+                .testTag(TestTags.timelineItemSenderAvatar)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
+            avatarData = senderAvatar,
+        )
         SenderName(
+            modifier = Modifier
+                .testTag(TestTags.timelineItemSenderName)
+                .clip(RoundedCornerShape(6.dp))
+                .clickable(onClick = onClick)
+                .padding(horizontal = 4.dp),
             senderId = senderId,
             senderProfile = senderProfile,
             senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),

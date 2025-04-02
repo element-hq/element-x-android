@@ -8,8 +8,11 @@
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ange en anpassad bas-URL för Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Dölj avatarer i förfrågningar om rumsinbjudningar"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Dölj förhandsgranskningar av media i tidslinjen"</string>
   <string name="screen_advanced_settings_media_compression_description">"Ladda upp foton och videor snabbare och minska dataanvändningen"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimera mediekvaliteten"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderering och säkerhet"</string>
   <string name="screen_advanced_settings_push_provider_android">"Pushnotisleverantör"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Inaktivera rik-text-redigeraren för att skriva Markdown manuellt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Läskvitton"</string>

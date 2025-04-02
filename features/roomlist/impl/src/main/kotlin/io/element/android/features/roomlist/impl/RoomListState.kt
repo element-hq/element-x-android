@@ -29,6 +29,7 @@ data class RoomListState(
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
+    val canReportBug: Boolean,
     val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,

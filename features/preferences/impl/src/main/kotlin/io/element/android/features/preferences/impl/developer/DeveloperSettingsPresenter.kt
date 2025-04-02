@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevel
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevelItem
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
@@ -35,9 +35,13 @@ import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -78,6 +82,12 @@ class DeveloperSettingsPresenter @Inject constructor(
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
         }
         val tracingLogLevel by tracingLogLevelFlow.collectAsState(initial = AsyncData.Uninitialized)
+        val tracingLogPacks by produceState(persistentListOf<TraceLogPack>()) {
+            appPreferencesStore.getTracingLogPacksFlow()
+                // Sort the entries alphabetically by its title
+                .map { it.sortedBy { it.title }.toPersistentList() }
+                .collectLatest { value = it }
+        }
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries
@@ -112,8 +122,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                     triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
                 )
                 is DeveloperSettingsEvents.SetCustomElementCallBaseUrl -> coroutineScope.launch {
-                    // If the URL is either empty or the default one, we want to save 'null' to remove the custom URL
-                    val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() && it != ElementCallConfig.DEFAULT_BASE_URL }
+                    val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() }
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
@@ -122,6 +131,15 @@ class DeveloperSettingsPresenter @Inject constructor(
                 }
                 is DeveloperSettingsEvents.SetTracingLogLevel -> coroutineScope.launch {
                     appPreferencesStore.setTracingLogLevel(event.logLevel.toLogLevel())
+                }
+                is DeveloperSettingsEvents.ToggleTracingLogPack -> coroutineScope.launch {
+                    val currentPacks = tracingLogPacks.toMutableSet()
+                    if (currentPacks.contains(event.logPack)) {
+                        currentPacks.remove(event.logPack)
+                    } else {
+                        currentPacks.add(event.logPack)
+                    }
+                    appPreferencesStore.setTracingLogPacks(currentPacks)
                 }
             }
         }
@@ -133,11 +151,11 @@ class DeveloperSettingsPresenter @Inject constructor(
             rageshakeState = rageshakeState,
             customElementCallBaseUrlState = CustomElementCallBaseUrlState(
                 baseUrl = customElementCallBaseUrl,
-                defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
                 validator = ::customElementCallUrlValidator,
             ),
             hideImagesAndVideos = hideImagesAndVideos,
             tracingLogLevel = tracingLogLevel,
+            tracingLogPacks = tracingLogPacks,
             eventSink = ::handleEvents
         )
     }

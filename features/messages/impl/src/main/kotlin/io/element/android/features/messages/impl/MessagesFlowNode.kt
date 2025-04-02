@@ -28,6 +28,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -56,6 +57,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.hide
 import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
@@ -72,17 +74,19 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -96,13 +100,17 @@ class MessagesFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
+    private val roomNamesCache: RoomNamesCache,
+    private val mentionSpanUpdater: MentionSpanUpdater,
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
     private val timelineController: TimelineController,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val dateFormatter: DateFormatter,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -170,13 +178,29 @@ class MessagesFlowNode @AssistedInject constructor(
                 timelineController.close()
             }
         )
+        setupCacheUpdaters()
+
+        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
+    }
+
+    private fun setupCacheUpdaters() {
         room.membersStateFlow
             .onEach { membersState ->
-                roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                withContext(coroutineDispatchers.computation) {
+                    roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                }
             }
             .launchIn(lifecycleScope)
 
-        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
+        matrixClient.roomListService
+            .allRooms
+            .summaries
+            .onEach {
+                withContext(coroutineDispatchers.computation) {
+                    roomNamesCache.replace(it)
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -409,7 +433,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 NavTarget.LocationViewer(
                     location = event.content.location,
                     description = event.content.description,
-                )
+                ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
         }
@@ -463,10 +487,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        mentionSpanTheme.updateStyles(currentUserId = room.sessionId)
+        mentionSpanTheme.updateStyles()
         CompositionLocalProvider(
-            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
-            LocalMentionSpanTheme provides mentionSpanTheme,
+            LocalMentionSpanUpdater provides mentionSpanUpdater
         ) {
             BackstackWithOverlayBox(modifier)
         }

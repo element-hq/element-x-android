@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -87,6 +88,21 @@ fun RoomMembersModerationView(
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), state = asyncIndicatorState)
 
         when (val action = state.kickUserAsyncAction) {
+            is AsyncAction.Confirming -> {
+                TextFieldDialog(
+                    title = stringResource(R.string.screen_room_member_list_kick_member_confirmation_title),
+                    submitText = stringResource(R.string.screen_room_member_list_kick_member_confirmation_action),
+                    onSubmit = { reason ->
+                        state.eventSink(RoomMembersModerationEvents.DoKickUser(reason = reason))
+                    },
+                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    label = stringResource(id = CommonStrings.common_reason),
+                    withBorder = true,
+                    content = stringResource(R.string.screen_room_member_list_kick_member_confirmation_description),
+                    value = "",
+                )
+            }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
                     val userDisplayName = state.selectedRoomMember?.getBestName().orEmpty()
@@ -113,12 +129,18 @@ fun RoomMembersModerationView(
 
         when (val action = state.banUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                ConfirmationDialog(
+                TextFieldDialog(
                     title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
-                    content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
-                    onSubmitClick = { state.eventSink(RoomMembersModerationEvents.BanUser) },
-                    onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) }
+                    onSubmit = { reason ->
+                        state.eventSink(RoomMembersModerationEvents.DoBanUser(reason = reason))
+                    },
+                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    label = stringResource(id = CommonStrings.common_reason),
+                    withBorder = true,
+                    content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
+                    value = "",
                 )
             }
             is AsyncAction.Loading -> {

@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.link.LinkState
+import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemDaySeparator
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -86,6 +88,7 @@ fun anEmptyPinnedMessagesListState() = PinnedMessagesListState.Empty
 fun aLoadedPinnedMessagesListState(
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
+    linkState: LinkState = aLinkState(),
     timelineItems: List<TimelineItem> = emptyList(),
     actionListState: ActionListState = anActionListState(),
     aUserEventPermissions: UserEventPermissions = UserEventPermissions.DEFAULT,
@@ -93,6 +96,7 @@ fun aLoadedPinnedMessagesListState(
 ) = PinnedMessagesListState.Filled(
     timelineRoomInfo = timelineRoomInfo,
     timelineProtectionState = timelineProtectionState,
+    linkState = linkState,
     timelineItems = timelineItems.toImmutableList(),
     actionListState = actionListState,
     userEventPermissions = aUserEventPermissions,

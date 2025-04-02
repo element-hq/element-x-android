@@ -131,6 +131,9 @@ class IncomingVerificationPresenterTest {
                     isWaiting = false,
                 )
             )
+
+            advanceTimeBy(1.seconds)
+
             resetLambda.assertions().isCalledOnce().with(value(false))
             acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
@@ -139,7 +142,9 @@ class IncomingVerificationPresenterTest {
             skipItems(1)
             val initialWaitingState = awaitItem()
             assertThat((initialWaitingState.step as IncomingVerificationState.Step.Initial).isWaiting).isTrue()
-            advanceUntilIdle()
+
+            advanceTimeBy(1.seconds)
+
             acceptVerificationRequestLambda.assertions().isCalledOnce()
             // Remote sent the data
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)

@@ -8,10 +8,16 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isEditable
+import androidx.compose.ui.test.isFocusable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
@@ -56,11 +62,13 @@ class DeveloperSettingsViewTest {
             ),
         )
         rule.clickOn(R.string.screen_advanced_settings_element_call_base_url)
+        val textInputNode = rule.onAllNodes(isEditable().and(isFocusable())).filterToOne(hasAnyAncestor(isDialog()))
+        textInputNode.performTextInput("https://call.element.dev")
         rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.io"))
+        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetCustomElementCallBaseUrl("https://call.element.dev"))
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1200dp")
     @Test
     fun `clicking on open showkase invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
@@ -89,7 +97,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.DEBUG))
     }
 
-    @Config(qualifiers = "h1500dp")
+    @Config(qualifiers = "h1700dp")
     @Test
     fun `clicking on clear cache emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()

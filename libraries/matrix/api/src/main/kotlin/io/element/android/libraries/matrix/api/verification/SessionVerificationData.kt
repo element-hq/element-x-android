@@ -25,6 +25,4 @@ sealed interface SessionVerificationData {
 // https://spec.matrix.org/unstable/client-server-api/#sas-method-emoji
 data class VerificationEmoji(
     val number: Int,
-    val emoji: String,
-    val description: String,
 )

@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -38,6 +39,7 @@ data class MessagesState(
     val timelineState: TimelineState,
     val timelineProtectionState: TimelineProtectionState,
     val identityChangeState: IdentityChangeState,
+    val linkState: LinkState,
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,
     val reactionSummaryState: ReactionSummaryState,

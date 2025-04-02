@@ -51,7 +51,7 @@ fun RoomAliasResolverView(
     ) {
         HeaderFooterPage(
             containerColor = Color.Transparent,
-            paddingValues = PaddingValues(
+            contentPadding = PaddingValues(
                 horizontal = 16.dp,
                 vertical = 32.dp
             ),

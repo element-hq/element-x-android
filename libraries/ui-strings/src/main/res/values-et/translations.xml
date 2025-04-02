@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Tunnuspilt"</string>
   <string name="a11y_delete">"Kustuta"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d number sisestatud"</item>
     <item quantity="other">"%1$d numbrit sisestatud"</item>
   </plurals>
   <string name="a11y_hide_password">"Peida salasõna"</string>
+  <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
   <string name="a11y_page_n">"%1$d. lehekülg"</string>
   <string name="a11y_pause">"Peata"</string>
+  <string name="a11y_paused_voice_message">"Häälsõnum, kestus:%1$s, praegune asukoht: %2$s"</string>
   <string name="a11y_pin_field">"PIN-koodi väli"</string>
   <string name="a11y_play">"Esita"</string>
   <string name="a11y_poll">"Küsitlus"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
   <string name="a11y_view_details">"Vaata üksikasju"</string>
+  <string name="a11y_voice_message">"Häälsõnum, kestus:%1$s"</string>
   <string name="a11y_voice_message_record">"Salvesta häälsõnum."</string>
   <string name="a11y_voice_message_stop_recording">"Lõpeta salvestamine"</string>
   <string name="action_accept">"Nõustu"</string>
@@ -59,6 +63,7 @@
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_disable">"Lülita välja"</string>
   <string name="action_discard">"Loobu"</string>
+  <string name="action_dismiss">"Lõpeta"</string>
   <string name="action_done">"Valmis"</string>
   <string name="action_edit">"Muuda"</string>
   <string name="action_edit_caption">"Muuda selgitust"</string>
@@ -160,6 +165,7 @@
   <string name="common_editing">"Muutmine"</string>
   <string name="common_editing_caption">"Muudame selgitust"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Tühi fail"</string>
   <string name="common_encryption">"Krüptimine"</string>
   <string name="common_encryption_enabled">"Krüptimine on kasutusel"</string>
   <string name="common_enter_your_pin">"Sisesta oma PIN-kood"</string>
@@ -184,6 +190,7 @@ Põhjus: %1$s."</string>
   <string name="common_invite_unknown_profile">"Sellist Matrix\'i kasutajatunnust ei õnnestu leida, seega sõnumit ilmselt keegi kätte ei saa."</string>
   <string name="common_leaving_room">"Oled lahkumas jututoast"</string>
   <string name="common_light">"Hele"</string>
+  <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>
@@ -200,6 +207,7 @@ Põhjus: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
+  <string name="common_not_encrypted">"Krüptimata"</string>
   <string name="common_offline">"Võrgust väljas"</string>
   <string name="common_open_source_licenses">"Avatud lähtekoodiga litsentsid"</string>
   <string name="common_or">"või"</string>
@@ -261,7 +269,7 @@ Põhjus: %1$s."</string>
   <string name="common_unable_to_decrypt">"Dekrüptimine ei olnud võimalik"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Saadetud ebaturvalisest seadmest"</string>
   <string name="common_unable_to_decrypt_no_access">"Sul pole ligipääsu antud sõnumile"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Saatja verifitseeritud identiteet on muutunud"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Saatja verifitseeritud identiteet on lähtestatud"</string>
   <string name="common_unable_to_invite_message">"Kutset polnud võimalik saata ühele või enamale kasutajale."</string>
   <string name="common_unable_to_invite_title">"Kutse(te) saatmine ei õnnestunud"</string>
   <string name="common_unlock">"Eemalda lukustus"</string>
@@ -281,11 +289,11 @@ Põhjus: %1$s."</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
   <string name="common_you">"Sina"</string>
-  <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet tundub olema muutunud. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet tundub olema muutunud. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet on lähtestatud. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet on lähtestatud. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$s kasutaja verifitseeritud identiteet on muutunud."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on muutunud. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s kasutaja verifitseeritud identiteet on lähtestatud."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (%2$s kasutajanimi) verifitseeritud identiteet on lähtestatud. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Võta verifitseerimine tagasi"</string>
   <string name="dialog_confirm_link_message">"%1$s link viib sind teise veebisaiti %2$s
 
@@ -337,7 +345,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_reset_identity_confirmation_title">"Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$s verifitseerimist proovid seda uuesti."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Sinu sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Sinu sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Saada sõnum ikkagi"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s kasutab ühte või enamat verifitseerimata seadet. Sa võid sõnumi ikkagi saata või katkestad selle ning ootad kuni %2$s on kõik oma seadmed verifitseerinud ning proovid seejärel uuesti."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid"</string>
@@ -358,7 +366,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
   <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
   <string name="screen_view_location_title">"Asukoht"</string>

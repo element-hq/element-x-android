@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -35,11 +36,6 @@ import javax.inject.Inject
 class DefaultMessageSummaryFormatter @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
-    companion object {
-        // Max characters to display in the summary message. This works around https://github.com/element-hq/element-x-android/issues/2105
-        private const val MAX_SAFE_LENGTH = 500
-    }
-
     override fun format(event: TimelineItem.Event): String {
         return when (event.content) {
             is TimelineItemTextBasedContent -> event.content.plainText
@@ -58,6 +54,8 @@ class DefaultMessageSummaryFormatter @Inject constructor(
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
             is TimelineItemCallNotifyContent -> context.getString(CommonStrings.common_call_started)
-        }.take(MAX_SAFE_LENGTH)
+        }
+            // Truncate the message to a safe length to avoid crashes in Compose
+            .toSafeLength()
     }
 }

@@ -1,3 +1,5 @@
+import extension.buildConfigFieldStr
+import extension.readLocalProperty
 import extension.setupAnvil
 
 /*
@@ -23,6 +25,39 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
+
+    defaultConfig {
+        buildConfigFieldStr(
+            name = "SENTRY_DSN",
+            value = System.getenv("ELEMENT_CALL_SENTRY_DSN")
+                ?: readLocalProperty("features.call.sentry.dsn")
+                ?: ""
+        )
+        buildConfigFieldStr(
+            name = "POSTHOG_USER_ID",
+            value = System.getenv("ELEMENT_CALL_POSTHOG_USER_ID")
+                ?: readLocalProperty("features.call.posthog.userid")
+                ?: ""
+        )
+        buildConfigFieldStr(
+            name = "POSTHOG_API_HOST",
+            value = System.getenv("ELEMENT_CALL_POSTHOG_API_HOST")
+                ?: readLocalProperty("features.call.posthog.api.host")
+                ?: ""
+        )
+        buildConfigFieldStr(
+            name = "POSTHOG_API_KEY",
+            value = System.getenv("ELEMENT_CALL_POSTHOG_API_KEY")
+                ?: readLocalProperty("features.call.posthog.api.key")
+                ?: ""
+        )
+        buildConfigFieldStr(
+            name = "RAGESHAKE_URL",
+            value = System.getenv("ELEMENT_CALL_RAGESHAKE_URL")
+                ?: readLocalProperty("features.call.regeshake.url")
+                ?: ""
+        )
+    }
 }
 
 setupAnvil()
@@ -47,6 +82,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
+    implementation(libs.element.call.embedded)
     api(projects.features.call.api)
 
     testImplementation(libs.coroutines.test)

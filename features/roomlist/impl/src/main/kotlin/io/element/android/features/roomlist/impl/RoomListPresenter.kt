@@ -30,6 +30,7 @@ import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -91,6 +92,7 @@ class RoomListPresenter @Inject constructor(
     private val notificationCleaner: NotificationCleaner,
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val appPreferencesStore: AppPreferencesStore,
+    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
 
@@ -103,6 +105,7 @@ class RoomListPresenter @Inject constructor(
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
+        val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -163,6 +166,7 @@ class RoomListPresenter @Inject constructor(
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
+            canReportBug = canReportBug,
             searchState = searchState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
@@ -307,6 +311,8 @@ class RoomListPresenter @Inject constructor(
 
     private fun CoroutineScope.clearCacheOfRoom(roomId: RoomId) = launch {
         client.getRoom(roomId)?.use { room ->
+            // Ideally we wouldn't have a live timeline at this point, but right now we instantiate one when retrieving the room
+            room.liveTimeline.close()
             room.clearEventCacheStorage()
         }
     }
