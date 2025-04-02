@@ -7,6 +7,7 @@
 
 package io.element.android.features.roomdetails.impl.securityandprivacy
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -23,6 +24,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -36,6 +41,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -57,12 +63,21 @@ fun SecurityAndPrivacyView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showExitDialog by remember { mutableStateOf(false) }
+    fun goBack() {
+        if (state.canBeSaved) {
+            showExitDialog = true
+        } else {
+            onBackClick()
+        }
+    }
+    BackHandler { goBack() }
     Scaffold(
         modifier = modifier,
         topBar = {
             SecurityAndPrivacyToolbar(
                 isSaveActionEnabled = state.canBeSaved,
-                onBackClick = onBackClick,
+                onBackClick = ::goBack,
                 onSaveClick = {
                     state.eventSink(SecurityAndPrivacyEvents.Save)
                 },
@@ -130,6 +145,17 @@ fun SecurityAndPrivacyView(
         },
         onRetry = { state.eventSink(SecurityAndPrivacyEvents.Save) },
     )
+    if (showExitDialog) {
+        SaveChangesDialog(
+            onSubmitClick = {
+                showExitDialog = false
+                onBackClick()
+            },
+            onDismiss = {
+                showExitDialog = false
+            },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -267,8 +293,7 @@ private fun RoomAddressSection(
                 Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
             },
             onClick = if (isVisibleInRoomDirectory.isSuccess()) onVisibilityChange else null,
-            trailingContent =
-            when (isVisibleInRoomDirectory) {
+            trailingContent = when (isVisibleInRoomDirectory) {
                 is AsyncData.Uninitialized, is AsyncData.Loading -> {
                     ListItemContent.Custom {
                         CircularProgressIndicator(
