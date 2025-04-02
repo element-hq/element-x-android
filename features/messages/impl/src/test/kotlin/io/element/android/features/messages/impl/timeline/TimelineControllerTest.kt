@@ -36,6 +36,9 @@ class TimelineControllerTest {
         val sut = TimelineController(matrixRoom)
 
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }
@@ -75,6 +78,9 @@ class TimelineControllerTest {
         val sut = TimelineController(matrixRoom)
 
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }
@@ -102,6 +108,9 @@ class TimelineControllerTest {
         )
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+            // Assert live timeline
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }
@@ -121,6 +130,9 @@ class TimelineControllerTest {
         )
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }
@@ -171,6 +183,9 @@ class TimelineControllerTest {
         )
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+
             sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -197,6 +212,9 @@ class TimelineControllerTest {
         val sut = TimelineController(matrixRoom)
 
         sut.activeTimelineFlow().test {
+            // Wait until the live timeline is emitted
+            skipItems(1)
+
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }

@@ -64,7 +64,7 @@ class CreatePollPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitDefaultItem()
+            awaitDefaultItem(waitForTimeline = false)
         }
     }
 
@@ -74,7 +74,7 @@ class CreatePollPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitDefaultItem()
+            awaitDefaultItem(waitForTimeline = true)
             awaitPollLoaded()
         }
     }
@@ -88,7 +88,8 @@ class CreatePollPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitDefaultItem()
+            awaitDefaultItem(waitForTimeline = false)
+            advanceUntilIdle()
             assertThat(fakeAnalyticsService.trackedErrors.filterIsInstance<CreatePollException.GetPollFailed>()).isNotEmpty()
             assertThat(navUpInvocationsCount).isEqualTo(1)
         }
@@ -177,7 +178,7 @@ class CreatePollPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitDefaultItem().eventSink(CreatePollEvents.SetQuestion("A question?"))
+            awaitDefaultItem(waitForTimeline = false).eventSink(CreatePollEvents.SetQuestion("A question?"))
             awaitItem().eventSink(CreatePollEvents.SetAnswer(0, "Answer 1"))
             awaitItem().eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
             awaitItem().eventSink(CreatePollEvents.Save)
@@ -508,6 +509,7 @@ class CreatePollPresenterTest {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
             awaitDeleteConfirmation().eventSink(CreatePollEvents.Delete(confirmed = true))
+            advanceUntilIdle()
             awaitPollLoaded().apply {
                 assertThat(showDeleteConfirmation).isFalse()
             }
@@ -517,8 +519,11 @@ class CreatePollPresenterTest {
         }
     }
 
-    private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem() =
-        awaitItem().apply {
+    private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem(waitForTimeline: Boolean = true): CreatePollState {
+        if (waitForTimeline) {
+            skipItems(1)
+        }
+        return awaitItem().apply {
             assertThat(canSave).isFalse()
             assertThat(canAddAnswer).isTrue()
             assertThat(question).isEmpty()
@@ -527,6 +532,7 @@ class CreatePollPresenterTest {
             assertThat(showBackConfirmation).isFalse()
             assertThat(showDeleteConfirmation).isFalse()
         }
+    }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitDeleteConfirmation() =
         awaitItem().apply {
@@ -537,8 +543,8 @@ class CreatePollPresenterTest {
         newQuestion: String? = null,
         newAnswer1: String? = null,
         newAnswer2: String? = null,
-    ) =
-        awaitItem().also { state ->
+    ): CreatePollState {
+        return awaitItem().also { state ->
             assertThat(state.canSave).isTrue()
             assertThat(state.canAddAnswer).isTrue()
             assertThat(state.question).isEqualTo(newQuestion ?: existingPoll.question)
@@ -548,6 +554,7 @@ class CreatePollPresenterTest {
             })
             assertThat(state.pollKind).isEqualTo(existingPoll.kind)
         }
+    }
 
     private fun createCreatePollPresenter(
         mode: CreatePollMode = CreatePollMode.NewPoll,

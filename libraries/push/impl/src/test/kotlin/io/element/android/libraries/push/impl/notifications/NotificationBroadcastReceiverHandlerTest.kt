@@ -49,6 +49,7 @@ import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -359,7 +360,7 @@ class NotificationBroadcastReceiverHandlerTest {
                 roomId = A_ROOM_ID,
             ),
         )
-        runCurrent()
+        advanceUntilIdle()
         sendMessage.assertions()
             .isCalledOnce()
             .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))
@@ -426,7 +427,7 @@ class NotificationBroadcastReceiverHandlerTest {
                 threadId = A_THREAD_ID,
             ),
         )
-        runCurrent()
+        advanceUntilIdle()
         sendMessage.assertions()
             .isNeverCalled()
         onNotifiableEventReceivedResult.assertions()
