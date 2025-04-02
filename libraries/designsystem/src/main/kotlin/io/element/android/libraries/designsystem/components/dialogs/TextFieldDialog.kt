@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -95,7 +96,9 @@ fun TextFieldDialog(
                     }
                 }),
                 maxLines = maxLines,
-                modifier = Modifier.focusRequester(focusRequester),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
             )
             canRequestFocus = true
         }
