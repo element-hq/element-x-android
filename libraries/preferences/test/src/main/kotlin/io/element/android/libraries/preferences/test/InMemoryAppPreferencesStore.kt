@@ -18,7 +18,6 @@ class InMemoryAppPreferencesStore(
     hideImagesAndVideos: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
-    simplifiedSlidingSyncEnabled: Boolean = false,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
 ) : AppPreferencesStore {
@@ -26,7 +25,6 @@ class InMemoryAppPreferencesStore(
     private val hideImagesAndVideos = MutableStateFlow(hideImagesAndVideos)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
-    private val simplifiedSlidingSyncEnabled = MutableStateFlow(simplifiedSlidingSyncEnabled)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
 
@@ -70,8 +68,8 @@ class InMemoryAppPreferencesStore(
         return logLevel
     }
 
-    override suspend fun setTracingLogPacks(logPacks: Set<TraceLogPack>) {
-        tracingLogPacks.value = logPacks
+    override suspend fun setTracingLogPacks(targets: Set<TraceLogPack>) {
+        tracingLogPacks.value = targets
     }
 
     override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
