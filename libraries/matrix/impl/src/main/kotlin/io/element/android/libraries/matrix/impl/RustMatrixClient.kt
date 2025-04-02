@@ -476,7 +476,7 @@ class RustMatrixClient(
 
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
-    suspend fun destroy() {
+    internal suspend fun destroy() {
         innerNotificationClient.close()
 
         roomFactory.destroy()
