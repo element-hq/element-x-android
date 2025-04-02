@@ -65,7 +65,6 @@ fun TextFieldDialog(
         onSubmit = { onSubmit(textFieldContents.text) },
         onDismissRequest = onDismissRequest,
         enabled = canSubmit,
-        applyPaddingToContents = content.isNullOrEmpty().not(),
         submitText = submitText,
         modifier = modifier,
     ) {

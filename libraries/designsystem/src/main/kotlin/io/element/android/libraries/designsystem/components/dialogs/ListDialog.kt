@@ -39,7 +39,7 @@ fun ListDialog(
     cancelText: String = stringResource(CommonStrings.action_cancel),
     submitText: String = stringResource(CommonStrings.action_ok),
     enabled: Boolean = true,
-    applyPaddingToContents: Boolean = false,
+    applyPaddingToContents: Boolean = true,
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -119,7 +119,7 @@ internal fun ListDialogContentPreview() {
                 cancelText = "Cancel",
                 submitText = "Save",
                 enabled = true,
-                applyPaddingToContents = false,
+                applyPaddingToContents = true,
             )
         }
     }
