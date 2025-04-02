@@ -39,11 +39,7 @@ class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersM
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                kickUserAsyncAction = ConfirmingWithReason(""),
-            ),
-            aRoomMembersModerationState(
-                selectedRoomMember = anAlice(),
-                kickUserAsyncAction = ConfirmingWithReason("A reason"),
+                kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
@@ -51,11 +47,7 @@ class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersM
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                banUserAsyncAction = ConfirmingWithReason(""),
-            ),
-            aRoomMembersModerationState(
-                selectedRoomMember = anAlice(),
-                banUserAsyncAction = ConfirmingWithReason("A reason"),
+                banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
