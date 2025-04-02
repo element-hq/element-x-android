@@ -9,6 +9,7 @@
 
 package io.element.android.features.roomdetails.impl.edit
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +22,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -35,6 +38,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -64,6 +68,16 @@ fun RoomDetailsEditView(
         isAvatarActionsSheetVisible.value = true
     }
 
+    var showExitDialog by remember { mutableStateOf(false) }
+    fun goBack() {
+        if (state.saveButtonEnabled) {
+            showExitDialog = true
+        } else {
+            onBackClick()
+        }
+    }
+    BackHandler { goBack() }
+
     Scaffold(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
@@ -74,7 +88,7 @@ fun RoomDetailsEditView(
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
-                navigationIcon = { BackButton(onClick = onBackClick) },
+                navigationIcon = { BackButton(onClick = ::goBack) },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -155,6 +169,18 @@ fun RoomDetailsEditView(
     PermissionsView(
         state = state.cameraPermissionState,
     )
+
+    if (showExitDialog) {
+        SaveChangesDialog(
+            onSubmitClick = {
+                showExitDialog = false
+                onBackClick()
+            },
+            onDismiss = {
+                showExitDialog = false
+            },
+        )
+    }
 }
 
 @PreviewsDayNight
