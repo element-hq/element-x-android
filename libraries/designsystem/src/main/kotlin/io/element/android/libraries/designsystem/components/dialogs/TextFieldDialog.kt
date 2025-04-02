@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -44,7 +45,6 @@ fun TextFieldDialog(
     maxLines: Int = 1,
     content: String? = null,
     label: String? = null,
-    withBorder: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     submitText: String = stringResource(CommonStrings.action_ok),
 ) {
@@ -65,7 +65,6 @@ fun TextFieldDialog(
         onSubmit = { onSubmit(textFieldContents.text) },
         onDismissRequest = onDismissRequest,
         enabled = canSubmit,
-        applyPaddingToContents = content.isNullOrEmpty().not(),
         submitText = submitText,
         modifier = modifier,
     ) {
@@ -81,7 +80,6 @@ fun TextFieldDialog(
             TextFieldListItem(
                 placeholder = placeholder.orEmpty(),
                 label = label,
-                withBorder = withBorder,
                 text = textFieldContents,
                 onTextChange = {
                     error = if (!validation(it.text)) onValidationErrorMessage else null
@@ -95,7 +93,9 @@ fun TextFieldDialog(
                     }
                 }),
                 maxLines = maxLines,
-                modifier = Modifier.focusRequester(focusRequester),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
             )
             canRequestFocus = true
         }
@@ -122,22 +122,6 @@ internal fun TextFieldDialogPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun TextFieldDialogWithBorderPreview() = ElementPreview {
-    TextFieldDialog(
-        title = "Title",
-        content = "Some content",
-        onSubmit = {},
-        onDismissRequest = {},
-        value = "Value",
-        placeholder = "Placeholder",
-        label = "Label",
-        withBorder = true,
-        onValidationErrorMessage = "Error message",
-    )
-}
-
-@PreviewsDayNight
-@Composable
 internal fun TextFieldDialogWithErrorPreview() = ElementPreview {
     TextFieldDialog(
         title = "Title",
@@ -148,7 +132,6 @@ internal fun TextFieldDialogWithErrorPreview() = ElementPreview {
         value = "Value",
         placeholder = "Placeholder",
         label = "Label",
-        withBorder = true,
         onValidationErrorMessage = "Error message",
     )
 }

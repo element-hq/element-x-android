@@ -98,7 +98,6 @@ fun RoomMembersModerationView(
                     onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     label = stringResource(id = CommonStrings.common_reason),
-                    withBorder = true,
                     content = stringResource(R.string.screen_room_member_list_kick_member_confirmation_description),
                     value = "",
                 )
@@ -138,7 +137,6 @@ fun RoomMembersModerationView(
                     onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     label = stringResource(id = CommonStrings.common_reason),
-                    withBorder = true,
                     content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
                     value = "",
                 )

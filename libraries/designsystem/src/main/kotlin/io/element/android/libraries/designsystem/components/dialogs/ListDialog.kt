@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -38,7 +39,7 @@ fun ListDialog(
     cancelText: String = stringResource(CommonStrings.action_cancel),
     submitText: String = stringResource(CommonStrings.action_ok),
     enabled: Boolean = true,
-    applyPaddingToContents: Boolean = false,
+    applyPaddingToContents: Boolean = true,
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -92,7 +93,8 @@ private fun ListDialogContent(
         // No start padding if padding is already applied to the content
         val horizontalPadding = if (applyPaddingToContents) 0.dp else 8.dp
         LazyColumn(
-            modifier = Modifier.padding(horizontal = horizontalPadding)
+            modifier = Modifier.padding(horizontal = horizontalPadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) { listItems() }
     }
 }
@@ -117,7 +119,7 @@ internal fun ListDialogContentPreview() {
                 cancelText = "Cancel",
                 submitText = "Save",
                 enabled = true,
-                applyPaddingToContents = false,
+                applyPaddingToContents = true,
             )
         }
     }
