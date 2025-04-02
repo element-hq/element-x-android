@@ -42,10 +42,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import java.io.Closeable
 import java.util.Optional
 
-interface MatrixClient : Closeable {
+interface MatrixClient {
     val sessionId: SessionId
     val deviceId: DeviceId
     val userProfile: StateFlow<MatrixUser>

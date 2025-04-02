@@ -28,9 +28,10 @@ import java.io.File
 class RustMatrixClientTest {
     @Test
     fun `ensure that sessionId and deviceId can be retrieved from the client`() = runTest {
-        createRustMatrixClient().use { sut ->
-            assertThat(sut.sessionId).isEqualTo(A_USER_ID)
-            assertThat(sut.deviceId).isEqualTo(A_DEVICE_ID)
+        createRustMatrixClient().run {
+            assertThat(sessionId).isEqualTo(A_USER_ID)
+            assertThat(deviceId).isEqualTo(A_DEVICE_ID)
+            destroy()
         }
     }
 
@@ -38,16 +39,16 @@ class RustMatrixClientTest {
     fun `clear cache invokes the method clearCaches from the client and close it`() = runTest {
         val clearCachesResult = lambdaRecorder<Unit> { }
         val closeResult = lambdaRecorder<Unit> { }
-        createRustMatrixClient(
+        val client = createRustMatrixClient(
             client = FakeRustClient(
                 clearCachesResult = clearCachesResult,
                 closeResult = closeResult,
             )
-        ).use { sut ->
-            sut.clearCache()
-            clearCachesResult.assertions().isCalledOnce()
-            closeResult.assertions().isCalledOnce()
-        }
+        )
+        client.clearCache()
+        clearCachesResult.assertions().isCalledOnce()
+        closeResult.assertions().isCalledOnce()
+        client.destroy()
     }
 
     private fun TestScope.createRustMatrixClient(
