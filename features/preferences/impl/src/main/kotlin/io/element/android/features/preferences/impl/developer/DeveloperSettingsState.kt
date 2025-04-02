@@ -23,7 +23,7 @@ data class DeveloperSettingsState(
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val hideImagesAndVideos: Boolean,
     val tracingLogLevel: AsyncData<LogLevelItem>,
-    val tracingLogPacks: Set<TraceLogPack>,
+    val tracingLogPacks: ImmutableList<TraceLogPack>,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
 

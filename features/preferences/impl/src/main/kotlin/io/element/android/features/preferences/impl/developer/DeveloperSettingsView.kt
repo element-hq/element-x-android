@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
@@ -70,6 +72,12 @@ fun DeveloperSettingsView(
             )
         }
         PreferenceCategory(title = "Enable trace logs per SDK feature") {
+            Text(
+                text = "Requires app reboot",
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            )
             for (logPack in TraceLogPack.entries) {
                 PreferenceSwitch(
                     title = logPack.title,
