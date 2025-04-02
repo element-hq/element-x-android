@@ -36,6 +36,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -65,8 +66,7 @@ fun CreatePollView(
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showBackConfirmation) {
-        ConfirmationDialog(
-            content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
+        SaveChangesDialog(
             onSubmitClick = { state.eventSink(CreatePollEvents.NavBack) },
             onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
         )
