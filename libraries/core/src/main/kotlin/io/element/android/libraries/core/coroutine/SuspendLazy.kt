@@ -7,19 +7,15 @@
 
 package io.element.android.libraries.core.coroutine
 
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend () -> T): Lazy<Deferred<T>> {
     return lazy(LazyThreadSafetyMode.NONE) {
-        val deferred = CompletableDeferred<T>()
-        CoroutineScope(coroutineContext).launch {
-            deferred.complete(block())
-        }
-        deferred
+        CoroutineScope(coroutineContext).async(start = CoroutineStart.LAZY) { block() }
     }
 }
