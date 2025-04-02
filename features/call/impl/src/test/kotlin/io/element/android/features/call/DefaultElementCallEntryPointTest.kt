@@ -73,6 +73,5 @@ class DefaultElementCallEntryPointTest {
     ) = DefaultElementCallEntryPoint(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
         activeCallManager = activeCallManager,
-        coroutineScope = backgroundScope,
     )
 }

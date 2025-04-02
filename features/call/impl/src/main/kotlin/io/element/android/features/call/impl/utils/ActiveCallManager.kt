@@ -80,7 +80,7 @@ interface ActiveCallManager {
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultActiveCallManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext context: Context,
     private val coroutineScope: CoroutineScope,
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
@@ -91,18 +91,9 @@ class DefaultActiveCallManager @Inject constructor(
     private var timedOutCallJob: Job? = null
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val activeWakeLock: PowerManager.WakeLock? = run {
-        val powerManager = context.getSystemService<PowerManager>()
-
-        if (powerManager?.isWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK) == true) {
-            powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
-                "${context.packageName}:IncomingCallWakeLock",
-            )
-        } else {
-            null
-        }
-    }
+    internal val activeWakeLock: PowerManager.WakeLock? = context.getSystemService<PowerManager>()
+        ?.takeIf { it.isWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK) }
+        ?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "${context.packageName}:IncomingCallWakeLock")
 
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 

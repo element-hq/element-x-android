@@ -18,15 +18,12 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultElementCallEntryPoint @Inject constructor(
     @ApplicationContext private val context: Context,
     private val activeCallManager: ActiveCallManager,
-    private val coroutineScope: CoroutineScope,
 ) : ElementCallEntryPoint {
     companion object {
         const val EXTRA_CALL_TYPE = "EXTRA_CALL_TYPE"
@@ -37,7 +34,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
         context.startActivity(IntentProvider.createIntent(context, callType))
     }
 
-    override fun handleIncomingCall(
+    override suspend fun handleIncomingCall(
         callType: CallType.RoomCall,
         eventId: EventId,
         senderId: UserId,
@@ -60,8 +57,6 @@ class DefaultElementCallEntryPoint @Inject constructor(
             notificationChannelId = notificationChannelId,
             textContent = textContent,
         )
-        coroutineScope.launch {
-            activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
-        }
+        activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
     }
 }

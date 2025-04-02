@@ -30,7 +30,7 @@ class FakeElementCallEntryPoint(
         startCallResult(callType)
     }
 
-    override fun handleIncomingCall(
+    override suspend fun handleIncomingCall(
         callType: CallType.RoomCall,
         eventId: EventId,
         senderId: UserId,

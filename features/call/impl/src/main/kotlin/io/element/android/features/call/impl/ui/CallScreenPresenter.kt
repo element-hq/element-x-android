@@ -88,7 +88,7 @@ class CallScreenPresenter @AssistedInject constructor(
             coroutineScope.launch {
                 // Sets the call as joined
                 activeCallManager.joinedCall(callType)
-                getRoomCallUrl(
+                fetchRoomCallUrl(
                     inputs = callType,
                     urlState = urlState,
                     callWidgetDriver = callWidgetDriver,
@@ -188,7 +188,7 @@ class CallScreenPresenter @AssistedInject constructor(
         )
     }
 
-    private suspend fun getRoomCallUrl(
+    private suspend fun fetchRoomCallUrl(
         inputs: CallType,
         urlState: MutableState<AsyncData<String>>,
         callWidgetDriver: MutableState<MatrixWidgetDriver?>,

@@ -31,13 +31,13 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
     lateinit var activeCallManager: ActiveCallManager
 
     @Inject
-    lateinit var coroutineScope: CoroutineScope
+    lateinit var appCoroutineScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent?) {
         val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
             ?: return
         context.bindings<CallBindings>().inject(this)
-        coroutineScope.launch {
+        appCoroutineScope.launch {
             activeCallManager.hungUpCall(callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
         }
     }
