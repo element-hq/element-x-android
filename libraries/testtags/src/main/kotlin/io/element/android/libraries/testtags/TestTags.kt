@@ -98,6 +98,11 @@ object TestTags {
     val floatingActionButton = TestTag("floating-action-button")
 
     /**
+     * Timeline.
+     */
+    val timeline = TestTag("timeline")
+
+    /**
      * Timeline item.
      */
     val timelineItemSenderInfo = TestTag("timeline_item-sender_info")

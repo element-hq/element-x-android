@@ -23,6 +23,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.isDm
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -74,10 +75,11 @@ private suspend fun showLeaveRoomAlert(
     confirmation: MutableState<LeaveRoomState.Confirmation>,
 ) {
     matrixClient.getRoom(roomId)?.use { room ->
+        val roomInfo = room.roomInfoFlow.first()
         confirmation.value = when {
-            room.isDm -> Dm(roomId)
-            !room.isPublic -> PrivateRoom(roomId)
-            room.joinedMemberCount == 1L -> LastUserInRoom(roomId)
+            roomInfo.isDm -> Dm(roomId)
+            !roomInfo.isPublic -> PrivateRoom(roomId)
+            roomInfo.joinedMembersCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }
     }

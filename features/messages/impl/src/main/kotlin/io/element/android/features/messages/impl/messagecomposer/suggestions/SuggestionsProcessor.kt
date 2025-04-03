@@ -53,7 +53,11 @@ class SuggestionsProcessor @Inject constructor() {
             }
             SuggestionType.Room -> {
                 roomAliasSuggestions
-                    .filter { it.roomAlias.value.contains(suggestion.text, ignoreCase = true) }
+                    .filter { roomAliasSuggestion ->
+                        // Filter by either room alias or room name (if available)
+                        roomAliasSuggestion.roomAlias.value.contains(suggestion.text, ignoreCase = true) ||
+                            roomAliasSuggestion.roomName?.contains(suggestion.text, ignoreCase = true) == true
+                    }
                     .map {
                         ResolvedSuggestion.Alias(
                             roomAlias = it.roomAlias,

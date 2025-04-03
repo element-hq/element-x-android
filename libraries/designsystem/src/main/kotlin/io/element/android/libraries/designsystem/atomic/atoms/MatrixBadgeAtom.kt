@@ -14,6 +14,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.Badge
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.badgeInfoBackgroundColor
+import io.element.android.libraries.designsystem.theme.badgeInfoContentColor
 import io.element.android.libraries.designsystem.theme.badgeNegativeBackgroundColor
 import io.element.android.libraries.designsystem.theme.badgeNegativeContentColor
 import io.element.android.libraries.designsystem.theme.badgeNeutralBackgroundColor
@@ -31,7 +33,8 @@ object MatrixBadgeAtom {
     enum class Type {
         Positive,
         Neutral,
-        Negative
+        Negative,
+        Info,
     }
 
     @Composable
@@ -42,16 +45,19 @@ object MatrixBadgeAtom {
             Type.Positive -> ElementTheme.colors.badgePositiveBackgroundColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralBackgroundColor
             Type.Negative -> ElementTheme.colors.badgeNegativeBackgroundColor
+            Type.Info -> ElementTheme.colors.badgeInfoBackgroundColor
         }
         val textColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.badgePositiveContentColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralContentColor
             Type.Negative -> ElementTheme.colors.badgeNegativeContentColor
+            Type.Info -> ElementTheme.colors.badgeInfoContentColor
         }
         val iconColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.iconSuccessPrimary
             Type.Neutral -> ElementTheme.colors.iconSecondary
             Type.Negative -> ElementTheme.colors.iconCriticalPrimary
+            Type.Info -> ElementTheme.colors.iconInfoPrimary
         }
         Badge(
             text = data.text,
@@ -95,6 +101,18 @@ internal fun MatrixBadgeAtomNegativePreview() = ElementPreview {
             text = "Not trusted",
             icon = CompoundIcons.ErrorSolid(),
             type = MatrixBadgeAtom.Type.Negative,
+        )
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MatrixBadgeAtomInfoPreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
+            text = "Not encrypted",
+            icon = CompoundIcons.LockOff(),
+            type = MatrixBadgeAtom.Type.Info,
         )
     )
 }

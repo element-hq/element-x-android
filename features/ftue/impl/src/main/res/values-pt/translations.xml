@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Não é possível confirmar?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Criar uma nova chave de recuperação"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifica este dispositivo para configurar o envio seguro de mensagens."</string>
+  <string name="screen_identity_confirmation_title">"Confirma que és tu"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Utilizar outro dispositivo"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Utilizar chave de recuperação"</string>
+  <string name="screen_identity_confirmed_subtitle">"Agora podes ler ou enviar mensagens de forma segura, e qualquer pessoa com quem converses também pode confiar neste dispositivo."</string>
+  <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
+  <string name="screen_identity_use_another_device">"Utilizar outro dispositivo"</string>
+  <string name="screen_identity_waiting_on_other_device">"A aguardar por outros dispositivos…"</string>
   <string name="screen_notification_optin_subtitle">"Podes alterar as tuas definições mais tarde."</string>
   <string name="screen_notification_optin_title">"Permite as notificações e nunca percas uma mensagem"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
   <string name="screen_welcome_bullet_1">"Chamadas, sondagens, pesquisa e mais funcionalidades vão ser adicionadas ao longo do ano."</string>
   <string name="screen_welcome_bullet_2">"O histórico de mensagens em salas cifradas ainda não está disponível."</string>
   <string name="screen_welcome_bullet_3">"Gostaríamos de ouvir a tua opinião, diz-nos o que pensas através da página de configurações."</string>

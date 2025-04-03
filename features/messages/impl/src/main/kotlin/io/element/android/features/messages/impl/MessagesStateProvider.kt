@@ -11,8 +11,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
-import io.element.android.features.messages.impl.crypto.identity.RoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
+import io.element.android.features.messages.impl.link.LinkState
+import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -40,9 +41,9 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -82,6 +83,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     currentPinnedMessageIndex = 0,
                 ),
             ),
+            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.Verified),
+            aMessagesState(roomName = AsyncData.Success("A DM with a very looong name"), dmUserVerificationState = IdentityState.VerificationViolation),
         )
 }
 
@@ -94,7 +97,6 @@ fun aMessagesState(
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
-    roomMemberIdentityStateChanges: ImmutableList<RoomMemberIdentityStateChange> = persistentListOf(),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState: TimelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
@@ -103,6 +105,7 @@ fun aMessagesState(
     ),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     identityChangeState: IdentityChangeState = anIdentityChangeState(),
+    linkState: LinkState = aLinkState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
@@ -112,6 +115,7 @@ fun aMessagesState(
     enableVoiceMessages: Boolean = true,
     roomCallState: RoomCallState = aStandByCallState(),
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
+    dmUserVerificationState: IdentityState? = null,
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     isDebugBuild = false,
@@ -121,10 +125,10 @@ fun aMessagesState(
     heroes = persistentListOf(),
     userEventPermissions = userEventPermissions,
     composerState = composerState,
-    roomMemberIdentityStateChanges = roomMemberIdentityStateChanges,
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,
+    linkState = linkState,
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,
@@ -139,6 +143,7 @@ fun aMessagesState(
     roomCallState = roomCallState,
     appName = "Tchap",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
+    dmUserVerificationState = dmUserVerificationState,
     eventSink = eventSink,
 )
 

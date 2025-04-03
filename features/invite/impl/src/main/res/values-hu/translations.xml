@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
   <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Igen, elutasítás és blokkolás"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez a szobához? Ez azt is megakadályozza, hogy %1$s kapcsolatba lépjen Önnel, vagy szobákba hívja."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Meghívó elutasítása és blokkolás"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Elutasítás és blokkolás"</string>
 </resources>

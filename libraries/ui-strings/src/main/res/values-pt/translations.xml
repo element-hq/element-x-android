@@ -145,7 +145,9 @@
   <string name="common_copied_to_clipboard">"Copiado para a área de transferência"</string>
   <string name="common_copyright">"Direitos de autor"</string>
   <string name="common_creating_room">"A criar sala…"</string>
+  <string name="common_current_user_canceled_knock">"Pedido cancelado"</string>
   <string name="common_current_user_left_room">"Saíste da sala"</string>
+  <string name="common_current_user_rejected_invite">"Convite recusado"</string>
   <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de decifragem"</string>
   <string name="common_developer_options">"Opções de programador"</string>
@@ -158,6 +160,7 @@
   <string name="common_editing">"A editar"</string>
   <string name="common_editing_caption">"A editar legenda"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Ficheiro vazio"</string>
   <string name="common_encryption">"Cifragem"</string>
   <string name="common_encryption_enabled">"Cifragem ativada"</string>
   <string name="common_enter_your_pin">"Introduz o teu PIN"</string>
@@ -182,6 +185,7 @@ Razão: %1$s."</string>
   <string name="common_invite_unknown_profile">"Não foi possível encontrar este ID Matrix, portanto o convite pode não ser recebido."</string>
   <string name="common_leaving_room">"A sair da sala"</string>
   <string name="common_light">"Claro"</string>
+  <string name="common_line_copied_to_clipboard">"Linha copiada para a área de transferência"</string>
   <string name="common_link_copied_to_clipboard">"Ligação copiada para a área de transferência"</string>
   <string name="common_loading">"A carregar…"</string>
   <string name="common_loading_more">"A carregar mais…"</string>
@@ -259,7 +263,7 @@ Razão: %1$s."</string>
   <string name="common_unable_to_decrypt">"Impossível decifrar"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Enviado de um dispositivo inseguro"</string>
   <string name="common_unable_to_decrypt_no_access">"Não tens acesso a esta mensagem"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"A identidade verificada do remetente foi alterada"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"A identidade verificada do remetente foi reposta"</string>
   <string name="common_unable_to_invite_message">"Não foi possível enviar convites a um ou mais utilizadores."</string>
   <string name="common_unable_to_invite_title">"Não foi possível enviar convite(s)"</string>
   <string name="common_unlock">"Desbloquear"</string>
@@ -279,12 +283,16 @@ Razão: %1$s."</string>
   <string name="common_waiting">"A aguardar…"</string>
   <string name="common_waiting_for_decryption_key">"À espera desta mensagem"</string>
   <string name="common_you">"Tu"</string>
-  <string name="crypto_identity_change_pin_violation">"A identidade de %1$s parece ter mudado. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s (username: %2$s ) aparenta ter mudado. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"A identidade de %1$s foi reposta. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s (%2$s) foi reposta. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"A identidade verificada de %1$s foi alterada."</string>
-  <string name="crypto_identity_change_verification_violation_new">"A identidade verificada de %1$s %2$s foi alterada. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"A identidade de %1$s foi reposta."</string>
+  <string name="crypto_identity_change_verification_violation_new">"A identidade de %1$s (%2$s) foi reposta. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Retirar verificação"</string>
+  <string name="dialog_confirm_link_message">"O link %1$s está a levar-te para outro site %2$s
+
+Tens a certeza de que queres continuar?"</string>
+  <string name="dialog_confirm_link_title">"Verifica novamente esta ligação"</string>
   <string name="dialog_title_confirmation">"Confirmação"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
@@ -331,7 +339,7 @@ Razão: %1$s."</string>
   <string name="screen_reset_identity_confirmation_title">"Não consegue confirmar? Aceda à sua conta para repor a sua identidade."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Retirar verificação e enviar"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Podes retirar a tua verificação e enviar esta mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde depois de reverificares %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"A sua mensagem não foi enviada porque a identidade verificada de %1$s foi alterada"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"A tua mensagem não foi enviada porque a identidade verificada de %1$s foi reposta"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Enviar mensagem mesmo assim"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s está a utilizar um ou mais dispositivos não verificados. Podes enviar a mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde, depois de %2$s ter verificado todos os seus dispositivos."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"A sua mensagem não foi enviada porque %1$s não verificou todos os dispositivos"</string>
@@ -339,6 +347,7 @@ Razão: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"A sua mensagem não foi enviada porque não verificou um ou mais dos seus dispositivos"</string>
   <string name="screen_room_error_failed_processing_media">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Não foi possível obter os detalhes de utilizador."</string>
+  <string name="screen_room_event_pill">"Mensagem em %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s mensagens afixadas"</string>
   <string name="screen_room_pinned_banner_loading_description">"A carregar mensagem…"</string>
@@ -351,7 +360,7 @@ Razão: %1$s."</string>
   <string name="screen_share_open_google_maps">"Abrir no Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir no OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partilhar este local"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensagem não enviada porque a identidade verificada de %1$s foi alterada."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensagem não enviada porque a identidade verificada de %1$s foi reposta."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mensagem não enviada porque %1$s não verificou todos os dispositivos."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mensagem não enviada porque não verificou um ou mais dos seus dispositivos."</string>
   <string name="screen_view_location_title">"Localização"</string>

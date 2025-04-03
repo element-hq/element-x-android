@@ -24,6 +24,7 @@ class UserProfileNodeHelper(
         fun openAvatarPreview(username: String, avatarUrl: String)
         fun onStartDM(roomId: RoomId)
         fun onStartCall(dmRoomId: RoomId)
+        fun onVerifyUser(userId: UserId)
     }
 
     fun onShareUser(

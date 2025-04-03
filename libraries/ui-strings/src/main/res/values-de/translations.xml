@@ -145,7 +145,9 @@
   <string name="common_copied_to_clipboard">"In die Zwischenablage kopiert"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Raum wird erstellt…"</string>
+  <string name="common_current_user_canceled_knock">"Anfrage storniert"</string>
   <string name="common_current_user_left_room">"Hat den Raum verlassen"</string>
+  <string name="common_current_user_rejected_invite">"Einladung abgelehnt"</string>
   <string name="common_dark">"Dunkel"</string>
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
@@ -158,6 +160,7 @@
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_editing_caption">"Bearbeitung der Bildunterschrift"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Leere Datei"</string>
   <string name="common_encryption">"Verschlüsselung"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
   <string name="common_enter_your_pin">"PIN eingeben"</string>
@@ -182,6 +185,7 @@ Grund: %1$s."</string>
   <string name="common_invite_unknown_profile">"Diese Matrix-ID kann nicht gefunden werden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_light">"Hell"</string>
+  <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
@@ -285,6 +289,10 @@ Grund: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Die verifizierte Identität von %1$s hat sich geändert."</string>
   <string name="crypto_identity_change_verification_violation_new">"Die verifizierte Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Verifizierung zurückziehen"</string>
+  <string name="dialog_confirm_link_message">"Der Link%1$s führt Sie zu einer anderen Seite%2$s. 
+
+Möchten Sie wirklich fortfahren?"</string>
+  <string name="dialog_confirm_link_title">"Überprüfen Sie diesen Link noch einmal"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
@@ -339,6 +347,7 @@ Grund: %1$s."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ihre Nachricht wurde nicht geschickt, da Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben."</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
+  <string name="screen_room_event_pill">"Nachricht in %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s fixierte Nachrichten"</string>
   <string name="screen_room_pinned_banner_loading_description">"Nachricht wird geladen…"</string>

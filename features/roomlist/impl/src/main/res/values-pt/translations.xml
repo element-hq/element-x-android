@@ -40,7 +40,6 @@ Não tens nenhuma mensagem por ler!"</string>
   <string name="screen_roomlist_main_space_title">"Conversas"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como lida"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lida"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Consultar lista completa de salas"</string>
   <string name="session_verification_banner_message">"Parece que estás a utilizar um novo dispositivo. Verifica-o com um outro para poderes aceder às tuas mensagens cifradas."</string>
   <string name="session_verification_banner_title">"Verifica que és tu"</string>
 </resources>

@@ -133,7 +133,7 @@ class SuggestionsProcessorTest {
     }
 
     @Test
-    fun `processing Room suggestion with aliases will return a suggestion`() = runTest {
+    fun `processing Room suggestion with aliases will return a suggestion when matching on alias`() = runTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ali"),
@@ -171,7 +171,56 @@ class SuggestionsProcessorTest {
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
                     roomId = aRoomSummary.roomId,
-                    roomName = aRoomSummary.info.name,
+                    roomName = "Element",
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
+            currentUserId = A_USER_ID,
+            canSendRoomMention = { true },
+        )
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `processing Room suggestion will return a suggestion when matching on room name`() = runTest {
+        val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
+        val result = suggestionsProcessor.process(
+            suggestion = aRoomSuggestion("lement"),
+            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = "Element",
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
+            currentUserId = A_USER_ID,
+            canSendRoomMention = { true },
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Alias(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = "Element",
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `processing Room suggestion will not return a suggestion when room has no name`() = runTest {
+        val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
+        val result = suggestionsProcessor.process(
+            suggestion = aRoomSuggestion("lement"),
+            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = null,
                     roomAvatarUrl = aRoomSummary.info.avatarUrl,
                 )
             ),

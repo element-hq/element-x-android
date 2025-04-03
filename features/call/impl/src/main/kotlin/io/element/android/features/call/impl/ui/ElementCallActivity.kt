@@ -48,6 +48,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
@@ -64,6 +65,7 @@ class ElementCallActivity :
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var enterpriseService: EnterpriseService
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
+    @Inject lateinit var buildMeta: BuildMeta
 
     private lateinit var presenter: Presenter<CallScreenState>
 
@@ -114,6 +116,7 @@ class ElementCallActivity :
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
                 enterpriseService = enterpriseService,
+                buildMeta = buildMeta,
             ) {
                 val state = presenter.present()
                 eventSink = state.eventSink

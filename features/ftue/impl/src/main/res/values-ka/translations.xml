@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"ახალი აღდგენის გასაღების შექმნა"</string>
+  <string name="screen_identity_confirmation_subtitle">"დაადასტურეთ ეს მოწყობილობა უსაფრთხო მიმოწერისათვის."</string>
+  <string name="screen_identity_confirmation_title">"დაამტკიცეთ თქვენი პიროვნება"</string>
+  <string name="screen_identity_confirmed_subtitle">"ახლა თქვენ შეძლებთ შეტყობინებების წაკითხვას ან გაგზავნას უსაფრთხოდ, სხვა მომხმარებლებსაც შეუძლიათ ამ მოწყობილობას ენდონ."</string>
+  <string name="screen_identity_confirmed_title">"მოწყობილობა დადასტურებულია"</string>
+  <string name="screen_identity_waiting_on_other_device">"ველოდებით სხვა მოწყობილობას…"</string>
   <string name="screen_notification_optin_subtitle">"თქვენ შეგიძლიათ შეცვალოთ თქვენი პარამეტრები მოგვიანებით."</string>
   <string name="screen_notification_optin_title">"ყველა შეტყობინებაზე შეტყობინებების მიღება"</string>
+  <string name="screen_session_verification_enter_recovery_key">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_welcome_bullet_1">"ზარები, გამოკითხვები, ძიება და სხვა დაემატება ამ წლის ბოლოს."</string>
   <string name="screen_welcome_bullet_2">"დაშიფრული ოთახებისთვის შეტყობინებების ისტორია ჯერ არ არის ხელმისაწვდომი."</string>
   <string name="screen_welcome_bullet_3">"ჩვენ სიამოვნებით მოვისმინოთ თქვენგან, შეგვატყობინეთ რას ფიქრობთ პარამეტრების გვერდზე."</string>

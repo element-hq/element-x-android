@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.verification
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -31,7 +32,12 @@ interface SessionVerificationService {
     /**
      * Request verification of the current session.
      */
-    suspend fun requestVerification()
+    suspend fun requestCurrentSessionVerification()
+
+    /**
+     * Request verification of the user with the given [userId].
+     */
+    suspend fun requestUserVerification(userId: UserId)
 
     /**
      * Cancels the current verification attempt.
@@ -67,7 +73,7 @@ interface SessionVerificationService {
      * Set this particular request as the currently active one and register for
      * events pertaining it.
      */
-    suspend fun acknowledgeVerificationRequest(details: SessionVerificationRequestDetails)
+    suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming)
 
     /**
      * Accept the previously acknowledged verification request.
@@ -76,7 +82,7 @@ interface SessionVerificationService {
 }
 
 interface SessionVerificationServiceListener {
-    fun onIncomingSessionRequest(sessionVerificationRequestDetails: SessionVerificationRequestDetails)
+    fun onIncomingSessionRequest(verificationRequest: VerificationRequest.Incoming)
 }
 
 /** Verification status of the current session. */

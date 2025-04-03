@@ -10,10 +10,12 @@
 package io.element.android.features.verifysession.impl.incoming
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -22,20 +24,24 @@ import io.element.android.features.verifysession.impl.incoming.IncomingVerificat
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationStateMachine.State as StateMachineState
 
 class IncomingVerificationPresenter @AssistedInject constructor(
-    @Assisted private val sessionVerificationRequestDetails: SessionVerificationRequestDetails,
+    @Assisted private val verificationRequest: VerificationRequest.Incoming,
     @Assisted private val navigator: IncomingVerificationNavigator,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val sessionVerificationService: SessionVerificationService,
     private val stateMachine: IncomingVerificationStateMachine,
     private val dateFormatter: DateFormatter,
@@ -43,47 +49,61 @@ class IncomingVerificationPresenter @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            sessionVerificationRequestDetails: SessionVerificationRequestDetails,
+            verificationRequest: VerificationRequest.Incoming,
             navigator: IncomingVerificationNavigator,
         ): IncomingVerificationPresenter
     }
 
     @Composable
     override fun present(): IncomingVerificationState {
-        LaunchedEffect(Unit) {
-            // Force reset, just in case the service was left in a broken state
-            sessionVerificationService.reset(
-                cancelAnyPendingVerificationAttempt = false
-            )
-            // Acknowledge the request right now
-            sessionVerificationService.acknowledgeVerificationRequest(sessionVerificationRequestDetails)
-        }
+        val coroutineScope = rememberCoroutineScope()
+
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
+
+        DisposableEffect(Unit) {
+            coroutineScope.launch {
+                // Force reset, just in case the service was left in a broken state
+                sessionVerificationService.reset(
+                    cancelAnyPendingVerificationAttempt = false
+                )
+
+                // Start this after observing state machine
+                observeVerificationService()
+
+                // Acknowledge the request right now
+                sessionVerificationService.acknowledgeVerificationRequest(verificationRequest)
+            }
+
+            onDispose {
+                sessionCoroutineScope.launch {
+                    val currentState = stateAndDispatch.state.value
+                    sessionVerificationService.reset(
+                        cancelAnyPendingVerificationAttempt = currentState?.isPending() == true,
+                    )
+                }
+            }
+        }
+
         val formattedSignInTime = remember {
             dateFormatter.format(
-                timestamp = sessionVerificationRequestDetails.firstSeenTimestamp,
+                timestamp = verificationRequest.details.firstSeenTimestamp,
                 mode = DateFormatterMode.TimeOrDate,
             )
         }
         val step by remember {
             derivedStateOf {
                 stateAndDispatch.state.value.toVerificationStep(
-                    sessionVerificationRequestDetails = sessionVerificationRequestDetails,
+                    sessionVerificationRequestDetails = verificationRequest.details,
                     formattedSignInTime = formattedSignInTime,
                 )
             }
         }
 
         LaunchedEffect(stateAndDispatch.state.value) {
-            if ((stateAndDispatch.state.value as? IncomingVerificationStateMachine.State.Initial)?.isCancelled == true) {
+            if ((stateAndDispatch.state.value as? StateMachineState.Initial)?.isCancelled == true) {
                 // The verification was canceled before it was started, maybe because another session accepted it
                 navigator.onFinish()
             }
-        }
-
-        // Start this after observing state machine
-        LaunchedEffect(Unit) {
-            observeVerificationService()
         }
 
         fun handleEvents(event: IncomingVerificationViewEvents) {
@@ -119,6 +139,7 @@ class IncomingVerificationPresenter @AssistedInject constructor(
 
         return IncomingVerificationState(
             step = step,
+            request = verificationRequest,
             eventSink = ::handleEvents,
         )
     }
@@ -129,36 +150,36 @@ class IncomingVerificationPresenter @AssistedInject constructor(
     ): Step =
         when (val machineState = this) {
             is StateMachineState.Initial,
-            IncomingVerificationStateMachine.State.AcceptingIncomingVerification,
-            IncomingVerificationStateMachine.State.RejectingIncomingVerification,
+            StateMachineState.AcceptingIncomingVerification,
+            StateMachineState.RejectingIncomingVerification,
             null -> {
                 Step.Initial(
-                    deviceDisplayName = sessionVerificationRequestDetails.displayName ?: sessionVerificationRequestDetails.deviceId.value,
+                    deviceDisplayName = sessionVerificationRequestDetails.senderProfile.displayName ?: sessionVerificationRequestDetails.deviceId.value,
                     deviceId = sessionVerificationRequestDetails.deviceId,
                     formattedSignInTime = formattedSignInTime,
-                    isWaiting = machineState == IncomingVerificationStateMachine.State.AcceptingIncomingVerification ||
-                        machineState == IncomingVerificationStateMachine.State.RejectingIncomingVerification,
+                    isWaiting = machineState == StateMachineState.AcceptingIncomingVerification ||
+                        machineState == StateMachineState.RejectingIncomingVerification,
                 )
             }
-            is IncomingVerificationStateMachine.State.ChallengeReceived ->
+            is StateMachineState.ChallengeReceived ->
                 Step.Verifying(
                     data = machineState.data,
                     isWaiting = false,
                 )
-            IncomingVerificationStateMachine.State.Completed -> Step.Completed
-            IncomingVerificationStateMachine.State.Canceling,
-            IncomingVerificationStateMachine.State.Failure -> Step.Failure
-            is IncomingVerificationStateMachine.State.AcceptingChallenge ->
+            StateMachineState.Completed -> Step.Completed
+            StateMachineState.Canceling,
+            StateMachineState.Failure -> Step.Failure
+            is StateMachineState.AcceptingChallenge ->
                 Step.Verifying(
                     data = machineState.data,
                     isWaiting = true,
                 )
-            is IncomingVerificationStateMachine.State.RejectingChallenge ->
+            is StateMachineState.RejectingChallenge ->
                 Step.Verifying(
                     data = machineState.data,
                     isWaiting = true,
                 )
-            IncomingVerificationStateMachine.State.Canceled -> Step.Canceled
+            StateMachineState.Canceled -> Step.Canceled
         }
 
     private fun CoroutineScope.observeVerificationService() {
@@ -170,10 +191,10 @@ class IncomingVerificationPresenter @AssistedInject constructor(
                     VerificationFlowState.DidAcceptVerificationRequest,
                     VerificationFlowState.DidStartSasVerification -> Unit
                     is VerificationFlowState.DidReceiveVerificationData -> {
-                        stateMachine.dispatch(IncomingVerificationStateMachine.Event.DidReceiveChallenge(verificationAttemptState.data))
+                        stateMachine.dispatch(StateMachineEvent.DidReceiveChallenge(verificationAttemptState.data))
                     }
                     VerificationFlowState.DidFinish -> {
-                        stateMachine.dispatch(IncomingVerificationStateMachine.Event.DidAcceptChallenge)
+                        stateMachine.dispatch(StateMachineEvent.DidAcceptChallenge)
                     }
                     VerificationFlowState.DidCancel -> {
                         // Can happen when:
@@ -181,10 +202,10 @@ class IncomingVerificationPresenter @AssistedInject constructor(
                         // - another session has accepted the incoming verification request
                         // - the user reject the challenge from this application (I think this is an error). In this case, the state
                         // machine will ignore this event and change state to Failure.
-                        stateMachine.dispatch(IncomingVerificationStateMachine.Event.DidCancel)
+                        stateMachine.dispatch(StateMachineEvent.DidCancel)
                     }
                     VerificationFlowState.DidFail -> {
-                        stateMachine.dispatch(IncomingVerificationStateMachine.Event.DidFail)
+                        stateMachine.dispatch(StateMachineEvent.DidFail)
                     }
                 }
             }

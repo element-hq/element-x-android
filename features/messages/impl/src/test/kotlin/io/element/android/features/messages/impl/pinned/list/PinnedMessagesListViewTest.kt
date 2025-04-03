@@ -29,6 +29,7 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.setSafeContent
+import io.element.android.wysiwyg.link.Link
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -99,7 +100,8 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onEventClick: (event: TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
-    onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         PinnedMessagesListView(
@@ -108,6 +110,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
             onEventClick = onEventClick,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
         )
     }
 }

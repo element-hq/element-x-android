@@ -156,3 +156,24 @@ fun aVoiceMediaInfo(
     waveform = waveForm,
     duration = duration,
 )
+
+fun aTxtMediaInfo(
+    filename: String = "a text file.txt",
+    caption: String? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+    dateSentFull: String? = null,
+): MediaInfo = MediaInfo(
+    filename = filename,
+    caption = caption,
+    mimeType = MimeTypes.PlainText,
+    formattedFileSize = "2kB",
+    fileExtension = "txt",
+    senderId = UserId("@alice:server.org"),
+    senderName = senderName,
+    senderAvatar = null,
+    dateSent = dateSent,
+    dateSentFull = dateSentFull,
+    waveform = null,
+    duration = null,
+)

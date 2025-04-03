@@ -17,6 +17,7 @@ import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
+import uniffi.matrix_sdk_base.EncryptionState
 
 fun aRustRoomInfo(
     id: String = A_ROOM_ID.value,
@@ -24,6 +25,7 @@ fun aRustRoomInfo(
     rawName: String? = A_ROOM_NAME,
     topic: String? = null,
     avatarUrl: String? = null,
+    encryptionState: EncryptionState = EncryptionState.UNKNOWN,
     isDirect: Boolean = false,
     isPublic: Boolean = false,
     isSpace: Boolean = false,
@@ -57,6 +59,7 @@ fun aRustRoomInfo(
     rawName = rawName,
     topic = topic,
     avatarUrl = avatarUrl,
+    encryptionState = encryptionState,
     isDirect = isDirect,
     isPublic = isPublic,
     isSpace = isSpace,

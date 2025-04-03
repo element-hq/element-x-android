@@ -36,6 +36,7 @@ class DefaultFirebaseNewTokenHandler @Inject constructor(
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixClientProvider: MatrixClientProvider,
     private val firebaseStore: FirebaseStore,
+    private val firebaseGatewayProvider: FirebaseGatewayProvider,
 ) : FirebaseNewTokenHandler {
     override suspend fun handle(firebaseToken: String) {
         firebaseStore.storeFcmToken(firebaseToken)
@@ -55,7 +56,7 @@ class DefaultFirebaseNewTokenHandler @Inject constructor(
                                 .registerPusher(
                                     matrixClient = client,
                                     pushKey = firebaseToken,
-                                    gateway = FirebaseConfig.PUSHER_HTTP_URL,
+                                    gateway = firebaseGatewayProvider.getFirebaseGateway(),
                                 )
                                 .onFailure {
                                     Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $sessionId")

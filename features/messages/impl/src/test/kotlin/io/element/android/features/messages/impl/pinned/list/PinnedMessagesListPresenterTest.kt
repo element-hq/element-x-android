@@ -12,6 +12,7 @@ import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
+import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
@@ -315,6 +316,7 @@ class PinnedMessagesListPresenterTest {
             timelineProtectionPresenter = { aTimelineProtectionState() },
             snackbarDispatcher = SnackbarDispatcher(),
             actionListPresenter = { anActionListState() },
+            linkPresenter = { aLinkState() },
             analyticsService = analyticsService,
             appCoroutineScope = this,
         )

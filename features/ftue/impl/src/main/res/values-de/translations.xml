@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Sie können es nicht bestätigen?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
+  <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Ein anderes Gerät verwenden"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Wiederherstellungsschlüssel verwenden"</string>
+  <string name="screen_identity_confirmed_subtitle">"Du kannst nun verschlüsselte Nachrichten lesen oder versenden."</string>
+  <string name="screen_identity_confirmed_title">"Gerät verifiziert"</string>
+  <string name="screen_identity_use_another_device">"Ein anderes Gerät verwenden"</string>
+  <string name="screen_identity_waiting_on_other_device">"Bitte warten bis das andere Gerät bereit ist."</string>
   <string name="screen_notification_optin_subtitle">"Du kannst deine Einstellungen später ändern."</string>
   <string name="screen_notification_optin_title">"Erlaube Benachrichtigungen und verpasse keine Nachricht"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_welcome_bullet_1">"Anrufe, Umfragen, Suchfunktionen und mehr werden im Laufe des Jahres hinzugefügt."</string>
   <string name="screen_welcome_bullet_2">"Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein."</string>
   <string name="screen_welcome_bullet_3">"Wir würden uns freuen, von dir zu hören. Teile uns deine Meinung über die Einstellungsseite mit."</string>

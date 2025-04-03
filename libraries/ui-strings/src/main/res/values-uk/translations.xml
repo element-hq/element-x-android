@@ -147,7 +147,9 @@
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
   <string name="common_creating_room">"Створення кімнати…"</string>
+  <string name="common_current_user_canceled_knock">"Запит скасовано"</string>
   <string name="common_current_user_left_room">"Виходить з кімнати"</string>
+  <string name="common_current_user_rejected_invite">"Запрошення відхилено"</string>
   <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифрування"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>
@@ -286,8 +288,13 @@
   <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s, схоже, змінилася. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s схоже, змінилася. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Верифікована ідентичність %1$s змінилася."</string>
   <string name="crypto_identity_change_verification_violation_new">"Верифіковано особистість %1$s %2$s змінилася. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Відкликати верифікацію"</string>
+  <string name="dialog_confirm_link_message">"Посилання %1$s спрямовує вас на інший сайт %2$s
+
+Ви впевнені, що хочете продовжити?"</string>
+  <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>
@@ -343,6 +350,7 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
+  <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
   <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>

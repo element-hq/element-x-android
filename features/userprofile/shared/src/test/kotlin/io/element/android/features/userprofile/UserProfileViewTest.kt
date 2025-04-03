@@ -15,13 +15,16 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.R
 import io.element.android.features.userprofile.shared.UserProfileView
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -193,6 +196,17 @@ class UserProfileViewTest {
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
     }
+
+    @Test
+    fun `on verify user clicked - the right callback is called`() = runTest {
+        ensureCalledOnceWithParam(A_USER_ID) { callback ->
+            rule.setUserProfileView(
+                state = aUserProfileState(userId = A_USER_ID, verificationState = UserProfileVerificationState.UNVERIFIED),
+                onVerifyClick = callback,
+            )
+            rule.clickOn(CommonStrings.common_verify_user)
+        }
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserProfileView(
@@ -202,6 +216,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserP
     onShareUser: () -> Unit = EnsureNeverCalled(),
     onDmStarted: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onStartCall: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onVerifyClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     goBack: () -> Unit = EnsureNeverCalled(),
     openAvatarPreview: (String, String) -> Unit = EnsureNeverCalledWithTwoParams(),
 ) {
@@ -213,6 +228,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserP
             onStartCall = onStartCall,
             goBack = goBack,
             openAvatarPreview = openAvatarPreview,
+            onVerifyClick = onVerifyClick,
         )
     }
 }

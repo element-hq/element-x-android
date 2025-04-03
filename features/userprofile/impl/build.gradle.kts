@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediaviewer.api)
     implementation(projects.features.call.api)
+    implementation(projects.features.verifysession.api)
     api(projects.features.userprofile.api)
     api(projects.features.userprofile.shared)
     implementation(libs.coil.compose)

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.test.room
 
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -66,19 +67,9 @@ import java.io.File
 class FakeMatrixRoom(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
-    override val displayName: String = "",
-    override val topic: String? = null,
-    override val avatarUrl: String? = null,
-    override var isEncrypted: Boolean = false,
-    override val canonicalAlias: RoomAlias? = null,
-    override val alternativeAliases: List<RoomAlias> = emptyList(),
-    override val isPublic: Boolean = true,
-    override val isSpace: Boolean = false,
-    override val isDirect: Boolean = false,
-    override val joinedMemberCount: Long = 123L,
-    override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     override val liveTimeline: Timeline = FakeTimeline(),
+    initialRoomInfo: MatrixRoomInfo = aRoomInfo(),
     override val roomCoroutineScope: CoroutineScope = TestScope(),
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
@@ -156,8 +147,8 @@ class FakeMatrixRoom(
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
 ) : MatrixRoom {
-    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
-    override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
+    private val _roomInfoFlow: MutableStateFlow<MatrixRoomInfo> = MutableStateFlow(initialRoomInfo)
+    override val roomInfoFlow: StateFlow<MatrixRoomInfo> = _roomInfoFlow
 
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
@@ -200,14 +191,14 @@ class FakeMatrixRoom(
     }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
-        val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
+        val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, info().isEncrypted.orFalse(), isOneToOne).getOrThrow()
         roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(notificationSettings)
         return Result.success(Unit)
     }
 
     override suspend fun enableEncryption(): Result<Unit> = simulateLongTask {
         enableEncryptionResult().onSuccess {
-            isEncrypted = true
+            givenRoomInfo(info().copy(isEncrypted = true))
             emitSyncUpdate()
         }
     }
@@ -614,6 +605,10 @@ class FakeMatrixRoom(
 
     override suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit> = simulateLongTask {
         updateJoinRuleResult(joinRule)
+    }
+
+    override suspend fun getUpdatedIsEncrypted(): Result<Boolean> = simulateLongTask {
+        Result.success(info().isEncrypted.orFalse())
     }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {

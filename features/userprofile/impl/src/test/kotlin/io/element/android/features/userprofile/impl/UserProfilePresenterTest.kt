@@ -18,6 +18,7 @@ import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -25,6 +26,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -71,7 +73,7 @@ class UserProfilePresenterTest {
             assertThat(initialState.userName).isEqualTo(matrixUser.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(matrixUser.avatarUrl)
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(false))
-            assertThat(initialState.isVerified.dataOrNull()).isFalse()
+            assertThat(initialState.verificationState).isEqualTo(UserProfileVerificationState.UNKNOWN)
             assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.canCall).isFalse()
         }
@@ -363,36 +365,25 @@ class UserProfilePresenterTest {
         }
     }
 
-    @Test
-    fun `present - when user is verified, the value in the state is true`() = runTest {
-        val client = createFakeMatrixClient(isUserVerified = true)
-        val presenter = createUserProfilePresenter(
-            client = client,
-        )
-        presenter.test {
-            assertThat(awaitItem().isVerified.isUninitialized()).isTrue()
-            assertThat(awaitItem().isVerified.isLoading()).isTrue()
-            assertThat(awaitItem().isVerified.dataOrNull()).isTrue()
-        }
-    }
-
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(2)
+        skipItems(1)
         return awaitItem()
     }
 
     private fun createFakeMatrixClient(
-        isUserVerified: Boolean = false,
+        isUserVerified: Boolean = true,
+        userIdentityState: IdentityState? = null,
         ignoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
     ) = FakeMatrixClient(
         encryptionService = FakeEncryptionService(
-            isUserVerifiedResult = { Result.success(isUserVerified) }
+            isUserVerifiedResult = { Result.success(isUserVerified) },
+            getUserIdentityResult = { Result.success(userIdentityState) }
         ),
         ignoreUserResult = ignoreUserResult,
         unIgnoreUserResult = unIgnoreUserResult,
-        ignoredUsersFlow = ignoredUsersFlow
+        ignoredUsersFlow = ignoredUsersFlow,
     )
 
     private fun createUserProfilePresenter(
@@ -405,7 +396,7 @@ class UserProfilePresenterTest {
             userId = userId,
             buildMeta = buildMeta,
             client = client,
-            startDMAction = startDMAction
+            startDMAction = startDMAction,
         )
     }
 }

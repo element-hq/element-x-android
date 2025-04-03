@@ -42,7 +42,7 @@ fun TestScope.createRustMatrixClientFactory(
 ) = RustMatrixClientFactory(
     baseDirectory = baseDirectory,
     cacheDirectory = cacheDirectory,
-    appCoroutineScope = this,
+    appCoroutineScope = backgroundScope,
     coroutineDispatchers = testCoroutineDispatchers(),
     sessionStore = sessionStore,
     userAgentProvider = SimpleUserAgentProvider(),

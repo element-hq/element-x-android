@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
+import io.element.android.libraries.mediaviewer.api.aTxtMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
@@ -158,6 +159,14 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 listOf(
                     MediaViewerPageData.Failure(Exception("error"))
                 ),
+            ),
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Loading(),
+                        mediaInfo = aTxtMediaInfo(),
+                    )
+                )
             ),
         )
 }

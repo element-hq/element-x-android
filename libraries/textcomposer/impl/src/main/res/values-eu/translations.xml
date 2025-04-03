@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Gehitu eranskina"</string>
+  <string name="rich_text_editor_bullet_list">"Buleten zerrenda bai/ez"</string>
+  <string name="rich_text_editor_close_formatting_options">"Itxi formatu aukerak"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Gehitu testua"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Zifratutako mezua…"</string>
+  <string name="rich_text_editor_composer_placeholder">"Mezua…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Zifratu gabeko mezua…"</string>
+  <string name="rich_text_editor_create_link">"Sortu esteka"</string>
+  <string name="rich_text_editor_edit_link">"Editatu esteka"</string>
+  <string name="rich_text_editor_format_bold">"Aplikatu formatu lodia"</string>
+  <string name="rich_text_editor_format_italic">"Aplikatu formatu etzana"</string>
+  <string name="rich_text_editor_format_strikethrough">"Aplikatu ezabaketa formatua"</string>
+  <string name="rich_text_editor_format_underline">"Aplikatu azpimarra formatua"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Pantaila osoa bai/ez"</string>
+  <string name="rich_text_editor_indent">"Koska"</string>
+  <string name="rich_text_editor_link">"Ezarri esteka"</string>
+  <string name="rich_text_editor_numbered_list">"Zenbakidu zerrenda bai/ez"</string>
+  <string name="rich_text_editor_open_compose_options">"Ireki idazketa aukerak"</string>
+  <string name="rich_text_editor_quote">"Aipua bai/ez"</string>
+  <string name="rich_text_editor_remove_link">"Kendu esteka"</string>
+  <string name="rich_text_editor_unindent">"Koskarik gabe"</string>
+  <string name="rich_text_editor_url_placeholder">"Esteka"</string>
+  <string name="screen_room_voice_message_tooltip">"Mantendu sakatuta grabatzeko"</string>
+</resources>

@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
+import io.element.android.features.roomdetails.impl.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.libraries.architecture.AsyncAction
@@ -36,8 +37,7 @@ import org.junit.Test
 class RoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when room is DM is false`() = runTest {
-        val room = FakeMatrixRoom(
-            isDirect = true,
+        val room = aMatrixRoom(
             isPublic = true,
             activeMemberCount = 2,
             canKickResult = { Result.success(true) },
@@ -54,8 +54,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `canDisplayModerationActions - when user can kick other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(
-            isDirect = false,
+        val room = aMatrixRoom(
             activeMemberCount = 10,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
@@ -70,8 +69,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `canDisplayModerationActions - when user can ban other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(
-            isDirect = false,
+        val room = aMatrixRoom(
             activeMemberCount = 10,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
@@ -86,7 +84,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `present - SelectRoomMember when the current user has permissions displays member actions`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
@@ -112,7 +110,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `present - SelectRoomMember displays only view profile if selected member has same power level as the current user`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             sessionId = A_USER_ID,
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
@@ -138,7 +136,7 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `present - SelectRoomMember displays an unban confirmation dialog when the member is banned`() = runTest {
         val selectedMember = aRoomMember(A_USER_ID_2, membership = RoomMembershipState.BAN)
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
@@ -159,7 +157,7 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `present - Kick removes the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
@@ -188,7 +186,7 @@ class RoomMembersModerationPresenterTest {
     @Test
     fun `present - BanUser requires confirmation and then bans the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
@@ -224,7 +222,7 @@ class RoomMembersModerationPresenterTest {
     fun `present - UnbanUser requires confirmation and then unbans the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val selectedMember = aRoomMember(A_USER_ID_2, membership = RoomMembershipState.BAN)
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
@@ -256,7 +254,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `present - Reset removes the selected user and actions`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.USER) },
@@ -278,7 +276,7 @@ class RoomMembersModerationPresenterTest {
 
     @Test
     fun `present - Reset resets any async actions`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             kickUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
@@ -327,7 +325,7 @@ class RoomMembersModerationPresenterTest {
 
     private fun TestScope.createRoomMembersModerationPresenter(
         buildMeta: BuildMeta = aBuildMeta(),
-        matrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
+        matrixRoom: FakeMatrixRoom = aMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): RoomMembersModerationPresenter {

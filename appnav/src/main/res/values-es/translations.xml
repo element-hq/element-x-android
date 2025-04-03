@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Cerrar sesión y actualizar"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s ya no es compatible con el antiguo protocolo. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Tu servidor base ya no es compatible con el protocolo anterior. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación."</string>
+</resources>

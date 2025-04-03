@@ -37,7 +37,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     data class RoomMemberDetailsInput(
-        val roomMemberId: UserId
+        val roomMemberId: UserId,
     ) : NodeInputs
 
     private val inputs = inputs<RoomMemberDetailsInput>()
@@ -79,6 +79,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             onOpenDm = ::onStartDM,
             onStartCall = ::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
+            onVerifyClick = callback::onVerifyUser,
         )
     }
 }

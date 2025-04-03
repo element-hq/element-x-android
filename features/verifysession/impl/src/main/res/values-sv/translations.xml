@@ -13,9 +13,11 @@
   <string name="screen_session_verification_cancelled_subtitle">"Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bekräfta att emojierna nedan matchar de som visas på din andra session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Jämför emojis"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Bekräfta att emojierna nedan matchar de som visas på den andra användarens enhet."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bekräfta att siffrorna nedan matchar de som visas på din andra session."</string>
   <string name="screen_session_verification_compare_numbers_title">"Jämför siffror"</string>
   <string name="screen_session_verification_complete_subtitle">"Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Nu kan du lita på användarens identitet när du skickar eller tar emot meddelanden."</string>
   <string name="screen_session_verification_enter_recovery_key">"Ange återställningsnyckel"</string>
   <string name="screen_session_verification_failed_subtitle">"Antingen överskreds tidsgränsen för begäran, begäran nekades eller så fanns det ett matchningsfel för verifieringen."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevisa att det är du för att komma åt din krypterade meddelandehistorik."</string>
@@ -37,8 +39,14 @@
   <string name="screen_session_verification_they_match">"De matchar"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Se till att du har appen öppen på den andra enheten innan du startar verifieringen härifrån."</string>
   <string name="screen_session_verification_use_another_device_title">"Öppna appen på en annan verifierad enhet"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"För extra säkerhet, verifiera den här användaren genom att jämföra en uppsättning emojier på dina enheter. Gör detta med hjälp av ett betrott kommunikationssätt."</string>
+  <string name="screen_session_verification_user_initiator_title">"Verifiera den här användaren?"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"För extra säkerhet vill en annan användare verifiera din identitet. Du kommer att visas en uppsättning emojier att jämföra."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Du bör se en popup på den andra enheten. Starta verifieringen därifrån nu."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Starta verifieringen på den andra enheten"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Väntar på den andra enheten"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Väntar på den andra användaren"</string>
+  <string name="screen_session_verification_waiting_subtitle">"När det har accepterats kommer du kunna fortsätta verifieringen."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Godkänn begäran om att starta verifieringsprocessen på din andra session för att fortsätta."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Väntar på att acceptera begäran"</string>
   <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>

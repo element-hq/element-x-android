@@ -51,6 +51,7 @@ class KonsistClassNameTest {
             .withoutName(
                 "AspectRatioProvider",
                 "OverlapRatioProvider",
+                "TextFileContentProvider",
             )
             .also {
                 // Check that classes are actually found

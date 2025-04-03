@@ -152,6 +152,7 @@ private fun RustEventItemOrigin.map(): TimelineItemEventOrigin {
         RustEventItemOrigin.LOCAL -> TimelineItemEventOrigin.LOCAL
         RustEventItemOrigin.SYNC -> TimelineItemEventOrigin.SYNC
         RustEventItemOrigin.PAGINATION -> TimelineItemEventOrigin.PAGINATION
+        RustEventItemOrigin.CACHE -> TimelineItemEventOrigin.CACHE
     }
 }
 

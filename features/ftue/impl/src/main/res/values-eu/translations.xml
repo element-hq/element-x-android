@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Ezin duzu baieztatu?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Sortu berreskuratze-gako berria"</string>
+  <string name="screen_identity_confirmation_subtitle">"Egiaztatu gailua mezularitza segurua konfiguratzeko."</string>
+  <string name="screen_identity_confirmation_title">"Berretsi zure identitatea"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Erabili beste gailu bat"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Erabili berreskuratze-gakoa"</string>
+  <string name="screen_identity_confirmed_subtitle">"Orain mezuak modu seguruan irakurri edo bidal ditzakezu, eta txateatzen duzun edonor ere fida daiteke gailu honetaz."</string>
+  <string name="screen_identity_confirmed_title">"Gailua egiaztatu da"</string>
+  <string name="screen_identity_use_another_device">"Erabili beste gailu bat"</string>
+  <string name="screen_identity_waiting_on_other_device">"Beste gailuaren zain…"</string>
+  <string name="screen_notification_optin_subtitle">"Geroago alda ditzakezu ezarpenak."</string>
+  <string name="screen_notification_optin_title">"Baimendu jakinarazpenak eta ez galdu inoiz mezurik"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Sartu berreskuratze-gakoa"</string>
+  <string name="screen_welcome_bullet_1">"Deiak, inkestak, bilaketa eta gehiago gehituko dira aurten."</string>
+  <string name="screen_welcome_bullet_2">"Enkriptatutako geletarako mezuen historia ez dago oraindik erabilgarri."</string>
+  <string name="screen_welcome_button">"Goazen!"</string>
+  <string name="screen_welcome_subtitle">"Hona hemen jakin beharrekoa:"</string>
+  <string name="screen_welcome_title">"Ongi etorri %1$s(e)ra!"</string>
+</resources>
