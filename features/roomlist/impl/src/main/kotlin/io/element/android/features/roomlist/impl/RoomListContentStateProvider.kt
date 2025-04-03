@@ -11,8 +11,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentSet
 
 open class RoomListContentStateProvider : PreviewParameterProvider<RoomListContentState> {
     override val values: Sequence<RoomListContentState>
@@ -29,10 +31,12 @@ internal fun aRoomsContentState(
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    seenRoomInvites: Set<RoomId> = emptySet(),
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     summaries = summaries,
+    seenRoomInvites = seenRoomInvites.toPersistentSet(),
 )
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)

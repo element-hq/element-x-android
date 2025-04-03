@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -58,6 +59,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -93,6 +95,7 @@ class RoomListPresenter @Inject constructor(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
+    private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
 
@@ -228,6 +231,7 @@ class RoomListPresenter @Inject constructor(
                 loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
             }
         }
+        val seenRoomInvites by seenInvitesStore.seenRoomIds().collectAsState(emptySet())
         val securityBannerState by rememberSecurityBannerState(securityBannerDismissed)
         return when {
             showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
@@ -236,7 +240,8 @@ class RoomListPresenter @Inject constructor(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
-                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()
+                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList(),
+                    seenRoomInvites = seenRoomInvites.toPersistentSet(),
                 )
             }
         }
