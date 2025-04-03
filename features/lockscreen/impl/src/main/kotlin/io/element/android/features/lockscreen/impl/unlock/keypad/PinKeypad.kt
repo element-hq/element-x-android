@@ -27,6 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -60,7 +65,21 @@ fun PinKeypad(
     val horizontalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterHorizontally)
     val verticalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterVertically)
     Column(
-        modifier = modifier,
+        modifier = modifier.onKeyEvent { event ->
+            if (event.type == KeyEventType.KeyUp) {
+                if (Character.isDigit(event.nativeKeyEvent.unicodeChar)) {
+                    onClick(PinKeypadModel.Number(event.nativeKeyEvent.unicodeChar.toChar()))
+                    true
+                } else if (event.key == Key.Backspace) {
+                    onClick(PinKeypadModel.Back)
+                    true
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        },
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment,
     ) {
