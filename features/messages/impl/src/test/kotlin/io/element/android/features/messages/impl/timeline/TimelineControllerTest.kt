@@ -19,11 +19,16 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TimelineControllerTest {
     @Test
     fun `test switching between live and detached timeline`() = runTest {
@@ -33,11 +38,12 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
 
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
             skipItems(1)
+            advanceTimeBy(1.seconds)
 
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -73,13 +79,14 @@ class TimelineControllerTest {
                     2 -> Result.success(detachedTimeline2)
                     else -> lambdaError()
                 }
-            }
+            },
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
 
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
             skipItems(1)
+            advanceUntilIdle()
 
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -104,11 +111,12 @@ class TimelineControllerTest {
     fun `test switching to live when already in live should have no effect`() = runTest {
         val liveTimeline = FakeTimeline(name = "live")
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
+            advanceTimeBy(1.seconds)
             skipItems(1)
             // Assert live timeline
             awaitItem().also { state ->
@@ -126,11 +134,12 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) },
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
+            advanceTimeBy(1.seconds)
             skipItems(1)
 
             awaitItem().also { state ->
@@ -159,7 +168,7 @@ class TimelineControllerTest {
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
         assertThat(sut.timelineItems().first()).hasSize(1)
     }
 
@@ -179,11 +188,12 @@ class TimelineControllerTest {
         }
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) },
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
+            advanceTimeBy(1.seconds)
             skipItems(1)
 
             sut.focusOnEvent(AN_EVENT_ID)
@@ -207,13 +217,14 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-            createTimelineResult = { Result.success(detachedTimeline) }
+            createTimelineResult = { Result.success(detachedTimeline) },
         )
-        val sut = TimelineController(matrixRoom)
+        val sut = TimelineController(matrixRoom, backgroundScope)
 
         sut.activeTimelineFlow().test {
             // Wait until the live timeline is emitted
             skipItems(1)
+            advanceTimeBy(1.seconds)
 
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)

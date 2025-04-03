@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
-import io.element.android.libraries.core.coroutine.suspendLazy
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -72,7 +71,9 @@ import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -193,7 +194,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    private val _liveTimeline by suspendLazy(sessionCoroutineScope.coroutineContext + coroutineDispatchers.io) {
+    private val lazyLiveTimeline = roomCoroutineScope.async(start = CoroutineStart.LAZY) {
         createTimeline(innerTimelineInitializer(), mode = Timeline.Mode.LIVE) {
             _syncUpdateFlow.value = systemClock.epochMillis()
         }
@@ -305,16 +306,16 @@ class RustMatrixRoom(
     }
 
     override suspend fun liveTimeline(): Timeline {
-        return _liveTimeline.await()
+        return lazyLiveTimeline.await()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun destroy() {
         roomCoroutineScope.cancel()
-        if (_liveTimeline.isActive) {
-            _liveTimeline.cancel()
+        if (lazyLiveTimeline.isActive) {
+            lazyLiveTimeline.cancel()
         }
-        tryOrNull { _liveTimeline.getCompleted() }?.close()
+        tryOrNull { lazyLiveTimeline.getCompleted() }?.close()
     }
 
     override suspend fun updateMembers() {

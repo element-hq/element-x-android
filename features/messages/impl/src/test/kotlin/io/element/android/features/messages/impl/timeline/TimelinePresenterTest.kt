@@ -66,6 +66,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -75,7 +76,8 @@ import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalCoroutinesApi::class) class TimelinePresenterTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class TimelinePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -109,6 +111,10 @@ import kotlin.time.Duration.Companion.seconds
             val initialState = awaitItem()
             initialState.eventSink.invoke(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
             initialState.eventSink.invoke(TimelineEvents.LoadMore(Timeline.PaginationDirection.FORWARDS))
+
+            // Wait until the live timeline is emitted
+            advanceTimeBy(1.seconds)
+
             assert(paginateLambda)
                 .isCalledExactly(2)
                 .withSequence(
@@ -685,7 +691,7 @@ import kotlin.time.Duration.Companion.seconds
             sendPollResponseAction = sendPollResponseAction,
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
-            timelineController = TimelineController(room),
+            timelineController = TimelineController(room, backgroundScope),
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },

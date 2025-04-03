@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -21,17 +22,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -47,13 +47,12 @@ import javax.inject.Inject
 @ContributesBinding(RoomScope::class, boundType = TimelineProvider::class)
 class TimelineController @Inject constructor(
     private val room: MatrixRoom,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : Closeable, TimelineProvider {
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    private val coroutineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + SupervisorJob())
 
-    private val liveTimeline = callbackFlow {
-        send(room.liveTimeline())
-        awaitClose()
-    }
+    private val liveTimeline = flow { emit(room.liveTimeline()) }
+
     private val detachedTimeline = MutableStateFlow<Optional<Timeline>>(Optional.empty())
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -66,7 +65,7 @@ class TimelineController @Inject constructor(
     }
 
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Unit)) {
-        currentTimelineFlow.value?.run {
+        currentTimelineFlow.filterNotNull().first().run {
             block(this)
         }
     }

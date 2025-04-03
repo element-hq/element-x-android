@@ -101,6 +101,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -1397,6 +1398,10 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
+
+            // Give the live timeline time to load
+            advanceUntilIdle()
+
             awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(aReplyMode())
@@ -1521,18 +1526,18 @@ class MessageComposerPresenterTest {
         return normalState
     }
 
-    private fun createPresenter(
+    private fun TestScope.createPresenter(
         coroutineScope: CoroutineScope,
         room: MatrixRoom = FakeMatrixRoom(
             typingNoticeResult = { Result.success(Unit) }
         ),
         navigator: MessagesNavigator = FakeMessagesNavigator(),
-        pickerProvider: PickerProvider = this.pickerProvider,
-        featureFlagService: FeatureFlagService = this.featureFlagService,
+        pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
+        featureFlagService: FeatureFlagService = this@MessageComposerPresenterTest.featureFlagService,
         locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
-        mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
-        snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
+        mediaPreProcessor: MediaPreProcessor = this@MessageComposerPresenterTest.mediaPreProcessor,
+        snackbarDispatcher: SnackbarDispatcher = this@MessageComposerPresenterTest.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         permalinkParser: PermalinkParser = FakePermalinkParser(),
@@ -1562,7 +1567,7 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room),
+        timelineController = TimelineController(room, backgroundScope),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
