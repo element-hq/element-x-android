@@ -108,7 +108,6 @@ import uniffi.matrix_sdk.RoomPowerLevelChanges
 import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.coroutines.coroutineContext
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom

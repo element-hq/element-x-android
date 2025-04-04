@@ -281,9 +281,8 @@ class TimelinePresenter @AssistedInject constructor(
             newMostRecentItemId != prevMostRecentItemIdValue
 
         if (hasNewEvent) {
-            val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentEvent?.isMine == true
+            val fromMe = newMostRecentItem.isMine == true
             newEventState.value = if (fromMe) {
                 NewEventState.FromMe
             } else {
