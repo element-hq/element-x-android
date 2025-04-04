@@ -11,6 +11,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.joinroom.impl.JoinRoomPresenter
 import io.element.android.features.roomdirectory.api.RoomDescription
@@ -35,6 +36,7 @@ object JoinRoomModule {
         forgetRoom: ForgetRoom,
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
         buildMeta: BuildMeta,
+        seenInvitesStore: SeenInvitesStore,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(
@@ -57,6 +59,7 @@ object JoinRoomModule {
                     cancelKnockRoom = cancelKnockRoom,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                     buildMeta = buildMeta,
+                    seenInvitesStore = seenInvitesStore,
                 )
             }
         }

@@ -12,9 +12,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
@@ -169,10 +171,11 @@ class RoomListPresenterTest {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService
         )
-        val presenter = createRoomListPresenter(client = matrixClient)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)),
+        )
+        presenter.test {
             val initialState = consumeItemsUntilPredicate { state -> state.contentState is RoomListContentState.Skeleton }.last()
             assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
             roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
@@ -194,6 +197,7 @@ class RoomListPresenterTest {
                     timestamp = "0 TimeOrDate true",
                 )
             )
+            assertThat(withRoomsState.contentAsRooms().seenRoomInvites).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -680,6 +684,7 @@ class RoomListPresenterTest {
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
+        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore()
     ) = RoomListPresenter(
         client = client,
         syncService = syncService,
@@ -711,6 +716,7 @@ class RoomListPresenterTest {
         logoutPresenter = { aDirectLogoutState() },
         appPreferencesStore = appPreferencesStore,
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
+        seenInvitesStore = seenInvitesStore,
     )
 }
 

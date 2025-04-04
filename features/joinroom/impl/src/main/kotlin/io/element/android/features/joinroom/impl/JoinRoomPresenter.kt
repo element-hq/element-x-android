@@ -9,6 +9,7 @@ package io.element.android.features.joinroom.impl
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -67,6 +69,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val forgetRoom: ForgetRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
+    private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<JoinRoomState> {
     interface Factory {
         fun create(
@@ -148,6 +151,10 @@ class JoinRoomPresenter @AssistedInject constructor(
             }
         }
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
+
+        LaunchedEffect(contentState) {
+            contentState.markRoomInviteAsSeen()
+        }
 
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
@@ -234,6 +241,12 @@ class JoinRoomPresenter @AssistedInject constructor(
     private fun CoroutineScope.forgetRoom(forgetAction: MutableState<AsyncAction<Unit>>) = launch {
         forgetAction.runUpdatingState {
             forgetRoom.invoke(roomId)
+        }
+    }
+
+    private suspend fun ContentState.markRoomInviteAsSeen() {
+        if ((this as? ContentState.Loaded)?.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited != null) {
+            seenInvitesStore.markAsSeen(roomId)
         }
     }
 }
