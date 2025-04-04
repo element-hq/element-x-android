@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.coroutine.suspendLazy
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -71,9 +72,7 @@ import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -109,6 +108,7 @@ import uniffi.matrix_sdk.RoomPowerLevelChanges
 import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.coroutines.coroutineContext
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
@@ -194,7 +194,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    private val lazyLiveTimeline = roomCoroutineScope.async(start = CoroutineStart.LAZY) {
+    private val lazyLiveTimeline by suspendLazy(coroutineContext = roomCoroutineScope.coroutineContext) {
         createTimeline(innerTimelineInitializer(), mode = Timeline.Mode.LIVE) {
             _syncUpdateFlow.value = systemClock.epochMillis()
         }

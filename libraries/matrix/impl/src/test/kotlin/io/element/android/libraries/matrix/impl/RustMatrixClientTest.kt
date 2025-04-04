@@ -43,7 +43,7 @@ class RustMatrixClientTest {
             client = FakeRustClient(
                 clearCachesResult = clearCachesResult,
                 closeResult = closeResult,
-            )
+            ),
         )
         client.clearCache()
         clearCachesResult.assertions().isCalledOnce()
@@ -61,6 +61,7 @@ class RustMatrixClientTest {
         appCoroutineScope = backgroundScope,
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
+            appCoroutineScope = backgroundScope,
         ),
         innerSyncService = FakeRustSyncService(),
         dispatchers = testCoroutineDispatchers(),

@@ -14,8 +14,17 @@ import kotlinx.coroutines.async
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend () -> T): Lazy<Deferred<T>> {
-    return lazy(LazyThreadSafetyMode.NONE) {
-        CoroutineScope(coroutineContext).async(start = CoroutineStart.LAZY) { block() }
+class SuspendLazy<T>(
+    coroutineContext: CoroutineContext = EmptyCoroutineContext,
+    private val block: suspend CoroutineScope.() -> T,
+) {
+    private val coroutineScope = CoroutineScope(coroutineContext)
+
+    operator fun getValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>): Deferred<T> {
+        return coroutineScope.async(start = CoroutineStart.LAZY, block = block)
     }
+}
+
+fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): SuspendLazy<T> {
+    return SuspendLazy(coroutineContext, block = block)
 }
