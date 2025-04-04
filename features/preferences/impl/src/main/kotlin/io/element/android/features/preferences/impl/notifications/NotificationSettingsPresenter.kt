@@ -158,7 +158,7 @@ class NotificationSettingsPresenter @Inject constructor(
             matrixSettings = matrixSettings.value,
             appSettings = NotificationSettingsState.AppSettings(
                 systemNotificationsEnabled = systemNotificationsEnabled.value,
-                appNotificationsEnabled = appNotificationsEnabled.value
+                appNotificationsEnabled = appNotificationsEnabled,
             ),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             currentPushDistributor = currentDistributor,
