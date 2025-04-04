@@ -29,4 +29,9 @@ interface SeenInvitesStore {
      * @param roomId the room ID of the invitation to mark as unseen.
      */
     suspend fun markAsUnSeen(roomId: RoomId)
+
+    /**
+     * Delete the store.
+     */
+    suspend fun clear()
 }

@@ -21,6 +21,7 @@ setupAnvil()
 dependencies {
     api(projects.features.invite.api)
     implementation(libs.androidx.datastore.preferences)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

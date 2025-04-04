@@ -26,4 +26,8 @@ class InMemorySeenInvitesStore(
     override suspend fun markAsUnSeen(roomId: RoomId) {
         roomIds.value -= roomId
     }
+
+    override suspend fun clear() {
+        roomIds.value = emptySet()
+    }
 }
