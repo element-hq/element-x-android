@@ -29,6 +29,15 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
             aLogoutState(isLastDevice = true, recoveryState = RecoveryState.DISABLED),
             // Last session no backup
             aLogoutState(isLastDevice = true, backupState = BackupState.UNKNOWN, doesBackupExistOnServer = false),
+            aLogoutState(
+                isLastDevice = false,
+                backupUploadState = BackupUploadState.Waiting,
+            ),
+            aLogoutState(
+                isLastDevice = false,
+                backupUploadState = BackupUploadState.Waiting,
+                waitingForALongTime = true,
+            ),
         )
 }
 
@@ -38,6 +47,7 @@ fun aLogoutState(
     doesBackupExistOnServer: Boolean = true,
     recoveryState: RecoveryState = RecoveryState.ENABLED,
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
+    waitingForALongTime: Boolean = false,
     logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (LogoutEvents) -> Unit = {},
 ) = LogoutState(
@@ -46,6 +56,7 @@ fun aLogoutState(
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
     backupUploadState = backupUploadState,
+    waitingForALongTime = waitingForALongTime,
     logoutAction = logoutAction,
     eventSink = eventSink,
 )

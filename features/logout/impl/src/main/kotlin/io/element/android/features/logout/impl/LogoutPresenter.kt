@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,6 +45,16 @@ class LogoutPresenter @Inject constructor(
             encryptionService.waitForBackupUploadSteadyState()
         }
             .collectAsState(initial = BackupUploadState.Unknown)
+
+        var waitingForALongTime by remember { mutableStateOf(false) }
+        LaunchedEffect(backupUploadState) {
+            if (backupUploadState is BackupUploadState.Waiting) {
+                delay(2_000)
+                waitingForALongTime = true
+            } else {
+                waitingForALongTime = false
+            }
+        }
 
         val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
@@ -79,6 +91,7 @@ class LogoutPresenter @Inject constructor(
             doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),
             recoveryState = recoveryState,
             backupUploadState = backupUploadState,
+            waitingForALongTime = waitingForALongTime,
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents
         )
