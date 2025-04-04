@@ -7,7 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import android.text.SpannableString
+import android.text.SpannedString
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
@@ -71,7 +71,7 @@ fun TimelineItemTextView(
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
     val mentionSpanUpdater = LocalMentionSpanUpdater.current
     val bodyWithResolvedMentions = mentionSpanUpdater.rememberMentionSpans(content.formattedBody)
-    return SpannableString(bodyWithResolvedMentions)
+    return SpannedString.valueOf(bodyWithResolvedMentions)
 }
 
 @PreviewsDayNight
