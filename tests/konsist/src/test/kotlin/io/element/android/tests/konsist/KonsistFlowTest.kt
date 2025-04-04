@@ -24,7 +24,6 @@ class KonsistFlowTest {
         val regex = "(.*)\\)(\n\\s*)*\\.collectAsState".toRegex()
 
         val allowedMethods = listOf(
-            "accountProviderDataSource.flow()",
             "timeline.paginationStatus",
             "analyticsService.getUserConsent()",
         )
