@@ -84,7 +84,9 @@ class DefaultActionListPresenter @AssistedInject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
-        val isDeveloperModeEnabled by appPreferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
         val isPinnedEventsEnabled = isPinnedMessagesFeatureEnabled()
         val pinnedEventIds by remember {
             room.roomInfoFlow.map { it.pinnedEventIds }

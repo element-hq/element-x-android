@@ -64,9 +64,9 @@ class BugReportPresenter @Inject constructor(
                 screenshotHolder.getFileUri()
             )
         }
-        val crashInfo: String by crashDataStore
-            .crashInfo()
-            .collectAsState(initial = "")
+        val crashInfo: String by remember {
+            crashDataStore.crashInfo()
+        }.collectAsState(initial = "")
 
         val sendingProgress = remember {
             mutableFloatStateOf(0f)

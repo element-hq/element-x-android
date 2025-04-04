@@ -38,7 +38,9 @@ class LockScreenSettingsPresenter @Inject constructor(
                 value = !lockScreenConfig.isPinMandatory && hasPinCode
             }
         }
-        val isBiometricEnabled by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
+        val isBiometricEnabled by remember {
+            lockScreenStore.isBiometricUnlockAllowed()
+        }.collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
         }

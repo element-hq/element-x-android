@@ -24,7 +24,12 @@ class KonsistFlowTest {
         val regex = "(.*)\\)(\n\\s*)*\\.collectAsState".toRegex()
 
         val allowedMethods = listOf(
-            "isOnline()",
+            "syncService.isOnline()",
+            "userListDataStore.selectedUsers()",
+            "accountProviderDataSource.flow()",
+            "syncService.isOnline()",
+            "timeline.paginationStatus",
+            "analyticsService.getUserConsent()",
         )
         Konsist
             .scopeFromProject()

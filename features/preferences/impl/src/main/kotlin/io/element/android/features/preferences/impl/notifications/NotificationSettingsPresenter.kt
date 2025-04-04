@@ -58,9 +58,9 @@ class NotificationSettingsPresenter @Inject constructor(
         val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val localCoroutineScope = rememberCoroutineScope()
-        val appNotificationsEnabled = userPushStore
-            .getNotificationEnabledForDevice()
-            .collectAsState(initial = false)
+        val appNotificationsEnabled by remember {
+            userPushStore.getNotificationEnabledForDevice()
+        }.collectAsState(initial = false)
 
         val matrixSettings: MutableState<NotificationSettingsState.MatrixSettings> = remember {
             mutableStateOf(NotificationSettingsState.MatrixSettings.Uninitialized)

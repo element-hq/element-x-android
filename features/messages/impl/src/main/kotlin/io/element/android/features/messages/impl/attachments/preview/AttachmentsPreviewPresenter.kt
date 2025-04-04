@@ -78,8 +78,12 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        val allowCaption by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation).collectAsState(initial = false)
-        val showCaptionCompatibilityWarning by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning).collectAsState(initial = false)
+        val allowCaption by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionCreation)
+        }.collectAsState(initial = false)
+        val showCaptionCompatibilityWarning by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaCaptionWarning)
+        }.collectAsState(initial = false)
 
         var useSendQueue by remember { mutableStateOf(false) }
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }

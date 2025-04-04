@@ -177,7 +177,9 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
-        val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
+        val sendTypingNotifications by remember {
+            sessionPreferencesStore.isSendTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -397,16 +399,16 @@ class MessageComposerPresenter @AssistedInject constructor(
                 .stateIn(this, SharingStarted.Lazily, emptyList())
 
             combine(mentionTriggerFlow, room.membersStateFlow, roomAliasSuggestionsFlow) { suggestion, roomMembersState, roomAliasSuggestions ->
-                    val result = suggestionsProcessor.process(
-                        suggestion = suggestion,
-                        roomMembersState = roomMembersState,
-                        roomAliasSuggestions = roomAliasSuggestions,
-                        currentUserId = currentUserId,
-                        canSendRoomMention = ::canSendRoomMention,
-                    )
-                    suggestions.clear()
-                    suggestions.addAll(result)
-                }
+                val result = suggestionsProcessor.process(
+                    suggestion = suggestion,
+                    roomMembersState = roomMembersState,
+                    roomAliasSuggestions = roomAliasSuggestions,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = ::canSendRoomMention,
+                )
+                suggestions.clear()
+                suggestions.addAll(result)
+            }
                 .collect()
         }
     }
