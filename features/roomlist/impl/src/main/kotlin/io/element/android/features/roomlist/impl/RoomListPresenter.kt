@@ -50,7 +50,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -101,7 +100,7 @@ class RoomListPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser = client.userProfile.collectAsState()
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
