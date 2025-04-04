@@ -49,7 +49,10 @@ interface Timeline : AutoCloseable {
     val membershipChangeEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>
-    fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
+
+    val backwardPaginationStatus: StateFlow<PaginationStatus>
+    val forwardPaginationStatus: StateFlow<PaginationStatus>
+
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
     suspend fun sendMessage(
@@ -105,7 +108,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-        ): Result<MediaUploadHandler>
+    ): Result<MediaUploadHandler>
 
     suspend fun sendFile(
         file: File,

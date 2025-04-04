@@ -40,7 +40,7 @@ class PollHistoryPresenter @Inject constructor(
     @Composable
     override fun present(): PollHistoryState {
         val timeline = room.liveTimeline
-        val paginationState by timeline.paginationStatus(Timeline.PaginationDirection.BACKWARDS).collectAsState()
+        val paginationState by timeline.backwardPaginationStatus.collectAsState()
         val pollHistoryItemsFlow = remember {
             timeline.timelineItems.map { items ->
                 pollHistoryItemFactory.create(items)

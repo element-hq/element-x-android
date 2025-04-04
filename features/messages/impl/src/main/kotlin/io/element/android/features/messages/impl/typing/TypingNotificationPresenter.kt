@@ -37,7 +37,9 @@ class TypingNotificationPresenter @Inject constructor(
 ) : Presenter<TypingNotificationState> {
     @Composable
     override fun present(): TypingNotificationState {
-        val renderTypingNotifications by sessionPreferencesStore.isRenderTypingNotificationsEnabled().collectAsState(initial = true)
+        val renderTypingNotifications by remember {
+            sessionPreferencesStore.isRenderTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
         val typingMembersState by produceState(initialValue = persistentListOf(), key1 = renderTypingNotifications) {
             if (renderTypingNotifications) {
                 observeRoomTypingMembers()

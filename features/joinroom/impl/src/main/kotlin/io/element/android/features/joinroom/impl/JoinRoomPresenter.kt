@@ -82,7 +82,9 @@ class JoinRoomPresenter @AssistedInject constructor(
     override fun present(): JoinRoomState {
         val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
-        val roomInfo by matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias()).collectAsState(initial = Optional.empty())
+        val roomInfo by remember {
+            matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias())
+        }.collectAsState(initial = Optional.empty())
         val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val cancelKnockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }

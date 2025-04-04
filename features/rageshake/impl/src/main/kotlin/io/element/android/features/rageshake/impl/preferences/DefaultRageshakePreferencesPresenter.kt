@@ -10,6 +10,7 @@ package io.element.android.features.rageshake.impl.preferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,13 +40,13 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
             mutableStateOf(rageshake.isAvailable())
         }
         val isFeatureAvailable = remember { rageshakeFeatureAvailability.isAvailable() }
-        val isEnabled = rageshakeDataStore
-            .isEnabled()
-            .collectAsState(initial = false)
+        val isEnabled by remember {
+            rageshakeDataStore.isEnabled()
+        }.collectAsState(initial = false)
 
-        val sensitivity = rageshakeDataStore
-            .sensitivity()
-            .collectAsState(initial = 0f)
+        val sensitivity by remember {
+            rageshakeDataStore.sensitivity()
+        }.collectAsState(initial = 0f)
 
         fun handleEvents(event: RageshakePreferencesEvents) {
             when (event) {
@@ -56,9 +57,9 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
 
         return RageshakePreferencesState(
             isFeatureEnabled = isFeatureAvailable,
-            isEnabled = isEnabled.value,
+            isEnabled = isEnabled,
             isSupported = isSupported.value,
-            sensitivity = sensitivity.value,
+            sensitivity = sensitivity,
             eventSink = ::handleEvents
         )
     }

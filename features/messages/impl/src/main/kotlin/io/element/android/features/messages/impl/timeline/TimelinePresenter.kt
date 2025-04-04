@@ -109,9 +109,15 @@ class TimelinePresenter @AssistedInject constructor(
         val messageShield: MutableState<MessageShield?> = remember { mutableStateOf(null) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
-        val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
-        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
-        val isLive by timelineController.isLive().collectAsState(initial = true)
+        val isSendPublicReadReceiptsEnabled by remember {
+            sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
+        }.collectAsState(initial = true)
+        val renderReadReceipts by remember {
+            sessionPreferencesStore.isRenderReadReceiptsEnabled()
+        }.collectAsState(initial = true)
+        val isLive by remember {
+            timelineController.isLive()
+        }.collectAsState(initial = true)
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {

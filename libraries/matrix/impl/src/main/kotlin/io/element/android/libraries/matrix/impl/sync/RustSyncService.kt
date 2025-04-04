@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.sync
 
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -73,4 +74,6 @@ class RustSyncService(
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
+
+    override val isOnline: StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }
 }
