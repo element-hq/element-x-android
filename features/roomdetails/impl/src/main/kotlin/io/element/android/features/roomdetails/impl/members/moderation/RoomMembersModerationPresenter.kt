@@ -52,7 +52,7 @@ class RoomMembersModerationPresenter @Inject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canBan by room.canBanAsState(syncUpdateFlow.value)
         val canKick by room.canKickAsState(syncUpdateFlow.value)
-        val isDm by room.isDmAsState(syncUpdateFlow.value)
+        val isDm by room.isDmAsState()
         val currentUserMemberPowerLevel by room.userPowerLevelAsState(syncUpdateFlow.value)
 
         val canDisplayModerationActions by remember {

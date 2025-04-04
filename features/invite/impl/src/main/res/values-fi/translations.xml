@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Hylkää keskustelu"</string>
   <string name="screen_invites_empty_list">"Ei kutsuja"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) kutsui sinut"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Kyllä, hylkää ja estä"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Oletko varma, että haluat kieltäytyä kutsusta liittyä tähän huoneeseen? Tämä estää myös käyttäjää %1$s ottamasta sinuun yhteyttä tai kutsumasta sinua huoneisiin."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Hylkää kutsu ja estä"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Hylkää ja estä"</string>
 </resources>

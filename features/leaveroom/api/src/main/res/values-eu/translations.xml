@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Ziur elkarrizketa utzi nahi duzula? Ez da publikoa eta ezingo zara berriro batu gonbidapenik gabe."</string>
+  <string name="leave_room_alert_empty_subtitle">"Ziur gelatik irten nahi duzula? Dagoen pertsona bakarra zara. Ateratzen bazara ezingo da inor batu etorkizunean, ezta zeu ere."</string>
+  <string name="leave_room_alert_private_subtitle">"Ziur gelatik irten nahi duzula? Gela hau ez da publikoa eta ezingo zara berriro batu gonbidapenik gabe."</string>
+  <string name="leave_room_alert_subtitle">"Ziur gelatik atera nahi duzula?"</string>
+</resources>

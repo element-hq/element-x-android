@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
+  <string name="banner_set_up_recovery_submit">"Konfigurer gjenoppretting"</string>
+  <string name="banner_set_up_recovery_title">"Konfigurer gjenoppretting for å beskytte kontoen din"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gjenopprettingsnøkkel?"</string>
+  <string name="full_screen_intent_banner_message">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
+  <string name="full_screen_intent_banner_title">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avvis invitasjon"</string>
   <string name="screen_invites_decline_direct_chat_message">"Er du sikker på at du vil avslå denne private chatten med %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Avslå chat"</string>
   <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
+  <string name="screen_join_room_knock_sent_title">"Forespørsel om å bli med sendt"</string>
   <string name="screen_migration_message">"Dette er en engangsprosess, takk for at du venter."</string>
   <string name="screen_migration_title">"Setter opp kontoen din."</string>
   <string name="screen_roomlist_a11y_create_message">"Opprett en ny samtale eller et nytt rom"</string>
@@ -28,7 +34,6 @@ Du har ingen uleste meldinger!"</string>
   <string name="screen_roomlist_main_space_title">"Chatter"</string>
   <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Bla gjennom alle rom"</string>
   <string name="session_verification_banner_message">"Det ser ut til at du bruker en ny enhet. Bekreft med en annen enhet for å få tilgang til de krypterte meldingene dine."</string>
   <string name="session_verification_banner_title">"Bekreft at det er deg"</string>
 </resources>

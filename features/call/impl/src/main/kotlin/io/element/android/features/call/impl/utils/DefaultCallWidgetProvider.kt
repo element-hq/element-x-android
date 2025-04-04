@@ -8,10 +8,8 @@
 package io.element.android.features.call.impl.utils
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.ElementCallConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
@@ -19,12 +17,13 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
+private const val EMBEDDED_CALL_WIDGET_BASE_URL = "https://appassets.androidplatform.net/element-call/index.html"
+
 @ContributesBinding(AppScope::class)
 class DefaultCallWidgetProvider @Inject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,
-    private val elementCallBaseUrlProvider: ElementCallBaseUrlProvider,
 ) : CallWidgetProvider {
     override suspend fun getWidget(
         sessionId: SessionId,
@@ -35,19 +34,22 @@ class DefaultCallWidgetProvider @Inject constructor(
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
         val room = matrixClient.getRoom(roomId) ?: error("Room not found")
-        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
-            ?: elementCallBaseUrlProvider.provides(matrixClient)
-            ?: ElementCallConfig.DEFAULT_BASE_URL
-        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
+
+        val customBaseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
+        val baseUrl = customBaseUrl ?: EMBEDDED_CALL_WIDGET_BASE_URL
+
+        val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
+        val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = isEncrypted)
         val callUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
             clientId = clientId,
             languageTag = languageTag,
             theme = theme,
         ).getOrThrow()
+
         CallWidgetProvider.GetWidgetResult(
             driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
-            url = callUrl
+            url = callUrl,
         )
     }
 }

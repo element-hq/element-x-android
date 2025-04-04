@@ -40,7 +40,6 @@
   <string name="screen_roomlist_main_space_title">"Бесіди"</string>
   <string name="screen_roomlist_mark_as_read">"Позначити прочитаним"</string>
   <string name="screen_roomlist_mark_as_unread">"Позначити непрочитаним"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Переглянути всі кімнати"</string>
   <string name="session_verification_banner_message">"Схоже, ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою."</string>
   <string name="session_verification_banner_title">"Підтвердьте, що це ви"</string>
 </resources>

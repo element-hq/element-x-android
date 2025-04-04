@@ -22,6 +22,8 @@ interface StaticMapUrlBuilder {
         height: Int,
         density: Float,
     ): String
+
+    fun isServiceAvailable(): Boolean
 }
 
 fun StaticMapUrlBuilder(context: Context): StaticMapUrlBuilder = MapTilerStaticMapUrlBuilder(context = context)

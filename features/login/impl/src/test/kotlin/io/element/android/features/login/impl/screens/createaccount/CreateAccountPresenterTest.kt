@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
@@ -135,11 +136,13 @@ class CreateAccountPresenterTest {
         defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
         messageParser: MessageParser = FakeMessageParser(),
         buildMeta: BuildMeta = aBuildMeta(),
+        clientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     ) = CreateAccountPresenter(
         url = url,
         authenticationService = authenticationService,
         defaultLoginUserStory = defaultLoginUserStory,
         messageParser = messageParser,
         buildMeta = buildMeta,
+        clientProvider = clientProvider,
     )
 }

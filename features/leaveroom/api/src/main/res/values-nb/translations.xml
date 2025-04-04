@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Er du sikker på at du vil forlate denne samtalen? Denne samtalen er ikke offentlig, og du vil ikke kunne bli med igjen uten en invitasjon."</string>
   <string name="leave_room_alert_empty_subtitle">"Er du sikker på at du vil forlate dette rommet? Du er den eneste personen her. Hvis du forlater, vil ingen kunne bli med i fremtiden, inkludert deg."</string>
   <string name="leave_room_alert_private_subtitle">"Er du sikker på at du vil forlate dette rommet? Dette rommet er ikke offentlig, og du vil ikke kunne bli med igjen uten en invitasjon."</string>
   <string name="leave_room_alert_subtitle">"Er du sikker på at du vil forlate rommet?"</string>

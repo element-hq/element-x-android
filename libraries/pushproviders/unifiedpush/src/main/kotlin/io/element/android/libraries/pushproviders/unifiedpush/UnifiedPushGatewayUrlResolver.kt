@@ -21,6 +21,7 @@ interface UnifiedPushGatewayUrlResolver {
 @ContributesBinding(AppScope::class)
 class DefaultUnifiedPushGatewayUrlResolver @Inject constructor(
     private val unifiedPushStore: UnifiedPushStore,
+    private val defaultPushGatewayHttpUrlProvider: DefaultPushGatewayHttpUrlProvider,
 ) : UnifiedPushGatewayUrlResolver {
     override fun resolve(
         gatewayResult: UnifiedPushGatewayResolverResult,
@@ -33,7 +34,7 @@ class DefaultUnifiedPushGatewayUrlResolver @Inject constructor(
             }
             UnifiedPushGatewayResolverResult.ErrorInvalidUrl,
             UnifiedPushGatewayResolverResult.NoMatrixGateway -> {
-                UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
+                defaultPushGatewayHttpUrlProvider.provide()
             }
             is UnifiedPushGatewayResolverResult.Success -> {
                 gatewayResult.gateway

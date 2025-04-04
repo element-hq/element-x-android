@@ -103,6 +103,7 @@ fun StaticMapView(
         } else {
             StaticMapPlaceholder(
                 showProgress = collectedState.value.isLoading(),
+                canReload = builder.isServiceAvailable(),
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,

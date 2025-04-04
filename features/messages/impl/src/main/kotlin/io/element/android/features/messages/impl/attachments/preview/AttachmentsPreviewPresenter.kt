@@ -73,7 +73,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
         val textEditorState by rememberUpdatedState(
-            TextEditorState.Markdown(markdownTextEditorState)
+            TextEditorState.Markdown(markdownTextEditorState, isRoomEncrypted = null)
         )
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }

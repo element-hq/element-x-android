@@ -14,6 +14,8 @@ import io.element.android.features.messages.impl.crypto.identity.IdentityChangeS
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStatePresenter
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailurePresenter
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.link.LinkPresenter
+import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerPresenter
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
@@ -45,6 +47,9 @@ interface MessagesModule {
 
     @Binds
     fun bindTimelineProtectionPresenter(presenter: TimelineProtectionPresenter): Presenter<TimelineProtectionState>
+
+    @Binds
+    fun bindLinkPresenter(presenter: LinkPresenter): Presenter<LinkState>
 
     @Binds
     fun bindVoiceMessageComposerPresenter(presenter: VoiceMessageComposerPresenter): Presenter<VoiceMessageComposerState>

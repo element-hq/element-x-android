@@ -18,6 +18,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -59,10 +61,10 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -998,7 +1000,6 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         var canUserTriggerRoomNotificationResult = true
         val room = FakeMatrixRoom(
-            isDirect = false,
             canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1007,17 +1008,12 @@ class MessageComposerPresenterTest {
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
+            givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
-            )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // A null suggestion (no suggestion was received) returns nothing
@@ -1060,9 +1056,6 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
-            isDirect = true,
-            activeMemberCount = 2,
-            isEncrypted = true,
             canUserTriggerRoomNotificationResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1071,17 +1064,17 @@ class MessageComposerPresenterTest {
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
-        }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
+                )
             )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        }
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // An empty suggestion returns the joined members that are not the current user, but not the room
@@ -1287,11 +1280,11 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isNull()
             }
-
             assert(loadDraftLambda)
                 .isCalledOnce()
                 .with(value(A_ROOM_ID), value(false))
@@ -1321,7 +1314,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isTrue()
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -1354,7 +1348,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(anEditMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1400,7 +1395,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(aReplyMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1532,6 +1528,7 @@ class MessageComposerPresenterTest {
         navigator: MessagesNavigator = FakeMessagesNavigator(),
         pickerProvider: PickerProvider = this.pickerProvider,
         featureFlagService: FeatureFlagService = this.featureFlagService,
+        locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
@@ -1554,6 +1551,7 @@ class MessageComposerPresenterTest {
         mediaSender = MediaSender(mediaPreProcessor, room, InMemorySessionPreferencesStore()),
         snackbarDispatcher = snackbarDispatcher,
         analyticsService = analyticsService,
+        locationService = locationService,
         messageComposerContext = DefaultMessageComposerContext(),
         richTextEditorStateFactory = TestRichTextEditorStateFactory(),
         roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),
@@ -1572,8 +1570,7 @@ class MessageComposerPresenterTest {
     }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
+        skipItems(1)
         return awaitItem()
     }
 }

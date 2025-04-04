@@ -11,15 +11,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
+import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /**
  * Presenter for room member details screen.
@@ -29,6 +43,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     @Assisted private val roomMemberId: UserId,
     private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
+    private val encryptionService: EncryptionService,
     userProfilePresenterFactory: UserProfilePresenterFactory,
 ) : Presenter<UserProfileState> {
     interface Factory {
@@ -37,8 +52,11 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 
     private val userProfilePresenter = userProfilePresenterFactory.create(roomMemberId)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): UserProfileState {
+        val coroutineScope = rememberCoroutineScope()
+
         val roomMember by room.getRoomMemberAsState(roomMemberId)
         LaunchedEffect(Unit) {
             // Update room member info when opening this screen
@@ -62,10 +80,55 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 
         val userProfileState = userProfilePresenter.present()
 
+        val identityStateChanges by produceState<IdentityStateChange?>(initialValue = null) {
+            room.roomInfoFlow.filter { it.isEncrypted == true }
+                .flatMapLatest {
+                    // Fetch the initial identity state manually
+                    val identityState = encryptionService.getUserIdentity(roomMemberId).getOrNull()
+                    value = identityState?.let { IdentityStateChange(roomMemberId, it) }
+
+                    // Subscribe to the identity changes
+                    room.roomMemberIdentityStateChange()
+                        .map { it.find { it.identityRoomMember.userId == roomMemberId } }
+                        .map { roomMemberIdentityStateChange ->
+                            // If we didn't receive any info, manually fetch it
+                            roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()
+                        }
+                        .filterNotNull()
+                }
+                .collect { value = IdentityStateChange(roomMemberId, it) }
+        }
+
+        val verificationState = remember(identityStateChanges) {
+            when (identityStateChanges?.identityState) {
+                IdentityState.VerificationViolation -> UserProfileVerificationState.VERIFICATION_VIOLATION
+                IdentityState.Verified -> UserProfileVerificationState.VERIFIED
+                IdentityState.Pinned, IdentityState.PinViolation -> UserProfileVerificationState.UNVERIFIED
+                else -> UserProfileVerificationState.UNKNOWN
+            }
+        }
+
+        fun eventSink(event: UserProfileEvents) {
+            when (event) {
+                UserProfileEvents.WithdrawVerification -> coroutineScope.launch {
+                    encryptionService.withdrawVerification(roomMemberId)
+                }
+                else -> Unit
+            }
+        }
+
         return userProfileState.copy(
             isDebugBuild = buildMeta.isDebuggable,
             userName = roomUserName ?: userProfileState.userName,
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
+            verificationState = verificationState,
+            eventSink = { event ->
+                if (event is UserProfileEvents.WithdrawVerification) {
+                    eventSink(UserProfileEvents.WithdrawVerification)
+                } else {
+                    userProfileState.eventSink(event)
+                }
+            }
         )
     }
 }

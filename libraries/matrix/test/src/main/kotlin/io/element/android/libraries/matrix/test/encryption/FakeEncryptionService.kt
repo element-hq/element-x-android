@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,7 @@ class FakeEncryptionService(
     private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val isUserVerifiedResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val withdrawVerificationResult: (UserId) -> Result<Unit> = { lambdaError() },
+    private val getUserIdentityResult: (UserId) -> Result<IdentityState?> = { lambdaError() }
 ) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
@@ -131,6 +133,10 @@ class FakeEncryptionService(
 
     override suspend fun isUserVerified(userId: UserId): Result<Boolean> = simulateLongTask {
         isUserVerifiedResult(userId)
+    }
+
+    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = simulateLongTask {
+        return getUserIdentityResult(userId)
     }
 
     companion object {

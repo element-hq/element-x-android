@@ -12,6 +12,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.ui.room.IdentityRoomMember
+import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import kotlinx.collections.immutable.toImmutableList
 
 class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState> {

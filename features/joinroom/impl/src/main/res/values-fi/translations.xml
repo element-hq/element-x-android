@@ -7,6 +7,10 @@
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Kyllä, peruuta"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Haluatko varmasti peruuttaa pyyntösi liittyä tähän huoneeseen?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Peruuta liittymispyyntö"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Kyllä, hylkää ja estä"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Oletko varma, että haluat kieltäytyä kutsusta liittyä tähän huoneeseen? Tämä estää myös käyttäjää %1$s ottamasta sinuun yhteyttä tai kutsumasta sinua huoneisiin."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Hylkää kutsu ja estä"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Hylkää ja estä"</string>
   <string name="screen_join_room_fail_message">"Huoneeseen liittyminen epäonnistui."</string>
   <string name="screen_join_room_fail_reason">"Tämä huone on tarkoitettu vain kutsutuille, tai siihen saattaa liittyä rajoituksia tilatasolla."</string>
   <string name="screen_join_room_forget_action">"Unohda tämä huone"</string>
@@ -17,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Viesti (valinnainen)"</string>
   <string name="screen_join_room_knock_sent_description">"Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään."</string>
   <string name="screen_join_room_knock_sent_title">"Liittymispyyntö lähetetty"</string>
+  <string name="screen_join_room_loading_alert_message">"Emme voineet näyttää huoneen esikatselua. Tämä voi johtua verkko- tai palvelinongelmista."</string>
+  <string name="screen_join_room_loading_alert_title">"Emme voineet näyttää tämän huoneen esikatselua"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s ei tue vielä tiloja. Voit käyttää tiloja selainversiolla."</string>
   <string name="screen_join_room_space_not_supported_title">"Tiloja ei vielä tueta"</string>
   <string name="screen_join_room_subtitle_knock">"Paina alla olevaa nappia ja huoneen ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty."</string>

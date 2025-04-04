@@ -12,7 +12,7 @@
     <item quantity="other">"%d varsler"</item>
   </plurals>
   <string name="notification_fallback_content">"Varsel"</string>
-  <string name="notification_incoming_call">"Innkommende anrop"</string>
+  <string name="notification_incoming_call">"📹 Innkommende anrop"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - vennligst åpne rommet"</string>
   <string name="notification_invitation_action_join">"Bli med"</string>
   <string name="notification_invitation_action_reject">"Avvis"</string>
@@ -22,6 +22,7 @@
   </plurals>
   <string name="notification_invite_body">"Inviterte deg til å chatte"</string>
   <string name="notification_invite_body_with_sender">"%1$s inviterte deg til å chatte"</string>
+  <string name="notification_mentioned_you_body">"Nevnte deg: %1$s"</string>
   <string name="notification_new_messages">"Nye meldinger"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ny melding"</item>
@@ -51,9 +52,19 @@
   <string name="push_distributor_background_sync_android">"Bakgrunnssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Ingen gyldige Google Play-tjenester funnet. Det kan hende at varsler ikke fungerer som de skal."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Få navnet på den nåværende tilbyderen."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ingen push-leverandører er valgt."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Gjeldende push-leverandør: %1$s."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nåværende push-leverandør"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-leverandører funnet."</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Kontroller at programmet kan vise varsler."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Det er ikke klikket på varselet."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Kan ikke vise varselet."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Varselet har blitt klikket på!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Vis varsel"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klikk på varselet for å fortsette testen."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Kontroller at applikasjonen mottar push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Feil: pusheren har avvist forespørselen."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Feil: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Feil, kan ikke teste push."</string>
 </resources>

@@ -19,5 +19,6 @@ Bunu istediğiniz zaman oda ayarlarından değiştirebilirsiniz."</string>
   <string name="screen_create_room_room_visibility_section_title">"Oda görünürlüğü"</string>
   <string name="screen_create_room_title">"Bir oda oluştur"</string>
   <string name="screen_create_room_topic_label">"Konu (isteğe bağlı)"</string>
+  <string name="screen_room_directory_search_title">"Oda dizini"</string>
   <string name="screen_start_chat_error_starting_chat">"Sohbet başlatmaya çalışırken bir hata oluştu"</string>
 </resources>

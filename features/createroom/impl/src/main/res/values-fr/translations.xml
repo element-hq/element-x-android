@@ -19,6 +19,7 @@ Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string
   <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
   <string name="screen_create_room_title">"Créer un salon"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
+  <string name="screen_room_directory_search_title">"Annuaire des salons"</string>
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
   <string name="screen_start_chat_join_room_by_address_action">"Saisir une adresse de salon"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Ce n’est pas une adresse valide"</string>

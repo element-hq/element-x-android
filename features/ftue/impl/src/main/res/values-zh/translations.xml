@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"无法确认？"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"创建新的恢复密钥"</string>
+  <string name="screen_identity_confirmation_subtitle">"验证此设备以开始安全地收发消息。"</string>
+  <string name="screen_identity_confirmation_title">"确认这是你"</string>
+  <string name="screen_identity_confirmation_use_another_device">"使用其他设备"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"使用恢复密钥"</string>
+  <string name="screen_identity_confirmed_subtitle">"现在，您可以安全地阅读或发送消息，与您聊天的人也会信任此设备。"</string>
+  <string name="screen_identity_confirmed_title">"设备已验证"</string>
+  <string name="screen_identity_use_another_device">"使用其他设备"</string>
+  <string name="screen_identity_waiting_on_other_device">"正在等待其他设备……"</string>
   <string name="screen_notification_optin_subtitle">"您可以稍后更改设置。"</string>
   <string name="screen_notification_optin_title">"允许通知，绝不错过任何消息"</string>
+  <string name="screen_session_verification_enter_recovery_key">"输入恢复密钥"</string>
   <string name="screen_welcome_bullet_1">"今年晚些时候将增加通话、投票、搜索等功能。"</string>
   <string name="screen_welcome_bullet_2">"加密聊天室的消息历史记录尚不可用。"</string>
   <string name="screen_welcome_bullet_3">"我们很乐意听取您的意见，请通过设置页面告诉我们您的想法。"</string>

@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -32,7 +33,9 @@ class DefaultJoinRoomTest {
         val roomSummary = aRoomSummary()
         val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
         val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom()
+        val roomResult = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo())
+        }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
         val client: MatrixClient = FakeMatrixClient().also {
             it.joinRoomLambda = joinRoomLambda
@@ -67,7 +70,9 @@ class DefaultJoinRoomTest {
         val roomSummary = aRoomSummary()
         val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
         val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom()
+        val roomResult = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo())
+        }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
         val client: MatrixClient = FakeMatrixClient().also {
             it.joinRoomLambda = joinRoomLambda
@@ -103,7 +108,9 @@ class DefaultJoinRoomTest {
         val roomSummary = aRoomSummary()
         val joinRoomLambda = lambdaRecorder { _: RoomId -> Result.success(roomSummary) }
         val joinRoomByIdOrAliasLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String> -> Result.success(roomSummary) }
-        val roomResult = FakeMatrixRoom()
+        val roomResult = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo())
+        }
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
         val client: MatrixClient = FakeMatrixClient().also {
             it.joinRoomLambda = joinRoomLambda

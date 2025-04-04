@@ -9,6 +9,7 @@
   <string name="screen_room_member_details_block_alert_action">"დაბლოკვა"</string>
   <string name="screen_room_member_details_block_alert_description">"დაბლოკილი მომხმარებლები ვერ შეძლებენ თქვენთვის შეტყობინების გაგზავნას და ყველა მათი შეტყობინება თქვენთვის დამალული იქნება. თქვენ მათი განბლოკვა ნებისმეირ დროს შეგიძლიათ."</string>
   <string name="screen_room_member_details_block_user">"მომხმარებლის დაბლოკვა"</string>
+  <string name="screen_room_member_details_title">"პროფილი"</string>
   <string name="screen_room_member_details_unblock_alert_action">"განბლოკვა"</string>
   <string name="screen_room_member_details_unblock_alert_description">"თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას."</string>
   <string name="screen_room_member_details_unblock_user">"Მომხმარებლის განბლოკვა"</string>

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Confirmation impossible ?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Créer une nouvelle clé de récupération"</string>
+  <string name="screen_identity_confirmation_subtitle">"Vérifier cette session pour configurer votre messagerie sécurisée."</string>
+  <string name="screen_identity_confirmation_title">"Confirmez votre identité"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Utiliser une autre session"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Utiliser la clé de récupération"</string>
+  <string name="screen_identity_confirmed_subtitle">"Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cette session."</string>
+  <string name="screen_identity_confirmed_title">"Session vérifiée"</string>
+  <string name="screen_identity_use_another_device">"Utiliser une autre session"</string>
+  <string name="screen_identity_waiting_on_other_device">"En attente d’une autre session…"</string>
   <string name="screen_notification_optin_subtitle">"Vous pourrez modifier vos paramètres ultérieurement."</string>
   <string name="screen_notification_optin_title">"Autorisez les notifications et ne manquez aucun message"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Utiliser la clé de récupération"</string>
   <string name="screen_welcome_bullet_1">"Les appels, les sondages, les recherches et plus encore seront ajoutés plus tard cette année."</string>
   <string name="screen_welcome_bullet_2">"L’historique des messages pour les salons chiffrés ne sera pas disponible dans cette mise à jour."</string>
   <string name="screen_welcome_bullet_3">"N’hésitez pas à nous faire part de vos commentaires via l’écran des paramètres."</string>

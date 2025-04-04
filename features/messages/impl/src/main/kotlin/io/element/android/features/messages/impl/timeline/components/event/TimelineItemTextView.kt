@@ -41,11 +41,13 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
@@ -64,6 +66,7 @@ fun TimelineItemTextView(
             EditorStyledText(
                 text = body,
                 onLinkClickedListener = onLinkClick,
+                onLinkLongClickedListener = onLinkLongClick,
                 style = ElementRichTextEditorStyle.textStyle(),
                 onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 releaseOnDetach = false,
@@ -115,6 +118,7 @@ internal fun TimelineItemTextViewPreview(
     TimelineItemTextView(
         content = content,
         onLinkClick = {},
+        onLinkLongClick = {},
     )
 }
 
@@ -127,6 +131,7 @@ internal fun TimelineItemTextViewWithLinkifiedUrlPreview() = ElementPreview {
     TimelineItemTextView(
         content = content,
         onLinkClick = {},
+        onLinkLongClick = {},
     )
 }
 
@@ -139,5 +144,6 @@ internal fun TimelineItemTextViewWithLinkifiedUrlAndNestedParenthesisPreview() =
     TimelineItemTextView(
         content = content,
         onLinkClick = {},
+        onLinkLongClick = {},
     )
 }

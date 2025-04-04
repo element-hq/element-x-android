@@ -18,6 +18,21 @@ class MapTilerStaticMapUrlBuilderTest {
     )
 
     @Test
+    fun `isServiceAvailable returns true if api key is not empty`() {
+        assertThat(builder.isServiceAvailable()).isTrue()
+    }
+
+    @Test
+    fun `isServiceAvailable returns false if api key is empty`() {
+        val builderWithoutKey = MapTilerStaticMapUrlBuilder(
+            apiKey = "",
+            lightMapId = "aLightMapId",
+            darkMapId = "aDarkMapId",
+        )
+        assertThat(builderWithoutKey.isServiceAvailable()).isFalse()
+    }
+
+    @Test
     fun `static map 1x density`() {
         assertThat(
             builder.build(

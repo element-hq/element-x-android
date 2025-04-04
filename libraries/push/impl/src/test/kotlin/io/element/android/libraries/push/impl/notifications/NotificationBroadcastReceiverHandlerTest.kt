@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -337,7 +338,14 @@ class NotificationBroadcastReceiverHandlerTest {
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
             getUpdatedMemberResult = { Result.success(aRoomMember()) },
-        )
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
+                )
+            )
+        }
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(
@@ -396,7 +404,14 @@ class NotificationBroadcastReceiverHandlerTest {
         val matrixRoom = FakeMatrixRoom(
             liveTimeline = liveTimeline,
             getUpdatedMemberResult = { Result.success(aRoomMember()) },
-        )
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
+                )
+            )
+        }
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(

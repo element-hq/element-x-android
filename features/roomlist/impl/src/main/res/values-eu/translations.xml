@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_submit">"Konfiguratu berreskurapena"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Sartu zure berreskuratze-gakoa"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Berreskuratze-gakoa ahaztu al duzu?"</string>
+  <string name="full_screen_intent_banner_message">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
+  <string name="full_screen_intent_banner_title">"Hobetu deien esperientzia"</string>
+  <string name="screen_invites_decline_chat_message">"Ziur %1$s(e)ra batzeko gonbidapena baztertu nahi duzula?"</string>
+  <string name="screen_invites_decline_chat_title">"Baztertu gonbidapena"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Ziur %1$s(r)en txat pribatua baztertu nahi duzula?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Baztertu txata"</string>
+  <string name="screen_invites_empty_list">"Ez dago gonbidapenik"</string>
+  <string name="screen_invites_invited_you">"%1$s(e)k (%2$s) gonbidatu zaitu"</string>
+  <string name="screen_join_room_knock_sent_title">"Sartzeko eskaera bidali da"</string>
+  <string name="screen_migration_message">"Behin egin beharreko prozesua da; eskerrik asko itxaroteagatik."</string>
+  <string name="screen_migration_title">"Zure kontua konfiguratzen."</string>
+  <string name="screen_roomlist_a11y_create_message">"Sortu elkarrizketa edo gela berria"</string>
+  <string name="screen_roomlist_empty_message">"Hasi norbaiti mezuak bidaltzen."</string>
+  <string name="screen_roomlist_empty_title">"Oraindik ez dago txatik."</string>
+  <string name="screen_roomlist_filter_favourites">"Gogokoak"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Txatak gogokoetara gehi dezakezu txaten ezarpenetan.
+Oraingoz, iragazkiak desautatu ditzakezu zure gainerako txatak ikusteko"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Oraindik ez duzu gogoko txatik"</string>
+  <string name="screen_roomlist_filter_invites">"Gonbidapenak"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Ez duzu gonbidapenik zain."</string>
+  <string name="screen_roomlist_filter_low_priority">"Lehentasun baxua"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Iragazkiak desautatu ditzakezu gainerako txatak ikusteko"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Ez duzu hautaketa betetzen duen txatik"</string>
+  <string name="screen_roomlist_filter_people">"Jendea"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Oraindik ez duzu Mezu Pribaturik"</string>
+  <string name="screen_roomlist_filter_rooms">"Gelak"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Oraindik ez zaude inolako gelatan"</string>
+  <string name="screen_roomlist_filter_unreads">"Irakurri gabeak"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Bejondeizula!
+Ez duzu irakurri gabeko mezurik!"</string>
+  <string name="screen_roomlist_main_space_title">"Txatak"</string>
+  <string name="screen_roomlist_mark_as_read">"Markatu irakurritzat"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markatu irakurri gabetzat"</string>
+  <string name="session_verification_banner_message">"Gailu berri bat erabiltzen ari zarela dirudi. Egiaztatu beste gailu batekin enkriptatutako mezuak atzitzeko."</string>
+  <string name="session_verification_banner_title">"Egiaztatu zu zarela"</string>
+</resources>

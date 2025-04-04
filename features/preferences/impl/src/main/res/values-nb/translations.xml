@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
+  <string name="full_screen_intent_banner_title">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
   <string name="screen_advanced_settings_developer_mode">"Utviklermodus"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktiver for å få tilgang til funksjoner og funksjonalitet for utviklere."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ugyldig URL. Pass på at du inkluderer protokollen (http/https) og riktig adresse."</string>
+  <string name="screen_advanced_settings_media_compression_description">"Last opp bilder og videoer raskere og reduser databruken"</string>
+  <string name="screen_advanced_settings_media_compression_title">"Optimaliser mediekvaliteten"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rik tekstredigering for å skrive Markdown manuelt."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Lesebekreftelser"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Hvis slått av, sendes ikke lesebekreftelsene dine til noen. Du vil fortsatt motta lesebekreftelser fra andre brukere."</string>
+  <string name="screen_advanced_settings_share_presence">"Del tilstedeværelse"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Hvis slått av, kan du ikke sende eller motta lesebekreftelser eller skrivevarsler."</string>
+  <string name="screen_advanced_settings_view_source_description">"Aktiver alternativet for å vise meldingskilden på tidslinjen."</string>
+  <string name="screen_blocked_users_empty">"Du har ingen blokkerte brukere"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Fjern blokkering"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du vil kunne se alle meldingene fra dem igjen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Fjern blokkering av bruker"</string>
+  <string name="screen_blocked_users_unblocking">"Fjerner blokkering …"</string>
   <string name="screen_edit_profile_display_name">"Visningsnavn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnavn"</string>
   <string name="screen_edit_profile_error">"Det oppstod en ukjent feil, og informasjonen kunne ikke endres."</string>
@@ -29,11 +41,17 @@ Hvis du fortsetter, kan noen av innstillingene dine endres."</string>
   <string name="screen_notification_settings_enable_notifications">"Aktiver varsler på denne enheten"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurasjonen er ikke korrigert, prøv igjen."</string>
   <string name="screen_notification_settings_group_chats">"Gruppechatter"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitasjoner"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og det kan hende at du ikke blir varslet i enkelte rom."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Omtaler"</string>
   <string name="screen_notification_settings_mode_all">"Alle"</string>
+  <string name="screen_notification_settings_mode_mentions">"Omtaler"</string>
   <string name="screen_notification_settings_notification_section_title">"Varsle meg om"</string>
   <string name="screen_notification_settings_room_mention_label">"Gi meg varsel på @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"For å motta varsler, vennligst endre %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminnstillinger"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemvarsler er slått av"</string>
   <string name="screen_notification_settings_title">"Varslinger"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Feilsøk"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Feilsøk varsler"</string>
 </resources>

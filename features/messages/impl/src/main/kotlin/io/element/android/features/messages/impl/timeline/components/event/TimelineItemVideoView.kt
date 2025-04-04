@@ -64,6 +64,7 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.link.Link
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -73,7 +74,8 @@ fun TimelineItemVideoView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
-    onLinkClick: (String) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -147,6 +149,7 @@ fun TimelineItemVideoView(
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     onLinkClickedListener = onLinkClick,
+                    onLinkLongClickedListener = onLinkLongClick,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
                     onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
@@ -166,6 +169,7 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
         onContentClick = {},
         onLongClick = {},
         onLinkClick = {},
+        onLinkLongClick = {},
         onContentLayoutChange = {},
     )
 }
@@ -180,6 +184,7 @@ internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
         onContentClick = {},
         onLongClick = {},
         onLinkClick = {},
+        onLinkLongClick = {},
         onContentLayoutChange = {},
     )
 }

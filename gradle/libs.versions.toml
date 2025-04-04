@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.8.1"
+android_gradle_plugin = "8.9.1"
 kotlin = "2.1.10"
 kotlinpoet = "2.1.0"
 ksp = "2.1.10-1.0.31"
@@ -25,7 +25,7 @@ media3 = "1.5.1"
 camera = "1.4.1"
 
 # Compose
-compose_bom = "2025.02.00"
+compose_bom = "2025.03.00"
 composecompiler = "1.5.15"
 
 # Coroutines
@@ -46,14 +46,14 @@ coil = "3.1.0"
 showkase = "1.0.3"
 appyx = "1.6.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.38.2"
+wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
-dependencyAnalysis = "2.10.1"
+dependencyAnalysis = "2.13.2"
 
 # DI
-dagger = "2.55"
+dagger = "2.56.1"
 anvil = "0.4.1"
 
 # Auto service
@@ -77,10 +77,11 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.10.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.11.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+google_tink = "com.google.crypto.tink:tink-android:1.17.0"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -100,7 +101,6 @@ androidx_browser = "androidx.browser:browser:1.8.0"
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
-androidx_security_crypto = "androidx.security:security-crypto:1.1.0-alpha06"
 androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 androidx_biometric = "androidx.biometric:biometric-ktx:1.2.0-alpha05"
@@ -109,7 +109,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.12.1"
+androidx_webkit = "androidx.webkit:webkit:1.13.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3" }
@@ -174,7 +174,7 @@ jsoup = "org.jsoup:jsoup:1.19.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.3.6"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:25.3.24"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -188,15 +188,15 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.8.2"
+maplibre = "org.maplibre.gl:android-sdk:11.8.4"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.11.3"
-sentry = "io.sentry:sentry-android:8.3.0"
+posthog = "com.posthog:posthog-android:3.12.0"
+sentry = "io.sentry:sentry-android:8.5.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
@@ -210,6 +210,9 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
+
+# Element Call
+element_call_embedded = "io.element.android:element-call-embedded:0.9.0-rc.4"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -242,6 +245,6 @@ paparazzi = "app.cash.paparazzi:1.3.5"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-sonarqube = "org.sonarqube:6.0.1.5171"
-licensee = "app.cash.licensee:1.12.0"
+sonarqube = "org.sonarqube:6.1.0.5360"
+licensee = "app.cash.licensee:1.13.0"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

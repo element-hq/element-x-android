@@ -17,7 +17,7 @@ data class UserProfileState(
     val userId: UserId,
     val userName: String?,
     val avatarUrl: String?,
-    val isVerified: AsyncData<Boolean>,
+    val verificationState: UserProfileVerificationState,
     val isBlocked: AsyncData<Boolean>,
     val startDmActionState: AsyncAction<RoomId>,
     val displayConfirmationDialog: ConfirmationDialog?,
@@ -30,4 +30,11 @@ data class UserProfileState(
         Block,
         Unblock
     }
+}
+
+enum class UserProfileVerificationState {
+    UNKNOWN,
+    VERIFIED,
+    UNVERIFIED,
+    VERIFICATION_VIOLATION,
 }

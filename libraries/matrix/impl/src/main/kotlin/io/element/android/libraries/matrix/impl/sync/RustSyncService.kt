@@ -62,6 +62,7 @@ class RustSyncService(
         stopSync()
         Timber.d("Destroying sync service")
         isServiceReady.set(false)
+        inner.destroy()
     }
 
     override val syncState: StateFlow<SyncState> =

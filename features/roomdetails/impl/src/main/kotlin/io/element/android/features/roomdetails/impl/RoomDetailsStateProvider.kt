@@ -14,6 +14,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -50,6 +51,9 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(pinnedMessagesCount = 3),
             aRoomDetailsState(knockRequestsCount = null, canShowKnockRequests = true),
             aRoomDetailsState(knockRequestsCount = 4, canShowKnockRequests = true),
+            aRoomDetailsState(hasMemberVerificationViolations = true),
+            aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFIED),
+            aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
             // Add other state here
         )
 }
@@ -110,6 +114,7 @@ fun aRoomDetailsState(
     canShowKnockRequests: Boolean = false,
     knockRequestsCount: Int? = null,
     canShowSecurityAndPrivacy: Boolean = true,
+    hasMemberVerificationViolations: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     isDebugBuild = false,
@@ -138,6 +143,7 @@ fun aRoomDetailsState(
     canShowKnockRequests = canShowKnockRequests,
     knockRequestsCount = knockRequestsCount,
     canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
+    hasMemberVerificationViolations = hasMemberVerificationViolations,
     eventSink = eventSink
 )
 
@@ -153,6 +159,7 @@ fun aDmRoomDetailsState(
     isDmMemberIgnored: Boolean = false,
     roomName: String = "Daniel",
     isEncrypted: Boolean = true,
+    dmRoomMemberVerificationState: UserProfileVerificationState = UserProfileVerificationState.UNKNOWN,
 ) = aRoomDetailsState(
     roomName = roomName,
     isPublic = false,
@@ -163,5 +170,6 @@ fun aDmRoomDetailsState(
     ),
     roomMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
+        verificationState = dmRoomMemberVerificationState,
     )
 )

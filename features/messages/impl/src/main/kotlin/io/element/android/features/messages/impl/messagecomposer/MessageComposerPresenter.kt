@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import dagger.assisted.Assisted
@@ -30,6 +31,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
@@ -83,11 +85,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
@@ -104,6 +108,7 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val locationService: LocationService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val roomAliasSuggestionsDataSource: RoomAliasSuggestionsDataSource,
@@ -133,29 +138,25 @@ class MessageComposerPresenter @AssistedInject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal var showTextFormatting: Boolean by mutableStateOf(false)
 
-    @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
+
+        val roomInfo by room.roomInfoFlow.collectAsState()
 
         val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
-        var isMentionsEnabled by remember { mutableStateOf(false) }
-        var isRoomAliasSuggestionsEnabled by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
-            isRoomAliasSuggestionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.RoomAliasSuggestions)
-        }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
 
         val canShareLocation = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing)
+            canShareLocation.value = featureFlagService.isFeatureEnabled(FeatureFlags.LocationSharing) &&
+                locationService.isServiceAvailable()
         }
 
         val canCreatePoll = remember { mutableStateOf(false) }
@@ -182,8 +183,6 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
-        val roomAliasSuggestions by roomAliasSuggestionsDataSource.getAllRoomAliasSuggestions().collectAsState(initial = emptyList())
-
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
                 when (pendingEvent) {
@@ -196,35 +195,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
 
         val suggestions = remember { mutableStateListOf<ResolvedSuggestion>() }
-        LaunchedEffect(isMentionsEnabled) {
-            if (!isMentionsEnabled) return@LaunchedEffect
-            val currentUserId = room.sessionId
-
-            suspend fun canSendRoomMention(): Boolean {
-                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !room.isDm && userCanSendAtRoom
-            }
-
-            // This will trigger a search immediately when `@` is typed
-            val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
-            // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
-            val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
-            merge(mentionStartTrigger, mentionCompletionTrigger)
-                .combine(room.membersStateFlow) { suggestion, roomMembersState ->
-                    suggestions.clear()
-                    val result = suggestionsProcessor.process(
-                        suggestion = suggestion,
-                        roomMembersState = roomMembersState,
-                        roomAliasSuggestions = if (isRoomAliasSuggestionsEnabled) roomAliasSuggestions else emptyList(),
-                        currentUserId = currentUserId,
-                        canSendRoomMention = ::canSendRoomMention,
-                    )
-                    if (result.isNotEmpty()) {
-                        suggestions.addAll(result)
-                    }
-                }
-                .collect()
-        }
+        ResolveSuggestionsEffect(suggestions)
 
         DisposableEffect(Unit) {
             // Declare that the user is not typing anymore when the composer is disposed
@@ -239,9 +210,9 @@ class MessageComposerPresenter @AssistedInject constructor(
 
         val textEditorState by rememberUpdatedState(
             if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState)
+                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
             } else {
-                TextEditorState.Markdown(markdownTextEditorState)
+                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
             }
         )
 
@@ -402,6 +373,45 @@ class MessageComposerPresenter @AssistedInject constructor(
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
         )
+    }
+
+    @OptIn(FlowPreview::class)
+    @Composable
+    private fun ResolveSuggestionsEffect(
+        suggestions: SnapshotStateList<ResolvedSuggestion>,
+    ) {
+        LaunchedEffect(Unit) {
+            val currentUserId = room.sessionId
+
+            suspend fun canSendRoomMention(): Boolean {
+                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                return !room.isDm() && userCanSendAtRoom
+            }
+
+            // This will trigger a search immediately when `@` is typed
+            val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
+            // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
+            val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
+
+            val mentionTriggerFlow = merge(mentionStartTrigger, mentionCompletionTrigger)
+
+            val roomAliasSuggestionsFlow = roomAliasSuggestionsDataSource
+                .getAllRoomAliasSuggestions()
+                .stateIn(this, SharingStarted.Lazily, emptyList())
+
+            combine(mentionTriggerFlow, room.membersStateFlow, roomAliasSuggestionsFlow) { suggestion, roomMembersState, roomAliasSuggestions ->
+                    val result = suggestionsProcessor.process(
+                        suggestion = suggestion,
+                        roomMembersState = roomMembersState,
+                        roomAliasSuggestions = roomAliasSuggestions,
+                        currentUserId = currentUserId,
+                        canSendRoomMention = ::canSendRoomMention,
+                    )
+                    suggestions.clear()
+                    suggestions.addAll(result)
+                }
+                .collect()
+        }
     }
 
     private fun CoroutineScope.sendMessage(

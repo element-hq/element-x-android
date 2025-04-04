@@ -37,7 +37,6 @@
   <string name="screen_roomlist_main_space_title">"Усе чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
-  <string name="screen_roomlist_room_directory_button_title">"Праглядзець усе пакоі"</string>
   <string name="session_verification_banner_message">"Здаецца, вы карыстаецеся новай прыладай. Праверце з дапамогай іншай прылады, каб атрымаць доступ да зашыфраваных паведамленняў."</string>
   <string name="session_verification_banner_title">"Пацвердзіце, што гэта вы"</string>
 </resources>

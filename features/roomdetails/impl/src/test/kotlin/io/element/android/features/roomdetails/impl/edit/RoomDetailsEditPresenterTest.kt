@@ -93,7 +93,6 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             displayName = A_ROOM_NAME,
             rawName = A_ROOM_RAW_NAME,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
@@ -106,7 +105,7 @@ class RoomDetailsEditPresenterTest {
             assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomRawName).isEqualTo(A_ROOM_RAW_NAME)
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
-            assertThat(initialState.roomTopic).isEqualTo(room.topic.orEmpty())
+            assertThat(initialState.roomTopic).isEqualTo(room.info().topic.orEmpty())
             assertThat(initialState.avatarActions).containsExactly(
                 AvatarAction.ChoosePhoto,
                 AvatarAction.TakePhoto,
@@ -220,7 +219,6 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
@@ -266,7 +264,6 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
@@ -291,7 +288,6 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(anotherAvatarUri)
@@ -319,8 +315,7 @@ class RoomDetailsEditPresenterTest {
             stateWithNewAvatar.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             val stateWithNewAvatar2 = awaitItem()
             assertThat(stateWithNewAvatar2.roomAvatarUrl).isEqualTo(roomAvatarUri)
-            deleteCallback.assertions().isCalledExactly(4).withSequence(
-                listOf(value(null)),
+            deleteCallback.assertions().isCalledExactly(3).withSequence(
                 listOf(value(null)),
                 listOf(value(roomAvatarUri)),
                 listOf(value(anotherAvatarUri)),
@@ -334,7 +329,6 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(roomAvatarUri)
@@ -385,7 +379,6 @@ class RoomDetailsEditPresenterTest {
             topic = null,
             displayName = "fallback",
             avatarUrl = null,
-            emitRoomInfo = true,
             canSendStateResult = { _, _ -> Result.success(true) }
         )
         fakePickerProvider.givenResult(roomAvatarUri)
@@ -439,7 +432,6 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             setNameResult = setNameResult,
             setTopicResult = setTopicResult,
             removeAvatarResult = removeAvatarResult,
@@ -553,7 +545,7 @@ class RoomDetailsEditPresenterTest {
             updateAvatarResult.assertions().isCalledOnce().with(value(MimeTypes.Jpeg), value(fakeFileContents))
             deleteCallback.assertions().isCalledExactly(2).withSequence(
                 listOf(value(null)),
-                listOf(value(null)),
+                listOf(value(roomAvatarUri)),
             )
         }
     }
@@ -588,11 +580,10 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             setNameResult = { Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomName("New name"))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomName("New name"), deleteCallbackNumberOfInvocation = 1)
     }
 
     @Test
@@ -601,11 +592,10 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             setTopicResult = { Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomTopic("New topic"))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomTopic("New topic"), deleteCallbackNumberOfInvocation = 1)
     }
 
     @Test
@@ -614,11 +604,10 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             removeAvatarResult = { Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove), deleteCallbackNumberOfInvocation = 3)
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove), deleteCallbackNumberOfInvocation = 2)
     }
 
     @Test
@@ -628,11 +617,10 @@ class RoomDetailsEditPresenterTest {
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
-            emitRoomInfo = true,
             updateAvatarResult = { _, _ -> Result.failure(Throwable("!")) },
             canSendStateResult = { _, _ -> Result.success(true) }
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 3)
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 2)
     }
 
     @Test
@@ -704,6 +692,6 @@ class RoomDetailsEditPresenterTest {
 }
 
 private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-    skipItems(2)
+    skipItems(1)
     return awaitItem()
 }

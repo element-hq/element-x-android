@@ -17,5 +17,6 @@ Puteți modifica acest lucru oricând în setări."</string>
   <string name="screen_create_room_room_name_label">"Numele camerei"</string>
   <string name="screen_create_room_title">"Creați o cameră"</string>
   <string name="screen_create_room_topic_label">"Subiect (opțional)"</string>
+  <string name="screen_room_directory_search_title">"Director de camere"</string>
   <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
 </resources>

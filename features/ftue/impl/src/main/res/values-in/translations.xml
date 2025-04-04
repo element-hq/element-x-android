@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Tidak dapat mengonfirmasi?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Buat kunci pemulihan baru"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifikasi perangkat ini untuk menyiapkan perpesanan aman."</string>
+  <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Gunakan perangkat lain"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Gunakan kunci pemulihan"</string>
+  <string name="screen_identity_confirmed_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini."</string>
+  <string name="screen_identity_confirmed_title">"Perangkat terverifikasi"</string>
+  <string name="screen_identity_use_another_device">"Gunakan perangkat lain"</string>
+  <string name="screen_identity_waiting_on_other_device">"Menunggu di perangkat lain…"</string>
   <string name="screen_notification_optin_subtitle">"Anda dapat mengubah pengaturan Anda nanti."</string>
   <string name="screen_notification_optin_title">"Izinkan pemberitahuan dan jangan pernah melewatkan pesan"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Masukkan kunci pemulihan"</string>
   <string name="screen_welcome_bullet_1">"Panggilan, pemungutan suara, pencarian, dan lainnya akan ditambahkan di tahun ini."</string>
   <string name="screen_welcome_bullet_2">"Riwayat pesan untuk ruangan terenkripsi tidak akan tersedia dalam pembaruan ini."</string>
   <string name="screen_welcome_bullet_3">"Kami ingin mendengar dari Anda, beri tahu kami pendapat Anda melalui halaman pengaturan."</string>

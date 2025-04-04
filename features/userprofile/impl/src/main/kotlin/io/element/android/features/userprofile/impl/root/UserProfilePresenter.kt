@@ -24,10 +24,10 @@ import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
+import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -75,10 +75,8 @@ class UserProfilePresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         val isCurrentUser = remember { client.isMe(userId) }
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
-        var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
-        val isVerified: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by getDmRoomId()
         val canCall by getCanCall(dmRoomId)
         LaunchedEffect(Unit) {
@@ -88,14 +86,7 @@ class UserProfilePresenter @AssistedInject constructor(
                 .onEach { isBlocked.value = AsyncData.Success(it) }
                 .launchIn(this)
         }
-        LaunchedEffect(Unit) {
-            userProfile = client.getProfile(userId).getOrNull()
-        }
-        LaunchedEffect(Unit) {
-            suspend {
-                client.encryptionService().isUserVerified(userId).getOrThrow()
-            }.runCatchingUpdatingState(isVerified)
-        }
+        val userProfile by produceState<MatrixUser?>(null) { value = client.getProfile(userId).getOrNull() }
 
         fun handleEvents(event: UserProfileEvents) {
             when (event) {
@@ -131,6 +122,8 @@ class UserProfilePresenter @AssistedInject constructor(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
+                // Do nothing for withdrawing verification as it's handled by the RoomMemberDetailsPresenter if needed
+                UserProfileEvents.WithdrawVerification -> Unit
             }
         }
 
@@ -140,7 +133,7 @@ class UserProfilePresenter @AssistedInject constructor(
             userName = userProfile?.displayName,
             avatarUrl = userProfile?.avatarUrl,
             isBlocked = isBlocked.value,
-            isVerified = isVerified.value,
+            verificationState = UserProfileVerificationState.UNKNOWN,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
             isCurrentUser = isCurrentUser,

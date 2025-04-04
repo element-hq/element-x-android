@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"Esci e aggiorna"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s non supporta più il vecchio protocollo. Esci e accedi nuovamente per continuare a utilizzare l\'app."</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Il tuo homeserver non supporta più il vecchio protocollo. Esci e rientra per continuare a usare l\'app."</string>
 </resources>
