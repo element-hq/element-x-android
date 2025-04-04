@@ -38,77 +38,42 @@ val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.messageFromMeBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray400
-        Color(0xFFE1E6EC)
-    } else {
-        // We want DarkDesignTokens.colorGray500
-        Color(0xFF323539)
-    }
+    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray500
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.messageFromOtherBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray300
-        Color(0xFFF0F2F5)
-    } else {
-        // We want DarkDesignTokens.colorGray400
-        Color(0xFF26282D)
-    }
+    get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.progressIndicatorTrackColor
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorAlphaGray500
-        Color(0x33052448)
-    } else {
-        // We want DarkDesignTokens.colorAlphaGray500
-        Color(0x25F4F7FA)
-    }
+    get() = if (isLight) LightColorTokens.colorAlphaGray500 else DarkColorTokens.colorAlphaGray500
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.iconSuccessPrimaryBackground
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGreen300
-        Color(0xffe3f7ed)
-    } else {
-        // We want DarkDesignTokens.colorGreen300
-        Color(0xff002513)
-    }
+    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.bgSubtleTertiary
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray100
-        Color(0xfffbfcfd)
-    } else {
-        // We want DarkDesignTokens.colorGray100
-        Color(0xff14171b)
-    }
+    get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
 
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
 
 // This color is not present in Semantic color, so put hard-coded value for now
+@OptIn(CoreColorToken::class)
 val SemanticColors.pinDigitBg
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGray300
-        Color(0xFFF0F2F5)
-    } else {
-        // We want DarkDesignTokens.colorGray400
-        Color(0xFF26282D)
-    }
+    get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
 
+@OptIn(CoreColorToken::class)
 val SemanticColors.currentUserMentionPillText
-    get() = if (isLight) {
-        // We want LightDesignTokens.colorGreen1100
-        Color(0xff005c45)
-    } else {
-        // We want DarkDesignTokens.colorGreen1100
-        Color(0xff1fc090)
-    }
+    get() = if (isLight) LightColorTokens.colorGreen1100 else DarkColorTokens.colorGreen1100
 
 val SemanticColors.currentUserMentionPillBackground
     get() = if (isLight) {
