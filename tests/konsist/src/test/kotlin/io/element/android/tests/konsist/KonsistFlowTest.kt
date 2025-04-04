@@ -25,7 +25,6 @@ class KonsistFlowTest {
 
         val allowedMethods = listOf(
             "timeline.paginationStatus",
-            "analyticsService.getUserConsent()",
         )
         Konsist
             .scopeFromProject()

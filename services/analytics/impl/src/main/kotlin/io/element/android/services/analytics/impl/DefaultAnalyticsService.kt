@@ -52,18 +52,14 @@ class DefaultAnalyticsService @Inject constructor(
         return analyticsProviders
     }
 
-    override fun getUserConsent(): Flow<Boolean> {
-        return analyticsStore.userConsentFlow
-    }
+    override val userConsentFlow: Flow<Boolean> = analyticsStore.userConsentFlow
 
     override suspend fun setUserConsent(userConsent: Boolean) {
         Timber.tag(analyticsTag.value).d("setUserConsent($userConsent)")
         analyticsStore.setUserConsent(userConsent)
     }
 
-    override fun didAskUserConsent(): Flow<Boolean> {
-        return analyticsStore.didAskUserConsentFlow
-    }
+    override val didAskUserConsentFlow: Flow<Boolean> = analyticsStore.didAskUserConsentFlow
 
     override suspend fun setDidAskUserConsent() {
         Timber.tag(analyticsTag.value).d("setDidAskUserConsent()")
@@ -74,9 +70,7 @@ class DefaultAnalyticsService @Inject constructor(
         analyticsStore.setDidAskUserConsent(false)
     }
 
-    override fun getAnalyticsId(): Flow<String> {
-        return analyticsStore.analyticsIdFlow
-    }
+    override val analyticsIdFlow: Flow<String> = analyticsStore.analyticsIdFlow
 
     override suspend fun setAnalyticsId(analyticsId: String) {
         Timber.tag(analyticsTag.value).d("setAnalyticsId($analyticsId)")
@@ -93,7 +87,7 @@ class DefaultAnalyticsService @Inject constructor(
     }
 
     private fun observeUserConsent() {
-        getUserConsent()
+        userConsentFlow
             .onEach { consent ->
                 Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                 userConsent.set(consent)
