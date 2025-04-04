@@ -38,6 +38,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -125,6 +126,7 @@ class PollHistoryPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - load more scenario`() = runTest {
         val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
@@ -141,6 +143,10 @@ class PollHistoryPresenterTest {
             val loadedState = awaitItem()
             assertThat(loadedState.isLoading).isFalse()
             loadedState.eventSink(PollHistoryEvents.LoadMore)
+
+            // Give some time for the live timeline to be retrieved
+            advanceUntilIdle()
+
             backwardPaginationStatus.getAndUpdate { it.copy(isPaginating = true) }
             awaitItem().also { state ->
                 assertThat(state.isLoading).isTrue()
@@ -149,6 +155,7 @@ class PollHistoryPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.isLoading).isFalse()
             }
+
             // Called once by the initial load and once by the load more event
             assert(paginateLambda).isCalledExactly(2)
         }

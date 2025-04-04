@@ -16,5 +16,5 @@ import kotlinx.coroutines.flow.StateFlow
 class LiveTimelineProvider(
     private val room: MatrixRoom,
 ) : TimelineProvider {
-    override fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline)
+    override suspend fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline())
 }

@@ -13,6 +13,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -46,8 +47,9 @@ class RustClientSessionDelegateTest {
 
 fun TestScope.aRustClientSessionDelegate(
     sessionStore: SessionStore = InMemorySessionStore(),
+    appCoroutineScope: CoroutineScope = this,
 ) = RustClientSessionDelegate(
     sessionStore = sessionStore,
-    appCoroutineScope = this,
+    appCoroutineScope = appCoroutineScope,
     coroutineDispatchers = testCoroutineDispatchers(),
 )

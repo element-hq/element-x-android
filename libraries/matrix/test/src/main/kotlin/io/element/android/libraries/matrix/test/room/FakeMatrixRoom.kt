@@ -68,7 +68,7 @@ class FakeMatrixRoom(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
-    override val liveTimeline: Timeline = FakeTimeline(),
+    private val liveTimeline: Timeline = FakeTimeline(),
     initialRoomInfo: MatrixRoomInfo = aRoomInfo(),
     override val roomCoroutineScope: CoroutineScope = TestScope(),
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
@@ -147,6 +147,8 @@ class FakeMatrixRoom(
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
 ) : MatrixRoom {
+    override suspend fun liveTimeline(): Timeline = simulateLongTask { liveTimeline }
+
     private val _roomInfoFlow: MutableStateFlow<MatrixRoomInfo> = MutableStateFlow(initialRoomInfo)
     override val roomInfoFlow: StateFlow<MatrixRoomInfo> = _roomInfoFlow
 

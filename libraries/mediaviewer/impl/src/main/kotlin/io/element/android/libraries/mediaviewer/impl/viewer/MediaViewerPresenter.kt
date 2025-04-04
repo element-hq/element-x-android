@@ -237,7 +237,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.delete(eventId: EventId) = launch {
-        room.liveTimeline.redactEvent(eventId.toEventOrTransactionId(), null)
+        room.liveTimeline().redactEvent(eventId.toEventOrTransactionId(), null)
             .onFailure {
                 val snackbarMessage = SnackbarMessage(CommonStrings.error_unknown)
                 snackbarDispatcher.post(snackbarMessage)

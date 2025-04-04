@@ -7,19 +7,35 @@
 
 package io.element.android.libraries.core.coroutine
 
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend () -> T): Lazy<Deferred<T>> {
-    return lazy(LazyThreadSafetyMode.NONE) {
-        val deferred = CompletableDeferred<T>()
-        CoroutineScope(coroutineContext).launch {
-            deferred.complete(block())
+class SuspendLazy<T>(
+    coroutineContext: CoroutineContext = EmptyCoroutineContext,
+    private val block: suspend CoroutineScope.() -> T,
+) {
+    private val coroutineScope = CoroutineScope(coroutineContext)
+
+    @Volatile
+    private lateinit var deferred: Deferred<T>
+
+    private val lock = this
+
+    operator fun getValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>): Deferred<T> {
+        return synchronized(lock) {
+            if (this::deferred.isInitialized) {
+                deferred
+            } else {
+                coroutineScope.async(start = CoroutineStart.LAZY, block = block).also { deferred = it }
+            }
         }
-        deferred
     }
+}
+
+fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): SuspendLazy<T> {
+    return SuspendLazy(coroutineContext, block = block)
 }

@@ -47,6 +47,7 @@ import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -471,6 +472,10 @@ class MediaViewerPresenterTest {
                     eventId = AN_EVENT_ID,
                 )
             )
+
+            // Give time to the live timeline to load and process the deletion action
+            advanceUntilIdle()
+
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             redactEventLambda.assertions()

@@ -96,12 +96,16 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LargeClass")
 class MessagesPresenterTest {
     @get:Rule
@@ -125,7 +129,6 @@ class MessagesPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - check that the room's unread flag is removed`() = runTest {
         val room = FakeMatrixRoom(
@@ -169,12 +172,18 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+
+            advanceTimeBy(1.seconds)
+
             assert(toggleReactionSuccess)
                 .isCalledOnce()
                 .with(value("👍"), value(AN_EVENT_ID.toEventOrTransactionId()))
             // No crashes when sending a reaction failed
             timeline.apply { toggleReactionLambda = toggleReactionFailure }
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+
+            advanceTimeBy(1.seconds)
+
             assert(toggleReactionFailure)
                 .isCalledOnce()
                 .with(value("👍"), value(AN_EVENT_ID.toEventOrTransactionId()))
@@ -200,6 +209,10 @@ class MessagesPresenterTest {
         )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         presenter.testWithLifecycleOwner {
+            // Give time for the live timeline to load
+            skipItems(1)
+            advanceTimeBy(1.seconds)
+
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
@@ -209,7 +222,6 @@ class MessagesPresenterTest {
                     listOf(value("👍"), value(AN_EVENT_ID.toEventOrTransactionId())),
                     listOf(value("👍"), value(AN_EVENT_ID.toEventOrTransactionId())),
                 )
-            skipItems(1)
         }
     }
 
@@ -275,7 +287,9 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
+            advanceTimeBy(1.seconds)
             awaitItem()
+            advanceTimeBy(1.seconds)
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
                     composerMode = MessageComposerMode.Reply(
@@ -325,6 +339,10 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -366,6 +384,10 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -400,6 +422,10 @@ class MessagesPresenterTest {
                 )
             )
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -421,6 +447,10 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -486,6 +516,10 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Redact, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             awaitItem()
             assert(redactEventLambda)
                 .isCalledOnce()
@@ -846,6 +880,10 @@ class MessagesPresenterTest {
             )
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, poll))
             skipItems(1)
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
                     composerMode = MessageComposerMode.Reply(
@@ -881,6 +919,10 @@ class MessagesPresenterTest {
 
             timeline.pinEventLambda = successPinEventLambda
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             assert(successPinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
 
             timeline.pinEventLambda = failurePinEventLambda
@@ -919,6 +961,10 @@ class MessagesPresenterTest {
 
             timeline.unpinEventLambda = successUnpinEventLambda
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             assert(successUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
 
             timeline.unpinEventLambda = failureUnpinEventLambda
@@ -947,6 +993,10 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceUntilIdle()
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -977,6 +1027,10 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceUntilIdle()
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -1004,6 +1058,10 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceUntilIdle()
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -1034,6 +1092,10 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceUntilIdle()
+
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
@@ -1074,6 +1136,10 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceTimeBy(1.seconds)
+
             editCaptionLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID.toEventOrTransactionId()), value(null), value(null))
         }
     }
@@ -1088,6 +1154,11 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewInTimeline, messageEvent))
+
+            // Give time for the live timeline to load
+            advanceUntilIdle()
+
+            ensureAllEventsConsumed()
             // No op!
         }
     }
@@ -1171,7 +1242,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
-            timelineController = TimelineController(matrixRoom),
+            timelineController = TimelineController(matrixRoom, backgroundScope),
             permalinkParser = permalinkParser,
             encryptionService = encryptionService,
             analyticsService = analyticsService,
