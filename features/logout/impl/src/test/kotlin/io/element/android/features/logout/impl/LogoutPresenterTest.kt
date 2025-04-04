@@ -44,6 +44,7 @@ class LogoutPresenterTest {
             assertThat(initialState.doesBackupExistOnServer).isTrue()
             assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
+            assertThat(initialState.waitingForALongTime).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -63,6 +64,34 @@ class LogoutPresenterTest {
             assertThat(initialState.isLastDevice).isTrue()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - initial state - waiting a long time`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        encryptionService.givenWaitForBackupUploadSteadyStateFlow(
+            flow {
+                emit(BackupUploadState.Waiting)
+                delay(3_000)
+            }
+        )
+        val presenter = createLogoutPresenter(
+            encryptionService = encryptionService
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.waitingForALongTime).isFalse()
+            assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
+            val waitingState = awaitItem()
+            assertThat(waitingState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            assertThat(initialState.waitingForALongTime).isFalse()
+            skipItems(1)
+            val waitingALongTimeState = awaitItem()
+            assertThat(waitingALongTimeState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            assertThat(waitingALongTimeState.waitingForALongTime).isTrue()
         }
     }
 
