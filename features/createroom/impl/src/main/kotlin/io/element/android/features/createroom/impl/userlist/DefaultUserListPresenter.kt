@@ -54,7 +54,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
             recentDirectRooms = matrixClient.getRecentDirectRooms()
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        val selectedUsers by userListDataStore.selectedUsers().collectAsState(emptyList())
+        val selectedUsers by userListDataStore.selectedUsers.collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
             mutableStateOf(SearchBarResultState.Initial())
