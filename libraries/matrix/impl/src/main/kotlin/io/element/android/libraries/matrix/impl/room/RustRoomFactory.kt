@@ -115,7 +115,9 @@ class RustRoomFactory(
                 innerRoom = roomReferences.room,
                 innerTimelineInitializer = {
                     // Ideally we'd use `Room.initTimeline` but its behaviour in the SDK doesn't match the `initTimeline` one yet
-                    roomReferences.roomListItem.initTimeline(eventFilters, "LIVE")
+                    if (!roomReferences.roomListItem.isTimelineInitialized()) {
+                        roomReferences.roomListItem.initTimeline(eventFilters, "LIVE")
+                    }
                     roomReferences.room.timeline()
                 },
                 sessionCoroutineScope = sessionCoroutineScope,
