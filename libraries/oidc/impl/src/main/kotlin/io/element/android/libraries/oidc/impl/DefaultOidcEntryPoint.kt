@@ -12,6 +12,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -30,6 +31,10 @@ class DefaultOidcEntryPoint @Inject constructor(
     override fun openUrlInCustomTab(activity: Activity, darkTheme: Boolean, url: String) {
         assert(canUseCustomTab()) { "Custom tab is not supported in this device." }
         activity.openUrlInChromeCustomTab(null, darkTheme, url)
+    }
+
+    override fun openUrlInExternalApp(activity: Activity, url: String) {
+        activity.openUrlInExternalApp(url)
     }
 
     override fun createFallbackWebViewNode(parentNode: Node, buildContext: BuildContext, url: String): Node {
