@@ -231,7 +231,7 @@ class RoomListPresenter @Inject constructor(
                 loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
             }
         }
-        val seenRoomInvites by seenInvitesStore.seenRoomIds().collectAsState(emptySet())
+        val seenRoomInvites by remember { seenInvitesStore.seenRoomIds() }.collectAsState(emptySet())
         val securityBannerState by rememberSecurityBannerState(securityBannerDismissed)
         return when {
             showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
