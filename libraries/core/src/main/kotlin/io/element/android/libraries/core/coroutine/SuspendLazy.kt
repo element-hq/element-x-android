@@ -20,8 +20,19 @@ class SuspendLazy<T>(
 ) {
     private val coroutineScope = CoroutineScope(coroutineContext)
 
+    @Volatile
+    private lateinit var deferred: Deferred<T>
+
+    private val lock = this
+
     operator fun getValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>): Deferred<T> {
-        return coroutineScope.async(start = CoroutineStart.LAZY, block = block)
+        return synchronized(lock) {
+            if (this::deferred.isInitialized) {
+                deferred
+            } else {
+                coroutineScope.async(start = CoroutineStart.LAZY, block = block).also { deferred = it }
+            }
+        }
     }
 }
 
