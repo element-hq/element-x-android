@@ -123,4 +123,9 @@ object TestTags {
      *
      */
     val roomAddressField = TestTag("room_address_field")
+
+    /**
+     * PinKeypad back key.
+     */
+    val pinKeypadBack = TestTag("pin_keypad-back")
 }
