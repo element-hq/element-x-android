@@ -25,8 +25,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.badgePositiveBackgroundColor
-import io.element.android.libraries.designsystem.theme.badgePositiveContentColor
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -76,9 +74,9 @@ internal fun BadgePreview() {
         Badge(
             text = "Trusted",
             icon = CompoundIcons.Verified(),
-            backgroundColor = ElementTheme.colors.badgePositiveBackgroundColor,
-            textColor = ElementTheme.colors.badgePositiveContentColor,
-            iconColor = ElementTheme.colors.iconSuccessPrimary,
+            backgroundColor = ElementTheme.colors.bgBadgeAccent,
+            textColor = ElementTheme.colors.textBadgeAccent,
+            iconColor = ElementTheme.colors.textBadgeAccent,
         )
     }
 }

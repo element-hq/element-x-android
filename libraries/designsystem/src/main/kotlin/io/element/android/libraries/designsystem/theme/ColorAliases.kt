@@ -142,14 +142,6 @@ val SemanticColors.highlightedMessageBackgroundColor
 // Badge colors
 
 @OptIn(CoreColorToken::class)
-val SemanticColors.badgePositiveBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaGreen300 else DarkColorTokens.colorAlphaGreen300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgePositiveContentColor
-    get() = if (isLight) LightColorTokens.colorGreen1100 else DarkColorTokens.colorGreen1100
-
-@OptIn(CoreColorToken::class)
 val SemanticColors.badgeNeutralBackgroundColor
     get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
 
@@ -164,14 +156,6 @@ val SemanticColors.badgeNegativeBackgroundColor
 @OptIn(CoreColorToken::class)
 val SemanticColors.badgeNegativeContentColor
     get() = if (isLight) LightColorTokens.colorRed1100 else DarkColorTokens.colorRed1100
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeInfoBackgroundColor
-    get() = if (isLight) LightColorTokens.colorAlphaBlue300 else DarkColorTokens.colorAlphaBlue300
-
-@OptIn(CoreColorToken::class)
-val SemanticColors.badgeInfoContentColor
-    get() = if (isLight) LightColorTokens.colorBlue1100 else DarkColorTokens.colorBlue1100
 
 @OptIn(CoreColorToken::class)
 val SemanticColors.pinnedMessageBannerIndicator
