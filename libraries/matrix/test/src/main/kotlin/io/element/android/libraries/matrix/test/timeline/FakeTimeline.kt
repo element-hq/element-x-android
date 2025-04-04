@@ -28,19 +28,18 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
 class FakeTimeline(
     private val name: String = "FakeTimeline",
     override val timelineItems: Flow<List<MatrixTimelineItem>> = MutableStateFlow(emptyList()),
-    private val backwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
+    override val backwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
         Timeline.PaginationStatus(
             isPaginating = false,
             hasMoreToLoad = true
         )
     ),
-    private val forwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
+    override val forwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
         Timeline.PaginationStatus(
             isPaginating = false,
             hasMoreToLoad = false
@@ -376,13 +375,6 @@ class FakeTimeline(
     }
 
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = paginateLambda(direction)
-
-    override fun paginationStatus(direction: Timeline.PaginationDirection): StateFlow<Timeline.PaginationStatus> {
-        return when (direction) {
-            Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus
-            Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus
-        }
-    }
 
     var loadReplyDetailsLambda: (eventId: EventId) -> InReplyTo = {
         InReplyTo.NotLoaded(it)

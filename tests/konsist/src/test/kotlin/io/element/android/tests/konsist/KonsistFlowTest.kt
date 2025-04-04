@@ -23,9 +23,7 @@ class KonsistFlowTest {
         //     .collectAsState```
         val regex = "(.*)\\)(\n\\s*)*\\.collectAsState".toRegex()
 
-        val allowedMethods = listOf(
-            "timeline.paginationStatus",
-        )
+        val allowedMethods = emptyList<String>()
         Konsist
             .scopeFromProject()
             .functions()

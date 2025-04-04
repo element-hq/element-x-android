@@ -54,7 +54,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -127,11 +126,11 @@ class RustTimeline(
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
-    private val backPaginationStatus = MutableStateFlow(
+    override val backwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
     )
 
-    private val forwardPaginationStatus = MutableStateFlow(
+    override val forwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode == Timeline.Mode.FOCUSED_ON_EVENT)
     )
 
@@ -167,7 +166,7 @@ class RustTimeline(
 
     private fun updatePaginationStatus(direction: Timeline.PaginationDirection, update: (Timeline.PaginationStatus) -> Timeline.PaginationStatus) {
         when (direction) {
-            Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.getAndUpdate(update)
+            Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.getAndUpdate(update)
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.getAndUpdate(update)
         }
     }
@@ -185,7 +184,7 @@ class RustTimeline(
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {
-                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
+                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
                 } else {
                     updatePaginationStatus(direction) { it.copy(isPaginating = false) }
                     Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
@@ -199,21 +198,14 @@ class RustTimeline(
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
         if (!isTimelineInitialized.value) return false
         return when (direction) {
-            Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
+            Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
-        }
-    }
-
-    override fun paginationStatus(direction: Timeline.PaginationDirection): StateFlow<Timeline.PaginationStatus> {
-        return when (direction) {
-            Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus
-            Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus
         }
     }
 
     override val timelineItems: Flow<List<MatrixTimelineItem>> = combine(
         _timelineItems,
-        backPaginationStatus,
+        backwardPaginationStatus,
         forwardPaginationStatus,
         matrixRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
         isTimelineInitialized,
