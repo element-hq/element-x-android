@@ -15,7 +15,7 @@ import java.io.File
 class OidcConfigurationProviderTest {
     @Test
     fun get() {
-        val result = OidcConfigurationProvider(File("/base")).get()
+        val result = OidcConfigurationProvider().get()
         assertThat(result.redirectUri).isEqualTo(OidcConfig.REDIRECT_URI)
     }
 }
