@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.cryptography.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.testtags)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.features.logout.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.sessionStorage.api)

@@ -61,6 +61,16 @@ class PinKeypadTest {
         rule.onAllNodes(isRoot())[0].performKeyInput {
             val keys = listOf(
                 Key.A,
+                Key.NumPad1,
+                Key.NumPad2,
+                Key.NumPad3,
+                Key.NumPad4,
+                Key.NumPad5,
+                Key.NumPad6,
+                Key.NumPad7,
+                Key.NumPad8,
+                Key.NumPad9,
+                Key.NumPad0,
                 Key(KeyEvent.KEYCODE_1),
                 Key(KeyEvent.KEYCODE_2),
                 Key(KeyEvent.KEYCODE_3),
@@ -80,6 +90,18 @@ class PinKeypadTest {
         eventsRecorder.assertList(
             listOf(
                 // Note that the first key is not a number, but a letter so it's ignored as input
+                // Then we have the numpad keys
+                PinKeypadModel.Number('1'),
+                PinKeypadModel.Number('2'),
+                PinKeypadModel.Number('3'),
+                PinKeypadModel.Number('4'),
+                PinKeypadModel.Number('5'),
+                PinKeypadModel.Number('6'),
+                PinKeypadModel.Number('7'),
+                PinKeypadModel.Number('8'),
+                PinKeypadModel.Number('9'),
+                PinKeypadModel.Number('0'),
+                // And the normal keys from the number row in the keyboard
                 PinKeypadModel.Number('1'),
                 PinKeypadModel.Number('2'),
                 PinKeypadModel.Number('3'),

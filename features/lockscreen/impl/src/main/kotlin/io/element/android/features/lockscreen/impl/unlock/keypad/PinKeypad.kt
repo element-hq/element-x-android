@@ -70,9 +70,9 @@ fun PinKeypad(
     Column(
         modifier = modifier.onKeyEvent { event ->
             if (event.type == KeyEventType.KeyUp) {
-                val char = event.nativeKeyEvent.unicodeChar.toChar()
-                if (Character.isDigit(char)) {
-                    onClick(PinKeypadModel.Number(char))
+                val digitChar = event.digit
+                if (digitChar != null) {
+                    onClick(PinKeypadModel.Number(digitChar))
                     true
                 } else if (event.key == Key.Backspace) {
                     onClick(PinKeypadModel.Back)
