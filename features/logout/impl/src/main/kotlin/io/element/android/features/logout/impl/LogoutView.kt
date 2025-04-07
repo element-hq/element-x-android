@@ -143,24 +143,41 @@ private fun ColumnScope.Buttons(
 @Composable
 private fun Content(
     state: LogoutState,
+    modifier: Modifier = Modifier,
 ) {
-    if (state.backupUploadState is BackupUploadState.Uploading) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 60.dp, start = 20.dp, end = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
-                progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
-                trackColor = ElementTheme.colors.progressIndicatorTrackColor,
-            )
-            Text(
-                modifier = Modifier.align(Alignment.End),
-                text = "${state.backupUploadState.backedUpCount} / ${state.backupUploadState.totalCount}",
-                style = ElementTheme.typography.fontBodySmRegular,
-            )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 60.dp, start = 20.dp, end = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        when (state.backupUploadState) {
+            is BackupUploadState.Uploading -> {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
+                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
+                )
+                Text(
+                    modifier = Modifier.align(Alignment.End),
+                    text = "${state.backupUploadState.backedUpCount} / ${state.backupUploadState.totalCount}",
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
+            }
+            BackupUploadState.Waiting -> {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
+                )
+                if (state.waitingForALongTime) {
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        text = stringResource(CommonStrings.common_please_check_internet_connection),
+                        style = ElementTheme.typography.fontBodySmRegular,
+                    )
+                }
+            }
+            else -> Unit
         }
     }
 }
