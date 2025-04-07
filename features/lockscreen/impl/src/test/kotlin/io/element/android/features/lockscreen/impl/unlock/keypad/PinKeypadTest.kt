@@ -11,7 +11,7 @@ import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -22,7 +22,7 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import org.junit.Rule
@@ -48,7 +48,7 @@ class PinKeypadTest {
     fun `clicking on the delete previous character button emits the expected event`() {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
         rule.setPinKeyPad(onClick = eventsRecorder)
-        rule.onNode(hasTestTag(TestTags.pinKeypadBack.value)).performClick()
+        rule.onNode(hasContentDescription(rule.activity.getString(CommonStrings.a11y_delete))).performClick()
         eventsRecorder.assertSingle(PinKeypadModel.Back)
     }
 

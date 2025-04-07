@@ -32,7 +32,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -43,7 +43,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.digit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -138,7 +139,7 @@ private fun PinKeypadRow(
                 }
                 is PinKeypadModel.Back -> {
                     PinKeypadBackButton(
-                        modifier = commonModifier.testTag(TestTags.pinKeypadBack.value),
+                        modifier = commonModifier,
                         onClick = { onClick(model) },
                     )
                 }
@@ -205,7 +206,7 @@ private fun PinKeypadBackButton(
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.Backspace,
-            contentDescription = null,
+            contentDescription = stringResource(CommonStrings.a11y_delete),
         )
     }
 }
