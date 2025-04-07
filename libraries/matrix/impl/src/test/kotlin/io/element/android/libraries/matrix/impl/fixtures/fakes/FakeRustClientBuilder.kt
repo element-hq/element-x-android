@@ -30,7 +30,7 @@ class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     override fun roomDecryptionTrustRequirement(trustRequirement: TrustRequirement) = this
     override fun disableSslVerification() = this
     override fun homeserverUrl(url: String) = this
-    override fun passphrase(passphrase: String?) = this
+    override fun sessionPassphrase(passphrase: String?) = this
     override fun proxy(url: String) = this
     override fun requestConfig(config: RequestConfig) = this
     override fun roomKeyRecipientStrategy(strategy: CollectStrategy) = this

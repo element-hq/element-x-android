@@ -32,6 +32,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
@@ -127,6 +128,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                                 caption = caption,
                                 sendActionState = sendActionState,
                                 dismissAfterSend = !useSendQueue,
+                                replyParameters = null,
                             )
                         }
                     }
@@ -237,6 +239,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         caption: String?,
         sendActionState: MutableState<SendActionState>,
         dismissAfterSend: Boolean,
+        replyParameters: ReplyParameters?,
     ) = runCatching {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
@@ -251,7 +254,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             mediaUploadInfo = mediaUploadInfo,
             caption = caption,
             formattedCaption = null,
-            progressCallback = progressCallback
+            progressCallback = progressCallback,
+            replyParameters = replyParameters,
         ).getOrThrow()
     }.fold(
         onSuccess = {

@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -138,7 +139,8 @@ interface MatrixRoom : Closeable {
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendVideo(
@@ -147,7 +149,8 @@ interface MatrixRoom : Closeable {
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendAudio(
@@ -156,6 +159,7 @@ interface MatrixRoom : Closeable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
 
     suspend fun sendFile(
@@ -164,7 +168,35 @@ interface MatrixRoom : Closeable {
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler>
+
+    suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler>
+
+    /**
+     * Share a location message in the room.
+     *
+     * @param body A human readable textual representation of the location.
+     * @param geoUri A geo URI (RFC 5870) representing the location e.g. `geo:51.5008,0.1247;u=35`.
+     *  Respectively: latitude, longitude, and (optional) uncertainty.
+     * @param description Optional description of the location to display to the user.
+     * @param zoomLevel Optional zoom level to display the map at.
+     * @param assetType Optional type of the location asset.
+     *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
+     */
+    suspend fun sendLocation(
+        body: String,
+        geoUri: String,
+        description: String? = null,
+        zoomLevel: Int? = null,
+        assetType: AssetType? = null,
+    ): Result<Unit>
 
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
 
@@ -236,25 +268,6 @@ interface MatrixRoom : Closeable {
     suspend fun clearEventCacheStorage(): Result<Unit>
 
     /**
-     * Share a location message in the room.
-     *
-     * @param body A human readable textual representation of the location.
-     * @param geoUri A geo URI (RFC 5870) representing the location e.g. `geo:51.5008,0.1247;u=35`.
-     *  Respectively: latitude, longitude, and (optional) uncertainty.
-     * @param description Optional description of the location to display to the user.
-     * @param zoomLevel Optional zoom level to display the map at.
-     * @param assetType Optional type of the location asset.
-     *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
-     */
-    suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String? = null,
-        zoomLevel: Int? = null,
-        assetType: AssetType? = null,
-    ): Result<Unit>
-
-    /**
      * Create a poll in the room.
      *
      * @param question The question to ask.
@@ -301,13 +314,6 @@ interface MatrixRoom : Closeable {
      * @param text Fallback text of the poll end event.
      */
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
-
-    suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?
-    ): Result<MediaUploadHandler>
 
     /**
      * Send a typing notification.

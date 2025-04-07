@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
@@ -497,8 +498,17 @@ class RustMatrixRoom(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendImage(file, thumbnailFile, imageInfo, caption, formattedCaption, progressCallback)
+        return liveTimeline.sendImage(
+            file = file,
+            thumbnailFile = thumbnailFile,
+            imageInfo = imageInfo,
+            caption = caption,
+            formattedCaption = formattedCaption,
+            progressCallback = progressCallback,
+            replyParameters = replyParameters
+        )
     }
 
     override suspend fun sendVideo(
@@ -508,8 +518,17 @@ class RustMatrixRoom(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVideo(file, thumbnailFile, videoInfo, caption, formattedCaption, progressCallback)
+        return liveTimeline.sendVideo(
+            file = file,
+            thumbnailFile = thumbnailFile,
+            videoInfo = videoInfo,
+            caption = caption,
+            formattedCaption = formattedCaption,
+            progressCallback = progressCallback,
+            replyParameters = replyParameters
+        )
     }
 
     override suspend fun sendAudio(
@@ -518,6 +537,7 @@ class RustMatrixRoom(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> {
         return liveTimeline.sendAudio(
             file = file,
@@ -525,6 +545,7 @@ class RustMatrixRoom(
             caption = caption,
             formattedCaption = formattedCaption,
             progressCallback = progressCallback,
+            replyParameters = replyParameters,
         )
     }
 
@@ -534,14 +555,42 @@ class RustMatrixRoom(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> {
         return liveTimeline.sendFile(
-            file,
-            fileInfo,
-            caption,
-            formattedCaption,
-            progressCallback,
+            file = file,
+            fileInfo = fileInfo,
+            caption = caption,
+            formattedCaption = formattedCaption,
+            progressCallback = progressCallback,
+            replyParameters = replyParameters,
         )
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler> {
+        return liveTimeline.sendVoiceMessage(
+            file = file,
+            audioInfo = audioInfo,
+            waveform = waveform,
+            progressCallback = progressCallback,
+            replyParameters = replyParameters,
+        )
+    }
+
+    override suspend fun sendLocation(
+        body: String,
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
+    ): Result<Unit> {
+        return liveTimeline.sendLocation(body, geoUri, description, zoomLevel, assetType)
     }
 
     override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> {
@@ -631,16 +680,6 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String?,
-        zoomLevel: Int?,
-        assetType: AssetType?,
-    ): Result<Unit> {
-        return liveTimeline.sendLocation(body, geoUri, description, zoomLevel, assetType)
-    }
-
     override suspend fun createPoll(
         question: String,
         answers: List<String>,
@@ -672,15 +711,6 @@ class RustMatrixRoom(
         text: String
     ): Result<Unit> {
         return liveTimeline.endPoll(pollStartId, text)
-    }
-
-    override suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVoiceMessage(file, audioInfo, waveform, progressCallback)
     }
 
     override suspend fun typingNotice(isTyping: Boolean) = withContext(roomDispatcher) {

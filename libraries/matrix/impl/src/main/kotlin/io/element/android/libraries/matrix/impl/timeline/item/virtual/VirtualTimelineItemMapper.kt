@@ -15,6 +15,7 @@ class VirtualTimelineItemMapper {
         return when (virtualTimelineItem) {
             is RustVirtualTimelineItem.DateDivider -> VirtualTimelineItem.DayDivider(virtualTimelineItem.ts.toLong())
             RustVirtualTimelineItem.ReadMarker -> VirtualTimelineItem.ReadMarker
+            RustVirtualTimelineItem.TimelineStart -> VirtualTimelineItem.RoomBeginning
         }
     }
 }

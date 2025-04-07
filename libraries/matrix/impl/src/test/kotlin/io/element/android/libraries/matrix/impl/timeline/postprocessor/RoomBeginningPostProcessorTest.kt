@@ -99,43 +99,6 @@ class RoomBeginningPostProcessorTest {
     }
 
     @Test
-    fun `processor will add beginning of room item if it's not a DM`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, hasMoreToLoadBackwards = false)
-        assertThat(processedItems).isEqualTo(
-            listOf(processor.createRoomBeginningItem()) + timelineItems
-        )
-    }
-
-    @Test
-    fun `processor will not add beginning of room item if it's not a DM but the room has more to load`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
-        assertThat(processedItems).isEqualTo(timelineItems)
-    }
-
-    @Test
-    fun `processor will add beginning of room item if it's not a DM, when the parameter roomCreator is null`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = null, hasMoreToLoadBackwards = false)
-        assertThat(processedItems).isEqualTo(
-            listOf(processor.createRoomBeginningItem()) + timelineItems
-        )
-    }
-
-    @Test
     fun `processor removes items event it's not at the start of the timeline`() {
         val timelineItems = listOf(
             roomCreateEvent,

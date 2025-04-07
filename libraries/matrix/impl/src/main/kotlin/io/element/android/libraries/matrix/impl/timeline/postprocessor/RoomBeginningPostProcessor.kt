@@ -7,8 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
-import androidx.annotation.VisibleForTesting
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -16,7 +14,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
 /**
  * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
@@ -39,8 +36,8 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     }
 
     private fun processForRoom(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-        val roomBeginningItem = createRoomBeginningItem()
-        return listOf(roomBeginningItem) + items
+        // No changes needed, timeline start item is already added by the SDK
+        return items
     }
 
     private fun processForDM(items: List<MatrixTimelineItem>, roomCreator: UserId?): List<MatrixTimelineItem> {
@@ -74,13 +71,5 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
             newItems.removeAt(roomCreationEventIndex)
         }
         return newItems
-    }
-
-    @VisibleForTesting
-    fun createRoomBeginningItem(): MatrixTimelineItem.Virtual {
-        return MatrixTimelineItem.Virtual(
-            uniqueId = UniqueId("RoomBeginning"),
-            virtual = VirtualTimelineItem.RoomBeginning
-        )
     }
 }
