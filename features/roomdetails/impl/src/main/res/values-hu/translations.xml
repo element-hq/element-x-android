@@ -75,6 +75,9 @@
     <item quantity="one">"%1$d személy"</item>
     <item quantity="other">"%1$d személy"</item>
   </plurals>
+  <string name="screen_room_member_list_kick_member_confirmation_action">"Eltávolítás"</string>
+  <string name="screen_room_member_list_kick_member_confirmation_description">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
+  <string name="screen_room_member_list_kick_member_confirmation_title">"Biztos, hogy eltávolítja ezt a tagot?"</string>
   <string name="screen_room_member_list_manage_member_ban">"Eltávolítás és a tag kitiltása"</string>
   <string name="screen_room_member_list_manage_member_remove">"Eltávolítás a szobából"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eltávolítás és a tag kitiltása"</string>
