@@ -60,6 +60,7 @@
   <string name="action_deactivate">"Eemalda konto"</string>
   <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>
+  <string name="action_decline_and_block">"Keeldu ja blokeeri"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_disable">"Lülita välja"</string>
   <string name="action_discard">"Loobu"</string>
@@ -105,8 +106,10 @@
   <string name="action_remove_message">"Eemalda sõnum"</string>
   <string name="action_reply">"Vasta"</string>
   <string name="action_reply_in_thread">"Vasta jutulõngas"</string>
+  <string name="action_report">"Teata"</string>
   <string name="action_report_bug">"Teata veast"</string>
   <string name="action_report_content">"Teata sisust haldurile"</string>
+  <string name="action_report_room">"Teata jututoast"</string>
   <string name="action_reset">"Lähtesta"</string>
   <string name="action_reset_identity">"Lähtesta oma identiteet"</string>
   <string name="action_retry">"Proovi uuesti"</string>
@@ -216,6 +219,7 @@ Põhjus: %1$s."</string>
   <string name="common_permalink">"Püsilink"</string>
   <string name="common_permission">"Õigus"</string>
   <string name="common_pinned">"Esiletõstetud"</string>
+  <string name="common_please_check_internet_connection">"Palun kontrolli oma nutiseadme internetiühendust"</string>
   <string name="common_please_wait">"Palun oota…"</string>
   <string name="common_poll_end_confirmation">"Kas oled kindel, et soovid selle küsitluse lõpetada?"</string>
   <string name="common_poll_summary">"Küsitlus: %1$s"</string>
@@ -228,6 +232,7 @@ Põhjus: %1$s."</string>
   <string name="common_privacy_policy">"Privaatsuspoliitika"</string>
   <string name="common_reaction">"Reaktsioon"</string>
   <string name="common_reactions">"Reaktsioonid"</string>
+  <string name="common_reason">"Põhjus"</string>
   <string name="common_recovery_key">"Taastevõti"</string>
   <string name="common_refreshing">"Värskendame andmeid…"</string>
   <string name="common_replying_to">"Vastates kasutajale %1$s"</string>
@@ -299,6 +304,8 @@ Põhjus: %1$s."</string>
 
 Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_confirm_link_title">"Palun kontrolli seda linki mõttega"</string>
+  <string name="dialog_room_reported">"Teatasid jututoast"</string>
+  <string name="dialog_room_reported_and_left">"Teatasid jututoast ja lahkusid sealt"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
@@ -330,6 +337,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Blokeeri kasutaja"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Teata sellest jututoast oma teenusepakkujale."</string>
+  <string name="screen_decline_and_block_title">"Keeldu ja blokeeri"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -341,6 +352,11 @@ Kas sa oled kindel, et soovid jätkata?"</string>
     <item quantity="other">"%1$d esiletõstetud sõnumit"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Jututoast haldajale teatamine õnnestus, kuid jututost lahkumisel tekkis viga. Palun proovi uuesti lahkuda."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Pole võimalik lahkuda jututoast"</string>
+  <string name="screen_report_room_reason_footer">"Teata sellest jututoast süsteemi haldajale. Kui sõnumid on krüptitud, ei saa haldaja neid lugeda."</string>
+  <string name="screen_report_room_reason_placeholder">"Kirjelda põhjust…"</string>
+  <string name="screen_report_room_title">"Teata jututoast"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Oma võrguidentiteedi lähtestamiseks suuname sind %1$s kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde."</string>
   <string name="screen_reset_identity_confirmation_title">"Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>

@@ -8,8 +8,11 @@
   <string name="screen_advanced_settings_element_call_base_url">"Vlastná Element Call základná URL adresa"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Nastaviť vlastnú základnú URL adresu pre Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skrytie profilové obrázky v žiadostiach o pozvánku do miestnosti"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skryť ukážky médií na časovej osi"</string>
   <string name="screen_advanced_settings_media_compression_description">"Nahrávajte fotografie a videá rýchlejšie a znížte spotrebu dát"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalizovať kvalitu médií"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderovanie a bezpečnosť"</string>
   <string name="screen_advanced_settings_push_provider_android">"Poskytovateľ oznámení Push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypnite rozšírený textový editor na ručné písanie Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Potvrdenia o prečítaní"</string>

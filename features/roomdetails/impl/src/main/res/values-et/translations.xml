@@ -75,6 +75,9 @@
     <item quantity="one">"%1$d osaleja"</item>
     <item quantity="other">"%1$d osalejat"</item>
   </plurals>
+  <string name="screen_room_member_list_kick_member_confirmation_action">"Eemalda"</string>
+  <string name="screen_room_member_list_kick_member_confirmation_description">"Uue kutse saamisel on tal võimalik selle jututoaga uuesti liituda."</string>
+  <string name="screen_room_member_list_kick_member_confirmation_title">"Kas sa oled kindel, et soovid selle osaleja eemaldada?"</string>
   <string name="screen_room_member_list_manage_member_ban">"Eemalda ja sea suhtluskeeld"</string>
   <string name="screen_room_member_list_manage_member_remove">"Eemalda kasutaja jututoast"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eemalda ja sea suhtluskeeld"</string>
