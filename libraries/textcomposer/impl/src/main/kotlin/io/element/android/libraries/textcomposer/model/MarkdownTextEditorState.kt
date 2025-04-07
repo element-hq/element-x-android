@@ -9,7 +9,6 @@ package io.element.android.libraries.textcomposer.model
 
 import android.os.Parcelable
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.compose.runtime.Composable
@@ -118,8 +117,7 @@ class MarkdownTextEditorState(
     }
 
     fun getMentions(): List<IntentionalMention> {
-        val text = SpannableString(text.value())
-        val mentionSpans = text.getMentionSpans()
+        val mentionSpans = text.value().getMentionSpans()
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
                 is MentionType.User -> IntentionalMention.User(mentionSpan.type.userId)
