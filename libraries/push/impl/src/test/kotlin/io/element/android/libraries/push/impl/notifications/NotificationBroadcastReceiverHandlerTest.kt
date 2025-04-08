@@ -427,6 +427,7 @@ class NotificationBroadcastReceiverHandlerTest {
             createIntent(
                 action = actionIds.smartReply,
                 roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
                 threadId = A_THREAD_ID,
             ),
         )
@@ -438,7 +439,7 @@ class NotificationBroadcastReceiverHandlerTest {
         replyMessage.assertions()
             .isCalledOnce()
             .with(
-                value(replyInThread(eventId = A_THREAD_ID.asEventId(), explicitReply = false)),
+                value(replyInThread(eventId = AN_EVENT_ID, explicitReply = false)),
                 value(A_MESSAGE),
                 value(null),
                 value(emptyList<IntentionalMention>()),
