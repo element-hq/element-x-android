@@ -14,9 +14,9 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.message.replyInThread
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -54,7 +54,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
             actionIds.smartReply -> if (roomId != null) {
-                handleSmartReply(sessionId, roomId, threadId, intent)
+                handleSmartReply(sessionId, roomId, eventId, threadId, intent)
             }
             actionIds.dismissRoom -> if (roomId != null) {
                 notificationCleaner.clearMessagesForRoom(sessionId, roomId)
@@ -106,6 +106,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private fun handleSmartReply(
         sessionId: SessionId,
         roomId: RoomId,
+        replyToEventId: EventId?,
         threadId: ThreadId?,
         intent: Intent,
     ) = appCoroutineScope.launch {
@@ -120,6 +121,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             sendMatrixEvent(
                 sessionId = sessionId,
                 roomId = roomId,
+                replyToEventId = replyToEventId,
                 threadId = threadId,
                 room = room,
                 message = message,
@@ -131,6 +133,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         sessionId: SessionId,
         roomId: RoomId,
         threadId: ThreadId?,
+        replyToEventId: EventId?,
         room: MatrixRoom,
         message: String,
     ) {
@@ -158,13 +161,13 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         )
         onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)
 
-        if (threadId != null) {
+        if (threadId != null && replyToEventId != null) {
             room.liveTimeline.replyMessage(
-                eventId = threadId.asEventId(),
                 body = message,
                 htmlBody = null,
                 intentionalMentions = emptyList(),
                 fromNotification = true,
+                replyParameters = replyInThread(replyToEventId),
             )
         } else {
             room.liveTimeline.sendMessage(

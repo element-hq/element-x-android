@@ -10,12 +10,11 @@ package io.element.android.libraries.matrix.impl.auth
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import org.junit.Test
-import java.io.File
 
 class OidcConfigurationProviderTest {
     @Test
     fun get() {
-        val result = OidcConfigurationProvider(File("/base")).get()
+        val result = OidcConfigurationProvider().get()
         assertThat(result.redirectUri).isEqualTo(OidcConfig.REDIRECT_URI)
     }
 }
