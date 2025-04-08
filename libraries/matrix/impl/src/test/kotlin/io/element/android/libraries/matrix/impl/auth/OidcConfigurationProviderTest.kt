@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl.auth
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import org.junit.Test
-import java.io.File
 
 class OidcConfigurationProviderTest {
     @Test
