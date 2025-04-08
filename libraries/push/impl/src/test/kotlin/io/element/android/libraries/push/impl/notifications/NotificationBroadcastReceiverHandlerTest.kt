@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
-import io.element.android.libraries.matrix.api.room.message.inReplyTo
+import io.element.android.libraries.matrix.api.room.message.replyInThread
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -438,7 +438,7 @@ class NotificationBroadcastReceiverHandlerTest {
         replyMessage.assertions()
             .isCalledOnce()
             .with(
-                value(inReplyTo(eventId = A_THREAD_ID.asEventId(), enforceThreadReply = true, replyWithinThread = true)),
+                value(replyInThread(eventId = A_THREAD_ID.asEventId(), explicitReply = false)),
                 value(A_MESSAGE),
                 value(null),
                 value(emptyList<IntentionalMention>()),
