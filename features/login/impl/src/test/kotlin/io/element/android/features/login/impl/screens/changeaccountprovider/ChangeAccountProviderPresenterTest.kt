@@ -13,6 +13,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.aChangeServerState
+import io.element.android.features.login.impl.R
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -36,7 +37,7 @@ class ChangeAccountProviderPresenterTest {
                     AccountProvider(
                         url = "https://matrix.org",
                         title = "matrix.org",
-                        subtitle = null,
+                        subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                         isPublic = true,
                         isMatrixOrg = true,
                         isValid = true,

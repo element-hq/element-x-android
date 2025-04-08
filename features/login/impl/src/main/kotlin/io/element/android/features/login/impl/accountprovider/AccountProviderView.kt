@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -89,11 +90,11 @@ fun AccountProviderView(
                     )
                 }
             }
-            if (item.subtitle != null) {
+            if (item.subtitleResourceId != null) {
                 Text(
                     modifier = Modifier
                         .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
-                    text = item.subtitle,
+                    text = stringResource(id = item.subtitleResourceId) ,
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textSecondary,
                 )

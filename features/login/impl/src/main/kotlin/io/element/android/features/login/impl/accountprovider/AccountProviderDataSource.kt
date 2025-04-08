@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.accountprovider
 
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ class AccountProviderDataSource @Inject constructor(
     private val defaultAccountProvider = (enterpriseService.defaultHomeserver() ?: AuthenticationConfig.MATRIX_ORG_URL).let { url ->
         AccountProvider(
             url = url,
-            subtitle = null,
+            subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
             isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
             isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
         )

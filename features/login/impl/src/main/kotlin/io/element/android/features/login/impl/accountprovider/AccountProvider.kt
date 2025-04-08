@@ -10,7 +10,7 @@ package io.element.android.features.login.impl.accountprovider
 data class AccountProvider(
     val url: String,
     val title: String = url.removePrefix("https://").removePrefix("http://"),
-    val subtitle: String? = null,
+    val subtitleResourceId: Int? = null,
     val isPublic: Boolean = false,
     val isMatrixOrg: Boolean = false,
     val isValid: Boolean = false,

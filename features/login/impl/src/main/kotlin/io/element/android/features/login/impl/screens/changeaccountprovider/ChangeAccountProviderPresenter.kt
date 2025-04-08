@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import androidx.compose.runtime.Composable
 import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
@@ -25,7 +26,7 @@ class ChangeAccountProviderPresenter @Inject constructor(
             accountProviders = listOf(
                 AccountProvider(
                     url = AuthenticationConfig.MATRIX_ORG_URL,
-                    subtitle = null,
+                    subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                     isPublic = true,
                     isMatrixOrg = true,
                     isValid = true,

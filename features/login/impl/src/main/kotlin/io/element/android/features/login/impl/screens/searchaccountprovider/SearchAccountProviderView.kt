@@ -188,7 +188,7 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     val isMatrixOrg = homeserverUrl == AuthenticationConfig.MATRIX_ORG_URL
     return AccountProvider(
         url = homeserverUrl,
-        subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
+        subtitleResourceId = if (isMatrixOrg) R.string.screen_change_account_provider_matrix_org_subtitle else null,
         // There is no need to know for other servers right now
         isPublic = isMatrixOrg,
         isMatrixOrg = isMatrixOrg,
