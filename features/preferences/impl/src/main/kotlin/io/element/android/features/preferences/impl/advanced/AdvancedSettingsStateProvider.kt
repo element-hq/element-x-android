@@ -9,6 +9,7 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.theme.Theme
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -18,6 +19,8 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSharePresenceEnabled = true),
             aAdvancedSettingsState(doesCompressMedia = true),
+            aAdvancedSettingsState(hideInviteAvatars = true),
+            aAdvancedSettingsState(timelineMediaPreviewValue = MediaPreviewValue.Off)
         )
 }
 
@@ -26,6 +29,8 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled: Boolean = false,
     doesCompressMedia: Boolean = false,
     showChangeThemeDialog: Boolean = false,
+    hideInviteAvatars: Boolean = false,
+    timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
     eventSink: (AdvancedSettingsEvents) -> Unit = {},
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
@@ -33,5 +38,7 @@ fun aAdvancedSettingsState(
     doesCompressMedia = doesCompressMedia,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
+    hideInviteAvatars = hideInviteAvatars,
+    timelineMediaPreviewValue = timelineMediaPreviewValue,
     eventSink = eventSink
 )

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.launch
@@ -44,6 +45,14 @@ class AdvancedSettingsPresenter @Inject constructor(
             .collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
 
+        val hideInviteAvatars by remember {
+            appPreferencesStore.getHideInviteAvatarsFlow()
+        }.collectAsState(false)
+
+        val timelineMediaPreviewValue by remember {
+            appPreferencesStore.getTimelineMediaPreviewValueFlow()
+        }.collectAsState(initial = MediaPreviewValue.On)
+
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
@@ -61,6 +70,12 @@ class AdvancedSettingsPresenter @Inject constructor(
                     appPreferencesStore.setTheme(event.theme.name)
                     showChangeThemeDialog = false
                 }
+                is AdvancedSettingsEvents.SetHideInviteAvatars -> localCoroutineScope.launch {
+                    appPreferencesStore.setHideInviteAvatars(event.value)
+                }
+                is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> localCoroutineScope.launch {
+                    appPreferencesStore.setTimelineMediaPreviewValue(event.value)
+                }
             }
         }
 
@@ -70,6 +85,8 @@ class AdvancedSettingsPresenter @Inject constructor(
             doesCompressMedia = doesCompressMedia,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
+            hideInviteAvatars = hideInviteAvatars,
+            timelineMediaPreviewValue = timelineMediaPreviewValue,
             eventSink = { handleEvents(it) }
         )
     }

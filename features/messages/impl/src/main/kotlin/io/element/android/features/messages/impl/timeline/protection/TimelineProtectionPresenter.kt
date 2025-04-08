@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
@@ -25,14 +26,14 @@ class TimelineProtectionPresenter @Inject constructor(
 ) : Presenter<TimelineProtectionState> {
     @Composable
     override fun present(): TimelineProtectionState {
-        val hideMediaContent by appPreferencesStore.doesHideImagesAndVideosFlow().collectAsState(initial = false)
+        val mediaPreviewValue = appPreferencesStore.getTimelineMediaPreviewValueFlow().collectAsState(initial = MediaPreviewValue.Off)
         var allowedEvents by remember { mutableStateOf<Set<EventId>>(setOf()) }
-        val protectionState by remember(hideMediaContent) {
+        val protectionState by remember {
             derivedStateOf {
-                if (hideMediaContent) {
-                    ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
-                } else {
+                if (mediaPreviewValue.value == MediaPreviewValue.On) {
                     ProtectionState.RenderAll
+                } else {
+                    ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
                 }
             }
         }
