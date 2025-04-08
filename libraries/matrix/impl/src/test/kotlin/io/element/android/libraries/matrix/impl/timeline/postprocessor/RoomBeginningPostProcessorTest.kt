@@ -50,8 +50,9 @@ class RoomBeginningPostProcessorTest {
     }
 
     @Test
-    fun `processor removes room creation event and self-join event from DM timeline`() {
+    fun `processor removes timeline start, room creation event and self-join event from DM timeline`() {
         val timelineItems = listOf(
+            timelineStartEvent,
             roomCreateEvent,
             roomCreatorJoinEvent,
         )
