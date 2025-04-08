@@ -7,11 +7,11 @@
   <string name="screen_room_change_permissions_ban_people">"Cekal orang-orang"</string>
   <string name="screen_room_change_permissions_delete_messages">"Hapus pesan"</string>
   <string name="screen_room_change_permissions_everyone">"Semua orang"</string>
-  <string name="screen_room_change_permissions_invite_people">"Undang orang-orang"</string>
+  <string name="screen_room_change_permissions_invite_people">"Undang orang-orang dan terima permintaan untuk bergabung"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderasi anggota"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Pesan dan konten"</string>
   <string name="screen_room_change_permissions_moderators">"Admin dan moderator"</string>
-  <string name="screen_room_change_permissions_remove_people">"Keluarkan orang-orang"</string>
+  <string name="screen_room_change_permissions_remove_people">"Keluarkan orang-orang dan tolak permintaan untuk bergabung"</string>
   <string name="screen_room_change_permissions_room_avatar">"Ubah avatar ruangan"</string>
   <string name="screen_room_change_permissions_room_details">"Detail ruangan"</string>
   <string name="screen_room_change_permissions_room_name">"Ubah nama ruangan"</string>
@@ -57,6 +57,7 @@
   <string name="screen_room_details_requests_to_join_title">"Permintaan untuk bergabung"</string>
   <string name="screen_room_details_roles_and_permissions">"Peran dan perizinan"</string>
   <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
+  <string name="screen_room_details_security_and_privacy_title">"Keamanan &amp; privasi"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_share_room_title">"Bagikan ruangan"</string>
   <string name="screen_room_details_title">"Info ruangan"</string>
@@ -118,6 +119,9 @@
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Minta untuk bergabung"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Enkripsi"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Siapa pun"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Hanya undangan"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Akses ruangan"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Siapa pun"</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Keterlihatan ruangan"</string>
+  <string name="screen_security_and_privacy_title">"Keamanan &amp; privasi"</string>
 </resources>

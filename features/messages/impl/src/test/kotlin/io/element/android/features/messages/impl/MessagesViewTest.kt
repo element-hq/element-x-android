@@ -104,7 +104,7 @@ class MessagesViewTest {
                 state = state,
                 onRoomDetailsClick = callback,
             )
-            rule.onNodeWithText(state.roomName.dataOrNull().orEmpty()).performClick()
+            rule.onNodeWithText(state.roomName.dataOrNull().orEmpty(), useUnmergedTree = true).performClick()
         }
     }
 
@@ -206,6 +206,7 @@ class MessagesViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on a read receipt list emits the expected Event`() {
         val eventsRecorder = EventsRecorder<ReadReceiptBottomSheetEvents>()
         val state = aMessagesState(
@@ -229,7 +230,7 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onNodeWithTag(TestTags.messageReadReceipts.value).performClick()
+        rule.onNodeWithTag(TestTags.messageReadReceipts.value, useUnmergedTree = true).performClick()
         eventsRecorder.assertSingle(ReadReceiptBottomSheetEvents.EventSelected(timelineItem))
     }
 
@@ -309,7 +310,7 @@ class MessagesViewTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on the sender of an Event invoke expected callback`() {
+    fun `clicking on the avatar of the sender of an Event invoke expected callback`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
         val state = aMessagesState(
             eventSink = eventsRecorder
@@ -322,7 +323,26 @@ class MessagesViewTest {
                 state = state,
                 onUserDataClick = callback,
             )
-            rule.onNodeWithTag(TestTags.timelineItemSenderInfo.value).performClick()
+            rule.onNodeWithTag(TestTags.timelineItemSenderAvatar.value, useUnmergedTree = true).performClick()
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "h1024dp")
+    fun `clicking on the display name of the sender of an Event invoke expected callback`() {
+        val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
+        val state = aMessagesState(
+            eventSink = eventsRecorder
+        )
+        val timelineItem = state.timelineState.timelineItems.first()
+        ensureCalledOnceWithParam(
+            param = (timelineItem as TimelineItem.Event).senderId
+        ) { callback ->
+            rule.setMessagesView(
+                state = state,
+                onUserDataClick = callback,
+            )
+            rule.onNodeWithTag(TestTags.timelineItemSenderName.value, useUnmergedTree = true).performClick()
         }
     }
 

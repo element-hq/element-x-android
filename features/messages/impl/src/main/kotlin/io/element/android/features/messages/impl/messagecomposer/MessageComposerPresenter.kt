@@ -47,16 +47,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -65,7 +64,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -119,7 +117,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
-    private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
@@ -181,7 +178,9 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
-        val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
+        val sendTypingNotifications by remember {
+            sessionPreferencesStore.isSendTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -331,7 +330,6 @@ class MessageComposerPresenter @AssistedInject constructor(
                             markdownTextEditorState.insertSuggestion(
                                 resolvedSuggestion = event.resolvedSuggestion,
                                 mentionSpanProvider = mentionSpanProvider,
-                                permalinkBuilder = permalinkBuilder,
                             )
                             suggestionSearchTrigger.value = null
                         }
@@ -344,20 +342,21 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
         }
 
-        val mentionSpanTheme = LocalMentionSpanTheme.current
-        val resolveMentionDisplay = remember(mentionSpanTheme) {
+        val resolveMentionDisplay = remember {
             { text: String, url: String ->
-                val permalinkData = permalinkParser.parse(url)
-                if (permalinkData is PermalinkData.UserLink) {
-                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
-                    mentionSpan.update(mentionSpanTheme)
+                val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                if (mentionSpan != null) {
                     TextDisplay.Custom(mentionSpan)
                 } else {
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                    mentionSpan.update(mentionSpanTheme)
-                    TextDisplay.Custom(mentionSpan)
+                    TextDisplay.Plain
                 }
+            }
+        }
+
+        val resolveAtRoomMentionDisplay = remember {
+            {
+                val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                TextDisplay.Custom(mentionSpan)
             }
         }
 
@@ -371,6 +370,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
+            resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
             eventSink = { handleEvents(it) },
         )
     }
@@ -400,16 +400,16 @@ class MessageComposerPresenter @AssistedInject constructor(
                 .stateIn(this, SharingStarted.Lazily, emptyList())
 
             combine(mentionTriggerFlow, room.membersStateFlow, roomAliasSuggestionsFlow) { suggestion, roomMembersState, roomAliasSuggestions ->
-                    val result = suggestionsProcessor.process(
-                        suggestion = suggestion,
-                        roomMembersState = roomMembersState,
-                        roomAliasSuggestions = roomAliasSuggestions,
-                        currentUserId = currentUserId,
-                        canSendRoomMention = ::canSendRoomMention,
-                    )
-                    suggestions.clear()
-                    suggestions.addAll(result)
-                }
+                val result = suggestionsProcessor.process(
+                    suggestion = suggestion,
+                    roomMembersState = roomMembersState,
+                    roomAliasSuggestions = roomAliasSuggestions,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = ::canSendRoomMention,
+                )
+                suggestions.clear()
+                suggestions.addAll(result)
+            }
                 .collect()
         }
     }
@@ -453,7 +453,19 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
+                    with(capturedMode) {
+                        replyMessage(
+                            body = message.markdown,
+                            htmlBody = message.html,
+                            intentionalMentions = message.intentionalMentions,
+                            replyParameters = ReplyParameters(
+                                inReplyToEventId = eventId,
+                                enforceThreadReply = inThread,
+                                // This should be false until we add a way to make a reply in a thread an explicit reply to the provided eventId
+                                replyWithinThread = false,
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -640,8 +652,8 @@ class MessageComposerPresenter @AssistedInject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
-            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
+            val markdownWithMentions = pillificationHelper.pillify(markdown, false)
+            markdownTextEditorState.text.update(markdownWithMentions, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -709,7 +721,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            val pillifiedContent = pillificationHelper.pillify(content)
+            val pillifiedContent = pillificationHelper.pillify(content, false)
             markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()

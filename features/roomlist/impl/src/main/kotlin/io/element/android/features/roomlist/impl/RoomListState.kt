@@ -19,6 +19,7 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 
 @Immutable
 data class RoomListState(
@@ -29,6 +30,7 @@ data class RoomListState(
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
+    val canReportBug: Boolean,
     val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
@@ -64,9 +66,11 @@ sealed interface RoomListContentState {
     data class Empty(
         val securityBannerState: SecurityBannerState,
     ) : RoomListContentState
+
     data class Rooms(
         val securityBannerState: SecurityBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val summaries: ImmutableList<RoomListRoomSummary>,
+        val seenRoomInvites: ImmutableSet<RoomId>,
     ) : RoomListContentState
 }

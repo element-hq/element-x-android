@@ -53,7 +53,6 @@ class PushProvidersTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
-            assertThat(lastItem.description).contains("2")
             assertThat(lastItem.description).contains("foo")
             assertThat(lastItem.description).contains("bar")
         }

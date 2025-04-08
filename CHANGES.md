@@ -1,3 +1,21 @@
+Changes in Element X v25.03.4
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.03.4 -->
+
+## What's Changed
+### 🙌 Improvements
+* Change : composer suggestions by @ganfra in https://github.com/element-hq/element-x-android/pull/4485
+### 🧱 Build
+* Fix flaky incoming verification tests by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4479
+### Dependency upgrades
+* fix(deps): update dagger to v2.56.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4472
+* fix(deps): update dependencyanalysis to v2.13.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4473
+* Upgrade embedded EC version to `v0.9.0-rc.4` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4489
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.03.3...v25.03.4
+
 Changes in Element X v25.03.3
 =============================
 

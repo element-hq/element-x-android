@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_key_backup_action_disable">"Slett nøkkellagring"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Slå på sikkerhetskopiering"</string>
   <string name="screen_chat_backup_key_backup_description">"Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_title">"Nøkkellagring"</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Last opp nøkler fra denne enheten"</string>
   <string name="screen_chat_backup_recovery_action_change">"Endre gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Nøkkellagringen din er for øyeblikket ikke synkronisert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Konfigurer gjenoppretting"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Få tilgang til de krypterte meldingene dine hvis du mister alle enhetene dine eller blir logget ut av %1$s overalt."</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logg på kontoen din igjen"</string>
@@ -25,6 +28,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Er du sikker på at du vil slå av sikkerhetskopiering?"</string>
   <string name="screen_key_backup_disable_description_point_1">"Du vil ikke ha kryptert meldingshistorikk på nye enheter"</string>
   <string name="screen_key_backup_disable_description_point_2">"Du mister tilgangen til de krypterte meldingene dine hvis du er logget ut av %1$s overalt"</string>
+  <string name="screen_key_backup_disable_title">"Er du sikker på at du vil slå av nøkkellagring og slette den?"</string>
   <string name="screen_recovery_key_change_description">"Få en ny gjenopprettingsnøkkel hvis du har mistet den eksisterende. Etter at du har endret gjenopprettingsnøkkelen, vil den gamle ikke lenger fungere."</string>
   <string name="screen_recovery_key_change_generate_key">"Generer en ny gjenopprettingsnøkkel"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Ikke del dette med noen!"</string>

@@ -39,7 +39,7 @@ class CreateRoomDataStore @Inject constructor(
         }
 
     val createRoomConfigWithInvites: Flow<CreateRoomConfig> = combine(
-        selectedUserListDataStore.selectedUsers(),
+        selectedUserListDataStore.selectedUsers,
         createRoomConfigFlow,
     ) { selectedUsers, config ->
         config.copy(invites = selectedUsers.toImmutableList())

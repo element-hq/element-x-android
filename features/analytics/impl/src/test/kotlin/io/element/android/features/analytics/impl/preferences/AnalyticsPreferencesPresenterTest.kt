@@ -11,6 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -35,7 +36,7 @@ class AnalyticsPreferencesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnabled).isTrue()
-            assertThat(initialState.policyUrl).isNotEmpty()
+            assertThat(initialState.policyUrl).isEqualTo(AnalyticsConfig.POLICY_LINK)
         }
     }
 

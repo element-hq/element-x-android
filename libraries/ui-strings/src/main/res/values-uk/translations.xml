@@ -61,6 +61,7 @@
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_disable">"Вимкнути"</string>
   <string name="action_discard">"Відкинути"</string>
+  <string name="action_dismiss">"Відхилити"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редагувати"</string>
   <string name="action_edit_caption">"Редагувати підпис"</string>
@@ -162,6 +163,7 @@
   <string name="common_editing">"Редагування"</string>
   <string name="common_editing_caption">"Редагування підпису"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Порожній файл"</string>
   <string name="common_encryption">"Шифрування"</string>
   <string name="common_encryption_enabled">"Шифрування ввімкнено"</string>
   <string name="common_enter_your_pin">"Введіть свій PIN-код"</string>
@@ -186,6 +188,7 @@
   <string name="common_invite_unknown_profile">"Цей Matrix-ID не знайдено, тому запрошення може не бути отримано."</string>
   <string name="common_leaving_room">"Вихід з кімнати"</string>
   <string name="common_light">"Світла"</string>
+  <string name="common_line_copied_to_clipboard">"Рядок скопійовано до буфера обміну"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_loading">"Завантаження"</string>
   <string name="common_loading_more">"Завантаження наступних…"</string>
@@ -203,6 +206,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Немає результатів"</string>
   <string name="common_no_room_name">"Немає назви кімнати"</string>
+  <string name="common_not_encrypted">"Не зашифровано"</string>
   <string name="common_offline">"Не в мережі"</string>
   <string name="common_open_source_licenses">"Ліцензії відкритого коду"</string>
   <string name="common_or">"або"</string>
@@ -265,7 +269,7 @@
   <string name="common_unable_to_decrypt">"Неможливо розшифрувати"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Надіслано з незахищеного пристрою"</string>
   <string name="common_unable_to_decrypt_no_access">"Ви не маєте доступу до цього повідомлення"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Підтверджена особа відправника змінилася"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Ідентичність відправника скинуто"</string>
   <string name="common_unable_to_invite_message">"Не вдалося надіслати запрошення одному чи кільком користувачам."</string>
   <string name="common_unable_to_invite_title">"Не вдалося надіслати запрошення"</string>
   <string name="common_unlock">"Розблокувати"</string>
@@ -285,11 +289,11 @@
   <string name="common_waiting">"Очікування…"</string>
   <string name="common_waiting_for_decryption_key">"Чекаємо на це повідомлення"</string>
   <string name="common_you">"Ви"</string>
-  <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s, схоже, змінилася. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s схоже, змінилася. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s скинуто. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s скинуто. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Верифікована ідентичність %1$s змінилася."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Верифіковано особистість %1$s %2$s змінилася. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Ідентичність %1$s скинуто."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Ідентичність %1$s %2$s скинуто. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Відкликати верифікацію"</string>
   <string name="dialog_confirm_link_message">"Посилання %1$s спрямовує вас на інший сайт %2$s
 
@@ -342,7 +346,7 @@
   <string name="screen_reset_identity_confirmation_title">"Не можете підтвердити? Перейдіть до свого облікового запису, щоб скинути облікові дані."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Ви все одно можете відкликати підтвердження та надіслати це повідомлення, або ви можете скасувати підписку на даний момент і спробувати пізніше після повторної перевірки %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше повідомлення не було надіслано, оскільки підтверджена особистість %1$s змінилася"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Надіслати повідомлення в будь-якому випадку"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s використовує один або кілька неперевірених пристроїв. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли %2$s перевірить всі пристрої."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше повідомлення не було надіслано, тому що %1$s не перевірив усі пристрої"</string>
@@ -363,7 +367,7 @@
   <string name="screen_share_open_google_maps">"Відкрити в Картах Google"</string>
   <string name="screen_share_open_osm_maps">"Відкрити в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поділитися цим місцем перебування"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджена особистість %1$s змінилася."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв."</string>
   <string name="screen_view_location_title">"Розташування"</string>

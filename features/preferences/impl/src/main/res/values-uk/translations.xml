@@ -8,8 +8,11 @@
   <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Встановіть URL-адресу для Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Сховати аватари у запитах на запрошення до кімнат"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Сховати попередній перегляд медіа у стрічці"</string>
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
   <string name="screen_advanced_settings_push_provider_android">"Постачальник push-сповіщень"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>

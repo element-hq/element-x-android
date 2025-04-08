@@ -42,6 +42,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.features.invite.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)

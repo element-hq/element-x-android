@@ -16,10 +16,10 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
+import io.element.android.features.rageshake.impl.crash.CrashDataStore
+import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
@@ -64,9 +64,9 @@ class BugReportPresenter @Inject constructor(
                 screenshotHolder.getFileUri()
             )
         }
-        val crashInfo: String by crashDataStore
-            .crashInfo()
-            .collectAsState(initial = "")
+        val crashInfo: String by remember {
+            crashDataStore.crashInfo()
+        }.collectAsState(initial = "")
 
         val sendingProgress = remember {
             mutableFloatStateOf(0f)

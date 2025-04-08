@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
@@ -60,7 +61,7 @@ class VoiceMessageComposerPresenterTest {
     )
     private val analyticsService = FakeAnalyticsService()
     private val sendVoiceMessageResult =
-        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
+        lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
     private val matrixRoom = FakeMatrixRoom(

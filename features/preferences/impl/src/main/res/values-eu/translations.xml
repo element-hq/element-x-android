@@ -5,6 +5,7 @@
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Aukeratu jakinarazpenak nola jaso"</string>
   <string name="screen_advanced_settings_developer_mode">"Garatzaile modua"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Gaitu garatzaileentzako ezaugarrietarako eta funtzionalitateetarako sarbidea izateko."</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderazioa eta Segurtasuna"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push jakinarazpen hornitzailea"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desgaitu testu aberatseko editorea Markdown eskuz idazteko."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Irakurketa-agiriak"</string>

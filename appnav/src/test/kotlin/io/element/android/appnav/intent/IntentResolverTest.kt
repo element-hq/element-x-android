@@ -241,7 +241,7 @@ class IntentResolverTest {
     }
 
     private fun createIntentResolver(
-        permalinkParserResult: () -> PermalinkData = { lambdaError() }
+        permalinkParserResult: (String) -> PermalinkData = { lambdaError() }
     ): IntentResolver {
         return IntentResolver(
             deeplinkParser = DeeplinkParser(),

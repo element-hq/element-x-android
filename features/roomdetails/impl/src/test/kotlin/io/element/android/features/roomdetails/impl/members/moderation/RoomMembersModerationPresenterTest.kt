@@ -17,14 +17,18 @@ import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
@@ -153,13 +157,14 @@ class RoomMembersModerationPresenterTest {
     }
 
     @Test
-    fun `present - Kick removes the user`() = runTest {
+    fun `present - Kick requires confirmation and then kicks the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
+        val kickUserResult = lambdaRecorder<UserId, String?, Result<Unit>> { _, _ -> Result.success(Unit) }
         val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
-            kickUserResult = { _, _ -> Result.success(Unit) },
+            kickUserResult = kickUserResult,
         )
         val selectedMember = aVictor()
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
@@ -169,6 +174,10 @@ class RoomMembersModerationPresenterTest {
             skipItems(1)
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
+            val confirmingState = awaitItem()
+            assertThat(confirmingState.kickUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+            // Confirm
+            confirmingState.eventSink(RoomMembersModerationEvents.DoKickUser(reason = A_REASON))
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.actions).isEmpty()
@@ -178,17 +187,22 @@ class RoomMembersModerationPresenterTest {
                 assertThat(selectedRoomMember).isNull()
             }
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.KickMember))
+            kickUserResult.assertions().isCalledOnce().with(
+                value(selectedMember.userId),
+                value(A_REASON),
+            )
         }
     }
 
     @Test
     fun `present - BanUser requires confirmation and then bans the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
+        val banUserResult = lambdaRecorder<UserId, String?, Result<Unit>> { _, _ -> Result.success(Unit) }
         val room = aMatrixRoom(
             canKickResult = { Result.success(true) },
             canBanResult = { Result.success(true) },
             userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
-            banUserResult = { _, _ -> Result.success(Unit) },
+            banUserResult = banUserResult,
         )
         val selectedMember = aVictor()
         val presenter = createRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
@@ -200,9 +214,8 @@ class RoomMembersModerationPresenterTest {
             awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
             val confirmingState = awaitItem()
             assertThat(confirmingState.banUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-
             // Confirm
-            confirmingState.eventSink(RoomMembersModerationEvents.BanUser)
+            confirmingState.eventSink(RoomMembersModerationEvents.DoBanUser(reason = A_REASON))
             skipItems(1)
             val loadingItem = awaitItem()
             assertThat(loadingItem.actions).isEmpty()
@@ -213,6 +226,10 @@ class RoomMembersModerationPresenterTest {
                 assertThat(selectedRoomMember).isNull()
             }
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.BanMember))
+            banUserResult.assertions().isCalledOnce().with(
+                value(selectedMember.userId),
+                value(A_REASON),
+            )
         }
     }
 
@@ -289,7 +306,7 @@ class RoomMembersModerationPresenterTest {
             val initialItem = awaitItem()
             // Kick user and fail
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
-            awaitItem().eventSink(RoomMembersModerationEvents.KickUser)
+            awaitItem().eventSink(RoomMembersModerationEvents.DoKickUser(reason = ""))
             skipItems(1)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().kickUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)
@@ -299,8 +316,7 @@ class RoomMembersModerationPresenterTest {
 
             // Ban user and fail
             initialItem.eventSink(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
-            awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
-            awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
+            awaitItem().eventSink(RoomMembersModerationEvents.DoBanUser(reason = ""))
             skipItems(1)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().banUserAsyncAction).isInstanceOf(AsyncAction.Failure::class.java)

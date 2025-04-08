@@ -12,14 +12,21 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class RageshakePreferencesStateProvider : PreviewParameterProvider<RageshakePreferencesState> {
     override val values: Sequence<RageshakePreferencesState>
         get() = sequenceOf(
-            aRageshakePreferencesState().copy(isEnabled = true, isSupported = true, sensitivity = 0.5f),
-            aRageshakePreferencesState().copy(isEnabled = true, isSupported = false, sensitivity = 0.5f),
+            aRageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f),
+            aRageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f),
         )
 }
 
-fun aRageshakePreferencesState() = RageshakePreferencesState(
-    isEnabled = false,
-    isSupported = true,
-    sensitivity = 0.3f,
-    eventSink = {}
+fun aRageshakePreferencesState(
+    isFeatureEnabled: Boolean = true,
+    isEnabled: Boolean = false,
+    isSupported: Boolean = true,
+    sensitivity: Float = 0.3f,
+    eventSink: (RageshakePreferencesEvents) -> Unit = {}
+) = RageshakePreferencesState(
+    isFeatureEnabled = isFeatureEnabled,
+    isEnabled = isEnabled,
+    isSupported = isSupported,
+    sensitivity = sensitivity,
+    eventSink = eventSink,
 )

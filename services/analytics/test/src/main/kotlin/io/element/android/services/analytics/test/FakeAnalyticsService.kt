@@ -15,6 +15,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class FakeAnalyticsService(
     isEnabled: Boolean = false,
@@ -22,7 +23,7 @@ class FakeAnalyticsService(
     private val resetLambda: () -> Unit = {},
 ) : AnalyticsService {
     private val isEnabledFlow = MutableStateFlow(isEnabled)
-    private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
+    override val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
     val screenEvents = mutableListOf<VectorAnalyticsScreen>()
     val trackedErrors = mutableListOf<Throwable>()
@@ -30,19 +31,17 @@ class FakeAnalyticsService(
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
-    override fun getUserConsent(): Flow<Boolean> = isEnabledFlow
+    override val userConsentFlow: Flow<Boolean> = isEnabledFlow.asStateFlow()
 
     override suspend fun setUserConsent(userConsent: Boolean) {
         isEnabledFlow.value = userConsent
     }
 
-    override fun didAskUserConsent(): Flow<Boolean> = didAskUserConsentFlow
-
     override suspend fun setDidAskUserConsent() {
         didAskUserConsentFlow.value = true
     }
 
-    override fun getAnalyticsId(): Flow<String> = MutableStateFlow("")
+    override val analyticsIdFlow: Flow<String> = MutableStateFlow("")
 
     override suspend fun setAnalyticsId(analyticsId: String) {
     }

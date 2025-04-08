@@ -34,8 +34,8 @@ fun InviteSenderView(
         modifier = modifier,
     ) {
         Box(modifier = Modifier.padding(vertical = 2.dp)) {
-        Avatar(avatarData = inviteSender.avatarData)
-            }
+            Avatar(avatarData = inviteSender.avatarData)
+        }
         Text(
             text = inviteSender.annotatedString(),
             style = ElementTheme.typography.fontBodyMdRegular,

@@ -39,7 +39,15 @@ class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersM
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
+                kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
+            ),
+            aRoomMembersModerationState(
+                selectedRoomMember = anAlice(),
                 kickUserAsyncAction = AsyncAction.Loading,
+            ),
+            aRoomMembersModerationState(
+                selectedRoomMember = anAlice(),
+                banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
@@ -53,10 +61,6 @@ class RoomMembersModerationStateProvider : PreviewParameterProvider<RoomMembersM
                 kickUserAsyncAction = AsyncAction.Failure(Exception("Failed to kick user")),
                 banUserAsyncAction = AsyncAction.Failure(Exception("Failed to ban user")),
                 unbanUserAsyncAction = AsyncAction.Failure(Exception("Failed to unban user")),
-            ),
-            aRoomMembersModerationState(
-                selectedRoomMember = anAlice(),
-                banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),

@@ -1,38 +1,28 @@
-Element X brings you both sovereign & seamless collaboration built on Matrix.
+Freedom to communicate on your own terms
 
-The collaboration capabilities include chat & video calls with the modern set of features such as:
- • public & private channels
- • room moderation & access control
- • replies, reactions, polls, read receipts, pinned messages, etc.
- • simultaneous chat & calls (picture in picture)
- • decentralized & federated communication across organizations
+For individuals and communities - private communication between family, friends, hobby groups, clubs, etc.
 
-All this comes in a secure & sovereign fashion without compromising responsiveness or overall usability of the app:
- • enterprise-grade single sign-on
- • easy & secure login & device verification via QR-code
- • end to end encryption & zero trust
- • protection against MITM & other cyber attacks
+Element X gives you fast, secure and private instant messaging and video calls built on Matrix, the open standard for real-time communication. This is a free and open-source app maintained at https://github.com/element-hq/element-x-android.
 
-If you’re a new user, use the new Element X app from the start. Compared to the current Element app you will get:
- • greatly enhanced performance, sleek user interface and overall better user experience
- • enterprise-grade support for single sign-on (OIDC)
- • QR-code based login & device verification
- • natively integrated Element Call for video calls
- • continuous improvements, bug fixes and new features
+Stay in touch with friends, family and communities with:
+ • Real time messaging & video calls
+ • Public rooms for open group communication
+ • Private rooms for closed group communication
+ • Rich messaging features: emoji reactions, replies, polls, pinned messages and more.
+ • Video calling while browsing messages.
+ • Interoperability with other Matrix-based apps such as FluffyChat, Cinny and many more.
 
-If you’re an existing user, using the current Element app - check out the new Element X and start planning your transition. The current Element app will be phased out and will only get critical security updates.
+<b>Privacy-first<b>
+Unlike some other messengers from Big Tech companies, we don’t mine your data or monitor your communications.
 
-<b>Own your data</b>
-Matrix-based, Element X lets you self-host your data or choose from any free public server (the default is matrix.org, but there are plenty of others to choose from). However you host, you have ownership; it’s your data. You’re not the product. You’re in control.
+<b>Own your conversations</b>
+Choose where to host your data - from any public server (the largest free server is matrix.org, but there are plenty of others to choose from) to creating your own personal server and hosting it on your own domain. This ability to choose a server is a large part of what differentiates us from other real time communication apps. However you host, you have ownership; it’s your data. You’re not the product. You’re in control.
 
-<b>Interoperate natively</b>
-Enjoy the freedom of the Matrix open standard! You have native interoperability with any other Matrix-based app. So just like email, it doesn't matter if your friends, partners or customers are on a different Matrix-based app - you can still connect.
+<b>Communicate in real time, all the time</b>
+Use Element everywhere. Stay in touch wherever you are with fully synchronised message history across all your devices, including on the web at https://app.element.io
 
-<b>Encrypt your data</b>
-Enjoy your right to private conversations - free from data mining, ads and all the rest of it - and stay secure. Only the people in your conversation can read your messages.
-
-<b>Chat across multiple devices</b>
-Stay in touch wherever you are with fully synchronized message history across all your devices, even those running Element legacy app, and on the web at https://app.element.io
+<b>Element X is our next-generation app</b>
+If you’re using the original Element app, it’s time to try Element X! It’s faster, easier to use, and more powerful than the original app. It’s better in every way and we’re adding new features all the time.
 
 The application requires the android.permission.REQUEST_INSTALL_PACKAGES permission to enable the installation of applications received as attachments, ensuring seamless and convenient access to new software within the app.
 

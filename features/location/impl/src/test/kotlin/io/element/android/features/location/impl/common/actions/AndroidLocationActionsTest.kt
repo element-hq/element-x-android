@@ -11,6 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import org.junit.Test
 import java.net.URLEncoder
+import java.util.Locale
 
 internal class AndroidLocationActionsTest {
     // We use an Android-native encoder in the actual app, switch to an equivalent JVM one for the tests
@@ -25,7 +26,7 @@ internal class AndroidLocationActionsTest {
         )
 
         val actual = buildUrl(location, null, ::urlEncoder)
-        val expected = "geo:0,0?q=1.234568,123.456789"
+        val expected = "geo:0,0?q=1.234568,123.456789 ()"
 
         assertThat(actual).isEqualTo(expected)
     }
@@ -51,6 +52,22 @@ internal class AndroidLocationActionsTest {
             lon = 2.000001,
             accuracy = 0f
         )
+
+        val actual = buildUrl(location, "(weird/stuff here)", ::urlEncoder)
+        val expected = "geo:0,0?q=1.000001,2.000001 (%28weird%2Fstuff+here%29)"
+
+        assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    fun `buildUrl - URL encodes coordinates in locale with comma decimal separator`() {
+        val location = Location(
+            lat = 1.000001,
+            lon = 2.000001,
+            accuracy = 0f
+        )
+        // Set a locale with comma as decimal separator
+        Locale.setDefault(Locale.Category.FORMAT, Locale("pt", "BR"))
 
         val actual = buildUrl(location, "(weird/stuff here)", ::urlEncoder)
         val expected = "geo:0,0?q=1.000001,2.000001 (%28weird%2Fstuff+here%29)"

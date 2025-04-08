@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
@@ -79,7 +78,7 @@ class LoggedInPresenter @Inject constructor(
                 .launchIn(this)
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         val showSyncSpinner by remember {
             derivedStateOf {
                 isOnline && syncIndicator == RoomListService.SyncIndicator.Show

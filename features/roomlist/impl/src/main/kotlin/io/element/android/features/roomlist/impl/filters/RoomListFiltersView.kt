@@ -10,7 +10,6 @@ package io.element.android.features.roomlist.impl.filters
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
@@ -48,7 +47,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,

@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -28,19 +29,18 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
 class FakeTimeline(
     private val name: String = "FakeTimeline",
     override val timelineItems: Flow<List<MatrixTimelineItem>> = MutableStateFlow(emptyList()),
-    private val backwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
+    override val backwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
         Timeline.PaginationStatus(
             isPaginating = false,
             hasMoreToLoad = true
         )
     ),
-    private val forwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
+    override val forwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
         Timeline.PaginationStatus(
             isPaginating = false,
             hasMoreToLoad = false
@@ -111,7 +111,7 @@ class FakeTimeline(
     )
 
     var replyMessageLambda: (
-        eventId: EventId,
+        replyParameters: ReplyParameters,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
@@ -121,13 +121,13 @@ class FakeTimeline(
     }
 
     override suspend fun replyMessage(
-        eventId: EventId,
+        replyParameters: ReplyParameters,
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
-        eventId,
+        replyParameters,
         body,
         htmlBody,
         intentionalMentions,
@@ -141,7 +141,8 @@ class FakeTimeline(
         body: String?,
         formattedBody: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
+        replyParameters: ReplyParameters?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
@@ -152,13 +153,15 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = sendImageLambda(
         file,
         thumbnailFile,
         imageInfo,
         caption,
         formattedCaption,
-        progressCallback
+        progressCallback,
+        replyParameters,
     )
 
     var sendVideoLambda: (
@@ -168,7 +171,8 @@ class FakeTimeline(
         body: String?,
         formattedBody: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
+        replyParameters: ReplyParameters?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
@@ -179,13 +183,15 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = sendVideoLambda(
         file,
         thumbnailFile,
         videoInfo,
         caption,
         formattedCaption,
-        progressCallback
+        progressCallback,
+        replyParameters,
     )
 
     var sendAudioLambda: (
@@ -194,7 +200,8 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
+        replyParameters: ReplyParameters?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
@@ -204,12 +211,14 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = sendAudioLambda(
         file,
         audioInfo,
         caption,
         formattedCaption,
-        progressCallback
+        progressCallback,
+        replyParameters,
     )
 
     var sendFileLambda: (
@@ -218,7 +227,8 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
+        replyParameters: ReplyParameters?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _, _ ->
         Result.success(FakeMediaUploadHandler())
     }
 
@@ -228,22 +238,39 @@ class FakeTimeline(
         caption: String?,
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = sendFileLambda(
         file,
         fileInfo,
         caption,
         formattedCaption,
-        progressCallback
+        progressCallback,
+        replyParameters,
     )
 
-    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = toggleReactionLambda(
-        emoji,
-        eventOrTransactionId
-    )
+    var sendVoiceMessageLambda: (
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _, _ ->
+        Result.success(FakeMediaUploadHandler())
+    }
 
-    var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler> = sendVoiceMessageLambda(
+        file,
+        audioInfo,
+        waveform,
+        progressCallback,
+        replyParameters,
+    )
 
     var sendLocationLambda: (
         body: String,
@@ -268,6 +295,17 @@ class FakeTimeline(
         zoomLevel,
         assetType
     )
+
+    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = toggleReactionLambda(
+        emoji,
+        eventOrTransactionId
+    )
+
+    var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
 
     var createPollLambda: (
         question: String,
@@ -338,27 +376,6 @@ class FakeTimeline(
         text: String,
     ): Result<Unit> = endPollLambda(pollStartId, text)
 
-    var sendVoiceMessageLambda: (
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-    ) -> Result<MediaUploadHandler> = { _, _, _, _ ->
-        Result.success(FakeMediaUploadHandler())
-    }
-
-    override suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-    ): Result<MediaUploadHandler> = sendVoiceMessageLambda(
-        file,
-        audioInfo,
-        waveform,
-        progressCallback
-    )
-
     var sendReadReceiptLambda: (
         eventId: EventId,
         receiptType: ReceiptType,
@@ -376,13 +393,6 @@ class FakeTimeline(
     }
 
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = paginateLambda(direction)
-
-    override fun paginationStatus(direction: Timeline.PaginationDirection): StateFlow<Timeline.PaginationStatus> {
-        return when (direction) {
-            Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus
-            Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus
-        }
-    }
 
     var loadReplyDetailsLambda: (eventId: EventId) -> InReplyTo = {
         InReplyTo.NotLoaded(it)

@@ -120,8 +120,9 @@ class UserProfilePresenter @AssistedInject constructor(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
-                // Do nothing for withdrawing verification as it's handled by the RoomMemberDetailsPresenter if needed
-                UserProfileEvents.WithdrawVerification -> Unit
+                // Do nothing for other event as they are handled by the RoomMemberDetailsPresenter if needed
+                UserProfileEvents.WithdrawVerification,
+                is UserProfileEvents.CopyToClipboard -> Unit
             }
         }
 
@@ -136,6 +137,7 @@ class UserProfilePresenter @AssistedInject constructor(
             isCurrentUser = isCurrentUser,
             dmRoomId = dmRoomId,
             canCall = canCall,
+            snackbarMessage = null,
             eventSink = ::handleEvents
         )
     }

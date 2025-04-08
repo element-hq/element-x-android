@@ -76,7 +76,7 @@ class MediaViewerDataSource(
     }
 
     @VisibleForTesting
-    fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
+    internal fun dataFlow(): Flow<PersistentList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
                 when (groupedItems) {

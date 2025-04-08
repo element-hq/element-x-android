@@ -27,6 +27,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -37,6 +43,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.digit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -60,7 +68,22 @@ fun PinKeypad(
     val horizontalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterHorizontally)
     val verticalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterVertically)
     Column(
-        modifier = modifier,
+        modifier = modifier.onKeyEvent { event ->
+            if (event.type == KeyEventType.KeyUp) {
+                val digitChar = event.digit
+                if (digitChar != null) {
+                    onClick(PinKeypadModel.Number(digitChar))
+                    true
+                } else if (event.key == Key.Backspace) {
+                    onClick(PinKeypadModel.Back)
+                    true
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        },
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment,
     ) {
@@ -183,7 +206,7 @@ private fun PinKeypadBackButton(
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.Backspace,
-            contentDescription = null,
+            contentDescription = stringResource(CommonStrings.a11y_delete),
         )
     }
 }

@@ -75,7 +75,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -128,7 +127,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
-        htmlConverterProvider.Update(currentUserId = room.sessionId)
+        htmlConverterProvider.Update()
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
@@ -183,7 +182,7 @@ class MessagesPresenter @AssistedInject constructor(
                 showReinvitePrompt = !hasDismissedInviteDialog && composerHasFocus && roomInfo.isDm && roomInfo.activeMembersCount == 1L
             }
         }
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 

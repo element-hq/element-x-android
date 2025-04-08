@@ -12,6 +12,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -25,6 +26,7 @@ object RoomMemberModule {
         room: MatrixRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory,
         encryptionService: EncryptionService,
+        clipboardHelper: ClipboardHelper,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
@@ -33,6 +35,7 @@ object RoomMemberModule {
                     room = room,
                     userProfilePresenterFactory = userProfilePresenterFactory,
                     encryptionService = encryptionService,
+                    clipboardHelper = clipboardHelper,
                 )
             }
         }

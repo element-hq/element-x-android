@@ -14,8 +14,9 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
+import io.element.android.libraries.matrix.api.room.message.replyInThread
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -330,7 +331,8 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test send reply`() = runTest {
         val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
-        val replyMessage = lambdaRecorder<EventId, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+        val replyMessage =
+            lambdaRecorder<ReplyParameters, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -396,7 +398,8 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test send reply to thread`() = runTest {
         val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
-        val replyMessage = lambdaRecorder<EventId, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+        val replyMessage =
+            lambdaRecorder<ReplyParameters, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -423,6 +426,7 @@ class NotificationBroadcastReceiverHandlerTest {
             createIntent(
                 action = actionIds.smartReply,
                 roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
                 threadId = A_THREAD_ID,
             ),
         )
@@ -433,7 +437,13 @@ class NotificationBroadcastReceiverHandlerTest {
             .isCalledOnce()
         replyMessage.assertions()
             .isCalledOnce()
-            .with(value(A_THREAD_ID.asEventId()), value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()), value(true))
+            .with(
+                value(replyInThread(eventId = AN_EVENT_ID, explicitReply = false)),
+                value(A_MESSAGE),
+                value(null),
+                value(emptyList<IntentionalMention>()),
+                value(true)
+            )
     }
 
     private fun createIntent(

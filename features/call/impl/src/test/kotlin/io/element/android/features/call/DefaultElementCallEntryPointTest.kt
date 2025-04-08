@@ -20,16 +20,21 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import kotlin.time.Duration.Companion.seconds
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultElementCallEntryPointTest {
     @Test
-    fun `startCall - starts ElementCallActivity setup with the needed extras`() {
+    fun `startCall - starts ElementCallActivity setup with the needed extras`() = runTest {
         val entryPoint = createEntryPoint()
         entryPoint.startCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
 
@@ -39,8 +44,9 @@ class DefaultElementCallEntryPointTest {
         assertThat(intent.extras?.containsKey("EXTRA_CALL_TYPE")).isTrue()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `handleIncomingCall - registers the incoming call using ActiveCallManager`() {
+    fun `handleIncomingCall - registers the incoming call using ActiveCallManager`() = runTest {
         val registerIncomingCallLambda = lambdaRecorder<CallNotificationData, Unit> {}
         val activeCallManager = FakeActiveCallManager(registerIncomingCallResult = registerIncomingCallLambda)
         val entryPoint = createEntryPoint(activeCallManager = activeCallManager)
@@ -57,10 +63,12 @@ class DefaultElementCallEntryPointTest {
             textContent = "textContent",
         )
 
+        advanceTimeBy(1.seconds)
+
         registerIncomingCallLambda.assertions().isCalledOnce()
     }
 
-    private fun createEntryPoint(
+    private fun TestScope.createEntryPoint(
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
     ) = DefaultElementCallEntryPoint(
         context = InstrumentationRegistry.getInstrumentation().targetContext,

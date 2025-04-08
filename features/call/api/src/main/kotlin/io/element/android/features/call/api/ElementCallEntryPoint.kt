@@ -32,7 +32,7 @@ interface ElementCallEntryPoint {
      * @param notificationChannelId The id of the notification channel to use for the call notification.
      * @param textContent The text content of the notification. If null the default content from the system will be used.
      */
-    fun handleIncomingCall(
+    suspend fun handleIncomingCall(
         callType: CallType.RoomCall,
         eventId: EventId,
         senderId: UserId,

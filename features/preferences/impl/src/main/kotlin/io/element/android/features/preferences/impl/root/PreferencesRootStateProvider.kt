@@ -25,6 +25,7 @@ fun aPreferencesRootState(
     accountManagementUrl = "aUrl",
     devicesManagementUrl = "anOtherUrl",
     showAnalyticsSettings = true,
+    canReportBug = true,
     showDeveloperSettings = true,
     showNotificationSettings = true,
     showLockScreenSettings = true,

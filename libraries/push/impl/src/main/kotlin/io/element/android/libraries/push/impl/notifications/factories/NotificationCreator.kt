@@ -197,7 +197,8 @@ class DefaultNotificationCreator @Inject constructor(
                 addAction(markAsReadActionFactory.create(roomInfo))
                 // Quick reply
                 if (!roomInfo.hasSmartReplyError) {
-                    addAction(quickReplyActionFactory.create(roomInfo, threadId))
+                    val latestEventId = events.lastOrNull()?.eventId
+                    addAction(quickReplyActionFactory.create(roomInfo, latestEventId, threadId))
                 }
                 if (openIntent != null) {
                     setContentIntent(openIntent)

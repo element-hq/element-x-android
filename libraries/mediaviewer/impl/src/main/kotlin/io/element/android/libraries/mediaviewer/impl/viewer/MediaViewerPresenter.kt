@@ -148,6 +148,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
 
         return MediaViewerState(
+            initiallySelectedEventId = inputs.eventId,
             listData = data.value,
             currentIndex = currentIndex.intValue,
             snackbarMessage = snackbarMessage,

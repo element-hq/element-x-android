@@ -12,6 +12,7 @@ import org.junit.Test
 
 class MapTilerTileServerStyleUriBuilderTest {
     private val builder = MapTilerTileServerStyleUriBuilder(
+        baseUrl = "https://base.url",
         apiKey = "anApiKey",
         lightMapId = "aLightMapId",
         darkMapId = "aDarkMapId",
@@ -21,13 +22,13 @@ class MapTilerTileServerStyleUriBuilderTest {
     fun `light map uri`() {
         assertThat(
             builder.build(darkMode = false)
-        ).isEqualTo("https://api.maptiler.com/maps/aLightMapId/style.json?key=anApiKey")
+        ).isEqualTo("https://base.url/aLightMapId/style.json?key=anApiKey")
     }
 
     @Test
     fun `dark map uri`() {
         assertThat(
             builder.build(darkMode = true)
-        ).isEqualTo("https://api.maptiler.com/maps/aDarkMapId/style.json?key=anApiKey")
+        ).isEqualTo("https://base.url/aDarkMapId/style.json?key=anApiKey")
     }
 }

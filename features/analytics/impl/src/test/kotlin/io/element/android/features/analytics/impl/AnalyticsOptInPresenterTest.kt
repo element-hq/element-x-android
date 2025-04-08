@@ -35,10 +35,10 @@ class AnalyticsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(analyticsService.didAskUserConsent().first()).isFalse()
+            assertThat(analyticsService.didAskUserConsentFlow.first()).isFalse()
             initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(true))
-            assertThat(analyticsService.didAskUserConsent().first()).isTrue()
-            assertThat(analyticsService.getUserConsent().first()).isTrue()
+            assertThat(analyticsService.didAskUserConsentFlow.first()).isTrue()
+            assertThat(analyticsService.userConsentFlow.first()).isTrue()
         }
     }
 
@@ -53,10 +53,10 @@ class AnalyticsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(analyticsService.didAskUserConsent().first()).isFalse()
+            assertThat(analyticsService.didAskUserConsentFlow.first()).isFalse()
             initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(false))
-            assertThat(analyticsService.didAskUserConsent().first()).isTrue()
-            assertThat(analyticsService.getUserConsent().first()).isFalse()
+            assertThat(analyticsService.didAskUserConsentFlow.first()).isTrue()
+            assertThat(analyticsService.userConsentFlow.first()).isFalse()
         }
     }
 }

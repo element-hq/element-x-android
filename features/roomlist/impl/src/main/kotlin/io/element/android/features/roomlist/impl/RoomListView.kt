@@ -127,6 +127,7 @@ private fun RoomListScaffold(
                 displayMenuItems = state.displayActions,
                 displayFilters = state.displayFilters,
                 filtersState = state.filtersState,
+                canReportBug = state.canReportBug,
             )
         },
         content = { padding ->

@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -484,14 +483,15 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
+            val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
+                modifier = Modifier
+                    .clip(roundedCornerShape)
+                    .clickable { onRoomDetailsClick() },
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val roundedCornerShape = RoundedCornerShape(8.dp)
-                val titleModifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() }
+                val titleModifier = Modifier.weight(1f, fill = false)
                 if (roomName != null && roomAvatar != null) {
                     RoomAvatarAndNameRow(
                         roomName = roomName,
@@ -509,7 +509,6 @@ private fun MessagesViewTopBar(
                 when (dmUserIdentityState) {
                     IdentityState.Verified -> {
                         Icon(
-                            modifier = Modifier.requiredWidthIn(min = 16.dp),
                             imageVector = CompoundIcons.Verified(),
                             tint = ElementTheme.colors.iconSuccessPrimary,
                             contentDescription = null,
@@ -517,7 +516,6 @@ private fun MessagesViewTopBar(
                     }
                     IdentityState.VerificationViolation -> {
                         Icon(
-                            modifier = Modifier.requiredWidthIn(min = 16.dp),
                             imageVector = CompoundIcons.ErrorSolid(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,

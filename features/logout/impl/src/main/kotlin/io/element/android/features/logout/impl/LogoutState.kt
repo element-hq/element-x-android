@@ -18,6 +18,7 @@ data class LogoutState(
     val doesBackupExistOnServer: Boolean,
     val recoveryState: RecoveryState,
     val backupUploadState: BackupUploadState,
+    val waitingForALongTime: Boolean,
     val logoutAction: AsyncAction<Unit>,
     val eventSink: (LogoutEvents) -> Unit,
 )

@@ -65,12 +65,12 @@ class RoomListRoomSummaryTest {
     }
 
     @Test
-    fun `when display type is invite then isHighlighted and hasNewContent are true`() {
+    fun `when display type is invite then isHighlighted and hasNewContent are false`() {
         val sut = createRoomListRoomSummary(
             displayType = RoomSummaryDisplayType.INVITE,
         )
-        assertThat(sut.isHighlighted).isTrue()
-        assertThat(sut.hasNewContent).isTrue()
+        assertThat(sut.isHighlighted).isFalse()
+        assertThat(sut.hasNewContent).isFalse()
     }
 }
 

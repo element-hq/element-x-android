@@ -23,7 +23,7 @@ class AccountProviderDataSourceTest {
     @Test
     fun `present - initial state`() = runTest {
         val sut = AccountProviderDataSource(FakeEnterpriseService())
-        sut.flow().test {
+        sut.flow.test {
             val initialState = awaitItem()
             assertThat(initialState).isEqualTo(
                 AccountProvider(
@@ -43,7 +43,7 @@ class AccountProviderDataSourceTest {
         val sut = AccountProviderDataSource(FakeEnterpriseService(
             defaultHomeserverResult = { AuthenticationConfig.MATRIX_ORG_URL }
         ))
-        sut.flow().test {
+        sut.flow.test {
             val initialState = awaitItem()
             assertThat(initialState).isEqualTo(
                 AccountProvider(
@@ -61,7 +61,7 @@ class AccountProviderDataSourceTest {
     @Test
     fun `present - user change and reset`() = runTest {
         val sut = AccountProviderDataSource(FakeEnterpriseService())
-        sut.flow().test {
+        sut.flow.test {
             val initialState = awaitItem()
             assertThat(initialState.url).isEqualTo(FakeEnterpriseService.A_FAKE_HOMESERVER)
             sut.userSelection(AccountProvider(url = "https://example.com"))

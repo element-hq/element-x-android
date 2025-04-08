@@ -476,16 +476,13 @@ class RustMatrixClient(
 
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
-    override fun close() {
+    internal suspend fun destroy() {
         innerNotificationClient.close()
 
-        appCoroutineScope.launch {
-            roomFactory.destroy()
-            rustSyncService.destroy()
-            notificationSettingsService.destroy()
-            // This is sync, but it can destroy the `Client` instance and block stopping the sync service
-            notificationProcessSetup.destroy()
-        }
+        roomFactory.destroy()
+        rustSyncService.destroy()
+        notificationSettingsService.destroy()
+        notificationProcessSetup.destroy()
 
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -504,7 +501,7 @@ class RustMatrixClient(
 
     override suspend fun clearCache() {
         innerClient.clearCaches()
-        close()
+        destroy()
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
@@ -527,7 +524,7 @@ class RustMatrixClient(
                     }
                 }
             }
-            close()
+            destroy()
 
             deleteSessionDirectory()
             if (userInitiated) {
@@ -577,7 +574,7 @@ class RustMatrixClient(
                     throw it
                 }
             }
-            close()
+            destroy()
             deleteSessionDirectory()
             sessionStore.removeSession(sessionId.value)
         }.onFailure {
