@@ -16,14 +16,14 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 
 @Module
 @ContributesTo(RoomScope::class)
 object RoomMemberModule {
     @Provides
     fun provideRoomMemberDetailsPresenterFactory(
-        room: MatrixRoom,
+        room: JoinedMatrixRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory,
         encryptionService: EncryptionService,
         clipboardHelper: ClipboardHelper,
