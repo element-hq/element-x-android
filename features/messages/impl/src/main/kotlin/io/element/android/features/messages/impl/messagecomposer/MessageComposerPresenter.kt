@@ -49,7 +49,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -98,7 +98,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val appCoroutineScope: CoroutineScope,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val sessionPreferencesStore: SessionPreferencesStore,

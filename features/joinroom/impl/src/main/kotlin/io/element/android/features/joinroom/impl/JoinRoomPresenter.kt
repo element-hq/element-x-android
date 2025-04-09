@@ -131,7 +131,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                     val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
                         onSuccess = { preview ->
-                            val membershipInfo = when (preview.info.membership) {
+                            val membershipInfo = when (preview.previewInfo.membership) {
                                 CurrentUserMembership.INVITED,
                                 CurrentUserMembership.BANNED,
                                 CurrentUserMembership.KNOCKED -> {
@@ -139,7 +139,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                                 }
                                 else -> null
                             }
-                            preview.info.toContentState(
+                            preview.previewInfo.toContentState(
                                 senderMember = membershipInfo?.senderMember,
                                 reason = membershipInfo?.currentUserMember?.membershipChangeReason,
                             )

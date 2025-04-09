@@ -25,13 +25,13 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class ReportMessagePresenter @AssistedInject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     @Assisted private val inputs: Inputs,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<ReportMessageState> {

@@ -29,7 +29,7 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 class SecurityAndPrivacyPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
 ) : Presenter<SecurityAndPrivacyState> {
     @AssistedFactory
     interface Factory {

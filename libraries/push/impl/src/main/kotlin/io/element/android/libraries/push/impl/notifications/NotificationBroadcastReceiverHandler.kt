@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.message.replyInThread
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -117,7 +117,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             return@launch
         }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        client.getRoom(roomId)?.let { room ->
+        client.getJoinedRoom(roomId)?.let { room ->
             sendMatrixEvent(
                 sessionId = sessionId,
                 roomId = roomId,
@@ -134,7 +134,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         roomId: RoomId,
         threadId: ThreadId?,
         replyToEventId: EventId?,
-        room: MatrixRoom,
+        room: JoinedMatrixRoom,
         message: String,
     ) {
         // Create a new event to be displayed in the notification drawer, right now

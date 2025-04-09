@@ -7,7 +7,7 @@
 
 package io.element.android.features.knockrequests.impl.data
 
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canBan
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canKick
@@ -22,7 +22,7 @@ data class KnockRequestPermissions(
     val canHandle = canAccept || canDecline || canBan
 }
 
-fun MatrixRoom.knockRequestPermissionsFlow(): Flow<KnockRequestPermissions> {
+fun JoinedMatrixRoom.knockRequestPermissionsFlow(): Flow<KnockRequestPermissions> {
     return syncUpdateFlow.map {
         val canAccept = canInvite().getOrDefault(false)
         val canDecline = canKick().getOrDefault(false)

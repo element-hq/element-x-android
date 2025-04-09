@@ -38,7 +38,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
@@ -60,7 +60,7 @@ import timber.log.Timber
 
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
