@@ -12,7 +12,8 @@ import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.call.test.FakeCurrentCallService
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.test
@@ -23,8 +24,10 @@ import org.junit.Test
 class RoomCallStatePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(false) },
+        )
         )
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
@@ -39,8 +42,10 @@ class RoomCallStatePresenterTest {
 
     @Test
     fun `present - initial state - user can join call`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(true) },
+        )
         )
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
@@ -56,9 +61,11 @@ class RoomCallStatePresenterTest {
 
     @Test
     fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(false) },
             initialRoomInfo = aRoomInfo(hasRoomCall = true),
+        )
         )
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
@@ -74,7 +81,8 @@ class RoomCallStatePresenterTest {
 
     @Test
     fun `present - user has joined the call on another session`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(
@@ -84,6 +92,7 @@ class RoomCallStatePresenterTest {
                 )
             )
         }
+        )
         val presenter = createRoomCallStatePresenter(matrixRoom = room)
         presenter.test {
             skipItems(1)
@@ -99,7 +108,8 @@ class RoomCallStatePresenterTest {
 
     @Test
     fun `present - user has joined the call locally`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(
@@ -109,6 +119,7 @@ class RoomCallStatePresenterTest {
                 )
             )
         }
+        )
         val presenter = createRoomCallStatePresenter(
             matrixRoom = room,
             currentCallService = FakeCurrentCallService(MutableStateFlow(CurrentCall.RoomCall(room.roomId))),
@@ -127,7 +138,8 @@ class RoomCallStatePresenterTest {
 
     @Test
     fun `present - user leaves the call`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(
             canUserJoinCallResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(
@@ -137,6 +149,7 @@ class RoomCallStatePresenterTest {
                 )
             )
         }
+        )
         val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.RoomCall(room.roomId))
         val currentCallService = FakeCurrentCallService(currentCall = currentCall)
         val presenter = createRoomCallStatePresenter(
@@ -188,7 +201,7 @@ class RoomCallStatePresenterTest {
     }
 
     private fun createRoomCallStatePresenter(
-        matrixRoom: MatrixRoom,
+        matrixRoom: JoinedMatrixRoom,
         currentCallService: CurrentCallService = FakeCurrentCallService(),
     ): RoomCallStatePresenter {
         return RoomCallStatePresenter(

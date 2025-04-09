@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
@@ -19,20 +18,15 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 
 fun aRoomPreview(
-    sessionId: SessionId = A_SESSION_ID,
+    localRoom: FakeMatrixRoom? = null,
     info: RoomPreviewInfo = aRoomPreviewInfo(),
-    declineInviteResult: () -> Result<Unit> = { lambdaError() },
-    forgetRoomResult: () -> Result<Unit> = { lambdaError() },
     roomMembershipDetails: () -> Result<RoomMembershipDetails?> = { lambdaError() },
-) = FakeRoomPreview(
-    sessionId = sessionId,
-    info = info,
-    declineInviteResult = declineInviteResult,
-    forgetRoomResult = forgetRoomResult,
+) = FakeNotJoinedRoom(
+    localRoom = localRoom,
+    previewInfo = info,
     roomMembershipDetails = roomMembershipDetails,
 )
 

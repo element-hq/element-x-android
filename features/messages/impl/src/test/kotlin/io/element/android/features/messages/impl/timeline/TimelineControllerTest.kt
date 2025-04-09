@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -29,7 +29,7 @@ class TimelineControllerTest {
     fun `test switching between live and detached timeline`() = runTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
@@ -61,7 +61,7 @@ class TimelineControllerTest {
         val detachedTimeline1 = FakeTimeline(name = "detached 1")
         val detachedTimeline2 = FakeTimeline(name = "detached 2")
         var callNumber = 0
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = {
                 callNumber++
@@ -97,7 +97,7 @@ class TimelineControllerTest {
     @Test
     fun `test switching to live when already in live should have no effect`() = runTest {
         val liveTimeline = FakeTimeline(name = "live")
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline
         )
         val sut = TimelineController(matrixRoom)
@@ -115,7 +115,7 @@ class TimelineControllerTest {
     fun `test closing the TimelineController should close the detached timeline`() = runTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
@@ -144,7 +144,7 @@ class TimelineControllerTest {
                 )
             )
         )
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline
         )
         val sut = TimelineController(matrixRoom)
@@ -165,7 +165,7 @@ class TimelineControllerTest {
         val detachedTimeline = FakeTimeline(name = "detached").apply {
             sendMessageLambda = lambdaForDetached
         }
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
@@ -190,7 +190,7 @@ class TimelineControllerTest {
     fun `test last forward pagination on a detached timeline should switch to live timeline`() = runTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
-        val matrixRoom = FakeMatrixRoom(
+        val matrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )

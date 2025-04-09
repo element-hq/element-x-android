@@ -13,12 +13,12 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
@@ -26,6 +26,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -45,14 +46,15 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the room emits identity change, the presenter emits new state`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val identityStateChanges = MutableStateFlow(emptyList<IdentityStateChange>())
+        val room = FakeJoinedMatrixRoom(identityStateChangesFlow = identityStateChanges).apply {
             givenRoomInfo(aRoomInfo(isEncrypted = true))
         }
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-            room.emitIdentityStateChanges(
+            identityStateChanges.emit(
                 listOf(
                     IdentityStateChange(
                         userId = A_USER_ID_2,
@@ -70,12 +72,16 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the clear room emits identity change, the presenter does not emit new state`() = runTest {
-        val room = FakeMatrixRoom(enableEncryptionResult = { Result.success(Unit) })
+        val identityStateChanges = MutableStateFlow(emptyList<IdentityStateChange>())
+        val room = FakeJoinedMatrixRoom(
+            identityStateChangesFlow = identityStateChanges,
+            enableEncryptionResult = { Result.success(Unit) }
+        )
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-            room.emitIdentityStateChanges(
+            identityStateChanges.emit(
                 listOf(
                     IdentityStateChange(
                         userId = A_USER_ID_2,
@@ -100,7 +106,8 @@ class IdentityChangeStatePresenterTest {
     @Test
     fun `present - when the room emits identity change, the presenter emits new state with member details`() =
         runTest {
-            val room = FakeMatrixRoom().apply {
+            val identityStateChanges = MutableStateFlow(emptyList<IdentityStateChange>())
+            val room = FakeJoinedMatrixRoom(identityStateChangesFlow = identityStateChanges).apply {
                 givenRoomMembersState(
                     MatrixRoomMembersState.Ready(
                         listOf(
@@ -117,7 +124,7 @@ class IdentityChangeStatePresenterTest {
             presenter.test {
                 val initialState = awaitItem()
                 assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
-                room.emitIdentityStateChanges(
+                identityStateChanges.emit(
                     listOf(
                         IdentityStateChange(
                             userId = A_USER_ID_2,
@@ -166,7 +173,7 @@ class IdentityChangeStatePresenterTest {
         }
 
     private fun createIdentityChangeStatePresenter(
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
         encryptionService: EncryptionService = FakeEncryptionService(),
     ): IdentityChangeStatePresenter {
         return IdentityChangeStatePresenter(

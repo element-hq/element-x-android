@@ -15,10 +15,10 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
@@ -78,7 +78,7 @@ class ReportMessagePresenterTest {
         val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             reportContentResult = reportContentResult
         )
         val presenter = createReportMessagePresenter(matrixRoom = room)
@@ -100,7 +100,7 @@ class ReportMessagePresenterTest {
         val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             reportContentResult = reportContentResult
         )
         val presenter = createReportMessagePresenter(matrixRoom = room)
@@ -120,7 +120,7 @@ class ReportMessagePresenterTest {
         val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
             Result.failure(Exception("Failed to report content"))
         }
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             reportContentResult = reportContentResult
         )
         val presenter = createReportMessagePresenter(matrixRoom = room)
@@ -141,7 +141,7 @@ class ReportMessagePresenterTest {
 
     private fun createReportMessagePresenter(
         inputs: ReportMessagePresenter.Inputs = ReportMessagePresenter.Inputs(AN_EVENT_ID, A_USER_ID),
-        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        matrixRoom: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ) = ReportMessagePresenter(
         inputs = inputs,

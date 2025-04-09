@@ -16,7 +16,7 @@ import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
@@ -56,7 +56,7 @@ class TimelineMediaGalleryDataSourceTest {
     fun `test - not started TimelineMediaGalleryDataSource emits no events`() = runTest {
         val fakeTimeline = FakeTimeline()
         val sut = createTimelineMediaGalleryDataSource(
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
@@ -74,7 +74,7 @@ class TimelineMediaGalleryDataSourceTest {
         val fakeTimeline = FakeTimeline()
         runTest {
             val sut = createTimelineMediaGalleryDataSource(
-                room = FakeMatrixRoom(
+                room = FakeJoinedMatrixRoom(
                     createTimelineResult = { Result.success(fakeTimeline) },
                     roomCoroutineScope = backgroundScope,
                 )
@@ -111,7 +111,7 @@ class TimelineMediaGalleryDataSourceTest {
             paginateLambda = paginateLambdaRecorder
         }
         val sut = createTimelineMediaGalleryDataSource(
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
@@ -134,7 +134,7 @@ class TimelineMediaGalleryDataSourceTest {
             redactEventLambda = redactEventLambdaRecorder
         }
         val sut = createTimelineMediaGalleryDataSource(
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
@@ -153,7 +153,7 @@ class TimelineMediaGalleryDataSourceTest {
     @Test
     fun `test - failing to load timeline should emit an error`() = runTest {
         val sut = createTimelineMediaGalleryDataSource(
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 createTimelineResult = { Result.failure(AN_EXCEPTION) },
                 roomCoroutineScope = backgroundScope,
             )
@@ -175,7 +175,7 @@ class TimelineMediaGalleryDataSourceTest {
             timelineItems = timelineItems,
         )
         val sut = createTimelineMediaGalleryDataSource(
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 createTimelineResult = { Result.success(fakeTimeline) },
                 roomCoroutineScope = backgroundScope,
             )
@@ -256,7 +256,7 @@ class TimelineMediaGalleryDataSourceTest {
     }
 
     private fun TestScope.createTimelineMediaGalleryDataSource(
-        room: MatrixRoom = FakeMatrixRoom(
+        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(
             liveTimeline = FakeTimeline(),
         ),
     ): TimelineMediaGalleryDataSource {

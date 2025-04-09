@@ -8,17 +8,17 @@
 package io.element.android.features.roomdetails.impl.securityandprivacy.editroomaddress
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aJoinedMatrixRoom
 import io.element.android.features.roomdetails.impl.securityandprivacy.FakeSecurityAndPrivacyNavigator
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyNavigator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.alias.FakeRoomAliasHelper
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.tests.testutils.lambda.assert
@@ -33,7 +33,7 @@ class EditRoomAddressPresenterTest {
     @Test
     fun `present - initial state no address`() = runTest {
         val presenter = createEditRoomAddressPresenter(
-            room = aMatrixRoom(displayName = "")
+            room = aJoinedMatrixRoom(displayName = "")
         )
         presenter.test {
             with(awaitItem()) {
@@ -48,7 +48,7 @@ class EditRoomAddressPresenterTest {
 
     @Test
     fun `present - initial state address matching own homeserver`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             canonicalAlias = RoomAlias("#canonical:matrix.org"),
         )
         val presenter = createEditRoomAddressPresenter(room = room)
@@ -65,7 +65,7 @@ class EditRoomAddressPresenterTest {
 
     @Test
     fun `present - initial state address not matching own homeserver`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             displayName = "",
             canonicalAlias = RoomAlias("#canonical:notmatrix.org"),
         )
@@ -148,7 +148,7 @@ class EditRoomAddressPresenterTest {
         val navigator = FakeSecurityAndPrivacyNavigator(
             closeEditRoomAddressLambda = closeEditAddressLambda
         )
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             updateCanonicalAliasResult = updateCanonicalAliasResult,
             publishRoomAliasInRoomDirectoryResult = publishAliasInRoomDirectoryResult
         )
@@ -194,7 +194,7 @@ class EditRoomAddressPresenterTest {
 
         val navigator = FakeSecurityAndPrivacyNavigator(closeEditRoomAddressLambda = closeEditAddressLambda)
         val canonicalAlias = RoomAlias("#canonical:matrix.org")
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             canonicalAlias = canonicalAlias,
             updateCanonicalAliasResult = updateCanonicalAliasResult,
             publishRoomAliasInRoomDirectoryResult = publishAliasInRoomDirectoryResult,
@@ -244,7 +244,7 @@ class EditRoomAddressPresenterTest {
 
         val navigator = FakeSecurityAndPrivacyNavigator(closeEditRoomAddressLambda = closeEditAddressLambda)
         val canonicalAlias = RoomAlias("#canonical:notmatrix.org")
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             canonicalAlias = canonicalAlias,
             updateCanonicalAliasResult = updateCanonicalAliasResult,
             publishRoomAliasInRoomDirectoryResult = publishAliasInRoomDirectoryResult,
@@ -343,7 +343,7 @@ class EditRoomAddressPresenterTest {
 
     private fun createEditRoomAddressPresenter(
         client: FakeMatrixClient = createMatrixClient(),
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
         navigator: SecurityAndPrivacyNavigator = FakeSecurityAndPrivacyNavigator(),
         roomAliasHelper: RoomAliasHelper = FakeRoomAliasHelper()
     ): EditRoomAddressPresenter {

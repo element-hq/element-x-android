@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember.Role.ADMIN
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.MODERATOR
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.USER
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -152,9 +153,9 @@ class ChangeRoomPermissionsPresenterTest {
         val analyticsService = FakeAnalyticsService()
         val presenter = createChangeRoomPermissionsPresenter(
             analyticsService = analyticsService,
-            room = FakeMatrixRoom(
+            room = FakeJoinedMatrixRoom(
                 updatePowerLevelsResult = { Result.success(Unit) },
-                powerLevelsResult = { Result.success(defaultPermissions()) }
+                baseRoom = FakeMatrixRoom(powerLevelsResult = { Result.success(defaultPermissions()) }),
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -200,8 +201,8 @@ class ChangeRoomPermissionsPresenterTest {
 
     @Test
     fun `present - Save will fail if there are not current permissions`() = runTest {
-        val room = FakeMatrixRoom(
-            powerLevelsResult = { Result.failure(IllegalStateException("Failed to load power levels")) }
+        val room = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(powerLevelsResult = { Result.failure(IllegalStateException("Failed to load power levels")) }),
         )
         val presenter = createChangeRoomPermissionsPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -217,9 +218,9 @@ class ChangeRoomPermissionsPresenterTest {
 
     @Test
     fun `present - Save can handle failures and they can be cleared`() = runTest {
-        val room = FakeMatrixRoom(
-            powerLevelsResult = { Result.success(defaultPermissions()) },
+        val room = FakeJoinedMatrixRoom(
             updatePowerLevelsResult = { Result.failure(IllegalStateException("Failed to update power levels")) },
+            baseRoom = FakeMatrixRoom(powerLevelsResult = { Result.success(defaultPermissions()) }),
         )
         val presenter = createChangeRoomPermissionsPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -285,8 +286,8 @@ class ChangeRoomPermissionsPresenterTest {
 
     private fun createChangeRoomPermissionsPresenter(
         section: ChangeRoomPermissionsSection = ChangeRoomPermissionsSection.RoomDetails,
-        room: FakeMatrixRoom = FakeMatrixRoom(
-            powerLevelsResult = { Result.success(defaultPermissions()) }
+        room: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(
+            baseRoom = FakeMatrixRoom(powerLevelsResult = { Result.success(defaultPermissions()) }),
         ),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ) = ChangeRoomPermissionsPresenter(

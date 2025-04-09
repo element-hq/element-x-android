@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -49,10 +50,12 @@ class SyncOnNotifiableEventTest {
     private val liveTimeline = FakeTimeline(
         timelineItems = timelineItems,
     )
-    private val room = FakeMatrixRoom(
-        roomId = A_ROOM_ID,
+    private val room = FakeJoinedMatrixRoom(
         liveTimeline = liveTimeline,
-        subscribeToSyncLambda = subscribeToSyncLambda
+        baseRoom = FakeMatrixRoom(
+            roomId = A_ROOM_ID,
+            subscribeToSyncLambda = subscribeToSyncLambda,
+        ),
     )
     private val syncService = FakeSyncService(SyncState.Idle).also {
         it.startSyncLambda = startSyncLambda

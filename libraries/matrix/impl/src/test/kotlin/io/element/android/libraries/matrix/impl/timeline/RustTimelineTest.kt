@@ -12,7 +12,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListS
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimeline
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineDiff
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -103,7 +103,7 @@ private fun TestScope.createRustTimeline(
     inner: InnerTimeline,
     mode: Timeline.Mode = Timeline.Mode.LIVE,
     systemClock: SystemClock = FakeSystemClock(),
-    matrixRoom: MatrixRoom = FakeMatrixRoom().apply { givenRoomInfo(aRoomInfo()) },
+    matrixRoom: JoinedMatrixRoom = FakeJoinedMatrixRoom().apply { givenRoomInfo(aRoomInfo()) },
     coroutineScope: CoroutineScope = backgroundScope,
     dispatcher: CoroutineDispatcher = testCoroutineDispatchers().io,
     roomContentForwarder: RoomContentForwarder = RoomContentForwarder(FakeRustRoomListService()),

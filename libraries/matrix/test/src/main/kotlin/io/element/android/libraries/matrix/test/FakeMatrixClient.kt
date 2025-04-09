@@ -22,9 +22,10 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -77,7 +78,7 @@ class FakeMatrixClient(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
     },
-    private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val getNotJoinedRoomResult: (RoomIdOrAlias, List<String>) -> Result<NotJoinedRoom> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
@@ -127,8 +128,8 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? = simulateLongTask {
-        getRoomPreviewResult(RoomIdOrAlias.Id(roomId), emptyList()).getOrNull()
+    override suspend fun getJoinedRoom(roomId: RoomId): JoinedMatrixRoom? {
+        return getRoomResults[roomId] as? JoinedMatrixRoom
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -294,8 +295,8 @@ class FakeMatrixClient(
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = simulateLongTask {
-        getRoomPreviewResult(roomIdOrAlias, serverNames)
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom> = simulateLongTask {
+        getNotJoinedRoomResult(roomIdOrAlias, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
