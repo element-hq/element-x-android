@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.9.1"
 kotlin = "2.1.20"
 kotlinpoet = "2.1.0"
-ksp = "2.1.20-1.0.32"
+ksp = "2.1.20-2.0.0"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -29,7 +29,7 @@ compose_bom = "2025.03.01"
 composecompiler = "1.5.15"
 
 # Coroutines
-coroutines = "1.10.1"
+coroutines = "1.10.2"
 
 # Accompanist
 accompanist = "0.37.2"
