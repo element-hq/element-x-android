@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class TypingNotificationPresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<TypingNotificationState> {
     @Composable

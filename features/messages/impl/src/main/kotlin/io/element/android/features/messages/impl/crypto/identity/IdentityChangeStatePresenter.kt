@@ -14,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.ui.room.observeRoomMemberIdentityStateChange
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +23,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class IdentityChangeStatePresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val encryptionService: EncryptionService,
 ) : Presenter<IdentityChangeState> {
     @Composable

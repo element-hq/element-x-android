@@ -12,6 +12,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -37,7 +38,7 @@ class SyncOnNotifiableEvent @Inject constructor(
         }
         val client = matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull() ?: return@withContext
 
-        client.getRoom(notifiableEvent.roomId)?.use { room ->
+        client.getJoinedRoom(notifiableEvent.roomId)?.use { room ->
             room.subscribeToSync()
 
             // If the app is in foreground, sync is already running, so we just add the subscription above.
@@ -68,7 +69,7 @@ class SyncOnNotifiableEvent @Inject constructor(
         }
     }
 
-    private suspend fun MatrixRoom.waitsUntilEventIsKnown(eventId: EventId, timeout: Duration) {
+    private suspend fun JoinedMatrixRoom.waitsUntilEventIsKnown(eventId: EventId, timeout: Duration) {
         withTimeoutOrNull(timeout) {
             liveTimeline.timelineItems.first { timelineItems ->
                 timelineItems.any { timelineItem ->

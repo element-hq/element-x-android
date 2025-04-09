@@ -121,7 +121,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         declinedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
         suspend {
-            client.getPendingRoom(inviteData.roomId)?.use {
+            client.getRoom(inviteData.roomId)?.use {
                 it.leave().getOrThrow()
             }
             if (blockUser) {

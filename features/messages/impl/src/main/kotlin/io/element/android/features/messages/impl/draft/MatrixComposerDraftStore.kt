@@ -21,7 +21,7 @@ class MatrixComposerDraftStore @Inject constructor(
     private val client: MatrixClient,
 ) : ComposerDraftStore {
     override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {
-        return client.getRoom(roomId)?.let { room ->
+        return client.getRoom(roomId)?.use { room ->
             room.loadComposerDraft()
                 .onFailure {
                     Timber.e(it, "Failed to load composer draft for room $roomId")
@@ -35,7 +35,7 @@ class MatrixComposerDraftStore @Inject constructor(
     }
 
     override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) {
-        client.getRoom(roomId)?.let { room ->
+        client.getRoom(roomId)?.use { room ->
             val updateDraftResult = if (draft == null) {
                 room.clearComposerDraft()
             } else {

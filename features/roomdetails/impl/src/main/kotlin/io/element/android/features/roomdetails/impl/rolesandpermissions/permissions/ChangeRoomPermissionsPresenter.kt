@@ -21,7 +21,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.analytics.trackPermissionChangeAnalytics
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 class ChangeRoomPermissionsPresenter @AssistedInject constructor(
     @Assisted private val section: ChangeRoomPermissionsSection,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val analyticsService: AnalyticsService,
 ) : Presenter<ChangeRoomPermissionsState> {
     companion object {

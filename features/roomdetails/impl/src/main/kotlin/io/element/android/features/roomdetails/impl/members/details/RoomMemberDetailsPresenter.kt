@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
  */
 class RoomMemberDetailsPresenter @AssistedInject constructor(
     @Assisted private val roomMemberId: UserId,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val encryptionService: EncryptionService,
     private val clipboardHelper: ClipboardHelper,
     userProfilePresenterFactory: UserProfilePresenterFactory,
