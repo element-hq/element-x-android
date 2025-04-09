@@ -17,23 +17,38 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class TimelineProtectionPresenter @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
+    private val room: MatrixRoom,
 ) : Presenter<TimelineProtectionState> {
     @Composable
     override fun present(): TimelineProtectionState {
-        val mediaPreviewValue = appPreferencesStore.getTimelineMediaPreviewValueFlow().collectAsState(initial = MediaPreviewValue.Off)
+        val mediaPreviewValue = remember {
+            appPreferencesStore.getTimelineMediaPreviewValueFlow()
+        }.collectAsState(initial = MediaPreviewValue.Off)
         var allowedEvents by remember { mutableStateOf<Set<EventId>>(setOf()) }
+        val roomInfo = room.roomInfoFlow.collectAsState()
         val protectionState by remember {
             derivedStateOf {
-                if (mediaPreviewValue.value == MediaPreviewValue.On) {
-                    ProtectionState.RenderAll
-                } else {
-                    ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
+                when (mediaPreviewValue.value) {
+                    MediaPreviewValue.On -> {
+                        ProtectionState.RenderAll
+                    }
+                    MediaPreviewValue.Off -> {
+                        ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
+                    }
+                    MediaPreviewValue.Private -> {
+                        if (roomInfo.value.isPublic) {
+                            ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
+                        } else {
+                            ProtectionState.RenderAll
+                        }
+                    }
                 }
             }
         }
