@@ -8,30 +8,21 @@
 package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import androidx.compose.runtime.Composable
-import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class ChangeAccountProviderPresenter @Inject constructor(
     private val changeServerPresenter: Presenter<ChangeServerState>,
+    private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<ChangeAccountProviderState> {
     @Composable
     override fun present(): ChangeAccountProviderState {
         val changeServerState = changeServerPresenter.present()
         return ChangeAccountProviderState(
             // Just matrix.org by default for now
-            accountProviders = listOf(
-                AccountProvider(
-                    url = AuthenticationConfig.MATRIX_ORG_URL,
-                    subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
-                    isPublic = true,
-                    isMatrixOrg = true,
-                    isValid = true,
-                )
-            ),
+            accountProviders = accountProviderDataSource.accountProvidersList,
             changeServerState = changeServerState,
         )
     }

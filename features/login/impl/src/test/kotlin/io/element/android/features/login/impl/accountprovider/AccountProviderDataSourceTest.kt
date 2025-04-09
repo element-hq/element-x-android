@@ -32,8 +32,6 @@ class AccountProviderDataSourceTest {
                     title = FakeEnterpriseService.A_FAKE_HOMESERVER,
                     subtitleResourceId = null,
                     isPublic = false,
-                    isMatrixOrg = false,
-                    isValid = false,
                 )
             )
         }
@@ -52,8 +50,6 @@ class AccountProviderDataSourceTest {
                     title = "matrix.org",
                     subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                     isPublic = true,
-                    isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -73,8 +69,6 @@ class AccountProviderDataSourceTest {
                     title = "example.com",
                     subtitleResourceId = null,
                     isPublic = false,
-                    isMatrixOrg = false,
-                    isValid = false,
                 )
             )
             sut.reset()

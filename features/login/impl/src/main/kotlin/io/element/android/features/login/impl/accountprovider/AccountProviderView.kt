@@ -58,7 +58,7 @@ fun AccountProviderView(
                     .heightIn(min = 44.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (item.isMatrixOrg) {
+                if (item.isMatrixOrg()) {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Medium,
                         resourceId = R.drawable.ic_matrix,
