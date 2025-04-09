@@ -10,11 +10,11 @@ package io.element.android.features.roomdetails.impl.edit
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdetails.impl.aMatrixRoom
+import io.element.android.features.roomdetails.impl.aJoinedMatrixRoom
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -74,7 +74,7 @@ class RoomDetailsEditPresenterTest {
     }
 
     private fun createRoomDetailsEditPresenter(
-        room: MatrixRoom,
+        room: JoinedMatrixRoom,
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),
     ): RoomDetailsEditPresenter {
@@ -89,7 +89,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - initial state is created from room info`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             avatarUrl = AN_AVATAR_URL,
             displayName = A_ROOM_NAME,
             rawName = A_ROOM_RAW_NAME,
@@ -118,7 +118,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets canChangeName if user has permission`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
@@ -151,7 +151,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets canChangeAvatar if user has permission`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
@@ -183,7 +183,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets canChangeTopic if user has permission`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             avatarUrl = AN_AVATAR_URL,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
@@ -215,7 +215,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates state in response to changes`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -260,7 +260,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - obtains avatar uris from gallery`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -284,7 +284,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - obtains avatar uris from camera`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -325,7 +325,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates save button state`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -375,7 +375,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates save button state when initial values are null`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = null,
             displayName = "fallback",
             avatarUrl = null,
@@ -428,7 +428,7 @@ class RoomDetailsEditPresenterTest {
         val setNameResult = lambdaRecorder { _: String -> Result.success(Unit) }
         val setTopicResult = lambdaRecorder { _: String -> Result.success(Unit) }
         val removeAvatarResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -457,7 +457,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change room details if they're the same trimmed`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -479,7 +479,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change topic if it was unset and is now blank`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = null,
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -501,7 +501,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change name if it's now empty`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -524,7 +524,7 @@ class RoomDetailsEditPresenterTest {
     @Test
     fun `present - save processes and sets avatar when processor returns successfully`() = runTest {
         val updateAvatarResult = lambdaRecorder { _: String, _: ByteArray -> Result.success(Unit) }
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -552,7 +552,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save does not set avatar data if processor fails`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -576,7 +576,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if name update fails`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -588,7 +588,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if topic update fails`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -600,7 +600,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if removing avatar fails`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -613,7 +613,7 @@ class RoomDetailsEditPresenterTest {
     @Test
     fun `present - sets save action to failure if setting avatar fails`() = runTest {
         givenPickerReturnsFile()
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -626,7 +626,7 @@ class RoomDetailsEditPresenterTest {
     @Test
     fun `present - CancelSaveChanges resets save action state`() = runTest {
         givenPickerReturnsFile()
-        val room = aMatrixRoom(
+        val room = aJoinedMatrixRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
@@ -650,7 +650,7 @@ class RoomDetailsEditPresenterTest {
     }
 
     private suspend fun saveAndAssertFailure(
-        room: MatrixRoom,
+        room: JoinedMatrixRoom,
         event: RoomDetailsEditEvents,
         deleteCallbackNumberOfInvocation: Int = 2,
     ) {
