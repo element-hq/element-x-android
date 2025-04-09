@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
@@ -86,7 +86,7 @@ class RustTimeline(
     private val inner: InnerTimeline,
     mode: Timeline.Mode,
     systemClock: SystemClock,
-    private val matrixRoom: MatrixRoom,
+    private val matrixRoom: JoinedMatrixRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
@@ -137,7 +137,10 @@ class RustTimeline(
     )
 
     init {
-        coroutineScope.fetchMembers()
+        if (mode != Timeline.Mode.PINNED_EVENTS) {
+            coroutineScope.fetchMembers()
+        }
+
         if (mode == Timeline.Mode.LIVE) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.

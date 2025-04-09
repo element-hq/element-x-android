@@ -31,10 +31,11 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomPreview
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -55,13 +56,15 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
+import io.element.android.libraries.matrix.impl.room.GetRoomResult
+import io.element.android.libraries.matrix.impl.room.NotJoinedRustRoom
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
-import io.element.android.libraries.matrix.impl.room.RustRoomPreview
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
@@ -186,6 +189,7 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
     private val roomFactory = RustRoomFactory(
+        innerClient = innerClient,
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
@@ -264,11 +268,16 @@ class RustMatrixClient(
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
-        return roomFactory.create(roomId)
+        return roomFactory.getBaseRoom(roomId)
     }
 
-    override suspend fun getPendingRoom(roomId: RoomId): RoomPreview? {
-        return roomFactory.createRoomPreview(roomId)
+    override suspend fun getJoinedRoom(roomId: RoomId): JoinedMatrixRoom? {
+        return try {
+            (roomFactory.getJoinedRoomOrPreview(roomId) as GetRoomResult.JoinedRoom).joinedMatrixRoom
+        } catch (e: ClassCastException) {
+            Timber.e(e, "Room $roomId is not a joined room")
+            null
+        }
     }
 
     /**
@@ -455,13 +464,29 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom> = withContext(sessionDispatcher) {
         runCatching {
-            val roomPreview = when (roomIdOrAlias) {
-                is RoomIdOrAlias.Alias -> innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
-                is RoomIdOrAlias.Id -> innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
+            when (roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> {
+                    val roomId = innerClient.resolveRoomAlias(roomIdOrAlias.roomAlias.value)?.roomId?.let { RoomId(it) }
+
+                    var room = (roomId?.let { roomFactory.getJoinedRoomOrPreview(it) } as? GetRoomResult.NotJoinedRoom)?.notJoinedMatrixRoom
+                    if (room == null) {
+                        val preview = innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                    }
+                    room
+                }
+                is RoomIdOrAlias.Id -> {
+                    var room = (roomFactory.getJoinedRoomOrPreview(roomIdOrAlias.roomId) as? GetRoomResult.NotJoinedRoom)?.notJoinedMatrixRoom
+
+                    if (room == null) {
+                        val preview = innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                    }
+                    room
+                }
             }
-            RustRoomPreview(sessionId, roomPreview, roomMembershipObserver)
         }.mapFailure { it.mapClientException() }
     }
 
