@@ -1,0 +1,38 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.matrix.impl.room
+
+import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.NotJoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
+import org.matrix.rustcomponents.sdk.RoomMember
+
+@Immutable
+class NotJoinedRustRoom(
+    private val sessionId: SessionId,
+    override val localRoom: RustMatrixRoom?,
+    override val previewInfo: RoomPreviewInfo,
+) : NotJoinedRoom {
+    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatching {
+        val room = localRoom?.innerRoom ?: return@runCatching null
+        val ownMember = room.member(sessionId.value)
+        // TODO: don't merge until this is fixed in the SDK
+        val senderMember: RoomMember? = null // tryOrNull { room.member(ownMember.membershipChangeSender) }
+        RoomMembershipDetails(
+            currentUserMember = RoomMemberMapper.map(ownMember),
+            senderMember = senderMember?.let { RoomMemberMapper.map(it) },
+        )
+    }
+
+    override fun close() {
+        localRoom?.close()
+    }
+}
