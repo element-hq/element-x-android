@@ -33,10 +33,16 @@ fun CompositeAvatar(
     avatarData: AvatarData,
     heroes: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier,
+    hideAvatarImages: Boolean = false,
     contentDescription: String? = null,
 ) {
     if (avatarData.url != null || heroes.isEmpty()) {
-        Avatar(avatarData, modifier, contentDescription)
+        Avatar(
+            avatarData = avatarData,
+            modifier = modifier,
+            contentDescription = contentDescription,
+            hideImage = hideAvatarImages
+        )
     } else {
         val limitedHeroes = heroes.take(4)
         val numberOfHeroes = limitedHeroes.size
@@ -49,7 +55,12 @@ fun CompositeAvatar(
                 error("Unsupported number of heroes: 0")
             }
             1 -> {
-                Avatar(heroes[0], modifier, contentDescription)
+                Avatar(
+                    avatarData = heroes[0],
+                    modifier = modifier,
+                    contentDescription = contentDescription,
+                    hideImage = hideAvatarImages
+                )
             }
             else -> {
                 val angle = 2 * Math.PI / numberOfHeroes
@@ -91,8 +102,9 @@ fun CompositeAvatar(
                                 )
                         ) {
                             Avatar(
-                                heroAvatar,
+                                avatarData = heroAvatar,
                                 forcedAvatarSize = heroAvatarSize,
+                                hideImage = hideAvatarImages,
                             )
                         }
                     }

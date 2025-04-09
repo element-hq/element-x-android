@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.features.invite.api)
     implementation(projects.features.roomdirectory.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.libraries.preferences.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -45,5 +46,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(projects.libraries.preferences.test)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
+
 }

@@ -97,6 +97,7 @@ fun JoinRoomView(
                     roomIdOrAlias = state.roomIdOrAlias,
                     contentState = state.contentState,
                     knockMessage = state.knockMessage,
+                    shouldHideAvatars = state.shouldHideAvatars,
                     onKnockMessageUpdate = { state.eventSink(JoinRoomEvents.UpdateKnockMessage(it)) },
                 )
             },
@@ -371,6 +372,7 @@ private fun JoinRoomContent(
     roomIdOrAlias: RoomIdOrAlias,
     contentState: ContentState,
     knockMessage: String,
+    shouldHideAvatars: Boolean,
     onKnockMessageUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -385,13 +387,14 @@ private fun JoinRoomContent(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
                             if (inviteSender != null) {
-                                InviteSenderView(inviteSender = inviteSender)
+                                InviteSenderView(inviteSender = inviteSender, hideAvatarImage = shouldHideAvatars)
                                 Spacer(modifier = Modifier.height(32.dp))
                             }
                             DefaultLoadedContent(
                                 modifier = Modifier.verticalScroll(rememberScrollState()),
                                 contentState = contentState,
                                 knockMessage = knockMessage,
+                                shouldHideAvatars = shouldHideAvatars,
                                 onKnockMessageUpdate = onKnockMessageUpdate
                             )
                         }
@@ -474,13 +477,14 @@ private fun IsKnockedLoadedContent(modifier: Modifier = Modifier) {
 private fun DefaultLoadedContent(
     contentState: ContentState.Loaded,
     knockMessage: String,
+    shouldHideAvatars: Boolean,
     onKnockMessageUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RoomPreviewOrganism(
         modifier = modifier,
         avatar = {
-            Avatar(contentState.avatarData(AvatarSize.RoomHeader))
+            Avatar(contentState.avatarData(AvatarSize.RoomHeader), hideImage = shouldHideAvatars)
         },
         title = {
             if (contentState.name != null) {

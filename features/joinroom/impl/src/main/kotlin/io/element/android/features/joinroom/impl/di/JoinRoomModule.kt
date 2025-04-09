@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import java.util.Optional
 
 @Module
@@ -35,6 +36,7 @@ object JoinRoomModule {
         forgetRoom: ForgetRoom,
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
         buildMeta: BuildMeta,
+        appPreferencesStore: AppPreferencesStore,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(
@@ -57,6 +59,7 @@ object JoinRoomModule {
                     cancelKnockRoom = cancelKnockRoom,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                     buildMeta = buildMeta,
+                    appPreferencesStore = appPreferencesStore,
                 )
             }
         }

@@ -81,6 +81,7 @@ fun RoomListView(
             RoomListSearchView(
                 state = state.searchState,
                 eventSink = state.eventSink,
+                hideInvitesAvatars = state.hideInvitesAvatars,
                 onRoomClick = onRoomClick,
                 modifier = Modifier
                     .statusBarsPadding()
@@ -134,6 +135,7 @@ private fun RoomListScaffold(
             RoomListContentView(
                 contentState = state.contentState,
                 filtersState = state.filtersState,
+                hideInvitesAvatars = state.hideInvitesAvatars,
                 eventSink = state.eventSink,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,

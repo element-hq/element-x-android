@@ -45,6 +45,8 @@ import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
@@ -759,7 +761,8 @@ class JoinRoomPresenterTest {
         cancelKnockRoom: CancelKnockRoom = FakeCancelKnockRoom(),
         forgetRoom: ForgetRoom = FakeForgetRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
-        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
+        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
             roomId = roomId,
@@ -773,7 +776,8 @@ class JoinRoomPresenterTest {
             cancelKnockRoom = cancelKnockRoom,
             forgetRoom = forgetRoom,
             buildMeta = buildMeta,
-            acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
+            acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
+            appPreferencesStore = appPreferencesStore,
         )
     }
 
