@@ -57,6 +57,7 @@
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Gjeldende push-leverandør: %1$s."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nåværende push-leverandør"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-leverandører funnet."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Oppdag push-leverandører"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Kontroller at programmet kan vise varsler."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Det er ikke klikket på varselet."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Kan ikke vise varselet."</string>

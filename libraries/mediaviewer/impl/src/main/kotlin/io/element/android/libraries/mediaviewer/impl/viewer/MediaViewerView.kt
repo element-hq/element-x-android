@@ -142,8 +142,13 @@ fun MediaViewerView(
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        val isDisplayed = remember(pagerState.settledPage) {
+                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
+                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
+                            page == pagerState.settledPage
+                        }
                         MediaViewerPage(
-                            isDisplayed = page == pagerState.settledPage,
+                            isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
                             bottomPaddingInPixels = bottomPaddingInPixels,
                             data = dataForPage,
@@ -157,7 +162,8 @@ fun MediaViewerView(
                             },
                             onShowOverlayChange = {
                                 showOverlay = it
-                            }
+                            },
+                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
@@ -273,6 +279,7 @@ private fun MediaViewerPage(
     bottomPaddingInPixels: Int,
     data: MediaViewerPageData.MediaViewerData,
     textFileViewer: TextFileViewer,
+    isUserSelected: Boolean,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
@@ -328,6 +335,7 @@ private fun MediaViewerPage(
                             currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
+                    isUserSelected = isUserSelected,
                 )
                 ThumbnailView(
                     mediaInfo = data.mediaInfo,

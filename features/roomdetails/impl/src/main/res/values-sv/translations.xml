@@ -75,6 +75,9 @@
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>
   </plurals>
+  <string name="screen_room_member_list_kick_member_confirmation_action">"Ta bort"</string>
+  <string name="screen_room_member_list_kick_member_confirmation_description">"Denne kommer kunna gå med i rummet igen om denne bjuds in"</string>
+  <string name="screen_room_member_list_kick_member_confirmation_title">"Är du säker på att du vill ta bort den här medlemmen?"</string>
   <string name="screen_room_member_list_manage_member_ban">"Ta bort och banna medlem"</string>
   <string name="screen_room_member_list_manage_member_remove">"Ta bort från rummet"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Ta bort och banna medlem"</string>

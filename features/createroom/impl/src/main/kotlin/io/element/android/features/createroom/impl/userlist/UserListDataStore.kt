@@ -8,22 +8,22 @@
 package io.element.android.features.createroom.impl.userlist
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class UserListDataStore @Inject constructor() {
-    private val selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
+    private val _selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
 
     fun selectUser(user: MatrixUser) {
-        if (!selectedUsers.value.contains(user)) {
-            selectedUsers.tryEmit(selectedUsers.value.plus(user))
+        if (!_selectedUsers.value.contains(user)) {
+            _selectedUsers.tryEmit(_selectedUsers.value.plus(user))
         }
     }
 
     fun removeUserFromSelection(user: MatrixUser) {
-        selectedUsers.tryEmit(selectedUsers.value.minus(user))
+        _selectedUsers.tryEmit(_selectedUsers.value.minus(user))
     }
 
-    fun selectedUsers(): Flow<List<MatrixUser>> = selectedUsers
+    val selectedUsers = _selectedUsers.asStateFlow()
 }

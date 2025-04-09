@@ -181,8 +181,6 @@ class FakeMatrixClient(
         deactivateAccountResult(password, eraseData)
     }
 
-    override fun close() = Unit
-
     override suspend fun getUserProfile(): Result<MatrixUser> = simulateLongTask {
         val result = getProfileResults[sessionId]?.getOrNull() ?: MatrixUser(sessionId, userDisplayName, userAvatarUrl)
         _userProfile.tryEmit(result)

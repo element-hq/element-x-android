@@ -14,7 +14,7 @@
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
   <string name="notification_fallback_content">"Γνωστοποίηση"</string>
-  <string name="notification_incoming_call">"Εισερχόμενη κλήση"</string>
+  <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ άνοιξε το δωμάτιο"</string>
   <string name="notification_invitation_action_join">"Συμμετοχή"</string>
   <string name="notification_invitation_action_reject">"Απόρριψη"</string>

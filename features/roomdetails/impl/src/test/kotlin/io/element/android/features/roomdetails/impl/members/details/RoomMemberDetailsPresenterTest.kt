@@ -17,6 +17,8 @@ import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -350,12 +352,14 @@ class RoomMemberDetailsPresenterTest {
             }
         },
         encryptionService: FakeEncryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(null) }),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
             roomMemberId = UserId("@alice:server.org"),
             room = room,
             userProfilePresenterFactory = userProfilePresenterFactory,
             encryptionService = encryptionService,
+            clipboardHelper = clipboardHelper,
         )
     }
 }

@@ -16,15 +16,18 @@ open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
             anOnBoardingState(canLoginWithQrCode = true),
             anOnBoardingState(canCreateAccount = true),
             anOnBoardingState(canLoginWithQrCode = true, canCreateAccount = true),
+            anOnBoardingState(canLoginWithQrCode = true, canCreateAccount = true, canReportBug = true),
         )
 }
 
 fun anOnBoardingState(
     productionApplicationName: String = "Element",
     canLoginWithQrCode: Boolean = false,
-    canCreateAccount: Boolean = false
+    canCreateAccount: Boolean = false,
+    canReportBug: Boolean = false,
 ) = OnBoardingState(
     productionApplicationName = productionApplicationName,
     canLoginWithQrCode = canLoginWithQrCode,
-    canCreateAccount = canCreateAccount
+    canCreateAccount = canCreateAccount,
+    canReportBug = canReportBug,
 )

@@ -9,12 +9,9 @@ package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import org.matrix.rustcomponents.sdk.OidcConfiguration
-import java.io.File
 import javax.inject.Inject
 
-class OidcConfigurationProvider @Inject constructor(
-    private val baseDirectory: File,
-) {
+class OidcConfigurationProvider @Inject constructor() {
     fun get(): OidcConfiguration = OidcConfiguration(
         clientName = "Element",
         redirectUri = OidcConfig.REDIRECT_URI,
@@ -29,6 +26,5 @@ class OidcConfigurationProvider @Inject constructor(
         staticRegistrations = mapOf(
             "https://id.thirdroom.io/realms/thirdroom" to "elementx",
         ),
-        dynamicRegistrationsFile = File(baseDirectory, "oidc/registrations.json").absolutePath,
     )
 }

@@ -24,11 +24,11 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class NoopAnalyticsService @Inject constructor() : AnalyticsService {
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
-    override fun getUserConsent(): Flow<Boolean> = flowOf(false)
+    override val userConsentFlow: Flow<Boolean> = flowOf(false)
     override suspend fun setUserConsent(userConsent: Boolean) = Unit
-    override fun didAskUserConsent(): Flow<Boolean> = flowOf(true)
+    override val didAskUserConsentFlow: Flow<Boolean> = flowOf(true)
     override suspend fun setDidAskUserConsent() = Unit
-    override fun getAnalyticsId(): Flow<String> = flowOf("")
+    override val analyticsIdFlow: Flow<String> = flowOf("")
     override suspend fun setAnalyticsId(analyticsId: String) = Unit
     override suspend fun reset() = Unit
     override fun capture(event: VectorAnalyticsEvent) = Unit

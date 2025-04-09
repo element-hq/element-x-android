@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -46,6 +47,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
@@ -61,14 +63,12 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -83,6 +83,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenterFac
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -611,7 +612,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: ReplyParameters, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -1011,16 +1012,10 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
-            )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // A null suggestion (no suggestion was received) returns nothing
@@ -1078,16 +1073,10 @@ class MessageComposerPresenterTest {
                 )
             )
         }
-        val flagsService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Mentions.key to true,
-            )
-        )
-        val presenter = createPresenter(this, room, featureFlagService = flagsService)
+        val presenter = createPresenter(this, room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             // An empty suggestion returns the joined members that are not the current user, but not the room
@@ -1122,7 +1111,7 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: ReplyParameters, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
@@ -1293,11 +1282,11 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isNull()
             }
-
             assert(loadDraftLambda)
                 .isCalledOnce()
                 .with(value(A_ROOM_ID), value(false))
@@ -1327,7 +1316,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isTrue()
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
                 assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -1360,7 +1350,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(anEditMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1406,7 +1397,8 @@ class MessageComposerPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().also { state ->
+            skipItems(2)
+            awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
                 assertThat(state.mode).isEqualTo(aReplyMode())
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1545,8 +1537,11 @@ class MessageComposerPresenterTest {
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         permalinkParser: PermalinkParser = FakePermalinkParser(),
-        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkParser),
-        roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
+        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(
+            permalinkParser = permalinkParser,
+            mentionSpanFormatter = FakeMentionSpanFormatter(),
+            mentionSpanTheme = MentionSpanTheme(A_USER_ID)
+        ),
         textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
@@ -1572,7 +1567,6 @@ class MessageComposerPresenterTest {
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
-        roomMemberProfilesCache = roomMemberProfilesCache,
         suggestionsProcessor = SuggestionsProcessor(),
     ).apply {
         isTesting = true
@@ -1580,8 +1574,7 @@ class MessageComposerPresenterTest {
     }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
+        skipItems(1)
         return awaitItem()
     }
 }

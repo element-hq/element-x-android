@@ -26,6 +26,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -42,7 +43,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -60,7 +60,6 @@ fun TimelineItemReadReceiptView(
                 ReadReceiptsAvatars(
                     receipts = state.receipts,
                     modifier = Modifier
-                            .testTag(TestTags.messageReadReceipts)
                             .clip(RoundedCornerShape(4.dp))
                             .clickable {
                                 onReadReceiptsClick()
@@ -135,6 +134,7 @@ private fun ReadReceiptsAvatars(
     Row(
         modifier = modifier
             .clearAndSetSemantics {
+                testTag = TestTags.messageReadReceipts.value
                 contentDescription = receiptDescription
             },
         horizontalArrangement = Arrangement.spacedBy(4.dp - avatarStrokeSize),

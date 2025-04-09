@@ -52,7 +52,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): ConfirmAccountProviderState {
-        val accountProvider by accountProviderDataSource.flow().collectAsState()
+        val accountProvider by accountProviderDataSource.flow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
 
         val loginFlowAction: MutableState<AsyncData<LoginFlow>> = remember {

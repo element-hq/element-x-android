@@ -300,7 +300,9 @@
   <string name="invite_friends_rich_title">"🔐️ Bli med meg på %1$s"</string>
   <string name="invite_friends_text">"Hei, snakk med meg på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="preference_rageshake">"Rageshake for å rapportere feil"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
+  <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Opplasting av medier mislyktes, vennligst prøv igjen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>

@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
@@ -105,7 +106,8 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media success scenario`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -142,7 +144,8 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media after pre-processing success scenario`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -177,7 +180,8 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media before pre-processing success scenario`() = runTest {
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(
@@ -287,7 +291,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send image with caption success scenario`() = runTest {
         val sendImageResult =
-            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -320,6 +324,7 @@ class AttachmentsPreviewPresenterTest {
                 value(A_CAPTION),
                 any(),
                 any(),
+                any(),
             )
             onDoneListener.assertions().isCalledOnce()
         }
@@ -328,7 +333,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send video with caption success scenario`() = runTest {
         val sendVideoResult =
-            lambdaRecorder<File, File?, VideoInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder { _: File, _: File?, _: VideoInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -361,6 +366,7 @@ class AttachmentsPreviewPresenterTest {
                 value(A_CAPTION),
                 any(),
                 any(),
+                any(),
             )
             onDoneListener.assertions().isCalledOnce()
         }
@@ -369,7 +375,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send audio with caption success scenario`() = runTest {
         val sendAudioResult =
-            lambdaRecorder<File, AudioInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+            lambdaRecorder<File, AudioInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -399,6 +405,7 @@ class AttachmentsPreviewPresenterTest {
                 value(A_CAPTION),
                 any(),
                 any(),
+                any(),
             )
             onDoneListener.assertions().isCalledOnce()
         }
@@ -407,7 +414,8 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send media failure scenario without media queue`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.failure(failure)
         }
         val room = FakeMatrixRoom(
@@ -435,7 +443,8 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - send media failure scenario with media queue`() = runTest {
         val failure = MediaPreProcessor.Failure(null)
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.failure(failure)
         }
         val onDoneListenerResult = lambdaRecorder<Unit> {}

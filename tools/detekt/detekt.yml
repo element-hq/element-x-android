@@ -227,7 +227,7 @@ Compose:
       - LocalMediaItemPresenterFactories
       - LocalTimelineItemPresenterFactories
       - LocalRoomMemberProfilesCache
-      - LocalMentionSpanTheme
+      - LocalMentionSpanUpdater
       - LocalAnalyticsService
       - LocalBuildMeta
   CompositionLocalNaming:

@@ -132,10 +132,10 @@ class DefaultAnalyticsServiceTest {
             analyticsStore = store,
         )
         assertThat(store.userConsentFlow.first()).isFalse()
-        assertThat(sut.getUserConsent().first()).isFalse()
+        assertThat(sut.userConsentFlow.first()).isFalse()
         sut.setUserConsent(true)
         assertThat(store.userConsentFlow.first()).isTrue()
-        assertThat(sut.getUserConsent().first()).isTrue()
+        assertThat(sut.userConsentFlow.first()).isTrue()
     }
 
     @Test
@@ -146,10 +146,10 @@ class DefaultAnalyticsServiceTest {
             analyticsStore = store,
         )
         assertThat(store.analyticsIdFlow.first()).isEqualTo("")
-        assertThat(sut.getAnalyticsId().first()).isEqualTo("")
+        assertThat(sut.analyticsIdFlow.first()).isEqualTo("")
         sut.setAnalyticsId(AN_ID)
         assertThat(store.analyticsIdFlow.first()).isEqualTo(AN_ID)
-        assertThat(sut.getAnalyticsId().first()).isEqualTo(AN_ID)
+        assertThat(sut.analyticsIdFlow.first()).isEqualTo(AN_ID)
     }
 
     @Test
@@ -160,10 +160,10 @@ class DefaultAnalyticsServiceTest {
             analyticsStore = store,
         )
         assertThat(store.didAskUserConsentFlow.first()).isFalse()
-        assertThat(sut.didAskUserConsent().first()).isFalse()
+        assertThat(sut.didAskUserConsentFlow.first()).isFalse()
         sut.setDidAskUserConsent()
         assertThat(store.didAskUserConsentFlow.first()).isTrue()
-        assertThat(sut.didAskUserConsent().first()).isTrue()
+        assertThat(sut.didAskUserConsentFlow.first()).isTrue()
     }
 
     @Test

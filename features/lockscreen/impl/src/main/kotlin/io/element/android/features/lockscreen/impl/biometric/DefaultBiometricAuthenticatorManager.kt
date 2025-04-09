@@ -87,7 +87,9 @@ class DefaultBiometricAuthenticatorManager @Inject constructor(
 
     @Composable
     override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
-        val isBiometricAllowed by lockScreenStore.isBiometricUnlockAllowed().collectAsState(initial = false)
+        val isBiometricAllowed by remember {
+            lockScreenStore.isBiometricUnlockAllowed()
+        }.collectAsState(initial = false)
         val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
         val isAvailable by remember(lifecycleState) {
             derivedStateOf { isBiometricAllowed && hasAvailableAuthenticator }

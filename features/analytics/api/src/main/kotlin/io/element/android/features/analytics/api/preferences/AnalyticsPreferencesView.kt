@@ -36,11 +36,6 @@ fun AnalyticsPreferencesView(
         id = R.string.screen_analytics_settings_help_us_improve,
         state.applicationName
     )
-    val linkText = buildAnnotatedStringWithStyledPart(
-        R.string.screen_analytics_settings_read_terms,
-        R.string.screen_analytics_settings_read_terms_content_link,
-        tagAndLink = LINK_TAG to state.policyUrl,
-    )
     Column(modifier) {
         ListItem(
             headlineContent = {
@@ -57,7 +52,14 @@ fun AnalyticsPreferencesView(
                 onEnabledChanged(!state.isEnabled)
             }
         )
-        ListSupportingText(annotatedString = linkText)
+        if (state.policyUrl.isNotEmpty()) {
+            val linkText = buildAnnotatedStringWithStyledPart(
+                R.string.screen_analytics_settings_read_terms,
+                R.string.screen_analytics_settings_read_terms_content_link,
+                tagAndLink = LINK_TAG to state.policyUrl,
+            )
+            ListSupportingText(annotatedString = linkText)
+        }
     }
 }
 

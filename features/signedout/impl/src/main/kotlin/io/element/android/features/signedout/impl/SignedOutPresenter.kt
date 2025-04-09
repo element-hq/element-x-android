@@ -34,7 +34,9 @@ class SignedOutPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): SignedOutState {
-        val sessions by sessionStore.sessionsFlow().collectAsState(initial = emptyList())
+        val sessions by remember {
+            sessionStore.sessionsFlow()
+        }.collectAsState(initial = emptyList())
         val signedOutSession by remember {
             derivedStateOf { sessions.firstOrNull { it.userId == sessionId } }
         }

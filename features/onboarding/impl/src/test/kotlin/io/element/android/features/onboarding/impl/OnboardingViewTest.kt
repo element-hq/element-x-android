@@ -10,6 +10,7 @@ package io.element.android.features.onboarding.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -76,11 +77,26 @@ class OnboardingViewTest {
     fun `clicking on report a problem calls the sign in callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = anOnBoardingState(),
+                state = anOnBoardingState(
+                    canReportBug = true,
+                ),
                 onReportProblem = callback,
             )
+            val text = rule.activity.getString(CommonStrings.common_report_a_problem)
+            rule.onNodeWithText(text).assertExists()
             rule.clickOn(CommonStrings.common_report_a_problem)
         }
+    }
+
+    @Test
+    fun `cannot report a problem when the feature is disabled`() {
+        rule.setOnboardingView(
+            state = anOnBoardingState(
+                canReportBug = false,
+            ),
+        )
+        val text = rule.activity.getString(CommonStrings.common_report_a_problem)
+        rule.onNodeWithText(text).assertDoesNotExist()
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(

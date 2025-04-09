@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import dagger.assisted.Assisted
@@ -46,16 +47,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
-import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -64,7 +64,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -84,11 +83,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
@@ -116,7 +117,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     private val draftService: ComposerDraftService,
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
-    private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
@@ -135,7 +135,6 @@ class MessageComposerPresenter @AssistedInject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal var showTextFormatting: Boolean by mutableStateOf(false)
 
-    @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
@@ -148,12 +147,6 @@ class MessageComposerPresenter @AssistedInject constructor(
             richTextEditorState.isReadyToProcessActions = true
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
-        var isMentionsEnabled by remember { mutableStateOf(false) }
-        var isRoomAliasSuggestionsEnabled by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
-            isRoomAliasSuggestionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.RoomAliasSuggestions)
-        }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
 
@@ -185,9 +178,9 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
-        val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
-
-        val roomAliasSuggestions by roomAliasSuggestionsDataSource.getAllRoomAliasSuggestions().collectAsState(initial = emptyList())
+        val sendTypingNotifications by remember {
+            sessionPreferencesStore.isSendTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -201,35 +194,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         }
 
         val suggestions = remember { mutableStateListOf<ResolvedSuggestion>() }
-        LaunchedEffect(isMentionsEnabled) {
-            if (!isMentionsEnabled) return@LaunchedEffect
-            val currentUserId = room.sessionId
-
-            suspend fun canSendRoomMention(): Boolean {
-                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !room.isDm() && userCanSendAtRoom
-            }
-
-            // This will trigger a search immediately when `@` is typed
-            val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
-            // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
-            val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
-            merge(mentionStartTrigger, mentionCompletionTrigger)
-                .combine(room.membersStateFlow) { suggestion, roomMembersState ->
-                    suggestions.clear()
-                    val result = suggestionsProcessor.process(
-                        suggestion = suggestion,
-                        roomMembersState = roomMembersState,
-                        roomAliasSuggestions = if (isRoomAliasSuggestionsEnabled) roomAliasSuggestions else emptyList(),
-                        currentUserId = currentUserId,
-                        canSendRoomMention = ::canSendRoomMention,
-                    )
-                    if (result.isNotEmpty()) {
-                        suggestions.addAll(result)
-                    }
-                }
-                .collect()
-        }
+        ResolveSuggestionsEffect(suggestions)
 
         DisposableEffect(Unit) {
             // Declare that the user is not typing anymore when the composer is disposed
@@ -365,7 +330,6 @@ class MessageComposerPresenter @AssistedInject constructor(
                             markdownTextEditorState.insertSuggestion(
                                 resolvedSuggestion = event.resolvedSuggestion,
                                 mentionSpanProvider = mentionSpanProvider,
-                                permalinkBuilder = permalinkBuilder,
                             )
                             suggestionSearchTrigger.value = null
                         }
@@ -378,20 +342,21 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
         }
 
-        val mentionSpanTheme = LocalMentionSpanTheme.current
-        val resolveMentionDisplay = remember(mentionSpanTheme) {
+        val resolveMentionDisplay = remember {
             { text: String, url: String ->
-                val permalinkData = permalinkParser.parse(url)
-                if (permalinkData is PermalinkData.UserLink) {
-                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
-                    mentionSpan.update(mentionSpanTheme)
+                val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                if (mentionSpan != null) {
                     TextDisplay.Custom(mentionSpan)
                 } else {
-                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                    mentionSpan.update(mentionSpanTheme)
-                    TextDisplay.Custom(mentionSpan)
+                    TextDisplay.Plain
                 }
+            }
+        }
+
+        val resolveAtRoomMentionDisplay = remember {
+            {
+                val mentionSpan = mentionSpanProvider.createEveryoneMentionSpan()
+                TextDisplay.Custom(mentionSpan)
             }
         }
 
@@ -405,8 +370,48 @@ class MessageComposerPresenter @AssistedInject constructor(
             canCreatePoll = canCreatePoll.value,
             suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
+            resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
             eventSink = { handleEvents(it) },
         )
+    }
+
+    @OptIn(FlowPreview::class)
+    @Composable
+    private fun ResolveSuggestionsEffect(
+        suggestions: SnapshotStateList<ResolvedSuggestion>,
+    ) {
+        LaunchedEffect(Unit) {
+            val currentUserId = room.sessionId
+
+            suspend fun canSendRoomMention(): Boolean {
+                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                return !room.isDm() && userCanSendAtRoom
+            }
+
+            // This will trigger a search immediately when `@` is typed
+            val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
+            // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
+            val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
+
+            val mentionTriggerFlow = merge(mentionStartTrigger, mentionCompletionTrigger)
+
+            val roomAliasSuggestionsFlow = roomAliasSuggestionsDataSource
+                .getAllRoomAliasSuggestions()
+                .stateIn(this, SharingStarted.Lazily, emptyList())
+
+            combine(mentionTriggerFlow, room.membersStateFlow, roomAliasSuggestionsFlow) { suggestion, roomMembersState, roomAliasSuggestions ->
+                val result = suggestionsProcessor.process(
+                    suggestion = suggestion,
+                    roomMembersState = roomMembersState,
+                    roomAliasSuggestions = roomAliasSuggestions,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = ::canSendRoomMention,
+                )
+                suggestions.clear()
+                suggestions.addAll(result)
+            }
+                .collect()
+        }
     }
 
     private fun CoroutineScope.sendMessage(
@@ -448,7 +453,19 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
+                    with(capturedMode) {
+                        replyMessage(
+                            body = message.markdown,
+                            htmlBody = message.html,
+                            intentionalMentions = message.intentionalMentions,
+                            replyParameters = ReplyParameters(
+                                inReplyToEventId = eventId,
+                                enforceThreadReply = inThread,
+                                // This should be false until we add a way to make a reply in a thread an explicit reply to the provided eventId
+                                replyWithinThread = false,
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -635,8 +652,8 @@ class MessageComposerPresenter @AssistedInject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
-            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
+            val markdownWithMentions = pillificationHelper.pillify(markdown, false)
+            markdownTextEditorState.text.update(markdownWithMentions, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -704,7 +721,7 @@ class MessageComposerPresenter @AssistedInject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            val pillifiedContent = pillificationHelper.pillify(content)
+            val pillifiedContent = pillificationHelper.pillify(content, false)
             markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()

@@ -19,9 +19,9 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider>
 
     /**
-     * Return a Flow of Boolean, true if the user has given their consent.
+     * A Flow of Boolean, true if the user has given their consent.
      */
-    fun getUserConsent(): Flow<Boolean>
+    val userConsentFlow: Flow<Boolean>
 
     /**
      * Update the user consent value.
@@ -29,9 +29,9 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     suspend fun setUserConsent(userConsent: Boolean)
 
     /**
-     * Return a Flow of Boolean, true if the user has been asked for their consent.
+     * A Flow of Boolean, true if the user has been asked for their consent.
      */
-    fun didAskUserConsent(): Flow<Boolean>
+    val didAskUserConsentFlow: Flow<Boolean>
 
     /**
      * Store the fact that the user has been asked for their consent.
@@ -39,9 +39,9 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     suspend fun setDidAskUserConsent()
 
     /**
-     * Return a Flow of String, used for analytics Id.
+     * A Flow of String, used for analytics Id.
      */
-    fun getAnalyticsId(): Flow<String>
+    val analyticsIdFlow: Flow<String>
 
     /**
      * Update analyticsId from the AccountData.

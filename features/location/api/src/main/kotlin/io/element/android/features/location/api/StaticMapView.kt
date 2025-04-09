@@ -57,7 +57,7 @@ fun StaticMapView(
     ) {
         val context = LocalContext.current
         var retryHash by remember { mutableIntStateOf(0) }
-        val builder = remember { StaticMapUrlBuilder(context) }
+        val builder = remember { StaticMapUrlBuilder() }
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
                 // Avoid building a URL if any of the size constraints is zero (else it will thrown an exception).

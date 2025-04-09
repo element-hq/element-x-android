@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Delete"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
+  <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
   <string name="a11y_pin_field">"PIN field"</string>
   <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="a11y_view_details">"View details"</string>
+  <string name="a11y_voice_message">"Voice message, duration: %1$s"</string>
   <string name="a11y_voice_message_record">"Record voice message."</string>
   <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
   <string name="action_accept">"Accept"</string>
@@ -56,6 +60,7 @@
   <string name="action_deactivate">"Deactivate"</string>
   <string name="action_deactivate_account">"Deactivate account"</string>
   <string name="action_decline">"Decline"</string>
+  <string name="action_decline_and_block">"Decline and block"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_disable">"Disable"</string>
   <string name="action_discard">"Discard"</string>
@@ -101,8 +106,10 @@
   <string name="action_remove_message">"Remove message"</string>
   <string name="action_reply">"Reply"</string>
   <string name="action_reply_in_thread">"Reply in thread"</string>
+  <string name="action_report">"Report"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_report_room">"Report room"</string>
   <string name="action_reset">"Reset"</string>
   <string name="action_reset_identity">"Reset identity"</string>
   <string name="action_retry">"Retry"</string>
@@ -212,6 +219,7 @@ Reason: %1$s."</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Permission"</string>
   <string name="common_pinned">"Pinned"</string>
+  <string name="common_please_check_internet_connection">"Please check your internet connection"</string>
   <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
@@ -224,6 +232,7 @@ Reason: %1$s."</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
   <string name="common_reaction">"Reaction"</string>
   <string name="common_reactions">"Reactions"</string>
+  <string name="common_reason">"Reason"</string>
   <string name="common_recovery_key">"Recovery key"</string>
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
@@ -295,6 +304,8 @@ Reason: %1$s."</string>
 
 Are you sure you want to continue?"</string>
   <string name="dialog_confirm_link_title">"Double-check this link"</string>
+  <string name="dialog_room_reported">"Room reported"</string>
+  <string name="dialog_room_reported_and_left">"Reported and left room"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
@@ -326,6 +337,10 @@ Are you sure you want to continue?"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"You will not see any messages or room invites from this user"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Block user"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Report this room to your account provider."</string>
+  <string name="screen_decline_and_block_title">"Decline and block"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
@@ -337,6 +352,11 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d Pinned messages"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Pinned messages"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Unable to Leave Room"</string>
+  <string name="screen_report_room_reason_footer">"Report this room to your admin. If the messages are encrypted, your admin will not be able to read them."</string>
+  <string name="screen_report_room_reason_placeholder">"Describe the reason…"</string>
+  <string name="screen_report_room_title">"Report room"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your identity. Afterwards you\'ll be taken back to the app."</string>
   <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your identity."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Withdraw verification and send"</string>

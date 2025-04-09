@@ -19,7 +19,11 @@ import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -27,6 +31,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
@@ -42,6 +47,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     @Assisted private val roomMemberId: UserId,
     private val room: MatrixRoom,
     private val encryptionService: EncryptionService,
+    private val clipboardHelper: ClipboardHelper,
     userProfilePresenterFactory: UserProfilePresenterFactory,
 ) : Presenter<UserProfileState> {
     interface Factory {
@@ -55,6 +61,8 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     override fun present(): UserProfileState {
         val coroutineScope = rememberCoroutineScope()
 
+        val snackbarDispatcher = LocalSnackbarDispatcher.current
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val roomMember by room.getRoomMemberAsState(roomMemberId)
         LaunchedEffect(Unit) {
             // Update room member info when opening this screen
@@ -111,7 +119,11 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                 UserProfileEvents.WithdrawVerification -> coroutineScope.launch {
                     encryptionService.withdrawVerification(roomMemberId)
                 }
-                else -> Unit
+                is UserProfileEvents.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text)
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                }
+                else -> userProfileState.eventSink(event)
             }
         }
 
@@ -119,13 +131,8 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             userName = roomUserName ?: userProfileState.userName,
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
             verificationState = verificationState,
-            eventSink = { event ->
-                if (event is UserProfileEvents.WithdrawVerification) {
-                    eventSink(UserProfileEvents.WithdrawVerification)
-                } else {
-                    userProfileState.eventSink(event)
-                }
-            }
+            snackbarMessage = snackbarMessage,
+            eventSink = ::eventSink
         )
     }
 }

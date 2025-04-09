@@ -13,7 +13,9 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 sealed interface RoomMembersModerationEvents {
     data class SelectRoomMember(val roomMember: RoomMember) : RoomMembersModerationEvents
     data object KickUser : RoomMembersModerationEvents
+    data class DoKickUser(val reason: String) : RoomMembersModerationEvents
     data object BanUser : RoomMembersModerationEvents
+    data class DoBanUser(val reason: String) : RoomMembersModerationEvents
     data class UnbanUser(val userId: UserId) : RoomMembersModerationEvents
     data object Reset : RoomMembersModerationEvents
 }

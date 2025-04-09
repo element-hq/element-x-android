@@ -44,17 +44,17 @@ class BlockedUsersPresenter @Inject constructor(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        val renderBlockedUsersDetail = featureFlagService
-            .isFeatureEnabledFlow(FeatureFlags.ShowBlockedUsersDetails)
-            .collectAsState(initial = false)
+        val renderBlockedUsersDetail by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ShowBlockedUsersDetails)
+        }.collectAsState(initial = false)
         val ignoredUserIds by matrixClient.ignoredUsersFlow.collectAsState()
         val ignoredMatrixUser by produceState(
             initialValue = ignoredUserIds.map { MatrixUser(userId = it) },
-            key1 = renderBlockedUsersDetail.value,
+            key1 = renderBlockedUsersDetail,
             key2 = ignoredUserIds
         ) {
             value = ignoredUserIds.map {
-                if (renderBlockedUsersDetail.value) {
+                if (renderBlockedUsersDetail) {
                     matrixClient.getProfile(it).getOrNull()
                 } else {
                     null

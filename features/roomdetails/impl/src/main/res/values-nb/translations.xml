@@ -10,6 +10,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Fjern meldinger"</string>
   <string name="screen_room_change_permissions_everyone">"Alle"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter folk og godta forespørsler om å bli med"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Moderering av medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_change_permissions_moderators">"Administratorer og moderatorer"</string>
   <string name="screen_room_change_permissions_remove_people">"Fjern folk og avslå forespørsler om å bli med"</string>
@@ -25,6 +26,7 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Du vil ikke kunne angre denne endringen ettersom du degraderer deg selv, og hvis du er den siste privilegerte brukeren i rommet, vil det være umulig å få tilbake privilegiene."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradere deg selv?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Venter)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Venter)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Administratorer har automatisk moderatorrettigheter"</string>
   <string name="screen_room_change_role_moderators_title">"Rediger moderatorer"</string>
   <string name="screen_room_change_role_section_administrators">"Administratorer"</string>
@@ -108,6 +110,7 @@
   <string name="screen_room_roles_and_permissions_change_my_role">"Endre rollen min"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Nedgradere til medlem"</string>
   <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Nedgradere til moderator"</string>
+  <string name="screen_room_roles_and_permissions_member_moderation">"Moderering av medlemmer"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Tillatelser"</string>

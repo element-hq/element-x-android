@@ -5,6 +5,7 @@
   <string name="banner_set_up_recovery_title">"Konfigurer gjenoppretting for å beskytte kontoen din"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gjenopprettingsnøkkel?"</string>
+  <string name="confirm_recovery_key_banner_title">"Nøkkellagringen din er ikke synkronisert"</string>
   <string name="full_screen_intent_banner_message">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
   <string name="full_screen_intent_banner_title">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>

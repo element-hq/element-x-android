@@ -173,6 +173,8 @@ private fun RoomListSearchContent(
                 ) { room ->
                     RoomSummaryRow(
                         room = room,
+                        // TODO
+                        isInviteSeen = false,
                         onClick = ::onRoomClick,
                         eventSink = eventSink,
                     )

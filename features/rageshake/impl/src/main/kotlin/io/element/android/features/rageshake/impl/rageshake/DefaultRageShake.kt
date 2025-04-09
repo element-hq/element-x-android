@@ -13,7 +13,6 @@ import android.hardware.SensorManager
 import androidx.core.content.getSystemService
 import com.squareup.anvil.annotations.ContributesBinding
 import com.squareup.seismic.ShakeDetector
-import io.element.android.features.rageshake.api.rageshake.RageShake
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn

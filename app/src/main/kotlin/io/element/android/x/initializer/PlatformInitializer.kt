@@ -37,6 +37,7 @@ class PlatformInitializer : Initializer<Unit> {
             writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),
+            traceLogPacks = runBlocking { preferencesStore.getTracingLogPacksFlow().first() },
         )
         bugReporter.setCurrentTracingLogLevel(logLevel.name)
         platformService.init(tracingConfiguration)

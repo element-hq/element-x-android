@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -56,13 +57,13 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
 
         // To reset the store: ResetStore()
 
-        val isAlreadyDenied: Boolean by permissionsStore
-            .isPermissionDenied(permission)
-            .collectAsState(initial = false)
+        val isAlreadyDenied: Boolean by remember {
+            permissionsStore.isPermissionDenied(permission)
+        }.collectAsState(initial = false)
 
-        val isAlreadyAsked: Boolean by permissionsStore
-            .isPermissionAsked(permission)
-            .collectAsState(initial = false)
+        val isAlreadyAsked: Boolean by remember {
+            permissionsStore.isPermissionAsked(permission)
+        }.collectAsState(initial = false)
 
         var permissionState: PermissionState? = null
 

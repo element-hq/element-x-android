@@ -34,7 +34,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
         context.startActivity(IntentProvider.createIntent(context, callType))
     }
 
-    override fun handleIncomingCall(
+    override suspend fun handleIncomingCall(
         callType: CallType.RoomCall,
         eventId: EventId,
         senderId: UserId,

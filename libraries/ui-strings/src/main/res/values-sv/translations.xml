@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Radera"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d siffra angiven"</item>
     <item quantity="other">"%1$d siffror angivna"</item>
   </plurals>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
+  <string name="a11y_join_call">"Anslut till samtal"</string>
   <string name="a11y_jump_to_bottom">"Hoppa till botten"</string>
   <string name="a11y_notifications_mentions_only">"Endast omnämningar"</string>
   <string name="a11y_notifications_muted">"Tystad"</string>
   <string name="a11y_page_n">"Sida %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
+  <string name="a11y_paused_voice_message">"Röstmeddelande, varaktighet:%1$s, nuvarande position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-fält"</string>
   <string name="a11y_play">"Spela upp"</string>
   <string name="a11y_poll">"Omröstning"</string>
@@ -30,6 +33,7 @@
   <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
   <string name="a11y_view_details">"Visa detaljer"</string>
+  <string name="a11y_voice_message">"Röstmeddelande, varaktighet: %1$s"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
   <string name="action_accept">"Godkänn"</string>
@@ -101,8 +105,10 @@
   <string name="action_remove_message">"Ta bort meddelande"</string>
   <string name="action_reply">"Svara"</string>
   <string name="action_reply_in_thread">"Svara i tråd"</string>
+  <string name="action_report">"Anmäl"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
+  <string name="action_report_room">"Anmäl rum"</string>
   <string name="action_reset">"Återställ"</string>
   <string name="action_reset_identity">"Återställ identitet"</string>
   <string name="action_retry">"Försök igen"</string>
@@ -224,6 +230,7 @@ Anledning:%1$s."</string>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
+  <string name="common_reason">"Orsak"</string>
   <string name="common_recovery_key">"Återställningsnyckel"</string>
   <string name="common_refreshing">"Uppdaterar …"</string>
   <string name="common_replying_to">"Svarar till %1$s"</string>
@@ -295,6 +302,8 @@ Anledning:%1$s."</string>
 
 Är du säker på att du vill fortsätta?"</string>
   <string name="dialog_confirm_link_title">"Dubbelkolla den här länken"</string>
+  <string name="dialog_room_reported">"Rum anmält"</string>
+  <string name="dialog_room_reported_and_left">"Anmälde och lämnade rummet"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>
@@ -337,6 +346,10 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d Fästa meddelanden"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fästa meddelanden"</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Kunde inte lämna rummet"</string>
+  <string name="screen_report_room_reason_footer">"Anmäl det här rummet till din administratör. Om meddelandena är krypterade kommer din administratör inte att kunna läsa dem."</string>
+  <string name="screen_report_room_reason_placeholder">"Beskriv anledningen …"</string>
+  <string name="screen_report_room_title">"Rapportera rum"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Du är på väg att gå till ditt %1$s-konto för att återställa din identitet. Därefter kommer du att tas tillbaka till appen."</string>
   <string name="screen_reset_identity_confirmation_title">"Kan du inte bekräfta? Gå till ditt konto för att återställa din identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Dra tillbaka verifieringen och skicka"</string>

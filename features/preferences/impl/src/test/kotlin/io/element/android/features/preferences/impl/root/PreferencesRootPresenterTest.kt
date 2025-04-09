@@ -13,6 +13,7 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
+import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -78,6 +79,7 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showLockScreenSettings).isTrue()
             assertThat(loadedState.showNotificationSettings).isTrue()
             assertThat(loadedState.canDeactivateAccount).isTrue()
+            assertThat(loadedState.canReportBug).isTrue()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(loadedState.snackbarMessage).isNull()
             skipItems(1)
@@ -89,6 +91,22 @@ class PreferencesRootPresenterTest {
                 )
             assertThat(finalState.accountManagementUrl).isEqualTo("Profile url")
             assertThat(finalState.devicesManagementUrl).isEqualTo("SessionsList url")
+        }
+    }
+
+    @Test
+    fun `present - cannot report bug`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            canDeactivateAccountResult = { true },
+            accountManagementUrlResult = { Result.success("") },
+        )
+        createPresenter(
+            matrixClient = matrixClient,
+            rageshakeFeatureAvailability = { false },
+        ).test {
+            val initialState = awaitItem()
+            assertThat(initialState.canReportBug).isFalse()
+            skipItems(1)
         }
     }
 
@@ -146,6 +164,7 @@ class PreferencesRootPresenterTest {
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
+        rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { true },
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
@@ -159,5 +178,6 @@ class PreferencesRootPresenterTest {
         ),
         directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
+        rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     )
 }

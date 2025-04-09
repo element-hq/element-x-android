@@ -6,6 +6,7 @@
  */
 
 import config.BuildTimeConfig
+import extension.buildConfigFieldStr
 import extension.readLocalProperty
 
 plugins {
@@ -16,10 +17,17 @@ plugins {
 android {
     namespace = "io.element.android.features.location.api"
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
-        resValue(
-            type = "string",
-            name = "maptiler_api_key",
+        buildConfigFieldStr(
+            name = "MAPTILER_BASE_URL",
+            value = BuildTimeConfig.SERVICES_MAPTILER_BASE_URL ?: "https://api.maptiler.com/maps"
+        )
+        buildConfigFieldStr(
+            name = "MAPTILER_API_KEY",
             value = if (isEnterpriseBuild) {
                 BuildTimeConfig.SERVICES_MAPTILER_APIKEY
             } else {
@@ -28,9 +36,8 @@ android {
             }
                 ?: ""
         )
-        resValue(
-            type = "string",
-            name = "maptiler_light_map_id",
+        buildConfigFieldStr(
+            name = "MAPTILER_LIGHT_MAP_ID",
             value = if (isEnterpriseBuild) {
                 BuildTimeConfig.SERVICES_MAPTILER_LIGHT_MAPID
             } else {
@@ -40,9 +47,8 @@ android {
             // fall back to maptiler's default light map.
                 ?: "basic-v2"
         )
-        resValue(
-            type = "string",
-            name = "maptiler_dark_map_id",
+        buildConfigFieldStr(
+            name = "MAPTILER_DARK_MAP_ID",
             value = if (isEnterpriseBuild) {
                 BuildTimeConfig.SERVICES_MAPTILER_DARK_MAPID
             } else {

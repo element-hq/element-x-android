@@ -29,7 +29,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : CallWidgetSettingsProvider {
     override suspend fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
-        val isAnalyticsEnabled = analyticsService.getUserConsent().first()
+        val isAnalyticsEnabled = analyticsService.userConsentFlow.first()
         val options = VirtualElementCallWidgetOptions(
             elementCallUrl = baseUrl,
             widgetId = widgetId,

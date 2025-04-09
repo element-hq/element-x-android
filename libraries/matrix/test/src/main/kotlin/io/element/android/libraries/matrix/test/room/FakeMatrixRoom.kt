@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -87,16 +88,16 @@ class FakeMatrixRoom(
     private val canRedactOtherResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val canSendStateResult: (UserId, StateEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
     private val canUserSendMessageResult: (UserId, MessageEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
-    private val sendImageResult: (File, File?, ImageInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
+    private val sendImageResult: (File, File?, ImageInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
+        { _, _, _, _, _, _, _ -> lambdaError() },
+    private val sendVideoResult: (File, File?, VideoInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
+        { _, _, _, _, _, _, _ -> lambdaError() },
+    private val sendFileResult: (File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
         { _, _, _, _, _, _ -> lambdaError() },
-    private val sendVideoResult: (File, File?, VideoInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
+    private val sendAudioResult: (File, AudioInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
         { _, _, _, _, _, _ -> lambdaError() },
-    private val sendFileResult: (File, FileInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
+    private val sendVoiceMessageResult: (File, AudioInfo, List<Float>, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
         { _, _, _, _, _ -> lambdaError() },
-    private val sendAudioResult: (File, AudioInfo, String?, String?, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _ -> lambdaError() },
-    private val sendVoiceMessageResult: (File, AudioInfo, List<Float>, ProgressCallback?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _ -> lambdaError() },
     private val setNameResult: (String) -> Result<Unit> = { lambdaError() },
     private val setTopicResult: (String) -> Result<Unit> = { lambdaError() },
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -332,7 +333,8 @@ class FakeMatrixRoom(
         imageInfo: ImageInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendImageResult(
@@ -342,6 +344,7 @@ class FakeMatrixRoom(
             caption,
             formattedCaption,
             progressCallback,
+            replyParameters,
         )
     }
 
@@ -351,7 +354,8 @@ class FakeMatrixRoom(
         videoInfo: VideoInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendVideoResult(
@@ -361,6 +365,7 @@ class FakeMatrixRoom(
             caption,
             formattedCaption,
             progressCallback,
+            replyParameters,
         )
     }
 
@@ -369,7 +374,8 @@ class FakeMatrixRoom(
         audioInfo: AudioInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendAudioResult(
@@ -378,6 +384,7 @@ class FakeMatrixRoom(
             caption,
             formattedCaption,
             progressCallback,
+            replyParameters,
         )
     }
 
@@ -386,7 +393,8 @@ class FakeMatrixRoom(
         fileInfo: FileInfo,
         caption: String?,
         formattedCaption: String?,
-        progressCallback: ProgressCallback?
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
     ): Result<MediaUploadHandler> = simulateLongTask {
         simulateSendMediaProgress(progressCallback)
         sendFileResult(
@@ -395,6 +403,40 @@ class FakeMatrixRoom(
             caption,
             formattedCaption,
             progressCallback,
+            replyParameters,
+        )
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+        replyParameters: ReplyParameters?,
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendVoiceMessageResult(
+            file,
+            audioInfo,
+            waveform,
+            progressCallback,
+            replyParameters,
+        )
+    }
+
+    override suspend fun sendLocation(
+        body: String,
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
+    ): Result<Unit> = simulateLongTask {
+        return sendLocationResult(
+            body,
+            geoUri,
+            description,
+            zoomLevel,
+            assetType,
         )
     }
 
@@ -464,22 +506,6 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String?,
-        zoomLevel: Int?,
-        assetType: AssetType?,
-    ): Result<Unit> = simulateLongTask {
-        return sendLocationResult(
-            body,
-            geoUri,
-            description,
-            zoomLevel,
-            assetType,
-        )
-    }
-
     override suspend fun createPoll(
         question: String,
         answers: List<String>,
@@ -522,21 +548,6 @@ class FakeMatrixRoom(
         text: String
     ): Result<Unit> = simulateLongTask {
         return endPollResult(pollStartId, text)
-    }
-
-    override suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendVoiceMessageResult(
-            file,
-            audioInfo,
-            waveform,
-            progressCallback,
-        )
     }
 
     override suspend fun typingNotice(isTyping: Boolean): Result<Unit> {

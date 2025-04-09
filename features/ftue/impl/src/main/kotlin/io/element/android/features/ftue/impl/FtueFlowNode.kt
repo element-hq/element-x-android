@@ -84,7 +84,7 @@ class FtueFlowNode @AssistedInject constructor(
             moveToNextStepIfNeeded()
         })
 
-        analyticsService.didAskUserConsent()
+        analyticsService.didAskUserConsentFlow
             .distinctUntilChanged()
             .onEach { moveToNextStepIfNeeded() }
             .launchIn(lifecycleScope)

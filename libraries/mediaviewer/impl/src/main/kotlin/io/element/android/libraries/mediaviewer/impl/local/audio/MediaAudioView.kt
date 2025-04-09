@@ -111,6 +111,7 @@ private fun ExoPlayerMediaAudioView(
             MediaPlayerControllerState(
                 isVisible = true,
                 isPlaying = false,
+                isReady = false,
                 progressInMillis = 0,
                 durationInMillis = 0,
                 canMute = false,
