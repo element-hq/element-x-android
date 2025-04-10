@@ -23,7 +23,7 @@ class AccountProviderDataSource @Inject constructor(
 ) {
     val matrixOrgAccountProvider = AccountProvider (
         url = AuthenticationConfig.MATRIX_ORG_URL,
-        subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
+        descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
         isPublic = true,
     )
     //add more hard coded AccountProvider here if you need them

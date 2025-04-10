@@ -15,15 +15,15 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
     override val values: Sequence<AccountProvider>
         get() = sequenceOf(
             anAccountProvider(),
-            anAccountProvider().copy(subtitleResourceId = null),
-            anAccountProvider().copy(subtitleResourceId = null, title = "invalid"),
-            anAccountProvider().copy(subtitleResourceId = null, title = "Other", isPublic = false),
+            anAccountProvider().copy(descriptionResourceId = null),
+            anAccountProvider().copy(descriptionResourceId = null, title = "invalid"),
+            anAccountProvider().copy(descriptionResourceId = null, title = "Other", isPublic = false),
             // Add other state here
         )
 }
 
 fun anAccountProvider() = AccountProvider(
     url = AuthenticationConfig.MATRIX_ORG_URL,
-    subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
+    descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
     isPublic = true,
 )

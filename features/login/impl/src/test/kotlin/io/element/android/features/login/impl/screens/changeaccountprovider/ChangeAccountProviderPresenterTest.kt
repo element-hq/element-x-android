@@ -39,7 +39,7 @@ class ChangeAccountProviderPresenterTest {
                     AccountProvider(
                         url = "https://matrix.org",
                         title = "matrix.org",
-                        subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
+                        descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                         isPublic = true,
                     )
                 )

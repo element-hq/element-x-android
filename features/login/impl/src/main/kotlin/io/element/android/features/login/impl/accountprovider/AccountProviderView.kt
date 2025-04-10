@@ -90,11 +90,11 @@ fun AccountProviderView(
                     )
                 }
             }
-            if (item.subtitleResourceId != null) {
+            if (item.descriptionResourceId != null) {
                 Text(
                     modifier = Modifier
                         .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
-                    text = stringResource(id = item.subtitleResourceId) ,
+                    text = stringResource(id = item.descriptionResourceId) ,
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textSecondary,
                 )

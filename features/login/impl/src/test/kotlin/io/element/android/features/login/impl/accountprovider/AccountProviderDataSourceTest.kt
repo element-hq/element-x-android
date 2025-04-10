@@ -30,7 +30,7 @@ class AccountProviderDataSourceTest {
                 AccountProvider(
                     url = FakeEnterpriseService.A_FAKE_HOMESERVER,
                     title = FakeEnterpriseService.A_FAKE_HOMESERVER,
-                    subtitleResourceId = null,
+                    descriptionResourceId = null,
                     isPublic = false,
                 )
             )
@@ -48,7 +48,7 @@ class AccountProviderDataSourceTest {
                 AccountProvider(
                     url = "https://matrix.org",
                     title = "matrix.org",
-                    subtitleResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
+                    descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                     isPublic = true,
                 )
             )
@@ -67,7 +67,7 @@ class AccountProviderDataSourceTest {
                 AccountProvider(
                     url = "https://example.com",
                     title = "example.com",
-                    subtitleResourceId = null,
+                    descriptionResourceId = null,
                     isPublic = false,
                 )
             )

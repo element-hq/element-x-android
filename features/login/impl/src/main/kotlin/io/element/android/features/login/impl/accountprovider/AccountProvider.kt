@@ -12,7 +12,7 @@ import io.element.android.appconfig.AuthenticationConfig
 data class AccountProvider(
     val url: String,
     val title: String = url.removePrefix("https://").removePrefix("http://"),
-    val subtitleResourceId: Int? = null,
+    val descriptionResourceId: Int? = null,
     val isPublic: Boolean = false,
 ) {
     fun isMatrixOrg(): Boolean {
