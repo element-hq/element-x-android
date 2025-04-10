@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -46,7 +47,7 @@ class MediaSenderTest {
     @Test
     fun `given an attachment when sending it the MatrixRoom will call sendMedia`() = runTest {
         val sendImageResult =
-            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeMatrixRoom(
@@ -74,8 +75,8 @@ class MediaSenderTest {
     @Test
     fun `given a failure in the media upload when sending the whole process fails`() = runTest {
         val sendImageResult =
-            lambdaRecorder<File, File?, ImageInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-                Result.failure(Exception())
+            lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
+                Result.failure<FakeMediaUploadHandler>(Exception())
             }
         val room = FakeMatrixRoom(
             sendImageResult = sendImageResult
@@ -91,7 +92,8 @@ class MediaSenderTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
-        val sendFileResult = lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
         val room = FakeMatrixRoom(

@@ -30,19 +30,18 @@ class AdvancedSettingsPresenter @Inject constructor(
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isDeveloperModeEnabled by appPreferencesStore
-            .isDeveloperModeEnabledFlow()
-            .collectAsState(initial = false)
-        val isSharePresenceEnabled by sessionPreferencesStore
-            .isSharePresenceEnabled()
-            .collectAsState(initial = true)
-        val doesCompressMedia by sessionPreferencesStore
-            .doesCompressMedia()
-            .collectAsState(initial = true)
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
+        val isSharePresenceEnabled by remember {
+            sessionPreferencesStore.isSharePresenceEnabled()
+        }.collectAsState(initial = true)
+        val doesCompressMedia by remember {
+            sessionPreferencesStore.doesCompressMedia()
+        }.collectAsState(initial = true)
         val theme by remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
-        }
-            .collectAsState(initial = Theme.System)
+        }.collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
 
         val hideInviteAvatars by remember {

@@ -36,7 +36,6 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -114,7 +113,7 @@ class JoinedRoomFlowNode @AssistedInject constructor(
 
     private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
             hasNetworkConnection = isOnline,

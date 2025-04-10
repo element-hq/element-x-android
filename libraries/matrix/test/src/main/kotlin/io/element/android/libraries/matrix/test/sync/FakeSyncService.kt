@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.test.sync
 
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,8 @@ class FakeSyncService(
     }
 
     override val syncState: StateFlow<SyncState> = syncStateFlow
+
+    override val isOnline: StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }
 
     suspend fun emitSyncState(syncState: SyncState) {
         syncStateFlow.emit(syncState)

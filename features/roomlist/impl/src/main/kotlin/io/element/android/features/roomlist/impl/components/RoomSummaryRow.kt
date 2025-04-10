@@ -69,6 +69,7 @@ internal val minHeight = 84.dp
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     hideInviteAvatars: Boolean,
+    isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
@@ -87,7 +88,7 @@ internal fun RoomSummaryRow(
                         Timber.d("Long click on invite room")
                     },
                 ) {
-                    InviteNameAndIndicatorRow(name = room.name)
+                    InviteNameAndIndicatorRow(name = room.name, isInviteSeen = isInviteSeen)
                     InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender)
                     if (!room.isDm && room.inviteSender != null) {
                         Spacer(modifier = Modifier.height(4.dp))
@@ -305,6 +306,7 @@ private fun LastMessageAndIndicatorRow(
 @Composable
 private fun InviteNameAndIndicatorRow(
     name: String?,
+    isInviteSeen: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -321,9 +323,11 @@ private fun InviteNameAndIndicatorRow(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        UnreadIndicatorAtom(
-            color = ElementTheme.colors.unreadIndicator
-        )
+        if (!isInviteSeen) {
+            UnreadIndicatorAtom(
+                color = ElementTheme.colors.unreadIndicator
+            )
+        }
     }
 }
 
@@ -390,6 +394,8 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
     RoomSummaryRow(
         room = data,
         hideInviteAvatars = false,
+        // Set isInviteSeen to true for the preview when the room has name "Bob"
+        isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
     )

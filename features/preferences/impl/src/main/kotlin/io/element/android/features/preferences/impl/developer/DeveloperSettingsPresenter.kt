@@ -71,9 +71,10 @@ class DeveloperSettingsPresenter @Inject constructor(
         val clearCacheAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
-        val customElementCallBaseUrl by appPreferencesStore
-            .getCustomElementCallBaseUrlFlow()
-            .collectAsState(initial = null)
+        val customElementCallBaseUrl by remember {
+            appPreferencesStore
+                .getCustomElementCallBaseUrlFlow()
+        }.collectAsState(initial = null)
 
         val tracingLogLevelFlow = remember {
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }

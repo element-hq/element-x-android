@@ -8,7 +8,7 @@
 package io.element.android.libraries.designsystem.text
 
 import android.graphics.Typeface
-import android.text.SpannableString
+import android.text.SpannedString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
@@ -26,7 +26,7 @@ import io.element.android.compound.theme.LinkColor
 
 fun String.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
     append(this@toAnnotatedString)
-    val spannable = SpannableString(this@toAnnotatedString)
+    val spannable = SpannedString.valueOf(this@toAnnotatedString)
     spannable.getSpans(0, spannable.length, Any::class.java).forEach { span ->
         val start = spannable.getSpanStart(span)
         val end = spannable.getSpanEnd(span)

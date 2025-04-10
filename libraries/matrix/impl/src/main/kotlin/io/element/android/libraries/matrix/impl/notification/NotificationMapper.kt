@@ -36,6 +36,8 @@ class NotificationMapper(
             )
             NotificationData(
                 eventId = eventId,
+                // FIXME once the `NotificationItem` in the SDK returns the thread id
+                threadId = null,
                 roomId = roomId,
                 senderAvatarUrl = item.senderInfo.avatarUrl,
                 senderDisplayName = item.senderInfo.displayName,

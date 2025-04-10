@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -50,7 +51,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.isOnline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -58,6 +58,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -93,6 +94,7 @@ class RoomListPresenter @Inject constructor(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
+    private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
 
@@ -101,7 +103,7 @@ class RoomListPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser = client.userProfile.collectAsState()
-        val isOnline by syncService.isOnline().collectAsState()
+        val isOnline by syncService.isOnline.collectAsState()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
@@ -232,6 +234,7 @@ class RoomListPresenter @Inject constructor(
                 loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
             }
         }
+        val seenRoomInvites by remember { seenInvitesStore.seenRoomIds() }.collectAsState(emptySet())
         val securityBannerState by rememberSecurityBannerState(securityBannerDismissed)
         return when {
             showEmpty -> RoomListContentState.Empty(securityBannerState = securityBannerState)
@@ -240,7 +243,8 @@ class RoomListPresenter @Inject constructor(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
-                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()
+                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList(),
+                    seenRoomInvites = seenRoomInvites.toPersistentSet(),
                 )
             }
         }

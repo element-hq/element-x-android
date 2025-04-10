@@ -61,6 +61,9 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
+    testImplementation(projects.features.invite.test)
+    testImplementation(projects.features.logout.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.dateformatter.test)
@@ -72,7 +75,5 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(projects.features.networkmonitor.test)
-    testImplementation(projects.features.logout.test)
     testImplementation(projects.tests.testutils)
 }

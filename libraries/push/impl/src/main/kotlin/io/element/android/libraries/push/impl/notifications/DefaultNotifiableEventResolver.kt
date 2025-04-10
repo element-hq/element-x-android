@@ -103,6 +103,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
+                    threadId = threadId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,

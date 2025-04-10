@@ -33,9 +33,7 @@ class AccountProviderDataSource @Inject constructor(
         defaultAccountProvider
     )
 
-    fun flow(): StateFlow<AccountProvider> {
-        return accountProvider.asStateFlow()
-    }
+    val flow: StateFlow<AccountProvider> = accountProvider.asStateFlow()
 
     fun reset() {
         accountProvider.tryEmit(defaultAccountProvider)

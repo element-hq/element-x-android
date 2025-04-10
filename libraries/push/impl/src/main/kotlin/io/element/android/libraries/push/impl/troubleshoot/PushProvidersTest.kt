@@ -38,10 +38,8 @@ class PushProvidersTest @Inject constructor(
         val result = sortedPushProvider.isNotEmpty()
         if (result) {
             delegate.updateState(
-                description = stringProvider.getQuantityString(
-                    resId = R.plurals.troubleshoot_notifications_test_detect_push_provider_success,
-                    quantity = sortedPushProvider.size,
-                    sortedPushProvider.size,
+                description = stringProvider.getString(
+                    resId = R.string.troubleshoot_notifications_test_detect_push_provider_success_2,
                     sortedPushProvider.joinToString { it.name }
                 ),
                 status = NotificationTroubleshootTestState.Status.Success

@@ -24,8 +24,12 @@ import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEn
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.securityAndPrivacyPermissionsAsState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -45,6 +49,7 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -65,6 +70,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
+    private val clipboardHelper: ClipboardHelper,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -122,7 +128,9 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val canHandleKnockRequests by room.canHandleKnockRequestsAsState(syncUpdateFlow.value)
-        val isKnockRequestsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock).collectAsState(false)
+        val isKnockRequestsEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
+        }.collectAsState(false)
         val knockRequestsCount by produceState<Int?>(null) {
             room.knockRequestsFlow.collect { value = it.size }
         }
@@ -131,6 +139,9 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
+
+        val snackbarDispatcher = LocalSnackbarDispatcher.current
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -147,6 +158,10 @@ class RoomDetailsPresenter @Inject constructor(
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
+                is RoomDetailsEvent.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text)
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                }
             }
         }
 
@@ -188,6 +203,7 @@ class RoomDetailsPresenter @Inject constructor(
             canShowPinnedMessages = canShowPinnedMessages,
             canShowMediaGallery = canShowMediaGallery,
             pinnedMessagesCount = pinnedMessagesCount,
+            snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,

@@ -9,9 +9,11 @@ package io.element.android.features.joinroom.impl
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.ForgetRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
@@ -54,6 +56,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -113,14 +116,19 @@ class JoinRoomPresenterTest {
                 flowOf(Optional.of(roomSummary))
             }
         }
+        val seenInvitesStore = InMemorySeenInvitesStore()
         val presenter = createJoinRoomPresenter(
-            matrixClient = matrixClient
+            matrixClient = matrixClient,
+            seenInvitesStore = seenInvitesStore,
         )
+        assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(null))
             }
+            // Check that the roomId is stored in the seen invites store
+            assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(roomSummary.roomId)
         }
     }
 
@@ -762,7 +770,8 @@ class JoinRoomPresenterTest {
         forgetRoom: ForgetRoom = FakeForgetRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
             roomId = roomId,
@@ -778,6 +787,7 @@ class JoinRoomPresenterTest {
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
             appPreferencesStore = appPreferencesStore,
+            seenInvitesStore = seenInvitesStore,
         )
     }
 

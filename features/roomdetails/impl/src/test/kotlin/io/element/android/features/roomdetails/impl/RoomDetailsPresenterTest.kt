@@ -17,6 +17,8 @@ import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -81,6 +83,7 @@ class RoomDetailsPresenterTest {
         ),
         isPinnedMessagesFeatureEnabled: Boolean = true,
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -92,6 +95,7 @@ class RoomDetailsPresenterTest {
                         Presenter { aUserProfileState() }
                     },
                     encryptionService = encryptionService,
+                    clipboardHelper = clipboardHelper,
                 )
             }
         }
@@ -106,6 +110,7 @@ class RoomDetailsPresenterTest {
             dispatchers = dispatchers,
             isPinnedMessagesFeatureEnabled = { isPinnedMessagesFeatureEnabled },
             analyticsService = analyticsService,
+            clipboardHelper = clipboardHelper,
         )
     }
 

@@ -46,6 +46,7 @@ import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -245,6 +246,8 @@ private fun RoomsViewList(
             RoomSummaryRow(
                 room = room,
                 hideInviteAvatars = hideInvitesAvatars,
+                isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
+                    state.seenRoomInvites.contains(room.roomId),
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )

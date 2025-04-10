@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.api.sync
 
-import io.element.android.libraries.core.coroutine.mapState
 import kotlinx.coroutines.flow.StateFlow
 
 interface SyncService {
@@ -25,6 +24,6 @@ interface SyncService {
      * Flow of [SyncState]. Will be updated as soon as the current [SyncState] changes.
      */
     val syncState: StateFlow<SyncState>
-}
 
-fun SyncService.isOnline(): StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }
+    val isOnline: StateFlow<Boolean>
+}

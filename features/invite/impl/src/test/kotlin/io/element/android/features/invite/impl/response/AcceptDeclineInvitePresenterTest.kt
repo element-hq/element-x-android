@@ -9,9 +9,11 @@ package io.element.android.features.invite.impl.response
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
 import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -20,6 +22,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -33,6 +37,7 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -54,7 +59,10 @@ class AcceptDeclineInvitePresenterTest {
 
     @Test
     fun `present - declining invite cancel flow`() = runTest {
-        val presenter = createAcceptDeclineInvitePresenter()
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
+        val presenter = createAcceptDeclineInvitePresenter(
+            seenInvitesStore = seenInvitesStore,
+        )
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -72,6 +80,7 @@ class AcceptDeclineInvitePresenterTest {
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             }
         }
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -84,7 +93,11 @@ class AcceptDeclineInvitePresenterTest {
                 Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
             }
         )
-        val presenter = createAcceptDeclineInvitePresenter(client = client)
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
+        val presenter = createAcceptDeclineInvitePresenter(
+            client = client,
+            seenInvitesStore = seenInvitesStore,
+        )
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -111,6 +124,7 @@ class AcceptDeclineInvitePresenterTest {
             cancelAndConsumeRemainingEvents()
         }
         assert(declineInviteFailure).isCalledOnce()
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -129,9 +143,11 @@ class AcceptDeclineInvitePresenterTest {
                 Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
             }
         )
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
             notificationCleaner = fakeNotificationCleaner,
+            seenInvitesStore = seenInvitesStore,
         )
         presenter.test {
             val inviteData = anInviteData()
@@ -156,6 +172,7 @@ class AcceptDeclineInvitePresenterTest {
         clearMembershipNotificationForRoomLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value(A_ROOM_ID))
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -174,9 +191,11 @@ class AcceptDeclineInvitePresenterTest {
             },
             ignoreUserResult = ignoreUserSuccess
         )
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
             notificationCleaner = fakeNotificationCleaner,
+            seenInvitesStore = seenInvitesStore,
         )
         presenter.test {
             val inviteData = anInviteData()
@@ -202,6 +221,7 @@ class AcceptDeclineInvitePresenterTest {
         clearMembershipNotificationForRoomLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value(A_ROOM_ID))
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -214,7 +234,11 @@ class AcceptDeclineInvitePresenterTest {
                 Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
             }
         )
-        val presenter = createAcceptDeclineInvitePresenter(client = client)
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
+        val presenter = createAcceptDeclineInvitePresenter(
+            client = client,
+            seenInvitesStore = seenInvitesStore,
+        )
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -230,6 +254,7 @@ class AcceptDeclineInvitePresenterTest {
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
         }
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -237,7 +262,11 @@ class AcceptDeclineInvitePresenterTest {
         val joinRoomFailure = lambdaRecorder { roomIdOrAlias: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.failure<Unit>(RuntimeException("Failed to join room $roomIdOrAlias"))
         }
-        val presenter = createAcceptDeclineInvitePresenter(joinRoomLambda = joinRoomFailure)
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
+        val presenter = createAcceptDeclineInvitePresenter(
+            joinRoomLambda = joinRoomFailure,
+            seenInvitesStore = seenInvitesStore,
+        )
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -266,6 +295,7 @@ class AcceptDeclineInvitePresenterTest {
                 value(emptyList<String>()),
                 value(JoinedRoom.Trigger.Invite)
             )
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     @Test
@@ -279,9 +309,11 @@ class AcceptDeclineInvitePresenterTest {
         val joinRoomSuccess = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
+        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             joinRoomLambda = joinRoomSuccess,
             notificationCleaner = fakeNotificationCleaner,
+            seenInvitesStore = seenInvitesStore,
         )
         presenter.test {
             val inviteData = anInviteData()
@@ -308,6 +340,7 @@ class AcceptDeclineInvitePresenterTest {
         clearMembershipNotificationForRoomLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value(A_ROOM_ID))
+        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
     private fun anInviteData(
@@ -330,11 +363,13 @@ class AcceptDeclineInvitePresenterTest {
             Result.success(Unit)
         },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
+        seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
     ): AcceptDeclineInvitePresenter {
         return AcceptDeclineInvitePresenter(
             client = client,
             joinRoom = FakeJoinRoom(joinRoomLambda),
             notificationCleaner = notificationCleaner,
+            seenInvitesStore = seenInvitesStore,
         )
     }
 }

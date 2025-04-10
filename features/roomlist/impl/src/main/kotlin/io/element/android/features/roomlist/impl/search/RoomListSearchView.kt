@@ -177,6 +177,8 @@ private fun RoomListSearchContent(
                     RoomSummaryRow(
                         room = room,
                         hideInviteAvatars = hideInvitesAvatars,
+                        // TODO
+                        isInviteSeen = false,
                         onClick = ::onRoomClick,
                         eventSink = eventSink,
                     )
