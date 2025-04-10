@@ -21,7 +21,10 @@ open class PushHistoryStateProvider : PreviewParameterProvider<PushHistoryState>
             aPushHistoryState(
                 pushCounter = 123,
                 pushHistoryItems = listOf(
-                    aPushHistoryItem(),
+                    aPushHistoryItem(
+                        hasBeenResolved = false,
+                        comment = "An error description"
+                    ),
                     aPushHistoryItem(
                         pushDate = 1,
                         providerInfo = "providerInfo2",
