@@ -55,5 +55,4 @@ class AccountProviderDataSource @Inject constructor(
     fun userSelection(data: AccountProvider) {
         accountProvider.tryEmit(data)
     }
-
 }
