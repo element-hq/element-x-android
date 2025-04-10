@@ -44,7 +44,6 @@ class DeveloperSettingsPresenterTest {
                 assertThat(state.cacheSize).isEqualTo(AsyncData.Uninitialized)
                 assertThat(state.customElementCallBaseUrlState).isNotNull()
                 assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
-                assertThat(state.hideImagesAndVideos).isFalse()
                 assertThat(state.rageshakeState.isEnabled).isFalse()
                 assertThat(state.rageshakeState.isSupported).isTrue()
                 assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)

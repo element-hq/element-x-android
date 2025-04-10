@@ -73,7 +73,6 @@ internal fun RoomSummaryRow(
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Box(modifier = modifier) {
         when (room.displayType) {
             RoomSummaryDisplayType.PLACEHOLDER -> {
