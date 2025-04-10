@@ -43,8 +43,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val pushData = pushParser.parse(message.data)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from Firebase")
+                pushHandler.handleInvalid(
+                    providerInfo = FirebaseConfig.NAME,
+                )
             } else {
-                pushHandler.handle(pushData)
+                pushHandler.handle(
+                    pushData = pushData,
+                    providerInfo = FirebaseConfig.NAME,
+                )
             }
         }
     }

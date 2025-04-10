@@ -60,9 +60,9 @@ class VectorUnifiedPushMessagingReceiverTest {
     }
 
     @Test
-    fun `onMessage valid invoke the push handler`() = runTest {
+    fun `onMessage valid invokes the push handler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaRecorder<PushData, Unit> {}
+        val pushHandlerResult = lambdaRecorder<PushData, String, Unit> { _, _ -> }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -80,23 +80,25 @@ class VectorUnifiedPushMessagingReceiverTest {
                         unread = 1,
                         clientSecret = A_SECRET
                     )
+                ),
+                value(
+                    UnifiedPushConfig.NAME + " - " + A_SECRET
                 )
             )
     }
 
     @Test
-    fun `onMessage invalid does not invoke the push handler`() = runTest {
+    fun `onMessage invalid invokes the push handler invalid method`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaRecorder<PushData, Unit> {}
+        val handleInvalidResult = lambdaRecorder<String, Unit> { }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
-                handleResult = pushHandlerResult
+                handleInvalidResult = handleInvalidResult,
             ),
         )
         vectorUnifiedPushMessagingReceiver.onMessage(context, "".toByteArray(), A_SECRET)
         advanceUntilIdle()
-        pushHandlerResult.assertions()
-            .isNeverCalled()
+        handleInvalidResult.assertions().isCalledOnce()
     }
 
     @Test

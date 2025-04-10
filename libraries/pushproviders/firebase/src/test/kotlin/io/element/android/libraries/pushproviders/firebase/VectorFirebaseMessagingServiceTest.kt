@@ -22,6 +22,7 @@ import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,16 +32,18 @@ import org.robolectric.RobolectricTestRunner
 class VectorFirebaseMessagingServiceTest {
     @Test
     fun `test receiving invalid data`() = runTest {
-        val lambda = lambdaRecorder<PushData, Unit>(ensureNeverCalled = true) { }
+        val lambda = lambdaRecorder<String, Unit> {}
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
-            pushHandler = FakePushHandler(handleResult = lambda)
+            pushHandler = FakePushHandler(handleInvalidResult = lambda)
         )
         vectorFirebaseMessagingService.onMessageReceived(RemoteMessage(Bundle()))
+        runCurrent()
+        lambda.assertions().isCalledOnce()
     }
 
     @Test
     fun `test receiving valid data`() = runTest {
-        val lambda = lambdaRecorder<PushData, Unit> { }
+        val lambda = lambdaRecorder<PushData, String, Unit> { _, _ -> }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = lambda)
         )
@@ -56,7 +59,10 @@ class VectorFirebaseMessagingServiceTest {
         advanceUntilIdle()
         lambda.assertions()
             .isCalledOnce()
-            .with(value(PushData(AN_EVENT_ID, A_ROOM_ID, null, A_SECRET)))
+            .with(
+                value(PushData(AN_EVENT_ID, A_ROOM_ID, null, A_SECRET)),
+                value(FirebaseConfig.NAME)
+            )
     }
 
     @Test

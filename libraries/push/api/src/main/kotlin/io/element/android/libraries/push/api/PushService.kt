@@ -9,6 +9,7 @@ package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import kotlinx.coroutines.flow.Flow
@@ -51,4 +52,19 @@ interface PushService {
      * Return false in case of early error.
      */
     suspend fun testPush(): Boolean
+
+    /**
+     * Get a flow of total number of received Push.
+     */
+    val pushCounter: Flow<Int>
+
+    /**
+     * Get a flow of list of [PushHistoryItem].
+     */
+    fun getPushHistoryItemsFlow(): Flow<List<PushHistoryItem>>
+
+    /**
+     * Reset the push history, including the push counter.
+     */
+    suspend fun resetPushHistory()
 }

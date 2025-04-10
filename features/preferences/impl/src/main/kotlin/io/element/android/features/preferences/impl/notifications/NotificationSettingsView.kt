@@ -50,6 +50,7 @@ fun NotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
+    onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -82,6 +83,7 @@ fun NotificationSettingsView(
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+                onPushHistoryClick = onPushHistoryClick,
             )
         }
         AsyncActionView(
@@ -105,6 +107,7 @@ private fun NotificationSettingsContentView(
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
+    onPushHistoryClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
@@ -202,6 +205,12 @@ private fun NotificationSettingsContentView(
                     Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
                 },
                 onClick = onTroubleshootNotificationsClick
+            )
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(R.string.troubleshoot_notifications_entry_point_push_history_title))
+                },
+                onClick = onPushHistoryClick
             )
         }
         if (state.showAdvancedSettings) {
@@ -303,5 +312,6 @@ internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSetti
         onBackClick = {},
         onOpenEditDefault = {},
         onTroubleshootNotificationsClick = {},
+        onPushHistoryClick = {},
     )
 }

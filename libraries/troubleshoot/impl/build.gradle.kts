@@ -28,6 +28,8 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.uiStrings)
     api(projects.libraries.troubleshoot.api)
     api(projects.libraries.push.api)
     implementation(projects.services.analytics.api)
