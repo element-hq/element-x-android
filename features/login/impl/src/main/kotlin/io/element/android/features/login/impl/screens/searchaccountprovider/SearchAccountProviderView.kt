@@ -42,6 +42,7 @@ import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
@@ -183,17 +184,14 @@ fun SearchAccountProviderView(
     }
 }
 
-@Composable
 private fun HomeserverData.toAccountProvider(): AccountProvider {
-    val isMatrixOrg = homeserverUrl == AuthenticationConfig.MATRIX_ORG_URL
-    return AccountProvider(
-        url = homeserverUrl,
-        subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
-        // There is no need to know for other servers right now
-        isPublic = isMatrixOrg,
-        isMatrixOrg = isMatrixOrg,
-        isValid = isWellknownValid,
-    )
+    return if (homeserverUrl == AuthenticationConfig.MATRIX_ORG_URL) {
+        AccountProviderDataSource().matrixOrgAccountProvider
+    } else {
+        AccountProvider(
+            url = homeserverUrl
+        )
+    }
 }
 
 @PreviewsDayNight
