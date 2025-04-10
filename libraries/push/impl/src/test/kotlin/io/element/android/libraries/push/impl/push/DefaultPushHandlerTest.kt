@@ -58,6 +58,25 @@ private const val A_PUSHER_INFO = "info"
 
 class DefaultPushHandlerTest {
     @Test
+    fun `check handleInvalid behavior`() = runTest {
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
+        val defaultPushHandler = createDefaultPushHandler(
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
+        )
+        defaultPushHandler.handleInvalid(A_PUSHER_INFO)
+        incrementPushCounterResult.assertions()
+            .isCalledOnce()
+        onPushReceivedResult.assertions()
+            .isCalledOnce()
+            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value("Invalid push data"))
+    }
+
+    @Test
     fun `when classical PushData is received, the notification drawer is informed`() = runTest {
         val aNotifiableMessageEvent = aNotifiableMessageEvent()
         val notifiableEventResult =
