@@ -24,10 +24,10 @@ fun AudioManager.enableExternalAudioDevice() {
             // Wired audio devices
             AudioDeviceInfo.TYPE_WIRED_HEADSET,
             AudioDeviceInfo.TYPE_WIRED_HEADPHONES,
-            // The built-in earpiece of the device
-            AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
             // The built-in speaker of the device
             AudioDeviceInfo.TYPE_BUILTIN_SPEAKER,
+            // The built-in earpiece of the device
+            AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
         )
         val devices = availableCommunicationDevices
         val selectedDevice = devices.find {
