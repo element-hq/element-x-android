@@ -94,7 +94,7 @@ fun AccountProviderView(
                 Text(
                     modifier = Modifier
                         .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
-                    text = stringResource(id = item.descriptionResourceId) ,
+                    text = stringResource(id = item.descriptionResourceId),
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textSecondary,
                 )

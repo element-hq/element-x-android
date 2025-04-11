@@ -21,15 +21,15 @@ import javax.inject.Inject
 class AccountProviderDataSource @Inject constructor(
     enterpriseService: EnterpriseService? = null,
 ) {
-    val matrixOrgAccountProvider = AccountProvider (
+    val matrixOrgAccountProvider = AccountProvider(
         url = AuthenticationConfig.MATRIX_ORG_URL,
         descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
         isPublic = true,
     )
-    //add more hard coded AccountProvider here if you need them
+    // add more hard coded AccountProvider here if you need them
 
-    private val defaultAccountProvider = if (enterpriseService?.defaultHomeserver() != null
-        && enterpriseService.defaultHomeserver() != AuthenticationConfig.MATRIX_ORG_URL) {
+    private val defaultAccountProvider = if (enterpriseService?.defaultHomeserver() != null &&
+        enterpriseService.defaultHomeserver() != AuthenticationConfig.MATRIX_ORG_URL) {
         AccountProvider(
             enterpriseService.defaultHomeserver()!!,
         )
