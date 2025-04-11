@@ -35,7 +35,7 @@ class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
     fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, isThreaded: Boolean): MessageContent = message.use {
-        val type = it.content.msgType.use(this::mapMessageKind)
+        val type = it.content.msgType.use(this::mapMessageType)
         val inReplyToEvent: InReplyTo? = inReplyTo?.use(inReplyToMapper::map)
         MessageContent(
             body = it.content.body,
@@ -46,7 +46,7 @@ class EventMessageMapper {
         )
     }
 
-    fun mapMessageKind(type: RustMessageType) = when (type) {
+    fun mapMessageType(type: RustMessageType) = when (type) {
         is RustMessageType.Audio -> {
             when (type.content.voice) {
                 null -> {
