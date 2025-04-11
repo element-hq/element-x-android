@@ -96,7 +96,9 @@ class JoinRoomPresenter @AssistedInject constructor(
         val forgetRoomAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         var knockMessage by rememberSaveable { mutableStateOf("") }
         var isDismissingContent by remember { mutableStateOf(false) }
-        val shouldHideAvatars by appPreferencesStore.getHideInviteAvatarsFlow().collectAsState(initial = false)
+        val hideInviteAvatars by remember {
+            appPreferencesStore.getHideInviteAvatarsFlow()
+        }.collectAsState(initial = false)
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading,
             key1 = roomInfo,
@@ -205,7 +207,7 @@ class JoinRoomPresenter @AssistedInject constructor(
             cancelKnockAction = cancelKnockAction.value,
             applicationName = buildMeta.applicationName,
             knockMessage = knockMessage,
-            shouldHideAvatars = shouldHideAvatars,
+            hideInviteAvatars = hideInviteAvatars,
             eventSink = ::handleEvents
         )
     }

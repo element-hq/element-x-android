@@ -15,14 +15,16 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.themes
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
@@ -192,9 +194,21 @@ private fun Theme.toHumanReadable(): String {
     )
 }
 
-@PreviewsDayNight
+@PreviewWithLargeHeight
 @Composable
-internal fun AdvancedSettingsViewPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
-    ElementPreview {
-        AdvancedSettingsView(state = state, onBackClick = { })
-    }
+internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun AdvancedSettingsViewDarkPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@ExcludeFromCoverage
+@Composable
+private fun ContentToPreview(state: AdvancedSettingsState) {
+    AdvancedSettingsView(
+        state = state,
+        onBackClick = { }
+    )
+}
