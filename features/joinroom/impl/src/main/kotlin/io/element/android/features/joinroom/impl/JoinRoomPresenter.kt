@@ -52,6 +52,7 @@ import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
@@ -69,6 +70,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val forgetRoom: ForgetRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
+    private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<JoinRoomState> {
     interface Factory {
@@ -94,6 +96,9 @@ class JoinRoomPresenter @AssistedInject constructor(
         val forgetRoomAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         var knockMessage by rememberSaveable { mutableStateOf("") }
         var isDismissingContent by remember { mutableStateOf(false) }
+        val hideInviteAvatars by remember {
+            appPreferencesStore.getHideInviteAvatarsFlow()
+        }.collectAsState(initial = false)
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading,
             key1 = roomInfo,
@@ -202,6 +207,7 @@ class JoinRoomPresenter @AssistedInject constructor(
             cancelKnockAction = cancelKnockAction.value,
             applicationName = buildMeta.applicationName,
             knockMessage = knockMessage,
+            hideInviteAvatars = hideInviteAvatars,
             eventSink = ::handleEvents
         )
     }

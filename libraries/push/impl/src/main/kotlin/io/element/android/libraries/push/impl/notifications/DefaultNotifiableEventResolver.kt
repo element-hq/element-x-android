@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -305,7 +306,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
-        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+        if (appPreferencesStore.getTimelineMediaPreviewValueFlow().first() != MediaPreviewValue.On) {
             return null
         }
         val fileResult = when (val messageType = messageType) {
@@ -332,7 +333,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private suspend fun NotificationContent.MessageLike.RoomMessage.getImageMimetype(): String? {
-        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+        if (appPreferencesStore.getTimelineMediaPreviewValueFlow().first() != MediaPreviewValue.On) {
             return null
         }
         return when (val messageType = messageType) {

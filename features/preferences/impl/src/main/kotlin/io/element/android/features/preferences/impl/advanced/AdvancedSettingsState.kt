@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import io.element.android.compound.theme.Theme
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
@@ -15,5 +16,7 @@ data class AdvancedSettingsState(
     val doesCompressMedia: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
+    val hideInviteAvatars: Boolean,
+    val timelineMediaPreviewValue: MediaPreviewValue,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )

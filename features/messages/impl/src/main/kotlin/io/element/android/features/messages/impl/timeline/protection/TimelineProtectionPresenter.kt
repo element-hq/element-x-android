@@ -16,25 +16,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.matrix.api.media.isPreviewEnabled
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class TimelineProtectionPresenter @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
+    private val room: MatrixRoom,
 ) : Presenter<TimelineProtectionState> {
+    private val allowedEvents = mutableStateOf<Set<EventId>>(setOf())
+
     @Composable
     override fun present(): TimelineProtectionState {
-        val hideMediaContent by remember {
-            appPreferencesStore.doesHideImagesAndVideosFlow()
-        }.collectAsState(initial = false)
-        var allowedEvents by remember { mutableStateOf<Set<EventId>>(setOf()) }
-        val protectionState by remember(hideMediaContent) {
+        val mediaPreviewValue = remember {
+            appPreferencesStore.getTimelineMediaPreviewValueFlow()
+        }.collectAsState(initial = MediaPreviewValue.On)
+        val roomInfo = room.roomInfoFlow.collectAsState()
+        val protectionState by remember {
             derivedStateOf {
-                if (hideMediaContent) {
-                    ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
-                } else {
+                val isPreviewEnabled = mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule)
+                if (isPreviewEnabled) {
                     ProtectionState.RenderAll
+                } else {
+                    ProtectionState.RenderOnly(eventIds = allowedEvents.value.toImmutableSet())
                 }
             }
         }
@@ -42,7 +49,7 @@ class TimelineProtectionPresenter @Inject constructor(
         fun handleEvent(event: TimelineProtectionEvent) {
             when (event) {
                 is TimelineProtectionEvent.ShowContent -> {
-                    allowedEvents = allowedEvents + setOfNotNull(event.eventId)
+                    allowedEvents.value = allowedEvents.value + setOfNotNull(event.eventId)
                 }
             }
         }
