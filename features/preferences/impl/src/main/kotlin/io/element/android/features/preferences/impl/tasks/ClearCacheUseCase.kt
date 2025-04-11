@@ -11,7 +11,7 @@ import android.content.Context
 import coil3.SingletonImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
-import io.element.android.features.invite.api.SeenInvitesStoreFactory
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
@@ -36,13 +36,8 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
     private val pushService: PushService,
-    seenInvitesStoreFactory: SeenInvitesStoreFactory,
+    private val seenInvitesStore: SeenInvitesStore,
 ) : ClearCacheUseCase {
-    private val seenInvitesStore = seenInvitesStoreFactory.getOrCreate(
-        matrixClient.sessionId,
-        matrixClient.sessionCoroutineScope,
-    )
-
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Clear Matrix cache
         matrixClient.clearCache()

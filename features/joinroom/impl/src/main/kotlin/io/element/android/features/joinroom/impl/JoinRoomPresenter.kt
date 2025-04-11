@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.features.invite.api.SeenInvitesStoreFactory
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -69,7 +69,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val forgetRoom: ForgetRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
-    seenInvitesStoreFactory: SeenInvitesStoreFactory,
+    private val seenInvitesStore: SeenInvitesStore,
 ) : Presenter<JoinRoomState> {
     interface Factory {
         fun create(
@@ -80,11 +80,6 @@ class JoinRoomPresenter @AssistedInject constructor(
             trigger: JoinedRoom.Trigger,
         ): JoinRoomPresenter
     }
-
-    private val seenInvitesStore = seenInvitesStoreFactory.getOrCreate(
-        matrixClient.sessionId,
-        matrixClient.sessionCoroutineScope,
-    )
 
     @Composable
     override fun present(): JoinRoomState {

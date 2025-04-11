@@ -10,7 +10,6 @@ package io.element.android.features.invite.impl
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.SeenInvitesStoreFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn

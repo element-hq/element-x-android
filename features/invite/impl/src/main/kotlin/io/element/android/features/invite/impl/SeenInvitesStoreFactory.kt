@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.api
+package io.element.android.features.invite.impl
 
+import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
 
-fun interface SeenInvitesStoreFactory {
+interface SeenInvitesStoreFactory {
     fun getOrCreate(
         sessionId: SessionId,
         sessionCoroutineScope: CoroutineScope,
