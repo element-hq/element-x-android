@@ -716,7 +716,7 @@ class RoomListPresenterTest {
         logoutPresenter = { aDirectLogoutState() },
         appPreferencesStore = appPreferencesStore,
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
-        seenInvitesStore = seenInvitesStore,
+        seenInvitesStoreFactory = { _, _ -> seenInvitesStore },
     )
 }
 

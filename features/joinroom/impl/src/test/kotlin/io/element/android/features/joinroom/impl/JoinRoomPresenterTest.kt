@@ -783,7 +783,7 @@ class JoinRoomPresenterTest {
             forgetRoom = forgetRoom,
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
-            seenInvitesStore = seenInvitesStore,
+            seenInvitesStoreFactory = { _, _ -> seenInvitesStore },
         )
     }
 

@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.features.invite.api.SeenInvitesStoreFactory
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
@@ -35,8 +35,13 @@ class AcceptDeclineInvitePresenter @Inject constructor(
     private val client: MatrixClient,
     private val joinRoom: JoinRoom,
     private val notificationCleaner: NotificationCleaner,
-    private val seenInvitesStore: SeenInvitesStore,
+    seenInvitesStoreFactory: SeenInvitesStoreFactory,
 ) : Presenter<AcceptDeclineInviteState> {
+    private val seenInvitesStore = seenInvitesStoreFactory.getOrCreate(
+        sessionId = client.sessionId,
+        sessionCoroutineScope = client.sessionCoroutineScope,
+    )
+
     @Composable
     override fun present(): AcceptDeclineInviteState {
         val localCoroutineScope = rememberCoroutineScope()

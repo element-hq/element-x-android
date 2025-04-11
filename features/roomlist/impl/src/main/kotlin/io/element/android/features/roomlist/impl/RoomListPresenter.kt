@@ -24,7 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.features.invite.api.SeenInvitesStoreFactory
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -94,9 +94,14 @@ class RoomListPresenter @Inject constructor(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
-    private val seenInvitesStore: SeenInvitesStore,
+    seenInvitesStoreFactory: SeenInvitesStoreFactory,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
+
+    private val seenInvitesStore = seenInvitesStoreFactory.getOrCreate(
+        client.sessionId,
+        client.sessionCoroutineScope,
+    )
 
     @Composable
     override fun present(): RoomListState {

@@ -54,7 +54,7 @@ class DefaultClearCacheUseCaseTest {
             okHttpClient = { OkHttpClient.Builder().build() },
             ftueService = ftueService,
             pushService = pushService,
-            seenInvitesStore = seenInvitesStore,
+            seenInvitesStoreFactory = { _, _ -> seenInvitesStore },
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()

@@ -369,7 +369,7 @@ class AcceptDeclineInvitePresenterTest {
             client = client,
             joinRoom = FakeJoinRoom(joinRoomLambda),
             notificationCleaner = notificationCleaner,
-            seenInvitesStore = seenInvitesStore,
+            seenInvitesStoreFactory = { _, _ -> seenInvitesStore },
         )
     }
 }
