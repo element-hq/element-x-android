@@ -2,8 +2,8 @@
 
 <!--- TOC -->
 
-* [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Developer onboarding](#developer-onboarding)
+* [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Android Studio settings](#android-studio-settings)
 * [Compilation](#compilation)
 * [Strings](#strings)

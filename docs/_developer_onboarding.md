@@ -10,7 +10,7 @@
     * [Sync](#sync)
   * [Rust SDK](#rust-sdk)
     * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
-    * [Build the SDK locally](#build-the-sdk-locally)
+    * [Building the SDK locally](#building-the-sdk-locally)
   * [The Android project](#the-android-project)
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
