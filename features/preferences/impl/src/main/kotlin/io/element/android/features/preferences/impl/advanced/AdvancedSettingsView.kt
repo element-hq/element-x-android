@@ -7,7 +7,6 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-import android.preference.PreferenceCategory
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
