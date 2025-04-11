@@ -42,8 +42,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -96,6 +98,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -245,7 +248,7 @@ fun TimelineItemEventRow(
             ),
             renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptClick(event) },
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 4.dp)
         )
     }
 }
@@ -595,7 +598,10 @@ private fun MessageEventBubbleContent(
                 timestampPosition = timestampPosition,
                 eventSink = eventSink,
                 canShrinkContent = canShrinkContent,
-                modifier = timestampLayoutModifier,
+                modifier = timestampLayoutModifier.semantics(mergeDescendants = false) {
+                    isTraversalGroup = true
+                    traversalIndex = -1f
+                },
                 content = { onContentLayoutChange ->
                     eventContentView(contentModifier, onContentLayoutChange)
                 }
@@ -607,17 +613,23 @@ private fun MessageEventBubbleContent(
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
                 .clip(RoundedCornerShape(6.dp))
-                // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
-                .clickable(onClick = inReplyToClick)
+
+            val talkbackCompatModifier = if (isTalkbackActive()) {
+                // Use z-index to make the replied to text being read after the message
+                // Usually, you'd use traversalIndex for that, but it's not working for some reason
+                inReplyToModifier.zIndex(1f)
+            } else {
+                inReplyToModifier.clickable(onClick = inReplyToClick)
+            }
             InReplyToView(
                 inReplyTo = inReplyTo,
                 hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
-                modifier = inReplyToModifier,
+                modifier = talkbackCompatModifier,
             )
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
-            EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+            EqualWidthColumn(spacing = 8.dp) {
                 threadDecoration()
                 inReplyTo(inReplyToDetails)
                 contentWithTimestamp()

@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -58,7 +60,7 @@ fun InReplyToView(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(hideImage),
-                modifier = modifier
+                modifier = modifier,
             )
         }
         is InReplyToDetails.Error ->
@@ -96,13 +98,18 @@ private fun ReplyToReadyContent(
             Spacer(modifier = Modifier.width(8.dp))
         }
         val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderProfile.getDisambiguatedDisplayName(senderId))
-        Column(verticalArrangement = Arrangement.SpaceBetween) {
+        Column(
+            modifier = Modifier.semantics(mergeDescendants = false) { isTraversalGroup = true },
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             SenderName(
                 senderId = senderId,
                 senderProfile = senderProfile,
                 senderNameMode = SenderNameMode.Reply,
                 modifier = Modifier.semantics {
                     contentDescription = a11InReplyToText
+                    isTraversalGroup = true
+                    traversalIndex = 1f
                 },
             )
             ReplyToContentText(metadata)
@@ -169,6 +176,10 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
         else -> FontStyle.Normal
     }
     Row(
+        modifier = Modifier.semantics(mergeDescendants = false) {
+            isTraversalGroup = true
+            traversalIndex = -1f
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (iconResourceId != null) {

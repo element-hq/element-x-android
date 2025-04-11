@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -63,6 +64,7 @@ import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 
@@ -79,9 +81,20 @@ fun TimelineItemVideoView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(CommonStrings.common_video)
+    val isTalkbackActive = isTalkbackActive()
+    val a11yLabel = stringResource(CommonStrings.common_video)
+    val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
+    val a11PlayLabel = stringResource(CommonStrings.a11y_play)
     Column(
-        modifier = modifier.semantics { contentDescription = description }
+        modifier = modifier.semantics {
+            contentDescription = description
+            if (onContentClick != null) {
+                onClick(label = a11PlayLabel) {
+                    onContentClick()
+                    true
+                }
+            }
+        }
     ) {
         val containerModifier = if (content.showCaption) {
             Modifier
@@ -104,7 +117,16 @@ fun TimelineItemVideoView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
+                        .then(
+                            if (!isTalkbackActive && onContentClick != null) {
+                                Modifier.combinedClickable(
+                                    onClick = onContentClick,
+                                    onLongClick = onLongClick
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
                         kind = MediaRequestData.Kind.Thumbnail(
