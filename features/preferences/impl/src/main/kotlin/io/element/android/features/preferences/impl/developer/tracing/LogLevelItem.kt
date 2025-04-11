@@ -7,22 +7,28 @@
 
 package io.element.android.features.preferences.impl.developer.tracing
 
+import androidx.compose.runtime.Composable
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
 
 enum class LogLevelItem : DropdownOption {
     ERROR {
-        override val text: String = "Error"
+        @Composable
+        override fun getText(): String = "Error"
     },
     WARN {
-        override val text: String = "Warn"
+        @Composable
+        override fun getText(): String = "Warn"
     },
     INFO {
-        override val text: String = "Info"
+        @Composable
+        override fun getText(): String = "Info"
     },
     DEBUG {
-        override val text: String = "Debug"
+        @Composable
+        override fun getText(): String = "Debug"
     },
     TRACE {
-        override val text: String = "Trace"
+        @Composable
+        override fun getText(): String = "Trace"
     }
 }
