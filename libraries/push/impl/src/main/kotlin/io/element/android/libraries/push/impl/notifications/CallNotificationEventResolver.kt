@@ -30,16 +30,26 @@ interface CallNotificationEventResolver {
      * @param forceNotify `true` to force the notification to be non-ringing, `false` to use the default behaviour. Default is `false`.
      * @return a [NotifiableEvent] if the notification data is a call notification, null otherwise
      */
-    fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean = false): NotifiableEvent?
+    fun resolveEvent(
+        sessionId: SessionId,
+        notificationData: NotificationData,
+        forceNotify: Boolean = false,
+    ): Result<NotifiableEvent>
 }
 
 @ContributesBinding(AppScope::class)
 class DefaultCallNotificationEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
 ) : CallNotificationEventResolver {
-    override fun resolveEvent(sessionId: SessionId, notificationData: NotificationData, forceNotify: Boolean): NotifiableEvent? {
-        val content = notificationData.content as? NotificationContent.MessageLike.CallNotify ?: return null
-        return notificationData.run {
+    override fun resolveEvent(
+        sessionId: SessionId,
+        notificationData: NotificationData,
+        forceNotify: Boolean
+    ): Result<NotifiableEvent> = runCatching {
+        val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
+            ?: throw ResolvingException("content is not a call notify")
+
+        notificationData.run {
             if (NotifiableRingingCallEvent.shouldRing(content.type, timestamp) && !forceNotify) {
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,

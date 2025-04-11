@@ -75,10 +75,6 @@ class DeveloperSettingsPresenter @Inject constructor(
             appPreferencesStore
                 .getCustomElementCallBaseUrlFlow()
         }.collectAsState(initial = null)
-        val hideImagesAndVideos by remember {
-            appPreferencesStore
-                .doesHideImagesAndVideosFlow()
-        }.collectAsState(initial = false)
 
         val tracingLogLevelFlow = remember {
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
@@ -128,9 +124,6 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
-                is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
-                    appPreferencesStore.setHideImagesAndVideos(event.value)
-                }
                 is DeveloperSettingsEvents.SetTracingLogLevel -> coroutineScope.launch {
                     appPreferencesStore.setTracingLogLevel(event.logLevel.toLogLevel())
                 }
@@ -155,7 +148,6 @@ class DeveloperSettingsPresenter @Inject constructor(
                 baseUrl = customElementCallBaseUrl,
                 validator = ::customElementCallUrlValidator,
             ),
-            hideImagesAndVideos = hideImagesAndVideos,
             tracingLogLevel = tracingLogLevel,
             tracingLogPacks = tracingLogPacks,
             eventSink = ::handleEvents

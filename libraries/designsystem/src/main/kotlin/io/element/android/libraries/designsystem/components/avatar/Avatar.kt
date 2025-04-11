@@ -48,11 +48,13 @@ fun Avatar(
     contentDescription: String? = null,
     // If not null, will be used instead of the size from avatarData
     forcedAvatarSize: Dp? = null,
+    // If true, will show initials even if avatarData.url is not null
+    hideImage: Boolean = false,
 ) {
     val commonModifier = modifier
         .size(forcedAvatarSize ?: avatarData.size.dp)
         .clip(CircleShape)
-    if (avatarData.url.isNullOrBlank()) {
+    if (avatarData.url.isNullOrBlank() || hideImage) {
         InitialsAvatar(
             avatarData = avatarData,
             forcedAvatarSize = forcedAvatarSize,

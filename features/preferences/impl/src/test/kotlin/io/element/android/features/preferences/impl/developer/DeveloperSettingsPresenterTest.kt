@@ -44,7 +44,6 @@ class DeveloperSettingsPresenterTest {
                 assertThat(state.cacheSize).isEqualTo(AsyncData.Uninitialized)
                 assertThat(state.customElementCallBaseUrlState).isNotNull()
                 assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
-                assertThat(state.hideImagesAndVideos).isFalse()
                 assertThat(state.rageshakeState.isEnabled).isFalse()
                 assertThat(state.rageshakeState.isSupported).isTrue()
                 assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)
@@ -144,28 +143,6 @@ class DeveloperSettingsPresenterTest {
             assertThat(urlValidator("http://")).isFalse()
             assertThat(urlValidator("geo://test")).isFalse()
             assertThat(urlValidator("https://call.element.io")).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - toggling hide image and video`() = runTest {
-        val preferences = InMemoryAppPreferencesStore()
-        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
-        presenter.test {
-            skipItems(2)
-            awaitItem().also { state ->
-                assertThat(state.hideImagesAndVideos).isFalse()
-                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
-            }
-            awaitItem().also { state ->
-                assertThat(state.hideImagesAndVideos).isTrue()
-                assertThat(preferences.doesHideImagesAndVideosFlow().first()).isTrue()
-                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(false))
-            }
-            awaitItem().also { state ->
-                assertThat(state.hideImagesAndVideos).isFalse()
-                assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
-            }
         }
     }
 

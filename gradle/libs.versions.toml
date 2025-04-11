@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.9.1"
 kotlin = "2.1.20"
 kotlinpoet = "2.1.0"
-ksp = "2.1.20-1.0.32"
+ksp = "2.1.20-2.0.0"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -29,7 +29,7 @@ compose_bom = "2025.03.01"
 composecompiler = "1.5.15"
 
 # Coroutines
-coroutines = "1.10.1"
+coroutines = "1.10.2"
 
 # Accompanist
 accompanist = "0.37.2"
@@ -50,7 +50,7 @@ wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
-dependencyAnalysis = "2.14.0"
+dependencyAnalysis = "2.16.0"
 
 # DI
 dagger = "2.56.1"
@@ -149,7 +149,7 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.6.2"
-test_mockk = "io.mockk:mockk:1.13.17"
+test_mockk = "io.mockk:mockk:1.14.0"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.0"
 test_truth = "com.google.truth:truth:1.4.4"
@@ -188,7 +188,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.8.5"
+maplibre = "org.maplibre.gl:android-sdk:11.8.6"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"

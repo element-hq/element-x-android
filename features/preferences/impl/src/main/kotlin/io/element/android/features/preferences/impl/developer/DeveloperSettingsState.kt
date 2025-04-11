@@ -21,7 +21,6 @@ data class DeveloperSettingsState(
     val rageshakeState: RageshakePreferencesState,
     val clearCacheAction: AsyncAction<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
-    val hideImagesAndVideos: Boolean,
     val tracingLogLevel: AsyncData<LogLevelItem>,
     val tracingLogPacks: ImmutableList<TraceLogPack>,
     val eventSink: (DeveloperSettingsEvents) -> Unit

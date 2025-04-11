@@ -60,6 +60,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -86,6 +87,7 @@ fun RoomListContentView(
             is RoomListContentState.Rooms -> {
                 RoomsView(
                     state = contentState,
+                    hideInvitesAvatars = hideInvitesAvatars,
                     filtersState = filtersState,
                     eventSink = eventSink,
                     onSetUpRecoveryClick = onSetUpRecoveryClick,
@@ -156,6 +158,7 @@ private fun EmptyView(
 @Composable
 private fun RoomsView(
     state: RoomListContentState.Rooms,
+    hideInvitesAvatars: Boolean,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -171,6 +174,7 @@ private fun RoomsView(
     } else {
         RoomsViewList(
             state = state,
+            hideInvitesAvatars = hideInvitesAvatars,
             eventSink = eventSink,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
@@ -183,6 +187,7 @@ private fun RoomsView(
 @Composable
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
+    hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -240,6 +245,7 @@ private fun RoomsViewList(
         ) { index, room ->
             RoomSummaryRow(
                 room = room,
+                hideInviteAvatars = hideInvitesAvatars,
                 isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
                     state.seenRoomInvites.contains(room.roomId),
                 onClick = onRoomClick,
@@ -303,6 +309,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         filtersState = aRoomListFiltersState(
             filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
         ),
+        hideInvitesAvatars = false,
         eventSink = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},

@@ -119,6 +119,9 @@ class RoomListPresenter @Inject constructor(
 
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
+        val hideInvitesAvatar by remember {
+            appPreferencesStore.getHideInviteAvatarsFlow()
+        }.collectAsState(initial = false)
 
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
@@ -173,6 +176,7 @@ class RoomListPresenter @Inject constructor(
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
             directLogoutState = directLogoutState,
+            hideInvitesAvatars = hideInvitesAvatar,
             eventSink = ::handleEvents,
         )
     }

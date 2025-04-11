@@ -39,9 +39,12 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
+import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -50,6 +53,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
+    private val pushHistoryEntryPoint: PushHistoryEntryPoint,
     private val logoutEntryPoint: LogoutEntryPoint,
     private val openSourceLicensesEntryPoint: OpenSourceLicensesEntryPoint,
     private val accountDeactivationEntryPoint: AccountDeactivationEntryPoint,
@@ -82,6 +86,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object TroubleshootNotifications : NavTarget
+
+        @Parcelize
+        data object PushHistory : NavTarget
 
         @Parcelize
         data object LockScreenSettings : NavTarget
@@ -182,6 +189,10 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun onTroubleshootNotificationsClick() {
                         backstack.push(NavTarget.TroubleshootNotifications)
                     }
+
+                    override fun onPushHistoryClick() {
+                        backstack.push(NavTarget.PushHistory)
+                    }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
             }
@@ -194,6 +205,23 @@ class PreferencesFlowNode @AssistedInject constructor(
                             } else {
                                 navigateUp()
                             }
+                        }
+                    })
+                    .build()
+            }
+            NavTarget.PushHistory -> {
+                pushHistoryEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : PushHistoryEntryPoint.Callback {
+                        override fun onDone() {
+                            if (backstack.canPop()) {
+                                backstack.pop()
+                            } else {
+                                navigateUp()
+                            }
+                        }
+
+                        override fun onItemClick(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
+                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(sessionId, roomId, eventId) }
                         }
                     })
                     .build()
