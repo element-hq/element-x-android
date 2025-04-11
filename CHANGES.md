@@ -1,3 +1,25 @@
+Changes in Element X v25.04.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.04.1 -->
+
+## What's Changed
+### ✨ Features
+* Introduce PushHistoryService to store data about the received push by @bmarty in https://github.com/element-hq/element-x-android/pull/4573
+### 🙌 Improvements
+* change (preferences) : new moderation and safety settings by @ganfra in https://github.com/element-hq/element-x-android/pull/4574
+### 🐛 Bugfixes
+* Ensure that we have only one single instance of SeenInviteStore per session by @bmarty in https://github.com/element-hq/element-x-android/pull/4577
+### Dependency upgrades
+* fix(deps): update dependencyanalysis to v2.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4558
+* fix(deps): update dependency io.mockk:mockk to v1.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4562
+* fix(deps): update kotlin by @renovate in https://github.com/element-hq/element-x-android/pull/4552
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v11.8.6 by @renovate in https://github.com/element-hq/element-x-android/pull/4567
+* fix(deps): update dependencyanalysis to v2.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4575
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.04.0...v25.04.1
+
 Changes in Element X v25.04.0
 =============================
 
