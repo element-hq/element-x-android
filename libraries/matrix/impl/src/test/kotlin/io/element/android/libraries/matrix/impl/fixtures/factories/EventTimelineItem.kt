@@ -15,7 +15,6 @@ import org.matrix.rustcomponents.sdk.EventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails
-import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.Receipt
 import org.matrix.rustcomponents.sdk.ShieldState
 import org.matrix.rustcomponents.sdk.TimelineItemContent
@@ -30,7 +29,6 @@ fun aRustEventTimelineItem(
     isEditable: Boolean = true,
     content: TimelineItemContent = aRustTimelineItemMessageContent(),
     timestamp: ULong = 0uL,
-    reactions: List<Reaction> = emptyList(),
     debugInfo: EventTimelineItemDebugInfo = anEventTimelineItemDebugInfo(),
     localSendState: EventSendState? = null,
     readReceipts: Map<String, Receipt> = emptyMap(),
@@ -49,7 +47,6 @@ fun aRustEventTimelineItem(
     canBeRepliedTo = canBeRepliedTo,
     content = content,
     localSendState = localSendState,
-    reactions = reactions,
     readReceipts = readReceipts,
     origin = origin,
     localCreatedAt = localCreatedAt,

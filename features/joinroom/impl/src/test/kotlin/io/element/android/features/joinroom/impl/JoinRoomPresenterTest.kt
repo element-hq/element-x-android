@@ -250,7 +250,7 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter(
             roomDescription = Optional.of(roomDescription),
             joinRoomLambda = { _, _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             },
         )
         presenter.test {
@@ -742,7 +742,7 @@ class JoinRoomPresenterTest {
     fun `present - when room is not known RoomPreview is loaded with error Forbidden`() = runTest {
         val client = FakeMatrixClient(
             getRoomPreviewResult = { _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             }
         )
         val presenter = createJoinRoomPresenter(
