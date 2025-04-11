@@ -13,7 +13,9 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 interface PreferencesEntryPoint : FeatureEntryPoint {
@@ -29,6 +31,7 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
+
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
@@ -41,5 +44,6 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
         fun onOpenBugReport()
         fun onSecureBackupClick()
         fun onOpenRoomNotificationSettings(roomId: RoomId)
+        fun navigateTo(sessionId: SessionId, roomId: RoomId, eventId: EventId)
     }
 }

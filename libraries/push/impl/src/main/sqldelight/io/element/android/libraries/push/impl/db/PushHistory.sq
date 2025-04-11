@@ -1,0 +1,22 @@
+CREATE TABLE PushHistory (
+    pushDate INTEGER NOT NULL,
+    providerInfo TEXT NOT NULL,
+    eventId TEXT,
+    roomId TEXT,
+    sessionId TEXT,
+    hasBeenResolved INTEGER NOT NULL,
+    comment TEXT
+);
+
+selectAll:
+SELECT * FROM PushHistory ORDER BY pushDate DESC;
+
+insertPushHistory:
+INSERT INTO PushHistory VALUES ?;
+
+removeAll:
+DELETE FROM PushHistory;
+
+-- add query to keep only the last x entries
+removeOldest:
+DELETE FROM PushHistory WHERE rowid NOT IN (SELECT rowid FROM PushHistory ORDER BY pushDate DESC LIMIT ?);

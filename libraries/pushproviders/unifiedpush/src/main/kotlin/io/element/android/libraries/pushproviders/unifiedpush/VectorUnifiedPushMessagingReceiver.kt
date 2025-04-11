@@ -51,8 +51,14 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
             val pushData = pushParser.parse(message, instance)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
+                pushHandler.handleInvalid(
+                    providerInfo = "${UnifiedPushConfig.NAME} - $instance",
+                )
             } else {
-                pushHandler.handle(pushData)
+                pushHandler.handle(
+                    pushData = pushData,
+                    providerInfo = "${UnifiedPushConfig.NAME} - $instance",
+                )
             }
         }
     }

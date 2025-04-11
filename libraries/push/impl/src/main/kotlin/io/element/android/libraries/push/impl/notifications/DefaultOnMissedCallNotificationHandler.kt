@@ -39,7 +39,7 @@ class DefaultOnMissedCallNotificationHandler @Inject constructor(
             notificationData = notificationData,
             // Make sure the notifiable event is not a ringing one
             forceNotify = true,
-        )
+        ).getOrNull()
         notifiableEvent?.let { defaultNotificationDrawerManager.onNotifiableEventReceived(it) }
     }
 }

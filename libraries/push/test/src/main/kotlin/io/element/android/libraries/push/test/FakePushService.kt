@@ -10,6 +10,7 @@ package io.element.android.libraries.push.test
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -26,6 +27,7 @@ class FakePushService(
     private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
     private val selectPushProviderLambda: suspend (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
     private val setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
+    private val resetPushHistoryResult: () -> Unit = { lambdaError() },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
         return registeredPushProvider ?: currentPushProvider()
@@ -67,5 +69,27 @@ class FakePushService(
 
     override suspend fun testPush(): Boolean = simulateLongTask {
         testPushBlock()
+    }
+
+    private val pushHistoryItemsFlow = MutableStateFlow<List<PushHistoryItem>>(emptyList())
+
+    override fun getPushHistoryItemsFlow(): Flow<List<PushHistoryItem>> {
+        return pushHistoryItemsFlow
+    }
+
+    fun emitPushHistoryItems(items: List<PushHistoryItem>) {
+        pushHistoryItemsFlow.value = items
+    }
+
+    private val pushCounterFlow = MutableStateFlow(0)
+
+    override val pushCounter: Flow<Int> = pushCounterFlow
+
+    fun emitPushCounter(counter: Int) {
+        pushCounterFlow.value = counter
+    }
+
+    override suspend fun resetPushHistory() {
+        resetPushHistoryResult()
     }
 }

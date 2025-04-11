@@ -14,9 +14,9 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeNotifiableEventResolver(
-    private val notifiableEventResult: (SessionId, RoomId, EventId) -> ResolvedPushEvent? = { _, _, _ -> lambdaError() }
+    private val notifiableEventResult: (SessionId, RoomId, EventId) -> Result<ResolvedPushEvent> = { _, _, _ -> lambdaError() }
 ) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
+    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent> {
         return notifiableEventResult(sessionId, roomId, eventId)
     }
 }
