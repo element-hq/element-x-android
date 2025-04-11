@@ -42,6 +42,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
