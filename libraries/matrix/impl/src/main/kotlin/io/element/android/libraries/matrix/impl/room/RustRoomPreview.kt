@@ -48,8 +48,8 @@ class RustRoomPreview(
     override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatching {
         val details = inner.ownMembershipDetails() ?: return@runCatching null
         RoomMembershipDetails(
-            currentUserMember = RoomMemberMapper.map(details.ownRoomMember),
-            senderMember = details.senderRoomMember?.let { RoomMemberMapper.map(it) },
+            currentUserMember = RoomMemberMapper.map(details.roomMember),
+            senderMember = details.senderInfo?.let { RoomMemberMapper.map(it) },
         )
     }
 

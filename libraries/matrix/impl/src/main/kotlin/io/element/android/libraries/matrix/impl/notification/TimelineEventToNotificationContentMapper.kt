@@ -86,7 +86,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(relatedEventId)
             MessageLikeEventContent.RoomEncrypted -> NotificationContent.MessageLike.RoomEncrypted
             is MessageLikeEventContent.RoomMessage -> {
-                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
+                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageKind(messageType))
             }
             is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(
                 redactedEventId = redactedEventId?.let(::EventId),

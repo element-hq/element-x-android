@@ -23,29 +23,30 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
+import org.matrix.rustcomponents.sdk.InReplyToDetails
 import org.matrix.rustcomponents.sdk.MessageType
+import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
-import org.matrix.rustcomponents.sdk.MessageContent as Message
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
 class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
-    fun map(message: Message): MessageContent = message.use {
-        val type = it.msgType.use(this::mapMessageType)
-        val inReplyToEvent: InReplyTo? = it.inReplyTo?.use(inReplyToMapper::map)
+    fun map(message: MsgLikeKind.Message, inReplyTo: InReplyToDetails?, isThreaded: Boolean): MessageContent = message.use {
+        val type = it.content.msgType.use(this::mapMessageKind)
+        val inReplyToEvent: InReplyTo? = inReplyTo?.use(inReplyToMapper::map)
         MessageContent(
-            body = it.body,
+            body = it.content.body,
             inReplyTo = inReplyToEvent,
-            isEdited = it.isEdited,
-            isThreaded = it.threadRoot != null,
+            isEdited = it.content.isEdited,
+            isThreaded = isThreaded,
             type = type
         )
     }
 
-    fun mapMessageType(type: RustMessageType) = when (type) {
+    fun mapMessageKind(type: RustMessageType) = when (type) {
         is RustMessageType.Audio -> {
             when (type.content.voice) {
                 null -> {

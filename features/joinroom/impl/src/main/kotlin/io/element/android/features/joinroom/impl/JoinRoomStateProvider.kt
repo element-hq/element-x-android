@@ -47,7 +47,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
-                joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong"))
+                joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong", null))
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
