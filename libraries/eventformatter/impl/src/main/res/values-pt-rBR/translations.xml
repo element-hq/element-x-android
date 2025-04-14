@@ -29,7 +29,7 @@
   <string name="state_event_room_join">"%1$s entrou na sala"</string>
   <string name="state_event_room_join_by_you">"Você entrou na sala"</string>
   <string name="state_event_room_knock">"%1$s solicitou entrada"</string>
-  <string name="state_event_room_knock_accepted">"%1$s permitiu que o %2$s entrar"</string>
+  <string name="state_event_room_knock_accepted">"%1$sconcedeu acesso a %2$s"</string>
   <string name="state_event_room_knock_accepted_by_you">"Você permitiu que o %1$s entrasse"</string>
   <string name="state_event_room_knock_by_you">"Você solicitou entrada"</string>
   <string name="state_event_room_knock_denied">"%1$s rejeitou a solicitação de %2$s para entrar"</string>

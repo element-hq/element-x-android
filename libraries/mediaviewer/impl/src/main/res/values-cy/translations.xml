@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_list_mode_files">"Ffeiliau"</string>
+  <string name="screen_media_browser_list_mode_media">"Cyfryngau"</string>
+  <string name="screen_media_details_filename">"Enw\'r ffeil"</string>
+  <string name="screen_media_details_uploaded_on">"Llwythwyd i fyny ar"</string>
+</resources>

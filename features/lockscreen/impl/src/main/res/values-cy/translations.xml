@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_forgot_pin">"Wedi anghofio\'ch PIN?"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Cadarnhau eich PIN"</string>
+</resources>

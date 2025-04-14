@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Ha ki van kapcsolva, az olvasási visszaigazolások nem lesznek elküldve senkinek. A többi felhasználó olvasási visszaigazolását továbbra is meg fogja kapni."</string>
   <string name="screen_advanced_settings_share_presence">"Jelenlét megosztása"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ha ki van kapcsolva, nem tud olvasási visszaigazolást vagy írási értesítést küldeni és fogadni"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Elrejtés mindig"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Megjelenítés mindig"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Privát szobákban"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"A rejtett médiatartalmak koppintással jeleníthetők meg"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Média megjelenítése az idővonalon"</string>
   <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_blocked_users_empty">"Nincsenek letiltott felhasználók"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>

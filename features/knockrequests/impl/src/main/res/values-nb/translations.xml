@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ja, godta alle"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Er du sikker på at du vil godta alle forespørsler om å bli med?"</string>
   <string name="screen_knock_requests_list_accept_all_alert_title">"Godta alle forespørsler"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Godta alle"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Vi kunne ikke godta alle forespørsler. Vil du prøve igjen?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Kunne ikke godta alle forespørsler"</string>
   <string name="screen_knock_requests_list_accept_all_loading_title">"Godtar alle forespørsler om å bli med"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Vi kunne ikke godta denne forespørselen. Vil du prøve igjen?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Kunne ikke godta forespørselen"</string>
   <string name="screen_knock_requests_list_accept_loading_title">"Godtar forespørsel om å bli med"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, avslå og utesteng"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Er du sikker på at du vil avvise og utestenge %1$s? Denne brukeren vil ikke kunne be om tilgang til dette rommet igjen."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Avslå og forby tilgang"</string>
   <string name="screen_knock_requests_list_ban_loading_title">"Avslår og forbyr tilgang"</string>
   <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ja, avslå"</string>
   <string name="screen_knock_requests_list_decline_alert_description">"Er du sikker på at du vil avslå %1$ss forespørsel om å bli med i dette rommet?"</string>
@@ -12,8 +21,14 @@
   <string name="screen_knock_requests_list_decline_failed_alert_description">"Vi kunne ikke avslå denne forespørselen. Vil du prøve igjen?"</string>
   <string name="screen_knock_requests_list_decline_failed_alert_title">"Kunne ikke avslå forespørselen"</string>
   <string name="screen_knock_requests_list_decline_loading_title">"Avslår forespørsel om å bli med"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Når noen ber om å bli med i rommet, vil du kunne se forespørselen deres her."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Ingen ventende forespørsel om å bli med"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Laster inn forespørsler om å bli med…"</string>
   <string name="screen_knock_requests_list_title">"Forespørsler om å bli med"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d andre ønsker å bli med i dette rommet"</item>
+    <item quantity="other">"%1$s +%2$d andre ønsker å bli med i dette rommet"</item>
+  </plurals>
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Vis alle"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Godta"</string>
   <string name="screen_room_single_knock_request_title">"%1$s ønsker å bli med i dette rommet"</string>

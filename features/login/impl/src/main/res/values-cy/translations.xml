@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_account_provider_other">"Arall"</string>
+  <string name="screen_create_account_title">"Creu cyfrif"</string>
+  <string name="screen_login_error_deactivated_account">"Mae\'r cyfrif hwn wedi\'i gau."</string>
+  <string name="screen_login_title">"Croeso nôl!"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Nid yw\'r cysylltiad yn ddiogel"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Cafodd y mewngofnodi ei ddiddymu ar y ddyfais arall."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Cais mewngofnodi wedi\'i ddiddymu"</string>
+  <string name="screen_qr_code_login_error_declined_title">"Gwrthodwyd y mewngofnodi"</string>
+  <string name="screen_qr_code_login_error_expired_title">"Heb gwblhau\'r mewngofnodi mewn pryd"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Nid yw\'r cod QR yn cael ei gefnogi"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Ceisiwch eto"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Digwyddodd gwall annisgwyl. Ceisiwch eto."</string>
+</resources>

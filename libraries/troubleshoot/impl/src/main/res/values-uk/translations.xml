@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Історія push-сповіщень"</string>
   <string name="troubleshoot_notifications_screen_action">"Запустити тести"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Запустити тести знову"</string>
   <string name="troubleshoot_notifications_screen_failure">"Деякі тести не пройдено. Перегляньте подробиці."</string>

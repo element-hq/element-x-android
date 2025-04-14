@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Gweithgareddau"</string>
+  <string name="emoji_picker_category_flags">"Baneri"</string>
+  <string name="emoji_picker_category_foods">"Bwyd a Diod"</string>
+  <string name="emoji_picker_category_nature">"Anifeiliaid a Natur"</string>
+  <string name="emoji_picker_category_objects">"Gwrthrychau"</string>
+  <string name="emoji_picker_category_people">"Wynebau Hapus a Phobl"</string>
+  <string name="emoji_picker_category_places">"Teithio a Llefydd"</string>
+  <string name="emoji_picker_category_symbols">"Symbolau"</string>
+  <string name="screen_report_content_block_user">"Rhwystro defnyddiwr"</string>
+  <string name="screen_room_attachment_source_camera">"Camera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Cymryd llun"</string>
+  <string name="screen_room_attachment_source_files">"Atodiad"</string>
+  <string name="screen_room_attachment_source_location">"Lleoliad"</string>
+  <string name="screen_room_attachment_source_poll">"Pôl"</string>
+  <string name="screen_room_mentions_at_room_title">"Pawb"</string>
+  <string name="screen_room_timeline_less_reactions">"Dangos llai"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Dangos rhagor"</string>
+  <string name="screen_room_timeline_read_marker_title">"Newydd"</string>
+  <string name="screen_room_typing_two_members">"%1$s a %2$s"</string>
+</resources>

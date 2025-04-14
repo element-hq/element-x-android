@@ -62,6 +62,7 @@
   <string name="action_deactivate">"Deaktivovať"</string>
   <string name="action_deactivate_account">"Deaktivovať účet"</string>
   <string name="action_decline">"Odmietnuť"</string>
+  <string name="action_decline_and_block">"Odmietnuť a zablokovať"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
   <string name="action_disable">"Vypnúť"</string>
   <string name="action_discard">"Zahodiť"</string>
@@ -107,8 +108,10 @@
   <string name="action_remove_message">"Odstrániť správu"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
+  <string name="action_report">"Nahlásiť"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
+  <string name="action_report_room">"Nahlásiť miestnosť"</string>
   <string name="action_reset">"Obnoviť"</string>
   <string name="action_reset_identity">"Obnoviť identitu"</string>
   <string name="action_retry">"Skúsiť znova"</string>
@@ -219,6 +222,7 @@ Dôvod: %1$s."</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Povolenie"</string>
   <string name="common_pinned">"Pripnuté"</string>
+  <string name="common_please_check_internet_connection">"Skontrolujte si prosím vaše pripojenie k internetu"</string>
   <string name="common_please_wait">"Prosím, počkajte…"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
@@ -304,6 +308,8 @@ Dôvod: %1$s."</string>
 
 Naozaj chcete pokračovať?"</string>
   <string name="dialog_confirm_link_title">"Dôkladne skontrolujte tento odkaz"</string>
+  <string name="dialog_room_reported">"Miestnosť nahlásená"</string>
+  <string name="dialog_room_reported_and_left">"Nahlásili ste a opustili ste miestnosť"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
@@ -335,6 +341,22 @@ Naozaj chcete pokračovať?"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Odstrániť a zakázať člena"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Zakázať"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Nebudú sa môcť pripojiť k tejto miestnosti znova ani ak budú pozvaní."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ste si istý, že chcete zakázať tohto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Zakazuje sa %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Odstrániť"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"V prípade pozvania sa budú môcť znova pripojiť k tejto miestnosti."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Ste si istý, že chcete odstrániť tohto člena?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Zobraziť profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Odstrániť z miestnosti"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Odstrániť člena a zakázať vstup v budúcnosti?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Odstraňuje sa %1$s…"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Od tohto používateľa sa vám nezobrazia žiadne správy ani pozvánky do miestnosti"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Zablokovať používateľa"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Nahlásiť túto miestnosť poskytovateľovi účtu."</string>
+  <string name="screen_decline_and_block_title">"Odmietnuť a zablokovať"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
@@ -347,6 +369,11 @@ Naozaj chcete pokračovať?"</string>
     <item quantity="other">"%1$d pripnutých správ"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Pripnuté správy"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Vaša správa bola úspešne odoslaná, ale pri pokuse o opustenie miestnosti sme narazili na problém. Skúste to prosím znova."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Nie je možné opustiť miestnosť"</string>
+  <string name="screen_report_room_reason_footer">"Nahláste túto miestnosť svojmu správcovi. Ak sú správy zašifrované, váš správca ich nebude môcť prečítať."</string>
+  <string name="screen_report_room_reason_placeholder">"Popíšte dôvod…"</string>
+  <string name="screen_report_room_title">"Nahlásiť miestnosť"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Chystáte sa prejsť na svoj %1$s účet, aby ste obnovili svoju identitu. Potom budete vrátení späť do aplikácie."</string>
   <string name="screen_reset_identity_confirmation_title">"Neviete potvrdiť? Prejdite do svojho účtu a obnovte svoju identitu."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Odvolať overenie a odoslať"</string>

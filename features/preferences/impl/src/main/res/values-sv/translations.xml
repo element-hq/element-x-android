@@ -19,6 +19,7 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare."</string>
   <string name="screen_advanced_settings_share_presence">"Dela närvaro"</string>
   <string name="screen_advanced_settings_share_presence_description">"Om det är avstängt kan du inte skicka eller ta emot läskvitton eller skrivnotiser"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Visa media i tidslinjen"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktivera alternativet för att visa meddelandekälla i tidslinjen."</string>
   <string name="screen_blocked_users_empty">"Du har inga blockerade användare"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
