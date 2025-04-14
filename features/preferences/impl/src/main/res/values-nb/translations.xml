@@ -23,7 +23,7 @@
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Vis alltid"</string>
   <string name="screen_advanced_settings_show_media_timeline_private_rooms">"I private rom"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Et skjult medium kan alltid vises ved å trykke på det"</string>
-  <string name="screen_advanced_settings_show_media_timeline_title">"Vis media i tidslinjen"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Vis medier i tidslinjen"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktiver alternativet for å vise meldingskilden på tidslinjen."</string>
   <string name="screen_blocked_users_empty">"Du har ingen blokkerte brukere"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Fjern blokkering"</string>
