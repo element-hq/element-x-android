@@ -99,9 +99,10 @@ fun <T : DropdownOption> PreferenceDropdown(
  */
 interface DropdownOption {
     /**
-     * The text to display for this option.
+     * Returns the text to be displayed for this option.
      */
-    val text: String
+    @Composable
+    fun getText(): String
 }
 
 @Composable
@@ -123,7 +124,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = selectedOption?.text.orEmpty(),
+                text = selectedOption?.getText().orEmpty(),
                 maxLines = 1,
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -139,7 +140,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = option.text,
+                            text = option.getText(),
                             style = ElementTheme.typography.fontBodyMdRegular
                         )
                     },
@@ -158,13 +159,16 @@ private fun <T : DropdownOption> DropdownTrailingContent(
 internal fun PreferenceDropdownPreview() = ElementThemedPreview {
     val options = listOf(
         object : DropdownOption {
-            override val text = "Option 1"
+            @Composable
+            override fun getText(): String = "Option 1"
         },
         object : DropdownOption {
-            override val text = "Option 2"
+            @Composable
+            override fun getText(): String = "Option 2"
         },
         object : DropdownOption {
-            override val text = "Option 3"
+            @Composable
+            override fun getText(): String = "Option 3"
         },
     ).toImmutableList()
 
