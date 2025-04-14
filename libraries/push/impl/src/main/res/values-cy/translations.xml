@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Galw"</string>
+  <string name="notification_fallback_content">"Hysbysiad"</string>
+  <string name="notification_invitation_action_join">"Ymuno"</string>
+  <string name="notification_invitation_action_reject">"Gwrthod"</string>
+  <string name="notification_room_action_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="notification_room_action_quick_reply">"Ateb cyflym"</string>
+  <string name="notification_sender_me">"Fi"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s a %2$s"</string>
+</resources>

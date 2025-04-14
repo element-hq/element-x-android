@@ -66,28 +66,19 @@
   <string name="screen_room_details_title">"Informasjon om rommet"</string>
   <string name="screen_room_details_topic_title">"Emne"</string>
   <string name="screen_room_details_updating_room">"Oppdaterer rommet …"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_action">"Utesteng"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_description">"De vil ikke kunne bli med i dette rommet igjen hvis de blir invitert."</string>
-  <string name="screen_room_member_list_ban_member_confirmation_title">"Er du sikker på at du vil utestenge dette medlemmet?"</string>
   <string name="screen_room_member_list_banned_empty">"Det er ingen utestengte brukere i dette rommet."</string>
-  <string name="screen_room_member_list_banning_user">"Utestenger %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_ban">"Fjern og utesteng medlem"</string>
-  <string name="screen_room_member_list_manage_member_remove">"Fjern fra rommet"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Fjern og utesteng medlem"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Bare fjern medlem"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Fjerne medlem og utestenge fra å bli med i fremtiden?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Opphev utestengelse"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"De vil kunne bli med i dette rommet igjen hvis de blir invitert."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Opphev utestengelse av bruker"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"Vis profil"</string>
   <string name="screen_room_member_list_mode_banned">"Utestengt"</string>
   <string name="screen_room_member_list_mode_members">"Medlemmer"</string>
   <string name="screen_room_member_list_pending_header_title">"Venter"</string>
-  <string name="screen_room_member_list_removing_user">"Fjerner %1$s…"</string>
   <string name="screen_room_member_list_role_administrator">"Administrator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Medlemmer av rommet"</string>
@@ -124,18 +115,33 @@
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle kan be om å bli med i rommet, men en administrator eller moderator må godta forespørselen."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Be om å bli med"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktiver kryptering"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Når kryptering for et rom er aktivert, kan den ikke deaktiveres. Meldingshistorikken vil bare være synlig for rommedlemmer siden de ble invitert eller siden de ble med i rommet.
+Ingen andre enn rommedlemmene vil kunne lese meldingene. Dette kan føre til at bots og broer ikke fungerer som de skal.
+Vi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og bli med i."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Vil du aktivere kryptering?"</string>
   <string name="screen_security_and_privacy_encryption_section_footer">"Når kryptering er aktivert, kan det ikke deaktiveres."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktiver ende-til-ende-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan finne og bli med"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Alle"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Folk kan bare bli med hvis de er invitert"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun for inviterte"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Tilgang til rom"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Områder støttes ikke for øyeblikket"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer av område"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Du trenger en adresse til rommet for å gjøre rommet synlig i romkatalogen."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Romadresse"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillat at dette rommet blir funnet ved å søke %1$s offentlig romkatalog"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i offentlig romkatalog"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Alle"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Hvem kan lese historikk"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Medlemmer bare siden de ble invitert"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Kun medlemmer siden du valgte dette alternativet"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Romadresser er måter å finne og få tilgang til rom på. Dette sikrer også at du enkelt kan dele rommet ditt med andre.
+Du kan velge å publisere rommet ditt i hjemeserverens offentlige romkatalog."</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"Publisering av rom"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Romadresser er en måte å finne og få tilgang til rommene på. Dette sikrer også at du enkelt kan dele rommet ditt med andre.
+Adressen er også nødvendig for å gjøre rommet synlig i den offentlige romkatalogen på %1$s."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Romsynlighet"</string>
   <string name="screen_security_and_privacy_title">"Sikkerhet og personvern"</string>
 </resources>

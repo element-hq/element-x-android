@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Удалить"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -7,11 +8,13 @@
     <item quantity="many">"Введено много цифр"</item>
   </plurals>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
+  <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Звук отключен"</string>
   <string name="a11y_page_n">"Страница %1$d"</string>
   <string name="a11y_pause">"Приостановить"</string>
+  <string name="a11y_paused_voice_message">"Голосовое сообщение, длительность: %1$s, текущая позиция: %2$s"</string>
   <string name="a11y_pin_field">"Поле PIN-кода"</string>
   <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
   <string name="a11y_view_details">"Подробнее"</string>
+  <string name="a11y_voice_message">"Голосовое сообщение, продолжительность: %1$s"</string>
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
   <string name="action_accept">"Разрешить"</string>
@@ -58,9 +62,11 @@
   <string name="action_deactivate">"Отключить"</string>
   <string name="action_deactivate_account">"Отключить учётную запись"</string>
   <string name="action_decline">"Отклонить"</string>
+  <string name="action_decline_and_block">"Отклонить и заблокировать"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
   <string name="action_disable">"Отключить"</string>
   <string name="action_discard">"Отменить"</string>
+  <string name="action_dismiss">"Отклонить"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_edit_caption">"Изменить подпись"</string>
@@ -102,8 +108,10 @@
   <string name="action_remove_message">"Удалить сообщение"</string>
   <string name="action_reply">"Ответить"</string>
   <string name="action_reply_in_thread">"Ответить в теме"</string>
+  <string name="action_report">"Отчет"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
   <string name="action_report_content">"Пожаловаться на содержание"</string>
+  <string name="action_report_room">"Комната отчетов"</string>
   <string name="action_reset">"Сбросить"</string>
   <string name="action_reset_identity">"Сбросить идентификацию"</string>
   <string name="action_retry">"Повторить"</string>
@@ -205,6 +213,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ничего не найдено"</string>
   <string name="common_no_room_name">"Название комнаты отсутствует"</string>
+  <string name="common_not_encrypted">"Не зашифровано"</string>
   <string name="common_offline">"Не в сети"</string>
   <string name="common_open_source_licenses">"Лицензии с открытым исходным кодом"</string>
   <string name="common_or">"или"</string>
@@ -213,6 +222,7 @@
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
   <string name="common_pinned">"Закрепленный"</string>
+  <string name="common_please_check_internet_connection">"Пожалуйста, проверьте подключение к Интернету"</string>
   <string name="common_please_wait">"Подождите…"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
@@ -226,6 +236,7 @@
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
+  <string name="common_reason">"Причина"</string>
   <string name="common_recovery_key">"Ключ восстановления"</string>
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
@@ -267,7 +278,7 @@
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Отправлено с незащищенного устройства"</string>
   <string name="common_unable_to_decrypt_no_access">"Вы не имеете доступа к этому сообщению"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Подтвержденная личность отправителя изменилась"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Подтвержденная личность отправителя была сброшена"</string>
   <string name="common_unable_to_invite_message">"Не удалось отправить приглашения одному или нескольким пользователям."</string>
   <string name="common_unable_to_invite_title">"Не удалось отправить приглашение(я)"</string>
   <string name="common_unlock">"Разблокировать"</string>
@@ -287,7 +298,7 @@
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
   <string name="common_you">"Вы"</string>
-  <string name="crypto_identity_change_pin_violation">"Судя по всему, идентификатор %1$s изменился. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Идентификатор %1$s изменился. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Пользователь %1$s сменил имя пользователя на %2$s. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"Проверенная личность пользователя %1$s изменилась."</string>
@@ -297,6 +308,8 @@
 
 Вы действительно хотите продолжить?"</string>
   <string name="dialog_confirm_link_title">"Перепроверьте эту ссылку"</string>
+  <string name="dialog_room_reported">"Сообщение о комнате"</string>
+  <string name="dialog_room_reported_and_left">"Пожаловался и покинул комнату"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
@@ -328,6 +341,20 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Удалить и заблокировать участника"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Заблокировать"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Они не смогут снова присоединиться к этой комнате, если их пригласят."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Вы уверены, что хотите заблокировать этого участника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Блокировка %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Удалить"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Вы действительно хотите удалить этого участника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Посмотреть профиль"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Удалить участника из комнаты"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Удалить участника и запретить присоединяться в будущем?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Удаление %1$s…"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Заблокировать пользователя"</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Опишите причину жалобы…"</string>
+  <string name="screen_decline_and_block_title">"Отклонить и заблокировать"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Подпись может быть не видна пользователям старых приложений."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
@@ -340,6 +367,9 @@
     <item quantity="many">"%1$d закреплённых сообщений"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Закрепленные сообщения"</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Невозможно покинуть комнату"</string>
+  <string name="screen_report_room_reason_footer">"Сообщите об этой комнате своему администратору. Если сообщения зашифрованы, ваш администратор не сможет их прочитать."</string>
+  <string name="screen_report_room_reason_placeholder">"Опишите причину…"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Вы собираетесь перейти в свою учетную запись %1$s, чтобы сбросить идентификацию. После этого вы вернетесь в приложение."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свою учетную запись, чтобы сбросить свою идентификацию."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Отозвать статус и отправить"</string>

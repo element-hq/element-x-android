@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů."</string>
   <string name="screen_advanced_settings_share_presence">"Sdílejte přítomnost"</string>
   <string name="screen_advanced_settings_share_presence_description">"Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění o psaní."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Vždy skrýt"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Vždy zobrazit"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"V soukromých místnostech"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Skryté médium lze vždy zobrazit klepnutím na něj"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Zobrazit média na časové ose"</string>
   <string name="screen_advanced_settings_view_source_description">"Povolit možnost zobrazení zdroje zprávy na časové ose."</string>
   <string name="screen_blocked_users_empty">"Nemáte žádné blokované uživatele"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Odblokovat"</string>
@@ -60,6 +65,7 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systémová nastavení"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
   <string name="screen_notification_settings_title">"Oznámení"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Historie push oznámení"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Odstraňování problémů"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Odstraňování problémů s upozorněními"</string>
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_polls_history_title">"Polau"</string>
+  <string name="screen_room_change_permissions_everyone">"Pawb"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"Gostwng"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"Fyddwch chi ddim yn gallu dadwneud y newid hwn gan eich bod yn israddio eich hun, os mai chi yw\'r defnyddiwr breintiedig olaf yn yr ystafell bydd yn amhosibl adennill breintiau."</string>
+  <string name="screen_room_change_role_section_users">"Aelodau"</string>
+  <string name="screen_room_details_already_a_member">"Eisoes yn aelod"</string>
+  <string name="screen_room_details_invite_people_title">"Gwahodd pobl"</string>
+  <string name="screen_room_details_leave_conversation_title">"Gadael y sgwrs"</string>
+  <string name="screen_room_details_leave_room_title">"Gadael yr ystafell"</string>
+  <string name="screen_room_details_notification_mode_custom">"Cyfaddas"</string>
+  <string name="screen_room_details_notification_mode_default">"Rhagosodiad"</string>
+  <string name="screen_room_details_notification_title">"Hysbysiadau"</string>
+  <string name="screen_room_details_profile_row_title">"Proffil"</string>
+  <string name="screen_room_details_security_title">"Diogelwch"</string>
+  <string name="screen_room_details_title">"Manylion ystafell"</string>
+  <string name="screen_room_details_topic_title">"Pwnc"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Adfer"</string>
+  <string name="screen_room_member_list_mode_banned">"Wedi\'i wahardd"</string>
+  <string name="screen_room_member_list_mode_members">"Aelodau"</string>
+  <string name="screen_room_member_list_pending_header_title">"Dan ystyriaeth"</string>
+  <string name="screen_room_member_list_role_administrator">"Gweinyddwr"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Aelodau\'r ystafell"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Gosodiad rhagosodedig"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Caniatâd"</string>
+  <string name="screen_room_roles_and_permissions_roles_header">"Rolau"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Gofyn i gael ymuno"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Amgryptiad"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Unrhyw un"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Unrhyw un"</string>
+</resources>

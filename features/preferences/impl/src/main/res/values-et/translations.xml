@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi."</string>
   <string name="screen_advanced_settings_share_presence">"Jaga oma olekut"</string>
   <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Peida alati"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Näita alati"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Privaatsetes jututubades"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Peidetud meediumi saad alati näha temal klõpsides"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Näita ajajoonel meediat"</string>
   <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
   <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Eemalda blokeering"</string>
@@ -58,6 +63,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Tõuketeadete ajalugu"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Veaotsing"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Teavituste veaotsing"</string>
 </resources>

@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov."</string>
   <string name="screen_advanced_settings_share_presence">"Zdieľať prítomnosť"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo upozornenia o písaní"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Vždy skryť"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Vždy zobraziť"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"V súkromných miestnostiach"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Skryté médium sa dá vždy zobraziť ťuknutím naň"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Zobraziť médiá na časovej osi"</string>
   <string name="screen_advanced_settings_view_source_description">"Povoliť možnosť zobrazenia zdroja správy na časovej osi."</string>
   <string name="screen_blocked_users_empty">"Nemáte žiadnych blokovaných používateľov"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Odblokovať"</string>
@@ -60,6 +65,7 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
   <string name="screen_notification_settings_title">"Oznámenia"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"História push oznámení"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Riešenie problémov"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Oznámenia riešení problémov"</string>
 </resources>

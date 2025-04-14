@@ -60,6 +60,7 @@
   <string name="action_deactivate">"Deaktiválás"</string>
   <string name="action_deactivate_account">"Fiók deaktiválása"</string>
   <string name="action_decline">"Elutasítás"</string>
+  <string name="action_decline_and_block">"Elutasítás és letiltás"</string>
   <string name="action_delete_poll">"Szavazás törlése"</string>
   <string name="action_disable">"Letiltás"</string>
   <string name="action_discard">"Elvetés"</string>
@@ -105,8 +106,10 @@
   <string name="action_remove_message">"Üzenet eltávolítása"</string>
   <string name="action_reply">"Válasz"</string>
   <string name="action_reply_in_thread">"Válasz az üzenetszálban"</string>
+  <string name="action_report">"Jelentés"</string>
   <string name="action_report_bug">"Hiba jelentése"</string>
   <string name="action_report_content">"Tartalom jelentése"</string>
+  <string name="action_report_room">"Szoba jelentése"</string>
   <string name="action_reset">"Visszaállítás"</string>
   <string name="action_reset_identity">"Személyazonosság visszaállítása"</string>
   <string name="action_retry">"Újra"</string>
@@ -216,6 +219,7 @@ Ok: %1$s."</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>
   <string name="common_permission">"Engedély"</string>
   <string name="common_pinned">"Kitűzve"</string>
+  <string name="common_please_check_internet_connection">"Ellenőrizze az internetkapcsolatát"</string>
   <string name="common_please_wait">"Kis türelmet…"</string>
   <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
   <string name="common_poll_summary">"Szavazás: %1$s"</string>
@@ -300,6 +304,8 @@ Ok: %1$s."</string>
 
 Biztos, hogy folytatja?"</string>
   <string name="dialog_confirm_link_title">"Ellenőrizze újra ezt a hivatkozást"</string>
+  <string name="dialog_room_reported">"Szoba jelentve"</string>
+  <string name="dialog_room_reported_and_left">"Jelentve, és a szoba elhagyva"</string>
   <string name="dialog_title_confirmation">"Megerősítés"</string>
   <string name="dialog_title_error">"Hiba"</string>
   <string name="dialog_title_success">"Sikeres"</string>
@@ -331,6 +337,22 @@ Biztos, hogy folytatja?"</string>
   <string name="invite_friends_text">"Beszélgessünk itt: %1$s, %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Eltávolítás és a tag kitiltása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Kitiltás"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Biztos, hogy kitiltja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s kitiltása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Eltávolítás"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Biztos, hogy eltávolítja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profil megtekintése"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Eltávolítás a szobából"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s eltávolítása…"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni."</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Felhasználó letiltása"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"A szoba jelentése a fiókszolgáltatójának."</string>
+  <string name="screen_decline_and_block_title">"Elutasítás és blokkolás"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
@@ -342,6 +364,11 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d kitűzött üzenet"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"A jelentése sikeresen el lett küldve, de hibát találtunk a szoba elhagyása során. Próbálja újra."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Nem tudja elhagyni a szobát"</string>
+  <string name="screen_report_room_reason_footer">"A szoba jelentése a rendszergazdának. Ha az üzenetek titkosítva vannak, akkor a rendszergazda nem fogja tudni elolvasni őket."</string>
+  <string name="screen_report_room_reason_placeholder">"Írja le az okot…"</string>
+  <string name="screen_report_room_title">"Szoba jelentése"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy visszaállítsa a személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
   <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa vissza a személyazonosságát."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ellenőrzés visszavonása és elküldés"</string>

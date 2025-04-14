@@ -7,6 +7,7 @@
   <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, avslå og blokker"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Er du sikker på at du vil avslå invitasjonen til å bli med i dette rommet? Dette vil også forhindre %1$s fra å kontakte deg eller invitere deg til rom."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Avslå invitasjon og blokker"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Avslå og blokker"</string>
 </resources>

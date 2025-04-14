@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="action_cancel">"Atšaukti"</string>
+  <string name="action_confirm">"Patvirtinti"</string>
+  <string name="action_copy">"Kopijuoti"</string>
+  <string name="action_create_a_room">"Kurti kambarį"</string>
+  <string name="action_done">"Atlikta"</string>
+  <string name="action_enable">"Įjungti"</string>
+  <string name="action_invite">"Kviesti"</string>
+  <string name="action_learn_more">"Sužinoti daugiau"</string>
+  <string name="action_leave">"Palikti"</string>
+  <string name="action_next">"Toliau"</string>
+  <string name="action_not_now">"Ne dabar"</string>
+  <string name="action_ok">"Gerai"</string>
+  <string name="action_quick_reply">"Sparčiai atsakyti"</string>
+  <string name="action_quote">"Cituoti"</string>
+  <string name="action_remove">"Šalinti"</string>
+  <string name="action_report_bug">"Pranešti apie riktą"</string>
+  <string name="action_report_content">"Pranešti apie turinį"</string>
+  <string name="action_send">"Siųsti"</string>
+  <string name="action_start_chat">"Pradėti pokalbį"</string>
+  <string name="action_view_source">"Peržiūrėti šaltinį"</string>
+</resources>
