@@ -13,7 +13,6 @@ import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
-import org.matrix.rustcomponents.sdk.RoomMember
 
 @Immutable
 class NotJoinedRustRoom(
@@ -23,12 +22,10 @@ class NotJoinedRustRoom(
 ) : NotJoinedRoom {
     override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatching {
         val room = localRoom?.innerRoom ?: return@runCatching null
-        val ownMember = room.member(sessionId.value)
-        // TODO: don't merge until this is fixed in the SDK
-        val senderMember: RoomMember? = null // tryOrNull { room.member(ownMember.membershipChangeSender) }
+        val (ownMember, senderInfo) = room.memberWithSenderInfo(sessionId.value)
         RoomMembershipDetails(
             currentUserMember = RoomMemberMapper.map(ownMember),
-            senderMember = senderMember?.let { RoomMemberMapper.map(it) },
+            senderMember = senderInfo?.let { RoomMemberMapper.map(it) },
         )
     }
 
