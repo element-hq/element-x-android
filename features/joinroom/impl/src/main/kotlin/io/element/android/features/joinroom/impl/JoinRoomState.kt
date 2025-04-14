@@ -31,6 +31,7 @@ data class JoinRoomState(
     val cancelKnockAction: AsyncAction<Unit>,
     private val applicationName: String,
     val knockMessage: String,
+    val hideInviteAvatars: Boolean,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
     val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoomFailures.UnauthorizedJoin
@@ -57,6 +58,8 @@ data class JoinRoomState(
         }
         else -> JoinAuthorisationStatus.None
     }
+
+    val hideAvatarsImages = hideInviteAvatars && joinAuthorisationStatus is JoinAuthorisationStatus.IsInvited
 }
 
 @Immutable

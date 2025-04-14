@@ -23,6 +23,7 @@
   <string name="screen_login_error_deactivated_account">"Essa conta foi desativada."</string>
   <string name="screen_login_error_invalid_credentials">"Nome de usuário e/ou senha incorretos"</string>
   <string name="screen_login_error_invalid_user_id">"Esse não é um identificador de usuário válido. Formato esperado: \'@usuário:servidor.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para usar tokens de atualização. Eles não são suportados ao usar login baseado em senha."</string>
   <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta senha ou login no OIDC. Entre em contato com o administrador ou escolha outro servidor."</string>
   <string name="screen_login_form_header">"Insira seus dados"</string>
   <string name="screen_login_subtitle">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>

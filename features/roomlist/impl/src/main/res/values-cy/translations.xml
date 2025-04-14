@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol."</string>
+  <string name="banner_set_up_recovery_submit">"Gosod adfer"</string>
+  <string name="banner_set_up_recovery_title">"Gosodwch adferiad i ddiogelu eich cyfrif"</string>
+  <string name="screen_roomlist_filter_invites">"Gwahoddiadau"</string>
+  <string name="screen_roomlist_filter_people">"Pobl"</string>
+  <string name="screen_roomlist_filter_rooms">"Ystafelloedd"</string>
+  <string name="screen_roomlist_main_space_title">"Sgyrsiau"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
+</resources>

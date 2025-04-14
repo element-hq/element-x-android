@@ -105,7 +105,7 @@ class RustMatrixClientFactory @Inject constructor(
                 cachePath = sessionPaths.cacheDirectory.absolutePath,
             )
             .setSessionDelegate(sessionDelegate)
-            .passphrase(passphrase)
+            .sessionPassphrase(passphrase)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)

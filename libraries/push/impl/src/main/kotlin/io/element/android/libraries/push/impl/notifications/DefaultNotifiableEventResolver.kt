@@ -11,6 +11,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -21,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -59,7 +61,7 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 interface NotifiableEventResolver {
-    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent?
+    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent>
 }
 
 @ContributesBinding(AppScope::class)
@@ -73,35 +75,44 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val appPreferencesStore: AppPreferencesStore,
 ) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
+    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent> {
         // Restore session
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure(
+            ResolvingException("Unable to restore session for $sessionId")
+        )
         val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
             roomId = roomId,
             eventId = eventId,
         ).onFailure {
             Timber.tag(loggerTag.value).e(it, "Unable to resolve event: $eventId.")
-        }.getOrNull()
+        }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        return notificationData?.asNotifiableEvent(client, sessionId)
+        return notificationData.flatMap {
+            if (it == null) {
+                Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
+                return@flatMap Result.failure(ResolvingException("Unable to resolve event"))
+            } else {
+                it.asNotifiableEvent(client, sessionId)
+            }
+        }
     }
 
     private suspend fun NotificationData.asNotifiableEvent(
         client: MatrixClient,
         userId: SessionId,
-    ): ResolvedPushEvent? {
-        val content = this.content
-        val notifiableEvent = when (content) {
+    ): Result<ResolvedPushEvent> = runCatching {
+        when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
                 val messageBody = descriptionFromMessageContent(content, senderDisambiguatedDisplayName)
-                buildNotifiableMessageEvent(
+                val notifiableMessageEvent = buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
+                    threadId = threadId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
@@ -114,10 +125,11 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     senderAvatarPath = senderAvatarUrl,
                     hasMentionOrReply = hasMention,
                 )
+                ResolvedPushEvent.Event(notifiableMessageEvent)
             }
             is NotificationContent.Invite -> {
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
-                InviteNotifiableEvent(
+                val inviteNotifiableEvent = InviteNotifiableEvent(
                     sessionId = userId,
                     roomId = roomId,
                     eventId = eventId,
@@ -135,15 +147,16 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     // TODO check if title is needed anymore
                     title = null,
                 )
+                ResolvedPushEvent.Event(inviteNotifiableEvent)
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
             NotificationContent.MessageLike.CallHangup -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
-                null
+                throw ResolvingException("Ignoring notification for call ${content.javaClass.simpleName}")
             }
             is NotificationContent.MessageLike.CallInvite -> {
-                buildNotifiableMessageEvent(
+                val notifiableMessageEvent = buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
                     roomId = roomId,
@@ -157,9 +170,11 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
+                ResolvedPushEvent.Event(notifiableMessageEvent)
             }
             is NotificationContent.MessageLike.CallNotify -> {
-                callNotificationEventResolver.resolveEvent(userId, this)
+                val notifiableEvent = callNotificationEventResolver.resolveEvent(userId, this).getOrThrow()
+                ResolvedPushEvent.Event(notifiableEvent)
             }
             NotificationContent.MessageLike.KeyVerificationAccept,
             NotificationContent.MessageLike.KeyVerificationCancel,
@@ -167,11 +182,12 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.KeyVerificationKey,
             NotificationContent.MessageLike.KeyVerificationMac,
             NotificationContent.MessageLike.KeyVerificationReady,
-            NotificationContent.MessageLike.KeyVerificationStart -> null.also {
+            NotificationContent.MessageLike.KeyVerificationStart -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for verification ${content.javaClass.simpleName}")
+                throw ResolvingException("Ignoring notification for verification ${content.javaClass.simpleName}")
             }
             is NotificationContent.MessageLike.Poll -> {
-                buildNotifiableMessageEvent(
+                val notifiableEventMessage = buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
                     roomId = roomId,
@@ -186,19 +202,35 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
+                ResolvedPushEvent.Event(notifiableEventMessage)
             }
-            is NotificationContent.MessageLike.ReactionContent -> null.also {
+            is NotificationContent.MessageLike.ReactionContent -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for reaction")
+                throw ResolvingException("Ignoring notification for reaction")
             }
-            NotificationContent.MessageLike.RoomEncrypted -> fallbackNotifiableEvent(userId, roomId, eventId).also {
+            NotificationContent.MessageLike.RoomEncrypted -> {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
+                val fallbackNotifiableEvent = fallbackNotifiableEvent(userId, roomId, eventId)
+                ResolvedPushEvent.Event(fallbackNotifiableEvent)
             }
             is NotificationContent.MessageLike.RoomRedaction -> {
                 // Note: this case will be handled below
-                null
+                val redactedEventId = content.redactedEventId
+                if (redactedEventId == null) {
+                    Timber.tag(loggerTag.value).d("redactedEventId is null.")
+                    throw ResolvingException("redactedEventId is null")
+                } else {
+                    ResolvedPushEvent.Redaction(
+                        sessionId = userId,
+                        roomId = roomId,
+                        redactedEventId = redactedEventId,
+                        reason = content.reason,
+                    )
+                }
             }
-            NotificationContent.MessageLike.Sticker -> null.also {
+            NotificationContent.MessageLike.Sticker -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
+                throw ResolvingException("Ignoring notification for reaction")
             }
             is NotificationContent.StateEvent.RoomMemberContent,
             NotificationContent.StateEvent.PolicyRuleRoom,
@@ -220,28 +252,10 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.StateEvent.RoomTombstone,
             NotificationContent.StateEvent.RoomTopic,
             NotificationContent.StateEvent.SpaceChild,
-            NotificationContent.StateEvent.SpaceParent -> null.also {
+            NotificationContent.StateEvent.SpaceParent -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
+                throw ResolvingException("Ignoring notification for state event ${content.javaClass.simpleName}")
             }
-        }
-
-        return if (notifiableEvent != null) {
-            ResolvedPushEvent.Event(notifiableEvent)
-        } else if (content is NotificationContent.MessageLike.RoomRedaction) {
-            val redactedEventId = content.redactedEventId
-            if (redactedEventId == null) {
-                Timber.tag(loggerTag.value).d("redactedEventId is null.")
-                null
-            } else {
-                ResolvedPushEvent.Redaction(
-                    sessionId = userId,
-                    roomId = roomId,
-                    redactedEventId = redactedEventId,
-                    reason = content.reason,
-                )
-            }
-        } else {
-            null
         }
     }
 
@@ -292,7 +306,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
-        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+        if (appPreferencesStore.getTimelineMediaPreviewValueFlow().first() != MediaPreviewValue.On) {
             return null
         }
         val fileResult = when (val messageType = messageType) {
@@ -319,7 +333,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private suspend fun NotificationContent.MessageLike.RoomMessage.getImageMimetype(): String? {
-        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+        if (appPreferencesStore.getTimelineMediaPreviewValueFlow().first() != MediaPreviewValue.On) {
             return null
         }
         return when (val messageType = messageType) {

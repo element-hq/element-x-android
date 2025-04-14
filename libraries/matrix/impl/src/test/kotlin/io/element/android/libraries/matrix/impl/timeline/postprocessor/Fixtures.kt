@@ -19,6 +19,10 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 
+internal val timelineStartEvent = MatrixTimelineItem.Virtual(
+    uniqueId = UniqueId("timeline_start"),
+    virtual = VirtualTimelineItem.RoomBeginning,
+)
 internal val roomCreateEvent = MatrixTimelineItem.Event(
     uniqueId = UniqueId("m.room.create"),
     event = anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))

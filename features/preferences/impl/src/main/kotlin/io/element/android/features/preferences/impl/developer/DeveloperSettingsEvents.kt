@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 sealed interface DeveloperSettingsEvents {
     data class UpdateEnabledFeature(val feature: FeatureUiModel, val isEnabled: Boolean) : DeveloperSettingsEvents
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : DeveloperSettingsEvents
-    data class SetHideImagesAndVideos(val value: Boolean) : DeveloperSettingsEvents
     data class SetTracingLogLevel(val logLevel: LogLevelItem) : DeveloperSettingsEvents
     data class ToggleTracingLogPack(val logPack: TraceLogPack, val enabled: Boolean) : DeveloperSettingsEvents
     data object ClearCache : DeveloperSettingsEvents

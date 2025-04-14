@@ -18,7 +18,7 @@ open class RoomAliasResolverStateProvider : PreviewParameterProvider<RoomAliasRe
         get() = sequenceOf(
             aRoomAliasResolverState(),
             aRoomAliasResolverState(
-                resolveState = AsyncData.Failure(ClientException.Generic("Something went wrong")),
+                resolveState = AsyncData.Failure(ClientException.Generic("Something went wrong", null)),
             ),
             aRoomAliasResolverState(
                 resolveState = AsyncData.Failure(RoomAliasResolverFailures.UnknownAlias),

@@ -60,7 +60,9 @@ class DefaultOnMissedCallNotificationHandlerTest {
                 imageLoaderHolder = FakeImageLoaderHolder(),
                 activeNotificationsProvider = FakeActiveNotificationsProvider(),
             ),
-            callNotificationEventResolver = FakeCallNotificationEventResolver(resolveEventLambda = { _, _, _ -> aNotifiableMessageEvent() }),
+            callNotificationEventResolver = FakeCallNotificationEventResolver(resolveEventLambda = { _, _, _ ->
+                Result.success(aNotifiableMessageEvent())
+            }),
         )
 
         defaultOnMissedCallNotificationHandler.addMissedCallNotification(

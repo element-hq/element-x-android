@@ -47,6 +47,8 @@ import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
@@ -248,7 +250,7 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter(
             roomDescription = Optional.of(roomDescription),
             joinRoomLambda = { _, _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             },
         )
         presenter.test {
@@ -740,7 +742,7 @@ class JoinRoomPresenterTest {
     fun `present - when room is not known RoomPreview is loaded with error Forbidden`() = runTest {
         val client = FakeMatrixClient(
             getRoomPreviewResult = { _, _ ->
-                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden"))
+                Result.failure(ClientException.MatrixApi(ErrorKind.Forbidden, "403", "Forbidden", null))
             }
         )
         val presenter = createJoinRoomPresenter(
@@ -768,6 +770,7 @@ class JoinRoomPresenterTest {
         forgetRoom: ForgetRoom = FakeForgetRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
@@ -783,6 +786,7 @@ class JoinRoomPresenterTest {
             forgetRoom = forgetRoom,
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
+            appPreferencesStore = appPreferencesStore,
             seenInvitesStore = seenInvitesStore,
         )
     }

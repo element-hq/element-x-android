@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
+import android.media.AudioManager
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.getSystemService
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
@@ -35,6 +37,8 @@ import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
+import io.element.android.libraries.androidutils.compat.disableExternalAudioDevice
+import io.element.android.libraries.androidutils.compat.enableExternalAudioDevice
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -150,6 +154,12 @@ private fun CallWebView(
         AndroidView(
             modifier = modifier,
             factory = { context ->
+                // Set 'voice call' mode so volume keys actually control the call volume
+                val audioManager = context.getSystemService<AudioManager>()
+                audioManager?.mode = AudioManager.MODE_IN_COMMUNICATION
+
+                audioManager?.enableExternalAudioDevice()
+
                 WebView(context).apply {
                     onWebViewCreate(this)
                     setup(userAgent, onPermissionsRequest)
@@ -161,6 +171,11 @@ private fun CallWebView(
                 }
             },
             onRelease = { webView ->
+                // Reset audio mode
+                val audioManager = webView.context.getSystemService<AudioManager>()
+                audioManager?.disableExternalAudioDevice()
+                audioManager?.mode = AudioManager.MODE_NORMAL
+
                 webView.destroy()
             }
         )

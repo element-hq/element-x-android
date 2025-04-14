@@ -14,11 +14,12 @@ fun Throwable.mapClientException(): ClientException {
     return when (this) {
         is RustClientException -> {
             when (this) {
-                is RustClientException.Generic -> ClientException.Generic(msg)
+                is RustClientException.Generic -> ClientException.Generic(msg, details)
                 is RustClientException.MatrixApi -> ClientException.MatrixApi(
                     kind = kind.map(),
                     code = code,
-                    message = msg
+                    message = msg,
+                    details = details,
                 )
             }
         }

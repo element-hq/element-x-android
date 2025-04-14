@@ -87,3 +87,4 @@ const val A_RECOVERY_KEY = "1234 5678"
 val A_SERVER_LIST = listOf("server1", "server2")
 
 const val A_TIMESTAMP = 567L
+const val A_FORMATTED_DATE = "April 6, 1980 at 6:35 PM"

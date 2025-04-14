@@ -109,18 +109,6 @@ class DeveloperSettingsViewTest {
         rule.onNodeWithText("Clear cache").performClick()
         eventsRecorder.assertSingle(DeveloperSettingsEvents.ClearCache)
     }
-
-    @Test
-    fun `clicking on the hide images and videos switch emits the expected event`() {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
-        rule.setDeveloperSettingsView(
-            state = aDeveloperSettingsState(
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.onNodeWithText("Hide image & video previews").performClick()
-        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
-    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDeveloperSettingsView(

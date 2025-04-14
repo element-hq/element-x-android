@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Gweld y cyfan"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Derbyn"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Golwg"</string>
+</resources>

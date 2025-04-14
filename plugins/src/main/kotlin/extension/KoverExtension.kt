@@ -49,7 +49,7 @@ private fun Project.kover(action: Action<KoverProjectExtension>) {
 
 fun Project.setupKover() {
     // Create verify all task joining all existing verification tasks
-    task("koverVerifyAll") {
+    tasks.register("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
         val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }

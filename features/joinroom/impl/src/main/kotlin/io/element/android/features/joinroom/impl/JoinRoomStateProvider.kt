@@ -47,7 +47,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
-                joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong"))
+                joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong", null))
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
@@ -171,6 +171,7 @@ fun aJoinRoomState(
     forgetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockMessage: String = "",
+    hideInviteAvatars: Boolean = false,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     roomIdOrAlias = roomIdOrAlias,
@@ -182,6 +183,7 @@ fun aJoinRoomState(
     forgetAction = forgetAction,
     applicationName = "AppName",
     knockMessage = knockMessage,
+    hideInviteAvatars = hideInviteAvatars,
     eventSink = eventSink
 )
 

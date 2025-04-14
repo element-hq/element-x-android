@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.api.history.PushHistoryItem
+import io.element.android.libraries.push.impl.store.PushDataStore
 import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -34,6 +36,7 @@ class DefaultPushService @Inject constructor(
     private val getCurrentPushProvider: GetCurrentPushProvider,
     private val sessionObserver: SessionObserver,
     private val pushClientSecretStore: PushClientSecretStore,
+    private val pushDataStore: PushDataStore,
 ) : PushService, SessionListener {
     init {
         observeSessions()
@@ -124,5 +127,15 @@ class DefaultPushService @Inject constructor(
         // Now we can safely reset the stores.
         pushClientSecretStore.resetSecret(sessionId)
         userPushStore.reset()
+    }
+
+    override val pushCounter: Flow<Int> = pushDataStore.pushCounterFlow
+
+    override fun getPushHistoryItemsFlow(): Flow<List<PushHistoryItem>> {
+        return pushDataStore.getPushHistoryItemsFlow()
+    }
+
+    override suspend fun resetPushHistory() {
+        pushDataStore.reset()
     }
 }

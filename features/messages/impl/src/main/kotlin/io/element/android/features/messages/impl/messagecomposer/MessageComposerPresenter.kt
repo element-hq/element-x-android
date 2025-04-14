@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -452,7 +453,19 @@ class MessageComposerPresenter @AssistedInject constructor(
             }
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
+                    with(capturedMode) {
+                        replyMessage(
+                            body = message.markdown,
+                            htmlBody = message.html,
+                            intentionalMentions = message.intentionalMentions,
+                            replyParameters = ReplyParameters(
+                                inReplyToEventId = eventId,
+                                enforceThreadReply = inThread,
+                                // This should be false until we add a way to make a reply in a thread an explicit reply to the provided eventId
+                                replyWithinThread = false,
+                            ),
+                        )
+                    }
                 }
             }
         }

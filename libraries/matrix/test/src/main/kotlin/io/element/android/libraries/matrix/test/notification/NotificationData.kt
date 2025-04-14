@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.test.notification
 
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -19,6 +20,7 @@ fun aNotificationData(
     content: NotificationContent = NotificationContent.MessageLike.RoomEncrypted,
     isDirect: Boolean = false,
     hasMention: Boolean = false,
+    threadId: ThreadId? = null,
     timestamp: Long = A_TIMESTAMP,
     senderDisplayName: String? = A_USER_NAME_2,
     senderIsNameAmbiguous: Boolean = false,
@@ -26,6 +28,7 @@ fun aNotificationData(
 ): NotificationData {
     return NotificationData(
         eventId = AN_EVENT_ID,
+        threadId = threadId,
         roomId = A_ROOM_ID,
         senderAvatarUrl = null,
         senderDisplayName = senderDisplayName,

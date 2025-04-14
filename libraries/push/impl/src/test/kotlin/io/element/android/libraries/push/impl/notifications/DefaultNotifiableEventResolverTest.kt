@@ -69,7 +69,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event no session`() = runTest {
         val sut = createDefaultNotifiableEventResolver(notificationService = null)
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.isFailure).isTrue()
     }
 
     @Test
@@ -78,7 +78,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.failure(AN_EXCEPTION)
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.isFailure).isTrue()
     }
 
     @Test
@@ -87,7 +87,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(null)
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.isFailure).isTrue()
     }
 
     @Test
@@ -106,7 +106,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -127,7 +127,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world", hasMentionOrReply = true)
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -152,7 +152,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -177,7 +177,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -196,7 +196,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Audio")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -215,7 +215,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Video")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -234,7 +234,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Voice message")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -253,7 +253,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Image")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -272,7 +272,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Sticker")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -291,7 +291,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "File")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -310,7 +310,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Location")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -329,7 +329,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Notice")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -348,7 +348,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "* Bob is happy")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -367,7 +367,7 @@ class DefaultNotifiableEventResolverTest {
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Poll: A question")
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -384,7 +384,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.getOrNull()).isNull()
     }
 
     @Test
@@ -418,7 +418,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -452,7 +452,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -487,7 +487,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -522,7 +522,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -538,7 +538,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.getOrNull()).isNull()
     }
 
     @Test
@@ -564,7 +564,7 @@ class DefaultNotifiableEventResolverTest {
                 timestamp = A_FAKE_TIMESTAMP,
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -602,7 +602,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false
             )
         )
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -638,7 +638,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -675,7 +675,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -711,7 +711,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -733,7 +733,7 @@ class DefaultNotifiableEventResolverTest {
             reason = A_REDACTION_REASON,
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
     @Test
@@ -749,46 +749,46 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.isFailure).isTrue()
     }
 
     @Test
     fun `resolve null cases`() {
-        testNull(NotificationContent.MessageLike.CallAnswer)
-        testNull(NotificationContent.MessageLike.CallHangup)
-        testNull(NotificationContent.MessageLike.CallCandidates)
-        testNull(NotificationContent.MessageLike.KeyVerificationReady)
-        testNull(NotificationContent.MessageLike.KeyVerificationStart)
-        testNull(NotificationContent.MessageLike.KeyVerificationCancel)
-        testNull(NotificationContent.MessageLike.KeyVerificationAccept)
-        testNull(NotificationContent.MessageLike.KeyVerificationKey)
-        testNull(NotificationContent.MessageLike.KeyVerificationMac)
-        testNull(NotificationContent.MessageLike.KeyVerificationDone)
-        testNull(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
-        testNull(NotificationContent.MessageLike.Sticker)
-        testNull(NotificationContent.StateEvent.PolicyRuleRoom)
-        testNull(NotificationContent.StateEvent.PolicyRuleServer)
-        testNull(NotificationContent.StateEvent.PolicyRuleUser)
-        testNull(NotificationContent.StateEvent.RoomAliases)
-        testNull(NotificationContent.StateEvent.RoomAvatar)
-        testNull(NotificationContent.StateEvent.RoomCanonicalAlias)
-        testNull(NotificationContent.StateEvent.RoomCreate)
-        testNull(NotificationContent.StateEvent.RoomEncryption)
-        testNull(NotificationContent.StateEvent.RoomGuestAccess)
-        testNull(NotificationContent.StateEvent.RoomHistoryVisibility)
-        testNull(NotificationContent.StateEvent.RoomJoinRules)
-        testNull(NotificationContent.StateEvent.RoomName)
-        testNull(NotificationContent.StateEvent.RoomPinnedEvents)
-        testNull(NotificationContent.StateEvent.RoomPowerLevels)
-        testNull(NotificationContent.StateEvent.RoomServerAcl)
-        testNull(NotificationContent.StateEvent.RoomThirdPartyInvite)
-        testNull(NotificationContent.StateEvent.RoomTombstone)
-        testNull(NotificationContent.StateEvent.RoomTopic)
-        testNull(NotificationContent.StateEvent.SpaceChild)
-        testNull(NotificationContent.StateEvent.SpaceParent)
+        testFailure(NotificationContent.MessageLike.CallAnswer)
+        testFailure(NotificationContent.MessageLike.CallHangup)
+        testFailure(NotificationContent.MessageLike.CallCandidates)
+        testFailure(NotificationContent.MessageLike.KeyVerificationReady)
+        testFailure(NotificationContent.MessageLike.KeyVerificationStart)
+        testFailure(NotificationContent.MessageLike.KeyVerificationCancel)
+        testFailure(NotificationContent.MessageLike.KeyVerificationAccept)
+        testFailure(NotificationContent.MessageLike.KeyVerificationKey)
+        testFailure(NotificationContent.MessageLike.KeyVerificationMac)
+        testFailure(NotificationContent.MessageLike.KeyVerificationDone)
+        testFailure(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
+        testFailure(NotificationContent.MessageLike.Sticker)
+        testFailure(NotificationContent.StateEvent.PolicyRuleRoom)
+        testFailure(NotificationContent.StateEvent.PolicyRuleServer)
+        testFailure(NotificationContent.StateEvent.PolicyRuleUser)
+        testFailure(NotificationContent.StateEvent.RoomAliases)
+        testFailure(NotificationContent.StateEvent.RoomAvatar)
+        testFailure(NotificationContent.StateEvent.RoomCanonicalAlias)
+        testFailure(NotificationContent.StateEvent.RoomCreate)
+        testFailure(NotificationContent.StateEvent.RoomEncryption)
+        testFailure(NotificationContent.StateEvent.RoomGuestAccess)
+        testFailure(NotificationContent.StateEvent.RoomHistoryVisibility)
+        testFailure(NotificationContent.StateEvent.RoomJoinRules)
+        testFailure(NotificationContent.StateEvent.RoomName)
+        testFailure(NotificationContent.StateEvent.RoomPinnedEvents)
+        testFailure(NotificationContent.StateEvent.RoomPowerLevels)
+        testFailure(NotificationContent.StateEvent.RoomServerAcl)
+        testFailure(NotificationContent.StateEvent.RoomThirdPartyInvite)
+        testFailure(NotificationContent.StateEvent.RoomTombstone)
+        testFailure(NotificationContent.StateEvent.RoomTopic)
+        testFailure(NotificationContent.StateEvent.SpaceChild)
+        testFailure(NotificationContent.StateEvent.SpaceParent)
     }
 
-    private fun testNull(content: NotificationContent) = runTest {
+    private fun testFailure(content: NotificationContent) = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 aNotificationData(
@@ -797,7 +797,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result).isNull()
+        assertThat(result.isFailure).isTrue()
     }
 
     private fun createDefaultNotifiableEventResolver(

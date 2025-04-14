@@ -9,6 +9,7 @@ import extension.setupAnvil
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -32,9 +33,16 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.coil)
 
+    implementation(libs.sqldelight.driver.android)
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite)
+    implementation(libs.sqldelight.coroutines)
+    implementation(projects.libraries.encryptedDb)
+
     implementation(projects.appconfig)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
@@ -75,4 +83,12 @@ dependencies {
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(libs.kotlinx.collections.immutable)
+}
+
+sqldelight {
+    databases {
+        create("PushDatabase") {
+            schemaOutputDirectory = File("src/main/sqldelight/databases")
+        }
+    }
 }
