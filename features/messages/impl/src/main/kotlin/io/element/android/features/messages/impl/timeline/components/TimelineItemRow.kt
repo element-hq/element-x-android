@@ -134,11 +134,12 @@ internal fun TimelineItemRow(
                         TimelineItemEventRow(
                             modifier = Modifier
                                 .semantics(mergeDescendants = true) {
-                                    if (timelineItem.content is TimelineItemVoiceContent) {
+                                    contentDescription = if (timelineItem.content is TimelineItemVoiceContent) {
                                         val voiceMessageText = String.format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
-                                        contentDescription = "${timelineItem.safeSenderName}, $voiceMessageText"
+                                        "${timelineItem.safeSenderName}, $voiceMessageText"
+                                    } else {
+                                        timelineItem.safeSenderName
                                     }
-                                    contentDescription = timelineItem.safeSenderName
                                 }
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(if (isTalkbackActive()) Modifier.combinedClickable(
