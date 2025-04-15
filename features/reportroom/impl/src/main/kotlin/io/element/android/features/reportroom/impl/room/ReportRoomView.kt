@@ -83,8 +83,6 @@ fun ReportRoomView(
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
             TextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportRoomEvents.UpdateReason(it)) },
@@ -117,6 +115,7 @@ fun ReportRoomView(
             Button(
                 text = stringResource(CommonStrings.action_report),
                 enabled = state.reason.isNotBlank() && !isReporting,
+                destructive = true,
                 showProgress = isReporting,
                 onClick = {
                     focusManager.clearFocus(force = true)
