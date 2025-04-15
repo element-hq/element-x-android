@@ -24,6 +24,7 @@ object MimeTypes {
     const val Jpeg = "image/jpeg"
     const val Gif = "image/gif"
     const val WebP = "image/webp"
+    const val Svg = "image/svg+xml"
 
     const val Videos = "video/*"
     const val Mp4 = "video/mp4"
