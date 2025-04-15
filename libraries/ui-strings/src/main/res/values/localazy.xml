@@ -109,6 +109,7 @@
   <string name="action_report">"Report"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_report_dm">"Report conversation"</string>
   <string name="action_report_room">"Report room"</string>
   <string name="action_reset">"Reset"</string>
   <string name="action_reset_identity">"Reset identity"</string>

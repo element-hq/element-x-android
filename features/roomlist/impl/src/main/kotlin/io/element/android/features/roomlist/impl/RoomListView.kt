@@ -49,6 +49,7 @@ fun RoomListView(
     onCreateRoomClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
+    onReportRoomClick: (roomId: RoomId) -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -62,6 +63,7 @@ fun RoomListView(
                     contextMenu = state.contextMenu,
                     eventSink = state.eventSink,
                     onRoomSettingsClick = onRoomSettingsClick,
+                    onReportRoomClick = onReportRoomClick,
                 )
             }
 
@@ -177,6 +179,7 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onConfirmRecoveryKeyClick = {},
         onCreateRoomClick = {},
         onRoomSettingsClick = {},
+        onReportRoomClick = {},
         onMenuActionClick = {},
         acceptDeclineInviteView = {},
     )

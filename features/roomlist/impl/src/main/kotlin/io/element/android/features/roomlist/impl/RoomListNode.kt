@@ -28,6 +28,7 @@ import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
+import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class RoomListNode @AssistedInject constructor(
@@ -71,6 +72,10 @@ class RoomListNode @AssistedInject constructor(
         plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomSettingsClick(roomId) }
     }
 
+    private fun onReportRoomClick(roomId: RoomId) {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onReportRoomClick(roomId) }
+    }
+
     private fun onMenuActionClick(activity: Activity, roomListMenuAction: RoomListMenuAction) {
         when (roomListMenuAction) {
             RoomListMenuAction.InviteFriends -> {
@@ -96,6 +101,7 @@ class RoomListNode @AssistedInject constructor(
             onConfirmRecoveryKeyClick = this::onSessionConfirmRecoveryKeyClick,
             onRoomSettingsClick = this::onRoomSettingsClick,
             onMenuActionClick = { onMenuActionClick(activity, it) },
+            onReportRoomClick = this::onReportRoomClick,
             modifier = modifier,
         ) {
             acceptDeclineInviteView.Render(

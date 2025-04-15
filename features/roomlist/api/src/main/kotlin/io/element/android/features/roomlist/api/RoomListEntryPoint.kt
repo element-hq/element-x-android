@@ -28,6 +28,7 @@ interface RoomListEntryPoint : FeatureEntryPoint {
         fun onSessionConfirmRecoveryKeyClick()
         fun onRoomSettingsClick(roomId: RoomId)
         fun onReportBugClick()
+        fun onReportRoomClick(roomId: RoomId)
         fun onLogoutForNativeSlidingSyncMigrationNeeded()
     }
 }
