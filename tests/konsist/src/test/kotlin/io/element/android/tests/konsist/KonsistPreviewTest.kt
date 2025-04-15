@@ -61,8 +61,9 @@ class KonsistPreviewTest {
             .withoutName(
                 "AsyncIndicatorFailurePreview",
                 "AsyncIndicatorLoadingPreview",
-                "BloomInitialsPreview",
-                "BloomPreview",
+                "BackgroundVerticalGradientDisabledPreview",
+                "BackgroundVerticalGradientEnterprisePreview",
+                "BackgroundVerticalGradientPreview",
                 "CallScreenPipViewPreview",
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",

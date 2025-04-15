@@ -11,7 +11,6 @@ package io.element.android.libraries.designsystem.preview
 object PreviewGroup {
     const val AppBars = "App Bars"
     const val Avatars = "Avatars"
-    const val Bloom = "Bloom"
     const val BottomSheets = "Bottom Sheets"
     const val Buttons = "Buttons"
     const val DateTimePickers = "DateTime pickers"
