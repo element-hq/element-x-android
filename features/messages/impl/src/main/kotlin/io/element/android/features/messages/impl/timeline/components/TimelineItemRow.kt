@@ -7,6 +7,8 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,7 +21,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,10 +31,8 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -45,10 +44,11 @@ import io.element.android.libraries.designsystem.theme.highlightedMessageBackgro
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
-import okhttp3.internal.format
 import kotlin.time.DurationUnit
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,
@@ -130,32 +130,22 @@ internal fun TimelineItemRow(
                         )
                     }
                     else -> {
-                        val a11yPlayText = stringResource(CommonStrings.a11y_play)
-                        val a11yImageShowText = stringResource(CommonStrings.action_show)
                         val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
                         TimelineItemEventRow(
-                            modifier = Modifier.semantics(mergeDescendants = true) {
-                                contentDescription = timelineItem.safeSenderName
-                                when (timelineItem.content) {
-                                    is TimelineItemImageContent -> {
-                                        onClick(a11yImageShowText) {
-                                            onContentClick(timelineItem)
-                                            true
-                                        }
-                                    }
-                                    is TimelineItemVideoContent -> {
-                                        onClick(a11yPlayText) {
-                                            onContentClick(timelineItem)
-                                            true
-                                        }
-                                    }
-                                    is TimelineItemVoiceContent -> {
-                                        val voiceMessageText = format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
+                            modifier = Modifier
+                                .semantics(mergeDescendants = true) {
+                                    if (timelineItem.content is TimelineItemVoiceContent) {
+                                        val voiceMessageText = String.format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
                                         contentDescription = "${timelineItem.safeSenderName}, $voiceMessageText"
                                     }
-                                    else -> Unit
+                                    contentDescription = timelineItem.safeSenderName
                                 }
-                            },
+                                // Custom clickable that applies over the whole item for accessibility
+                                .then(if (isTalkbackActive()) Modifier.combinedClickable(
+                                    onClick = { onContentClick(timelineItem) },
+                                    onLongClick = { onLongClick(timelineItem) },
+                                ) else Modifier
+                            ),
                             event = timelineItem,
                             timelineRoomInfo = timelineRoomInfo,
                             renderReadReceipts = renderReadReceipts,
