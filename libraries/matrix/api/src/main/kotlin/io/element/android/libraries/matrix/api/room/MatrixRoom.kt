@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.withContext
 import java.io.Closeable
 import java.io.File
 
@@ -455,4 +456,11 @@ interface MatrixRoom : Closeable {
     suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
 
     suspend fun getUpdatedIsEncrypted(): Result<Boolean>
+
+    /**
+     * Reports a room as inappropriate to the server.
+     * The caller is not required to be joined to the room to report it.
+     * @param reason - The reason the room is being reported.
+     */
+    suspend fun reportRoom(reason: String?): Result<Unit>
 }

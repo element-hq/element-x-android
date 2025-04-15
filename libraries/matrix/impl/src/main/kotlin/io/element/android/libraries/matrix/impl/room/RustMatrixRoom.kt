@@ -866,6 +866,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun reportRoom(reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.reportRoom(reason)
+        }
+    }
+
     private fun createTimeline(
         timeline: InnerTimeline,
         mode: Timeline.Mode,

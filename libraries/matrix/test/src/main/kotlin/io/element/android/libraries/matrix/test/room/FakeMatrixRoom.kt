@@ -147,6 +147,7 @@ class FakeMatrixRoom(
     private val removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
+    private val reportRoomResult: (String?) -> Result<Unit> = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableStateFlow<MatrixRoomInfo> = MutableStateFlow(initialRoomInfo)
     override val roomInfoFlow: StateFlow<MatrixRoomInfo> = _roomInfoFlow
@@ -624,6 +625,10 @@ class FakeMatrixRoom(
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
+    }
+
+    override suspend fun reportRoom(reason: String?): Result<Unit> = simulateLongTask {
+        reportRoomResult(reason)
     }
 
     override suspend fun clearEventCacheStorage(): Result<Unit> {
