@@ -142,10 +142,15 @@ internal fun TimelineItemRow(
                                     }
                                 }
                                 // Custom clickable that applies over the whole item for accessibility
-                                .then(if (isTalkbackActive()) Modifier.combinedClickable(
+                                .then(
+                                    if (isTalkbackActive()) {
+                                    Modifier.combinedClickable(
                                     onClick = { onContentClick(timelineItem) },
-                                    onLongClick = { onLongClick(timelineItem) },
-                                ) else Modifier
+                                    onLongClick = { onLongClick(timelineItem) }
+                                    )
+                                } else {
+                                    Modifier
+                                }
                             ),
                             event = timelineItem,
                             timelineRoomInfo = timelineRoomInfo,
