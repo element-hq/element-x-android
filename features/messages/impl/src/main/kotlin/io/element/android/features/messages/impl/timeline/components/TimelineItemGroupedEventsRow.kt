@@ -14,6 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
@@ -25,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
@@ -140,7 +143,16 @@ private fun TimelineItemGroupedEventsRowContent(
         },
 ) {
     Column(modifier = modifier.animateContentSize()) {
+        val groupedEventsTitle = pluralStringResource(
+            id = R.plurals.screen_room_timeline_state_changes,
+            count = timelineItem.events.size,
+            timelineItem.events.size
+        )
         GroupHeaderView(
+            modifier = Modifier.clearAndSetSemantics {
+                val groupedEventsContent = timelineItem.events.reversed().joinToString(separator = "\n") { (it.content as TimelineItemStateContent).body }
+                contentDescription = groupedEventsTitle + groupedEventsContent
+            },
             text = pluralStringResource(
                 id = R.plurals.screen_room_timeline_state_changes,
                 count = timelineItem.events.size,
