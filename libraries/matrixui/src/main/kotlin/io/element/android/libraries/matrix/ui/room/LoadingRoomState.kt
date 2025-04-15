@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.appnav.room.joined
+package io.element.android.libraries.matrix.ui.room
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -38,7 +38,6 @@ open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState>
         )
 }
 
-@SingleIn(SessionScope::class)
 class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {
     fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
         getRoomFlow(roomId)
