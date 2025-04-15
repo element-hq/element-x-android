@@ -7,7 +7,7 @@
 
 package io.element.android.features.reportroom.impl
 
-import com.bumble.appyx.core.plugin.Plugin
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 
-data class RoomIdPlugin(val roomId: RoomId): Plugin
+data class RoomIdInputs(val roomId: RoomId): NodeInputs

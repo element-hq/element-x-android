@@ -12,6 +12,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -19,10 +20,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class ReportRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
+    private val client: MatrixClient,
 ) : Presenter<ReportRoomState> {
 
     @AssistedFactory
@@ -36,9 +42,11 @@ class ReportRoomPresenter @AssistedInject constructor(
         var leaveRoom by rememberSaveable { mutableStateOf(false) }
         var reportAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
+        val coroutineScope = rememberCoroutineScope()
+
         fun handleEvents(event: ReportRoomEvents) {
             when (event) {
-                ReportRoomEvents.Report -> TODO()
+                ReportRoomEvents.Report -> coroutineScope.reportRoom(reason, leaveRoom, reportAction)
                 ReportRoomEvents.ToggleLeaveRoom -> {
                     leaveRoom = !leaveRoom
                 }
@@ -50,12 +58,23 @@ class ReportRoomPresenter @AssistedInject constructor(
                 }
             }
         }
-
         return ReportRoomState(
-            reason  = reason,
+            reason = reason,
             leaveRoom = leaveRoom,
             reportAction = reportAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.reportRoom(reason: String, leaveRoom: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
+        runUpdatingState(action) {
+            runCatching {
+                val room = client.getRoom(roomId)!!
+                room.reportRoom(reason.takeIf { it.isNotBlank() }).getOrThrow()
+                if (leaveRoom) {
+                    room.leave().getOrThrow()
+                }
+            }
+        }
     }
 }
