@@ -150,7 +150,7 @@ private fun TimelineItemGroupedEventsRowContent(
         )
         GroupHeaderView(
             modifier = Modifier.clearAndSetSemantics {
-                val groupedEventsContent = timelineItem.events.joinToString(separator = "\n") { (it.content as TimelineItemStateContent).body }
+                val groupedEventsContent = timelineItem.events.reversed().joinToString(separator = "\n") { (it.content as TimelineItemStateContent).body }
                 contentDescription = groupedEventsTitle + groupedEventsContent
             },
             text = pluralStringResource(

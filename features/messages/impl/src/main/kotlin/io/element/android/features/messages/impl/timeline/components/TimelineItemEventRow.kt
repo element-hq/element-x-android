@@ -37,14 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -663,9 +660,7 @@ private fun MessageEventBubbleContent(
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = event.content is TimelineItemVoiceContent,
-        modifier = bubbleModifier.semantics(mergeDescendants = true) {
-            contentDescription = event.safeSenderName
-        }
+        modifier = bubbleModifier,
     )
 }
 

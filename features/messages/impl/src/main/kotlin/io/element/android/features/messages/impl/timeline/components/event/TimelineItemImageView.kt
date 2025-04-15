@@ -33,9 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -75,18 +72,7 @@ fun TimelineItemImageView(
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
-    val a11yShowLabel = stringResource(CommonStrings.action_show)
-    Column(
-        modifier = modifier.semantics {
-            contentDescription = description
-            if (onContentClick != null) {
-                onClick(label = a11yShowLabel) {
-                    true
-                }
-            }
-        },
-    ) {
-        val isTalkbackActive = isTalkbackActive()
+    Column(modifier = modifier) {
         val containerModifier = if (content.showCaption) {
             Modifier.clip(RoundedCornerShape(10.dp))
         } else {
@@ -106,7 +92,7 @@ fun TimelineItemImageView(
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
                         .then(
-                            if (!isTalkbackActive && onContentClick != null) {
+                            if (!isTalkbackActive() && onContentClick != null) {
                                 Modifier.combinedClickable(
                                     onClick = onContentClick,
                                     onLongClick = onLongClick

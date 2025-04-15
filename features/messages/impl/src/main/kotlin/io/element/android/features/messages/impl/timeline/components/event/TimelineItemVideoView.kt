@@ -36,8 +36,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -84,18 +83,7 @@ fun TimelineItemVideoView(
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
-    val a11PlayLabel = stringResource(CommonStrings.a11y_play)
-    Column(
-        modifier = modifier.semantics {
-            contentDescription = description
-            if (onContentClick != null) {
-                onClick(label = a11PlayLabel) {
-                    onContentClick()
-                    true
-                }
-            }
-        }
-    ) {
+    Column(modifier = modifier) {
         val containerModifier = if (content.showCaption) {
             Modifier
                 .padding(top = 6.dp)
@@ -148,6 +136,7 @@ fun TimelineItemVideoView(
                         imageVector = CompoundIcons.PlaySolid(),
                         contentDescription = stringResource(id = CommonStrings.a11y_play),
                         colorFilter = ColorFilter.tint(Color.White),
+                        modifier = Modifier.semantics { invisibleToUser() }
                     )
                 }
             }
