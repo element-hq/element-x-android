@@ -98,10 +98,24 @@ fun PushHistoryView(
                         onDismissRequest = { showMenu = false },
                     ) {
                         DropdownMenuItem(
+                            text = { Text("Show only errors") },
+                            trailingIcon = if (state.showOnlyErrors) {
+                                {
+                                    Icon(
+                                        imageVector = CompoundIcons.CheckCircleSolid(),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp),
+                                    )
+                                }
+                            } else null,
+                            onClick = {
+                                showMenu = false
+                                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(state.showOnlyErrors.not()))
+                            },
+                        )
+                        DropdownMenuItem(
                             text = { Text(stringResource(id = CommonStrings.action_reset)) },
                             onClick = {
-                                // Explicitly close the menu before handling the action, as otherwise it stays open during the
-                                // transition and renders really badly.
                                 showMenu = false
                                 state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
                             },

@@ -27,6 +27,7 @@ class PushHistoryPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.pushCounter).isEqualTo(0)
             assertThat(initialState.pushHistoryItems).isEmpty()
+            assertThat(initialState.showOnlyErrors).isFalse()
             assertThat(initialState.resetAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -85,6 +86,36 @@ class PushHistoryPresenterTest {
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.Loading)
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.Uninitialized)
             resetPushHistoryResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - set show only errors`() = runTest {
+        val pushService = FakePushService()
+        val presenter = createPushHistoryPresenter(
+            pushService = pushService,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.showOnlyErrors).isFalse()
+            val item = aPushHistoryItem(hasBeenResolved = true)
+            val itemError = aPushHistoryItem(hasBeenResolved = false)
+            pushService.emitPushHistoryItems(listOf(item, itemError))
+            awaitItem().let { state ->
+                assertThat(state.pushHistoryItems).containsExactly(item, itemError)
+                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = true))
+            }
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.showOnlyErrors).isTrue()
+                assertThat(state.pushHistoryItems).containsExactly(itemError)
+                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = false))
+            }
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.showOnlyErrors).isFalse()
+                assertThat(state.pushHistoryItems).containsExactly(item, itemError)
+            }
         }
     }
 

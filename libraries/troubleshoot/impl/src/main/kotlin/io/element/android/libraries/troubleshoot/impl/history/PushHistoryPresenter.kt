@@ -18,6 +18,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.push.api.PushService
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,13 +29,21 @@ class PushHistoryPresenter @Inject constructor(
     override fun present(): PushHistoryState {
         val coroutineScope = rememberCoroutineScope()
         val pushCounter by pushService.pushCounter.collectAsState(0)
-        val pushHistory by remember {
+        var showOnlyErrors: Boolean by remember { mutableStateOf(false) }
+        val pushHistory by remember(showOnlyErrors) {
             pushService.getPushHistoryItemsFlow()
+        }.map {
+            it.filter { item ->
+                showOnlyErrors.not() || item.hasBeenResolved.not()
+            }
         }.collectAsState(emptyList())
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: PushHistoryEvents) {
             when (event) {
+                is PushHistoryEvents.SetShowOnlyErrors -> {
+                    showOnlyErrors = event.showOnlyErrors
+                }
                 is PushHistoryEvents.Reset -> {
                     if (event.requiresConfirmation) {
                         resetAction = AsyncAction.ConfirmingNoParams
@@ -55,6 +64,7 @@ class PushHistoryPresenter @Inject constructor(
         return PushHistoryState(
             pushCounter = pushCounter,
             pushHistoryItems = pushHistory.toImmutableList(),
+            showOnlyErrors = showOnlyErrors,
             resetAction = resetAction,
             eventSink = ::handleEvents
         )

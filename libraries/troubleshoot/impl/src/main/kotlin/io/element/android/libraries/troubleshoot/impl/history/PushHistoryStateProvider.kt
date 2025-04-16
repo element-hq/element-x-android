@@ -46,11 +46,13 @@ open class PushHistoryStateProvider : PreviewParameterProvider<PushHistoryState>
 fun aPushHistoryState(
     pushCounter: Int = 0,
     pushHistoryItems: List<PushHistoryItem> = emptyList(),
+    showOnlyErrors: Boolean = false,
     resetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (PushHistoryEvents) -> Unit = {},
 ) = PushHistoryState(
     pushCounter = pushCounter,
     pushHistoryItems = pushHistoryItems.toImmutableList(),
+    showOnlyErrors = showOnlyErrors,
     resetAction = resetAction,
     eventSink = eventSink,
 )

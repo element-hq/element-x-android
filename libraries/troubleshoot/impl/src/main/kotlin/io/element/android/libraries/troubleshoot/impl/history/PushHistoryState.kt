@@ -14,6 +14,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class PushHistoryState(
     val pushCounter: Int,
     val pushHistoryItems: ImmutableList<PushHistoryItem>,
+    val showOnlyErrors: Boolean,
     val resetAction: AsyncAction<Unit>,
     val eventSink: (PushHistoryEvents) -> Unit,
 )

@@ -8,6 +8,7 @@
 package io.element.android.libraries.troubleshoot.impl.history
 
 sealed interface PushHistoryEvents {
+    data class SetShowOnlyErrors(val showOnlyErrors: Boolean) : PushHistoryEvents
     data class Reset(val requiresConfirmation: Boolean) : PushHistoryEvents
     data object ClearDialog : PushHistoryEvents
 }

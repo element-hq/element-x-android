@@ -56,6 +56,36 @@ class PushHistoryViewTest {
     }
 
     @Test
+    fun `clicking on show only errors sends a PushHistoryEvents(true)`() {
+        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+        rule.setPushHistoryView(
+            aPushHistoryState(
+                showOnlyErrors = false,
+                eventSink = eventsRecorder,
+            ),
+        )
+        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
+        rule.onNodeWithContentDescription(menuContentDescription).performClick()
+        rule.onNodeWithText("Show only errors").performClick()
+        eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = true))
+    }
+
+    @Test
+    fun `clicking on show only errors sends a PushHistoryEvents(false)`() {
+        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+        rule.setPushHistoryView(
+            aPushHistoryState(
+                showOnlyErrors = true,
+                eventSink = eventsRecorder,
+            ),
+        )
+        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
+        rule.onNodeWithContentDescription(menuContentDescription).performClick()
+        rule.onNodeWithText("Show only errors").performClick()
+        eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = false))
+    }
+
+    @Test
     fun `clicking on an invalid event has no effect`() {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>(expectEvents = false)
         rule.setPushHistoryView(
