@@ -38,7 +38,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Timber.tag(loggerTag.value).w("New Firebase message")
+        Timber.tag(loggerTag.value).w("New Firebase message. Priority: ${message.priority}/${message.originalPriority}")
         coroutineScope.launch {
             val pushData = pushParser.parse(message.data)
             if (pushData == null) {
