@@ -73,7 +73,7 @@ class DefaultPushHandlerTest {
             .isCalledOnce()
         onPushReceivedResult.assertions()
             .isCalledOnce()
-            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value(false), value("Invalid push data"))
+            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value(false), value("Invalid or ignored push data:\ndata"))
     }
 
     @Test
@@ -290,7 +290,7 @@ class DefaultPushHandlerTest {
                 .isNeverCalled()
             onPushReceivedResult.assertions()
                 .isCalledOnce()
-                .with(any(), value(AN_EVENT_ID), value(A_ROOM_ID), value(A_USER_ID), value(false), any())
+                .with(any(), value(AN_EVENT_ID), value(A_ROOM_ID), value(A_USER_ID), value(false), value(true), any())
         }
 
     @Test
