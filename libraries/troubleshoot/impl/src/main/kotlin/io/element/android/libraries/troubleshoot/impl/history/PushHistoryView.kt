@@ -107,7 +107,9 @@ fun PushHistoryView(
                                         modifier = Modifier.size(16.dp),
                                     )
                                 }
-                            } else null,
+                            } else {
+                                null
+                            },
                             onClick = {
                                 showMenu = false
                                 state.eventSink(PushHistoryEvents.SetShowOnlyErrors(state.showOnlyErrors.not()))
