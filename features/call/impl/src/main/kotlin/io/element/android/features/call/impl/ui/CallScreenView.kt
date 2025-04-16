@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
@@ -109,9 +110,9 @@ internal fun CallScreenView(
         } else {
             CallWebView(
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .fillMaxSize(),
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .fillMaxSize(),
                 url = state.urlState,
                 userAgent = state.userAgent,
                 onPermissionsRequest = { request ->
@@ -161,25 +162,7 @@ private fun CallWebView(
         AndroidView(
             modifier = modifier,
             factory = { context ->
-                // Set 'voice call' mode so volume keys actually control the call volume
-                context.getSystemService<AudioManager>()?.let { audioManager ->
-                    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
-                    audioManager.enableExternalAudioDevice()
-                    audioDeviceCallback = object : AudioDeviceCallback() {
-                        override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
-                            Timber.d("Audio devices added")
-                            audioManager.enableExternalAudioDevice()
-                        }
-
-                        override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
-                            Timber.d("Audio devices removed")
-                            audioManager.enableExternalAudioDevice()
-                        }
-                    }
-
-                    audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
-                }
-
+                audioDeviceCallback = context.setupAudioConfiguration()
                 WebView(context).apply {
                     onWebViewCreate(this)
                     setup(userAgent, onPermissionsRequest)
@@ -192,16 +175,38 @@ private fun CallWebView(
             },
             onRelease = { webView ->
                 // Reset audio mode
-                webView.context.getSystemService<AudioManager>()?.let { audioManager ->
-                    audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
-                    audioManager.disableExternalAudioDevice()
-                    audioManager.mode = AudioManager.MODE_NORMAL
-                }
-
+                webView.context.releaseAudioConfiguration(audioDeviceCallback)
                 webView.destroy()
             }
         )
     }
+}
+
+private fun Context.setupAudioConfiguration(): AudioDeviceCallback? {
+    val audioManager = getSystemService<AudioManager>() ?: return null
+    // Set 'voice call' mode so volume keys actually control the call volume
+    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+    audioManager.enableExternalAudioDevice()
+    return object : AudioDeviceCallback() {
+        override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
+            Timber.d("Audio devices added")
+            audioManager.enableExternalAudioDevice()
+        }
+
+        override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
+            Timber.d("Audio devices removed")
+            audioManager.enableExternalAudioDevice()
+        }
+    }.also {
+        audioManager.registerAudioDeviceCallback(it, null)
+    }
+}
+
+private fun Context.releaseAudioConfiguration(audioDeviceCallback: AudioDeviceCallback?) {
+    val audioManager = getSystemService<AudioManager>() ?: return
+    audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
+    audioManager.disableExternalAudioDevice()
+    audioManager.mode = AudioManager.MODE_NORMAL
 }
 
 @SuppressLint("SetJavaScriptEnabled")
