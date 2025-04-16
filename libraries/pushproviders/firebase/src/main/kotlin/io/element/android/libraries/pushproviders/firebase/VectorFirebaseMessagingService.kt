@@ -31,14 +31,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        Timber.tag(loggerTag.value).d("New Firebase token")
+        Timber.tag(loggerTag.value).w("New Firebase token")
         coroutineScope.launch {
             firebaseNewTokenHandler.handle(token)
         }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Timber.tag(loggerTag.value).d("New Firebase message")
+        Timber.tag(loggerTag.value).w("New Firebase message")
         coroutineScope.launch {
             val pushData = pushParser.parse(message.data)
             if (pushData == null) {
