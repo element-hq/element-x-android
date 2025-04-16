@@ -7,8 +7,13 @@
 
 package io.element.android.libraries.push.impl.history
 
+import android.content.Context
+import android.os.Build
+import android.os.PowerManager
+import androidx.core.content.getSystemService
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -21,7 +26,11 @@ import javax.inject.Inject
 class DefaultPushHistoryService @Inject constructor(
     private val pushDatabase: PushDatabase,
     private val systemClock: SystemClock,
+    @ApplicationContext context: Context,
 ) : PushHistoryService {
+    private val powerManager = context.getSystemService<PowerManager>()
+    private val packageName = context.packageName
+
     override fun onPushReceived(
         providerInfo: String,
         eventId: EventId?,
@@ -30,6 +39,24 @@ class DefaultPushHistoryService @Inject constructor(
         hasBeenResolved: Boolean,
         comment: String?,
     ) {
+        val finalComment = buildString {
+            append(comment.orEmpty())
+            if (!hasBeenResolved && powerManager != null) {
+                // Add info about device state
+                append("\n")
+                append(" - Idle: ${powerManager.isDeviceIdleMode}\n")
+                append(" - Power Save Mode: ${powerManager.isPowerSaveMode}\n")
+                append(" - Ignoring Battery Optimizations: ${powerManager.isIgnoringBatteryOptimizations(packageName)}\n")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    append(" - Device Light Idle Mode: ${powerManager.isDeviceLightIdleMode}\n")
+                    append(" - Low Power Standby Enabled: ${powerManager.isLowPowerStandbyEnabled}\n")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        append(" - Exempt from Low Power Standby: ${powerManager.isExemptFromLowPowerStandby}\n")
+                    }
+                }
+            }
+        }.takeIf { it.isNotEmpty() }
+
         pushDatabase.pushHistoryQueries.insertPushHistory(
             PushHistory(
                 pushDate = systemClock.epochMillis(),
@@ -38,7 +65,7 @@ class DefaultPushHistoryService @Inject constructor(
                 roomId = roomId?.value,
                 sessionId = sessionId?.value,
                 hasBeenResolved = if (hasBeenResolved) 1 else 0,
-                comment = comment,
+                comment = finalComment,
             )
         )
 
