@@ -30,8 +30,11 @@ fun AudioManager.enableExternalAudioDevice() {
             AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
         )
         val devices = availableCommunicationDevices
-        val selectedDevice = devices.find {
-            wantedDeviceTypes.contains(it.type)
+        val selectedDevice = devices.minByOrNull {
+            wantedDeviceTypes.indexOf(it.type).let { index ->
+                // If the device type is not in the wantedDeviceTypes list, we give it a low priority
+                if (index == -1) Int.MAX_VALUE else index
+            }
         }
         selectedDevice?.let { setCommunicationDevice(it) }
     } else {
