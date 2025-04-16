@@ -8,8 +8,8 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState

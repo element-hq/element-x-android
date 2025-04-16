@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.api.response
+package io.element.android.features.invite.api.acceptdecline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

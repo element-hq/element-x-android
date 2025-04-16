@@ -5,13 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.impl.response
+package io.element.android.features.invite.impl.acceptdecline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.AcceptDeclineInviteView
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import javax.inject.Inject

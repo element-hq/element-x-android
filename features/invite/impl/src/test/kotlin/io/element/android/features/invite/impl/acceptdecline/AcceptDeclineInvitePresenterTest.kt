@@ -5,14 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.impl.response
+package io.element.android.features.invite.impl.acceptdecline
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
-import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
+import io.element.android.features.invite.api.acceptdecline.InviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient

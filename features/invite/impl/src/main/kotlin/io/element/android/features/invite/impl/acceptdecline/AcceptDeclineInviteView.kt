@@ -5,17 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.impl.response
+package io.element.android.features.invite.impl.acceptdecline
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.AcceptDeclineInviteStateProvider
-import io.element.android.features.invite.api.response.ConfirmingDeclineInvite
-import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteStateProvider
+import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
+import io.element.android.features.invite.api.acceptdecline.InviteData
 import io.element.android.features.invite.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog

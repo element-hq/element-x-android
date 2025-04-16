@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.reportroom.impl.room
+package io.element.android.features.reportroom.impl
 
 sealed interface ReportRoomEvents {
     data class UpdateReason(val reason: String) : ReportRoomEvents

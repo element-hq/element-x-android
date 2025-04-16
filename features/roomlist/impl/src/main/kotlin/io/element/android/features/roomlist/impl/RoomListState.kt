@@ -8,7 +8,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState

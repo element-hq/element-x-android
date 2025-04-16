@@ -15,7 +15,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.invite.api.response.AcceptDeclineInviteView
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope

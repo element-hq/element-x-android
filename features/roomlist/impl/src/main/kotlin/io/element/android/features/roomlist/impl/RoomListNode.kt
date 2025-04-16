@@ -20,7 +20,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.invite.api.response.AcceptDeclineInviteView
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
@@ -28,7 +28,6 @@ import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class RoomListNode @AssistedInject constructor(

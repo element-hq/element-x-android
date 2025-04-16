@@ -5,9 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.impl.response
+package io.element.android.features.invite.impl.acceptdecline
 
-import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 
 sealed interface InternalAcceptDeclineInviteEvents : AcceptDeclineInviteEvents {
     data object ConfirmDeclineInvite : InternalAcceptDeclineInviteEvents

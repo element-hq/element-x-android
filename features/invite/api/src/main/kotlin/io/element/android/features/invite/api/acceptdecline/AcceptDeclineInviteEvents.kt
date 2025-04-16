@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.invite.api.response
+package io.element.android.features.invite.api.acceptdecline
 
 interface AcceptDeclineInviteEvents {
     data class AcceptInvite(val invite: InviteData?) : AcceptDeclineInviteEvents

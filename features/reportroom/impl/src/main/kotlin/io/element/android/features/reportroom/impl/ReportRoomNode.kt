@@ -5,7 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.reportroom.impl.room
+package io.element.android.features.reportroom.impl
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -14,9 +15,10 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.reportroom.impl.RoomIdInputs
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class ReportRoomNode @AssistedInject constructor(
@@ -25,7 +27,9 @@ class ReportRoomNode @AssistedInject constructor(
     presenterFactory: ReportRoomPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    private val roomId = inputs<RoomIdInputs>().roomId
+    data class Inputs(val roomId: RoomId) : NodeInputs
+
+    private val roomId = inputs<Inputs>().roomId
     private val presenter: ReportRoomPresenter = presenterFactory.create(roomId = roomId)
 
     @Composable

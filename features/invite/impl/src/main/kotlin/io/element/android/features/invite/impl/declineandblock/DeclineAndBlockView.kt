@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.reportroom.impl.room
+package io.element.android.features.invite.impl.declineandblock
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -42,20 +42,20 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportRoomView(
-    state: ReportRoomState,
+fun DeclineAndBlockView(
+    state: DeclineAndBlockState,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
 
-    val isReporting = state.reportAction is AsyncAction.Loading
+    val isDeclining = state.declineAction is AsyncAction.Loading
     AsyncActionView(
-        async = state.reportAction,
+        async = state.declineAction,
         progressDialog = {},
         onSuccess = { onBackClick() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
-        onErrorDismiss = { state.eventSink(ReportRoomEvents.ClearReportAction) }
+        onErrorDismiss = { state.eventSink(DeclineAndBlockEvents.ClearDeclineAction) }
     )
 
     Scaffold(
@@ -63,7 +63,7 @@ fun ReportRoomView(
             TopAppBar(
                 title = {
                     Text(
-                        stringResource(CommonStrings.screen_report_room_title),
+                        stringResource(CommonStrings.screen_decline_and_block_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -83,43 +83,61 @@ fun ReportRoomView(
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
         ) {
-            TextField(
-                value = state.reason,
-                onValueChange = { state.eventSink(ReportRoomEvents.UpdateReason(it)) },
-                placeholder = stringResource(CommonStrings.screen_report_room_reason_placeholder),
-                minLines = 3,
-                enabled = !isReporting,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .heightIn(min = 90.dp),
-                supportingText = stringResource(CommonStrings.screen_report_room_reason_footer),
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
 
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
                 headlineContent = {
-                    Text(text = stringResource(CommonStrings.action_leave_room))
+                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_title))
+                },
+                supportingContent = {
+                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_description),)
                 },
                 trailingContent = ListItemContent.Switch(
-                    checked = state.leaveRoom,
-                    onChange = { state.eventSink(ReportRoomEvents.ToggleLeaveRoom) },
-                    enabled = !isReporting,
+                    checked = state.blockUser,
+                    onChange = { state.eventSink(DeclineAndBlockEvents.ToggleBlockUser) },
+                    enabled = !isDeclining,
                 )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
+            ListItem(
+                modifier = Modifier.padding(end = 8.dp),
+                headlineContent = {
+                    Text(text = stringResource(CommonStrings.action_report_room))
+                },
+                supportingContent = {
+                    Text(text = stringResource(CommonStrings.screen_decline_and_block_report_user_option_description),)
+                },
+                trailingContent = ListItemContent.Switch(
+                    checked = state.reportRoom,
+                    onChange = { state.eventSink(DeclineAndBlockEvents.ToggleReportRoom) },
+                    enabled = !isDeclining,
+                )
+            )
 
+            if(state.reportRoom) {
+                Spacer(modifier = Modifier.height(24.dp))
+                TextField(
+                    value = state.reportReason,
+                    onValueChange = { state.eventSink(DeclineAndBlockEvents.UpdateReportReason(it)) },
+                    placeholder = stringResource(CommonStrings.screen_decline_and_block_report_user_reason_placeholder),
+                    minLines = 3,
+                    enabled = !isDeclining,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .heightIn(min = 90.dp),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
             Button(
-                text = stringResource(CommonStrings.action_report),
-                enabled = state.reason.isNotBlank() && !isReporting,
+                text = stringResource(CommonStrings.action_decline_and_block),
                 destructive = true,
-                showProgress = isReporting,
+                showProgress = isDeclining,
                 onClick = {
                     focusManager.clearFocus(force = true)
-                    state.eventSink(ReportRoomEvents.Report)
+                    state.eventSink(DeclineAndBlockEvents.Decline)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,9 +150,9 @@ fun ReportRoomView(
 @PreviewsDayNight
 @Composable
 internal fun ReportRoomViewPreview(
-    @PreviewParameter(ReportRoomStateProvider::class) state: ReportRoomState
+    @PreviewParameter(DeclineAndBlockStateProvider ::class) state: DeclineAndBlockState
 ) = ElementPreview {
-    ReportRoomView(
+    DeclineAndBlockView(
         state = state,
         onBackClick = {},
     )
