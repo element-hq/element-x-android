@@ -10,8 +10,11 @@ package io.element.android.libraries.troubleshoot.impl.history
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.push.api.PushService
 import kotlinx.collections.immutable.toImmutableList
@@ -28,11 +31,23 @@ class PushHistoryPresenter @Inject constructor(
         val pushHistory by remember {
             pushService.getPushHistoryItemsFlow()
         }.collectAsState(emptyList())
+        var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: PushHistoryEvents) {
             when (event) {
-                PushHistoryEvents.Reset -> coroutineScope.launch {
-                    pushService.resetPushHistory()
+                is PushHistoryEvents.Reset -> {
+                    if (event.requiresConfirmation) {
+                        resetAction = AsyncAction.ConfirmingNoParams
+                    } else {
+                        resetAction = AsyncAction.Loading
+                        coroutineScope.launch {
+                            pushService.resetPushHistory()
+                            resetAction = AsyncAction.Uninitialized
+                        }
+                    }
+                }
+                PushHistoryEvents.ClearDialog -> {
+                    resetAction = AsyncAction.Uninitialized
                 }
             }
         }
@@ -40,6 +55,7 @@ class PushHistoryPresenter @Inject constructor(
         return PushHistoryState(
             pushCounter = pushCounter,
             pushHistoryItems = pushHistory.toImmutableList(),
+            resetAction = resetAction,
             eventSink = ::handleEvents
         )
     }

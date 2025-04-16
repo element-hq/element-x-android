@@ -10,6 +10,7 @@ package io.element.android.libraries.troubleshoot.impl.history
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -46,8 +47,10 @@ class PushHistoryViewTest {
                 eventSink = eventsRecorder,
             ),
         )
+        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
+        rule.onNodeWithContentDescription(menuContentDescription).performClick()
         rule.clickOn(CommonStrings.action_reset)
-        eventsRecorder.assertSingle(PushHistoryEvents.Reset)
+        eventsRecorder.assertSingle(PushHistoryEvents.Reset(requiresConfirmation = true))
         // Also check that the push counter is rendered
         rule.onNodeWithText("123").assertExists()
     }
