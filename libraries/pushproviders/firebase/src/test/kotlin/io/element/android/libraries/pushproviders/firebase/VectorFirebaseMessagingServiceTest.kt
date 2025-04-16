@@ -36,9 +36,20 @@ class VectorFirebaseMessagingServiceTest {
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleInvalidResult = lambda)
         )
-        vectorFirebaseMessagingService.onMessageReceived(RemoteMessage(Bundle()))
+        vectorFirebaseMessagingService.onMessageReceived(
+            message = RemoteMessage(
+                Bundle().apply {
+                    putString("a", "A")
+                    putString("b", "B")
+                }
+            )
+        )
         runCurrent()
         lambda.assertions().isCalledOnce()
+            .with(
+                value(FirebaseConfig.NAME),
+                value("a: A\nb: B"),
+            )
     }
 
     @Test
