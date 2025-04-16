@@ -69,7 +69,7 @@ class DefaultPushHistoryService @Inject constructor(
             )
         )
 
-        // Keep only the last 100 events
-        pushDatabase.pushHistoryQueries.removeOldest(100)
+        // Keep only the last 1_000 events
+        pushDatabase.pushHistoryQueries.removeOldest(1_000)
     }
 }
