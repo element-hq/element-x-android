@@ -37,11 +37,12 @@ class DefaultPushHistoryService @Inject constructor(
         roomId: RoomId?,
         sessionId: SessionId?,
         hasBeenResolved: Boolean,
+        includeDeviceState: Boolean,
         comment: String?,
     ) {
         val finalComment = buildString {
             append(comment.orEmpty())
-            if (!hasBeenResolved && powerManager != null) {
+            if (includeDeviceState && powerManager != null) {
                 // Add info about device state
                 append("\n")
                 append(" - Idle: ${powerManager.isDeviceIdleMode}\n")

@@ -60,7 +60,7 @@ class DefaultPushHandlerTest {
     @Test
     fun `check handleInvalid behavior`() = runTest {
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -68,12 +68,12 @@ class DefaultPushHandlerTest {
             incrementPushCounterResult = incrementPushCounterResult,
             pushHistoryService = pushHistoryService,
         )
-        defaultPushHandler.handleInvalid(A_PUSHER_INFO)
+        defaultPushHandler.handleInvalid(A_PUSHER_INFO, "data")
         incrementPushCounterResult.assertions()
             .isCalledOnce()
         onPushReceivedResult.assertions()
             .isCalledOnce()
-            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value("Invalid push data"))
+            .with(value(A_PUSHER_INFO), value(null), value(null), value(null), value(false), value(false), value("Invalid push data"))
     }
 
     @Test
@@ -85,7 +85,7 @@ class DefaultPushHandlerTest {
             }
         val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -133,7 +133,7 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )
@@ -176,7 +176,7 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )
@@ -221,7 +221,7 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )
@@ -263,7 +263,7 @@ class DefaultPushHandlerTest {
                 unread = 0,
                 clientSecret = A_SECRET,
             )
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )
@@ -314,7 +314,7 @@ class DefaultPushHandlerTest {
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
         val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -359,7 +359,7 @@ class DefaultPushHandlerTest {
             Unit,
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -403,7 +403,7 @@ class DefaultPushHandlerTest {
             Unit,
             > { _, _, _, _, _, _, _, _ -> }
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -444,7 +444,7 @@ class DefaultPushHandlerTest {
         )
         val onRedactedEventReceived = lambdaRecorder<ResolvedPushEvent.Redaction, Unit> { }
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
-        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
         val pushHistoryService = FakePushHistoryService(
             onPushReceivedResult = onPushReceivedResult,
         )
@@ -476,7 +476,7 @@ class DefaultPushHandlerTest {
                 clientSecret = A_SECRET,
             )
             val diagnosticPushHandler = DiagnosticPushHandler()
-            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, String?, Unit> { _, _, _, _, _, _ -> }
+            val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
             val pushHistoryService = FakePushHistoryService(
                 onPushReceivedResult = onPushReceivedResult,
             )

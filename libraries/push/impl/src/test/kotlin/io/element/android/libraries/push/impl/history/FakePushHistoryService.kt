@@ -19,8 +19,9 @@ class FakePushHistoryService(
         RoomId?,
         SessionId?,
         Boolean,
+        Boolean,
         String?
-    ) -> Unit = { _, _, _, _, _, _ -> lambdaError() }
+    ) -> Unit = { _, _, _, _, _, _, _ -> lambdaError() }
 ) : PushHistoryService {
     override fun onPushReceived(
         providerInfo: String,
@@ -28,6 +29,7 @@ class FakePushHistoryService(
         roomId: RoomId?,
         sessionId: SessionId?,
         hasBeenResolved: Boolean,
+        includeDeviceState: Boolean,
         comment: String?,
     ) {
         onPushReceivedResult(
@@ -36,6 +38,7 @@ class FakePushHistoryService(
             roomId,
             sessionId,
             hasBeenResolved,
+            includeDeviceState,
             comment
         )
     }

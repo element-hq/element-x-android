@@ -22,6 +22,7 @@ interface PushHistoryService {
         roomId: RoomId?,
         sessionId: SessionId?,
         hasBeenResolved: Boolean,
+        includeDeviceState: Boolean,
         comment: String?,
     )
 }
@@ -35,6 +36,7 @@ fun PushHistoryService.onInvalidPushReceived(
     roomId = null,
     sessionId = null,
     hasBeenResolved = false,
+    includeDeviceState = false,
     comment = "Invalid or ignored push data:\n$data",
 )
 
@@ -49,6 +51,7 @@ fun PushHistoryService.onUnableToRetrieveSession(
     roomId = roomId,
     sessionId = null,
     hasBeenResolved = false,
+    includeDeviceState = true,
     comment = "Unable to retrieve session: $reason",
 )
 
@@ -64,6 +67,7 @@ fun PushHistoryService.onUnableToResolveEvent(
     roomId = roomId,
     sessionId = sessionId,
     hasBeenResolved = false,
+    includeDeviceState = true,
     comment = "Unable to resolve event: $reason",
 )
 
@@ -79,6 +83,7 @@ fun PushHistoryService.onSuccess(
     roomId = roomId,
     sessionId = sessionId,
     hasBeenResolved = true,
+    includeDeviceState = false,
     comment = buildString {
         append("Success")
         if (comment.isNullOrBlank().not()) {
@@ -95,5 +100,6 @@ fun PushHistoryService.onDiagnosticPush(
     roomId = null,
     sessionId = null,
     hasBeenResolved = true,
+    includeDeviceState = false,
     comment = "Diagnostic push",
 )
