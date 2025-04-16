@@ -51,9 +51,9 @@ class DefaultPushHistoryService @Inject constructor(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     append(" - Device Light Idle Mode: ${powerManager.isDeviceLightIdleMode}\n")
                     append(" - Low Power Standby Enabled: ${powerManager.isLowPowerStandbyEnabled}\n")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                        append(" - Exempt from Low Power Standby: ${powerManager.isExemptFromLowPowerStandby}\n")
-                    }
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    append(" - Exempt from Low Power Standby: ${powerManager.isExemptFromLowPowerStandby}\n")
                 }
             }
         }.takeIf { it.isNotEmpty() }
