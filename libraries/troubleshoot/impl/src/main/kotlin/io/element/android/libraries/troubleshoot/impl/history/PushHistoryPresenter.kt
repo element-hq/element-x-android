@@ -31,10 +31,12 @@ class PushHistoryPresenter @Inject constructor(
         val pushCounter by pushService.pushCounter.collectAsState(0)
         var showOnlyErrors: Boolean by remember { mutableStateOf(false) }
         val pushHistory by remember(showOnlyErrors) {
-            pushService.getPushHistoryItemsFlow()
-        }.map {
-            it.filter { item ->
-                showOnlyErrors.not() || item.hasBeenResolved.not()
+            pushService.getPushHistoryItemsFlow().map {
+                if (showOnlyErrors) {
+                    it.filter { item -> item.hasBeenResolved.not() }
+                } else {
+                    it
+                }
             }
         }.collectAsState(emptyList())
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
