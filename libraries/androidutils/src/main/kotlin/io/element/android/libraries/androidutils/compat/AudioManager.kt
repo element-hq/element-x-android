@@ -10,6 +10,7 @@ package io.element.android.libraries.androidutils.compat
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
+import io.element.android.libraries.core.data.tryOrNull
 import timber.log.Timber
 
 fun AudioManager.enableExternalAudioDevice() {
@@ -37,9 +38,19 @@ fun AudioManager.enableExternalAudioDevice() {
                 if (index == -1) Int.MAX_VALUE else index
             }
         }
-        selectedDevice?.let {
-            Timber.d("Audio device selected, type: ${it.type}")
-            setCommunicationDevice(it)
+        selectedDevice?.let { device ->
+            Timber.d("Audio device selected, type: ${device.type}")
+            tryOrNull(
+                onError = { failure ->
+                    Timber.e(failure, "Audio: exception when setting communication device")
+                }
+            ) {
+                setCommunicationDevice(device).also {
+                    if (!it) {
+                        Timber.w("Audio: unable to set the communication device")
+                    }
+                }
+            }
         }
     } else {
         // If we don't have access to the new APIs, use the deprecated ones
