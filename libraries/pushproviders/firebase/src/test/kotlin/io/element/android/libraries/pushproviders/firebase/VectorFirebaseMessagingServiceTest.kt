@@ -32,7 +32,7 @@ import org.robolectric.RobolectricTestRunner
 class VectorFirebaseMessagingServiceTest {
     @Test
     fun `test receiving invalid data`() = runTest {
-        val lambda = lambdaRecorder<String, Unit> {}
+        val lambda = lambdaRecorder<String, String, Unit> { _, _ -> }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleInvalidResult = lambda)
         )

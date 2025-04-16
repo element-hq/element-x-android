@@ -45,6 +45,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 Timber.tag(loggerTag.value).w("Invalid data received from Firebase")
                 pushHandler.handleInvalid(
                     providerInfo = FirebaseConfig.NAME,
+                    data = buildString {
+                        message.data.keys.forEach {
+                            append("$it: ${message.data[it]}\n")
+                        }
+                    },
                 )
             } else {
                 pushHandler.handle(

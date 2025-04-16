@@ -72,9 +72,9 @@ class DefaultPushHandler @Inject constructor(
         }
     }
 
-    override suspend fun handleInvalid(providerInfo: String) {
+    override suspend fun handleInvalid(providerInfo: String, data: String) {
         incrementPushDataStore.incrementPushCounter()
-        pushHistoryService.onInvalidPushReceived(providerInfo)
+        pushHistoryService.onInvalidPushReceived(providerInfo, data)
     }
 
     /**

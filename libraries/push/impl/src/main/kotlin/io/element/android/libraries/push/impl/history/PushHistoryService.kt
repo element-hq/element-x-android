@@ -28,13 +28,14 @@ interface PushHistoryService {
 
 fun PushHistoryService.onInvalidPushReceived(
     providerInfo: String,
+    data: String,
 ) = onPushReceived(
     providerInfo = providerInfo,
     eventId = null,
     roomId = null,
     sessionId = null,
     hasBeenResolved = false,
-    comment = "Invalid push data",
+    comment = "Invalid or ignored push data:\n$data",
 )
 
 fun PushHistoryService.onUnableToRetrieveSession(

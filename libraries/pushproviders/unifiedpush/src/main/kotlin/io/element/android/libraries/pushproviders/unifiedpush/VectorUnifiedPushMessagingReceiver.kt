@@ -53,6 +53,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                 Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
                 pushHandler.handleInvalid(
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
+                    data = String(message),
                 )
             } else {
                 pushHandler.handle(
