@@ -1,3 +1,10 @@
+Changes in Element X v25.04.2
+=============================
+
+Security fixes 🔐
+-----------------
+- Fix for [GHSA-m5px-pwq3-4p5m](https://github.com/element-hq/element-x-android/security/advisories/GHSA-m5px-pwq3-4p5m) / [CVE-2025-27599](https://www.cve.org/CVERecord?id=CVE-2025-27599)
+
 Changes in Element X v25.04.1
 =============================
 

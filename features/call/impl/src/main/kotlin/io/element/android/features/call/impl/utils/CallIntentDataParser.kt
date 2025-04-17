@@ -12,25 +12,26 @@ import javax.inject.Inject
 
 class CallIntentDataParser @Inject constructor() {
     private val validHttpSchemes = sequenceOf("https")
+    private val knownHosts = sequenceOf(
+        "call.element.io",
+    )
 
     fun parse(data: String?): String? {
         val parsedUrl = data?.let { Uri.parse(data) } ?: return null
         val scheme = parsedUrl.scheme
         return when {
-            scheme in validHttpSchemes && parsedUrl.host == "call.element.io" -> parsedUrl
+            scheme in validHttpSchemes -> parsedUrl
             scheme == "element" && parsedUrl.host == "call" -> {
-                // We use this custom scheme to load arbitrary URLs for other instances of Element Call,
-                // so we can only verify it's an HTTP/HTTPs URL with a non-empty host
                 parsedUrl.getUrlParameter()
             }
             scheme == "io.element.call" && parsedUrl.host == null -> {
-                // We use this custom scheme to load arbitrary URLs for other instances of Element Call,
-                // so we can only verify it's an HTTP/HTTPs URL with a non-empty host
                 parsedUrl.getUrlParameter()
             }
             // This should never be possible, but we still need to take into account the possibility
             else -> null
-        }?.withCustomParameters()
+        }
+            ?.takeIf { it.host in knownHosts }
+            ?.withCustomParameters()
     }
 
     private fun Uri.getUrlParameter(): Uri? {

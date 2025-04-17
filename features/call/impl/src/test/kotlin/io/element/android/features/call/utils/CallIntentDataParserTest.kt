@@ -46,6 +46,17 @@ class CallIntentDataParserTest {
     }
 
     @Test
+    fun `Element Call urls with unknown host returns null`() {
+        // Check valid host first, should not return null
+        doTest("https://call.element.io", "https://call.element.io#?appPrompt=false&confineToRoom=true")
+        // Unknown host should return null
+        doTest("https://unknown.io", null)
+        doTest("https://call.unknown.io", null)
+        doTest("https://call.element.com", null)
+        doTest("https://call.element.io.tld", null)
+    }
+
+    @Test
     fun `Element Call urls will be returned as is`() {
         doTest(
             url = "https://call.element.io",
@@ -64,7 +75,7 @@ class CallIntentDataParserTest {
     @Test
     fun `HTTP and HTTPS urls that don't come from EC return null`() {
         doTest("http://app.element.io", null)
-        doTest("https://app.element.io", null, testEmbedded = false)
+        doTest("https://app.element.io", null)
         doTest("http://", null)
         doTest("https://", null)
     }
@@ -193,20 +204,18 @@ class CallIntentDataParserTest {
         )
     }
 
-    private fun doTest(url: String, expectedResult: String?, testEmbedded: Boolean = true) {
+    private fun doTest(url: String, expectedResult: String?) {
         // Test direct parsing
         assertThat(callIntentDataParser.parse(url)).isEqualTo(expectedResult)
 
-        if (testEmbedded) {
-            // Test embedded url, scheme 1
-            val encodedUrl = URLEncoder.encode(url, "utf-8")
-            val urlScheme1 = "element://call?url=$encodedUrl"
-            assertThat(callIntentDataParser.parse(urlScheme1)).isEqualTo(expectedResult)
+        // Test embedded url, scheme 1
+        val encodedUrl = URLEncoder.encode(url, "utf-8")
+        val urlScheme1 = "element://call?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(urlScheme1)).isEqualTo(expectedResult)
 
-            // Test embedded url, scheme 2
-            val urlScheme2 = "io.element.call:/?url=$encodedUrl"
-            assertThat(callIntentDataParser.parse(urlScheme2)).isEqualTo(expectedResult)
-        }
+        // Test embedded url, scheme 2
+        val urlScheme2 = "io.element.call:/?url=$encodedUrl"
+        assertThat(callIntentDataParser.parse(urlScheme2)).isEqualTo(expectedResult)
     }
 
     companion object {
