@@ -23,6 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun EditableAvatarView(
@@ -51,6 +55,7 @@ fun EditableAvatarView(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
         Box(
             modifier = Modifier
                 .size(avatarSize.dp)
@@ -60,6 +65,9 @@ fun EditableAvatarView(
                     indication = ripple(bounded = false),
                 )
                 .testTag(TestTags.editAvatar)
+                .clearAndSetSemantics {
+                    contentDescription = a11yAvatar
+                },
         ) {
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
