@@ -12,7 +12,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
-import io.element.android.features.invite.api.acceptdecline.InviteData
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -67,11 +67,11 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData)
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
                     InternalAcceptDeclineInviteEvents.CancelDeclineInvite
                 )
@@ -102,13 +102,13 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData)
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = false)
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -153,13 +153,13 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData)
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
+                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData))
                 state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
+                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = false)
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -175,87 +175,6 @@ class AcceptDeclineInvitePresenterTest {
         assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID_2, A_ROOM_ID_3)
     }
 
-    @Test
-    fun `present - declining invite with block success flow`() = runTest {
-        val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ ->
-            Result.success(Unit)
-        }
-        val fakeNotificationCleaner = FakeNotificationCleaner(
-            clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda
-        )
-        val declineInviteSuccess = lambdaRecorder { -> Result.success(Unit) }
-        val ignoreUserSuccess = lambdaRecorder { _: UserId -> Result.success(Unit) }
-        val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
-            },
-            ignoreUserResult = ignoreUserSuccess
-        )
-        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
-        val presenter = createAcceptDeclineInvitePresenter(
-            client = client,
-            notificationCleaner = fakeNotificationCleaner,
-            seenInvitesStore = seenInvitesStore,
-        )
-        presenter.test {
-            val inviteData = anInviteData()
-            awaitItem().also { state ->
-                state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = true)
-                )
-            }
-            awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, true))
-                state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
-                )
-            }
-            assertThat(awaitItem().declineAction.isLoading()).isTrue()
-            awaitItem().also { state ->
-                assertThat(state.declineAction).isInstanceOf(AsyncAction.Success::class.java)
-            }
-            cancelAndConsumeRemainingEvents()
-        }
-        declineInviteSuccess.assertions().isCalledOnce()
-        ignoreUserSuccess.assertions().isCalledOnce().with(value(A_USER_ID))
-        clearMembershipNotificationForRoomLambda.assertions()
-            .isCalledOnce()
-            .with(value(A_SESSION_ID), value(A_ROOM_ID))
-        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID_2, A_ROOM_ID_3)
-    }
-
-    @Test
-    fun `present - declining invite with block error flow`() = runTest {
-        val declineInviteFailure = lambdaRecorder { ->
-            Result.failure<Unit>(RuntimeException("Failed to leave room"))
-        }
-        val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
-            }
-        )
-        val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
-        val presenter = createAcceptDeclineInvitePresenter(
-            client = client,
-            seenInvitesStore = seenInvitesStore,
-        )
-        presenter.test {
-            val inviteData = anInviteData()
-            awaitItem().also { state ->
-                state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = true)
-                )
-            }
-            awaitItem().also { state ->
-                assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, true))
-                state.eventSink(
-                    InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
-                )
-            }
-            assertThat(awaitItem().declineAction.isLoading()).isTrue()
-        }
-        assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3)
-    }
 
     @Test
     fun `present - accepting invite error flow`() = runTest {

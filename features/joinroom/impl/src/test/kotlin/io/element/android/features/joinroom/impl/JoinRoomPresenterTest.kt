@@ -13,6 +13,7 @@ import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.ForgetRoom
@@ -121,11 +122,12 @@ class JoinRoomPresenterTest {
             matrixClient = matrixClient,
             seenInvitesStore = seenInvitesStore,
         )
+        val inviteData = roomSummary.info.toInviteData()
         assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(null))
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, null))
             }
             // Check that the roomId is stored in the seen invites store
             assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(roomSummary.roomId)
@@ -140,6 +142,7 @@ class JoinRoomPresenterTest {
             currentUserMembership = CurrentUserMembership.INVITED,
             inviter = inviter,
         )
+        val inviteData = roomSummary.info.toInviteData()
         val matrixClient = FakeMatrixClient().apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
@@ -151,7 +154,7 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(expectedInviteSender))
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(inviteData, expectedInviteSender))
             }
         }
     }
@@ -168,6 +171,7 @@ class JoinRoomPresenterTest {
                 flowOf(Optional.of(roomSummary))
             }
         }
+        val inviteData = roomSummary.info.toInviteData()
         val presenter = createJoinRoomPresenter(
             matrixClient = matrixClient,
             acceptDeclineInvitePresenter = acceptDeclinePresenter
@@ -176,16 +180,14 @@ class JoinRoomPresenterTest {
             skipItems(1)
 
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.AcceptInvite)
-                state.eventSink(JoinRoomEvents.DeclineInvite(false))
-
-                val inviteData = state.contentState.toInviteData()
+                state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
+                state.eventSink(JoinRoomEvents.DeclineInvite(inviteData))
 
                 assert(eventSinkRecorder)
                     .isCalledExactly(2)
                     .withSequence(
                         listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
+                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = true))),
                     )
             }
         }

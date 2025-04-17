@@ -66,6 +66,7 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -577,7 +578,8 @@ class RoomListPresenterTest {
             roomListService = roomListService,
         )
         val roomSummary = aRoomSummary(
-            currentUserMembership = CurrentUserMembership.INVITED
+            currentUserMembership = CurrentUserMembership.INVITED,
+            inviter = aRoomMember(),
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         roomListService.postAllRooms(listOf(roomSummary))
@@ -593,16 +595,17 @@ class RoomListPresenterTest {
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
                 it.id == roomSummary.roomId.value
             }
-            state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
-            state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))
+            val inviteData = roomListRoomSummary.toInviteData()!!
 
-            val inviteData = roomListRoomSummary.toInviteData()
+            state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
+            state.eventSink(RoomListEvents.DeclineInvite(inviteData))
+
 
             assert(eventSinkRecorder)
                 .isCalledExactly(2)
                 .withSequence(
                     listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
+                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = false))),
                 )
         }
     }

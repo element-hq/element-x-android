@@ -8,6 +8,7 @@
 package io.element.android.features.joinroom.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
@@ -50,12 +51,18 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong", null))
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
+                    inviteData = anInviteData(),
+                    inviteSender = null,
+                ))
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(
                     numberOfMembers = 123,
-                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(anInviteSender()),
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
+                        inviteData = anInviteData(),
+                        inviteSender = anInviteSender(),
+                    ),
                 )
             ),
             aJoinRoomState(
@@ -198,6 +205,15 @@ internal fun anInviteSender(
     avatarData = avatarData,
     membershipChangeReason = membershipChangeReason,
 )
+
+internal fun anInviteData(
+    roomId: RoomId = A_ROOM_ID,
+    roomName: String = "Room name",
+    isDm: Boolean = false,
+) = InviteData(
+    roomId = roomId,
+    roomName = roomName,
+    isDm = isDm,)
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")
 private val A_ROOM_ALIAS = RoomAlias("#exa:matrix.org")

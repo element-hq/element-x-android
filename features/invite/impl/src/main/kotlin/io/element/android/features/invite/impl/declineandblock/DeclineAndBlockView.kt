@@ -132,7 +132,7 @@ fun DeclineAndBlockView(
 
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                text = stringResource(CommonStrings.action_decline_and_block),
+                text = stringResource(CommonStrings.action_decline),
                 destructive = true,
                 showProgress = isDeclining,
                 onClick = {

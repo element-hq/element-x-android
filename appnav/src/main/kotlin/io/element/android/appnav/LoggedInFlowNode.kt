@@ -51,7 +51,6 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
-import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
@@ -113,7 +112,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val sendingQueue: SendQueues,
     private val logoutEntryPoint: LogoutEntryPoint,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
-    private val reportRoomEntryPoint: ReportRoomEntryPoint,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -256,9 +254,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
-
-        @Parcelize
-        data class ReportRoom(val roomId: RoomId) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -304,10 +299,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
                         backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
-                    }
-
-                    override fun onReportRoomClick(roomId: RoomId) {
-                        backstack.push(NavTarget.ReportRoom(roomId))
                     }
                 }
                 roomListEntryPoint
@@ -482,9 +473,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     })
                     .build()
-            }
-            is NavTarget.ReportRoom -> {
-                reportRoomEntryPoint.createNode(this, buildContext, navTarget.roomId)
             }
         }
     }

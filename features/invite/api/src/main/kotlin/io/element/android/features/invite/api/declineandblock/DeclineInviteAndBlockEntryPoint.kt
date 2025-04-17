@@ -9,9 +9,9 @@ package io.element.android.features.invite.api.declineandblock
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import io.element.android.features.invite.api.acceptdecline.InviteData
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface DeclineAndBlockEntryPoint : FeatureEntryPoint {
+interface DeclineInviteAndBlockEntryPoint : FeatureEntryPoint {
     fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData): Node
 }

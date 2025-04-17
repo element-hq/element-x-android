@@ -7,7 +7,9 @@
 
 package io.element.android.features.invite.api.acceptdecline
 
+import io.element.android.features.invite.api.InviteData
+
 interface AcceptDeclineInviteEvents {
-    data class AcceptInvite(val invite: InviteData?) : AcceptDeclineInviteEvents
-    data class DeclineInvite(val invite: InviteData?, val blockUser: Boolean = false) : AcceptDeclineInviteEvents
+    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvents
+    data class DeclineInvite(val invite: InviteData, val shouldConfirm: Boolean) : AcceptDeclineInviteEvents
 }

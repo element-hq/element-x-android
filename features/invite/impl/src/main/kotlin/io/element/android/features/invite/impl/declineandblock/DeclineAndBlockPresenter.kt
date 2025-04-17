@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.invite.api.acceptdecline.InviteData
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
@@ -72,14 +72,20 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
     ) = launch {
         runUpdatingState(action) {
             runCatching {
-                client.getPendingRoom(inviteData.roomId)!!.use {
-                    it.leave().getOrThrow()
-                }
-                if (blockUser) {
-                    client.ignoreUser(inviteData.senderId).getOrThrow()
-                }
-                if(reportRoom) {
-                    //room.reportRoom(reason.takeIf { it.isNotBlank() }).getOrThrow()
+                client.getPendingRoom(inviteData.roomId)!!.use { room ->
+                    room.leave().getOrThrow()
+
+                    if (blockUser) {
+                        val userIdToBlock = room.membershipDetails().getOrNull()?.senderMember?.userId
+                        if (userIdToBlock != null) {
+                            client.ignoreUser(userIdToBlock).getOrThrow()
+                        }
+                    }
+
+                    if (reportRoom) {
+                        //room.reportRoom(reason.takeIf { it.isNotBlank() }).getOrThrow()
+                    }
+
                 }
             }
         }

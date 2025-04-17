@@ -1,0 +1,39 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.features.invite.api
+
+import android.os.Parcelable
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class InviteData(
+    val roomId: RoomId,
+    val roomName: String,
+    val isDm: Boolean,
+) : Parcelable
+
+
+fun RoomPreviewInfo.toInviteData(): InviteData {
+    return InviteData(
+        roomId = roomId,
+        roomName = name ?: roomId.value,
+        isDm = false,
+    )
+}
+
+fun MatrixRoomInfo.toInviteData(): InviteData {
+    return InviteData(
+        roomId = id,
+        roomName = name ?: id.value,
+        isDm = isDm,
+    )
+}

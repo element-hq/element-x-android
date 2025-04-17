@@ -9,6 +9,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -28,6 +29,7 @@ data class RoomListState(
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val contextMenu: ContextMenu,
+    val declineInviteMenu: DeclineInviteMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
     val canReportBug: Boolean,
@@ -52,6 +54,11 @@ data class RoomListState(
             val eventCacheFeatureFlagEnabled: Boolean,
             val hasNewContent: Boolean,
         ) : ContextMenu
+    }
+
+    sealed interface DeclineInviteMenu {
+        data object Hidden : DeclineInviteMenu
+        data class Shown(val roomSummary: RoomListRoomSummary) : DeclineInviteMenu
     }
 }
 

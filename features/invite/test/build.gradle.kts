@@ -25,5 +25,6 @@ android {
 dependencies {
     implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrix.test)
     api(projects.features.invite.api)
 }

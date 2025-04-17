@@ -7,6 +7,8 @@
 
 package io.element.android.features.joinroom.impl
 
+import io.element.android.features.invite.api.InviteData
+
 sealed interface JoinRoomEvents {
     data object RetryFetchingContent : JoinRoomEvents
     data object DismissErrorAndHideContent : JoinRoomEvents
@@ -16,6 +18,6 @@ sealed interface JoinRoomEvents {
     data class CancelKnock(val requiresConfirmation: Boolean) : JoinRoomEvents
     data class UpdateKnockMessage(val message: String) : JoinRoomEvents
     data object ClearActionStates : JoinRoomEvents
-    data object AcceptInvite : JoinRoomEvents
-    data class DeclineInvite(val blockUser: Boolean) : JoinRoomEvents
+    data class AcceptInvite(val inviteData: InviteData) : JoinRoomEvents
+    data class DeclineInvite(val inviteData: InviteData) : JoinRoomEvents
 }

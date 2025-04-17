@@ -8,6 +8,7 @@
 package io.element.android.features.joinroom.impl
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -95,7 +96,7 @@ sealed interface ContentState {
 sealed interface JoinAuthorisationStatus {
     data object None : JoinAuthorisationStatus
     data class IsSpace(val applicationName: String) : JoinAuthorisationStatus
-    data class IsInvited(val inviteSender: InviteSender?) : JoinAuthorisationStatus
+    data class IsInvited(val inviteData: InviteData, val inviteSender: InviteSender?) : JoinAuthorisationStatus
     data class IsBanned(val banSender: InviteSender?, val reason: String?) : JoinAuthorisationStatus
     data object IsKnocked : JoinAuthorisationStatus
     data object CanKnock : JoinAuthorisationStatus

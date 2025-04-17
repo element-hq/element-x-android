@@ -226,7 +226,7 @@ class RoomListViewTest {
         rule.clickOn(CommonStrings.action_accept)
         rule.clickOn(CommonStrings.action_decline)
         eventsRecorder.assertList(
-            listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.DeclineInvite(invitedRoom)),
+            listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.ShowDeclineInviteMenu(invitedRoom)),
         )
     }
 }

@@ -28,7 +28,7 @@ class DefaultRoomListEntryPoint @Inject constructor() : RoomListEntryPoint {
             }
 
             override fun build(): Node {
-                return parentNode.createNode<RoomListNode>(buildContext, plugins)
+                return parentNode.createNode<RoomListFlowNode>(buildContext, plugins)
             }
         }
     }

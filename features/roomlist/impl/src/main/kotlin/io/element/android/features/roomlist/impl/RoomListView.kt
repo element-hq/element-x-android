@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.RoomListContentView
@@ -50,6 +51,7 @@ fun RoomListView(
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
+    onDeclineInviteAndBlockUser: (roomSummary: RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -64,6 +66,13 @@ fun RoomListView(
                     eventSink = state.eventSink,
                     onRoomSettingsClick = onRoomSettingsClick,
                     onReportRoomClick = onReportRoomClick,
+                )
+            }
+            if( state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
+                RoomListDeclineInviteMenu(
+                    menu = state.declineInviteMenu,
+                    eventSink = state.eventSink,
+                    onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
                 )
             }
 
@@ -181,6 +190,7 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onRoomSettingsClick = {},
         onReportRoomClick = {},
         onMenuActionClick = {},
+        onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
     )
 }

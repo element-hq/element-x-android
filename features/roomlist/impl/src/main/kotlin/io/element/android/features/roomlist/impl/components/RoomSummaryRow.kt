@@ -104,7 +104,7 @@ internal fun RoomSummaryRow(
                             eventSink(RoomListEvents.AcceptInvite(room))
                         },
                         onDeclineClick = {
-                            eventSink(RoomListEvents.DeclineInvite(room))
+                            eventSink(RoomListEvents.ShowDeclineInviteMenu(room))
                         }
                     )
                 }
