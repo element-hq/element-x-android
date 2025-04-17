@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.toImmutableList
+import androidx.core.net.toUri
 
 open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEditState> {
     override val values: Sequence<RoomDetailsEditState>
@@ -22,7 +23,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
             aRoomDetailsEditState(),
             aRoomDetailsEditState(roomTopic = ""),
             aRoomDetailsEditState(roomRawName = ""),
-            aRoomDetailsEditState(roomAvatarUrl = Uri.parse("example://uri")),
+            aRoomDetailsEditState(roomAvatarUrl = "example://uri".toUri()),
             aRoomDetailsEditState(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState(saveAction = AsyncAction.Loading),

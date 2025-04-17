@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -112,7 +113,7 @@ open class EditableAvatarViewUriProvider : PreviewParameterProvider<Uri?> {
     override val values: Sequence<Uri?>
         get() = sequenceOf(
             null,
-            Uri.parse("mxc://matrix.org/123456"),
-            Uri.parse("https://example.com/avatar.jpg"),
+            "mxc://matrix.org/123456".toUri(),
+            "https://example.com/avatar.jpg".toUri(),
         )
 }
