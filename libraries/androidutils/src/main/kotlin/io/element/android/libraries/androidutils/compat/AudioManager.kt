@@ -10,6 +10,8 @@ package io.element.android.libraries.androidutils.compat
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
+import io.element.android.libraries.core.data.tryOrNull
+import timber.log.Timber
 
 fun AudioManager.enableExternalAudioDevice() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -30,10 +32,26 @@ fun AudioManager.enableExternalAudioDevice() {
             AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
         )
         val devices = availableCommunicationDevices
-        val selectedDevice = devices.find {
-            wantedDeviceTypes.contains(it.type)
+        val selectedDevice = devices.minByOrNull {
+            wantedDeviceTypes.indexOf(it.type).let { index ->
+                // If the device type is not in the wantedDeviceTypes list, we give it a low priority
+                if (index == -1) Int.MAX_VALUE else index
+            }
         }
-        selectedDevice?.let { setCommunicationDevice(it) }
+        selectedDevice?.let { device ->
+            Timber.d("Audio device selected, type: ${device.type}")
+            tryOrNull(
+                onError = { failure ->
+                    Timber.e(failure, "Audio: exception when setting communication device")
+                }
+            ) {
+                setCommunicationDevice(device).also {
+                    if (!it) {
+                        Timber.w("Audio: unable to set the communication device")
+                    }
+                }
+            }
+        }
     } else {
         // If we don't have access to the new APIs, use the deprecated ones
         @Suppress("DEPRECATION")
