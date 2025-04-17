@@ -48,7 +48,7 @@ telephoto = "0.15.1"
 dependencyAnalysis = "2.16.0"
 
 # DI
-dagger = "2.56.1"
+dagger = "2.56.2"
 anvil = "0.4.1"
 
 # Auto service
