@@ -110,9 +110,9 @@ internal fun CallScreenView(
         } else {
             CallWebView(
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .fillMaxSize(),
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .fillMaxSize(),
                 url = state.urlState,
                 userAgent = state.userAgent,
                 onPermissionsRequest = { request ->
