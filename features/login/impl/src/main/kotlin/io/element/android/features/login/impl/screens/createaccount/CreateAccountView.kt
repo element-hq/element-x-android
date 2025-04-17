@@ -41,7 +41,6 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +99,6 @@ fun CreateAccountView(
                         .fillMaxWidth()
                         .height(2.dp),
                     progress = { state.pageProgress / 100f },
-                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 )
             }
         }

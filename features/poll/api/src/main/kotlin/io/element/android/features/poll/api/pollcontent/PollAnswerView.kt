@@ -28,7 +28,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -112,7 +111,6 @@ internal fun PollAnswerView(
                         else -> 0f
                     }
                 },
-                trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 strokeCap = StrokeCap.Round,
             )
         }

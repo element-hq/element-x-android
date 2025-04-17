@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -156,7 +155,6 @@ private fun Content(
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
                     progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
-                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 )
                 Text(
                     modifier = Modifier.align(Alignment.End),
@@ -167,7 +165,6 @@ private fun Content(
             BackupUploadState.Waiting -> {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
-                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 )
                 if (state.waitingForALongTime) {
                     Text(
