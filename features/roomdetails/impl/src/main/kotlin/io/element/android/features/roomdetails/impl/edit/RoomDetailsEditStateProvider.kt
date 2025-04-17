@@ -9,13 +9,13 @@ package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.net.toUri
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.toImmutableList
-import androidx.core.net.toUri
 
 open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEditState> {
     override val values: Sequence<RoomDetailsEditState>
