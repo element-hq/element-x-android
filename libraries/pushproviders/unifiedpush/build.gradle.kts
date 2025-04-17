@@ -42,13 +42,7 @@ dependencies {
     implementation(libs.serialization.json)
 
     // UnifiedPush library
-    implementation(libs.unifiedpush) {
-        // Exclude package com.google.crypto.tink
-        // Duplicate classes between
-        // tink-1.16.0.jar -> tink-1.16.0 (com.google.crypto.tink:tink:1.16.0)
-        // tink-android-1.8.0.jar tink-android-1.8.0 (com.google.crypto.tink:tink-android:1.8.0)
-        exclude(group = "com.google.crypto.tink", module = "tink")
-    }
+    implementation(libs.unifiedpush)
 
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
