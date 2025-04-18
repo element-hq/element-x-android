@@ -11,8 +11,8 @@ import config.PushProvidersConfig
 
 object ModulesConfig {
     val pushProvidersConfig = PushProvidersConfig(
-        includeFirebase = true,
-        includeUnifiedPush = true,
+        includeFirebase = BuildTimeConfig.PUSH_CONFIG_INCLUDE_FIREBASE,
+        includeUnifiedPush = BuildTimeConfig.PUSH_CONFIG_INCLUDE_UNIFIED_PUSH,
     )
 
     val analyticsConfig: AnalyticsConfig = if (isEnterpriseBuild) {
