@@ -363,7 +363,9 @@ private fun MessagesViewContent(
             },
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
-                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
+                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
+                        pinnedMessagesCount = state.pinnedMessagesBannerState.pinnedMessagesCount(),
+                    )
                     TimelineView(
                         state = state.timelineState,
                         timelineProtectionState = state.timelineProtectionState,
