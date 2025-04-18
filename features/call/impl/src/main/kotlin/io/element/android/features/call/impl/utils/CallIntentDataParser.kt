@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.utils
 
 import android.net.Uri
+import androidx.core.net.toUri
 import javax.inject.Inject
 
 class CallIntentDataParser @Inject constructor() {
@@ -17,7 +18,7 @@ class CallIntentDataParser @Inject constructor() {
     )
 
     fun parse(data: String?): String? {
-        val parsedUrl = data?.let { Uri.parse(data) } ?: return null
+        val parsedUrl = data?.toUri() ?: return null
         val scheme = parsedUrl.scheme
         return when {
             scheme in validHttpSchemes -> parsedUrl
@@ -37,7 +38,7 @@ class CallIntentDataParser @Inject constructor() {
     private fun Uri.getUrlParameter(): Uri? {
         return getQueryParameter("url")
             ?.let { urlParameter ->
-                Uri.parse(urlParameter).takeIf { uri ->
+                urlParameter.toUri().takeIf { uri ->
                     uri.scheme in validHttpSchemes && !uri.host.isNullOrBlank()
                 }
             }

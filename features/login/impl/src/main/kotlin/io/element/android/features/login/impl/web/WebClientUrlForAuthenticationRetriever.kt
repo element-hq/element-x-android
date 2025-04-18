@@ -7,7 +7,7 @@
 
 package io.element.android.features.login.impl.web
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.resolver.network.WellknownAPI
@@ -43,7 +43,7 @@ class DefaultWebClientUrlForAuthenticationRetriever @Inject constructor(
         }
         val registrationHelperUrl = result.registrationHelperUrl
         return if (registrationHelperUrl != null) {
-            Uri.parse(registrationHelperUrl)
+            registrationHelperUrl.toUri()
                 .buildUpon()
                 .appendQueryParameter("hs_url", homeServerUrl)
                 .build()

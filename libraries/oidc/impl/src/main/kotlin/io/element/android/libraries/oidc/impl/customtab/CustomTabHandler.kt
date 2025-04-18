@@ -10,10 +10,10 @@ package io.element.android.libraries.oidc.impl.customtab
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
-import android.net.Uri
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
+import androidx.core.net.toUri
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
@@ -55,7 +55,7 @@ class CustomTabHandler @Inject constructor(
             customTabsSession = customTabsClient?.newSession(null)
         }
 
-        customTabsSession?.mayLaunchUrl(Uri.parse(url), null, null)
+        customTabsSession?.mayLaunchUrl(url.toUri(), null, null)
     }
 
     fun disposeCustomTab() {

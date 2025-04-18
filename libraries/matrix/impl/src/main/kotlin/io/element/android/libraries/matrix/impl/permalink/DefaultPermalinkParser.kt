@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.permalink
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -38,7 +38,7 @@ class DefaultPermalinkParser @Inject constructor(
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
      */
     override fun parse(uriString: String): PermalinkData {
-        val uri = Uri.parse(uriString)
+        val uri = uriString.toUri()
         // the client or element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the
         // mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
         // so convert URI to matrix.to to simplify parsing process

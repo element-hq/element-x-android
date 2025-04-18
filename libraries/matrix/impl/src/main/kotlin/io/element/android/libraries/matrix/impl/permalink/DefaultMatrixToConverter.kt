@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.permalink
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.extensions.replacePrefix
@@ -43,7 +44,7 @@ class DefaultMatrixToConverter @Inject constructor() : MatrixToConverter {
             // Web or client url
             SUPPORTED_PATHS.any { it in uriString } -> {
                 val path = SUPPORTED_PATHS.first { it in uriString }
-                Uri.parse(baseUrl + uriString.substringAfter(path))
+                (baseUrl + uriString.substringAfter(path)).toUri()
             }
             // URL is not supported
             else -> null

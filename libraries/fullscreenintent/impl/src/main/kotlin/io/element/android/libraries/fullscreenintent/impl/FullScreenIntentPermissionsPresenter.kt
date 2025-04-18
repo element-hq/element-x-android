@@ -9,7 +9,6 @@ package io.element.android.libraries.fullscreenintent.impl
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import io.element.android.libraries.architecture.Presenter
@@ -77,7 +77,7 @@ class FullScreenIntentPermissionsPresenter @Inject constructor(
             try {
                 val intent = Intent(
                     Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
-                    Uri.parse("package:${buildMeta.applicationId}")
+                    "package:${buildMeta.applicationId}".toUri()
                 )
                 externalIntentLauncher.launch(intent)
             } catch (e: ActivityNotFoundException) {

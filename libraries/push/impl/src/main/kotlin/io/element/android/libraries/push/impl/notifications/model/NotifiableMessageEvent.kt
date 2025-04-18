@@ -7,6 +7,7 @@
 package io.element.android.libraries.push.impl.notifications.model
 
 import android.net.Uri
+import androidx.core.net.toUri
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -52,7 +53,7 @@ data class NotifiableMessageEvent(
     // Example of value:
     // content://io.element.android.x.debug.notifications.fileprovider/downloads/temp/notif/matrix.org/XGItzSDOnSyXjYtOPfiKexDJ
     val imageUri: Uri?
-        get() = imageUriString?.let { Uri.parse(it) }
+        get() = imageUriString?.toUri()
 }
 
 /**
