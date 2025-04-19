@@ -20,9 +20,7 @@ interface ForgetRoom {
 @ContributesBinding(SessionScope::class)
 class DefaultForgetRoom @Inject constructor(private val client: MatrixClient) : ForgetRoom {
     override suspend fun invoke(roomId: RoomId): Result<Unit> {
-        return client
-            .getPendingRoom(roomId)
-            ?.forget()
-            ?: Result.failure(IllegalStateException("No pending room found"))
+        return client.getRoom(roomId)?.use { it.forget() }
+            ?: Result.failure(IllegalStateException("Room not found"))
     }
 }

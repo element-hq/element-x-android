@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -84,7 +84,7 @@ import kotlin.time.Duration.Companion.seconds
     fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
         val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val syncService = FakeSyncService(SyncState.Running)
-        val fakeRoom = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
+        val fakeRoom = FakeJoinedMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
         val client = FakeMatrixClient(syncService = syncService).apply {
             givenGetRoomResult(A_ROOM_ID, fakeRoom)
         }

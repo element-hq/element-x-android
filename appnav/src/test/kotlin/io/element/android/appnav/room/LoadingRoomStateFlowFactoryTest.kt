@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import kotlinx.coroutines.test.runTest
@@ -23,7 +24,7 @@ import org.junit.Test
 class LoadingRoomStateFlowFactoryTest {
     @Test
     fun `flow should emit Loading and then Loaded when there is a room in cache`() = runTest {
-        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID)
+        val room = FakeJoinedMatrixRoom(baseRoom = FakeMatrixRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID))
         val matrixClient = FakeMatrixClient(A_SESSION_ID).apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -38,7 +39,7 @@ class LoadingRoomStateFlowFactoryTest {
 
     @Test
     fun `flow should emit Loading and then Loaded when there is a room in cache after SS is loaded`() = runTest {
-        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID)
+        val room = FakeJoinedMatrixRoom(baseRoom = FakeMatrixRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID))
         val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(A_SESSION_ID, roomListService = roomListService)
         val flowFactory = LoadingRoomStateFlowFactory(matrixClient)

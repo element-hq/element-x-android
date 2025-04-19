@@ -21,8 +21,8 @@ interface CancelKnockRoom {
 class DefaultCancelKnockRoom @Inject constructor(private val client: MatrixClient) : CancelKnockRoom {
     override suspend fun invoke(roomId: RoomId): Result<Unit> {
         return client
-            .getPendingRoom(roomId)
-            ?.leave()
+            .getRoom(roomId)
+            ?.use { it.leave() }
             ?: Result.failure(IllegalStateException("No pending room found"))
     }
 }

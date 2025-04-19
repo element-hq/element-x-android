@@ -7,14 +7,14 @@
 
 package io.element.android.libraries.matrix.test.timeline
 
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class LiveTimelineProvider(
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
 ) : TimelineProvider {
     override fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline)
 }

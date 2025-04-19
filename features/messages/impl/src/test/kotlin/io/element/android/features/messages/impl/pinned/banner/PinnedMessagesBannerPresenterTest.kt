@@ -12,14 +12,14 @@ import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProv
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -54,7 +54,7 @@ class PinnedMessagesBannerPresenterTest {
 
     @Test
     fun `present - loading state`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             createTimelineResult = { Result.success(FakeTimeline()) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
@@ -85,7 +85,7 @@ class PinnedMessagesBannerPresenterTest {
                 )
             )
         )
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             createTimelineResult = { Result.success(pinnedEventsTimeline) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
@@ -124,7 +124,7 @@ class PinnedMessagesBannerPresenterTest {
                 )
             )
         )
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             createTimelineResult = { Result.success(pinnedEventsTimeline) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
@@ -159,7 +159,7 @@ class PinnedMessagesBannerPresenterTest {
 
     @Test
     fun `present - timeline failed`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedMatrixRoom(
             createTimelineResult = { Result.failure(Exception()) }
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
@@ -179,7 +179,7 @@ class PinnedMessagesBannerPresenterTest {
     }
 
     private fun TestScope.createPinnedMessagesBannerPresenter(
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
         itemFactory: PinnedMessagesBannerItemFactory = PinnedMessagesBannerItemFactory(
             coroutineDispatchers = testCoroutineDispatchers(),
             formatter = FakePinnedMessagesBannerFormatter(

@@ -25,7 +25,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.api.roomAliasFromName
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 class EditRoomAddressPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val client: MatrixClient,
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
     private val roomAliasHelper: RoomAliasHelper,
 ) : Presenter<EditRoomAddressState> {
     @AssistedFactory

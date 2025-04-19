@@ -12,7 +12,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
@@ -42,7 +42,7 @@ import javax.inject.Inject
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class, boundType = TimelineProvider::class)
 class TimelineController @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedMatrixRoom,
 ) : Closeable, TimelineProvider {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
