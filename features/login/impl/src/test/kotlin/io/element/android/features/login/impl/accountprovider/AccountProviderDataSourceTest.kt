@@ -11,6 +11,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.login.impl.R
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -28,11 +29,6 @@ class AccountProviderDataSourceTest {
             assertThat(initialState).isEqualTo(
                 AccountProvider(
                     url = FakeEnterpriseService.A_FAKE_HOMESERVER,
-                    title = FakeEnterpriseService.A_FAKE_HOMESERVER,
-                    subtitle = null,
-                    isPublic = false,
-                    isMatrixOrg = false,
-                    isValid = false,
                 )
             )
         }
@@ -47,12 +43,10 @@ class AccountProviderDataSourceTest {
             val initialState = awaitItem()
             assertThat(initialState).isEqualTo(
                 AccountProvider(
-                    url = AuthenticationConfig.MATRIX_ORG_URL,
+                    url = "https://matrix.org",
                     title = "matrix.org",
-                    subtitle = null,
+                    descriptionResourceId = R.string.screen_change_account_provider_matrix_org_subtitle,
                     isPublic = true,
-                    isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -70,10 +64,8 @@ class AccountProviderDataSourceTest {
                 AccountProvider(
                     url = "https://example.com",
                     title = "example.com",
-                    subtitle = null,
+                    descriptionResourceId = null,
                     isPublic = false,
-                    isMatrixOrg = false,
-                    isValid = false,
                 )
             )
             sut.reset()
