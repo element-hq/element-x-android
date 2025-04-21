@@ -92,8 +92,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
         return notificationData.flatMap {
             if (it == null) {
                 Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
-                return@flatMap Result.failure(ResolvingException("Unable to resolve event"))
+                return@flatMap Result.failure(ResolvingException("Unable to resolve event $eventId"))
             } else {
+                Timber.tag(loggerTag.value).d("Found notification item for $eventId")
                 it.asNotifiableEvent(client, sessionId)
             }
         }
