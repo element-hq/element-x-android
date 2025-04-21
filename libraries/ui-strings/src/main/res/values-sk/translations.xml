@@ -111,6 +111,7 @@
   <string name="action_report">"Nahlásiť"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
+  <string name="action_report_dm">"Nahlásiť konverzáciu"</string>
   <string name="action_report_room">"Nahlásiť miestnosť"</string>
   <string name="action_reset">"Obnoviť"</string>
   <string name="action_reset_identity">"Obnoviť identitu"</string>
@@ -356,6 +357,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_decline_and_block_block_user_option_description">"Od tohto používateľa sa vám nezobrazia žiadne správy ani pozvánky do miestnosti"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Zablokovať používateľa"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Nahlásiť túto miestnosť poskytovateľovi účtu."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Opíšte dôvod nahlásenia…"</string>
   <string name="screen_decline_and_block_title">"Odmietnuť a zablokovať"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie."</string>

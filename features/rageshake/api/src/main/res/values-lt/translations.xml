@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s nulūžo paskutinį kartą, kai buvo naudojama. Ar norėtumėte su mumis pasidalyti strigčių ataskaita?"</string>
+  <string name="rageshake_detection_dialog_content">"Atrodo, kad nusivylęs purtote telefoną. Ar norėtumėte atidaryti pranešimo apie klaidas ekraną?"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Aptikimo riba"</string>
+</resources>

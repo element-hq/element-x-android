@@ -111,6 +111,7 @@
   <string name="action_report">"Поскаржитися"</string>
   <string name="action_report_bug">"Повідомити про помилку"</string>
   <string name="action_report_content">"Повідомити про вміст"</string>
+  <string name="action_report_dm">"Поскаржитися на розмову"</string>
   <string name="action_report_room">"Поскаржитися на кімнату"</string>
   <string name="action_reset">"Скинути"</string>
   <string name="action_reset_identity">"Скинути ідентичність"</string>

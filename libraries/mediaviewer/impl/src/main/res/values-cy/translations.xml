@@ -2,6 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_media_browser_list_mode_files">"Ffeiliau"</string>
   <string name="screen_media_browser_list_mode_media">"Cyfryngau"</string>
+  <string name="screen_media_details_file_format">"Fformat ffeil"</string>
   <string name="screen_media_details_filename">"Enw\'r ffeil"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Dim mwy o ffeiliau i\'w dangos"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Dim mwy o gyfryngau i\'w dangos"</string>
+  <string name="screen_media_details_uploaded_by">"Llwythwyd gan"</string>
   <string name="screen_media_details_uploaded_on">"Llwythwyd i fyny ar"</string>
 </resources>

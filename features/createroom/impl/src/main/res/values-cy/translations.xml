@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_add_people_title">"Gwahodd pobl"</string>
+  <string name="screen_create_room_room_access_section_anyone_option_description">"Gall unrhyw un ymuno â\'r ystafell hon"</string>
   <string name="screen_create_room_room_access_section_anyone_option_title">"Unrhyw un"</string>
+  <string name="screen_create_room_room_access_section_header">"Mynediad i\'r Ystafell"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Gall unrhyw un ofyn am gael ymuno â\'r ystafell ond bydd rhaid i weinyddwr neu gymedrolwr dderbyn y cais"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Gofyn i gael ymuno"</string>
+  <string name="screen_create_room_room_address_section_footer">"Er mwyn i\'r ystafell hon fod yn weladwy yn y cyfeiriadur ystafelloedd cyhoeddus, bydd angen cyfeiriad ystafell arnoch."</string>
+  <string name="screen_create_room_room_address_section_title">"Cyfeiriad yr ystafell"</string>
+  <string name="screen_create_room_room_name_label">"Enw\'r ystafell"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Gwelededd yr ystafell"</string>
   <string name="screen_create_room_title">"Creu ystafell"</string>
 </resources>

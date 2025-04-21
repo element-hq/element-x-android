@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_poll_add_option_btn">"Ychwanegu dewis"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
   <string name="screen_create_poll_title">"Creu Pôl"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Dileu Pôl"</string>
   <string name="screen_edit_poll_title">"Golygu pôl"</string>

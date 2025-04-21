@@ -7,11 +7,11 @@
   <string name="screen_room_change_permissions_ban_people">"Personen verbannen"</string>
   <string name="screen_room_change_permissions_delete_messages">"Berichten verwijderen"</string>
   <string name="screen_room_change_permissions_everyone">"Iedereen"</string>
-  <string name="screen_room_change_permissions_invite_people">"Personen uitnodigen"</string>
+  <string name="screen_room_change_permissions_invite_people">"Nodig personen uit en accepteer verzoeken om deel te nemen"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderatie van leden"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Berichten en inhoud"</string>
   <string name="screen_room_change_permissions_moderators">"Beheerders en moderators"</string>
-  <string name="screen_room_change_permissions_remove_people">"Personen verwijderen"</string>
+  <string name="screen_room_change_permissions_remove_people">"Verwijder personen en weiger verzoeken om deel te nemen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Kamerafbeelding wijzigen"</string>
   <string name="screen_room_change_permissions_room_details">"Kamergegevens"</string>
   <string name="screen_room_change_permissions_room_name">"Kamernaam wijzigen"</string>

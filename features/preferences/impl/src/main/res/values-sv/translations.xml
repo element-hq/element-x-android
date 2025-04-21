@@ -19,6 +19,10 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare."</string>
   <string name="screen_advanced_settings_share_presence">"Dela närvaro"</string>
   <string name="screen_advanced_settings_share_presence_description">"Om det är avstängt kan du inte skicka eller ta emot läskvitton eller skrivnotiser"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Göm alltid"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Visa alltid"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"I privata rum"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"En dold media kan alltid visas genom att trycka på den"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Visa media i tidslinjen"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktivera alternativet för att visa meddelandekälla i tidslinjen."</string>
   <string name="screen_blocked_users_empty">"Du har inga blockerade användare"</string>
@@ -59,6 +63,7 @@ Om du fortsätter kan vissa av dina inställningar ändras."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminställningar"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemaviseringar avstängda"</string>
   <string name="screen_notification_settings_title">"Aviseringar"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historik"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Felsök"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Felsök aviseringar"</string>
 </resources>
