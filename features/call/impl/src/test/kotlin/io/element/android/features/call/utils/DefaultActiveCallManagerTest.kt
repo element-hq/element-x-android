@@ -35,6 +35,7 @@ import io.element.android.libraries.push.api.notifications.NotificationIdProvide
 import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.FakeOnMissedCallNotificationHandler
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
@@ -323,5 +324,6 @@ class DefaultActiveCallManagerTest {
         notificationManagerCompat = notificationManagerCompat,
         matrixClientProvider = matrixClientProvider,
         defaultCurrentCallService = DefaultCurrentCallService(),
+        appForegroundStateService = FakeAppForegroundStateService(),
     )
 }

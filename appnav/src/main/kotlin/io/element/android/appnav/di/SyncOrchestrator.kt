@@ -92,7 +92,6 @@ class SyncOrchestrator @AssistedInject constructor(
             syncService.syncState.debounce(100.milliseconds),
             networkMonitor.connectivity,
             appForegroundState,
-
         ) { syncState, networkState, isAppActive ->
             val isNetworkAvailable = networkState == NetworkStatus.Connected
 
