@@ -106,7 +106,7 @@ sealed interface NotificationContent {
         data object RoomServerAcl : StateEvent
         data object RoomThirdPartyInvite : StateEvent
         data object RoomTombstone : StateEvent
-        data object RoomTopic : StateEvent
+        data class RoomTopic(val topic: String) : StateEvent
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
     }

@@ -27,5 +27,6 @@ fun aRustTimelineItemMessageContent(body: String = "Hello") = TimelineItemConten
         reactions = emptyList(),
         threadRoot = null,
         inReplyTo = null,
+        threadSummary = null,
     ),
 )
