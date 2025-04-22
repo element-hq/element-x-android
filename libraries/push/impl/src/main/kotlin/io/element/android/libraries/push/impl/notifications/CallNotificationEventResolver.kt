@@ -17,6 +17,7 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -69,6 +70,9 @@ class DefaultCallNotificationEventResolver @Inject constructor(
                     senderAvatarUrl = senderAvatarUrl,
                 )
             } else {
+                val now = System.currentTimeMillis()
+                val elapsed = now - timestamp
+                Timber.d("Event $eventId is call notify but should not ring: $timestamp vs $now ($elapsed ms elapsed), notify: ${content.type}")
                 // Create a simple message notification event
                 buildNotifiableMessageEvent(
                     sessionId = sessionId,
