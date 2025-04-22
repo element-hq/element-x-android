@@ -14,6 +14,7 @@
   <string name="screen_room_attachment_source_files">"Atodiad"</string>
   <string name="screen_room_attachment_source_location">"Lleoliad"</string>
   <string name="screen_room_attachment_source_poll">"Pôl"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Rhowch wybod i\'r ystafell gyfan"</string>
   <string name="screen_room_mentions_at_room_title">"Pawb"</string>
   <string name="screen_room_timeline_less_reactions">"Dangos llai"</string>
   <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>

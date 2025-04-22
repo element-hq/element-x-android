@@ -109,6 +109,7 @@
   <string name="action_report">"Rapporter"</string>
   <string name="action_report_bug">"Rapporter feil"</string>
   <string name="action_report_content">"Rapporter innhold"</string>
+  <string name="action_report_dm">"Rapporter samtale"</string>
   <string name="action_report_room">"Rapporter rommet"</string>
   <string name="action_reset">"Tilbakestill"</string>
   <string name="action_reset_identity">"Tilbakestill identitet"</string>
