@@ -7,13 +7,16 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import org.matrix.rustcomponents.sdk.OidcConfiguration
 import javax.inject.Inject
 
-class OidcConfigurationProvider @Inject constructor() {
+class OidcConfigurationProvider @Inject constructor(
+    private val buildMeta: BuildMeta,
+) {
     fun get(): OidcConfiguration = OidcConfiguration(
-        clientName = "Element",
+        clientName = buildMeta.applicationName,
         redirectUri = OidcConfig.REDIRECT_URI,
         clientUri = "https://element.io",
         logoUri = "https://element.io/mobile-icon.png",
