@@ -18,16 +18,11 @@ class OidcConfigurationProvider @Inject constructor(
     fun get(): OidcConfiguration = OidcConfiguration(
         clientName = buildMeta.applicationName,
         redirectUri = OidcConfig.REDIRECT_URI,
-        clientUri = "https://element.io",
-        logoUri = "https://element.io/mobile-icon.png",
-        tosUri = "https://element.io/acceptable-use-policy-terms",
-        policyUri = "https://element.io/privacy",
-        contacts = listOf(
-            "support@element.io",
-        ),
-        // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
-        staticRegistrations = mapOf(
-            "https://id.thirdroom.io/realms/thirdroom" to "elementx",
-        ),
+        clientUri = OidcConfig.CLIENT_URI,
+        logoUri = OidcConfig.LOGO_URI,
+        tosUri = OidcConfig.TOS_URI,
+        policyUri = OidcConfig.POLICY_URI,
+        contacts = OidcConfig.CONTACTS,
+        staticRegistrations = OidcConfig.STATIC_REGISTRATIONS,
     )
 }
