@@ -9,12 +9,12 @@ package io.element.android.libraries.androidutils.browser
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Browser
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
+import androidx.core.net.toUri
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import java.util.Locale
 
@@ -58,7 +58,7 @@ fun Activity.openUrlInChromeCustomTab(
                     putString("Accept-Language", Locale.getDefault().toLanguageTag())
                 })
             }
-            .launchUrl(this, Uri.parse(url))
+            .launchUrl(this, url.toUri())
     } catch (activityNotFoundException: ActivityNotFoundException) {
         openUrlInExternalApp(url)
     }
