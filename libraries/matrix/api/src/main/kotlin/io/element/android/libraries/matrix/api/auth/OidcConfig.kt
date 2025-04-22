@@ -7,24 +7,26 @@
 
 package io.element.android.libraries.matrix.api.auth
 
+import io.element.android.libraries.matrix.api.BuildConfig
+
 object OidcConfig {
-    const val CLIENT_URI = "https://element.io"
+    const val CLIENT_URI = BuildConfig.CLIENT_URI
 
     // Notes:
     // 1. the scheme must match the value declared in the AndroidManifest.xml
     // 2. the scheme must be the reverse of the host of CLIENT_URI
-    const val REDIRECT_URI = "io.element:/callback"
+    const val REDIRECT_URI = BuildConfig.REDIRECT_URI
 
     // Note: host must match with the host of CLIENT_URI
-    const val LOGO_URI = "https://element.io/mobile-icon.png"
+    const val LOGO_URI = BuildConfig.LOGO_URI
 
     // Note: host must match with the host of CLIENT_URI
-    const val TOS_URI = "https://element.io/acceptable-use-policy-terms"
+    const val TOS_URI = BuildConfig.TOS_URI
 
     // Note: host must match with the host of CLIENT_URI
-    const val POLICY_URI = "https://element.io/privacy"
+    const val POLICY_URI = BuildConfig.POLICY_URI
 
-    const val CONTACT = "support@element.io"
+    const val CONTACT = BuildConfig.CONTACT
 
     // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
     val STATIC_REGISTRATIONS = mapOf(

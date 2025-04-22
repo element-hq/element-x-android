@@ -15,6 +15,7 @@ object BuildTimeConfig {
     const val GOOGLE_APP_ID_NIGHTLY = "1:912726360885:android:e17435e0beb0303000427c"
 
     val METADATA_HOST: String? = null
+    val METADATA_HOST_REVERSED: String? = null
     val URL_WEBSITE: String? = null
     val URL_LOGO: String? = null
     val URL_COPYRIGHT: String? = null
