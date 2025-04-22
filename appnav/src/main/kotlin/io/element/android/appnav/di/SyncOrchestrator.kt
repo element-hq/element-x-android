@@ -78,7 +78,7 @@ class SyncOrchestrator @AssistedInject constructor(
     internal fun observeStates() = coroutineScope.launch {
         Timber.tag(tag).d("start observing the app and network state")
 
-        val appForegroundState = combine(
+        val isAppActiveFlow = combine(
             appForegroundStateService.isInForeground,
             appForegroundStateService.isInCall,
             appForegroundStateService.isSyncingNotificationEvent,
@@ -91,7 +91,7 @@ class SyncOrchestrator @AssistedInject constructor(
             // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
             syncService.syncState.debounce(100.milliseconds),
             networkMonitor.connectivity,
-            appForegroundState,
+            isAppActiveFlow,
         ) { syncState, networkState, isAppActive ->
             val isNetworkAvailable = networkState == NetworkStatus.Connected
 
