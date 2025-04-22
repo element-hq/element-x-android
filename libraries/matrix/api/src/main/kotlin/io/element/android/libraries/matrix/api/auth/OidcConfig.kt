@@ -24,9 +24,7 @@ object OidcConfig {
     // Note: host must match with the host of CLIENT_URI
     const val POLICY_URI = "https://element.io/privacy"
 
-    val CONTACTS = listOf(
-        "support@element.io",
-    )
+    const val CONTACT = "support@element.io"
 
     // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
     val STATIC_REGISTRATIONS = mapOf(
