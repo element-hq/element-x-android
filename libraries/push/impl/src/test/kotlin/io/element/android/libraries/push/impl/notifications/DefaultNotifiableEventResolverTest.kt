@@ -783,7 +783,7 @@ class DefaultNotifiableEventResolverTest {
         testFailure(NotificationContent.StateEvent.RoomServerAcl)
         testFailure(NotificationContent.StateEvent.RoomThirdPartyInvite)
         testFailure(NotificationContent.StateEvent.RoomTombstone)
-        testFailure(NotificationContent.StateEvent.RoomTopic)
+        testFailure(NotificationContent.StateEvent.RoomTopic(""))
         testFailure(NotificationContent.StateEvent.SpaceChild)
         testFailure(NotificationContent.StateEvent.SpaceParent)
     }

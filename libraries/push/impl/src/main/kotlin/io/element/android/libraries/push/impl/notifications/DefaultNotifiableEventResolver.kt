@@ -250,7 +250,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.StateEvent.RoomServerAcl,
             NotificationContent.StateEvent.RoomThirdPartyInvite,
             NotificationContent.StateEvent.RoomTombstone,
-            NotificationContent.StateEvent.RoomTopic,
+            is NotificationContent.StateEvent.RoomTopic,
             NotificationContent.StateEvent.SpaceChild,
             NotificationContent.StateEvent.SpaceParent -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
