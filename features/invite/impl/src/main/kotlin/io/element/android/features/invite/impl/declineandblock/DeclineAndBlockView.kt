@@ -135,6 +135,7 @@ fun DeclineAndBlockView(
                 text = stringResource(CommonStrings.action_decline),
                 destructive = true,
                 showProgress = isDeclining,
+                enabled = state.declineButtonEnabled,
                 onClick = {
                     focusManager.clearFocus(force = true)
                     state.eventSink(DeclineAndBlockEvents.Decline)

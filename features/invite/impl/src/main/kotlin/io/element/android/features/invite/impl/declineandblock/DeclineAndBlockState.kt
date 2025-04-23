@@ -15,4 +15,6 @@ data class DeclineAndBlockState(
     val blockUser: Boolean,
     val declineAction: AsyncAction<Unit>,
     val eventSink: (DeclineAndBlockEvents) -> Unit
-)
+){
+    val declineButtonEnabled = blockUser || (reportRoom && reportReason.isNotEmpty())
+}
