@@ -9,17 +9,20 @@ package io.element.android.features.login.impl.accountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.login.impl.R
 
 open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
-    val defaultAccountProvider = AccountProviderDataSource().defaultAccountProvider
-    val longAccountProvider = AccountProvider(url="https://default-title.for.really-long-url.with.many.subdomains.co.uk"),
+    private val longAccountProvider = AccountProvider(url="https://default-title.for.really-long-url.with.many.subdomains.co.uk")
     override val values: Sequence<AccountProvider>
         get() = sequenceOf(
-            defaultAccountProvider
-            defaultAccountProvider.copy(descriptionResourceId = null),
+            anAccountProvider(),
+            anAccountProvider().copy(descriptionResourceId = null),
             longAccountProvider,
             longAccountProvider.copy(title = "custom title"),
-            defaultAccountProvider.copy(descriptionResourceId = null, title = "Other", isPublic = false),
+            anAccountProvider().copy(descriptionResourceId = null, title = "Other", isPublic = false),
         )
 }
+
+fun anAccountProvider() = AccountProvider(
+    url = AuthenticationConfig.MATRIX_ORG_URL,
+    isPublic = true,
+)

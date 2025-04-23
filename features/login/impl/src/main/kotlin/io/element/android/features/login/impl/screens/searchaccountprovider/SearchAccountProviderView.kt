@@ -192,6 +192,7 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
             url = homeserverUrl
         )
     }
+}
 
 @PreviewsDayNight
 @Composable
