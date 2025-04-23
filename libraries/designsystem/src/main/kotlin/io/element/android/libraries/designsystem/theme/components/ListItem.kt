@@ -157,15 +157,12 @@ fun ListItem(
                 .then(modifier)
         } else {
             modifier
-        }.then(
-            trailingContent?.toA11yModifier(
+        }
+            .withAccessibilityModifier(
+                content = trailingContent ?: leadingContent,
                 enabled = enabled || alwaysClickable,
                 onClick = onClick,
-            ) ?: leadingContent?.toA11yModifier(
-                enabled = enabled || alwaysClickable,
-                onClick = onClick,
-            ) ?: Modifier
-        ),
+            ),
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
@@ -176,32 +173,33 @@ fun ListItem(
     )
 }
 
-private fun ListItemContent?.toA11yModifier(
+private fun Modifier.withAccessibilityModifier(
+    content: ListItemContent?,
     enabled: Boolean,
     onClick: (() -> Unit)?,
-): Modifier? {
-    return when (this) {
+): Modifier = then(
+    when (content) {
         is ListItemContent.Checkbox -> {
             Modifier.toggleable(
-                value = checked,
+                value = content.checked,
                 role = Role.Checkbox,
-                enabled = enabled,
+                enabled = content.enabled && enabled,
                 onValueChange = { onClick?.invoke() }
             )
         }
         is ListItemContent.Switch -> {
             Modifier.toggleable(
-                value = checked,
+                value = content.checked,
                 role = Role.Switch,
-                enabled = enabled,
+                enabled = content.enabled && enabled,
                 onValueChange = { onClick?.invoke() }
             )
         }
         is ListItemContent.RadioButton -> {
             Modifier.selectable(
-                selected = selected,
+                selected = content.selected,
                 role = Role.RadioButton,
-                enabled = enabled,
+                enabled = content.enabled && enabled,
                 onClick = { onClick?.invoke() }
             )
         }
@@ -210,9 +208,9 @@ private fun ListItemContent?.toA11yModifier(
         is ListItemContent.Icon,
         is ListItemContent.Text,
         is ListItemContent.Counter,
-        null -> null
+        null -> Modifier
     }
-}
+)
 
 /**
  * The style to use for a [ListItem].
