@@ -64,6 +64,7 @@
   <string name="action_delete_poll">"Poista kysely"</string>
   <string name="action_disable">"Poista käytöstä"</string>
   <string name="action_discard">"Hylkää"</string>
+  <string name="action_dismiss">"Sulje"</string>
   <string name="action_done">"Valmis"</string>
   <string name="action_edit">"Muokkaa"</string>
   <string name="action_edit_caption">"Muokkaa kuvatekstiä"</string>
@@ -108,6 +109,7 @@
   <string name="action_report">"Ilmoita"</string>
   <string name="action_report_bug">"Ilmoita virheestä"</string>
   <string name="action_report_content">"Ilmoita sisällöstä"</string>
+  <string name="action_report_dm">"Ilmoita keskustelusta"</string>
   <string name="action_report_room">"Ilmoita huoneesta"</string>
   <string name="action_reset">"Nollaa"</string>
   <string name="action_reset_identity">"Nollaa identiteetti"</string>
@@ -351,6 +353,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_decline_and_block_block_user_option_description">"Et tule näkemään viestejä tai kutsuja tältä käyttäjältä"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Estä käyttäjä"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Ilmoita tästä huoneesta palveluntarjoajallesi."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Kerro syy ilmoittamiseen…"</string>
   <string name="screen_decline_and_block_title">"Hylkää ja estä"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>

@@ -109,6 +109,7 @@
   <string name="action_report">"Signaler"</string>
   <string name="action_report_bug">"Signaler un problème"</string>
   <string name="action_report_content">"Signaler le contenu"</string>
+  <string name="action_report_dm">"Signaler la discussion"</string>
   <string name="action_report_room">"Signaler le salon"</string>
   <string name="action_reset">"Réinitialiser"</string>
   <string name="action_reset_identity">"Réinitialiser l’identité"</string>
@@ -339,14 +340,21 @@ Raison : %1$s."</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban">"Retirer et bannir ce membre"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Bannir"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"L‘utilisateur ne pourra pas rejoindre le salon à nouveau, même si il est invité."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Il ne pourra pas rejoindre le salon à nouveau, même si il est invité."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Êtes-vous certain de vouloir bannir ce membre ?"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"Bannissement de %1$s"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Retirer"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Cet utilisateur pourra rejoindre le salon à nouveau si il est invité."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Voulez-vous vraiment supprimer ce membre ?"</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Voir le profil"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Retirer le membre du salon"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Retirer le membre et interdire l’adhésion à l’avenir ?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Enlever %1$s…"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Vous ne verrez aucun messages ou invitation à un salon de la part de cet utilisateur"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Bloquer l’utilisateur"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Signalez ce salon à votre fournisseur de compte."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Décrivez la raison du signalement…"</string>
+  <string name="screen_decline_and_block_title">"Refuser et bloquer"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
@@ -358,6 +366,11 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d messages épinglés"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Messages épinglés"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Votre rapport a été envoyé avec succès, mais nous avons rencontré un problème en essayant de quitter le salon. Veuillez réessayer."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Impossible de quitter le salon"</string>
+  <string name="screen_report_room_reason_footer">"Signaler ce salon à votre admin. Si les messages sont chiffrés, votre admin ne pourra pas les lire."</string>
+  <string name="screen_report_room_reason_placeholder">"Décrivez la raison…"</string>
+  <string name="screen_report_room_title">"Signaler le salon"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Vous êtes sur le point d’accéder à votre compte %1$s pour réinitialiser votre identité. Vous serez ensuite redirigé vers l’application."</string>
   <string name="screen_reset_identity_confirmation_title">"Vous ne pouvez pas confirmer ? Accédez à votre compte pour réinitialiser votre identité."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Révoquer la verification et envoyer"</string>

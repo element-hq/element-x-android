@@ -72,9 +72,9 @@ class DefaultPushHandler @Inject constructor(
         }
     }
 
-    override suspend fun handleInvalid(providerInfo: String) {
+    override suspend fun handleInvalid(providerInfo: String, data: String) {
         incrementPushDataStore.incrementPushCounter()
-        pushHistoryService.onInvalidPushReceived(providerInfo)
+        pushHistoryService.onInvalidPushReceived(providerInfo, data)
     }
 
     /**
@@ -133,10 +133,12 @@ class DefaultPushHandler @Inject constructor(
                         is ResolvedPushEvent.Event -> {
                             when (val notifiableEvent = resolvedPushEvent.notifiableEvent) {
                                 is NotifiableRingingCallEvent -> {
+                                    Timber.tag(loggerTag.value).d("Notifiable event ${pushData.eventId} is ringing call: $notifiableEvent")
                                     onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
                                     handleRingingCallEvent(notifiableEvent)
                                 }
                                 else -> {
+                                    Timber.tag(loggerTag.value).d("Notifiable event ${pushData.eventId} is normal event: $notifiableEvent")
                                     val userPushStore = userPushStoreFactory.getOrCreate(userId)
                                     val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
                                     if (areNotificationsEnabled) {

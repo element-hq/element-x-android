@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Herstel je cryptografische identiteit en berichtengeschiedenis met een herstelsleutel voor als je al je bestaande apparaten kwijt bent."</string>
   <string name="banner_set_up_recovery_submit">"Herstelmogelijkheid instellen"</string>
-  <string name="confirm_recovery_key_banner_message">"Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up."</string>
-  <string name="confirm_recovery_key_banner_title">"Voer je herstelsleutel in"</string>
+  <string name="banner_set_up_recovery_title">"Herstel instellen om je account te beschermen"</string>
+  <string name="confirm_recovery_key_banner_message">"Bevestig je herstelsleutel om toegang te houden tot je sleutelopslag en berichtengeschiedenis."</string>
+  <string name="confirm_recovery_key_banner_title">"Je sleutelopslag is niet gesynchroniseerd"</string>
   <string name="full_screen_intent_banner_message">"Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek."</string>
   <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
   <string name="screen_invites_decline_chat_message">"Weet je zeker dat je de uitnodiging om toe te treden tot %1$s wilt weigeren?"</string>

@@ -3,7 +3,7 @@
   <string name="screen_create_room_action_create_room">"Nieuwe kamer"</string>
   <string name="screen_create_room_add_people_title">"Mensen uitnodigen"</string>
   <string name="screen_create_room_error_creating_room">"Er is een fout opgetreden bij het aanmaken van de kamer"</string>
-  <string name="screen_create_room_private_option_description">"Berichten in deze kamer zijn versleuteld. Versleuteling kan achteraf niet worden uitgeschakeld."</string>
+  <string name="screen_create_room_private_option_description">"Alleen uitgenodigde personen hebben toegang tot deze kamer. Alle berichten zijn end-to-end versleuteld."</string>
   <string name="screen_create_room_private_option_title">"Privé kamer"</string>
   <string name="screen_create_room_public_option_description">"Iedereen kan deze kamer vinden.
 Je kunt dit op elk gewenst moment wijzigen in de kamerinstellingen."</string>

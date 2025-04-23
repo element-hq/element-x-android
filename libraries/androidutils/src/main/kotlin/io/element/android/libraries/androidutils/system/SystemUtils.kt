@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.net.toUri
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -121,7 +122,7 @@ fun Context.startInstallFromSourceIntent(
     noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-        .setData(Uri.parse("package:$packageName"))
+        .setData("package:$packageName".toUri())
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
@@ -165,7 +166,7 @@ fun Context.openUrlInExternalApp(
     url: String,
     errorMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     if (this !is Activity) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }

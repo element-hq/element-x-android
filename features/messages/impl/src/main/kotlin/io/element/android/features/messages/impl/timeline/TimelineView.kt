@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
-import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -75,6 +74,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -126,10 +126,7 @@ fun TimelineView(
     val context = LocalContext.current
     val view = LocalView.current
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
-    val useReverseLayout = remember {
-        val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
-        accessibilityManager.isTouchExplorationEnabled.not()
-    }
+    val useReverseLayout = !isTalkbackActive()
 
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
@@ -159,7 +156,7 @@ fun TimelineView(
                     .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
-                contentPadding = PaddingValues(vertical = 8.dp),
+                contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
                 items(
                     items = state.timelineItems,

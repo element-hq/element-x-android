@@ -60,6 +60,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <!-- Note: the scheme must match the scheme of the value of OidcConfig.REDIRECT_URI -->
                 <data android:scheme="io.element" />
             </intent-filter>
             <!--

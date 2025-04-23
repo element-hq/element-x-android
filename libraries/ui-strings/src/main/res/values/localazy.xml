@@ -261,6 +261,7 @@ Reason: %1$s."</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_signing_out">"Signing out"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
+  <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -369,7 +370,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_report_room_leave_failed_alert_message">"Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again."</string>
   <string name="screen_report_room_leave_failed_alert_title">"Unable to Leave Room"</string>
   <string name="screen_report_room_reason_footer">"Report this room to your admin. If the messages are encrypted, your admin will not be able to read them."</string>
-  <string name="screen_report_room_reason_placeholder">"Describe the reason…"</string>
+  <string name="screen_report_room_reason_placeholder">"Describe the reason to report…"</string>
   <string name="screen_report_room_title">"Report room"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your identity. Afterwards you\'ll be taken back to the app."</string>
   <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your identity."</string>

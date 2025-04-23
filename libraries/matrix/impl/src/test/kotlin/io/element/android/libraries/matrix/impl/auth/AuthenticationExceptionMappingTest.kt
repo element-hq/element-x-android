@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.ClientBuildException
+import org.matrix.rustcomponents.sdk.OidcException
 
 class AuthenticationExceptionMappingTest {
     @Test
@@ -54,6 +55,20 @@ class AuthenticationExceptionMappingTest {
             .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
         assertThat(ClientBuildException.EventCache("EventCache error").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("EventCache error")
+    }
+
+    @Test
+    fun `mapping Oidc exceptions map to the Oidc Kotlin`() {
+        assertThat(OidcException.Generic("Generic").mapAuthenticationException())
+            .isException<AuthenticationException.Oidc>("Generic")
+        assertThat(OidcException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.Oidc>("CallbackUrlInvalid")
+        assertThat(OidcException.Cancelled("Cancelled").mapAuthenticationException())
+            .isException<AuthenticationException.Oidc>("Cancelled")
+        assertThat(OidcException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.Oidc>("MetadataInvalid")
+        assertThat(OidcException.NotSupported("NotSupported").mapAuthenticationException())
+            .isException<AuthenticationException.Oidc>("NotSupported")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 
@@ -79,10 +80,10 @@ fun TimelineItemVideoView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(CommonStrings.common_video)
-    Column(
-        modifier = modifier.semantics { contentDescription = description }
-    ) {
+    val isTalkbackActive = isTalkbackActive()
+    val a11yLabel = stringResource(CommonStrings.common_video)
+    val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
+    Column(modifier = modifier) {
         val containerModifier = if (content.showCaption) {
             Modifier
                 .padding(top = 6.dp)
@@ -104,7 +105,16 @@ fun TimelineItemVideoView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(if (onContentClick != null) Modifier.combinedClickable(onClick = onContentClick, onLongClick = onLongClick) else Modifier),
+                        .then(
+                            if (!isTalkbackActive && onContentClick != null) {
+                                Modifier.combinedClickable(
+                                    onClick = onContentClick,
+                                    onLongClick = onLongClick
+                                )
+                            } else {
+                                Modifier
+                            }
+                        ),
                     model = MediaRequestData(
                         source = content.thumbnailSource,
                         kind = MediaRequestData.Kind.Thumbnail(
@@ -126,6 +136,7 @@ fun TimelineItemVideoView(
                         imageVector = CompoundIcons.PlaySolid(),
                         contentDescription = stringResource(id = CommonStrings.a11y_play),
                         colorFilter = ColorFilter.tint(Color.White),
+                        modifier = Modifier.semantics { invisibleToUser() }
                     )
                 }
             }

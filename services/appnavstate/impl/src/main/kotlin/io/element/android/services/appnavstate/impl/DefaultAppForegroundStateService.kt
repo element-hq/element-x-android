@@ -17,6 +17,7 @@ class DefaultAppForegroundStateService : AppForegroundStateService {
     override val isInForeground = MutableStateFlow(false)
     override val isInCall = MutableStateFlow(false)
     override val isSyncingNotificationEvent = MutableStateFlow(false)
+    override val hasRingingCall = MutableStateFlow(false)
 
     private val appLifecycle: Lifecycle by lazy { ProcessLifecycleOwner.get().lifecycle }
 
@@ -26,6 +27,10 @@ class DefaultAppForegroundStateService : AppForegroundStateService {
 
     override fun updateIsInCallState(isInCall: Boolean) {
         this.isInCall.value = isInCall
+    }
+
+    override fun updateHasRingingCall(hasRingingCall: Boolean) {
+        this.hasRingingCall.value = hasRingingCall
     }
 
     override fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean) {

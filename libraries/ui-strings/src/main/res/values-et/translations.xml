@@ -109,6 +109,7 @@
   <string name="action_report">"Teata"</string>
   <string name="action_report_bug">"Teata veast"</string>
   <string name="action_report_content">"Teata sisust haldurile"</string>
+  <string name="action_report_dm">"Teata vestlusest"</string>
   <string name="action_report_room">"Teata jututoast"</string>
   <string name="action_reset">"Lähtesta"</string>
   <string name="action_reset_identity">"Lähtesta oma identiteet"</string>
@@ -260,6 +261,7 @@ Põhjus: %1$s."</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
   <string name="common_signing_out">"Logime välja"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
+  <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
   <string name="common_starting_chat">"Alustame vestlust…"</string>
   <string name="common_sticker">"Kleeps"</string>
   <string name="common_success">"Õnnestus"</string>

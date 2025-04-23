@@ -109,6 +109,7 @@
   <string name="action_report">"Jelentés"</string>
   <string name="action_report_bug">"Hiba jelentése"</string>
   <string name="action_report_content">"Tartalom jelentése"</string>
+  <string name="action_report_dm">"Beszélgetés jelentése"</string>
   <string name="action_report_room">"Szoba jelentése"</string>
   <string name="action_reset">"Visszaállítás"</string>
   <string name="action_reset_identity">"Személyazonosság visszaállítása"</string>
@@ -352,6 +353,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_decline_and_block_block_user_option_description">"Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni."</string>
   <string name="screen_decline_and_block_block_user_option_title">"Felhasználó letiltása"</string>
   <string name="screen_decline_and_block_report_user_option_description">"A szoba jelentése a fiókszolgáltatójának."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Írja le a jelentés okát…"</string>
   <string name="screen_decline_and_block_title">"Elutasítás és blokkolás"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>

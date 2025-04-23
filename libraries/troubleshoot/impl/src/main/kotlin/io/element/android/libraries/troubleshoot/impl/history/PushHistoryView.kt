@@ -24,6 +24,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,16 +35,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -57,6 +65,8 @@ fun PushHistoryView(
     onItemClick: (SessionId, RoomId, EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -77,12 +87,42 @@ fun PushHistoryView(
                     )
                 },
                 actions = {
-                    TextButton(
-                        text = stringResource(CommonStrings.action_reset),
-                        onClick = {
-                            state.eventSink(PushHistoryEvents.Reset)
-                        },
-                    )
+                    IconButton(onClick = { showMenu = !showMenu }) {
+                        Icon(
+                            imageVector = CompoundIcons.OverflowVertical(),
+                            contentDescription = stringResource(id = CommonStrings.a11y_user_menu),
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false },
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Show only errors") },
+                            trailingIcon = if (state.showOnlyErrors) {
+                                {
+                                    Icon(
+                                        imageVector = CompoundIcons.CheckCircleSolid(),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp),
+                                    )
+                                }
+                            } else {
+                                null
+                            },
+                            onClick = {
+                                showMenu = false
+                                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(state.showOnlyErrors.not()))
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(id = CommonStrings.action_reset)) },
+                            onClick = {
+                                showMenu = false
+                                state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
+                            },
+                        )
+                    }
                 }
             )
         },
@@ -95,6 +135,22 @@ fun PushHistoryView(
             onItemClick = onItemClick,
         )
     }
+
+    AsyncActionView(
+        async = state.resetAction,
+        onSuccess = {},
+        confirmationDialog = {
+            ConfirmationDialog(
+                content = "",
+                title = stringResource(CommonStrings.dialog_title_confirmation),
+                submitText = stringResource(CommonStrings.action_reset),
+                cancelText = stringResource(CommonStrings.action_cancel),
+                onSubmitClick = { state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = false)) },
+                onDismiss = { state.eventSink(PushHistoryEvents.ClearDialog) },
+            )
+        },
+        onErrorDismiss = {},
+    )
 }
 
 @Composable
