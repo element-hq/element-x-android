@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Pridėti ekrano nuotrauką"</string>
+  <string name="screen_bug_report_contact_me">"Jei turite papildomų klausimų, galite susisiekti su manimi."</string>
+  <string name="screen_bug_report_edit_screenshot">"Redaguoti ekrano nuotrauką"</string>
+  <string name="screen_bug_report_editor_description">"Apibūdinkite problemą. Ką padarėte? Ko tikėjotės? Kas iš tikrųjų įvyko? Pateikite kuo daugiau detalių."</string>
+  <string name="screen_bug_report_editor_placeholder">"Apibūdinkite problemą…"</string>
+  <string name="screen_bug_report_editor_supporting">"Jei įmanoma, aprašymą parašykite anglų kalba."</string>
+  <string name="screen_bug_report_include_crash_logs">"Siųsti gedimų žurnalus"</string>
+  <string name="screen_bug_report_include_logs">"Leisti žurnalus"</string>
+  <string name="screen_bug_report_include_screenshot">"Siųsti ekrano nuotrauką"</string>
+  <string name="screen_bug_report_logs_description">"Prie žinutės bus pridėti žurnalai, kad įsitikintumėme, jog viskas veikia tinkamai. Jei norite išsiųsti savo žinutę be žurnalų, išjunkite šį nustatymą."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s nulūžo paskutinį kartą, kai buvo naudojama. Ar norėtumėte su mumis pasidalyti strigčių ataskaita?"</string>
+</resources>

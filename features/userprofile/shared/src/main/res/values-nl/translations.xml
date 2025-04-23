@@ -13,5 +13,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Deblokkeren"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Je zult alle berichten van hen weer kunnen zien."</string>
   <string name="screen_room_member_details_unblock_user">"Gebruiker deblokkeren"</string>
+  <string name="screen_room_member_details_verify_button_title">"Verifieer %1$s"</string>
   <string name="screen_start_chat_error_starting_chat">"Er is een fout opgetreden bij het starten van een chat"</string>
 </resources>

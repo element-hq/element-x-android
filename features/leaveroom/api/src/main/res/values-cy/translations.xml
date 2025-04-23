@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Ydych chi\'n siŵr eich bod am adael y sgwrs hon? Dyw\'r sgwrs hon ddim yn gyhoeddus a fyddwch chi ddim yn gallu ailymuno heb wahoddiad."</string>
+  <string name="leave_room_alert_empty_subtitle">"Ydych chi\'n siŵr eich bod am adael yr ystafell hon? Chi yw\'r unig berson yma. Os byddwch yn gadael, fydd neb yn gallu ymuno yn y dyfodol, gan gynnwys chi."</string>
+  <string name="leave_room_alert_private_subtitle">"Ydych chi\'n siŵr eich bod am adael yr ystafell hon? Dyw\'r ystafell hon ddim yn gyhoeddus a fyddwch chi ddim yn gallu ailymuno heb wahoddiad."</string>
+  <string name="leave_room_alert_subtitle">"Ydych chi\'n siŵr eich bod am adael yr ystafell?"</string>
+</resources>

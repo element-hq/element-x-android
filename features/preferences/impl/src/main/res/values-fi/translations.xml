@@ -8,14 +8,22 @@
   <string name="screen_advanced_settings_element_call_base_url">"Mukautettu Element Call URL-osoite"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Aseta mukautettu URL-osoite Element Callille."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Virheellinen URL-osoite. Varmista, että sisällytät protokollan (http/https) ja oikean osoitteen."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Piilota huoneiden avatarit kutsuista"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Piilota median esikatselu aikajanalla"</string>
   <string name="screen_advanced_settings_media_compression_description">"Lähetä valokuvia ja videoita nopeammin ja vähennä datan käyttöä."</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimoi median laatu"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderointi ja Turvallisuus"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push-ilmoitusten tarjoaja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Ota rikastettu tekstieditori pois käytöstä, jotta voit kirjoittaa Markdownia manuaalisesti."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lukukuittaukset"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Jos tämä on poissa päältä, sinun lukukuittauksia ei lähetetä kenellekään. Vastaanotat silti lukukuittauksia muilta käyttäjiltä."</string>
   <string name="screen_advanced_settings_share_presence">"Jaa läsnäolo"</string>
   <string name="screen_advanced_settings_share_presence_description">"Jos tämä on poissa päältä, et lähetä tai vastaanota lukukuittauksia tai kirjoitusilmotuksia."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Piilota aina"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Näytä aina"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Yksityisissä huoneissa"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Piilotetun median voi aina näyttää napauttamalla sitä"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Näytä media aikajanalla"</string>
   <string name="screen_advanced_settings_view_source_description">"Ota käyttöön mahdollisuus tarkastella viestin lähdettä aikajanalla."</string>
   <string name="screen_blocked_users_empty">"Et ole estänyt ketään"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Poista esto"</string>
@@ -55,6 +63,7 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"järjestelmäsi asetuksia"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Järjestelmän ilmoitukset on poissa päältä"</string>
   <string name="screen_notification_settings_title">"Ilmoitukset"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historia"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Vianmääritys"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Ilmoitusten vianmääritys"</string>
 </resources>

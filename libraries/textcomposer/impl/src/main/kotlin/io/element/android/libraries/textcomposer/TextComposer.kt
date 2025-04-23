@@ -148,6 +148,7 @@ fun TextComposer(
                     IconColorButton(
                         onClick = onAddAttachment,
                         imageVector = CompoundIcons.Plus(),
+                        contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
                     )
                 }
             }
@@ -292,6 +293,7 @@ fun TextComposer(
                 IconColorButton(
                     onClick = onDismissTextFormatting,
                     imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(CommonStrings.action_close),
                 )
             },
             textFormatting = textFormattingOptions,

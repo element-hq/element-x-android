@@ -5,7 +5,9 @@
   <string name="rich_text_editor_close_formatting_options">"Lukk formateringsvalg"</string>
   <string name="rich_text_editor_code_block">"Aktiver kodeblokk"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Legg til en tekstbeskrivelse"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Kryptert melding…"</string>
   <string name="rich_text_editor_composer_placeholder">"Melding…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Ukryptert melding…"</string>
   <string name="rich_text_editor_create_link">"Opprett en lenke"</string>
   <string name="rich_text_editor_edit_link">"Rediger lenke"</string>
   <string name="rich_text_editor_format_bold">"Bruk fet skrift"</string>

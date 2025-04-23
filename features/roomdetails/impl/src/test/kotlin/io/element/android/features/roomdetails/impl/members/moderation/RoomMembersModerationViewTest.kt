@@ -72,7 +72,7 @@ class RoomMembersModerationViewTest {
                 state = state,
                 onDisplayMemberProfile = callback
             )
-            rule.clickOn(R.string.screen_room_member_list_manage_member_user_info)
+            rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_member_user_info)
         }
     }
 
@@ -92,7 +92,7 @@ class RoomMembersModerationViewTest {
         rule.setRoomMembersModerationView(
             state = state,
         )
-        rule.clickOn(R.string.screen_room_member_list_manage_member_remove)
+        rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_remove)
         // Give time for the bottom sheet to animate
         rule.mainClock.advanceTimeBy(1_000)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.KickUser)
@@ -129,7 +129,7 @@ class RoomMembersModerationViewTest {
         )
         val reason = rule.activity.getString(CommonStrings.common_reason)
         rule.onNodeWithText(reason).performTextInput(A_REASON)
-        rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
+        rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.DoKickUser(reason = A_REASON))
     }
 
@@ -146,7 +146,7 @@ class RoomMembersModerationViewTest {
             state = state,
         )
         // Note: the string key semantics is not perfect here :/
-        rule.clickOn(R.string.screen_room_member_list_kick_member_confirmation_action)
+        rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.DoKickUser(reason = ""))
     }
 
@@ -205,7 +205,7 @@ class RoomMembersModerationViewTest {
         )
         val reason = rule.activity.getString(CommonStrings.common_reason)
         rule.onNodeWithText(reason).performTextInput(A_REASON)
-        rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
+        rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.DoBanUser(reason = A_REASON))
     }
 
@@ -222,7 +222,7 @@ class RoomMembersModerationViewTest {
             state = state,
         )
         // Note: the string key semantics is not perfect here :/
-        rule.clickOn(R.string.screen_room_member_list_ban_member_confirmation_action)
+        rule.clickOn(CommonStrings.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action)
         eventsRecorder.assertSingle(RoomMembersModerationEvents.DoBanUser(reason = ""))
     }
 

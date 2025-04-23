@@ -1,3 +1,51 @@
+Changes in Element X v25.04.3
+=============================
+
+### 🙌 Improvements
+* Use PreferenceDropdown for appearance by @ganfra in https://github.com/element-hq/element-x-android/pull/4581
+### 🐛 Bugfixes
+* Use in-call volume and mode for EC by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4481
+* Send SVG images as files by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4595
+* Fetch the initial ignored user list manually when subscribing by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4598
+* Fix audio output selection for Element Call by @bmarty in https://github.com/element-hq/element-x-android/pull/4602
+* [a11y] Make more items focusable by @bmarty in https://github.com/element-hq/element-x-android/pull/4605
+* Fix ringing calls not stopping when the other user cancels the call by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4613
+* Ensure that pinning an event makes the pinned messages banner appear by @bmarty in https://github.com/element-hq/element-x-android/pull/4606
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4590
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4612
+### 📄 Documentation
+* Improve onboarding docs: by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4578
+### Dependency upgrades
+* Upgrade Rust bindings to `v25.04.11` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4580
+* fix(deps): update dependency androidx.sqlite:sqlite-ktx to v2.5.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4568
+* fix(deps): update dependency app.cash.molecule:molecule-runtime to v2.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4585
+* fix(deps): update core to v1.16.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4564
+* Upate datastore to 1.1.4 by @bmarty in https://github.com/element-hq/element-x-android/pull/4551
+* fix(deps): update media3 to v1.6.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4592
+* chore(deps): update danger/danger-js action to v13 by @renovate in https://github.com/element-hq/element-x-android/pull/4596
+* fix(deps): update dependency io.element.android:emojibase-bindings to v1.4.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4591
+* fix(deps): update dagger to v2.56.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4603
+* fix(deps): update dependency io.sentry:sentry-android to v8.8.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4557
+* fix(deps): update dependency androidx.compose:compose-bom to v2025.04.00 - autoclosed by @renovate in https://github.com/element-hq/element-x-android/pull/4565
+* fix(deps): update dependency com.posthog:posthog-android to v3.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4616
+* fix(deps): update android.gradle.plugin to v8.9.2 by @renovate in https://github.com/element-hq/element-x-android/pull/4615
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.4.22 by @renovate in https://github.com/element-hq/element-x-android/pull/4622
+### Others
+* Improve accessibility of the timeline by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4579
+* Push: improve Push history screen, log and stored data by @bmarty in https://github.com/element-hq/element-x-android/pull/4601
+* Push gateway config by @bmarty in https://github.com/element-hq/element-x-android/pull/4608
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.04.2...v25.04.3
+
+Changes in Element X v25.04.2
+=============================
+
+Security fixes 🔐
+-----------------
+- Fix for [GHSA-m5px-pwq3-4p5m](https://github.com/element-hq/element-x-android/security/advisories/GHSA-m5px-pwq3-4p5m) / [CVE-2025-27599](https://www.cve.org/CVERecord?id=CVE-2025-27599)
+
 Changes in Element X v25.04.1
 =============================
 

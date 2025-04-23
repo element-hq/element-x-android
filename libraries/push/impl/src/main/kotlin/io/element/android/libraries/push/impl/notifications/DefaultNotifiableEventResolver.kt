@@ -92,8 +92,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
         return notificationData.flatMap {
             if (it == null) {
                 Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
-                return@flatMap Result.failure(ResolvingException("Unable to resolve event"))
+                return@flatMap Result.failure(ResolvingException("Unable to resolve event $eventId"))
             } else {
+                Timber.tag(loggerTag.value).d("Found notification item for $eventId")
                 it.asNotifiableEvent(client, sessionId)
             }
         }
@@ -250,7 +251,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.StateEvent.RoomServerAcl,
             NotificationContent.StateEvent.RoomThirdPartyInvite,
             NotificationContent.StateEvent.RoomTombstone,
-            NotificationContent.StateEvent.RoomTopic,
+            is NotificationContent.StateEvent.RoomTopic,
             NotificationContent.StateEvent.SpaceChild,
             NotificationContent.StateEvent.SpaceParent -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")

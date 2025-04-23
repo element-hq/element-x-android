@@ -89,7 +89,7 @@ class FakePushService(
         pushCounterFlow.value = counter
     }
 
-    override suspend fun resetPushHistory() {
+    override suspend fun resetPushHistory() = simulateLongTask {
         resetPushHistoryResult()
     }
 }

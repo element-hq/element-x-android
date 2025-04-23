@@ -19,13 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Button with colored background.
@@ -35,6 +33,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun IconColorButton(
     onClick: () -> Unit,
     imageVector: ImageVector,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     buttonSize: ButtonSize = ButtonSize.Large,
     iconColorButtonStyle: IconColorButtonStyle = IconColorButtonStyle.Primary,
@@ -55,7 +54,7 @@ fun IconColorButton(
                 .background(bgColor)
                 .padding(buttonSize.toContainerPadding()),
             imageVector = imageVector,
-            contentDescription = stringResource(CommonStrings.action_close),
+            contentDescription = contentDescription,
             tint = ElementTheme.colors.iconOnSolidPrimary
         )
     }
@@ -101,6 +100,7 @@ internal fun IconColorButtonPreview() = ElementPreview {
                     IconColorButton(
                         onClick = {},
                         imageVector = CompoundIcons.Close(),
+                        contentDescription = null,
                         buttonSize = size,
                         iconColorButtonStyle = style,
                     )

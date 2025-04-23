@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Iawn, gwrthod a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â\'r ystafell hon? Bydd hyn hefyd yn atal %1$s rhag cysylltu â chi neu eich gwahodd i ystafelloedd."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Gwrthod gwahoddiad a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Gwrthod a rhwystro"</string>
+</resources>

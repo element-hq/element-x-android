@@ -237,6 +237,50 @@ class SyncOrchestratorTest {
     }
 
     @Test
+    fun `when the app was in background and we have an incoming ringing call, a sync will be started`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
+            startSyncLambda = startSyncRecorder
+            stopSyncLambda = stopSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val appForegroundStateService = FakeAppForegroundStateService(
+            initialForegroundValue = false,
+            initialIsSyncingNotificationEventValue = false,
+            initialHasRingingCall = false,
+        )
+        val syncOrchestrator = createSyncOrchestrator(
+            syncService = syncService,
+            networkMonitor = networkMonitor,
+            appForegroundStateService = appForegroundStateService,
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        // Advance the time to make sure the orchestrator has had time to start processing the inputs
+        advanceTimeBy(100.milliseconds)
+
+        // Start sync was never called
+        startSyncRecorder.assertions().isNeverCalled()
+
+        // Now we receive a ringing call
+        appForegroundStateService.updateHasRingingCall(true)
+
+        // Start sync will be called shortly after
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+
+        // If the sync is running and the ringing call notification is now over, the sync stops after a delay
+        syncService.emitSyncState(SyncState.Running)
+        appForegroundStateService.updateHasRingingCall(false)
+
+        advanceTimeBy(10.seconds)
+        stopSyncRecorder.assertions().isCalledOnce()
+    }
+
+    @Test
     fun `when the app is in foreground, we sync for a notification and a call is ongoing, the sync will only stop when all conditions are false`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }

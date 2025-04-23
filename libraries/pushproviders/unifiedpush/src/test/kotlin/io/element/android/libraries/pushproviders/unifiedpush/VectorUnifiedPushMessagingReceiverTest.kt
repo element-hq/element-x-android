@@ -90,7 +90,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onMessage invalid invokes the push handler invalid method`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val handleInvalidResult = lambdaRecorder<String, Unit> { }
+        val handleInvalidResult = lambdaRecorder<String, String, Unit> { _, _ -> }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleInvalidResult = handleInvalidResult,

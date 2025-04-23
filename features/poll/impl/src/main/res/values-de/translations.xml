@@ -12,8 +12,8 @@
   <string name="screen_edit_poll_delete_confirmation_title">"Umfrage löschen"</string>
   <string name="screen_edit_poll_title">"Umfrage bearbeiten"</string>
   <string name="screen_polls_history_empty_ongoing">"Keine laufenden Umfragen vorhanden."</string>
-  <string name="screen_polls_history_empty_past">"Keine vergangenen Umfragen vorhanden."</string>
+  <string name="screen_polls_history_empty_past">"Keine beendeten Umfragen vorhanden."</string>
   <string name="screen_polls_history_filter_ongoing">"Aktuell"</string>
-  <string name="screen_polls_history_filter_past">"Vergangene"</string>
+  <string name="screen_polls_history_filter_past">"Vergangenheit"</string>
   <string name="screen_polls_history_title">"Umfragen"</string>
 </resources>

@@ -60,6 +60,7 @@
   <string name="action_deactivate">"Deaktivieren"</string>
   <string name="action_deactivate_account">"Benutzerkonto deaktivieren"</string>
   <string name="action_decline">"Ablehnen"</string>
+  <string name="action_decline_and_block">"Ablehnen und blockieren"</string>
   <string name="action_delete_poll">"Umfrage löschen"</string>
   <string name="action_disable">"Deaktivieren"</string>
   <string name="action_discard">"Verwerfen"</string>
@@ -105,8 +106,10 @@
   <string name="action_remove_message">"Nachricht löschen"</string>
   <string name="action_reply">"Antworten"</string>
   <string name="action_reply_in_thread">"Im Thread antworten"</string>
+  <string name="action_report">"Bericht"</string>
   <string name="action_report_bug">"Fehler melden"</string>
   <string name="action_report_content">"Inhalt melden"</string>
+  <string name="action_report_room">"Chatroom melden"</string>
   <string name="action_reset">"Zurücksetzen"</string>
   <string name="action_reset_identity">"Identität zurücksetzen"</string>
   <string name="action_retry">"Erneut versuchen"</string>
@@ -216,6 +219,7 @@ Grund: %1$s."</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Erlaubnis"</string>
   <string name="common_pinned">"Fixiert"</string>
+  <string name="common_please_check_internet_connection">"Bitte überprüfen Sie Ihre Internetverbindung"</string>
   <string name="common_please_wait">"Bitte warten …"</string>
   <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
@@ -228,6 +232,7 @@ Grund: %1$s."</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
+  <string name="common_reason">"Grund"</string>
   <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
@@ -299,6 +304,8 @@ Grund: %1$s."</string>
 
 Möchten Sie wirklich fortfahren?"</string>
   <string name="dialog_confirm_link_title">"Überprüfen Sie diesen Link noch einmal"</string>
+  <string name="dialog_room_reported">"Chatroom gemeldet"</string>
+  <string name="dialog_room_reported_and_left">"Gemeldet und Zimmer verlassen"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
@@ -330,6 +337,23 @@ Möchten Sie wirklich fortfahren?"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Mitglied entfernen und sperren"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Sperren"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Sie können dem Raum nicht mehr beitreten, selbst wenn sie eingeladen werden."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Bist du sicher, dass du dieses Mitglied sperren möchtest?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s wird gesperrt."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Entfernen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Sie können diesen Raum wieder betreten, wenn sie eingeladen werden."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Möchten Sie dieses Mitglied wirklich entfernen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Benutzerinformationen anzeigen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Mitglied entfernen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Mitglied entfernen und den erneuten Beitritt sperren?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s wird entfernt."</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Sie werden keine Nachrichten oder Chatroomeinladungen von diesem Benutzer sehen."</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Benutzer blockieren"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Melden Sie diesen Raum Ihrem Kontoanbieter."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Beschreiben Sie den Grund für die Meldung…"</string>
+  <string name="screen_decline_and_block_title">"Ablehnen und blockieren"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
@@ -341,6 +365,11 @@ Möchten Sie wirklich fortfahren?"</string>
     <item quantity="other">"%1$d fixierte Nachrichten"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Ihr Bericht wurde erfolgreich übermittelt, aber beim Versuch, den Raum zu verlassen, ist ein Problem aufgetreten. Bitte versuchen Sie es erneut."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Der Chatroom kann nicht verlassen werden"</string>
+  <string name="screen_report_room_reason_footer">"Melden Sie diesen Chatroom Ihrem Administrator. Wenn die Nachrichten verschlüsselt sind, kann Ihr Administrator sie nicht lesen."</string>
+  <string name="screen_report_room_reason_placeholder">"Beschreiben Sie den Grund…"</string>
+  <string name="screen_report_room_title">"Chatroom melden"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Du wirst jetzt zu deinem %1$s Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht."</string>
   <string name="screen_reset_identity_confirmation_title">"Kannst du das nicht bestätigen? Gehe zu deinem Konto, um deine Identität zurückzusetzen."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>

@@ -62,7 +62,7 @@ class AndroidMediaPreProcessor @Inject constructor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
     }
 
     private val contentResolver = context.contentResolver
@@ -75,6 +75,10 @@ class AndroidMediaPreProcessor @Inject constructor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatching {
             val result = when {
+                // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
+                mimeType == MimeTypes.Svg -> {
+                    processFile(uri, mimeType)
+                }
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = compressIfPossible && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
