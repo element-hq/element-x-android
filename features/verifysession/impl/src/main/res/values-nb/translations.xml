@@ -17,6 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Kontroller at tallene nedenfor stemmer overens med dem som vises på den andre sesjonen."</string>
   <string name="screen_session_verification_compare_numbers_title">"Sammenlign tallene"</string>
   <string name="screen_session_verification_complete_subtitle">"Den nye sesjonen din er nå bekreftet. Den har tilgang til de krypterte meldingene dine, og andre brukere vil se den som klarert."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Nå kan du stole på identiteten til denne brukeren når du sender eller mottar meldinger."</string>
   <string name="screen_session_verification_enter_recovery_key">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_session_verification_failed_subtitle">"Enten ble forespørselen tidsavbrutt, forespørselen ble avslått eller det var en feil i verifiseringen."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevis at det er deg for å få tilgang til den krypterte meldingshistorikken din."</string>
@@ -40,6 +41,7 @@
   <string name="screen_session_verification_use_another_device_title">"Åpne appen på en annen bekreftet enhet"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"For ekstra sikkerhet, verifiser denne brukeren ved å sammenligne et sett med emojier på enhetene dine. Gjør dette ved å bruke en pålitelig måte å kommunisere på."</string>
   <string name="screen_session_verification_user_initiator_title">"Vil du verifisere denne brukeren?"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"For ekstra sikkerhet vil en annen bruker bekrefte identiteten din. Du får se et sett med emojier som du må sammenligne."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Du skal se en popup på den andre enheten. Start bekreftelsen derfra nå."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Start verifiseringen på den andre enheten"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Venter på den andre enheten"</string>

@@ -40,6 +40,7 @@ Se você continuar, algumas de suas configurações poderão mudar."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"A configuração não foi corrigida, tente novamente."</string>
   <string name="screen_notification_settings_group_chats">"Bate-papos em grupo"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Convites"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Seu servidor doméstico não suporta esta opção em salas criptografadas. Você pode não ser notificado em algumas salas."</string>
   <string name="screen_notification_settings_mentions_section_title">"Menções"</string>
   <string name="screen_notification_settings_mode_all">"Todos"</string>
   <string name="screen_notification_settings_mode_mentions">"Menções"</string>

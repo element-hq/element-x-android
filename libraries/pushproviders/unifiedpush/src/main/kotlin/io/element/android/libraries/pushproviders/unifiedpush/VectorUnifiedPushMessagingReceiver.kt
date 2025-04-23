@@ -46,13 +46,14 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
-        Timber.tag(loggerTag.value).d("New message")
+        Timber.tag(loggerTag.value).w("New message")
         coroutineScope.launch {
             val pushData = pushParser.parse(message, instance)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
                 pushHandler.handleInvalid(
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
+                    data = String(message),
                 )
             } else {
                 pushHandler.handle(
@@ -68,7 +69,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * You should send the endpoint to your application server and sync for missing notifications.
      */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
+        Timber.tag(loggerTag.value).w("onNewEndpoint: $endpoint")
         coroutineScope.launch {
             val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
                 .let { gatewayResult ->
@@ -109,7 +110,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * Called when this application is unregistered from receiving push messages.
      */
     override fun onUnregistered(context: Context, instance: String) {
-        Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
+        Timber.tag(loggerTag.value).w("Unifiedpush: Unregistered")
         /*
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         pushDataStore.setFdroidSyncBackgroundMode(mode)

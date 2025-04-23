@@ -8,6 +8,7 @@
 package io.element.android.libraries.troubleshoot.impl.history
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -36,16 +37,23 @@ open class PushHistoryStateProvider : PreviewParameterProvider<PushHistoryState>
                     )
                 )
             ),
+            aPushHistoryState(
+                resetAction = AsyncAction.ConfirmingNoParams,
+            ),
         )
 }
 
 fun aPushHistoryState(
     pushCounter: Int = 0,
     pushHistoryItems: List<PushHistoryItem> = emptyList(),
+    showOnlyErrors: Boolean = false,
+    resetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (PushHistoryEvents) -> Unit = {},
 ) = PushHistoryState(
     pushCounter = pushCounter,
     pushHistoryItems = pushHistoryItems.toImmutableList(),
+    showOnlyErrors = showOnlyErrors,
+    resetAction = resetAction,
     eventSink = eventSink,
 )
 

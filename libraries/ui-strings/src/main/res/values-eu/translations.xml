@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Abatarra"</string>
   <string name="a11y_delete">"Ezabatu"</string>
   <string name="a11y_hide_password">"Ezkutatu pasahitza"</string>
+  <string name="a11y_join_call">"Batu deira"</string>
   <string name="a11y_jump_to_bottom">"Joan behera"</string>
   <string name="a11y_notifications_mentions_only">"Aipamenak soilik"</string>
   <string name="a11y_notifications_muted">"Mutututa"</string>
@@ -52,9 +54,11 @@
   <string name="action_deactivate">"Desaktibatu"</string>
   <string name="action_deactivate_account">"Desaktibatu kontua"</string>
   <string name="action_decline">"Ukatu"</string>
+  <string name="action_decline_and_block">"Baztertu eta blokeatu"</string>
   <string name="action_delete_poll">"Ezabatu inkesta"</string>
   <string name="action_disable">"Desgaitu"</string>
   <string name="action_discard">"Baztertu"</string>
+  <string name="action_dismiss">"Baztertu"</string>
   <string name="action_done">"Eginda"</string>
   <string name="action_edit">"Editatu"</string>
   <string name="action_edit_caption">"Editatu testua"</string>
@@ -96,8 +100,10 @@
   <string name="action_remove_message">"Kendu mezua"</string>
   <string name="action_reply">"Erantzun"</string>
   <string name="action_reply_in_thread">"Erantzun harian"</string>
+  <string name="action_report">"Salatu"</string>
   <string name="action_report_bug">"Eman errore baten berri"</string>
   <string name="action_report_content">"Salatu edukia"</string>
+  <string name="action_report_room">"Salatu gela"</string>
   <string name="action_reset">"Berrezarri"</string>
   <string name="action_reset_identity">"Berrezarri identitatea"</string>
   <string name="action_retry">"Saiatu berriro"</string>
@@ -215,6 +221,7 @@ Arrazoia: %1$s."</string>
   <string name="common_privacy_policy">"Pribatutasun-politika"</string>
   <string name="common_reaction">"Erreakzioa"</string>
   <string name="common_reactions">"Erreakzioak"</string>
+  <string name="common_reason">"Arrazoia"</string>
   <string name="common_recovery_key">"Berreskuratze-gakoa"</string>
   <string name="common_refreshing">"Freskatzen…"</string>
   <string name="common_replying_to">"%1$s(r)i erantzuten"</string>
@@ -234,6 +241,7 @@ Arrazoia: %1$s."</string>
   <string name="common_seen_by">"Ikusi du"</string>
   <string name="common_send_to">"Bidali"</string>
   <string name="common_sending">"Bidaltzen…"</string>
+  <string name="common_sending_failed">"Bidalketak huts egin du"</string>
   <string name="common_sent">"Bidalita"</string>
   <string name="common_server_not_supported">"Zerbitzaria ez da bateragarria"</string>
   <string name="common_server_url">"Zerbitzariaren URLa"</string>
@@ -278,6 +286,8 @@ Arrazoia: %1$s."</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s(r)en identitatea berrezarri da."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
+  <string name="dialog_room_reported">"Gela salatu da"</string>
+  <string name="dialog_room_reported_and_left">"Gela salatu eta utzi da"</string>
   <string name="dialog_title_confirmation">"Baieztapena"</string>
   <string name="dialog_title_error">"Errorea"</string>
   <string name="dialog_title_success">"Arrakasta"</string>
@@ -288,10 +298,12 @@ Arrazoia: %1$s."</string>
   <string name="error_failed_loading_map">"%1$s ezin izan da mapa kargatu. Saiatu berriro geroago."</string>
   <string name="error_failed_loading_messages">"Huts egin du mezuak kargatzeak"</string>
   <string name="error_failed_locating_user">"%1$s ezin izan da zure kokapena atzitu. Saiatu berriro geroago."</string>
+  <string name="error_failed_uploading_voice_message">"Ahots-mezua igotzeak huts egin du"</string>
   <string name="error_message_not_found">"Ez da mezua aurkitu"</string>
   <string name="error_missing_location_auth_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Sarbidea Ezarpenetan gaitu dezakezu."</string>
   <string name="error_missing_location_rationale_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Gaitu sarbidea behean."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s(e)k ez du mikrofonoa atzitzeko baimenik. Gaitu sarbidea ahots-mezua grabatzeko."</string>
+  <string name="error_network_or_server_issue">"Sarearen edo zerbitzariaren arazoren bategatik izan daiteke."</string>
   <string name="error_room_address_already_exists">"Gela badago lehendik ere. Saiatu gelaren helbidearen eremua editatzen edo aldatu gelaren izena"</string>
   <string name="error_room_address_invalid_symbols">"Karaktere batzuk ez daude baimenduta. Hizkiak, zifrak, eta ondorengo ikurrak onartzen dira bakarrik: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mezu batzuk ez dira bidali"</string>
@@ -300,6 +312,14 @@ Arrazoia: %1$s."</string>
   <string name="invite_friends_rich_title">"🔐️ Zatoz nirekin %1$s(e)ra"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Astindu erroreen berri emateko"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Kendu kidea eta ezarri debekua"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Ezarri debekua"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ziur kide honi debekua ezarri nahi diozula?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s(r)i debekua ezartzen"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ikusi profila"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Kendu gelatik"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Kidea kendu eta etorkizunean sartzea debekatu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s kentzen…"</string>
   <string name="screen_media_picker_error_failed_selection">"Huts egin du multimedia aukeratzeak, saiatu berriro."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Huts egin du multimedia igotzeak, saiatu berriro."</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Finkatutako mezuak"</string>

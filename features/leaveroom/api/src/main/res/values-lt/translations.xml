@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"Ar tikrai norite išeiti iš šio kambario? Jūs esate vienintelis žmogus jame. Jei išeisite, niekas negalės prisijungti ateityje, įskaitant Jus."</string>
+  <string name="leave_room_alert_private_subtitle">"Ar tikrai norite išeiti iš šio kambario? Šis kambarys nėra viešas ir negalėsite vėl prisijungti be kvietimo."</string>
+  <string name="leave_room_alert_subtitle">"Ar tikrai norite išeiti iš kambario?"</string>
+</resources>

@@ -14,5 +14,6 @@
   <string name="screen_polls_history_empty_ongoing">"Finner ingen pågående avstemninger."</string>
   <string name="screen_polls_history_empty_past">"Kan ikke finne noen tidligere avstemninger."</string>
   <string name="screen_polls_history_filter_ongoing">"Pågående"</string>
+  <string name="screen_polls_history_filter_past">"Fortid"</string>
   <string name="screen_polls_history_title">"Avstemninger"</string>
 </resources>

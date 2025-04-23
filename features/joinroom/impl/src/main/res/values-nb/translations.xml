@@ -8,6 +8,7 @@
   <string name="screen_join_room_cancel_knock_alert_description">"Er du sikker på at du vil kansellere forespørselen din om å bli med i dette rommet?"</string>
   <string name="screen_join_room_cancel_knock_alert_title">"Avbryt forespørsel om å bli med"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, avslå og blokker"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Er du sikker på at du vil avslå invitasjonen til å bli med i dette rommet? Dette vil også forhindre %1$s fra å kontakte deg eller invitere deg til rom."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Avslå invitasjon og blokker"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Avslå og blokker"</string>
   <string name="screen_join_room_fail_message">"Å bli med i rommet mislyktes."</string>
@@ -20,6 +21,8 @@
   <string name="screen_join_room_knock_message_description">"Melding (valgfritt)"</string>
   <string name="screen_join_room_knock_sent_description">"Du vil motta en invitasjon til å bli med i rommet hvis forespørselen din blir akseptert."</string>
   <string name="screen_join_room_knock_sent_title">"Forespørsel om å bli med sendt"</string>
+  <string name="screen_join_room_loading_alert_message">"Vi kunne ikke vise forhåndsvisningen av rommet. Dette kan skyldes nettverks- eller serverproblemer."</string>
+  <string name="screen_join_room_loading_alert_title">"Vi kunne ikke vise forhåndsvisning av dette rommet"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s støtter ikke områder ennå. Du kan få tilgang til områder på nett."</string>
   <string name="screen_join_room_space_not_supported_title">"Områder støttes ikke ennå"</string>
   <string name="screen_join_room_subtitle_knock">"Klikk på knappen nedenfor, så vil en romadministrator bli varslet. Du vil kunne delta i samtalen når den er godkjent."</string>

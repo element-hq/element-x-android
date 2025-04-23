@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Diddymu cais"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Iawn, diddymu"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Ydych chi\'n siŵr eich bod am ddiddymu\'ch cais i ymuno â\'r ystafell hon?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Diddymu cais i ymuno"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Iawn, gwrthod a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â\'r ystafell hon? Bydd hyn hefyd yn atal %1$s rhag cysylltu â chi neu eich gwahodd i ystafelloedd."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Gwrthod gwahoddiad a rhwystro"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Gwrthod a rhwystro"</string>
+  <string name="screen_join_room_knock_message_description">"Neges (dewisol)"</string>
+  <string name="screen_join_room_knock_sent_description">"Byddwch yn derbyn gwahoddiad i ymuno â\'r ystafell os caiff eich cais ei dderbyn."</string>
+  <string name="screen_join_room_knock_sent_title">"Anfonwyd y cais i ymuno"</string>
+  <string name="screen_join_room_loading_alert_message">"Doedd dim modd dangos rhagolwg yr ystafell. Gall hyn fod oherwydd problemau rhwydwaith neu weinydd."</string>
+  <string name="screen_join_room_loading_alert_title">"Doedd dim modd dangos rhagolwg yr ystafell hon"</string>
+</resources>

@@ -63,27 +63,18 @@
   <string name="screen_room_details_title">"Info ruangan"</string>
   <string name="screen_room_details_topic_title">"Topik"</string>
   <string name="screen_room_details_updating_room">"Memperbarui ruangan…"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_action">"Cekal"</string>
-  <string name="screen_room_member_list_ban_member_confirmation_description">"Mereka tidak akan dapat bergabung ke ruangan ini lagi jika diundang."</string>
-  <string name="screen_room_member_list_ban_member_confirmation_title">"Apakah Anda yakin ingin mencekal anggota ini?"</string>
   <string name="screen_room_member_list_banned_empty">"Tidak ada pengguna yang dicekal dalam ruangan ini."</string>
-  <string name="screen_room_member_list_banning_user">"Mencekal %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d orang"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_ban">"Keluarkan dan cekal anggota"</string>
-  <string name="screen_room_member_list_manage_member_remove">"Keluarkan dari ruangan"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Keluarkan dan cekal anggota"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Hanya keluarkan anggota"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Keluarkan pengguna dan cekal pengguna bergabung lagi di masa mendatang?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Batalkan pencekalan"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Pengguna dapat bergabung ke ruangan ini lagi jika diundang."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Batalkan pencekalan pengguna"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"Tampilkan profil"</string>
   <string name="screen_room_member_list_mode_banned">"Tercekal"</string>
   <string name="screen_room_member_list_mode_members">"Anggota"</string>
   <string name="screen_room_member_list_pending_header_title">"Tertunda"</string>
-  <string name="screen_room_member_list_removing_user">"Mengeluarkan %1$s…"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Anggota ruangan"</string>

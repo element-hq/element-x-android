@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Видалити"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -7,11 +8,13 @@
     <item quantity="many">"Введено %1$d цифр"</item>
   </plurals>
   <string name="a11y_hide_password">"Cховати пароль"</string>
+  <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_notifications_mentions_only">"Тільки згадки"</string>
   <string name="a11y_notifications_muted">"Звук вимкнено"</string>
   <string name="a11y_page_n">"Сторінка %1$d"</string>
   <string name="a11y_pause">"Пауза"</string>
+  <string name="a11y_paused_voice_message">"Голосове повідомлення, тривалість: %1$s, поточна позиція: %2$s"</string>
   <string name="a11y_pin_field">"Поле PIN-коду"</string>
   <string name="a11y_play">"Відтворити"</string>
   <string name="a11y_poll">"Опитування"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_start_call">"Розпочати виклик"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
   <string name="a11y_view_details">"Переглянути подробиці"</string>
+  <string name="a11y_voice_message">"Голосове повідомлення, тривалість: %1$s"</string>
   <string name="a11y_voice_message_record">"Записати голосове повідомлення."</string>
   <string name="a11y_voice_message_stop_recording">"Припинити запис"</string>
   <string name="action_accept">"Прийняти"</string>
@@ -58,6 +62,7 @@
   <string name="action_deactivate">"Деактивувати"</string>
   <string name="action_deactivate_account">"Деактивувати обліковий запис"</string>
   <string name="action_decline">"Відхилити"</string>
+  <string name="action_decline_and_block">"Відхилити та заблокувати"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_disable">"Вимкнути"</string>
   <string name="action_discard">"Відкинути"</string>
@@ -103,8 +108,11 @@
   <string name="action_remove_message">"Вилучити повідомлення"</string>
   <string name="action_reply">"Відповісти"</string>
   <string name="action_reply_in_thread">"Відповісти в гілці"</string>
+  <string name="action_report">"Поскаржитися"</string>
   <string name="action_report_bug">"Повідомити про помилку"</string>
   <string name="action_report_content">"Повідомити про вміст"</string>
+  <string name="action_report_dm">"Поскаржитися на розмову"</string>
+  <string name="action_report_room">"Поскаржитися на кімнату"</string>
   <string name="action_reset">"Скинути"</string>
   <string name="action_reset_identity">"Скинути ідентичність"</string>
   <string name="action_retry">"Спробувати ще раз"</string>
@@ -215,6 +223,7 @@
   <string name="common_permalink">"Постійне посилання"</string>
   <string name="common_permission">"Дозвіл"</string>
   <string name="common_pinned">"Закріплено"</string>
+  <string name="common_please_check_internet_connection">"Перевірте з\'єднання з інтернетом"</string>
   <string name="common_please_wait">"Будь ласка, зачекайте…"</string>
   <string name="common_poll_end_confirmation">"Ви впевнені, що хочете закінчити це опитування?"</string>
   <string name="common_poll_summary">"Опитування: %1$s"</string>
@@ -228,6 +237,7 @@
   <string name="common_privacy_policy">"Політика конфіденційності"</string>
   <string name="common_reaction">"Реакція"</string>
   <string name="common_reactions">"Реакції"</string>
+  <string name="common_reason">"Причина"</string>
   <string name="common_recovery_key">"Ключ відновлення"</string>
   <string name="common_refreshing">"Оновлення…"</string>
   <string name="common_replying_to">"Відповідь %1$s"</string>
@@ -299,6 +309,8 @@
 
 Ви впевнені, що хочете продовжити?"</string>
   <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
+  <string name="dialog_room_reported">"Скаргу на кімнату надіслано"</string>
+  <string name="dialog_room_reported_and_left">"Поскаржитися та вийти з кімнати"</string>
   <string name="dialog_title_confirmation">"Підтвердження"</string>
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>
@@ -330,6 +342,23 @@
   <string name="invite_friends_text">"Вітаю, поспілкуйтеся зі мною в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Вилучити й заблокувати учасника"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Заблокувати"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Він не зможе приєднатися до цієї кімнати знову, якщо його запросять."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ви точно хочете заблокувати цього користувача?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Блокування %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Вилучити"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Вони зможуть знову приєднатися до цієї кімнати, якщо їх запросять."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Ви дійсно хочете вилучити цього учасника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Переглянути профіль"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Вилучити з кімнати"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Вилучити учасника та заборонити приєднання в майбутньому?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Вилучення %1$s…"</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Заблокувати користувача"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Поскаржитися на цю кімнату постачальнику облікового запису."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Опишіть причину скарги…"</string>
+  <string name="screen_decline_and_block_title">"Відхилити та заблокувати"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
@@ -342,6 +371,11 @@
     <item quantity="many">"%1$d Закріплених повідомлення"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Закріплені повідомлення"</string>
+  <string name="screen_report_room_leave_failed_alert_message">"Ваша скарга надіслана, але ми зіткнулися з проблемою під час спроби вийти з кімнати. Повторіть спробу."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Не вдалося вийти з кімнати"</string>
+  <string name="screen_report_room_reason_footer">"Поскаржтеся на цю кімнату своєму адміністратору. Якщо повідомлення зашифровані, ваш адміністратор не зможе їх прочитати."</string>
+  <string name="screen_report_room_reason_placeholder">"Опишіть причину…"</string>
+  <string name="screen_report_room_title">"Поскаржитися на кімнату"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Ви збираєтеся перейти до свого облікового запису %1$s, щоб скинути свій обліковий запис. Після цього ви повернетесь до програми."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете підтвердити? Перейдіть до свого облікового запису, щоб скинути облікові дані."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>

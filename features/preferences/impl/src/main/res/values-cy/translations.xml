@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
+  <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
+  <string name="screen_advanced_settings_element_call_base_url">"URL sylfaen Galwad Element Cyfaddas"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Gosod URL sylfaen cyfaddas ar gyfer Galwad Element."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL annilys, gwnewch yn siŵr eich bod yn cynnwys y protocol (http/https) a\'r cyfeiriad cywir."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Cuddio afatarau yn y ceisiadau gwahoddiad i ystafell"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Cuddio rhagolygon cyfryngau yn y llinell amser"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Cymedroli a Diogelwch"</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Derbynebau darllen"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Cuddio bob tro"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Dangos bob tro"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Mewn ystafelloedd preifat"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Mae modd dangos cyfrwng cudd trwy dapio arno"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Dangos cyfryngau mewn llinell amser"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Dad-rwystro"</string>
+  <string name="screen_edit_profile_display_name">"Enw dangos"</string>
+  <string name="screen_edit_profile_title">"Golygu proffil"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Gosodiadau ychwanegol"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Crybwyll"</string>
+  <string name="screen_notification_settings_mode_all">"Y Cyfan"</string>
+  <string name="screen_notification_settings_mode_mentions">"Crybwyll"</string>
+  <string name="screen_notification_settings_title">"Hysbysiadau"</string>
+</resources>

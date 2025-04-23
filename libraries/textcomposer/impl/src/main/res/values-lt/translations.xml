@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_bullet_list">"Perjungti punktų sąrašą"</string>
+  <string name="rich_text_editor_code_block">"Kodo blokas"</string>
+  <string name="rich_text_editor_composer_placeholder">"Žinutė…"</string>
+  <string name="rich_text_editor_format_bold">"Taikyti paryškintą formatą"</string>
+  <string name="rich_text_editor_format_italic">"Taikyti pasvirusį formatą"</string>
+  <string name="rich_text_editor_format_strikethrough">"Taikyti perbrauktą formatą"</string>
+  <string name="rich_text_editor_format_underline">"Taikyti pabrauktą formatą"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Perjungti viso ekrano režimą"</string>
+  <string name="rich_text_editor_indent">"Atitraukti"</string>
+  <string name="rich_text_editor_inline_code">"Taikyti įterpto kodo formatą"</string>
+  <string name="rich_text_editor_link">"Nustatyti nuorodą"</string>
+  <string name="rich_text_editor_numbered_list">"Perjungti sunumeruotą sąrašą"</string>
+  <string name="rich_text_editor_quote">"Cituoti"</string>
+  <string name="rich_text_editor_unindent">"Panaikinti atitraukimą"</string>
+</resources>

@@ -27,10 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -40,7 +41,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
-import io.element.android.libraries.androidutils.accessibility.isScreenReaderEnabled
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.libraries.voiceplayer.api.VoiceMessageStateProvider
@@ -66,10 +67,27 @@ fun TimelineItemVoiceView(
     }
 
     val a11y = stringResource(CommonStrings.common_voice_message)
+    val a11yActionLabel = stringResource(
+        when (state.button) {
+            VoiceMessageState.Button.Play -> CommonStrings.a11y_play
+            VoiceMessageState.Button.Pause -> CommonStrings.a11y_pause
+            VoiceMessageState.Button.Downloading -> CommonStrings.common_downloading
+            VoiceMessageState.Button.Retry -> CommonStrings.action_retry
+            VoiceMessageState.Button.Disabled -> CommonStrings.error_unknown
+        }
+    )
     Row(
         modifier = modifier
-            .semantics {
+            .clearAndSetSemantics {
                 contentDescription = a11y
+                if (state.button == VoiceMessageState.Button.Disabled) {
+                    disabled()
+                } else if (state.button in listOf(VoiceMessageState.Button.Play, VoiceMessageState.Button.Pause)) {
+                    onClick(label = a11yActionLabel) {
+                        playPause()
+                        true
+                    }
+                }
             }
             .onSizeChanged {
                 onContentLayoutChange(
@@ -81,12 +99,14 @@ fun TimelineItemVoiceView(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        when (state.button) {
-            VoiceMessageState.Button.Play -> PlayButton(onClick = ::playPause)
-            VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
-            VoiceMessageState.Button.Downloading -> ProgressButton()
-            VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
-            VoiceMessageState.Button.Disabled -> PlayButton(onClick = {}, enabled = false)
+        if (!isTalkbackActive()) {
+            when (state.button) {
+                VoiceMessageState.Button.Play -> PlayButton(onClick = ::playPause)
+                VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
+                VoiceMessageState.Button.Downloading -> ProgressButton()
+                VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
+                VoiceMessageState.Button.Disabled -> PlayButton(onClick = {}, enabled = false)
+            }
         }
         Spacer(Modifier.width(8.dp))
         Text(
@@ -97,13 +117,12 @@ fun TimelineItemVoiceView(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.width(8.dp))
-        val context = LocalContext.current
         WaveformPlaybackView(
             showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
             modifier = Modifier.height(34.dp),
-            seekEnabled = !context.isScreenReaderEnabled(),
+            seekEnabled = !isTalkbackActive(),
             onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
         )
     }

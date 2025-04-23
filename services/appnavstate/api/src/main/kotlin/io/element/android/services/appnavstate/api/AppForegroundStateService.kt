@@ -19,6 +19,11 @@ interface AppForegroundStateService {
     val isInForeground: StateFlow<Boolean>
 
     /**
+     * Updates to whether the app is active because an incoming ringing call is happening will be emitted here.
+     */
+    val hasRingingCall: StateFlow<Boolean>
+
+    /**
      * Updates to whether the app is in an active call or not will be emitted here.
      */
     val isInCall: StateFlow<Boolean>
@@ -37,6 +42,11 @@ interface AppForegroundStateService {
      * Update the in-call state.
      */
     fun updateIsInCallState(isInCall: Boolean)
+
+    /**
+     * Update the 'has ringing call' state.
+     */
+    fun updateHasRingingCall(hasRingingCall: Boolean)
 
     /**
      * Update the active state for the syncing notification event flow.

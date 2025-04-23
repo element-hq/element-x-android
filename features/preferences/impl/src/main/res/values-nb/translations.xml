@@ -5,14 +5,25 @@
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
   <string name="screen_advanced_settings_developer_mode">"Utviklermodus"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktiver for å få tilgang til funksjoner og funksjonalitet for utviklere."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Egendefinert Element Call base URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Angi en egendefinert base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ugyldig URL. Pass på at du inkluderer protokollen (http/https) og riktig adresse."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i invitasjonsforespørsler til rom"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skjul forhåndsvisninger av medier på tidslinjen"</string>
   <string name="screen_advanced_settings_media_compression_description">"Last opp bilder og videoer raskere og reduser databruken"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimaliser mediekvaliteten"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasjon og sikkerhet"</string>
+  <string name="screen_advanced_settings_push_provider_android">"Leverandør av pushvarsling"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rik tekstredigering for å skrive Markdown manuelt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lesebekreftelser"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Hvis slått av, sendes ikke lesebekreftelsene dine til noen. Du vil fortsatt motta lesebekreftelser fra andre brukere."</string>
   <string name="screen_advanced_settings_share_presence">"Del tilstedeværelse"</string>
   <string name="screen_advanced_settings_share_presence_description">"Hvis slått av, kan du ikke sende eller motta lesebekreftelser eller skrivevarsler."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Skjul alltid"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Vis alltid"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"I private rom"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Et skjult medium kan alltid vises ved å trykke på det"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Vis medier i tidslinjen"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktiver alternativet for å vise meldingskilden på tidslinjen."</string>
   <string name="screen_blocked_users_empty">"Du har ingen blokkerte brukere"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Fjern blokkering"</string>
@@ -52,6 +63,7 @@ Hvis du fortsetter, kan noen av innstillingene dine endres."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminnstillinger"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemvarsler er slått av"</string>
   <string name="screen_notification_settings_title">"Varslinger"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historikk"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Feilsøk"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Feilsøk varsler"</string>
 </resources>

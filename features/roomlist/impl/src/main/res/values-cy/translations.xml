@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol."</string>
+  <string name="banner_set_up_recovery_submit">"Gosod adfer"</string>
+  <string name="banner_set_up_recovery_title">"Gosodwch adferiad i ddiogelu eich cyfrif"</string>
+  <string name="confirm_recovery_key_banner_message">"Cadarnhewch eich allwedd adfer i gynnal mynediad i\'ch storfa allweddi a\'ch hanes negeseuon."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Rhowch eich allwedd adfer"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Wedi anghofio\'ch allwedd adfer?"</string>
+  <string name="confirm_recovery_key_banner_title">"Dyw eich allwedd storfa heb ei gydweddu"</string>
+  <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
+  <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
+  <string name="screen_join_room_knock_sent_title">"Anfonwyd y cais i ymuno"</string>
+  <string name="screen_roomlist_filter_invites">"Gwahoddiadau"</string>
+  <string name="screen_roomlist_filter_people">"Pobl"</string>
+  <string name="screen_roomlist_filter_rooms">"Ystafelloedd"</string>
+  <string name="screen_roomlist_main_space_title">"Sgyrsiau"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
+</resources>

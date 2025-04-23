@@ -109,6 +109,7 @@
   <string name="action_report">"Report"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_report_dm">"Report conversation"</string>
   <string name="action_report_room">"Report room"</string>
   <string name="action_reset">"Reset"</string>
   <string name="action_reset_identity">"Reset identity"</string>
@@ -260,6 +261,7 @@ Reason: %1$s."</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_signing_out">"Signing out"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
+  <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -298,7 +300,7 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s’s identity was reset."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s identity was reset.  %3$s"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_confirm_link_message">"The link %1$s is taking you to another site %2$s
 
@@ -337,9 +339,22 @@ Are you sure you want to continue?"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Ban from room"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Ban"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"They won’t be able to join this room again if invited."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Are you sure you want to ban this member?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Banning %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Remove"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"They will be able to join this room again if invited."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Are you sure you want to remove this member?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"View profile"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Remove from room"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remove member and ban from joining in the future?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Removing %1$s…"</string>
   <string name="screen_decline_and_block_block_user_option_description">"You will not see any messages or room invites from this user"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Block user"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Report this room to your account provider."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Describe the reason to report…"</string>
   <string name="screen_decline_and_block_title">"Decline and block"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
@@ -355,7 +370,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_report_room_leave_failed_alert_message">"Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again."</string>
   <string name="screen_report_room_leave_failed_alert_title">"Unable to Leave Room"</string>
   <string name="screen_report_room_reason_footer">"Report this room to your admin. If the messages are encrypted, your admin will not be able to read them."</string>
-  <string name="screen_report_room_reason_placeholder">"Describe the reason…"</string>
+  <string name="screen_report_room_reason_placeholder">"Describe the reason to report…"</string>
   <string name="screen_report_room_title">"Report room"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your identity. Afterwards you\'ll be taken back to the app."</string>
   <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your identity."</string>

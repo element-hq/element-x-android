@@ -15,5 +15,6 @@ interface PushHandler {
 
     suspend fun handleInvalid(
         providerInfo: String,
+        data: String,
     )
 }

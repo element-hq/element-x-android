@@ -19,6 +19,11 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Wenn diese Option deaktiviert ist, werden Ihre Lesebestätigungen an niemanden gesendet. Du erhältst weiterhin Lesebestätigungen von anderen Benutzern."</string>
   <string name="screen_advanced_settings_share_presence">"Präsenz teilen"</string>
   <string name="screen_advanced_settings_share_presence_description">"Wenn diese Option deaktiviert ist, kannst du keine Lesebestätigungen oder Tipp-Benachrichtigungen senden oder empfangen."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Immer verstecken"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Immer anzeigen"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In privaten Chatrooms"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ein verstecktes Medium kann jederzeit durch Antippen angezeigt werden"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Medien in der Zeitleiste anzeigen"</string>
   <string name="screen_advanced_settings_view_source_description">"Option aktiveren, um Nachrichtenquelle in der Zeitleiste anzuzeigen."</string>
   <string name="screen_blocked_users_empty">"Du hast keine blockierten Nutzer"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Blockierung aufheben"</string>
@@ -58,6 +63,7 @@ Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"Systemeinstellungen"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
   <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Verlauf pushen"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Fehlerbehebung"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Fehlerbehebung für Benachrichtigungen"</string>
 </resources>

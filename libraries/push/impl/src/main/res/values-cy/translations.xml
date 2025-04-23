@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Galw"</string>
+  <string name="notification_channel_listening_for_events">"Gwrando am ddigwyddiadau"</string>
+  <string name="notification_channel_noisy">"Hysbysiadau swnllyd"</string>
+  <string name="notification_channel_ringing_calls">"Galwadau\'n canu"</string>
+  <string name="notification_channel_silent">"Hysbysiadau tawel"</string>
+  <string name="notification_fallback_content">"Hysbysiad"</string>
+  <string name="notification_incoming_call">"📹 Galwad i mewn"</string>
+  <string name="notification_inline_reply_failed">"** Wedi methu anfon - agorwch yr ystafell"</string>
+  <string name="notification_invitation_action_join">"Ymuno"</string>
+  <string name="notification_invitation_action_reject">"Gwrthod"</string>
+  <string name="notification_invite_body">"Wedi eich gwahodd i sgwrsio"</string>
+  <string name="notification_invite_body_with_sender">"Mae %1$s wedi eich gwahodd i sgwrsio"</string>
+  <string name="notification_mentioned_you_body">"Wedi eich crybwyll: %1$s"</string>
+  <string name="notification_new_messages">"Negeseuon Newydd"</string>
+  <string name="notification_reaction_body">"Wedi ymateb gyda %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="notification_room_action_quick_reply">"Ateb cyflym"</string>
+  <string name="notification_room_invite_body">"Wedi\'ch gwahodd i ymuno â\'r ystafell"</string>
+  <string name="notification_room_invite_body_with_sender">"Mae %1$s wedi eich gwahodd i ymuno â\'r ystafell"</string>
+  <string name="notification_sender_me">"Fi"</string>
+  <string name="notification_sender_mention_reply">"Crybwyllodd neu atebodd %1$s"</string>
+  <string name="notification_test_push_notification_content">"Rydych chi\'n edrych ar yr hysbysiad! Cliciwch fi!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s : %2$s %3$s"</string>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s a %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s yn %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s yn %2$s a %3$s"</string>
+  <string name="push_distributor_background_sync_android">"Cydweddu\'n y cefndir"</string>
+  <string name="push_distributor_firebase_android">"Gwasanaethau Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Heb ganfod Google Play Services dilys. Efallai fydd hysbysiadau ddim yn gweithio\'n iawn."</string>
+</resources>

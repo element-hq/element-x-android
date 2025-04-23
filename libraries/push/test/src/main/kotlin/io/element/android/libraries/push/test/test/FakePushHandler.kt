@@ -13,13 +13,13 @@ import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushHandler(
     private val handleResult: (PushData, String) -> Unit = { _, _ -> lambdaError() },
-    private val handleInvalidResult: (String) -> Unit = { lambdaError() },
+    private val handleInvalidResult: (String, String) -> Unit = { _, _ -> lambdaError() },
 ) : PushHandler {
     override suspend fun handle(pushData: PushData, providerInfo: String) {
         handleResult(pushData, providerInfo)
     }
 
-    override suspend fun handleInvalid(providerInfo: String) {
-        handleInvalidResult(providerInfo)
+    override suspend fun handleInvalid(providerInfo: String, data: String) {
+        handleInvalidResult(providerInfo, data)
     }
 }

@@ -13,11 +13,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakeAppForegroundStateService(
     initialForegroundValue: Boolean = true,
     initialIsInCallValue: Boolean = false,
-    initialIsSyncingNotificationEventValue: Boolean = false
+    initialIsSyncingNotificationEventValue: Boolean = false,
+    initialHasRingingCall: Boolean = false,
 ) : AppForegroundStateService {
     override val isInForeground = MutableStateFlow(initialForegroundValue)
     override val isInCall = MutableStateFlow(initialIsInCallValue)
     override val isSyncingNotificationEvent = MutableStateFlow(initialIsSyncingNotificationEventValue)
+    override val hasRingingCall = MutableStateFlow(initialHasRingingCall)
 
     override fun startObservingForeground() {
         // No-op
@@ -33,5 +35,9 @@ class FakeAppForegroundStateService(
 
     override fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean) {
         this.isSyncingNotificationEvent.value = isSyncingNotificationEvent
+    }
+
+    override fun updateHasRingingCall(hasRingingCall: Boolean) {
+        this.hasRingingCall.value = hasRingingCall
     }
 }

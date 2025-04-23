@@ -4,10 +4,15 @@
   <string name="screen_signout_confirmation_dialog_submit">"Sair"</string>
   <string name="screen_signout_confirmation_dialog_title">"Sair"</string>
   <string name="screen_signout_in_progress_dialog_content">"Saindo…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Você está prestes a sair da sua última sessão. Se você sair agora, perderá o acesso às suas mensagens criptografadas."</string>
   <string name="screen_signout_key_backup_disabled_title">"Você desativou o backup"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"O backup das suas chaves ainda estava sendo feito quando você ficou off-line. Reconecte-se para que você possa fazer o backup de suas chaves antes de sair."</string>
   <string name="screen_signout_key_backup_offline_title">"O backup das suas chaves ainda está em andamento"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Aguarde até que isso seja concluído antes de sair."</string>
   <string name="screen_signout_key_backup_ongoing_title">"O backup das suas chaves ainda está em andamento"</string>
   <string name="screen_signout_preference_item">"Sair"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Você está prestes a sair da sua última sessão. Se você sair agora, perderá o acesso às suas mensagens criptografadas."</string>
   <string name="screen_signout_recovery_disabled_title">"A recuperação não está configurada"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Você está prestes a sair da sua última sessão. Se você sair agora, poderá perder o acesso às suas mensagens criptografadas."</string>
   <string name="screen_signout_save_recovery_key_title">"Você salvou sua chave de recuperação?"</string>
 </resources>

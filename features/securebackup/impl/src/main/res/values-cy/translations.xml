@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_recovery_action_setup">"Gosod adfer"</string>
+  <string name="screen_key_backup_disable_description">"Bydd dileu storfa allweddi\'n tynnu eich hunaniaeth cryptograffig a\'ch allweddi neges o\'r gweinydd ac yn diffodd y nodweddion diogelwch canlynol:"</string>
+  <string name="screen_recovery_key_confirm_title">"Rhowch eich allwedd adfer"</string>
+  <string name="screen_recovery_key_save_description">"Ysgrifennwch yr allwedd adfer hon yn rhywle diogel, fel rheolwr cyfrinair, nodyn wedi\'i amgryptio, neu mewn man dan glo."</string>
+  <string name="screen_recovery_key_save_title">"Cadwch eich allwedd adfer yn rhywle diogel"</string>
+  <string name="screen_recovery_key_setup_title">"Gosod adfer"</string>
+  <string name="screen_reset_encryption_password_error">"Digwyddodd gwall anhysbys. Gwiriwch fod cyfrinair eich cyfrif yn gywir a cheisio eto."</string>
+</resources>
