@@ -93,24 +93,24 @@ sealed interface ListItemContent {
     data class Counter(val count: Int) : ListItemContent
 
     @Composable
-    fun View() {
+    fun View(isItemEnabled: Boolean) {
         when (this) {
             is Switch -> SwitchComponent(
                 checked = checked,
                 onCheckedChange = null,
-                enabled = enabled
+                enabled = enabled && isItemEnabled,
             )
             is Checkbox -> CheckboxComponent(
                 modifier = if (compact) Modifier.size(maxCompactSize) else Modifier,
                 checked = checked,
                 onCheckedChange = null,
-                enabled = enabled
+                enabled = enabled && isItemEnabled,
             )
             is RadioButton -> RadioButtonComponent(
                 modifier = if (compact) Modifier.size(maxCompactSize) else Modifier,
                 selected = selected,
                 onClick = null,
-                enabled = enabled
+                enabled = enabled && isItemEnabled,
             )
             is Icon -> {
                 IconComponent(

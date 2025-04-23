@@ -134,7 +134,7 @@ fun ListItem(
             CompositionLocalProvider(
                 LocalContentColor provides leadingContentColor,
             ) {
-                content.View()
+                content.View(isItemEnabled = enabled)
             }
         }
     }
@@ -144,7 +144,7 @@ fun ListItem(
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
                 LocalContentColor provides trailingContentColor,
             ) {
-                content.View()
+                content.View(isItemEnabled = enabled)
             }
         }
     }
