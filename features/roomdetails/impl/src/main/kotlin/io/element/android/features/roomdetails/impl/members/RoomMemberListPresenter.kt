@@ -28,9 +28,9 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 class RoomMemberListPresenter @AssistedInject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomMembersModerationPresenter: Presenter<RoomMembersModerationState>,
@@ -86,11 +86,11 @@ class RoomMemberListPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(membersState, roomMemberIdentityStates) {
-            if (membersState is MatrixRoomMembersState.Unknown) {
+            if (membersState is RoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
             val finalMembersState = membersState
-            if (finalMembersState is MatrixRoomMembersState.Error && finalMembersState.roomMembers().orEmpty().isEmpty()) {
+            if (finalMembersState is RoomMembersState.Error && finalMembersState.roomMembers().orEmpty().isEmpty()) {
                 // Cannot fetch members and no cached members, display the error
                 roomMembers = AsyncData.Failure(finalMembersState.failure)
                 return@LaunchedEffect
@@ -116,7 +116,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                         .map { it.withIdentityState(roomMemberIdentityStates) }
                         .toImmutableList(),
                 )
-                roomMembers = if (membersState is MatrixRoomMembersState.Pending) {
+                roomMembers = if (membersState is RoomMembersState.Pending) {
                     AsyncData.Loading(result)
                 } else {
                     AsyncData.Success(result)
@@ -147,7 +147,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                                 .toImmutableList(),
                         )
                         SearchBarResultState.Results(
-                            if (membersState is MatrixRoomMembersState.Pending) {
+                            if (membersState is RoomMembersState.Pending) {
                                 AsyncData.Loading(result)
                             } else {
                                 AsyncData.Success(result)

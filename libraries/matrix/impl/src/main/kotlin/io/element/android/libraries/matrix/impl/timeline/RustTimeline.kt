@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
@@ -86,7 +86,7 @@ class RustTimeline(
     private val inner: InnerTimeline,
     mode: Timeline.Mode,
     systemClock: SystemClock,
-    private val matrixRoom: MatrixRoom,
+    private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
@@ -137,7 +137,10 @@ class RustTimeline(
     )
 
     init {
-        coroutineScope.fetchMembers()
+        if (mode != Timeline.Mode.PINNED_EVENTS) {
+            coroutineScope.fetchMembers()
+        }
+
         if (mode == Timeline.Mode.LIVE) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
@@ -186,10 +189,10 @@ class RustTimeline(
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {
-                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
+                    Timber.d("Can't paginate $direction on room ${joinedRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
                 } else {
                     updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-                    Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
+                    Timber.e(error, "Error paginating $direction on room ${joinedRoom.roomId}")
                 }
             }.onSuccess { hasReachedEnd ->
                 updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
@@ -209,7 +212,7 @@ class RustTimeline(
         _timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        matrixRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
+        joinedRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
         isTimelineInitialized,
     ) { timelineItems,
         backwardPaginationStatus,
@@ -261,7 +264,7 @@ class RustTimeline(
         try {
             inner.fetchMembers()
         } catch (exception: Exception) {
-            Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
+            Timber.e(exception, "Error fetching members for room ${joinedRoom.roomId}")
         }
     }
 

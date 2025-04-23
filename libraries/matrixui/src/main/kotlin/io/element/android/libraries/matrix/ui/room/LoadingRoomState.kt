@@ -13,7 +13,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,7 +27,7 @@ import javax.inject.Inject
 sealed interface LoadingRoomState {
     data object Loading : LoadingRoomState
     data object Error : LoadingRoomState
-    data class Loaded(val room: MatrixRoom) : LoadingRoomState
+    data class Loaded(val room: JoinedRoom) : LoadingRoomState
 }
 
 open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState> {
@@ -40,7 +40,7 @@ open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState>
 
 class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {
     fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
-        getRoomFlow(roomId)
+        getJoinedRoomFlow(roomId)
             .map { room ->
                 if (room != null) {
                     LoadingRoomState.Loaded(room)
@@ -50,8 +50,8 @@ class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: 
             }
             .stateIn(lifecycleScope, SharingStarted.Eagerly, LoadingRoomState.Loading)
 
-    private fun getRoomFlow(roomId: RoomId): Flow<MatrixRoom?> = suspend {
-        matrixClient.getRoom(roomId = roomId)
+    private fun getJoinedRoomFlow(roomId: RoomId): Flow<JoinedRoom?> = suspend {
+        matrixClient.getJoinedRoom(roomId = roomId)
     }
         .asFlow()
 }

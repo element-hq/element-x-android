@@ -51,7 +51,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.mediaviewer.api.MediaGalleryEntryPoint
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -65,7 +65,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     private val messagesEntryPoint: MessagesEntryPoint,
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,

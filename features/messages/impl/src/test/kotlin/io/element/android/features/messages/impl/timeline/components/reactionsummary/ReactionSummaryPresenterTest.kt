@@ -12,12 +12,12 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -32,8 +32,8 @@ class ReactionSummaryPresenterTest {
     private val aggregatedReaction = anAggregatedReaction(userId = A_USER_ID, key = "👍", isHighlighted = true)
     private val roomMember = aRoomMember(userId = A_USER_ID, avatarUrl = AN_AVATAR_URL, displayName = A_USER_NAME)
     private val summaryEvent = ReactionSummaryEvents.ShowReactionSummary(AN_EVENT_ID, listOf(aggregatedReaction), aggregatedReaction.key)
-    private val room = FakeMatrixRoom().apply {
-        givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
+    private val room = FakeBaseRoom().apply {
+        givenRoomMembersState(RoomMembersState.Ready(persistentListOf(roomMember)))
     }
     private val presenter = ReactionSummaryPresenter(room)
 

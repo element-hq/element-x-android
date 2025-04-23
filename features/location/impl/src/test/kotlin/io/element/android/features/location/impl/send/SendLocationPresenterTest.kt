@@ -20,12 +20,12 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.messages.test.FakeMessageComposerContext
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -47,12 +47,12 @@ class SendLocationPresenterTest {
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
 
     private fun createSendLocationPresenter(
-        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        joinedRoom: JoinedRoom = FakeJoinedRoom(),
     ): SendLocationPresenter = SendLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
             override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
-        room = matrixRoom,
+        room = joinedRoom,
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
         locationActions = fakeLocationActions,
@@ -265,10 +265,10 @@ class SendLocationPresenterTest {
         val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, Result<Unit>> { _, _, _, _, _ ->
             Result.success(Unit)
         }
-        val matrixRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             sendLocationResult = sendLocationResult,
         )
-        val sendLocationPresenter = createSendLocationPresenter(matrixRoom)
+        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -326,10 +326,10 @@ class SendLocationPresenterTest {
         val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, Result<Unit>> { _, _, _, _, _ ->
             Result.success(Unit)
         }
-        val matrixRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             sendLocationResult = sendLocationResult,
         )
-        val sendLocationPresenter = createSendLocationPresenter(matrixRoom)
+        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -387,10 +387,10 @@ class SendLocationPresenterTest {
         val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, Result<Unit>> { _, _, _, _, _ ->
             Result.success(Unit)
         }
-        val matrixRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             sendLocationResult = sendLocationResult,
         )
-        val sendLocationPresenter = createSendLocationPresenter(matrixRoom)
+        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,

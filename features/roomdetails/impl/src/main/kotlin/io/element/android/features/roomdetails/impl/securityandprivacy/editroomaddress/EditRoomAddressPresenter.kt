@@ -25,8 +25,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.api.roomAliasFromName
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 class EditRoomAddressPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val client: MatrixClient,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val roomAliasHelper: RoomAliasHelper,
 ) : Presenter<EditRoomAddressState> {
     @AssistedFactory
@@ -139,7 +139,7 @@ class EditRoomAddressPresenter @AssistedInject constructor(
 /**
  * Returns the first alias that matches the given server name, or null if none match.
  */
-private fun MatrixRoomInfo.firstAliasMatching(serverName: String): RoomAlias? {
+private fun RoomInfo.firstAliasMatching(serverName: String): RoomAlias? {
     // Check if the canonical alias matches the homeserver
     if (canonicalAlias?.matchesServer(serverName) == true) {
         return canonicalAlias

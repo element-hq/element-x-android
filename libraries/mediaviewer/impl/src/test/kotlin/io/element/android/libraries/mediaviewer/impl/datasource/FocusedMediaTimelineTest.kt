@@ -10,10 +10,10 @@ package io.element.android.libraries.mediaviewer.impl.datasource
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -79,7 +79,7 @@ class FocusedMediaTimelineTest {
         val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             createTimelineResult = createTimelineResult,
         )
         val sut = createFocusedMediaTimeline(
@@ -96,7 +96,7 @@ class FocusedMediaTimelineTest {
         val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             createTimelineResult = createTimelineResult,
         )
         val sut = createFocusedMediaTimeline(
@@ -110,7 +110,7 @@ class FocusedMediaTimelineTest {
     }
 
     private fun createFocusedMediaTimeline(
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: JoinedRoom = FakeJoinedRoom(),
         eventId: EventId = AN_EVENT_ID,
         initialMediaItem: MediaItem.Event = aMediaItemImage(),
         onlyPinnedEvent: Boolean = false,

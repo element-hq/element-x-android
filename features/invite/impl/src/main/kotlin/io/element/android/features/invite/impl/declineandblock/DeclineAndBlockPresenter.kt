@@ -72,16 +72,14 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
     ) = launch {
         runUpdatingState(action) {
             runCatching {
-                client.getPendingRoom(inviteData.roomId)!!.use { room ->
+                client.getRoom(inviteData.roomId)!!.use { room ->
                     room.leave().getOrThrow()
-
                     if (blockUser) {
-                        val userIdToBlock = room.membershipDetails().getOrNull()?.senderMember?.userId
+                        val userIdToBlock = room.info().inviter?.userId
                         if (userIdToBlock != null) {
                             client.ignoreUser(userIdToBlock).getOrThrow()
                         }
                     }
-
                     if (reportRoom) {
                         //room.reportRoom(reason.takeIf { it.isNotBlank() }).getOrThrow()
                     }

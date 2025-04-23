@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.room.member
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomMember
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
@@ -40,16 +40,16 @@ class RoomMemberListFetcherTest {
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
         fetcher.membersFlow.test {
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
 
             fetcher.fetchRoomMembers(source = CACHE)
 
             // Loading state
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
 
             val cachedItemsState = awaitItem()
-            assertThat(cachedItemsState).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-            assertThat((cachedItemsState as? MatrixRoomMembersState.Ready)?.roomMembers).hasSize(3)
+            assertThat(cachedItemsState).isInstanceOf(RoomMembersState.Ready::class.java)
+            assertThat((cachedItemsState as? RoomMembersState.Ready)?.roomMembers).hasSize(3)
         }
     }
 
@@ -62,9 +62,9 @@ class RoomMemberListFetcherTest {
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
         fetcher.membersFlow.test {
             fetcher.fetchRoomMembers(source = CACHE)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers).isEmpty()
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
+            assertThat((awaitItem() as? RoomMembersState.Ready)?.roomMembers).isEmpty()
         }
     }
 
@@ -77,9 +77,9 @@ class RoomMemberListFetcherTest {
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
         fetcher.membersFlow.test {
             fetcher.fetchRoomMembers(source = CACHE)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Error::class.java)
         }
     }
 
@@ -100,11 +100,11 @@ class RoomMemberListFetcherTest {
             fetcher.fetchRoomMembers(source = CACHE)
 
             // Initial state
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
             // Started loading cached members
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
             // Finished loading cached members
-            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers).hasSize(3)
+            assertThat((awaitItem() as? RoomMembersState.Ready)?.roomMembers).hasSize(3)
 
             ensureAllEventsConsumed()
         }
@@ -126,9 +126,9 @@ class RoomMemberListFetcherTest {
         fetcher.membersFlow.test {
             fetcher.fetchRoomMembers(source = SERVER)
 
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
+            assertThat((awaitItem() as? RoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
         }
     }
 
@@ -140,9 +140,9 @@ class RoomMemberListFetcherTest {
         fetcher.membersFlow.test {
             fetcher.fetchRoomMembers(source = SERVER)
 
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Pending::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Error::class.java)
         }
     }
 
@@ -167,20 +167,20 @@ class RoomMemberListFetcherTest {
         fetcher.membersFlow.test {
             fetcher.fetchRoomMembers(source = CACHE_AND_SERVER)
             // Initial
-            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(RoomMembersState.Unknown::class.java)
             // Loading cached
             awaitItem().let { pending ->
-                assertThat(pending).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+                assertThat(pending).isInstanceOf(RoomMembersState.Pending::class.java)
                 assertThat(pending.roomMembers()).isEmpty()
             }
             // Loaded cached
             awaitItem().let { cached ->
-                assertThat(cached).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+                assertThat(cached).isInstanceOf(RoomMembersState.Pending::class.java)
                 assertThat(cached.roomMembers()).hasSize(1)
             }
             // Start loading new
             awaitItem().let { ready ->
-                assertThat(ready).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+                assertThat(ready).isInstanceOf(RoomMembersState.Ready::class.java)
                 assertThat(ready.roomMembers()).hasSize(3)
             }
         }

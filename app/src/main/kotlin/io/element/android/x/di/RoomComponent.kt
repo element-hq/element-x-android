@@ -14,7 +14,8 @@ import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @SingleIn(RoomScope::class)
 @MergeSubcomponent(RoomScope::class)
@@ -22,7 +23,11 @@ interface RoomComponent : NodeFactoriesBindings {
     @MergeSubcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun room(room: MatrixRoom): Builder
+        fun joinedRoom(room: JoinedRoom): Builder
+
+        @BindsInstance
+        fun baseRoom(room: BaseRoom): Builder
+
         fun build(): RoomComponent
     }
 

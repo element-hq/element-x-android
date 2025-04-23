@@ -9,7 +9,7 @@ package io.element.android.features.invite.api
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import kotlinx.parcelize.Parcelize
@@ -30,7 +30,7 @@ fun RoomPreviewInfo.toInviteData(): InviteData {
     )
 }
 
-fun MatrixRoomInfo.toInviteData(): InviteData {
+fun RoomInfo.toInviteData(): InviteData {
     return InviteData(
         roomId = id,
         roomName = name ?: id.value,

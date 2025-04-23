@@ -13,19 +13,18 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.media.isPreviewEnabled
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableSet
 import javax.inject.Inject
 
 class TimelineProtectionPresenter @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
 ) : Presenter<TimelineProtectionState> {
     private val allowedEvents = mutableStateOf<Set<EventId>>(setOf())
 

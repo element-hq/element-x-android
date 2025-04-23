@@ -45,7 +45,7 @@ import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -132,7 +132,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                     val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
                         onSuccess = { preview ->
-                            val membershipInfo = when (preview.info.membership) {
+                            val membershipInfo = when (preview.previewInfo.membership) {
                                 CurrentUserMembership.INVITED,
                                 CurrentUserMembership.BANNED,
                                 CurrentUserMembership.KNOCKED -> {
@@ -140,7 +140,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                                 }
                                 else -> null
                             }
-                            preview.info.toContentState(
+                            preview.previewInfo.toContentState(
                                 senderMember = membershipInfo?.senderMember,
                                 reason = membershipInfo?.currentUserMember?.membershipChangeReason,
                             )
@@ -300,7 +300,7 @@ internal fun RoomDescription.toContentState(): ContentState {
 }
 
 @VisibleForTesting
-internal fun MatrixRoomInfo.toContentState(membershipSender: RoomMember?, reason: String?): ContentState {
+internal fun RoomInfo.toContentState(membershipSender: RoomMember?, reason: String?): ContentState {
     return ContentState.Loaded(
         roomId = id,
         name = name,

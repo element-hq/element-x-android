@@ -25,7 +25,7 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class RoomDetailsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDetailsPresenter,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {

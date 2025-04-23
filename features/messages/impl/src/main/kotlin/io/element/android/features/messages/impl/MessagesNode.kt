@@ -53,7 +53,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
@@ -67,7 +67,7 @@ class MessagesNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val coroutineScope: CoroutineScope,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     messageComposerPresenterFactory: MessageComposerPresenter.Factory,
     timelinePresenterFactory: TimelinePresenter.Factory,
