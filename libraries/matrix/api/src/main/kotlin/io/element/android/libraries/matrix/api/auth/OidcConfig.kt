@@ -26,8 +26,6 @@ object OidcConfig {
     // Note: host must match with the host of CLIENT_URI
     const val POLICY_URI = BuildConfig.POLICY_URI
 
-    const val CONTACT = BuildConfig.CONTACT
-
     // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
     val STATIC_REGISTRATIONS = mapOf(
         "https://id.thirdroom.io/realms/thirdroom" to "elementx",

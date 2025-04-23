@@ -22,7 +22,7 @@ class OidcConfigurationProvider @Inject constructor(
         logoUri = OidcConfig.LOGO_URI,
         tosUri = OidcConfig.TOS_URI,
         policyUri = OidcConfig.POLICY_URI,
-        contacts = listOf(OidcConfig.CONTACT),
+        contacts = null,
         staticRegistrations = OidcConfig.STATIC_REGISTRATIONS,
     )
 }

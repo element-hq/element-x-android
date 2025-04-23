@@ -46,10 +46,6 @@ android {
             name = "POLICY_URI",
             value = BuildTimeConfig.URL_POLICY ?: "https://element.io/privacy"
         )
-        buildConfigFieldStr(
-            name = "CONTACT",
-            value = BuildTimeConfig.SUPPORT_EMAIL_ADDRESS ?: "support@element.io"
-        )
     }
 }
 
