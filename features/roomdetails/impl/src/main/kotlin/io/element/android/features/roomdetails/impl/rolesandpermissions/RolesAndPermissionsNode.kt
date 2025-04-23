@@ -19,7 +19,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -32,7 +32,7 @@ class RolesAndPermissionsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
 ) : Node(buildContext, plugins = plugins), RolesAndPermissionsNavigator {
     interface Callback : Plugin, RolesAndPermissionsNavigator {
         override fun openAdminList()

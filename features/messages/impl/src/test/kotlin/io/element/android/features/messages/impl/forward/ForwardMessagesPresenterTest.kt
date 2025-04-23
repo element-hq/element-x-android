@@ -15,7 +15,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
@@ -49,8 +49,8 @@ class ForwardMessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.forwardEventLambda = forwardEventLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
+        val room = FakeJoinedRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -73,8 +73,8 @@ class ForwardMessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.forwardEventLambda = forwardEventLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
-        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
+        val room = FakeJoinedRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -93,11 +93,11 @@ class ForwardMessagesPresenterTest {
 
     private fun CoroutineScope.aForwardMessagesPresenter(
         eventId: EventId = AN_EVENT_ID,
-        fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
+        fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
         coroutineScope: CoroutineScope = this,
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
-        timelineProvider = LiveTimelineProvider(fakeMatrixRoom),
+        timelineProvider = LiveTimelineProvider(fakeRoom),
         appCoroutineScope = coroutineScope,
     )
 }

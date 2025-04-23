@@ -64,7 +64,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -275,7 +275,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - show context menu`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeBaseRoom()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -353,7 +353,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - hide context menu`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeBaseRoom()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -463,7 +463,7 @@ class RoomListPresenterTest {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val setIsFavoriteResult = lambdaRecorder { _: Boolean -> Result.success(Unit) }
-        val room = FakeMatrixRoom(
+        val room = FakeBaseRoom(
             setIsFavoriteResult = setIsFavoriteResult
         )
         val analyticsService = FakeAnalyticsService()
@@ -510,9 +510,9 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
-        val room = FakeMatrixRoom()
-        val room2 = FakeMatrixRoom(roomId = A_ROOM_ID_2)
-        val room3 = FakeMatrixRoom(roomId = A_ROOM_ID_3)
+        val room = FakeBaseRoom()
+        val room2 = FakeBaseRoom(roomId = A_ROOM_ID_2)
+        val room3 = FakeBaseRoom(roomId = A_ROOM_ID_3)
         val allRooms = setOf(room, room2, room3)
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val matrixClient = FakeMatrixClient().apply {

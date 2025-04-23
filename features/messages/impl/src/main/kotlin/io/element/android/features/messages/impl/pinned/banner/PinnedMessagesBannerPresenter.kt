@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class PinnedMessagesBannerPresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
 ) : Presenter<PinnedMessagesBannerState> {

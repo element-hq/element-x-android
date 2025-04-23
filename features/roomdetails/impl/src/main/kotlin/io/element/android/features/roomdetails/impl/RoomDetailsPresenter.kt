@@ -35,9 +35,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
@@ -61,7 +61,7 @@ import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val featureFlagService: FeatureFlagService,
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
@@ -235,12 +235,12 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getCanInvite(membersState: MatrixRoomMembersState) = produceState(false, membersState) {
+    private fun getCanInvite(membersState: RoomMembersState) = produceState(false, membersState) {
         value = room.canInvite().getOrElse { false }
     }
 
     @Composable
-    private fun getCanSendState(membersState: MatrixRoomMembersState, type: StateEventType) = produceState(false, membersState) {
+    private fun getCanSendState(membersState: RoomMembersState, type: StateEventType) = produceState(false, membersState) {
         value = room.canSendState(type).getOrElse { false }
     }
 

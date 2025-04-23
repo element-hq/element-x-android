@@ -13,7 +13,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -37,7 +37,7 @@ interface MediaTimeline {
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
 class LiveMediaTimeline @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
 ) : MediaTimeline {
     private var timeline: Timeline? = null
     private val mutex = Mutex()
@@ -62,7 +62,7 @@ class LiveMediaTimeline @Inject constructor(
  * Optionally, the timeline will only contain the pinned events.
  */
 class FocusedMediaTimeline(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val eventId: EventId,
     private val onlyPinnedEvents: Boolean,
     initialMediaItem: MediaItem.Event,

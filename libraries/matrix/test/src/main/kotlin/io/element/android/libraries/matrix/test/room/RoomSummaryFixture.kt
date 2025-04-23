@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
@@ -33,7 +33,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 
 fun aRoomSummary(
-    info: MatrixRoomInfo = aRoomInfo(),
+    info: RoomInfo = aRoomInfo(),
     lastMessage: RoomMessage? = aRoomMessage(),
 ) = RoomSummary(
     info = info,
@@ -76,7 +76,7 @@ fun aRoomSummary(
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
     lastMessage: RoomMessage? = aRoomMessage(),
 ) = RoomSummary(
-    info = MatrixRoomInfo(
+    info = RoomInfo(
         id = roomId,
         name = name,
         rawName = rawName,

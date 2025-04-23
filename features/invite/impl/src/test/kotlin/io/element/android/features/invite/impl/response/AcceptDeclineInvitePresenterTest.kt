@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeRoomPreview
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -88,11 +88,9 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteFailure = lambdaRecorder { ->
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
-        val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
-            }
-        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, FakeBaseRoom(leaveRoomLambda = declineInviteFailure))
+        }
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
@@ -138,11 +136,9 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteSuccess = lambdaRecorder { ->
             Result.success(Unit)
         }
-        val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
-            }
-        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, FakeBaseRoom(leaveRoomLambda = declineInviteSuccess))
+        }
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
@@ -186,11 +182,10 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteSuccess = lambdaRecorder { -> Result.success(Unit) }
         val ignoreUserSuccess = lambdaRecorder { _: UserId -> Result.success(Unit) }
         val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteSuccess))
-            },
             ignoreUserResult = ignoreUserSuccess
-        )
+        ).apply {
+            givenGetRoomResult(A_ROOM_ID, FakeBaseRoom(leaveRoomLambda = declineInviteSuccess))
+        }
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
@@ -229,11 +224,9 @@ class AcceptDeclineInvitePresenterTest {
         val declineInviteFailure = lambdaRecorder { ->
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
-        val client = FakeMatrixClient(
-            getRoomPreviewResult = { _, _ ->
-                Result.success(FakeRoomPreview(declineInviteResult = declineInviteFailure))
-            }
-        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, FakeBaseRoom(leaveRoomLambda = declineInviteFailure))
+        }
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,

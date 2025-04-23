@@ -25,8 +25,8 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -39,7 +39,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -70,7 +69,7 @@ class RoomDetailsPresenterTest {
     }
 
     private fun TestScope.createRoomDetailsPresenter(
-        room: MatrixRoom = aMatrixRoom(),
+        room: JoinedRoom = aJoinedRoom(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
@@ -116,7 +115,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state is created from initial room info`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -145,7 +144,7 @@ class RoomDetailsPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             pinnedEventIds = listOf(AN_EVENT_ID),
         )
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -166,7 +165,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state with no room name`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             displayName = "",
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -185,7 +184,7 @@ class RoomDetailsPresenterTest {
     fun `present - initial state with DM member sets custom DM roomType`() = runTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -198,7 +197,7 @@ class RoomDetailsPresenterTest {
             },
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
-            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+            givenRoomMembersState(RoomMembersState.Ready(roomMembers))
 
             givenRoomInfo(
                 aRoomInfo(
@@ -222,7 +221,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when user can invite others to room`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -240,7 +239,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when user can not invite others to room`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -255,7 +254,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when canInvite errors`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.failure(Throwable("Whoops")) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -270,7 +269,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when user can edit one attribute`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC -> Result.success(true)
@@ -296,7 +295,7 @@ class RoomDetailsPresenterTest {
     fun `present - initial state when user can edit attributes in a DM`() = runTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC,
@@ -316,7 +315,7 @@ class RoomDetailsPresenterTest {
             },
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
-            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+            givenRoomMembersState(RoomMembersState.Ready(roomMembers))
 
             givenRoomInfo(
                 aRoomInfo(
@@ -343,7 +342,7 @@ class RoomDetailsPresenterTest {
     fun `present - initial state when in a DM with no topic`() = runTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             isDirect = true,
             topic = null,
             canSendStateResult = { _, stateEventType ->
@@ -365,7 +364,7 @@ class RoomDetailsPresenterTest {
             },
         ).apply {
             val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
-            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+            givenRoomMembersState(RoomMembersState.Ready(roomMembers))
 
             givenRoomInfo(
                 aRoomInfo(
@@ -378,7 +377,7 @@ class RoomDetailsPresenterTest {
 
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            skipItems(1)
+            skipItems(2)
 
             // There's no topic, so we hide the entire UI for DMs
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
@@ -389,7 +388,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when user can edit all attributes`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC,
@@ -416,7 +415,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state when user can edit no attributes`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
                     StateEventType.ROOM_TOPIC,
@@ -441,7 +440,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - topic state is hidden when no topic and user has no permission`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             topic = null,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
@@ -467,7 +466,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - topic state is 'can add topic' when no topic and user has permission`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             topic = null,
             canSendStateResult = { _, stateEventType ->
                 when (stateEventType) {
@@ -499,7 +498,7 @@ class RoomDetailsPresenterTest {
     @Test
     fun `present - leave room event is passed on to leave room presenter`() = runTest {
         val leaveRoomEventRecorder = EventsRecorder<LeaveRoomEvent>()
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -519,7 +518,7 @@ class RoomDetailsPresenterTest {
     @Test
     fun `present - notification mode changes`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             notificationSettingsService = notificationSettingsService,
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -548,7 +547,7 @@ class RoomDetailsPresenterTest {
     fun `present - mute room notifications`() = runTest {
         val notificationSettingsService =
             FakeNotificationSettingsService(initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             notificationSettingsService = notificationSettingsService,
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -576,7 +575,7 @@ class RoomDetailsPresenterTest {
             initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             initialEncryptedGroupDefaultMode = RoomNotificationMode.ALL_MESSAGES
         )
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             notificationSettingsService = notificationSettingsService,
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -601,7 +600,7 @@ class RoomDetailsPresenterTest {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val setIsFavoriteResult = lambdaRecorder<Boolean, Result<Unit>> { _ -> Result.success(Unit) }
-        val room = FakeMatrixRoom(
+        val room = aJoinedRoom(
             setIsFavoriteResult = setIsFavoriteResult,
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -630,7 +629,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - changes in room info updates the is favorite flag`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -651,7 +650,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - show knock requests`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },
@@ -677,7 +676,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - show security and privacy`() = runTest {
-        val room = aMatrixRoom(
+        val room = aJoinedRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             canSendStateResult = { _, _ -> Result.success(true) },

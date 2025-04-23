@@ -30,7 +30,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -53,7 +53,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerEntryPoint.Params,
     @Assisted private val navigator: MediaViewerNavigator,
     @Assisted private val dataSource: MediaViewerDataSource,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val localMediaActions: LocalMediaActions,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory

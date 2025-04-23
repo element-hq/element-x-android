@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -122,7 +122,7 @@ class UserProfilePresenterTest {
         canFindRoom: Boolean = true,
         expectedResult: Boolean,
     ) = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeBaseRoom(
             canUserJoinCallResult = { canUserJoinCallResult },
         )
         val client = createFakeMatrixClient().apply {

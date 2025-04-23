@@ -21,8 +21,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RolesAndPermissionsPresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
 ) : Presenter<RolesAndPermissionsState> {
@@ -109,7 +109,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
         }
     }
 
-    private fun MatrixRoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
+    private fun RoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
         return this.userPowerLevels.count { (userId, level) ->
             RoomMember.Role.forPowerLevel(level) == role && userId in userIds
         }

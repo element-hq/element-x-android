@@ -16,12 +16,13 @@ import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -54,8 +55,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - initial results are loaded automatically`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -68,8 +69,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - ToggleSearchActive changes the value`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -87,8 +88,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - QueryChanged produces new results`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -113,8 +114,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - changes in the room members produce new results`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         }
         val presenter = createChangeRolesPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -126,7 +127,7 @@ class ChangeRolesPresenterTest {
             assertThat(initialResults?.moderators).hasSize(1)
             assertThat(initialResults?.admins).hasSize(1)
 
-            room.givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList().take(1).toPersistentList()))
+            room.givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList().take(1).toPersistentList()))
             skipItems(1)
 
             val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results
@@ -139,8 +140,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - UserSelectionToggle adds and removes users from the selected user list`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(room = room)
@@ -161,8 +162,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - hasPendingChanges is true when the initial selected users don't match the new ones`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(room = room)
@@ -190,8 +191,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Exit will display success if no pending changes`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(room = room)
@@ -210,8 +211,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - CancelExit will remove exit confirmation`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(room = room)
@@ -236,8 +237,8 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Exit will display a confirmation dialog if there are pending changes, calling it again will actually exit`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(room = room)
@@ -264,11 +265,11 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Save will display a confirmation when adding admins`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.success(Unit) },
-            updateMembersResult = { Result.success(Unit) },
+            baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
@@ -285,14 +286,19 @@ class ChangeRolesPresenterTest {
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             confirmingState.eventSink(ChangeRolesEvent.Save)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
+            skipItems(1)
+
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 
     @Test
     fun `present - CancelSave will remove the confirmation dialog`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+        val room = FakeJoinedRoom().apply {
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.ADMIN, room = room)
@@ -317,11 +323,11 @@ class ChangeRolesPresenterTest {
     @Test
     fun `present - Save will just save the data for moderators`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.success(Unit) },
-            updateMembersResult = { Result.success(Unit) },
+            baseRoom = FakeBaseRoom(updateMembersResult = { Result.success(Unit) }),
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
         }
         val presenter = createChangeRolesPresenter(
@@ -339,6 +345,11 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
+
+            val loadingState = awaitItem()
+            assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
+            skipItems(1)
+
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.Moderator))
         }
@@ -346,10 +357,10 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Save can handle failures and ClearError clears them`() = runTest {
-        val room = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.MODERATOR, room = room)
@@ -363,6 +374,9 @@ class ChangeRolesPresenterTest {
             initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
+            val loadingState = awaitItem()
+            assertThat(loadingState.savingState).isInstanceOf(AsyncAction.Loading::class.java)
+            skipItems(1)
             val failedState = awaitItem()
             assertThat(failedState.savingState).isInstanceOf(AsyncAction.Failure::class.java)
 
@@ -373,7 +387,7 @@ class ChangeRolesPresenterTest {
 
     private fun TestScope.createChangeRolesPresenter(
         role: RoomMember.Role = RoomMember.Role.ADMIN,
-        room: FakeMatrixRoom = FakeMatrixRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): ChangeRolesPresenter {

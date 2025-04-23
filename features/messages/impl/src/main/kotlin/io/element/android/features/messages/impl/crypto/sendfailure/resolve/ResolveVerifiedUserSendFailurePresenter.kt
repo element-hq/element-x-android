@@ -19,13 +19,13 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ResolveVerifiedUserSendFailurePresenter @Inject constructor(
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val verifiedUserSendFailureFactory: VerifiedUserSendFailureFactory,
 ) : Presenter<ResolveVerifiedUserSendFailureState> {
     @Composable

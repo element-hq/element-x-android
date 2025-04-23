@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import io.element.android.features.roomdetails.impl.securityandprivacy.permissions.SecurityAndPrivacyPermissions.Companion.DEFAULT
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 
@@ -37,7 +37,7 @@ data class SecurityAndPrivacyPermissions(
 }
 
 @Composable
-fun MatrixRoom.securityAndPrivacyPermissionsAsState(updateKey: Long): State<SecurityAndPrivacyPermissions> {
+fun BaseRoom.securityAndPrivacyPermissionsAsState(updateKey: Long): State<SecurityAndPrivacyPermissions> {
     return produceState(DEFAULT, key1 = updateKey) {
         value = SecurityAndPrivacyPermissions(
             canChangeRoomAccess = canSendState(type = StateEventType.ROOM_JOIN_RULES).getOrElse { false },

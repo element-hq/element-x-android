@@ -9,7 +9,7 @@ package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -35,7 +35,7 @@ class SuggestionsProcessorTest {
     fun `processing null suggestion will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = null,
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -47,7 +47,7 @@ class SuggestionsProcessorTest {
     fun `processing Command will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aCommandSuggestion,
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -59,7 +59,7 @@ class SuggestionsProcessorTest {
     fun `processing Custom will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aCustomSuggestion,
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -71,7 +71,7 @@ class SuggestionsProcessorTest {
     fun `processing Mention suggestion with not loaded members will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion(""),
-            roomMembersState = MatrixRoomMembersState.Unknown,
+            roomMembersState = RoomMembersState.Unknown,
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -83,7 +83,7 @@ class SuggestionsProcessorTest {
     fun `processing Mention suggestion with no members will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion(""),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -95,7 +95,7 @@ class SuggestionsProcessorTest {
     fun `processing Room suggestion with no aliases will return empty suggestion`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion(""),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
@@ -108,7 +108,7 @@ class SuggestionsProcessorTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ALI"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
@@ -137,7 +137,7 @@ class SuggestionsProcessorTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ali"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
@@ -166,7 +166,7 @@ class SuggestionsProcessorTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("tot"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
@@ -186,7 +186,7 @@ class SuggestionsProcessorTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("lement"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
@@ -215,7 +215,7 @@ class SuggestionsProcessorTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("lement"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(
                 RoomAliasSuggestion(
                     roomAlias = A_ROOM_ALIAS,
@@ -235,7 +235,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = null)
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
@@ -252,7 +252,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = null)
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = UserId("@alice:server.org"),
             canSendRoomMention = { true },
@@ -265,7 +265,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "alice")
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("bo"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
@@ -278,7 +278,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), membership = RoomMembershipState.INVITE)
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
@@ -291,7 +291,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "bob")
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("bo"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
@@ -308,7 +308,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "ro")
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ro"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
@@ -326,7 +326,7 @@ class SuggestionsProcessorTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "ro")
         val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ro"),
-            roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { false },

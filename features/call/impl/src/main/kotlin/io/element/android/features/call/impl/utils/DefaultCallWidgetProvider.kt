@@ -33,7 +33,7 @@ class DefaultCallWidgetProvider @Inject constructor(
         theme: String?,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
-        val room = matrixClient.getRoom(roomId) ?: error("Room not found")
+        val room = matrixClient.getJoinedRoom(roomId) ?: error("Room not found")
 
         val customBaseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
         val baseUrl = customBaseUrl ?: EMBEDDED_CALL_WIDGET_BASE_URL
