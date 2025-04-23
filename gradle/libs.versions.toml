@@ -20,7 +20,7 @@ media3 = "1.7.1"
 camera = "1.4.2"
 
 # Compose
-compose_bom = "2025.04.00"
+compose_bom = "2025.04.01"
 composecompiler = "1.5.15"
 
 # Coroutines
