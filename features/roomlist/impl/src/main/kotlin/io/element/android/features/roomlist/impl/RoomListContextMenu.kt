@@ -170,14 +170,7 @@ private fun RoomListModalBottomSheetContent(
         )
         ListItem(
             headlineContent = {
-                val reportText = stringResource(
-                    id = if (contextMenu.isDm) {
-                        CommonStrings.action_report_dm
-                    } else {
-                        CommonStrings.action_report_room
-                    }
-                )
-                Text(text = reportText)
+                Text(text = stringResource(CommonStrings.action_report_room))
             },
             modifier = Modifier.clickable { onReportRoomClick() },
             leadingContent = ListItemContent.Icon(
@@ -190,14 +183,7 @@ private fun RoomListModalBottomSheetContent(
         )
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(
-                    id = if (contextMenu.isDm) {
-                        CommonStrings.action_leave_conversation
-                    } else {
-                        CommonStrings.action_leave_room
-                    }
-                )
-                Text(text = leaveText)
+                Text(text = stringResource(CommonStrings.action_leave_room))
             },
             modifier = Modifier.clickable { onLeaveRoomClick() },
             leadingContent = ListItemContent.Icon(
