@@ -23,6 +23,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.services.analytics.api.AnalyticsService
@@ -53,6 +54,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openSecurityAndPrivacy()
         fun openDmUserProfile(userId: UserId)
         fun onJoinCall()
+        fun openReportRoom()
     }
 
     private val callbacks = plugins<Callback>()
@@ -132,6 +134,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openDmUserProfile(userId) }
     }
 
+    private fun onReportRoomClick() {
+        callbacks.forEach { it.openReportRoom() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -166,6 +172,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onKnockRequestsClick = ::openKnockRequestsLists,
             onSecurityAndPrivacyClick = ::openSecurityAndPrivacy,
             onProfileClick = ::onProfileClick,
+            onReportRoomClick = ::onReportRoomClick,
         )
     }
 }

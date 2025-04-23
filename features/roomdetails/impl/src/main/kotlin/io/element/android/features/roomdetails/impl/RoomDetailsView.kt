@@ -107,6 +107,7 @@ fun RoomDetailsView(
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
+    onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -123,9 +124,9 @@ fun RoomDetailsView(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState())
+                    .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -254,7 +255,10 @@ fun RoomDetailsView(
                 BlockUserDialogs(roomMemberState)
             }
 
-            OtherActionsSection { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+            OtherActionsSection(
+                onReportRoomClick = onReportRoomClick,
+                onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+            )
         }
     }
 }
@@ -318,8 +322,8 @@ private fun MainActionsSection(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -380,8 +384,8 @@ private fun RoomHeaderSection(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompositeAvatar(
@@ -390,8 +394,8 @@ private fun RoomHeaderSection(
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
-                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                .testTag(TestTags.roomDetailAvatar)
+                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                    .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(
             title = roomName,
@@ -412,8 +416,8 @@ private fun DmHeaderSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DmAvatars(
@@ -666,15 +670,26 @@ private fun MediaGalleryItem(
 }
 
 @Composable
-private fun OtherActionsSection(onLeaveRoom: () -> Unit) {
+private fun OtherActionsSection(
+    onReportRoomClick: () -> Unit,
+    onLeaveRoomClick: () -> Unit,
+) {
     PreferenceCategory(showTopDivider = true) {
+        ListItem(
+            headlineContent = {
+                Text(stringResource(CommonStrings.action_report_room))
+            },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+            style = ListItemStyle.Destructive,
+            onClick = onReportRoomClick,
+        )
         ListItem(
             headlineContent = {
                 Text(stringResource(CommonStrings.action_leave_room))
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
-            onClick = onLeaveRoom,
+            onClick = onLeaveRoomClick,
         )
     }
 }
@@ -709,5 +724,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onKnockRequestsClick = {},
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
+        onReportRoomClick = {},
     )
 }
