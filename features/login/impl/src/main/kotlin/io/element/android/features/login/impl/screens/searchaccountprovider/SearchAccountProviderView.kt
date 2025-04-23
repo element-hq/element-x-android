@@ -65,6 +65,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=611-61435
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchAccountProviderView(
     state: SearchAccountProviderState,
