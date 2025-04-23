@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.tests.testutils.lambda.lambdaError
 
 fun aRoomPreview(
-    localRoom: FakeMatrixRoom? = null,
+    localRoom: FakeBaseRoom? = null,
     info: RoomPreviewInfo = aRoomPreviewInfo(),
     roomMembershipDetails: () -> Result<RoomMembershipDetails?> = { lambdaError() },
 ) = FakeNotJoinedRoom(

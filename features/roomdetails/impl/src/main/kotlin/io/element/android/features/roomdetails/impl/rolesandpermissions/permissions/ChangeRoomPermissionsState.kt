@@ -8,12 +8,12 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions.permissions
 
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import kotlinx.collections.immutable.ImmutableList
 
 data class ChangeRoomPermissionsState(
     val section: ChangeRoomPermissionsSection,
-    val currentPermissions: MatrixRoomPowerLevels?,
+    val currentPermissions: RoomPowerLevels?,
     val items: ImmutableList<RoomPermissionType>,
     val hasChanges: Boolean,
     val saveAction: AsyncAction<Unit>,

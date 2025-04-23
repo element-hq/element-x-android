@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
@@ -61,7 +61,7 @@ fun aRoomInfo(
     numUnreadNotifications: Long = 0,
     numUnreadMentions: Long = 0,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
-) = MatrixRoomInfo(
+) = RoomInfo(
     id = id,
     name = name,
     rawName = rawName,

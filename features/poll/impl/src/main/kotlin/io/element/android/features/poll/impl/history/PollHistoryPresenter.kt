@@ -23,7 +23,7 @@ import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import io.element.android.features.poll.impl.history.model.PollHistoryItemsFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
@@ -35,7 +35,7 @@ class PollHistoryPresenter @Inject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val pollHistoryItemFactory: PollHistoryItemsFactory,
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
 ) : Presenter<PollHistoryState> {
     @Composable
     override fun present(): PollHistoryState {

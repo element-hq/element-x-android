@@ -7,8 +7,8 @@
 
 package io.element.android.appnav.di
 
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface RoomComponentFactory {
-    fun create(room: JoinedMatrixRoom): Any
+    fun create(room: JoinedRoom): Any
 }

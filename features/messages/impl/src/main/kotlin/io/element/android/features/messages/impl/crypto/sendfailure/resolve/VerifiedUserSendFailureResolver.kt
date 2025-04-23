@@ -10,7 +10,7 @@ package io.element.android.features.messages.impl.crypto.sendfailure.resolve
 import androidx.compose.runtime.mutableStateOf
 import io.element.android.libraries.matrix.api.core.SendHandle
 import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import timber.log.Timber
 
@@ -21,7 +21,7 @@ import timber.log.Timber
  * This way, the user can resolve and resend the message for each user concerned, one by one.
  */
 class VerifiedUserSendFailureResolver(
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val transactionId: TransactionId,
     private val sendHandle: SendHandle,
     private val iterator: VerifiedUserSendFailureIterator,

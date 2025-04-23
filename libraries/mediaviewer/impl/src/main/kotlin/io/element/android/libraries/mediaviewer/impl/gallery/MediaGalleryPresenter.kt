@@ -27,7 +27,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 
 class MediaGalleryPresenter @AssistedInject constructor(
     @Assisted private val navigator: MediaGalleryNavigator,
-    private val room: MatrixRoom,
+    private val room: BaseRoom,
     private val mediaGalleryDataSource: MediaGalleryDataSource,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,

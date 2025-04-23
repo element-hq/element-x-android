@@ -12,7 +12,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun JoinedMatrixRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMemberIdentityStateChange>> {
+fun JoinedRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMemberIdentityStateChange>> {
     return roomInfoFlow
         .filter {
             // Room cannot become unencrypted, so we can just apply a filter here.
@@ -52,7 +52,7 @@ fun JoinedMatrixRoom.roomMemberIdentityStateChange(): Flow<ImmutableList<RoomMem
         }
 }
 
-fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange(room: JoinedMatrixRoom) {
+fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange(room: JoinedRoom) {
     room.roomMemberIdentityStateChange()
         .onEach { roomMemberIdentityStateChanges ->
             value = roomMemberIdentityStateChanges.toPersistentList()

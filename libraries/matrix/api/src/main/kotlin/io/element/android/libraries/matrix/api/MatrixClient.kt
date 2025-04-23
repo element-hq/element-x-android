@@ -23,10 +23,10 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -53,8 +53,8 @@ interface MatrixClient {
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
-    suspend fun getJoinedRoom(roomId: RoomId): JoinedMatrixRoom?
-    suspend fun getRoom(roomId: RoomId): MatrixRoom?
+    suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
+    suspend fun getRoom(roomId: RoomId): BaseRoom?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
@@ -169,7 +169,7 @@ interface MatrixClient {
  * The flow will emit a new value whenever the room info is updated.
  * The flow will emit Optional.empty item if the room is not found.
  */
-fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
+fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<RoomInfo>> {
     return getRoomSummaryFlow(roomIdOrAlias)
         .map { roomSummary -> roomSummary.map { it.info } }
         .distinctUntilChanged()

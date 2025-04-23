@@ -9,10 +9,10 @@ package io.element.android.features.messages.impl.timeline.protection
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
@@ -55,7 +55,7 @@ class TimelineProtectionPresenterTest {
     @Test
     fun `present - media preview value private in public room`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(timelineMediaPreviewValue = MediaPreviewValue.Private)
-        val room = FakeMatrixRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Public))
+        val room = FakeBaseRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Public))
         val presenter = createPresenter(appPreferencesStore, room)
         presenter.test {
             skipItems(1)
@@ -72,7 +72,7 @@ class TimelineProtectionPresenterTest {
     @Test
     fun `present - media preview value private in non public room`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(timelineMediaPreviewValue = MediaPreviewValue.Private)
-        val room = FakeMatrixRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite))
+        val room = FakeBaseRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite))
         val presenter = createPresenter(appPreferencesStore, room)
         presenter.test {
             val initialState = awaitItem()
@@ -85,7 +85,7 @@ class TimelineProtectionPresenterTest {
 
     private fun createPresenter(
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: BaseRoom = FakeBaseRoom(),
     ) = TimelineProtectionPresenter(
         appPreferencesStore = appPreferencesStore,
         room = room,

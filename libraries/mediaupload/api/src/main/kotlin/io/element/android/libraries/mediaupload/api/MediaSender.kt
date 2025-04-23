@@ -11,7 +11,7 @@ import android.net.Uri
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CancellationException
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) {
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
@@ -130,7 +130,7 @@ class MediaSender @Inject constructor(
             ongoingUploadJobs.remove(Job)
         }
 
-    private suspend fun JoinedMatrixRoom.sendMedia(
+    private suspend fun JoinedRoom.sendMedia(
         uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?,
         caption: String?,

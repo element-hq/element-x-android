@@ -9,7 +9,7 @@ package io.element.android.features.poll.impl.data
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class PollRepository @Inject constructor(
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val timelineProvider: TimelineProvider,
 ) {
     suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatching {

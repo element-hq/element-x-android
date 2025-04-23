@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -64,11 +64,11 @@ class VoiceMessageComposerPresenterTest {
         lambdaRecorder<File, AudioInfo, List<Float>, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-    private val matrixRoom = FakeJoinedMatrixRoom(
+    private val joinedRoom = FakeJoinedRoom(
         sendVoiceMessageResult = sendVoiceMessageResult
     )
     private val mediaPreProcessor = FakeMediaPreProcessor().apply { givenAudioResult() }
-    private val mediaSender = MediaSender(mediaPreProcessor, matrixRoom, InMemorySessionPreferencesStore())
+    private val mediaSender = MediaSender(mediaPreProcessor, joinedRoom, InMemorySessionPreferencesStore())
     private val messageComposerContext = FakeMessageComposerContext()
 
     companion object {

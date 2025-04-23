@@ -15,8 +15,8 @@ import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -54,8 +54,8 @@ class SecurityAndPrivacyPresenterTest {
 
     @Test
     fun `present - room info change updates saved and edited settings`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
             initialRoomInfo = aRoomInfo(
                 joinRule = JoinRule.Public,
@@ -161,8 +161,8 @@ class SecurityAndPrivacyPresenterTest {
 
     @Test
     fun `present - room visibility loading and change`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
             getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
             initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared)
@@ -210,8 +210,8 @@ class SecurityAndPrivacyPresenterTest {
         val updateJoinRuleLambda = lambdaRecorder<JoinRule, Result<Unit>> { Result.success(Unit) }
         val updateRoomVisibilityLambda = lambdaRecorder<RoomVisibility, Result<Unit>> { Result.success(Unit) }
         val updateRoomHistoryVisibilityLambda = lambdaRecorder<RoomHistoryVisibility, Result<Unit>> { Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
             getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
             initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite, historyVisibility = RoomHistoryVisibility.Shared)
@@ -277,8 +277,8 @@ class SecurityAndPrivacyPresenterTest {
             Result.failure(Exception("Failed to update room visibility"))
         }
         val updateRoomHistoryVisibilityLambda = lambdaRecorder<RoomHistoryVisibility, Result<Unit>> { Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canSendStateResult = { _, _ -> Result.success(true) },
             getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
             initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
@@ -337,8 +337,8 @@ class SecurityAndPrivacyPresenterTest {
 
     private fun createSecurityAndPrivacyPresenter(
         serverName: String = "matrix.org",
-        room: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        room: FakeJoinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canSendStateResult = { _, _ -> Result.success(true) },
                 getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
                 initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)

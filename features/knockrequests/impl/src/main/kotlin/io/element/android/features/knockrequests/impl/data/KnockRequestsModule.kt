@@ -14,14 +14,14 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 @Module
 @ContributesTo(RoomScope::class)
 object KnockRequestsModule {
     @Provides
     @SingleIn(RoomScope::class)
-    fun knockRequestsService(room: JoinedMatrixRoom, featureFlagService: FeatureFlagService): KnockRequestsService {
+    fun knockRequestsService(room: JoinedRoom, featureFlagService: FeatureFlagService): KnockRequestsService {
         return KnockRequestsService(
             knockRequestsFlow = room.knockRequestsFlow,
             permissionsFlow = room.knockRequestPermissionsFlow(),

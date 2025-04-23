@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.widget.FakeCallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -41,7 +41,7 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - fails if it can't generate the URL for the widget`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.failure(Exception("Can't generate URL for widget")) }
         )
         val client = FakeMatrixClient().apply {
@@ -53,7 +53,7 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - fails if it can't get the widget driver`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
             getWidgetDriverResult = { Result.failure(Exception("Can't get a widget driver")) }
         )
@@ -66,7 +66,7 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - returns a widget driver when all steps are successful`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
             getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
         )
@@ -79,7 +79,7 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - will use a custom base url if it exists`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
             getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
         )

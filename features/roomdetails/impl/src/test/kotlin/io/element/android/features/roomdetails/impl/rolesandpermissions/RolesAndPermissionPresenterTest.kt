@@ -15,7 +15,7 @@ import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -59,7 +59,7 @@ class RolesAndPermissionPresenterTest {
     fun `present - DemoteSelfTo changes own role to the specified one`() = runTest(StandardTestDispatcher()) {
         val presenter = createRolesAndPermissionsPresenter(
             dispatchers = testCoroutineDispatchers(),
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 updateUserRoleResult = { Result.success(Unit) }
             ),
         )
@@ -80,7 +80,7 @@ class RolesAndPermissionPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - DemoteSelfTo can handle failures and clean them`() = runTest(StandardTestDispatcher()) {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             updateUserRoleResult = { Result.failure(Exception("Failed to update role")) }
         )
         val presenter = createRolesAndPermissionsPresenter(room = room, dispatchers = testCoroutineDispatchers())
@@ -120,7 +120,7 @@ class RolesAndPermissionPresenterTest {
         val analyticsService = FakeAnalyticsService()
         val presenter = createRolesAndPermissionsPresenter(
             analyticsService = analyticsService,
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 resetPowerLevelsResult = { Result.success(defaultRoomPowerLevels()) }
             )
         )
@@ -153,7 +153,7 @@ class RolesAndPermissionPresenterTest {
     }
 
     private fun TestScope.createRolesAndPermissionsPresenter(
-        room: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService()
     ): RolesAndPermissionsPresenter {

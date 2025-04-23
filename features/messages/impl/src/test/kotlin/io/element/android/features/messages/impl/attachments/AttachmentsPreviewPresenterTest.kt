@@ -29,12 +29,12 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -110,7 +110,7 @@ class AttachmentsPreviewPresenterTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             progressCallbackValues = listOf(
                 Pair(0, 10),
                 Pair(5, 10),
@@ -148,7 +148,7 @@ class AttachmentsPreviewPresenterTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendFileResult = sendFileResult,
         )
         val onDoneListener = lambdaRecorder<Unit> { }
@@ -184,7 +184,7 @@ class AttachmentsPreviewPresenterTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendFileResult = sendFileResult,
         )
         val onDoneListener = lambdaRecorder<Unit> { }
@@ -216,7 +216,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media with pre-processing failure after user sends media`() = runTest {
-        val room = FakeJoinedMatrixRoom()
+        val room = FakeJoinedRoom()
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
         val presenter = createAttachmentsPreviewPresenter(
@@ -242,7 +242,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media with pre-processing failure before user sends media`() = runTest {
-        val room = FakeJoinedMatrixRoom()
+        val room = FakeJoinedRoom()
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
         val presenter = createAttachmentsPreviewPresenter(
@@ -297,7 +297,7 @@ class AttachmentsPreviewPresenterTest {
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
             givenImageResult()
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendImageResult = sendImageResult,
         )
         val onDoneListener = lambdaRecorder<Unit> { }
@@ -339,7 +339,7 @@ class AttachmentsPreviewPresenterTest {
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
             givenVideoResult()
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendVideoResult = sendVideoResult,
         )
         val onDoneListener = lambdaRecorder<Unit> { }
@@ -381,7 +381,7 @@ class AttachmentsPreviewPresenterTest {
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
             givenAudioResult()
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendAudioResult = sendAudioResult,
         )
         val onDoneListener = lambdaRecorder<Unit> { }
@@ -418,7 +418,7 @@ class AttachmentsPreviewPresenterTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.failure(failure)
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendFileResult = sendFileResult,
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = false)
@@ -448,7 +448,7 @@ class AttachmentsPreviewPresenterTest {
             Result.failure(failure)
         }
         val onDoneListenerResult = lambdaRecorder<Unit> {}
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendFileResult = sendFileResult,
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = true, onDoneListener = onDoneListenerResult)
@@ -518,7 +518,7 @@ class AttachmentsPreviewPresenterTest {
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
-        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: JoinedRoom = FakeJoinedRoom(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         temporaryUriDeleter: TemporaryUriDeleter = FakeTemporaryUriDeleter(),

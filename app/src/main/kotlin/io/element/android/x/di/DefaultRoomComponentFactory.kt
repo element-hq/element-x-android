@@ -10,14 +10,14 @@ package io.element.android.x.di
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultRoomComponentFactory @Inject constructor(
     private val roomComponentBuilder: RoomComponent.Builder
 ) : RoomComponentFactory {
-    override fun create(room: JoinedMatrixRoom): Any {
+    override fun create(room: JoinedRoom): Any {
         return roomComponentBuilder
             .joinedRoom(room)
             .baseRoom(room)

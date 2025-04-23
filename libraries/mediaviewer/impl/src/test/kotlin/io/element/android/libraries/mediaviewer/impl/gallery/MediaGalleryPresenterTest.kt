@@ -12,15 +12,15 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
@@ -52,8 +52,8 @@ class MediaGalleryPresenterTest {
             mediaGalleryDataSource = FakeMediaGalleryDataSource(
                 startLambda = startLambda,
             ),
-            room = FakeJoinedMatrixRoom(
-                baseRoom = FakeMatrixRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
@@ -71,8 +71,8 @@ class MediaGalleryPresenterTest {
     @Test
     fun `present - change mode`() = runTest {
         val presenter = createMediaGalleryPresenter(
-            room = FakeJoinedMatrixRoom(
-                baseRoom = FakeMatrixRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
@@ -100,9 +100,9 @@ class MediaGalleryPresenterTest {
 
     private suspend fun `present - bottom sheet state - own message`(canDeleteOwn: Boolean) {
         val presenter = createMediaGalleryPresenter(
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 createTimelineResult = { Result.success(FakeTimeline()) },
-                baseRoom = FakeMatrixRoom(
+                baseRoom = FakeBaseRoom(
                     sessionId = A_USER_ID,
                     initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                     canRedactOwnResult = { Result.success(canDeleteOwn) }
@@ -145,8 +145,8 @@ class MediaGalleryPresenterTest {
 
     private suspend fun `present - bottom sheet state - other message`(canDeleteOther: Boolean) {
         val presenter = createMediaGalleryPresenter(
-            room = FakeJoinedMatrixRoom(
-                baseRoom = FakeMatrixRoom(
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
                 sessionId = A_USER_ID,
                 initialRoomInfo = aRoomInfo(name = A_ROOM_NAME),
                     canRedactOtherResult = { Result.success(canDeleteOther) },
@@ -181,8 +181,8 @@ class MediaGalleryPresenterTest {
     @Test
     fun `present - delete bottom sheet`() = runTest {
         val presenter = createMediaGalleryPresenter(
-            room = FakeJoinedMatrixRoom(
-                baseRoom = FakeMatrixRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(initialRoomInfo = aRoomInfo(name = A_ROOM_NAME)),
                 createTimelineResult = { Result.success(FakeTimeline()) },
             )
         )
@@ -249,7 +249,7 @@ class MediaGalleryPresenterTest {
             onViewInTimelineClickLambda = onViewInTimelineClickLambda,
         )
         val presenter = createMediaGalleryPresenter(
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 createTimelineResult = { Result.success(FakeTimeline()) },
             ),
             navigator = navigator,
@@ -289,7 +289,7 @@ class MediaGalleryPresenterTest {
         localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         navigator: MediaGalleryNavigator = FakeMediaGalleryNavigator(),
-        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(
+        room: JoinedRoom = FakeJoinedRoom(
             liveTimeline = FakeTimeline(),
         ),
     ): MediaGalleryPresenter {

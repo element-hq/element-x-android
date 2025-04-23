@@ -13,10 +13,10 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -45,12 +45,12 @@ class MediaSenderTest {
     }
 
     @Test
-    fun `given an attachment when sending it the MatrixRoom will call sendMedia`() = runTest {
+    fun `given an attachment when sending it the Room will call sendMedia`() = runTest {
         val sendImageResult =
             lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.success(FakeMediaUploadHandler())
             }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendImageResult = sendImageResult
         )
         val sender = createMediaSender(room = room)
@@ -78,7 +78,7 @@ class MediaSenderTest {
             lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.failure<FakeMediaUploadHandler>(Exception())
             }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendImageResult = sendImageResult
         )
         val sender = createMediaSender(room = room)
@@ -96,7 +96,7 @@ class MediaSenderTest {
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
             Result.success(FakeMediaUploadHandler())
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             sendFileResult = sendFileResult
         )
         val sender = createMediaSender(room = room)
@@ -123,7 +123,7 @@ class MediaSenderTest {
 
     private fun createMediaSender(
         preProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
-        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: JoinedRoom = FakeJoinedRoom(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
     ) = MediaSender(
         preProcessor = preProcessor,

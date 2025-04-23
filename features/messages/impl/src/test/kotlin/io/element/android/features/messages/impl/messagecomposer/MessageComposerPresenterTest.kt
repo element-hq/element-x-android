@@ -42,8 +42,8 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
@@ -65,8 +65,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -268,13 +268,13 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editCaptionLambda = editCaptionLambda
         }
-        val fakeMatrixRoom = FakeJoinedMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
             coroutineScope = this,
-            room = fakeMatrixRoom,
+            room = joinedRoom,
             isRichTextEditorEnabled = false,
         )
         val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
@@ -383,7 +383,7 @@ class MessageComposerPresenterTest {
     fun `present - send message with rich text enabled`() = runTest {
         val presenter = createPresenter(
             coroutineScope = this,
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 sendMessageResult = { _, _, _ -> Result.success(Unit) },
                 typingNoticeResult = { Result.success(Unit) }
             ),
@@ -417,7 +417,7 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             coroutineScope = this,
             isRichTextEditorEnabled = false,
-            room = FakeJoinedMatrixRoom(
+            room = FakeJoinedRoom(
                 sendMessageResult = { _, _, _ -> Result.success(Unit) },
                 typingNoticeResult = { Result.success(Unit) }
             ),
@@ -455,13 +455,13 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editMessageLambda = editMessageLambda
         }
-        val fakeMatrixRoom = FakeJoinedMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
             this,
-            fakeMatrixRoom,
+            joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -510,14 +510,14 @@ class MessageComposerPresenterTest {
         val roomEditMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val fakeMatrixRoom = FakeJoinedMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
             editMessageLambda = roomEditMessageLambda,
         )
         val presenter = createPresenter(
             this,
-            fakeMatrixRoom,
+            joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -567,13 +567,13 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editMessageLambda = editMessageLambda
         }
-        val fakeMatrixRoom = FakeJoinedMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createPresenter(
             this,
-            fakeMatrixRoom,
+            joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -619,13 +619,13 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.replyMessageLambda = replyMessageLambda
         }
-        val fakeMatrixRoom = FakeJoinedMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
             this,
-            fakeMatrixRoom,
+            joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -690,7 +690,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick image from gallery`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
@@ -731,7 +731,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick video from gallery`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
@@ -789,7 +789,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick file from storage will open the preview`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment> -> }
@@ -812,7 +812,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - create poll`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
@@ -831,7 +831,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - share location`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
@@ -850,7 +850,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Take photo`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
@@ -875,7 +875,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Take photo with permission request`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
@@ -902,7 +902,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Record video`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
@@ -927,7 +927,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Record video with permission request`() = runTest {
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
@@ -1002,12 +1002,12 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         var canUserTriggerRoomNotificationResult = true
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) }),
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) }),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
-                MatrixRoomMembersState.Ready(
+                RoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
@@ -1058,12 +1058,12 @@ class MessageComposerPresenterTest {
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(canUserTriggerRoomNotificationResult = { Result.success(true) }),
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(canUserTriggerRoomNotificationResult = { Result.success(true) }),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
-                MatrixRoomMembersState.Ready(
+                RoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
@@ -1125,7 +1125,7 @@ class MessageComposerPresenterTest {
         val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             liveTimeline = timeline,
             sendMessageResult = sendMessageResult,
             typingNoticeResult = { Result.success(Unit) }
@@ -1207,7 +1207,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - handle typing notice event`() = runTest {
         val typingNoticeResult = lambdaRecorder<Boolean, Result<Unit>> { Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = typingNoticeResult,
         )
         val presenter = createPresenter(room = room, coroutineScope = this)
@@ -1230,7 +1230,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - handle typing notice event when sending typing notice is disabled`() = runTest {
         val typingNoticeResult = lambdaRecorder<Boolean, Result<Unit>> { Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             typingNoticeResult = typingNoticeResult
         )
         val store = InMemorySessionPreferencesStore(
@@ -1385,7 +1385,7 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.loadReplyDetailsLambda = loadReplyDetailsLambda
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1526,7 +1526,7 @@ class MessageComposerPresenterTest {
 
     private fun createPresenter(
         coroutineScope: CoroutineScope,
-        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(
+        room: JoinedRoom = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         ),
         navigator: MessagesNavigator = FakeMessagesNavigator(),

@@ -51,8 +51,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -69,8 +69,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -128,8 +128,8 @@ class MessagesPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - check that the room's unread flag is removed`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -139,7 +139,7 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
         )
         assertThat(room.baseRoom.markAsReadCalls).isEmpty()
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             runCurrent()
             assertThat(room.baseRoom.setUnreadFlagCalls).isEqualTo(listOf(false))
@@ -157,8 +157,8 @@ class MessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
         }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -168,7 +168,7 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(joinedRoom = room, coroutineDispatchers = coroutineDispatchers)
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
@@ -193,8 +193,8 @@ class MessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
         }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -204,7 +204,7 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(joinedRoom = room, coroutineDispatchers = coroutineDispatchers)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
@@ -251,8 +251,8 @@ class MessagesPresenterTest {
     fun `present - handle action copy link`() = runTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -264,7 +264,7 @@ class MessagesPresenterTest {
         )
         val presenter = createMessagesPresenter(
             clipboardHelper = clipboardHelper,
-            matrixRoom = room,
+            joinedRoom = room,
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
@@ -474,8 +474,8 @@ class MessagesPresenterTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
 
         val liveTimeline = FakeTimeline()
-        val matrixRoom = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -489,7 +489,7 @@ class MessagesPresenterTest {
         val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
         liveTimeline.redactEventLambda = redactEventLambda
         val presenter = createMessagesPresenter(
-            matrixRoom = matrixRoom,
+            joinedRoom = joinedRoom,
             coroutineDispatchers = coroutineDispatchers,
         )
         presenter.testWithLifecycleOwner {
@@ -545,8 +545,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - shows prompt to reinvite users in DM`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -557,7 +557,7 @@ class MessagesPresenterTest {
             },
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             // Initially the composer doesn't have focus, so we don't show the alert
@@ -578,8 +578,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -590,7 +590,7 @@ class MessagesPresenterTest {
             },
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
@@ -604,8 +604,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -616,7 +616,7 @@ class MessagesPresenterTest {
             },
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
@@ -631,8 +631,8 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle reinviting other user when memberlist is ready`() = runTest {
         val inviteUserResult = lambdaRecorder { _: UserId -> Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -643,14 +643,14 @@ class MessagesPresenterTest {
             inviteUserResult = inviteUserResult,
         )
         room.givenRoomMembersState(
-            MatrixRoomMembersState.Ready(
+            RoomMembersState.Ready(
                 persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
                 )
             )
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
@@ -666,8 +666,8 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle reinviting other user when memberlist is error`() = runTest {
         val inviteUserResult = lambdaRecorder { _: UserId -> Result.success(Unit) }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -678,7 +678,7 @@ class MessagesPresenterTest {
             inviteUserResult = inviteUserResult,
         )
         room.givenRoomMembersState(
-            MatrixRoomMembersState.Error(
+            RoomMembersState.Error(
                 failure = Throwable(),
                 prevRoomMembers = persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
@@ -686,7 +686,7 @@ class MessagesPresenterTest {
                 )
             )
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
@@ -703,8 +703,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle reinviting other user when memberlist is not ready`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -713,8 +713,8 @@ class MessagesPresenterTest {
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        room.givenRoomMembersState(RoomMembersState.Unknown)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
@@ -728,8 +728,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle reinviting other user when inviting fails`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -740,14 +740,14 @@ class MessagesPresenterTest {
             inviteUserResult = { Result.failure(Throwable("Oops!")) },
         )
         room.givenRoomMembersState(
-            MatrixRoomMembersState.Ready(
+            RoomMembersState.Ready(
                 persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
                 )
             )
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
             initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
@@ -766,8 +766,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - permission to post`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
                 canUserJoinCallResult = { Result.success(true) },
@@ -782,7 +782,7 @@ class MessagesPresenterTest {
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val state = awaitItem()
@@ -792,8 +792,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - no permission to post`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
                 canUserJoinCallResult = { Result.success(true) },
@@ -808,7 +808,7 @@ class MessagesPresenterTest {
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             // Default value
             assertThat(awaitItem().userEventPermissions.canSendMessage).isTrue()
@@ -818,8 +818,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - permission to redact own`() = runTest {
-        val matrixRoom = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canRedactOwnResult = { Result.success(true) },
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOtherResult = { Result.success(false) },
@@ -828,7 +828,7 @@ class MessagesPresenterTest {
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
+        val presenter = createMessagesPresenter(joinedRoom = joinedRoom)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOwn }.last()
             assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
@@ -839,8 +839,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - permission to redact other`() = runTest {
-        val matrixRoom = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canRedactOtherResult = { Result.success(true) },
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(false) },
@@ -849,7 +849,7 @@ class MessagesPresenterTest {
         ),
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
+        val presenter = createMessagesPresenter(joinedRoom = joinedRoom)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOther }.last()
             assertThat(initialState.userEventPermissions.canRedactOwn).isFalse()
@@ -888,8 +888,8 @@ class MessagesPresenterTest {
         val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
         val analyticsService = FakeAnalyticsService()
         val timeline = FakeTimeline()
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
@@ -899,7 +899,7 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
+        val presenter = createMessagesPresenter(joinedRoom = room, analyticsService = analyticsService)
         presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
@@ -928,8 +928,8 @@ class MessagesPresenterTest {
         val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
         val timeline = FakeTimeline()
         val analyticsService = FakeAnalyticsService()
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
@@ -939,7 +939,7 @@ class MessagesPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
+        val presenter = createMessagesPresenter(joinedRoom = room, analyticsService = analyticsService)
         presenter.testWithLifecycleOwner {
             val messageEvent = aMessageEvent(
                 content = aTimelineItemTextContent()
@@ -1087,8 +1087,8 @@ class MessagesPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editCaptionLambda = editCaptionLambda
         }
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
@@ -1099,7 +1099,7 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createMessagesPresenter(
-            matrixRoom = room,
+            joinedRoom = room,
         )
         presenter.testWithLifecycleOwner {
             skipItems(1)
@@ -1125,8 +1125,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - when room is encrypted and a DM, the DM user's identity state is fetched onResume`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             sessionId = A_SESSION_ID,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
             canRedactOwnResult = { Result.success(true) },
@@ -1135,13 +1135,13 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
             initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
         ).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
+            givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
         },
             typingNoticeResult = { Result.success(Unit) },
         )
         val encryptionService = FakeEncryptionService(getUserIdentityResult = { Result.success(IdentityState.Verified) })
 
-        val presenter = createMessagesPresenter(matrixRoom = room, encryptionService = encryptionService)
+        val presenter = createMessagesPresenter(joinedRoom = room, encryptionService = encryptionService)
         val lifecycleOwner = FakeLifecycleOwner()
         presenter.testWithLifecycleOwner(lifecycleOwner) {
             val initialState = awaitItem()
@@ -1157,8 +1157,8 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        joinedRoom: FakeJoinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
                 canUserSendMessageResult = { _, _ -> Result.success(true) },
                 canRedactOwnResult = { Result.success(true) },
                 canRedactOtherResult = { Result.success(true) },
@@ -1186,7 +1186,7 @@ class MessagesPresenterTest {
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
         return MessagesPresenter(
-            room = matrixRoom,
+            room = joinedRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = { aVoiceMessageComposerState() },
             timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
@@ -1207,7 +1207,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
-            timelineController = TimelineController(matrixRoom),
+            timelineController = TimelineController(joinedRoom),
             permalinkParser = permalinkParser,
             encryptionService = encryptionService,
             analyticsService = analyticsService,

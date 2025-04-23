@@ -9,9 +9,9 @@ package io.element.android.libraries.mediaviewer.impl.datasource
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -31,7 +31,7 @@ class LiveMediaTimelineTest {
         val createTimelineResult = lambdaRecorder<CreateTimelineParams, Result<Timeline>> {
             Result.success(FakeTimeline())
         }
-        val room = FakeJoinedMatrixRoom(
+        val room = FakeJoinedRoom(
             createTimelineResult = createTimelineResult,
         )
         val sut = createLiveMediaTimeline(
@@ -47,7 +47,7 @@ class LiveMediaTimelineTest {
     }
 
     private fun createLiveMediaTimeline(
-        room: JoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: JoinedRoom = FakeJoinedRoom(),
     ) = LiveMediaTimeline(
         room = room,
     )

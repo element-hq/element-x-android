@@ -13,13 +13,13 @@ import app.cash.turbine.Event
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -52,12 +52,12 @@ class TypingNotificationPresenterTest {
     @Test
     fun `present - typing notification disabled`() = runTest {
         val typingMembersFlow = MutableStateFlow<List<UserId>>(emptyList())
-        val room = FakeJoinedMatrixRoom(roomTypingMembersFlow = typingMembersFlow)
+        val room = FakeJoinedRoom(roomTypingMembersFlow = typingMembersFlow)
         val sessionPreferencesStore = InMemorySessionPreferencesStore(
             isRenderTypingNotificationsEnabled = false,
         )
         val presenter = createPresenter(
-            matrixRoom = room,
+            joinedRoom = room,
             sessionPreferencesStore = sessionPreferencesStore,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -92,8 +92,8 @@ class TypingNotificationPresenterTest {
     @Test
     fun `present - state is updated when a member is typing, member is not known`() = runTest {
         val typingMembersFlow = MutableStateFlow<List<UserId>>(emptyList())
-        val room = FakeJoinedMatrixRoom(roomTypingMembersFlow = typingMembersFlow)
-        val presenter = createPresenter(matrixRoom = room)
+        val room = FakeJoinedRoom(roomTypingMembersFlow = typingMembersFlow)
+        val presenter = createPresenter(joinedRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -119,9 +119,9 @@ class TypingNotificationPresenterTest {
     fun `present - state is updated when a member is typing, member is known`() = runTest {
         val aKnownRoomMember = createKnownRoomMember(userId = A_USER_ID_2)
         val typingMembersFlow = MutableStateFlow<List<UserId>>(emptyList())
-        val room = FakeJoinedMatrixRoom(roomTypingMembersFlow = typingMembersFlow).apply {
+        val room = FakeJoinedRoom(roomTypingMembersFlow = typingMembersFlow).apply {
             givenRoomMembersState(
-                MatrixRoomMembersState.Ready(
+                RoomMembersState.Ready(
                     listOf(
                         createKnownRoomMember(A_USER_ID),
                         aKnownRoomMember,
@@ -131,7 +131,7 @@ class TypingNotificationPresenterTest {
                 )
             )
         }
-        val presenter = createPresenter(matrixRoom = room)
+        val presenter = createPresenter(joinedRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -157,8 +157,8 @@ class TypingNotificationPresenterTest {
     fun `present - state is updated when a member is typing, member is not known, then known`() = runTest {
         val aKnownRoomMember = createKnownRoomMember(A_USER_ID_2)
         val typingMembersFlow = MutableStateFlow<List<UserId>>(emptyList())
-        val room = FakeJoinedMatrixRoom(roomTypingMembersFlow = typingMembersFlow)
-        val presenter = createPresenter(matrixRoom = room)
+        val room = FakeJoinedRoom(roomTypingMembersFlow = typingMembersFlow)
+        val presenter = createPresenter(joinedRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -174,7 +174,7 @@ class TypingNotificationPresenterTest {
             )
             // User is getting known
             room.givenRoomMembersState(
-                MatrixRoomMembersState.Ready(
+                RoomMembersState.Ready(
                     listOf(aKnownRoomMember).toImmutableList()
                 )
             )
@@ -191,8 +191,8 @@ class TypingNotificationPresenterTest {
     @Test
     fun `present - reserveSpace becomes true once we get the first typing notification with room members`() = runTest {
         val typingMembersFlow = MutableStateFlow<List<UserId>>(emptyList())
-        val room = FakeJoinedMatrixRoom(roomTypingMembersFlow = typingMembersFlow)
-        val presenter = createPresenter(matrixRoom = room)
+        val room = FakeJoinedRoom(roomTypingMembersFlow = typingMembersFlow)
+        val presenter = createPresenter(joinedRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -215,14 +215,14 @@ class TypingNotificationPresenterTest {
     }
 
     private fun createPresenter(
-        matrixRoom: JoinedMatrixRoom = FakeJoinedMatrixRoom().apply {
+        joinedRoom: JoinedRoom = FakeJoinedRoom().apply {
             givenRoomInfo(aRoomInfo(id = roomId, name = ""))
         },
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(
             isRenderTypingNotificationsEnabled = true
         ),
     ) = TypingNotificationPresenter(
-        room = matrixRoom,
+        room = joinedRoom,
         sessionPreferencesStore = sessionPreferencesStore,
     )
 

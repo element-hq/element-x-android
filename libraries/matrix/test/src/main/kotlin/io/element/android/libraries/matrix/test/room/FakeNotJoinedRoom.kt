@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.test.room
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
@@ -17,7 +17,7 @@ import io.element.android.tests.testutils.simulateLongTask
 
 @Immutable
 class FakeNotJoinedRoom(
-    override val localRoom: MatrixRoom? = null,
+    override val localRoom: BaseRoom? = null,
     override val previewInfo: RoomPreviewInfo = aRoomPreviewInfo(),
     private val roomMembershipDetails: () -> Result<RoomMembershipDetails?> = { lambdaError() },
 ) : NotJoinedRoom {

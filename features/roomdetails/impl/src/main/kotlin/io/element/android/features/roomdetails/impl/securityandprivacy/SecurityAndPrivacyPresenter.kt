@@ -29,8 +29,8 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 class SecurityAndPrivacyPresenter @AssistedInject constructor(
     @Assisted private val navigator: SecurityAndPrivacyNavigator,
     private val matrixClient: MatrixClient,
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
 ) : Presenter<SecurityAndPrivacyState> {
     @AssistedFactory
     interface Factory {
@@ -279,6 +279,6 @@ private fun SecurityAndPrivacyHistoryVisibility.map(): RoomHistoryVisibility {
     }
 }
 
-private fun MatrixRoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
+private fun RoomInfo.firstDisplayableAlias(serverName: String): RoomAlias? {
     return aliases.firstOrNull { it.matchesServer(serverName) } ?: aliases.firstOrNull()
 }

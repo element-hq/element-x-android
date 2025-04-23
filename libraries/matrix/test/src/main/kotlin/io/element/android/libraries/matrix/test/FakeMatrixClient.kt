@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -103,7 +103,7 @@ class FakeMatrixClient(
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
-    private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
+    private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -124,12 +124,12 @@ class FakeMatrixClient(
     }
     var logoutLambda: (Boolean, Boolean) -> Unit = { _, _ -> }
 
-    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+    override suspend fun getRoom(roomId: RoomId): BaseRoom? {
         return getRoomResults[roomId]
     }
 
-    override suspend fun getJoinedRoom(roomId: RoomId): JoinedMatrixRoom? {
-        return getRoomResults[roomId] as? JoinedMatrixRoom
+    override suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
+        return getRoomResults[roomId] as? JoinedRoom
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -251,7 +251,7 @@ class FakeMatrixClient(
         findDmResult = result
     }
 
-    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom?) {
+    fun givenGetRoomResult(roomId: RoomId, result: BaseRoom?) {
         if (result == null) {
             getRoomResults.remove(roomId)
         } else {

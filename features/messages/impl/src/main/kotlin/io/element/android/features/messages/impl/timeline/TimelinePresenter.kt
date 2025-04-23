@@ -38,7 +38,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
@@ -62,7 +62,7 @@ const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
 
 class TimelinePresenter @AssistedInject constructor(
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,

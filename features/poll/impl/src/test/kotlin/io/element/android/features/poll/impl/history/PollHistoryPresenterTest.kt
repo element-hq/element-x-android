@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -56,7 +56,7 @@ class PollHistoryPresenterTest {
         ),
         backwardPaginationStatus = backwardPaginationStatus
     )
-    private val room = FakeJoinedMatrixRoom(
+    private val room = FakeJoinedRoom(
         liveTimeline = timeline
     )
 
@@ -154,7 +154,7 @@ class PollHistoryPresenterTest {
     }
 
     private fun TestScope.createPollHistoryPresenter(
-        room: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(),
         appCoroutineScope: CoroutineScope = this,
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),

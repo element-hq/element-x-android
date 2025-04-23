@@ -21,12 +21,12 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.lambda.lambdaError
 
-fun aMatrixRoom(
+fun aRoom(
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
@@ -51,7 +51,7 @@ fun aMatrixRoom(
     getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
     userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
     setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
-) = FakeMatrixRoom(
+) = FakeBaseRoom(
     sessionId = sessionId,
     roomId = roomId,
     canInviteResult = canInviteResult,
@@ -80,7 +80,7 @@ fun aMatrixRoom(
     )
 )
 
-fun aJoinedMatrixRoom(
+fun aJoinedRoom(
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
@@ -116,7 +116,7 @@ fun aJoinedMatrixRoom(
     publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
-) = FakeJoinedMatrixRoom(
+) = FakeJoinedRoom(
     roomNotificationSettingsService = notificationSettingsService,
     setNameResult = setNameResult,
     setTopicResult = setTopicResult,
@@ -128,7 +128,7 @@ fun aJoinedMatrixRoom(
     updateCanonicalAliasResult = updateCanonicalAliasResult,
     publishRoomAliasInRoomDirectoryResult = publishRoomAliasInRoomDirectoryResult,
     removeRoomAliasFromRoomDirectoryResult = removeRoomAliasFromRoomDirectoryResult,
-    baseRoom = aMatrixRoom(
+    baseRoom = aRoom(
         sessionId = sessionId,
         roomId = roomId,
         canInviteResult = canInviteResult,

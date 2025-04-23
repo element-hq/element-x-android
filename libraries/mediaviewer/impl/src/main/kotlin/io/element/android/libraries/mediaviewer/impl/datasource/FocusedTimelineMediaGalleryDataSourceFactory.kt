@@ -10,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.datasource
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ interface FocusedTimelineMediaGalleryDataSourceFactory {
 
 @ContributesBinding(RoomScope::class)
 class DefaultFocusedTimelineMediaGalleryDataSourceFactory @Inject constructor(
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val timelineMediaItemsFactory: TimelineMediaItemsFactory,
     private val mediaItemsPostProcessor: MediaItemsPostProcessor,
 ) : FocusedTimelineMediaGalleryDataSourceFactory {

@@ -18,8 +18,8 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
-import io.element.android.libraries.matrix.test.room.FakeJoinedMatrixRoom
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
@@ -81,8 +81,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user unsigned device failure dismiss scenario`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -109,8 +109,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user unsigned device failure retry scenario`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -142,8 +142,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user unsigned device failure resolve and resend scenario`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -185,8 +185,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user unsigned device failure resolve and resend scenario with error`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -220,8 +220,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user changed identity failure retry scenario`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -253,8 +253,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user changed identity failure resolve and resend scenario`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -296,8 +296,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
     @Test
     fun `present - verified user changed identity failure resolve and resend scenario with error`() = runTest {
-        val room = FakeJoinedMatrixRoom(
-            baseRoom = FakeMatrixRoom(
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
             userDisplayNameResult = { userId ->
                 Result.success(userId.value)
             },
@@ -351,7 +351,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
     }
 
     private fun createResolveVerifiedUserSendFailurePresenter(
-        room: FakeJoinedMatrixRoom = FakeJoinedMatrixRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(),
     ): ResolveVerifiedUserSendFailurePresenter {
         return ResolveVerifiedUserSendFailurePresenter(
             room = room,

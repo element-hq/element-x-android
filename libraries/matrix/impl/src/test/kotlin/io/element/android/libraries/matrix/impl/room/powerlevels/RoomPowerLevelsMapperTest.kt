@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.room.powerlevels
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPowerLevels
 import org.junit.Test
 
@@ -31,7 +31,7 @@ class RoomPowerLevelsMapperTest {
                 )
             )
         ).isEqualTo(
-            MatrixRoomPowerLevels(
+            RoomPowerLevels(
                 ban = 1,
                 invite = 2,
                 kick = 3,

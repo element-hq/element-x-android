@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 /** A reference to a room either invited, knocked or banned. */
 interface NotJoinedRoom : AutoCloseable {
     val previewInfo: RoomPreviewInfo
-    val localRoom: MatrixRoom?
+    val localRoom: BaseRoom?
 
     /**
      * Get the membership details of the user in the room, as well as from the user who sent the `m.room.member` event.

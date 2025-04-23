@@ -16,12 +16,12 @@ import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.room.JoinedMatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.canCall
 import javax.inject.Inject
 
 class RoomCallStatePresenter @Inject constructor(
-    private val room: JoinedMatrixRoom,
+    private val room: JoinedRoom,
     private val currentCallService: CurrentCallService,
 ) : Presenter<RoomCallState> {
     @Composable

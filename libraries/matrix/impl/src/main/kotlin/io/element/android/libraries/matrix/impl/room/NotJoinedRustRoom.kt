@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 @Immutable
 class NotJoinedRustRoom(
     private val sessionId: SessionId,
-    override val localRoom: RustMatrixRoom?,
+    override val localRoom: RustBaseRoom?,
     override val previewInfo: RoomPreviewInfo,
 ) : NotJoinedRoom {
     override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatching {
