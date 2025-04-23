@@ -29,7 +29,11 @@ fun CheckboxListItem(
         modifier = modifier,
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
-        leadingContent = ListItemContent.Checkbox(checked, null, enabled, compact = compactLayout),
+        leadingContent = ListItemContent.Checkbox(
+            checked = checked,
+            enabled = enabled,
+            compact = compactLayout,
+        ),
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,

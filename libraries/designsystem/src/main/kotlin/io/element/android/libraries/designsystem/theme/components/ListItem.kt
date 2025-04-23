@@ -9,6 +9,8 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
@@ -16,12 +18,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -158,7 +157,15 @@ fun ListItem(
                 .then(modifier)
         } else {
             modifier
-        },
+        }.then(
+            trailingContent?.toA11yModifier(
+                enabled = enabled || alwaysClickable,
+                onClick = onClick,
+            ) ?: leadingContent?.toA11yModifier(
+                enabled = enabled || alwaysClickable,
+                onClick = onClick,
+            ) ?: Modifier
+        ),
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
@@ -167,6 +174,44 @@ fun ListItem(
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
     )
+}
+
+private fun ListItemContent?.toA11yModifier(
+    enabled: Boolean,
+    onClick: (() -> Unit)?,
+): Modifier? {
+    return when (this) {
+        is ListItemContent.Checkbox -> {
+            Modifier.toggleable(
+                value = checked,
+                role = Role.Checkbox,
+                enabled = enabled,
+                onValueChange = { onClick?.invoke() }
+            )
+        }
+        is ListItemContent.Switch -> {
+            Modifier.toggleable(
+                value = checked,
+                role = Role.Switch,
+                enabled = enabled,
+                onValueChange = { onClick?.invoke() }
+            )
+        }
+        is ListItemContent.RadioButton -> {
+            Modifier.selectable(
+                selected = selected,
+                role = Role.RadioButton,
+                enabled = enabled,
+                onClick = { onClick?.invoke() }
+            )
+        }
+        ListItemContent.Badge,
+        is ListItemContent.Custom,
+        is ListItemContent.Icon,
+        is ListItemContent.Text,
+        is ListItemContent.Counter,
+        null -> null
+    }
 }
 
 /**
@@ -546,20 +591,17 @@ private object PreviewItems {
 
     @Composable
     fun checkbox(): ListItemContent {
-        var checked by remember { mutableStateOf(false) }
-        return ListItemContent.Checkbox(checked = checked, onChange = { checked = !checked })
+        return ListItemContent.Checkbox(checked = false)
     }
 
     @Composable
     fun radioButton(): ListItemContent {
-        var checked by remember { mutableStateOf(false) }
-        return ListItemContent.RadioButton(selected = checked, onClick = { checked = !checked })
+        return ListItemContent.RadioButton(selected = false)
     }
 
     @Composable
     fun switch(): ListItemContent {
-        var checked by remember { mutableStateOf(false) }
-        return ListItemContent.Switch(checked = checked, onChange = { checked = !checked })
+        return ListItemContent.Switch(checked = false)
     }
 
     @Composable

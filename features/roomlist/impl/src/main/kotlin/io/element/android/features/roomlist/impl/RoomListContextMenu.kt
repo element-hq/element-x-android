@@ -132,14 +132,10 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Favourite(),
-                    contentDescription = stringResource(id = CommonStrings.common_favourite),
                 )
             ),
             trailingContent = ListItemContent.Switch(
                 checked = contextMenu.isFavorite,
-                onChange = { isFavorite ->
-                    onFavoriteChange(isFavorite)
-                },
             ),
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
@@ -157,7 +153,6 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Settings(),
-                    contentDescription = stringResource(id = CommonStrings.common_settings)
                 )
             ),
             style = ListItemStyle.Primary,
@@ -177,7 +172,6 @@ private fun RoomListModalBottomSheetContent(
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Leave(),
-                    contentDescription = stringResource(id = CommonStrings.action_leave_room)
                 )
             ),
             style = ListItemStyle.Destructive,
