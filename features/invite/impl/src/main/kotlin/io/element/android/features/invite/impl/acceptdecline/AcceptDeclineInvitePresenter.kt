@@ -12,30 +12,23 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.InviteData
-import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
+import io.element.android.features.invite.impl.AcceptInvite
+import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
-import io.element.android.libraries.matrix.api.room.join.JoinRoom
-import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AcceptDeclineInvitePresenter @Inject constructor(
-    private val client: MatrixClient,
-    private val joinRoom: JoinRoom,
-    private val notificationCleaner: NotificationCleaner,
-    private val seenInvitesStore: SeenInvitesStore,
+    private val acceptInvite: AcceptInvite,
+    private val declineInvite: DeclineInvite,
 ) : Presenter<AcceptDeclineInviteState> {
     @Composable
     override fun present(): AcceptDeclineInviteState {
@@ -88,16 +81,10 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         acceptedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
         acceptedAction.runUpdatingState {
-            joinRoom(
-                roomIdOrAlias = roomId.toRoomIdOrAlias(),
-                serverNames = emptyList(),
-                trigger = JoinedRoom.Trigger.Invite,
-            )
-                .onSuccess {
-                    notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
-                    seenInvitesStore.markAsUnSeen(roomId)
-                }
-                .map { roomId }
+            runCatching {
+                acceptInvite(roomId)
+                roomId
+            }
         }
     }
 
@@ -105,16 +92,11 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         inviteData: InviteData,
         declinedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
-        suspend {
-            client.getRoom(inviteData.roomId)?.use {
-                it.leave().getOrThrow()
-            }
-            notificationCleaner.clearMembershipNotificationForRoom(
-                client.sessionId,
+        declinedAction.runUpdatingState {
+            runCatching {
+                declineInvite(inviteData.roomId, false, false, null)
                 inviteData.roomId
-            )
-            seenInvitesStore.markAsUnSeen(inviteData.roomId)
-            inviteData.roomId
-        }.runCatchingUpdatingState(declinedAction)
+            }
+        }
     }
 }

@@ -52,9 +52,22 @@ fun ReportRoomView(
     val isReporting = state.reportAction is AsyncAction.Loading
     AsyncActionView(
         async = state.reportAction,
-        progressDialog = {},
         onSuccess = { onBackClick() },
-        errorMessage = { stringResource(CommonStrings.error_unknown) },
+        errorTitle = { failure ->
+            when (failure) {
+                is ReportRoomException.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_title)
+                else -> stringResource(CommonStrings.dialog_title_error)
+            }
+        },
+        errorMessage = { failure ->
+            when (failure) {
+                is ReportRoomException.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_message)
+                else -> stringResource(CommonStrings.error_unknown)
+            }
+        },
+        onRetry = {
+            state.eventSink(ReportRoomEvents.Report)
+        },
         onErrorDismiss = { state.eventSink(ReportRoomEvents.ClearReportAction) }
     )
 
@@ -63,7 +76,7 @@ fun ReportRoomView(
             TopAppBar(
                 title = {
                     Text(
-                        stringResource(CommonStrings.screen_report_room_title),
+                        stringResource(R.string.screen_report_room_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -86,14 +99,14 @@ fun ReportRoomView(
             TextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportRoomEvents.UpdateReason(it)) },
-                placeholder = stringResource(CommonStrings.screen_report_room_reason_placeholder),
+                placeholder = stringResource(R.string.screen_report_room_reason_placeholder),
                 minLines = 3,
                 enabled = !isReporting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .heightIn(min = 90.dp),
-                supportingText = stringResource(CommonStrings.screen_report_room_reason_footer),
+                supportingText = stringResource(R.string.screen_report_room_reason_footer),
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -114,7 +127,7 @@ fun ReportRoomView(
 
             Button(
                 text = stringResource(CommonStrings.action_report),
-                enabled = state.reason.isNotBlank() && !isReporting,
+                enabled = state.canReport && !isReporting,
                 destructive = true,
                 showProgress = isReporting,
                 onClick = {

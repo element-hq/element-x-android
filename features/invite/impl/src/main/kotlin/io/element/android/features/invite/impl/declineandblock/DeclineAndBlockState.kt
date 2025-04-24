@@ -7,6 +7,7 @@
 
 package io.element.android.features.invite.impl.declineandblock
 
+import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 
 data class DeclineAndBlockState(
@@ -16,5 +17,5 @@ data class DeclineAndBlockState(
     val declineAction: AsyncAction<Unit>,
     val eventSink: (DeclineAndBlockEvents) -> Unit
 ){
-    val declineButtonEnabled = blockUser || (reportRoom && reportReason.isNotEmpty())
+    val canDecline = blockUser || (reportRoom && reportReason.isNotEmpty())
 }

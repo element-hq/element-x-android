@@ -318,6 +318,12 @@
         "screen\\.room\\.single_knock_request.*",
         "screen\\.room\\.multiple_knock_requests.*"
       ]
+    },
+    {
+      "name" : ":features:reportroom:impl",
+      "includeRegex" : [
+        "screen\\.report_room\\..*"
+      ]
     }
   ]
 }

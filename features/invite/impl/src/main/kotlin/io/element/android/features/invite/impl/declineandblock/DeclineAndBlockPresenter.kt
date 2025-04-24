@@ -19,16 +19,19 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class DeclineAndBlockPresenter @AssistedInject constructor(
     @Assisted private val inviteData: InviteData,
-    private val client: MatrixClient,
+    private val declineInvite: DeclineInvite,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<DeclineAndBlockState> {
 
     @AssistedFactory
@@ -70,21 +73,22 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
         reportRoom: Boolean,
         action: MutableState<AsyncAction<Unit>>
     ) = launch {
-        runUpdatingState(action) {
-            runCatching {
-                client.getRoom(inviteData.roomId)!!.use { room ->
-                    room.leave().getOrThrow()
-                    if (blockUser) {
-                        val userIdToBlock = room.info().inviter?.userId
-                        if (userIdToBlock != null) {
-                            client.ignoreUser(userIdToBlock).getOrThrow()
-                        }
-                    }
-                    if (reportRoom) {
-                        //room.reportRoom(reason.takeIf { it.isNotBlank() }).getOrThrow()
-                    }
-
-                }
+        action.value = AsyncAction.Loading
+        runCatching {
+            declineInvite(
+                roomId = inviteData.roomId,
+                blockUser = blockUser,
+                reportRoom = reportRoom,
+                reportReason = reason
+            )
+        }.onSuccess {
+            action.value = AsyncAction.Success(Unit)
+        }.onFailure { error ->
+            if (error is DeclineInvite.Exception.DeclineInviteFailed) {
+                action.value = AsyncAction.Failure(error)
+            } else {
+                action.value = AsyncAction.Uninitialized
+                snackbarDispatcher.post(SnackbarMessage(CommonStrings.error_unknown))
             }
         }
     }

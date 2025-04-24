@@ -6,6 +6,7 @@
  */
 
 package io.element.android.features.invite.impl.declineandblock
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -52,9 +53,9 @@ fun DeclineAndBlockView(
     val isDeclining = state.declineAction is AsyncAction.Loading
     AsyncActionView(
         async = state.declineAction,
-        progressDialog = {},
         onSuccess = { onBackClick() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
+        onRetry = { state.eventSink(DeclineAndBlockEvents.Decline) },
         onErrorDismiss = { state.eventSink(DeclineAndBlockEvents.ClearDeclineAction) }
     )
 
@@ -90,7 +91,7 @@ fun DeclineAndBlockView(
                     Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_title))
                 },
                 supportingContent = {
-                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_description),)
+                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_description))
                 },
                 trailingContent = ListItemContent.Switch(
                     checked = state.blockUser,
@@ -106,7 +107,7 @@ fun DeclineAndBlockView(
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 supportingContent = {
-                    Text(text = stringResource(CommonStrings.screen_decline_and_block_report_user_option_description),)
+                    Text(text = stringResource(CommonStrings.screen_decline_and_block_report_user_option_description))
                 },
                 trailingContent = ListItemContent.Switch(
                     checked = state.reportRoom,
@@ -115,7 +116,7 @@ fun DeclineAndBlockView(
                 )
             )
 
-            if(state.reportRoom) {
+            if (state.reportRoom) {
                 Spacer(modifier = Modifier.height(24.dp))
                 TextField(
                     value = state.reportReason,
@@ -135,7 +136,7 @@ fun DeclineAndBlockView(
                 text = stringResource(CommonStrings.action_decline),
                 destructive = true,
                 showProgress = isDeclining,
-                enabled = state.declineButtonEnabled,
+                enabled = !isDeclining && state.canDecline,
                 onClick = {
                     focusManager.clearFocus(force = true)
                     state.eventSink(DeclineAndBlockEvents.Decline)
@@ -151,7 +152,7 @@ fun DeclineAndBlockView(
 @PreviewsDayNight
 @Composable
 internal fun ReportRoomViewPreview(
-    @PreviewParameter(DeclineAndBlockStateProvider ::class) state: DeclineAndBlockState
+    @PreviewParameter(DeclineAndBlockStateProvider::class) state: DeclineAndBlockState
 ) = ElementPreview {
     DeclineAndBlockView(
         state = state,

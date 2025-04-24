@@ -14,4 +14,6 @@ data class ReportRoomState(
     val leaveRoom: Boolean,
     val reportAction: AsyncAction<Unit>,
     val eventSink: (ReportRoomEvents) -> Unit
-)
+){
+    val canReport: Boolean = reason.isNotBlank()
+}
