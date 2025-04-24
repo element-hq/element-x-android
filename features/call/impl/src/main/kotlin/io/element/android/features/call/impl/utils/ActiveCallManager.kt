@@ -13,6 +13,8 @@ import android.os.PowerManager
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
+import coil3.SingletonImageLoader
+import coil3.annotation.DelicateCoilApi
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
@@ -23,6 +25,8 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
@@ -89,6 +93,7 @@ class DefaultActiveCallManager @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
     private val defaultCurrentCallService: DefaultCurrentCallService,
     private val appForegroundStateService: AppForegroundStateService,
+    private val imageLoaderHolder: ImageLoaderHolder,
 ) : ActiveCallManager {
     private val tag = "DefaultActiveCallManager"
     private var timedOutCallJob: Job? = null
@@ -125,6 +130,7 @@ class DefaultActiveCallManager @Inject constructor(
             )
 
             timedOutCallJob = coroutineScope.launch {
+                setUpCoil(notificationData.sessionId)
                 showIncomingCallNotification(notificationData)
 
                 // Wait for the ringing call to time out
@@ -138,6 +144,13 @@ class DefaultActiveCallManager @Inject constructor(
                 activeWakeLock.acquire(ElementCallConfig.RINGING_CALL_DURATION_SECONDS * 1000L)
             }
         }
+    }
+
+    @OptIn(DelicateCoilApi::class)
+    private suspend fun setUpCoil(sessionId: SessionId) {
+        val matrixClient = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
+        // Ensure that the image loader is set, else the IncomingCallActivity will not be able to render the caller avatar
+        SingletonImageLoader.setUnsafe(imageLoaderHolder.get(matrixClient))
     }
 
     /**

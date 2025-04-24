@@ -325,5 +325,6 @@ class DefaultActiveCallManagerTest {
         matrixClientProvider = matrixClientProvider,
         defaultCurrentCallService = DefaultCurrentCallService(),
         appForegroundStateService = FakeAppForegroundStateService(),
+        imageLoaderHolder = FakeImageLoaderHolder(),
     )
 }
