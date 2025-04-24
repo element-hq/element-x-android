@@ -10,6 +10,7 @@ package io.element.android.features.roomlist.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.libraries.designsystem.utils.setContentForUiTest
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
@@ -28,7 +29,7 @@ class RoomListContextMenuTest {
     fun `clicking on Mark as read generates expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(hasNewContent = true)
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
@@ -48,7 +49,7 @@ class RoomListContextMenuTest {
     fun `clicking on Mark as unread generates expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(hasNewContent = false)
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
@@ -68,7 +69,7 @@ class RoomListContextMenuTest {
     fun `clicking on Leave dm generates expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(isDm = true)
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
@@ -88,7 +89,7 @@ class RoomListContextMenuTest {
     fun `clicking on Leave room generates expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(isDm = false)
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
@@ -109,7 +110,7 @@ class RoomListContextMenuTest {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown()
         val callback = EnsureCalledOnceWithParam(contextMenu.roomId, Unit)
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
@@ -126,7 +127,7 @@ class RoomListContextMenuTest {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(isDm = false, isFavorite = false)
         val callback = EnsureNeverCalledWithParam<RoomId>()
-        rule.setContent {
+        rule.setContentForUiTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,

@@ -8,6 +8,7 @@
 package io.element.android.features.roomdetails.impl.members.moderation
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -16,6 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.anAlice
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -266,9 +268,11 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomM
     onDisplayMemberProfile: (UserId) -> Unit = EnsureNeverCalledWithParam()
 ) {
     setContent {
-        RoomMembersModerationView(
-            state = state,
-            onDisplayMemberProfile = onDisplayMemberProfile,
-        )
+        CompositionLocalProvider(LocalUiTestMode provides true) {
+            RoomMembersModerationView(
+                state = state,
+                onDisplayMemberProfile = onDisplayMemberProfile,
+            )
+        }
     }
 }
