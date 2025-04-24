@@ -267,8 +267,7 @@ private fun RoomAddressSection(
                 Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_section_footer, homeserverName))
             },
             onClick = if (isVisibleInRoomDirectory.isSuccess()) onVisibilityChange else null,
-            trailingContent =
-            when (isVisibleInRoomDirectory) {
+            trailingContent = when (isVisibleInRoomDirectory) {
                 is AsyncData.Uninitialized, is AsyncData.Loading -> {
                     ListItemContent.Custom {
                         CircularProgressIndicator(
@@ -288,7 +287,6 @@ private fun RoomAddressSection(
                 is AsyncData.Success -> {
                     ListItemContent.Switch(
                         checked = isVisibleInRoomDirectory.data,
-                        onChange = { onVisibilityChange() },
                     )
                 }
             }
@@ -316,7 +314,6 @@ private fun EncryptionSection(
             trailingContent = ListItemContent.Switch(
                 checked = isRoomEncrypted,
                 enabled = canToggleEncryption,
-                onChange = { onToggleEncryption() },
             ),
             onClick = if (canToggleEncryption) onToggleEncryption else null
         )
