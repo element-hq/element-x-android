@@ -110,10 +110,10 @@ fun JoinRoomView(
                         state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
                     },
                     onDeclineInvite = { inviteData, blockUser ->
-                        if (blockUser) {
+                        if (state.canReportRoom && blockUser) {
                             onDeclineInviteAndBlockUser(inviteData)
                         } else {
-                            state.eventSink(JoinRoomEvents.DeclineInvite(inviteData))
+                            state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, blockUser = blockUser))
                         }
                     },
                     onJoinRoom = {

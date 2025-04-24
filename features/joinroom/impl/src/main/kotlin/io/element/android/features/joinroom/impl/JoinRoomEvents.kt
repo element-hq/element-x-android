@@ -19,5 +19,5 @@ sealed interface JoinRoomEvents {
     data class UpdateKnockMessage(val message: String) : JoinRoomEvents
     data object ClearActionStates : JoinRoomEvents
     data class AcceptInvite(val inviteData: InviteData) : JoinRoomEvents
-    data class DeclineInvite(val inviteData: InviteData) : JoinRoomEvents
+    data class DeclineInvite(val inviteData: InviteData, val blockUser: Boolean) : JoinRoomEvents
 }

@@ -47,10 +47,11 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
                     val inviteData = event.invite
                     if (event.shouldConfirm) {
-                        declinedAction.value = ConfirmingDeclineInvite(inviteData)
+                        declinedAction.value = ConfirmingDeclineInvite(inviteData, event.blockUser)
                     } else {
                         localCoroutineScope.declineInvite(
                             inviteData = inviteData,
+                            blockUser = event.blockUser,
                             declinedAction = declinedAction,
                         )
                     }
@@ -90,11 +91,17 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
     private fun CoroutineScope.declineInvite(
         inviteData: InviteData,
+        blockUser: Boolean,
         declinedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
         declinedAction.runUpdatingState {
             runCatching {
-                declineInvite(inviteData.roomId, false, false, null)
+                declineInvite(
+                    roomId = inviteData.roomId,
+                    blockUser = blockUser,
+                    reportRoom = false,
+                    reportReason = null
+                )
                 inviteData.roomId
             }
         }

@@ -18,6 +18,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -39,6 +40,7 @@ object JoinRoomModule {
         buildMeta: BuildMeta,
         appPreferencesStore: AppPreferencesStore,
         seenInvitesStore: SeenInvitesStore,
+        featureFlagService: FeatureFlagService,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(
@@ -63,6 +65,7 @@ object JoinRoomModule {
                     buildMeta = buildMeta,
                     appPreferencesStore = appPreferencesStore,
                     seenInvitesStore = seenInvitesStore,
+                    featureFlagService = featureFlagService,
                 )
             }
         }

@@ -10,4 +10,4 @@ package io.element.android.features.invite.api.acceptdecline
 import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 
-data class ConfirmingDeclineInvite(val inviteData: InviteData) : AsyncAction.Confirming
+data class ConfirmingDeclineInvite(val inviteData: InviteData, val blockUser: Boolean) : AsyncAction.Confirming

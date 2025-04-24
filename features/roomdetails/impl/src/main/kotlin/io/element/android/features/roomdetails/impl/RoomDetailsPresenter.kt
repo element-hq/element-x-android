@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
@@ -88,11 +87,15 @@ class RoomDetailsPresenter @Inject constructor(
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
-        var canShowMediaGallery by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            canShowMediaGallery = featureFlagService.isFeatureEnabled(FeatureFlags.MediaGallery)
-        }
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
+
+        val canShowMediaGallery by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaGallery)
+        }.collectAsState(false)
+
+        val canReportRoom by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReportRoom)
+        }.collectAsState(false)
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -208,6 +211,7 @@ class RoomDetailsPresenter @Inject constructor(
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
+            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }

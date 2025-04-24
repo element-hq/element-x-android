@@ -20,6 +20,7 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
                     InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    blockUser = false
                 ),
             ),
             anAcceptDeclineInviteState(

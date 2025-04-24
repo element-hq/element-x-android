@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteStateProvider
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
-import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -51,8 +51,15 @@ fun AcceptDeclineInviteView(
                 if (confirming is ConfirmingDeclineInvite) {
                     DeclineConfirmationDialog(
                         invite = confirming.inviteData,
+                        blockUser = confirming.blockUser,
                         onConfirmClick = {
-                            state.eventSink(AcceptDeclineInviteEvents.DeclineInvite(confirming.inviteData, shouldConfirm = false))
+                            state.eventSink(
+                                AcceptDeclineInviteEvents.DeclineInvite(
+                                    confirming.inviteData,
+                                    blockUser = confirming.blockUser,
+                                    shouldConfirm = false
+                                )
+                            )
                         },
                         onDismissClick = {
                             state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
@@ -67,6 +74,7 @@ fun AcceptDeclineInviteView(
 @Composable
 private fun DeclineConfirmationDialog(
     invite: InviteData,
+    blockUser: Boolean,
     onConfirmClick: () -> Unit,
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -74,8 +82,16 @@ private fun DeclineConfirmationDialog(
     ConfirmationDialog(
         modifier = modifier,
         content = stringResource(R.string.screen_invites_decline_chat_message, invite.roomName),
-        title = stringResource(R.string.screen_invites_decline_chat_title),
-        submitText = stringResource(CommonStrings.action_decline),
+        title = if (blockUser) {
+            stringResource(R.string.screen_join_room_decline_and_block_alert_title)
+        } else {
+            stringResource(R.string.screen_invites_decline_chat_title)
+        },
+        submitText = if (blockUser) {
+            stringResource(R.string.screen_join_room_decline_and_block_alert_confirmation)
+        } else {
+            stringResource(CommonStrings.action_decline)
+        },
         cancelText = stringResource(CommonStrings.action_cancel),
         onSubmitClick = onConfirmClick,
         onDismiss = onDismissClick,

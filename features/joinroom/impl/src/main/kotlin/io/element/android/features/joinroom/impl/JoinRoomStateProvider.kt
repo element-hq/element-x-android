@@ -156,7 +156,7 @@ fun aLoadedContentState(
     isDm: Boolean = false,
     roomType: RoomType = RoomType.Room,
     roomAvatarUrl: String? = null,
-    joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown
+    joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
 ) = ContentState.Loaded(
     roomId = roomId,
     name = name,
@@ -179,6 +179,7 @@ fun aJoinRoomState(
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockMessage: String = "",
     hideInviteAvatars: Boolean = false,
+    canReportRoom: Boolean = false,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     roomIdOrAlias = roomIdOrAlias,
@@ -191,6 +192,7 @@ fun aJoinRoomState(
     applicationName = "AppName",
     knockMessage = knockMessage,
     hideInviteAvatars = hideInviteAvatars,
+    canReportRoom = canReportRoom,
     eventSink = eventSink
 )
 

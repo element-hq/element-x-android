@@ -124,9 +124,9 @@ fun RoomDetailsView(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-                    .consumeWindowInsets(padding)
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -256,6 +256,7 @@ fun RoomDetailsView(
             }
 
             OtherActionsSection(
+                canReportRoom = state.canReportRoom,
                 onReportRoomClick = onReportRoomClick,
                 onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
@@ -322,8 +323,8 @@ private fun MainActionsSection(
 ) {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -384,8 +385,8 @@ private fun RoomHeaderSection(
 ) {
     Column(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompositeAvatar(
@@ -394,8 +395,8 @@ private fun RoomHeaderSection(
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
-                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                    .testTag(TestTags.roomDetailAvatar)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(
             title = roomName,
@@ -416,8 +417,8 @@ private fun DmHeaderSection(
 ) {
     Column(
         modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DmAvatars(
@@ -673,16 +674,19 @@ private fun MediaGalleryItem(
 private fun OtherActionsSection(
     onReportRoomClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
+    canReportRoom: Boolean,
 ) {
     PreferenceCategory(showTopDivider = true) {
-        ListItem(
-            headlineContent = {
-                Text(stringResource(CommonStrings.action_report_room))
-            },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-            style = ListItemStyle.Destructive,
-            onClick = onReportRoomClick,
-        )
+        if (canReportRoom) {
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(CommonStrings.action_report_room))
+                },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+                style = ListItemStyle.Destructive,
+                onClick = onReportRoomClick,
+            )
+        }
         ListItem(
             headlineContent = {
                 Text(stringResource(CommonStrings.action_leave_room))

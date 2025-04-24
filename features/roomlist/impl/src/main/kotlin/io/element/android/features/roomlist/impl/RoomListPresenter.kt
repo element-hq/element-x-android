@@ -125,6 +125,9 @@ class RoomListPresenter @Inject constructor(
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
 
         val directLogoutState = logoutPresenter.present()
+        val canReportRoom by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReportRoom)
+        }.collectAsState(false)
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -151,7 +154,7 @@ class RoomListPresenter @Inject constructor(
                 }
                 is RoomListEvents.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        DeclineInvite(event.roomSummary.toInviteData(), shouldConfirm = false)
+                        DeclineInvite(event.roomSummary.toInviteData(), blockUser = event.blockUser, shouldConfirm = false)
                     )
                 }
                 is RoomListEvents.ShowDeclineInviteMenu -> declineInviteMenu.value = RoomListState.DeclineInviteMenu.Shown(event.roomSummary)
@@ -164,6 +167,7 @@ class RoomListPresenter @Inject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         val contentState = roomListContentState(securityBannerDismissed)
+
 
         return RoomListState(
             matrixUser = matrixUser.value,
@@ -180,6 +184,7 @@ class RoomListPresenter @Inject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             directLogoutState = directLogoutState,
             hideInvitesAvatars = hideInvitesAvatar,
+            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }

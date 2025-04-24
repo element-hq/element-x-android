@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.invite.api.InviteData
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
@@ -33,6 +32,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListDeclineInviteMenu(
     menu: RoomListState.DeclineInviteMenu.Shown,
+    canReportRoom: Boolean,
     onDeclineAndBlockClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
 ) {
@@ -43,11 +43,15 @@ fun RoomListDeclineInviteMenu(
             roomName = menu.roomSummary.name ?: menu.roomSummary.roomId.value,
             onDeclineClick = {
                 eventSink(RoomListEvents.HideDeclineInviteMenu)
-                eventSink(RoomListEvents.DeclineInvite(menu.roomSummary))
+                eventSink(RoomListEvents.DeclineInvite(menu.roomSummary, false))
             },
             onDeclineAndBlockClick = {
                 eventSink(RoomListEvents.HideDeclineInviteMenu)
-                onDeclineAndBlockClick(menu.roomSummary)
+                if (canReportRoom) {
+                    onDeclineAndBlockClick(menu.roomSummary)
+                } else {
+                    eventSink(RoomListEvents.DeclineInvite(menu.roomSummary, true))
+                }
             },
             onCancelClick = {
                 eventSink(RoomListEvents.HideDeclineInviteMenu)
@@ -65,8 +69,8 @@ private fun BottomSheetContent(
 ) {
     Column(
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp),
+            .fillMaxWidth()
+            .padding(all = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
