@@ -7,9 +7,7 @@
 
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
-import androidx.compose.animation.core.SpringSpec
-import androidx.compose.animation.core.exponentialDecay
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,10 +19,8 @@ import androidx.compose.material3.SheetValue.PartiallyExpanded
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
 
-@OptIn(ExperimentalFoundationApi::class)
 @Stable
 @ExperimentalMaterial3Api
 class CustomSheetState
@@ -34,13 +30,12 @@ class CustomSheetState
     replaceWith = ReplaceWith(
         "SheetState(" +
             "skipPartiallyExpanded, LocalDensity.current, initialValue, " +
-            "confirmValueChange, skipHiddenState)"
+            "skipHiddenState)"
     )
 )
 constructor(
     internal val skipPartiallyExpanded: Boolean,
     initialValue: SheetValue = Hidden,
-    confirmValueChange: (SheetValue) -> Boolean = { true },
     internal val skipHiddenState: Boolean = false,
 ) {
     /**
@@ -54,7 +49,6 @@ constructor(
      * interaction.
      * @param density The density that this state can use to convert values to and from dp.
      * @param initialValue The initial value of the state.
-     * @param confirmValueChange Optional callback invoked to confirm or veto a pending state change.
      * @param skipHiddenState Whether the hidden state should be skipped. If true, the sheet will always
      * expand to the [Expanded] state and move to the [PartiallyExpanded] if available, either
      * programmatically or by user interaction.
@@ -65,9 +59,8 @@ constructor(
         skipPartiallyExpanded: Boolean,
         density: Density,
         initialValue: SheetValue = Hidden,
-        confirmValueChange: (SheetValue) -> Boolean = { true },
         skipHiddenState: Boolean = false,
-    ) : this(skipPartiallyExpanded, initialValue, confirmValueChange, skipHiddenState) {
+    ) : this(skipPartiallyExpanded, initialValue, skipHiddenState) {
         this.density = density
     }
 
@@ -135,13 +128,13 @@ constructor(
      */
 
     val hasExpandedState: Boolean
-        get() = anchoredDraggableState.anchors.hasAnchorFor(Expanded)
+        get() = anchoredDraggableState.anchors.hasPositionFor(Expanded)
 
     /**
      * Whether the modal bottom sheet has a partially expanded state defined.
      */
     val hasPartiallyExpandedState: Boolean
-        get() = anchoredDraggableState.anchors.hasAnchorFor(PartiallyExpanded)
+        get() = anchoredDraggableState.anchors.hasPositionFor(PartiallyExpanded)
 
     /**
      * Fully expand the bottom sheet with animation and suspend until it is fully expanded or
@@ -203,7 +196,6 @@ constructor(
      *
      * @param targetValue The target value of the animation
      */
-    @OptIn(ExperimentalFoundationApi::class)
     internal suspend fun animateTo(
         targetValue: SheetValue,
     ) {
@@ -218,7 +210,6 @@ constructor(
      *
      * @param targetValue The target value of the animation
      */
-    @OptIn(ExperimentalFoundationApi::class)
     internal suspend fun snapTo(targetValue: SheetValue) {
         anchoredDraggableState.snapTo(targetValue)
     }
@@ -226,29 +217,17 @@ constructor(
     /**
      * Find the closest anchor taking into account the velocity and settle at it with an animation.
      */
-    @OptIn(ExperimentalFoundationApi::class)
-    internal suspend fun settle(velocity: Float) {
-        anchoredDraggableState.settle(velocity)
+    internal suspend fun settle(animationSpec: AnimationSpec<Float>) {
+        anchoredDraggableState.settle(animationSpec)
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     internal var anchoredDraggableState = androidx.compose.foundation.gestures.AnchoredDraggableState(
         initialValue = initialValue,
-        snapAnimationSpec = AnchoredDraggableDefaults.SnapAnimationSpec,
-        decayAnimationSpec = AnchoredDraggableDefaults.DecayAnimationSpec,
-        confirmValueChange = confirmValueChange,
-        positionalThreshold = { with(requireDensity()) { 56.dp.toPx() } },
-        velocityThreshold = { with(requireDensity()) { 125.dp.toPx() } }
     )
 
-    @OptIn(ExperimentalFoundationApi::class)
     internal val offset: Float? get() = anchoredDraggableState.offset
 
     internal var density: Density? = null
-    private fun requireDensity() = requireNotNull(density) {
-        "SheetState did not have a density attached. Are you using SheetState with " +
-            "BottomSheetScaffold or ModalBottomSheet component?"
-    }
 
     companion object {
         /**
@@ -257,47 +236,12 @@ constructor(
         @SuppressWarnings("FunctionName")
         fun Saver(
             skipPartiallyExpanded: Boolean,
-            confirmValueChange: (SheetValue) -> Boolean,
             density: Density
         ) = Saver<CustomSheetState, SheetValue>(
             save = { it.currentValue },
             restore = { savedValue ->
-                CustomSheetState(skipPartiallyExpanded, density, savedValue, confirmValueChange)
-            }
-        )
-
-        /**
-         * The default [Saver] implementation for [SheetState].
-         */
-        @Deprecated(
-            message = "This function is deprecated. Please use the overload where Density is" +
-                " provided.",
-            replaceWith = ReplaceWith(
-                "Saver(skipPartiallyExpanded, confirmValueChange, LocalDensity.current)"
-            )
-        )
-        @Suppress("Deprecation", "FunctionName")
-        fun Saver(
-            skipPartiallyExpanded: Boolean,
-            confirmValueChange: (SheetValue) -> Boolean
-        ) = Saver<CustomSheetState, SheetValue>(
-            save = { it.currentValue },
-            restore = { savedValue ->
-                CustomSheetState(skipPartiallyExpanded, savedValue, confirmValueChange)
+                CustomSheetState(skipPartiallyExpanded, density, savedValue)
             }
         )
     }
-}
-
-@Stable
-@ExperimentalMaterial3Api
-internal object AnchoredDraggableDefaults {
-    /**
-     * The default animation used by [AnchoredDraggableState].
-     */
-    @ExperimentalMaterial3Api
-    val SnapAnimationSpec = SpringSpec<Float>()
-
-    @ExperimentalMaterial3Api
-    val DecayAnimationSpec = exponentialDecay<Float>()
 }
