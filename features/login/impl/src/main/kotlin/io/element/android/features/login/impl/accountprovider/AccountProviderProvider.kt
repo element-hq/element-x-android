@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.appconfig.AuthenticationConfig
 
 open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
-    private val longAccountProvider = AccountProvider(url="https://default-title.for.really-long-url.with.many.subdomains.co.uk")
+    private val longAccountProvider = AccountProvider(url = "https://default-title.for.really-long-url.with.many.subdomains.co.uk")
     override val values: Sequence<AccountProvider>
         get() = sequenceOf(
             anAccountProvider(),
