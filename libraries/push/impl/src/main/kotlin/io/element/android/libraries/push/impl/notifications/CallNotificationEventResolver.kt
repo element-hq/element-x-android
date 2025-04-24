@@ -9,13 +9,16 @@ package io.element.android.libraries.push.impl.notifications
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
+import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +34,7 @@ interface CallNotificationEventResolver {
      * @param forceNotify `true` to force the notification to be non-ringing, `false` to use the default behaviour. Default is `false`.
      * @return a [NotifiableEvent] if the notification data is a call notification, null otherwise
      */
-    fun resolveEvent(
+    suspend fun resolveEvent(
         sessionId: SessionId,
         notificationData: NotificationData,
         forceNotify: Boolean = false,
@@ -41,8 +44,10 @@ interface CallNotificationEventResolver {
 @ContributesBinding(AppScope::class)
 class DefaultCallNotificationEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
+    private val appForegroundStateService: AppForegroundStateService,
+    private val clientProvider: MatrixClientProvider,
 ) : CallNotificationEventResolver {
-    override fun resolveEvent(
+    override suspend fun resolveEvent(
         sessionId: SessionId,
         notificationData: NotificationData,
         forceNotify: Boolean
@@ -50,8 +55,16 @@ class DefaultCallNotificationEventResolver @Inject constructor(
         val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
             ?: throw ResolvingException("content is not a call notify")
 
+        appForegroundStateService.updateHasRingingCall(true)
+
+        val client = clientProvider.getOrNull(sessionId) ?: error("Session $sessionId not found")
+        val room = client.getRoom(notificationData.roomId) ?: error("Room ${notificationData.roomId} not found")
+        val isRoomCallActive = room.roomInfoFlow.value.hasRoomCall
+
+        appForegroundStateService.updateHasRingingCall(false)
+
         notificationData.run {
-            if (NotifiableRingingCallEvent.shouldRing(content.type, timestamp) && !forceNotify) {
+            if (content.type == CallNotifyType.RING && isRoomCallActive && !forceNotify) {
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,
                     roomId = roomId,
