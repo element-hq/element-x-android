@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -136,7 +136,7 @@ fun TimelineItemVideoView(
                         imageVector = CompoundIcons.PlaySolid(),
                         contentDescription = stringResource(id = CommonStrings.a11y_play),
                         colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier.semantics { invisibleToUser() }
+                        modifier = Modifier.semantics { hideFromAccessibility() }
                     )
                 }
             }

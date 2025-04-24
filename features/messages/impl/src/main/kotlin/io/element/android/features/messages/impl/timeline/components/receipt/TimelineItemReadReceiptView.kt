@@ -26,7 +26,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -59,7 +59,7 @@ fun TimelineItemReadReceiptView(
         if (renderReadReceipts) {
             ReadReceiptsRow(
                 modifier = modifier.clearAndSetSemantics {
-                    invisibleToUser()
+                    hideFromAccessibility()
                 }
             ) {
                 ReadReceiptsAvatars(
