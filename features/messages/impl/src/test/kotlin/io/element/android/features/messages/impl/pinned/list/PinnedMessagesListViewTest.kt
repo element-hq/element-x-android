@@ -28,7 +28,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import org.junit.Rule
 import org.junit.Test
@@ -103,7 +102,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {
-    setSafeContent {
+    setContent {
         PinnedMessagesListView(
             state = state,
             onBackClick = onBackClick,

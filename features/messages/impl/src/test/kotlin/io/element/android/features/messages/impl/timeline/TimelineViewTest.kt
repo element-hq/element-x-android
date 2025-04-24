@@ -33,7 +33,6 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -187,7 +186,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
-    setSafeContent {
+    setContent {
         TimelineView(
             state = state,
             timelineProtectionState = timelineProtectionState,
