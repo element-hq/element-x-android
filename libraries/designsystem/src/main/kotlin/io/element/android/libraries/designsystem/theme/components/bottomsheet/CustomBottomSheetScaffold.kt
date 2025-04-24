@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -230,7 +231,6 @@ private fun CustomStandardBottomSheet(
                             ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
                                 sheetState = state,
                                 orientation = orientation,
-                                onFling = { scope.launch { state.settle(it) } }
                             )
                         }
                     )
@@ -246,7 +246,7 @@ private fun CustomStandardBottomSheet(
                 val newTarget = when (state.anchoredDraggableState.targetValue) {
                     SheetValue.Hidden, SheetValue.PartiallyExpanded -> SheetValue.PartiallyExpanded
                     SheetValue.Expanded -> {
-                        if (newAnchors.hasAnchorFor(SheetValue.Expanded)) SheetValue.Expanded else SheetValue.PartiallyExpanded
+                        if (newAnchors.hasPositionFor(SheetValue.Expanded)) SheetValue.Expanded else SheetValue.PartiallyExpanded
                     }
                 }
                 state.anchoredDraggableState.updateAnchors(newAnchors, newTarget)
@@ -336,8 +336,8 @@ internal fun <T : Any> DraggableAnchors(
 ): DraggableAnchors<T> = MapDraggableAnchors(DraggableAnchorsConfig<T>().apply(builder).anchors)
 
 private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : DraggableAnchors<T> {
-    override fun positionOf(value: T): Float = anchors[value] ?: Float.NaN
-    override fun hasAnchorFor(value: T) = anchors.containsKey(value)
+    override fun positionOf(anchor: T): Float = anchors[anchor] ?: Float.NaN
+    override fun hasPositionFor(anchor: T) = anchors.containsKey(anchor)
 
     override fun closestAnchor(position: Float): T? = anchors.minByOrNull {
         abs(position - it.value)
@@ -353,12 +353,19 @@ private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : Dragg
         }?.key
     }
 
-    override fun minAnchor() = anchors.values.minOrNull() ?: Float.NaN
+    override fun minPosition() = anchors.values.minOrNull() ?: Float.NaN
+    override fun positionAt(index: Int): Float {
+        return anchorAt(index)?.let { anchors[it] } ?: Float.NaN
+    }
 
-    override fun maxAnchor() = anchors.values.maxOrNull() ?: Float.NaN
+    override fun maxPosition() = anchors.values.maxOrNull() ?: Float.NaN
 
     override val size: Int
         get() = anchors.size
+
+    override fun anchorAt(index: Int): T? {
+        return anchors.keys.elementAtOrNull(index)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -367,23 +374,16 @@ private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : Dragg
         return anchors == other.anchors
     }
 
-    override fun forEach(block: (anchor: T, position: Float) -> Unit) {
-        for (anchor in anchors) {
-            block(anchor.key, anchor.value)
-        }
-    }
-
     override fun hashCode() = 31 * anchors.hashCode()
 
     override fun toString() = "MapDraggableAnchors($anchors)"
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@SuppressWarnings("FunctionName")
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressWarnings("FunctionName", "standard:function-naming")
 internal fun ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
     sheetState: CustomSheetState,
     orientation: Orientation,
-    onFling: (velocity: Float) -> Unit
 ): NestedScrollConnection = object : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         val delta = available.toFloat()
@@ -409,9 +409,10 @@ internal fun ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
     override suspend fun onPreFling(available: Velocity): Velocity {
         val toFling = available.toFloat()
         val currentOffset = sheetState.requireOffset()
-        val minAnchor = sheetState.anchoredDraggableState.anchors.minAnchor()
+        val minAnchor = sheetState.anchoredDraggableState.anchors.minPosition()
+        val animationSpec = tween<Float>()
         return if (toFling < 0 && currentOffset > minAnchor) {
-            onFling(toFling)
+            sheetState.settle(animationSpec)
             // since we go to the anchor with tween settling, consume all for the best UX
             available
         } else {
@@ -420,7 +421,8 @@ internal fun ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        onFling(available.toFloat())
+        val animationSpec = tween<Float>()
+        sheetState.settle(animationSpec)
         return available
     }
 
@@ -476,32 +478,27 @@ fun rememberBottomSheetScaffoldState(
  *
  * @param initialValue the initial value of the state. Should be either [PartiallyExpanded] or
  * [Expanded] if [skipHiddenState] is true
- * @param confirmValueChange optional callback invoked to confirm or veto a pending state change
  * @param [skipHiddenState] whether Hidden state is skipped for [BottomSheetScaffold]
  */
 @Composable
 @ExperimentalMaterial3Api
 fun rememberStandardBottomSheetState(
     initialValue: SheetValue = PartiallyExpanded,
-    confirmValueChange: (SheetValue) -> Boolean = { true },
     skipHiddenState: Boolean = true,
-) = rememberSheetState(false, confirmValueChange, initialValue, skipHiddenState)
+) = rememberSheetState(false, initialValue, skipHiddenState)
 
 @Composable
 @ExperimentalMaterial3Api
 internal fun rememberSheetState(
     skipPartiallyExpanded: Boolean = false,
-    confirmValueChange: (SheetValue) -> Boolean = { true },
     initialValue: SheetValue = SheetValue.Hidden,
     skipHiddenState: Boolean = false,
 ): CustomSheetState {
     val density = LocalDensity.current
     return rememberSaveable(
         skipPartiallyExpanded,
-        confirmValueChange,
         saver = CustomSheetState.Saver(
             skipPartiallyExpanded = skipPartiallyExpanded,
-            confirmValueChange = confirmValueChange,
             density = density
         )
     ) {
@@ -509,7 +506,6 @@ internal fun rememberSheetState(
             skipPartiallyExpanded,
             density,
             initialValue,
-            confirmValueChange,
             skipHiddenState
         )
     }
