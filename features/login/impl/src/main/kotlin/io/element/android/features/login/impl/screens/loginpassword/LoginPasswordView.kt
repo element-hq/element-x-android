@@ -7,6 +7,7 @@
 
 package io.element.android.features.login.impl.screens.loginpassword
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalAutofillManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
@@ -72,6 +74,13 @@ fun LoginPasswordView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val autofillManager = LocalAutofillManager.current
+
+    BackHandler {
+        autofillManager?.cancel()
+        onBackClick()
+    }
+
     val isLoading by remember(state.loginAction) {
         derivedStateOf {
             state.loginAction is AsyncData.Loading
@@ -83,6 +92,8 @@ fun LoginPasswordView(
         // Clear focus to prevent keyboard issues with textfields
         focusManager.clearFocus(force = true)
 
+        autofillManager?.commit()
+
         state.eventSink(LoginPasswordEvents.Submit)
     }
 
@@ -91,7 +102,12 @@ fun LoginPasswordView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackClick) },
+                navigationIcon = {
+                    BackButton(onClick = {
+                        autofillManager?.cancel()
+                        onBackClick()
+                    })
+                },
             )
         }
     ) { padding ->
