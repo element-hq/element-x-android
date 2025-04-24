@@ -52,6 +52,7 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
@@ -570,7 +571,8 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
         CompositionLocalProvider(
-            LocalInspectionMode provides true
+            LocalInspectionMode provides true,
+            LocalUiTestMode provides true,
         ) {
             MessagesView(
                 state = state,

@@ -10,6 +10,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
@@ -21,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -52,7 +54,7 @@ class RoomListViewTest {
         eventsRecorder.assertList(
             listOf(
                 RoomListEvents.UpdateVisibleRange(IntRange.EMPTY),
-                RoomListEvents.UpdateVisibleRange(0 until 2),
+                RoomListEvents.UpdateVisibleRange(0..2),
             )
         )
     }
@@ -274,18 +276,20 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
-        RoomListView(
-            state = state,
-            onRoomClick = onRoomClick,
-            onSettingsClick = onSettingsClick,
-            onSetUpRecoveryClick = onSetUpRecoveryClick,
-            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-            onCreateRoomClick = onCreateRoomClick,
-            onRoomSettingsClick = onRoomSettingsClick,
-            onMenuActionClick = onMenuActionClick,
-            onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
-            onReportRoomClick = onReportRoomClick,
-            acceptDeclineInviteView = { },
-        )
+        CompositionLocalProvider(LocalUiTestMode provides true) {
+            RoomListView(
+                state = state,
+                onRoomClick = onRoomClick,
+                onSettingsClick = onSettingsClick,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onCreateRoomClick = onCreateRoomClick,
+                onRoomSettingsClick = onRoomSettingsClick,
+                onMenuActionClick = onMenuActionClick,
+                onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
+                onReportRoomClick = onReportRoomClick,
+                acceptDeclineInviteView = { },
+            )
+        }
     }
 }
