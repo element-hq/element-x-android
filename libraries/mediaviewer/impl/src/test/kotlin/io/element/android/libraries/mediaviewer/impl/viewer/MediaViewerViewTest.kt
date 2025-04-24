@@ -9,6 +9,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -18,7 +19,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.utils.setContentForUiTest
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -250,12 +251,14 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     state: MediaViewerState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
-    setContentForUiTest {
-        MediaViewerView(
-            state = state,
-            audioFocus = null,
-            textFileViewer = { _, _ -> },
-            onBackClick = onBackClick,
-        )
+    setContent {
+        CompositionLocalProvider(LocalUiTestMode provides true) {
+            MediaViewerView(
+                state = state,
+                audioFocus = null,
+                textFileViewer = { _, _ -> },
+                onBackClick = onBackClick,
+            )
+        }
     }
 }

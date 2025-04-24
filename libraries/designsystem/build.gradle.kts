@@ -27,7 +27,6 @@ android {
     dependencies {
         api(libs.compound)
 
-        implementation(libs.androidx.compose.ui.test.junit)
         implementation(libs.androidx.compose.material3.windowsizeclass)
         implementation(libs.androidx.compose.material3.adaptive)
         implementation(libs.coil.compose)

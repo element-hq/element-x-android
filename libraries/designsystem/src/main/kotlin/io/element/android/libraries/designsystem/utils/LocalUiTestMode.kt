@@ -7,27 +7,9 @@
 
 package io.element.android.libraries.designsystem.utils
 
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import org.junit.rules.TestRule
 
 /**
  * A composition local that indicates whether the app is running in UI test mode.
  */
 val LocalUiTestMode = staticCompositionLocalOf { false }
-
-/**
- * Sets the UI testing mode as enabled.
- *
- * This is used for working around issues like https://issuetracker.google.com/issues/366255137.
- */
-fun <R : TestRule, A : ComponentActivity> AndroidComposeTestRule<R, A>.setContentForUiTest(
-    block: @Composable () -> Unit,
-) {
-    setContent {
-        CompositionLocalProvider(LocalUiTestMode provides true, block)
-    }
-}
