@@ -8,7 +8,6 @@
 package io.element.android.libraries.designsystem.atomic.molecules
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -62,7 +62,7 @@ fun InfoListItemMolecule(
 @Composable
 internal fun InfoListItemMoleculePreview() {
     ElementPreview {
-        val color = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
+        val color = if (ElementTheme.isLightTheme) Color.LightGray else Color.DarkGray
         Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
