@@ -13,12 +13,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
-import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import org.junit.Test
 
 class InReplyToDetailTest {
@@ -47,9 +47,8 @@ class InReplyToDetailTest {
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
             senderProfile = aProfileTimelineDetails(),
-            content = RoomMembershipContent(
+            content = aRoomMembershipContent(
                 userId = A_USER_ID,
-                userDisplayName = null,
                 change = MembershipChange.INVITED,
             )
         )

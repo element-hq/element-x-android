@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
-import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -47,6 +46,7 @@ import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageCo
 import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import org.junit.Before
 import org.junit.Test
@@ -289,8 +289,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - joined`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.JOINED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.JOINED)
 
         val youJoinedRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youJoinedRoom = formatter.format(youJoinedRoomEvent, false)
@@ -305,8 +305,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - left`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.LEFT)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.LEFT)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.LEFT)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.LEFT)
 
         val youLeftRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youLeftRoom = formatter.format(youLeftRoomEvent, false)
@@ -322,10 +322,10 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - banned`() {
         val otherName = "Other"
         val third = "Someone"
-        val youContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED)
-        val youKickedContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED)
-        val someoneKickedContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED)
+        val youContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED)
+        val youKickedContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED)
+        val someoneKickedContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED)
 
         val youBannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youBanned = formatter.format(youBannedEvent, false)
@@ -349,8 +349,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - unban`() {
         val otherName = "Other"
         val third = "Someone"
-        val youContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.UNBANNED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.UNBANNED)
+        val youContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.UNBANNED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.UNBANNED)
 
         val youUnbannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youUnbanned = formatter.format(youUnbannedEvent, false)
@@ -366,8 +366,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - kicked`() {
         val otherName = "Other"
         val third = "Someone"
-        val youContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED)
+        val youContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED)
 
         val youKickedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youKicked = formatter.format(youKickedEvent, false)
@@ -383,8 +383,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - invited`() {
         val otherName = "Other"
         val third = "Someone"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.INVITED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.INVITED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.INVITED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.INVITED)
 
         val youWereInvitedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = youContent)
         val youWereInvited = formatter.format(youWereInvitedEvent, false)
@@ -403,8 +403,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - invitation accepted`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.INVITATION_ACCEPTED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.INVITATION_ACCEPTED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.INVITATION_ACCEPTED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.INVITATION_ACCEPTED)
 
         val youAcceptedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youAcceptedInvite = formatter.format(youAcceptedInviteEvent, false)
@@ -419,8 +419,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - invitation rejected`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.INVITATION_REJECTED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.INVITATION_REJECTED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.INVITATION_REJECTED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.INVITATION_REJECTED)
 
         val youRejectedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youRejectedInvite = formatter.format(youRejectedInviteEvent, false)
@@ -436,7 +436,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - invitation revoked`() {
         val otherName = "Other"
         val third = "Someone"
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.INVITATION_REVOKED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.INVITATION_REVOKED)
 
         val youRevokedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
         val youRevokedInvite = formatter.format(youRevokedInviteEvent, false)
@@ -451,8 +451,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - knocked`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.KNOCKED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.KNOCKED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.KNOCKED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.KNOCKED)
 
         val youKnockedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youKnocked = formatter.format(youKnockedEvent, false)
@@ -468,7 +468,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - knock accepted`() {
         val otherName = "Other"
         val third = "Someone"
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KNOCK_ACCEPTED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KNOCK_ACCEPTED)
 
         val youAcceptedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
         val youAcceptedKnock = formatter.format(youAcceptedKnockEvent, false)
@@ -483,8 +483,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - knock retracted`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.KNOCK_RETRACTED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), null, MembershipChange.KNOCK_RETRACTED)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.KNOCK_RETRACTED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), null, MembershipChange.KNOCK_RETRACTED)
 
         val youRetractedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youRetractedKnock = formatter.format(youRetractedKnockEvent, false)
@@ -500,8 +500,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     fun `Membership change - knock denied`() {
         val otherName = "Other"
         val third = "Someone"
-        val youContent = RoomMembershipContent(A_USER_ID, third, MembershipChange.KNOCK_DENIED)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KNOCK_DENIED)
+        val youContent = aRoomMembershipContent(A_USER_ID, third, MembershipChange.KNOCK_DENIED)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KNOCK_DENIED)
 
         val youDeniedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
         val youDeniedKnock = formatter.format(youDeniedKnockEvent, false)
@@ -520,8 +520,8 @@ class DefaultBaseRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Membership change - None`() {
         val otherName = "Other"
-        val youContent = RoomMembershipContent(A_USER_ID, null, MembershipChange.NONE)
-        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.NONE)
+        val youContent = aRoomMembershipContent(A_USER_ID, null, MembershipChange.NONE)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), otherName, MembershipChange.NONE)
 
         val youNoneRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
         val youNoneRoom = formatter.format(youNoneRoomEvent, false)
@@ -538,7 +538,7 @@ class DefaultBaseRoomLastMessageFormatterTest {
         val otherChanges = arrayOf(MembershipChange.ERROR, MembershipChange.NOT_IMPLEMENTED, null)
 
         val results = otherChanges.map { change ->
-            val content = RoomMembershipContent(A_USER_ID, null, change)
+            val content = aRoomMembershipContent(A_USER_ID, null, change)
             val event = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = content)
             val result = formatter.format(event, false)
             change to result
