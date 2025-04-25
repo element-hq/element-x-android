@@ -16,6 +16,8 @@ import com.otaliastudios.transcoder.TranscoderListener
 import com.otaliastudios.transcoder.internal.media.MediaFormatConstants
 import com.otaliastudios.transcoder.resize.AtMostResizer
 import com.otaliastudios.transcoder.strategy.DefaultVideoStrategy
+import com.otaliastudios.transcoder.strategy.PassThroughTrackStrategy
+import com.otaliastudios.transcoder.validator.WriteAlwaysValidator
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -40,7 +42,11 @@ class VideoCompressor @Inject constructor(
     }
 
     fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
-        val (width, height) = getVideoDimensions(uri) ?: (Int.MAX_VALUE to Int.MAX_VALUE)
+        val metadata = getVideoMetadata(uri)
+        val width = metadata?.width ?: Int.MAX_VALUE
+        val height = metadata?.height ?: Int.MAX_VALUE
+        val bitrate = metadata?.bitrate
+        val frameRate = metadata?.frameRate
 
         // We only create a resizer if needed
         val resizer = when {
@@ -53,77 +59,90 @@ class VideoCompressor @Inject constructor(
 
         val tmpFile = context.createTmpFile(extension = MP4_EXTENSION)
 
-        // If there's no transcoding needed for the video file, just copy it to the tmp file and return it
-        val future = if (expectedExtension == MP4_EXTENSION && resizer == null) {
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                tmpFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            }
-            trySend(VideoTranscodingEvent.Completed(tmpFile))
-            close()
-            null
+        val videoStrategy = if (resizer == null && expectedExtension == MP4_EXTENSION) {
+            // If there's no transcoding or resizing needed for the video file, just create a new file with the same contents but no metadata
+            PassThroughTrackStrategy()
         } else {
-            Transcoder.into(tmpFile.path)
-                .setVideoTrackStrategy(
-                    DefaultVideoStrategy.Builder()
-                        .apply {
-                            resizer?.let { addResizer(it) }
-                        }
-                        .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
-                        .build()
-                )
-                .addDataSource(context, uri)
-                .setListener(object : TranscoderListener {
-                    override fun onTranscodeProgress(progress: Double) {
-                        trySend(VideoTranscodingEvent.Progress(progress.toFloat()))
-                    }
-
-                    override fun onTranscodeCompleted(successCode: Int) {
-                        trySend(VideoTranscodingEvent.Completed(tmpFile))
-                        close()
-                    }
-
-                    override fun onTranscodeCanceled() {
-                        tmpFile.safeDelete()
-                        close()
-                    }
-
-                    override fun onTranscodeFailed(exception: Throwable) {
-                        tmpFile.safeDelete()
-                        close(exception)
-                    }
-                })
-                .transcode()
+            DefaultVideoStrategy.Builder()
+                .apply {
+                    resizer?.let { addResizer(it) }
+                    bitrate?.let { bitRate(it) }
+                    frameRate?.let { frameRate(it) }
+                }
+                .mimeType(MediaFormatConstants.MIMETYPE_VIDEO_AVC)
+                .build()
         }
 
+        val future = Transcoder.into(tmpFile.path)
+            .setVideoTrackStrategy(videoStrategy)
+            .addDataSource(context, uri)
+            // Force the output to be written, even if no transcoding was actually needed
+            .setValidator(WriteAlwaysValidator())
+            .setListener(object : TranscoderListener {
+                override fun onTranscodeProgress(progress: Double) {
+                    trySend(VideoTranscodingEvent.Progress(progress.toFloat()))
+                }
+
+                override fun onTranscodeCompleted(successCode: Int) {
+                    trySend(VideoTranscodingEvent.Completed(tmpFile))
+                    close()
+                }
+
+                override fun onTranscodeCanceled() {
+                    tmpFile.safeDelete()
+                    close()
+                }
+
+                override fun onTranscodeFailed(exception: Throwable) {
+                    tmpFile.safeDelete()
+                    close(exception)
+                }
+            })
+            .transcode()
+
         awaitClose {
-            if (future?.isDone == false) {
+            if (!future.isDone) {
                 future.cancel(true)
             }
         }
     }
 
-    private fun getVideoDimensions(uri: Uri): Pair<Int, Int>? {
+    private fun getVideoMetadata(uri: Uri): VideoFileMetadata? {
         return runCatching {
             MediaMetadataRetriever().use {
                 it.setDataSource(context, uri)
 
                 val width = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toIntOrNull() ?: -1
                 val height = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toIntOrNull() ?: -1
+                val bitrate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toLongOrNull() ?: -1
+                val framerate = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE)?.toIntOrNull() ?: -1
 
-                if (width == -1 || height == -1) {
+                val (actualWidth, actualHeight) = if (width == -1 || height == -1) {
                     // Try getting the first frame instead
                     val bitmap = it.getFrameAtTime(0) ?: return null
                     bitmap.width to bitmap.height
                 } else {
                     width to height
                 }
+
+                VideoFileMetadata(
+                    width = actualWidth,
+                    height = actualHeight,
+                    bitrate = bitrate,
+                    frameRate = framerate
+                )
             }
         }.onFailure {
             Timber.e(it, "Failed to get video dimensions")
         }.getOrNull()
     }
+
+    private data class VideoFileMetadata(
+        val width: Int?,
+        val height: Int?,
+        val bitrate: Long?,
+        val frameRate: Int?,
+    )
 }
 
 sealed interface VideoTranscodingEvent {
