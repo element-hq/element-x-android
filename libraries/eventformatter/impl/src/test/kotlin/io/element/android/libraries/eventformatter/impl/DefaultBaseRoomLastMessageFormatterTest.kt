@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.media.aMediaSource
@@ -346,6 +347,33 @@ class DefaultBaseRoomLastMessageFormatterTest {
 
     @Test
     @Config(qualifiers = "en")
+    fun `Membership change - banned with reason`() {
+        val otherName = "Other"
+        val third = "Someone"
+        val youContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED, A_REASON)
+        val youKickedContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED, A_REASON)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.BANNED, A_REASON)
+        val someoneKickedContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED_AND_BANNED, A_REASON)
+
+        val youBannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youBanned = formatter.format(youBannedEvent, false)
+        assertThat(youBanned).isEqualTo("You banned $third: $A_REASON")
+
+        val youKickBannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youKickedContent)
+        val youKickedBanned = formatter.format(youKickBannedEvent, false)
+        assertThat(youKickedBanned).isEqualTo("You banned $third: $A_REASON")
+
+        val someoneBannedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneBanned = formatter.format(someoneBannedEvent, false)
+        assertThat(someoneBanned).isEqualTo("$otherName banned $third: $A_REASON")
+
+        val someoneKickBannedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneKickedContent)
+        val someoneKickBanned = formatter.format(someoneKickBannedEvent, false)
+        assertThat(someoneKickBanned).isEqualTo("$otherName banned $third: $A_REASON")
+    }
+
+    @Test
+    @Config(qualifiers = "en")
     fun `Membership change - unban`() {
         val otherName = "Other"
         val third = "Someone"
@@ -376,6 +404,23 @@ class DefaultBaseRoomLastMessageFormatterTest {
         val someoneKickedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneKicked = formatter.format(someoneKickedEvent, false)
         assertThat(someoneKicked).isEqualTo("$otherName removed $third")
+    }
+
+    @Test
+    @Config(qualifiers = "en")
+    fun `Membership change - kicked with reason`() {
+        val otherName = "Other"
+        val third = "Someone"
+        val youContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED, A_REASON)
+        val someoneContent = aRoomMembershipContent(UserId("@someone_else:domain"), third, MembershipChange.KICKED, A_REASON)
+
+        val youKickedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youKicked = formatter.format(youKickedEvent, false)
+        assertThat(youKicked).isEqualTo("You removed $third: $A_REASON")
+
+        val someoneKickedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneKicked = formatter.format(someoneKickedEvent, false)
+        assertThat(someoneKicked).isEqualTo("$otherName removed $third: $A_REASON")
     }
 
     @Test
