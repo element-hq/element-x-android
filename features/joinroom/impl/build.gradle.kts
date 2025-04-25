@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.features.roomdirectory.api)
     implementation(projects.services.analytics.api)
     implementation(projects.libraries.preferences.api)
-    implementation(projects.libraries.featureflag.api)
+    implementation(projects.appconfig)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -49,6 +49,5 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.libraries.featureflag.test)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

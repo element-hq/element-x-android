@@ -63,7 +63,6 @@ fun RoomListView(
             if (state.contextMenu is RoomListState.ContextMenu.Shown) {
                 RoomListContextMenu(
                     contextMenu = state.contextMenu,
-                    canReportRoom = state.canReportRoom,
                     eventSink = state.eventSink,
                     onRoomSettingsClick = onRoomSettingsClick,
                     onReportRoomClick = onReportRoomClick,
@@ -72,7 +71,6 @@ fun RoomListView(
             if( state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
                 RoomListDeclineInviteMenu(
                     menu = state.declineInviteMenu,
-                    canReportRoom = state.canReportRoom,
                     eventSink = state.eventSink,
                     onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
                 )

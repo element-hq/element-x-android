@@ -33,7 +33,6 @@ data class JoinRoomState(
     private val applicationName: String,
     val knockMessage: String,
     val hideInviteAvatars: Boolean,
-    val canReportRoom: Boolean,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
     val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoomFailures.UnauthorizedJoin

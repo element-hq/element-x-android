@@ -51,10 +51,12 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 joinAction = AsyncAction.Failure(ClientException.Generic("Something went wrong", null))
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
-                    inviteData = anInviteData(),
-                    inviteSender = null,
-                ))
+                contentState = aLoadedContentState(
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
+                        inviteData = anInviteData(),
+                        inviteSender = null,
+                    )
+                )
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(
@@ -179,7 +181,6 @@ fun aJoinRoomState(
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockMessage: String = "",
     hideInviteAvatars: Boolean = false,
-    canReportRoom: Boolean = false,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     roomIdOrAlias = roomIdOrAlias,
@@ -192,7 +193,6 @@ fun aJoinRoomState(
     applicationName = "AppName",
     knockMessage = knockMessage,
     hideInviteAvatars = hideInviteAvatars,
-    canReportRoom = canReportRoom,
     eventSink = eventSink
 )
 
@@ -215,7 +215,8 @@ internal fun anInviteData(
 ) = InviteData(
     roomId = roomId,
     roomName = roomName,
-    isDm = isDm,)
+    isDm = isDm,
+)
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")
 private val A_ROOM_ALIAS = RoomAlias("#exa:matrix.org")

@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -37,8 +36,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -75,7 +72,6 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
-    private val featureFlagService: FeatureFlagService,
 ) : Presenter<JoinRoomState> {
     interface Factory {
         fun create(
@@ -161,10 +157,6 @@ class JoinRoomPresenter @AssistedInject constructor(
         }
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
-        val canReportRoom by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReportRoom)
-        }.collectAsState(initial = false)
-
         LaunchedEffect(contentState) {
             contentState.markRoomInviteAsSeen()
         }
@@ -214,7 +206,6 @@ class JoinRoomPresenter @AssistedInject constructor(
             applicationName = buildMeta.applicationName,
             knockMessage = knockMessage,
             hideInviteAvatars = hideInviteAvatars,
-            canReportRoom = canReportRoom,
             eventSink = ::handleEvents
         )
     }

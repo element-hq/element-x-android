@@ -164,11 +164,4 @@ enum class FeatureFlags(
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),
-    ReportRoom(
-        key = "feature.report_room",
-        title = "Report room",
-        description = "Allow user to report a room",
-        defaultValue = { false },
-        isFinished = false,
-    ),
 }

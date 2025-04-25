@@ -63,7 +63,6 @@ internal fun aRoomListState(
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     hideInvitesAvatars: Boolean = false,
-    canReportRoom: Boolean = false,
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -80,7 +79,6 @@ internal fun aRoomListState(
     acceptDeclineInviteState = acceptDeclineInviteState,
     directLogoutState = directLogoutState,
     hideInvitesAvatars = hideInvitesAvatars,
-    canReportRoom = canReportRoom,
     eventSink = eventSink,
 )
 

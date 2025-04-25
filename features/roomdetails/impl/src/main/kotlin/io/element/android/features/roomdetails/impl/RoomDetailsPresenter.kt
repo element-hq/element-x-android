@@ -93,10 +93,6 @@ class RoomDetailsPresenter @Inject constructor(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MediaGallery)
         }.collectAsState(false)
 
-        val canReportRoom by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReportRoom)
-        }.collectAsState(false)
-
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
             if (canShowNotificationSettings.value) {
@@ -211,7 +207,6 @@ class RoomDetailsPresenter @Inject constructor(
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
-            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }

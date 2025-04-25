@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
@@ -110,7 +111,7 @@ fun JoinRoomView(
                         state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
                     },
                     onDeclineInvite = { inviteData, blockUser ->
-                        if (state.canReportRoom && blockUser) {
+                        if (MatrixConfiguration.CAN_REPORT_ROOM && blockUser) {
                             onDeclineInviteAndBlockUser(inviteData)
                         } else {
                             state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, blockUser = blockUser))

@@ -125,9 +125,6 @@ class RoomListPresenter @Inject constructor(
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
 
         val directLogoutState = logoutPresenter.present()
-        val canReportRoom by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReportRoom)
-        }.collectAsState(false)
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -184,7 +181,6 @@ class RoomListPresenter @Inject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             directLogoutState = directLogoutState,
             hideInvitesAvatars = hideInvitesAvatar,
-            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }
