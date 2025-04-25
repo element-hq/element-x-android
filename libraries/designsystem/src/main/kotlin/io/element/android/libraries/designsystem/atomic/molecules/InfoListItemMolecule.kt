@@ -62,7 +62,7 @@ fun InfoListItemMolecule(
 @Composable
 internal fun InfoListItemMoleculePreview() {
     ElementPreview {
-        val color = if (ElementTheme.isLightTheme) Color.LightGray else Color.DarkGray
+        val color = ElementTheme.colors.bgSubtleSecondary
         Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
