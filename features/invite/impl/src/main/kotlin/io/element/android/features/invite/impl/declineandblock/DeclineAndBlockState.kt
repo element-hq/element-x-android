@@ -7,7 +7,6 @@
 
 package io.element.android.features.invite.impl.declineandblock
 
-import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.libraries.architecture.AsyncAction
 
 data class DeclineAndBlockState(

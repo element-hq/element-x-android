@@ -65,7 +65,7 @@ import org.junit.Test
 import java.util.Optional
 
 @Suppress("LargeClass")
-class JoinBaseRoomPresenterTest {
+class JoinRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -181,13 +181,13 @@ class JoinBaseRoomPresenterTest {
 
             awaitItem().also { state ->
                 state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
-                state.eventSink(JoinRoomEvents.DeclineInvite(inviteData))
+                state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, false))
 
                 assert(eventSinkRecorder)
                     .isCalledExactly(2)
                     .withSequence(
                         listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = true))),
+                        listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true))),
                     )
             }
         }

@@ -14,6 +14,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.reportroom.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupAnvil()
@@ -33,4 +38,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.test.robolectric)
 }

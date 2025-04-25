@@ -21,15 +21,13 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.core.extensions.mapFailure
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class ReportRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
-    private val client: MatrixClient,
+    private val reportRoom: ReportRoom,
 ) : Presenter<ReportRoomState> {
 
     @AssistedFactory
@@ -69,44 +67,19 @@ class ReportRoomPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.reportRoom(
         reason: String,
-        leaveRoom: Boolean,
+        shouldLeave: Boolean,
         action: MutableState<AsyncAction<Unit>>
     ) = launch {
         val previousFailure = action.value as? AsyncAction.Failure
-        val shouldReportRoom = previousFailure?.error !is ReportRoomException.LeftRoomFailed
-
+        val shouldReport = previousFailure?.error !is ReportRoom.Exception.LeftRoomFailed
         runUpdatingState(action) {
-            runCatching {
-                val room = client.getRoom(roomId)
-                    ?: throw ReportRoomException.RoomNotFound
-
-                if (shouldReportRoom) {
-                    room.reportRoom(reason.takeIf { it.isNotBlank() })
-                        .mapFailure { ReportRoomException.ReportRoomFailed }
-                        .getOrThrow()
-                }
-
-                if (leaveRoom) {
-                    room.leave()
-                        .mapFailure { ReportRoomException.LeftRoomFailed }
-                        .getOrThrow()
-                }
-            }
-        }
-    }
-
-    private fun CoroutineScope.leaveRoom(
-        action: MutableState<AsyncAction<Unit>>
-    ) = launch {
-        runUpdatingState(action) {
-            runCatching {
-                val room = client.getRoom(roomId)
-                    ?: throw ReportRoomException.RoomNotFound
-
-                room.leave()
-                    .mapFailure { ReportRoomException.LeftRoomFailed }
-                    .getOrThrow()
-            }
+            reportRoom(
+                roomId = roomId,
+                shouldReport = shouldReport,
+                reason = reason,
+                shouldLeave = shouldLeave
+            )
         }
     }
 }
+

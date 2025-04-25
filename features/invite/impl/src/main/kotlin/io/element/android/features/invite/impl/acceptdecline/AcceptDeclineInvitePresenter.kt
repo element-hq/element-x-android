@@ -82,10 +82,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         acceptedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
         acceptedAction.runUpdatingState {
-            runCatching {
-                acceptInvite(roomId)
-                roomId
-            }
+            acceptInvite(roomId)
         }
     }
 
@@ -95,15 +92,12 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         declinedAction: MutableState<AsyncAction<RoomId>>,
     ) = launch {
         declinedAction.runUpdatingState {
-            runCatching {
-                declineInvite(
-                    roomId = inviteData.roomId,
-                    blockUser = blockUser,
-                    reportRoom = false,
-                    reportReason = null
-                )
-                inviteData.roomId
-            }
+            declineInvite(
+                roomId = inviteData.roomId,
+                blockUser = blockUser,
+                reportRoom = false,
+                reportReason = null
+            )
         }
     }
 }

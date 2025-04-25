@@ -74,14 +74,12 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
         action: MutableState<AsyncAction<Unit>>
     ) = launch {
         action.value = AsyncAction.Loading
-        runCatching {
-            declineInvite(
-                roomId = inviteData.roomId,
-                blockUser = blockUser,
-                reportRoom = reportRoom,
-                reportReason = reason
-            )
-        }.onSuccess {
+        declineInvite(
+            roomId = inviteData.roomId,
+            blockUser = blockUser,
+            reportRoom = reportRoom,
+            reportReason = reason
+        ).onSuccess {
             action.value = AsyncAction.Success(Unit)
         }.onFailure { error ->
             if (error is DeclineInvite.Exception.DeclineInviteFailed) {

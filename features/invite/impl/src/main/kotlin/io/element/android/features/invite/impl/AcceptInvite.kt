@@ -19,7 +19,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import javax.inject.Inject
 
 interface AcceptInvite {
-    suspend operator fun invoke(roomId: RoomId)
+    suspend operator fun invoke(roomId: RoomId): Result<RoomId>
 }
 
 @ContributesBinding(SessionScope::class)
@@ -30,16 +30,14 @@ class DefaultAcceptInvite @Inject constructor(
     private val seenInvitesStore: SeenInvitesStore,
 ) : AcceptInvite {
 
-    override suspend fun invoke(roomId: RoomId) {
-        joinRoom(
+    override suspend fun invoke(roomId: RoomId): Result<RoomId> {
+        return joinRoom(
             roomIdOrAlias = roomId.toRoomIdOrAlias(),
             serverNames = emptyList(),
             trigger = JoinedRoom.Trigger.Invite,
-        ).onFailure {
-            throw it
-        }.onSuccess {
+        ).onSuccess {
             notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
             seenInvitesStore.markAsUnSeen(roomId)
-        }
+        }.map { roomId }
     }
 }

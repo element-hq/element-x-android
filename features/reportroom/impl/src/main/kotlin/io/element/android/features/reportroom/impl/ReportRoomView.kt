@@ -6,6 +6,7 @@
  */
 
 package io.element.android.features.reportroom.impl
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -55,13 +56,13 @@ fun ReportRoomView(
         onSuccess = { onBackClick() },
         errorTitle = { failure ->
             when (failure) {
-                is ReportRoomException.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_title)
+                is ReportRoom.Exception.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_title)
                 else -> stringResource(CommonStrings.dialog_title_error)
             }
         },
         errorMessage = { failure ->
             when (failure) {
-                is ReportRoomException.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_message)
+                is ReportRoom.Exception.LeftRoomFailed -> stringResource(R.string.screen_report_room_leave_failed_alert_message)
                 else -> stringResource(CommonStrings.error_unknown)
             }
         },
@@ -89,12 +90,12 @@ fun ReportRoomView(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .imePadding()
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(vertical = 16.dp)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .imePadding()
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 16.dp)
         ) {
             TextField(
                 value = state.reason,
@@ -103,9 +104,9 @@ fun ReportRoomView(
                 minLines = 3,
                 enabled = !isReporting,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .heightIn(min = 90.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .heightIn(min = 90.dp),
                 supportingText = stringResource(R.string.screen_report_room_reason_footer),
             )
 
@@ -135,8 +136,8 @@ fun ReportRoomView(
                     state.eventSink(ReportRoomEvents.Report)
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
             )
         }
     }

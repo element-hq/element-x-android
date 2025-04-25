@@ -16,7 +16,12 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import javax.inject.Inject
 
 interface DeclineInvite {
-    suspend operator fun invoke(roomId: RoomId, blockUser: Boolean, reportRoom: Boolean, reportReason: String?)
+    suspend operator fun invoke(
+        roomId: RoomId,
+        blockUser: Boolean,
+        reportRoom: Boolean,
+        reportReason: String?
+    ): Result<RoomId>
 
     sealed class Exception : kotlin.Exception() {
         data object RoomNotFound : Exception()
@@ -38,11 +43,11 @@ class DefaultDeclineInvite @Inject constructor(
         blockUser: Boolean,
         reportRoom: Boolean,
         reportReason: String?
-    ) {
-        val room = client.getRoom(roomId) ?: throw DeclineInvite.Exception.RoomNotFound
+    ): Result<RoomId> {
+        val room = client.getRoom(roomId) ?: return Result.failure(DeclineInvite.Exception.RoomNotFound)
         room.use {
             room.leave()
-                .onFailure { throw DeclineInvite.Exception.DeclineInviteFailed }
+                .onFailure { return Result.failure(DeclineInvite.Exception.DeclineInviteFailed) }
                 .onSuccess {
                     notificationCleaner.clearMembershipNotificationForRoom(
                         sessionId = client.sessionId,
@@ -56,14 +61,15 @@ class DefaultDeclineInvite @Inject constructor(
                 if (userIdToBlock != null) {
                     client
                         .ignoreUser(userIdToBlock)
-                        .onFailure { throw DeclineInvite.Exception.BlockUserFailed }
+                        .onFailure { return Result.failure(DeclineInvite.Exception.BlockUserFailed) }
                 }
             }
             if (reportRoom) {
                 room
                     .reportRoom(reportReason)
-                    .onFailure { throw DeclineInvite.Exception.ReportRoomFailed }
+                    .onFailure { return Result.failure(DeclineInvite.Exception.ReportRoomFailed) }
             }
         }
+        return Result.success(roomId)
     }
 }
