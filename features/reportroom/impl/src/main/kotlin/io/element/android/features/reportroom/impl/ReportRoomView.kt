@@ -117,11 +117,10 @@ fun ReportRoomView(
                 headlineContent = {
                     Text(text = stringResource(CommonStrings.action_leave_room))
                 },
-                trailingContent = ListItemContent.Switch(
-                    checked = state.leaveRoom,
-                    onChange = { state.eventSink(ReportRoomEvents.ToggleLeaveRoom) },
-                    enabled = !isReporting,
-                )
+                onClick = {
+                    state.eventSink(ReportRoomEvents.ToggleLeaveRoom)
+                },
+                trailingContent = ListItemContent.Switch(checked = state.leaveRoom)
             )
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -93,11 +93,10 @@ fun DeclineAndBlockView(
                 supportingContent = {
                     Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_description))
                 },
-                trailingContent = ListItemContent.Switch(
-                    checked = state.blockUser,
-                    onChange = { state.eventSink(DeclineAndBlockEvents.ToggleBlockUser) },
-                    enabled = !isDeclining,
-                )
+                onClick = {
+                    state.eventSink(DeclineAndBlockEvents.ToggleBlockUser)
+                },
+                trailingContent = ListItemContent.Switch(checked = state.blockUser)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -109,11 +108,10 @@ fun DeclineAndBlockView(
                 supportingContent = {
                     Text(text = stringResource(CommonStrings.screen_decline_and_block_report_user_option_description))
                 },
-                trailingContent = ListItemContent.Switch(
-                    checked = state.reportRoom,
-                    onChange = { state.eventSink(DeclineAndBlockEvents.ToggleReportRoom) },
-                    enabled = !isDeclining,
-                )
+                onClick = {
+                    state.eventSink(DeclineAndBlockEvents.ToggleReportRoom)
+                },
+                trailingContent = ListItemContent.Switch(checked = state.reportRoom)
             )
 
             if (state.reportRoom) {
