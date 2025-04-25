@@ -31,14 +31,21 @@ class VideoCompressor @Inject constructor(
 ) {
     companion object {
         private const val MP4_EXTENSION = "mp4"
+
+        // 720p
+        private const val MAX_COMPRESSED_PIXEL_SIZE = 1280
+
+        // 1080p
+        private const val MAX_PIXEL_SIZE = 1920
     }
 
     fun compress(uri: Uri, shouldBeCompressed: Boolean) = callbackFlow {
         val (width, height) = getVideoDimensions(uri) ?: (Int.MAX_VALUE to Int.MAX_VALUE)
 
+        // We only create a resizer if needed
         val resizer = when {
-            shouldBeCompressed && (width > 720 || height > 720) -> AtMostResizer(720)
-            width > 1080 || height > 1080 -> AtMostResizer(1080)
+            shouldBeCompressed && (width > MAX_COMPRESSED_PIXEL_SIZE || height > MAX_COMPRESSED_PIXEL_SIZE) -> AtMostResizer(MAX_COMPRESSED_PIXEL_SIZE)
+            width > MAX_PIXEL_SIZE || height > MAX_PIXEL_SIZE -> AtMostResizer(MAX_PIXEL_SIZE)
             else -> null
         }
 
