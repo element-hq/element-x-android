@@ -105,7 +105,8 @@ class TimelineEventContentMapper(
                     RoomMembershipContent(
                         userId = UserId(it.userId),
                         userDisplayName = it.userDisplayName,
-                        change = it.change?.map()
+                        change = it.change?.map(),
+                        reason = it.reason,
                     )
                 }
                 is TimelineItemContent.State -> {
