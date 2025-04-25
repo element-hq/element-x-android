@@ -29,7 +29,11 @@ fun RadioButtonListItem(
         modifier = modifier,
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
-        leadingContent = ListItemContent.RadioButton(selected, null, enabled, compact = compactLayout),
+        leadingContent = ListItemContent.RadioButton(
+            selected = selected,
+            enabled = enabled,
+            compact = compactLayout,
+        ),
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,

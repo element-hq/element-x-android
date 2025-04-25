@@ -10,7 +10,6 @@ package io.element.android.features.call.impl.ui
 import android.Manifest
 import android.app.PictureInPictureParams
 import android.content.Intent
-import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -78,7 +77,6 @@ class ElementCallActivity :
 
     private val requestPermissionsLauncher = registerPermissionResultLauncher()
 
-    private var isDarkMode = false
     private val webViewTarget = mutableStateOf<CallType?>(null)
 
     private var eventSink: ((CallScreenEvents) -> Unit)? = null
@@ -100,10 +98,6 @@ class ElementCallActivity :
         // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
         if (!::presenter.isInitialized) {
             return
-        }
-
-        if (savedInstanceState == null) {
-            updateUiMode(resources.configuration)
         }
 
         pictureInPicturePresenter.setPipView(this)
@@ -172,11 +166,6 @@ class ElementCallActivity :
                 removeOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
             }
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        updateUiMode(newConfig)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -280,19 +269,6 @@ class ElementCallActivity :
             audiofocusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
         } else {
             audioFocusChangeListener?.let { audioManager.abandonAudioFocus(it) }
-        }
-    }
-
-    private fun updateUiMode(configuration: Configuration) {
-        val prevDarkMode = isDarkMode
-        val currentNightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_YES
-        isDarkMode = currentNightMode != 0
-        if (prevDarkMode != isDarkMode) {
-            if (isDarkMode) {
-                window.setBackgroundDrawableResource(android.R.drawable.screen_background_dark)
-            } else {
-                window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
-            }
         }
     }
 

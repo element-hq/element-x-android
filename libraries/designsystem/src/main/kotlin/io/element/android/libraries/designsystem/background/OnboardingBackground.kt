@@ -8,6 +8,7 @@
 package io.element.android.libraries.designsystem.background
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,13 +33,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Suppress("ModifierMissing")
 @Composable
 fun OnboardingBackground() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ElementTheme.colors.bgCanvasDefault)
+    ) {
         val isLightTheme = ElementTheme.isLightTheme
         Canvas(
             modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
-            .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(220.dp)
+                .align(Alignment.BottomCenter)
         ) {
             val gradientBrush = ShaderBrush(
                 LinearGradientShader(

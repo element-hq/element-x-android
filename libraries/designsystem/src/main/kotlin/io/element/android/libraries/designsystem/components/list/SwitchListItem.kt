@@ -29,7 +29,10 @@ fun SwitchListItem(
         headlineContent = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
         leadingContent = leadingContent,
-        trailingContent = ListItemContent.Switch(value, null, enabled),
+        trailingContent = ListItemContent.Switch(
+            checked = value,
+            enabled = enabled,
+        ),
         style = style,
         enabled = enabled,
         onClick = { onChange(!value) },

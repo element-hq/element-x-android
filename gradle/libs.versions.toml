@@ -45,7 +45,7 @@ wysiwyg = "2.38.3"
 telephoto = "0.15.1"
 
 # Dependency analysis
-dependencyAnalysis = "2.16.0"
+dependencyAnalysis = "2.17.0"
 
 # DI
 dagger = "2.56.2"
@@ -72,7 +72,7 @@ kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", ve
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.12.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.13.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -84,7 +84,7 @@ androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.9.1"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
-androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.0"
+androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.1"
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout_compose" }
 androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
@@ -191,7 +191,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.14.1"
-sentry = "io.sentry:sentry-android:8.9.0"
+sentry = "io.sentry:sentry-android:8.10.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 
