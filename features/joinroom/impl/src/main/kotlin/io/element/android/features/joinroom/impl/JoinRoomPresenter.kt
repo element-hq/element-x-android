@@ -113,8 +113,8 @@ class JoinRoomPresenter @AssistedInject constructor(
                             // Workaround to get info about the sender for banned rooms
                             // TODO re-do this once we have a better API in the SDK
                             val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
-                            val membershipDetalis = preview.getOrNull()?.membershipDetails()?.getOrNull()
-                            membershipDetalis?.senderMember to membershipDetalis?.currentUserMember?.membershipChangeReason
+                            val membershipDetails = preview.getOrNull()?.membershipDetails()?.getOrNull()
+                            membershipDetails?.senderMember to membershipDetails?.currentUserMember?.membershipChangeReason
                         }
                         CurrentUserMembership.INVITED -> {
                             roomInfo.get().inviter to null
