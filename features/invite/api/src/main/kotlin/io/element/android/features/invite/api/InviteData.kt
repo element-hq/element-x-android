@@ -21,7 +21,6 @@ data class InviteData(
     val isDm: Boolean,
 ) : Parcelable
 
-
 fun RoomPreviewInfo.toInviteData(): InviteData {
     return InviteData(
         roomId = roomId,

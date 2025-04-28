@@ -9,9 +9,7 @@ package io.element.android.features.reportroom.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface ReportRoomEntryPoint : FeatureEntryPoint {

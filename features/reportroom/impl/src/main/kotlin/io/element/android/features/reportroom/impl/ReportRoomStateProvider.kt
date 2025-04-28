@@ -17,7 +17,7 @@ open class ReportRoomStateProvider : PreviewParameterProvider<ReportRoomState> {
             aReportRoomState(reason = "Inappropriate content"),
             aReportRoomState(leaveRoom = true),
             aReportRoomState(reportAction = AsyncAction.Loading),
-            aReportRoomState(reportAction = AsyncAction.Failure(Exception())),
+            aReportRoomState(reportAction = AsyncAction.Failure(Exception("Failed to report"))),
         )
 }
 

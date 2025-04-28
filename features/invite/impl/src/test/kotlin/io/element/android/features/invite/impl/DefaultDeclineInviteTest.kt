@@ -26,7 +26,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultDeclineInviteTest {
-
     private val roomId = A_ROOM_ID
     private val inviter = aRoomMember()
     private val seenInvitesStore = InMemorySeenInvitesStore(initialRoomIds = setOf(roomId))
@@ -75,7 +74,6 @@ class DefaultDeclineInviteTest {
             .with(value(client.sessionId), value(roomId))
 
         assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
-
     }
 
     @Test
@@ -103,7 +101,6 @@ class DefaultDeclineInviteTest {
             .with(value(client.sessionId), value(roomId))
 
         assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
-
     }
 
     @Test
@@ -177,7 +174,5 @@ class DefaultDeclineInviteTest {
 
         assert(clearMembershipNotificationForRoomLambda).isCalledOnce()
         assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
-
     }
-
 }

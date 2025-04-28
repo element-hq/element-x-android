@@ -29,7 +29,6 @@ class ReportRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     private val reportRoom: ReportRoom,
 ) : Presenter<ReportRoomState> {
-
     @AssistedFactory
     interface Factory {
         fun create(roomId: RoomId): ReportRoomPresenter
@@ -82,4 +81,3 @@ class ReportRoomPresenter @AssistedInject constructor(
         }
     }
 }
-

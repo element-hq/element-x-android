@@ -20,5 +20,4 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.services.analytics.api)
-
 }

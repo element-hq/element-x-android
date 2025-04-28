@@ -37,7 +37,6 @@ class DefaultDeclineInvite @Inject constructor(
     private val notificationCleaner: NotificationCleaner,
     private val seenInvitesStore: SeenInvitesStore,
 ) : DeclineInvite {
-
     override suspend fun invoke(
         roomId: RoomId,
         blockUser: Boolean,

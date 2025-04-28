@@ -17,7 +17,7 @@ import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultDeclineAndBlockEntryPoint @Inject constructor(): DeclineInviteAndBlockEntryPoint {
+class DefaultDeclineAndBlockEntryPoint @Inject constructor() : DeclineInviteAndBlockEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext, inviteData: InviteData): Node {
         val inputs = DeclineAndBlockNode.Inputs(inviteData)
         return parentNode.createNode<DeclineAndBlockNode>(buildContext, plugins = listOf(inputs))

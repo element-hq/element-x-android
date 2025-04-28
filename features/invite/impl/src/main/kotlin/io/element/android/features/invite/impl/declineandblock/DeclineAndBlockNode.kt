@@ -26,7 +26,6 @@ class DeclineAndBlockNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: DeclineAndBlockPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(val inviteData: InviteData) : NodeInputs
 
     private val inviteData = inputs<Inputs>().inviteData

@@ -165,7 +165,7 @@ class JoinRoomViewTest {
         val inviteData = anInviteData()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData,null)),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, null)),
                 eventSink = eventsRecorder,
             ),
         )
@@ -181,7 +181,7 @@ class JoinRoomViewTest {
             contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, aRoomMember().toInviteSender())),
             eventSink = eventsRecorder,
         )
-        if(MatrixConfiguration.CAN_REPORT_ROOM){
+        if (MatrixConfiguration.CAN_REPORT_ROOM) {
             ensureCalledOnceWithParam(inviteData) {
                 rule.setJoinRoomView(
                     state = joinRoomState,
@@ -189,7 +189,7 @@ class JoinRoomViewTest {
                 )
                 rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
             }
-        }else {
+        } else {
             rule.setJoinRoomView(state = joinRoomState,)
             rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
             eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, true))

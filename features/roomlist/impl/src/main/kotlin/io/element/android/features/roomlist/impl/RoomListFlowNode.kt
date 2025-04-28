@@ -56,7 +56,8 @@ class RoomListFlowNode @AssistedInject constructor(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
-    buildContext = buildContext, plugins = plugins
+    buildContext = buildContext,
+    plugins = plugins
 ) {
     init {
         lifecycle.subscribe(

@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
 
 open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDeclineInviteState> {
     override val values: Sequence<AcceptDeclineInviteState>

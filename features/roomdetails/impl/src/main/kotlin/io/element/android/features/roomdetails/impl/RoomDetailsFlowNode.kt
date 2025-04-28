@@ -131,7 +131,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data class VerifyUser(val userId: UserId) : NavTarget
 
         @Parcelize
-        data object ReportRoom: NavTarget
+        data object ReportRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

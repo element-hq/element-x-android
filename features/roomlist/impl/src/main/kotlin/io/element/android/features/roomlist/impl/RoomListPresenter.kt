@@ -157,14 +157,12 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.ShowDeclineInviteMenu -> declineInviteMenu.value = RoomListState.DeclineInviteMenu.Shown(event.roomSummary)
                 RoomListEvents.HideDeclineInviteMenu -> declineInviteMenu.value = RoomListState.DeclineInviteMenu.Hidden
                 is RoomListEvents.ClearCacheOfRoom -> coroutineScope.clearCacheOfRoom(event.roomId)
-
             }
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         val contentState = roomListContentState(securityBannerDismissed)
-
 
         return RoomListState(
             matrixUser = matrixUser.value,

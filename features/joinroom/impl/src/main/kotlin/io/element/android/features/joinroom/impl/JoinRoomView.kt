@@ -217,7 +217,7 @@ private fun JoinRoomFooter(
                         )
                         Button(
                             text = stringResource(CommonStrings.action_accept),
-                            onClick = {onAcceptInvite(joinAuthorisationStatus.inviteData)},
+                            onClick = { onAcceptInvite(joinAuthorisationStatus.inviteData) },
                             modifier = Modifier.weight(1f),
                             size = ButtonSize.LargeLowPadding,
                         )

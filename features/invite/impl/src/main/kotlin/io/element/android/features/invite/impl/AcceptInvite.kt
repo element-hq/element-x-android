@@ -29,7 +29,6 @@ class DefaultAcceptInvite @Inject constructor(
     private val notificationCleaner: NotificationCleaner,
     private val seenInvitesStore: SeenInvitesStore,
 ) : AcceptInvite {
-
     override suspend fun invoke(roomId: RoomId): Result<RoomId> {
         return joinRoom(
             roomIdOrAlias = roomId.toRoomIdOrAlias(),

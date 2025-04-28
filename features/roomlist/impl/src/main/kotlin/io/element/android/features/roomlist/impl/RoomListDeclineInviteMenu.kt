@@ -105,6 +105,5 @@ private fun BottomSheetContent(
             modifier = Modifier.fillMaxWidth(),
             onClick = onCancelClick
         )
-
     }
 }

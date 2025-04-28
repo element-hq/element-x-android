@@ -99,7 +99,6 @@ class DeclineAndBlockPresenterTest {
             .with(value(A_ROOM_ID), value(true), value(false), value(""))
     }
 
-
     @Test
     fun `present - declining invite error flow`() = runTest {
         val declineInviteFailure = lambdaRecorder<RoomId, Boolean, Boolean, String?, Result<RoomId>> { _, _, _, _ ->
@@ -149,7 +148,6 @@ class DeclineAndBlockPresenterTest {
             .isCalledOnce()
             .with(value(A_ROOM_ID), value(true), value(false), value(""))
     }
-
 
     private fun anInviteData(
         roomId: RoomId = A_ROOM_ID,

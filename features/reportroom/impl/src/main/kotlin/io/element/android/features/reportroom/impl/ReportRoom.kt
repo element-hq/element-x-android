@@ -26,9 +26,7 @@ interface ReportRoom {
         data object LeftRoomFailed : Exception()
         data object ReportRoomFailed : Exception()
     }
-
 }
-
 
 @ContributesBinding(SessionScope::class)
 class DefaultReportRoom @Inject constructor(
@@ -59,6 +57,4 @@ class DefaultReportRoom @Inject constructor(
         }
         return Result.success(Unit)
     }
-
-
 }

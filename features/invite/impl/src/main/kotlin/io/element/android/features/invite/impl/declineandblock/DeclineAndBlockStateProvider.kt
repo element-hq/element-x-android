@@ -25,7 +25,7 @@ open class DeclineAndBlockStateProvider : PreviewParameterProvider<DeclineAndBlo
                 declineAction = AsyncAction.Loading,
             ),
             aDeclineAndBlockState(
-                declineAction = AsyncAction.Failure(Exception()),
+                declineAction = AsyncAction.Failure(Exception("Failed to decline")),
             ),
         )
 }

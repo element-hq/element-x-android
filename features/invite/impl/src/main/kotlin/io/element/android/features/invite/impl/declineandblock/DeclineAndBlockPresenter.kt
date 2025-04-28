@@ -33,7 +33,6 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
     private val declineInvite: DeclineInvite,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<DeclineAndBlockState> {
-
     @AssistedFactory
     interface Factory {
         fun create(inviteData: InviteData): DeclineAndBlockPresenter

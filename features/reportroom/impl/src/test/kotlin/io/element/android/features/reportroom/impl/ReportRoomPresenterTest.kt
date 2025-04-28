@@ -21,7 +21,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class ReportRoomPresenterTest {
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createReportRoomPresenter()
@@ -104,7 +103,6 @@ class ReportRoomPresenterTest {
                 .isCalledOnce()
                 .with(value(roomId), value(true), any(), any())
         }
-
     }
 
     @Test
@@ -142,7 +140,6 @@ class ReportRoomPresenterTest {
                     listOf(value(roomId), value(false), any(), value(true))
                 )
         }
-
     }
 
     fun createReportRoomPresenter(

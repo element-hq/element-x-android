@@ -10,6 +10,7 @@ package io.element.android.appconfig
 object MatrixConfiguration {
     const val MATRIX_TO_PERMALINK_BASE_URL: String = "https://matrix.to/#/"
     val clientPermalinkBaseUrl: String? = null
-    //TODO remove this when report is fixed
+
+    // TODO remove this when report is fixed
     const val CAN_REPORT_ROOM = true
 }

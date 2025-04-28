@@ -7,7 +7,6 @@
 
 package io.element.android.features.roomlist.impl
 
-import io.element.android.features.invite.api.InviteData
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.matrix.api.core.RoomId
 

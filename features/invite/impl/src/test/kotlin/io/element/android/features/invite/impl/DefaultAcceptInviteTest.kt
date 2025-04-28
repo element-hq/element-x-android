@@ -27,7 +27,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultAcceptInviteTest {
-
     private val roomId = A_ROOM_ID
     private val client = FakeMatrixClient()
     private val seenInvitesStore = InMemorySeenInvitesStore(initialRoomIds = setOf(roomId))
@@ -43,7 +42,6 @@ class DefaultAcceptInviteTest {
             lambdaRecorder<RoomIdOrAlias, List<String>, JoinedRoom.Trigger, Result<Unit>> { _, _, _ ->
                 Result.success(Unit)
             }
-
 
         val acceptInvite = DefaultAcceptInvite(
             client = client,
@@ -93,5 +91,4 @@ class DefaultAcceptInviteTest {
 
         assertThat(seenInvitesStore.seenRoomIds().first()).containsExactly(roomId)
     }
-
 }

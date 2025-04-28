@@ -84,7 +84,6 @@ fun DeclineAndBlockView(
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
         ) {
-
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
                 headlineContent = {
@@ -149,7 +148,7 @@ fun DeclineAndBlockView(
 
 @PreviewsDayNight
 @Composable
-internal fun ReportRoomViewPreview(
+internal fun DeclineAndBlockViewPreview(
     @PreviewParameter(DeclineAndBlockStateProvider::class) state: DeclineAndBlockState
 ) = ElementPreview {
     DeclineAndBlockView(

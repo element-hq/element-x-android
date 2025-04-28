@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -226,7 +227,10 @@ class RoomListViewTest {
         rule.clickOn(CommonStrings.action_accept)
         rule.clickOn(CommonStrings.action_decline)
         eventsRecorder.assertList(
-            listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.ShowDeclineInviteMenu(invitedRoom)),
+            listOf(
+                RoomListEvents.AcceptInvite(invitedRoom),
+                RoomListEvents.ShowDeclineInviteMenu(invitedRoom),
+            )
         )
     }
 }
@@ -240,6 +244,8 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
     onRoomSettingsClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
+    onReportRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomListView(
@@ -251,6 +257,8 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             onCreateRoomClick = onCreateRoomClick,
             onRoomSettingsClick = onRoomSettingsClick,
             onMenuActionClick = onMenuActionClick,
+            onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
+            onReportRoomClick = onReportRoomClick,
             acceptDeclineInviteView = { },
         )
     }

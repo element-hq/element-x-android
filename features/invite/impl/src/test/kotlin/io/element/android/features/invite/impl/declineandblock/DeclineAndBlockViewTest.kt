@@ -10,6 +10,8 @@ package io.element.android.features.invite.impl.declineandblock
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -64,10 +66,11 @@ class DeclineAndBlockViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_decline)
+        eventsRecorder.assertEmpty()
     }
 
     @Test
-    fun `clicking on block when enabled emits the expected event`() {
+    fun `clicking on block option emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
         rule.setDeclineAndBlockView(
             aDeclineAndBlockState(
@@ -75,6 +78,35 @@ class DeclineAndBlockViewTest {
                 eventSink = eventsRecorder,
             ),
         )
+        rule.clickOn(CommonStrings.screen_decline_and_block_block_user_option_title)
+        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleBlockUser)
+    }
+
+    @Test
+    fun `clicking on report room option emits the expected event`() {
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        rule.setDeclineAndBlockView(
+            aDeclineAndBlockState(
+                reportRoom = true,
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_report_room)
+        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleReportRoom)
+    }
+
+    @Test
+    fun `typing text in the reason field emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        rule.setDeclineAndBlockView(
+            aDeclineAndBlockState(
+                reportRoom = true,
+                reportReason = "",
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.onNodeWithText("").performTextInput("Spam!")
+        eventsRecorder.assertSingle(DeclineAndBlockEvents.UpdateReportReason("Spam!"))
     }
 }
 

@@ -595,17 +595,16 @@ class RoomListPresenterTest {
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
                 it.id == roomSummary.roomId.value
             }
-            val inviteData = roomListRoomSummary.toInviteData()!!
 
             state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
-            state.eventSink(RoomListEvents.DeclineInvite(inviteData))
+            state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary, blockUser = false))
 
-
+            val inviteData = roomListRoomSummary.toInviteData()
             assert(eventSinkRecorder)
                 .isCalledExactly(2)
                 .withSequence(
                     listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, shouldConfirm = false))),
+                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
                 )
         }
     }

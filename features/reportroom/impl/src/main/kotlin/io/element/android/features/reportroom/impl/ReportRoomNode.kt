@@ -26,7 +26,6 @@ class ReportRoomNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: ReportRoomPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(val roomId: RoomId) : NodeInputs
 
     private val roomId = inputs<Inputs>().roomId
