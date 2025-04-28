@@ -265,6 +265,7 @@
   <string name="common_shared_location">"Поширене розташування"</string>
   <string name="common_signing_out">"Вихід"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
+  <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>
   <string name="common_starting_chat">"Початок бесіди…"</string>
   <string name="common_sticker">"Наліпка"</string>
   <string name="common_success">"Успіх"</string>

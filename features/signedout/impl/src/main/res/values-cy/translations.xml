@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Rydych chi wedi newid eich cyfrinair yn ystod sesiwn arall"</string>
+  <string name="screen_signed_out_reason_2">"Rydych chi wedi dileu\'r sesiwn o sesiwn arall"</string>
+  <string name="screen_signed_out_reason_3">"Mae gweinyddwr eich gweinydd wedi annilysu eich mynediad"</string>
+  <string name="screen_signed_out_subtitle">"Efallai eich bod wedi cael eich allgofnodi am un o\'r rhesymau sy\'n cael eu rhestru isod. Mewngofnodwch eto i barhau i ddefnyddio %s."</string>
+  <string name="screen_signed_out_title">"Rydych wedi\'ch allgofnodi"</string>
+</resources>

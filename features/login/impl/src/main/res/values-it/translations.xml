@@ -52,7 +52,7 @@
 
 Prova ad accedere manualmente o scansiona il codice QR con un altro dispositivo."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"Codice QR non supportato"</string>
-  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Il tuo fornitore di account non supporta %1$s ."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Il tuo fornitore di account non supporta %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s non supportato"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Pronto per la scansione"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Apri %1$s su un dispositivo desktop"</string>
