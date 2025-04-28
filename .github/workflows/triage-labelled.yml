@@ -12,7 +12,7 @@ jobs:
     if: >
       github.repository == 'element-hq/element-x-android'
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/43
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -21,7 +21,7 @@ jobs:
     name: Move triaged needs info issues on board
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         id: addItem
         with:
           project-url: https://github.com/orgs/element-hq/projects/91
@@ -43,7 +43,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/73
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -54,7 +54,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/57
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -66,7 +66,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'Team: QA') ||
       contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/69
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -77,7 +77,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/89
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
