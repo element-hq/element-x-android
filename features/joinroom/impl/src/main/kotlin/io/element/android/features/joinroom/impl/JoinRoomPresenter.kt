@@ -121,7 +121,13 @@ class JoinRoomPresenter @AssistedInject constructor(
                         }
                         else -> null to null
                     }
-                    value = roomInfo.get().toContentState(sender, reason)
+                    val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
+                    val joinedMembersCountOverride = preview.getOrNull()?.previewInfo?.numberOfJoinedMembers
+                    value = roomInfo.get().toContentState(
+                        membershipSender = sender,
+                        joinedMembersCountOverride = joinedMembersCountOverride,
+                        reason = reason,
+                    )
                 }
                 roomDescription.isPresent -> {
                     value = roomDescription.get().toContentState()
@@ -296,13 +302,17 @@ internal fun RoomDescription.toContentState(): ContentState {
 }
 
 @VisibleForTesting
-internal fun RoomInfo.toContentState(membershipSender: RoomMember?, reason: String?): ContentState {
+internal fun RoomInfo.toContentState(
+    membershipSender: RoomMember?,
+    joinedMembersCountOverride: Long?,
+    reason: String?,
+): ContentState {
     return ContentState.Loaded(
         roomId = id,
         name = name,
         topic = topic,
         alias = canonicalAlias,
-        numberOfMembers = joinedMembersCount,
+        numberOfMembers = joinedMembersCountOverride ?: joinedMembersCount,
         isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
