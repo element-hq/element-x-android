@@ -16,7 +16,6 @@
   <string name="screen_change_server_error_invalid_homeserver">"Nie mogliśmy połączyć się z tym serwerem domowym. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z administratorem serwera w celu uzyskania dalszej pomocy."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync nie jest dostępny z powodu problemu w znanym pliku:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Ten serwer obecnie nie obsługuje technologii Sliding Sync."</string>
   <string name="screen_change_server_form_header">"URL serwera domowego"</string>
   <string name="screen_change_server_form_notice">"Możesz połączyć się tylko z serwerem, który obsługuje technologię Sliding Sync. Administrator serwera domowego będzie musiał ją skonfigurować. %1$s"</string>
   <string name="screen_change_server_subtitle">"Jaki jest adres Twojego serwera?"</string>
