@@ -111,6 +111,7 @@
   <string name="action_report">"Nahlásit"</string>
   <string name="action_report_bug">"Nahlásit chybu"</string>
   <string name="action_report_content">"Nahlásit obsah"</string>
+  <string name="action_report_dm">"Nahlásit konverzaci"</string>
   <string name="action_report_room">"Nahlásit místnost"</string>
   <string name="action_reset">"Obnovit"</string>
   <string name="action_reset_identity">"Obnovit identitu"</string>
@@ -264,6 +265,7 @@ Důvod: %1$s."</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_signing_out">"Odhlašování"</string>
   <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
+  <string name="common_something_went_wrong_message">"Narazili jsme na problém. Zkuste to prosím znovu."</string>
   <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>

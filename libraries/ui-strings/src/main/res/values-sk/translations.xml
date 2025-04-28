@@ -265,6 +265,7 @@ Dôvod: %1$s."</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
   <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
+  <string name="common_something_went_wrong_message">"Vyskytol sa problém. Skúste to prosím znova."</string>
   <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
@@ -379,7 +380,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Chystáte sa prejsť na svoj %1$s účet, aby ste obnovili svoju identitu. Potom budete vrátení späť do aplikácie."</string>
   <string name="screen_reset_identity_confirmation_title">"Neviete potvrdiť? Prejdite do svojho účtu a obnovte svoju identitu."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Odvolať overenie a odoslať"</string>
-  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$s ."</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Vaša správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$s."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Odoslať správu aj tak"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s používa jedno alebo viac neoverených zariadení. Správu môžete odoslať aj tak, alebo ju môžete zatiaľ zrušiť a skúsiť to znova neskôr po %2$s overení všetkých zariadení."</string>

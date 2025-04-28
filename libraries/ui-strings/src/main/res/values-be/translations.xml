@@ -293,7 +293,7 @@
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Прагляд профілю"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Выдаліць удзельніка з пакоя"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Выдаліць удзельніка і забараніць далучацца ў будучыні?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Выдаленне %1$s …"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Выдаленне %1$s…"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
@@ -307,6 +307,8 @@
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Адклікаць праверку і адправіць"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$sвыкарыстоўвае адну або некалькі неправераных прылад. Вы можаце адправіць паведамленне ў любым выпадку, або вы можаце адмяніць зараз і паўтарыць спробу пазней, калі %2$s праверыць усе свае прылады."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваша паведамленне не было адпраўлена, таму што%1$s не праверыў усе прылады"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
@@ -320,6 +322,7 @@
   <string name="screen_share_open_google_maps">"Адкрыць у Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Адкрыць у OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Падзяліцеся гэтым месцазнаходжаннем"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Паведамленне не адпраўлена таму што%1$s не праверыў усе прылады."</string>
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"be"</string>

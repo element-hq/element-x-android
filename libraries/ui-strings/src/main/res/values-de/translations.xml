@@ -86,7 +86,7 @@
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_conversation">"Unterhaltung verlassen"</string>
   <string name="action_leave_room">"Verlassen"</string>
-  <string name="action_load_more">"Mehr laden …"</string>
+  <string name="action_load_more">"Mehr laden…"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
   <string name="action_message">"Nachricht"</string>
@@ -109,6 +109,7 @@
   <string name="action_report">"Bericht"</string>
   <string name="action_report_bug">"Fehler melden"</string>
   <string name="action_report_content">"Inhalt melden"</string>
+  <string name="action_report_dm">"Konversation melden"</string>
   <string name="action_report_room">"Chatroom melden"</string>
   <string name="action_reset">"Zurücksetzen"</string>
   <string name="action_reset_identity">"Identität zurücksetzen"</string>
@@ -220,7 +221,7 @@ Grund: %1$s."</string>
   <string name="common_permission">"Erlaubnis"</string>
   <string name="common_pinned">"Fixiert"</string>
   <string name="common_please_check_internet_connection">"Bitte überprüfen Sie Ihre Internetverbindung"</string>
-  <string name="common_please_wait">"Bitte warten …"</string>
+  <string name="common_please_wait">"Bitte warten…"</string>
   <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
@@ -260,6 +261,7 @@ Grund: %1$s."</string>
   <string name="common_shared_location">"Geteilter Standort"</string>
   <string name="common_signing_out">"Abmelden"</string>
   <string name="common_something_went_wrong">"Es ist ein Fehler aufgetreten."</string>
+  <string name="common_something_went_wrong_message">"Wir sind auf ein Problem gestoßen. Bitte versuchen Sie es erneut."</string>
   <string name="common_starting_chat">"Chat wird gestartet…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>

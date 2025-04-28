@@ -261,6 +261,7 @@ Syy: %1$s."</string>
   <string name="common_shared_location">"Jaettu sijainti"</string>
   <string name="common_signing_out">"Kirjaudutaan ulos"</string>
   <string name="common_something_went_wrong">"Jokin meni pieleen"</string>
+  <string name="common_something_went_wrong_message">"Kohtasimme ongelman. Yritä uudelleen."</string>
   <string name="common_starting_chat">"Aloitetaan keskustelua…"</string>
   <string name="common_sticker">"Tarra"</string>
   <string name="common_success">"Onnistui"</string>

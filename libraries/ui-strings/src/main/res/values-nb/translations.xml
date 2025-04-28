@@ -261,6 +261,7 @@
   <string name="common_shared_location">"Delt posisjon"</string>
   <string name="common_signing_out">"Logger av"</string>
   <string name="common_something_went_wrong">"Noe gikk galt"</string>
+  <string name="common_something_went_wrong_message">"Vi har støtt på et problem. Vennligst prøv igjen."</string>
   <string name="common_starting_chat">"Starter chat…"</string>
   <string name="common_sticker">"Klistremerke"</string>
   <string name="common_success">"Suksess"</string>

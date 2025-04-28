@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Odstránili ste obrázok miestnosti"</string>
   <string name="state_event_room_ban">"%1$s zakázal/a používateľa %2$s"</string>
   <string name="state_event_room_ban_by_you">"Zakázali ste používateľa %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Zakázali ste %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s zakázal/a %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s vytvoril/a miestnosť"</string>
   <string name="state_event_room_created_by_you">"Vytvorili ste miestnosť"</string>
   <string name="state_event_room_invite">"%1$s pozval/a používateľa %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Odmietli ste pozvánku"</string>
   <string name="state_event_room_remove">"%1$s odstránil/a %2$s"</string>
   <string name="state_event_room_remove_by_you">"Odstránili ste %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Odstránili ste %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s odstránil/a %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s poslal/a pozvánku používateľovi %2$s, aby sa pripojil k miestnosti"</string>
   <string name="state_event_room_third_party_invite_by_you">"Poslali ste pozvánku používateľovi %1$s, aby sa pripojil do miestnosti"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s zrušil/a pozvánku pre používateľa %2$s na vstup do miestnosti"</string>
