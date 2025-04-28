@@ -29,7 +29,7 @@ jobs:
           labeled: X-Needs-Info
       - name: Print itemId
         run: echo ${{ steps.addItem.outputs.itemId }}
-      - uses: kalgurn/update-project-item-status@main
+      - uses: kalgurn/update-project-item-status@31e54df46a2cdaef4f85c31ac839fbcd2fd7c3a2 # 0.0.3
         if: ${{ steps.addItem.outputs.itemId }}
         with:
           project-url: https://github.com/orgs/element-hq/projects/91

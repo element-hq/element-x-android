@@ -69,7 +69,7 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
-      - uses: rnkdsh/action-upload-diawi@v1.5.8
+      - uses: rnkdsh/action-upload-diawi@d2e5212dedc5e05133afe89bc12dfe2dd9e7e9c6 # v1.5.8
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true
@@ -81,7 +81,7 @@ jobs:
           file: app/build/outputs/apk/gplay/debug/app-gplay-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
         if: ${{ matrix.variant == 'debug' && github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
-        uses: NejcZdovc/comment-pr@v2
+        uses: NejcZdovc/comment-pr@a423635d183a8259308e80593c96fecf31539c26 # v2.1.0
         with:
           message: |
             :iphone: Scan the QR code below to install the build (arm64 only) for this PR.
