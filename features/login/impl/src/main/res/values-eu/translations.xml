@@ -10,7 +10,6 @@
   <string name="screen_change_account_provider_other">"Beste bat"</string>
   <string name="screen_change_account_provider_subtitle">"Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat."</string>
   <string name="screen_change_account_provider_title">"Aldatu kontu-hornitzailea"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Zerbitzari hau ez da gaur-gaurkoz sliding sync-ekin bateragarria."</string>
   <string name="screen_change_server_form_header">"Zerbitzariaren URLa"</string>
   <string name="screen_change_server_subtitle">"Zein da zure zerbitzariaren helbidea?"</string>
   <string name="screen_change_server_title">"Hautatu zure zerbitzaria"</string>
