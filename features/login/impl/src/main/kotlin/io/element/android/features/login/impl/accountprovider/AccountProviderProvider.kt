@@ -10,7 +10,10 @@ package io.element.android.features.login.impl.accountprovider
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
-    private val longAccountProvider = AccountProvider(url = "https://default-title.for.public-server.at.really-long-url.with.many.subdomains.co.uk", isPublic = true)
+    private val longAccountProvider = AccountProvider(
+        url = "https://default-title.for.public-server.at.really-long-url.with.many.subdomains.co.uk",
+        isPublic = true
+    )
     override val values: Sequence<AccountProvider>
         get() = sequenceOf(
             anAccountProvider(),
