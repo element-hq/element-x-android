@@ -52,7 +52,7 @@ class DefaultReportRoom @Inject constructor(
             room
                 .leave()
                 .onFailure {
-                    ReportRoom.Exception.LeftRoomFailed
+                    return Result.failure(ReportRoom.Exception.LeftRoomFailed)
                 }
         }
         return Result.success(Unit)

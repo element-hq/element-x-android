@@ -18,10 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -106,4 +109,18 @@ private fun BottomSheetContent(
             onClick = onCancelClick
         )
     }
+}
+
+// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
+// see: https://issuetracker.google.com/issues/283843380
+// Remove this preview when the issue is fixed.
+@PreviewsDayNight
+@Composable
+internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
+    BottomSheetContent(
+        roomName = "Room name",
+        onCancelClick = {},
+        onDeclineClick = {},
+        onDeclineAndBlockClick = {},
+    )
 }
