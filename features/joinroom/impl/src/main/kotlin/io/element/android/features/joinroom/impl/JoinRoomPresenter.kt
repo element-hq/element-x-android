@@ -108,12 +108,12 @@ class JoinRoomPresenter @AssistedInject constructor(
             when {
                 isDismissingContent -> value = ContentState.Dismissing
                 roomInfo.isPresent -> {
+                    val notJoinedRoom = matrixClient.getRoomPreview(roomIdOrAlias, serverNames).getOrNull()
                     val (sender, reason) = when (roomInfo.get().currentUserMembership) {
                         CurrentUserMembership.BANNED -> {
                             // Workaround to get info about the sender for banned rooms
                             // TODO re-do this once we have a better API in the SDK
-                            val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
-                            val membershipDetails = preview.getOrNull()?.membershipDetails()?.getOrNull()
+                            val membershipDetails = notJoinedRoom?.membershipDetails()?.getOrNull()
                             membershipDetails?.senderMember to membershipDetails?.currentUserMember?.membershipChangeReason
                         }
                         CurrentUserMembership.INVITED -> {
@@ -121,8 +121,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                         }
                         else -> null to null
                     }
-                    val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
-                    val joinedMembersCountOverride = preview.getOrNull()?.previewInfo?.numberOfJoinedMembers
+                    val joinedMembersCountOverride = notJoinedRoom?.previewInfo?.numberOfJoinedMembers
                     value = roomInfo.get().toContentState(
                         membershipSender = sender,
                         joinedMembersCountOverride = joinedMembersCountOverride,
