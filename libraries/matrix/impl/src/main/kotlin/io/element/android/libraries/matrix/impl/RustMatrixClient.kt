@@ -267,17 +267,12 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoom(roomId: RoomId): BaseRoom? {
-        return roomFactory.getBaseRoom(roomId)
+    override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {
+        roomFactory.getBaseRoom(roomId)
     }
 
-    override suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
-        return try {
-            (roomFactory.getJoinedRoomOrPreview(roomId) as GetRoomResult.Joined).joinedRoom
-        } catch (e: ClassCastException) {
-            Timber.e(e, "Room $roomId is not a joined room")
-            null
-        }
+    override suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? = withContext(sessionDispatcher) {
+        (roomFactory.getJoinedRoomOrPreview(roomId) as? GetRoomResult.Joined)?.joinedRoom
     }
 
     /**
