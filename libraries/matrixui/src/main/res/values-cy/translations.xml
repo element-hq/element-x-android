@@ -3,4 +3,5 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Anfon gwahoddiad"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Hoffech chi ddechrau sgwrs gyda %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Anfon gwahoddiad?"</string>
+  <string name="screen_invites_invited_you">"Mae %1$s (%2$s) wedi eich gwahodd"</string>
 </resources>

@@ -57,6 +57,7 @@
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="other">"找到 %1$d 個推播提供者：%2$s"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"該應用程式支援以下功能：%1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"偵測推播提供者"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"檢查應用程式是否可以顯示通知。"</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"尚未點選通知。"</string>

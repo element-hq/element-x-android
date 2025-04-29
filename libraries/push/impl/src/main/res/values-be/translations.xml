@@ -16,7 +16,7 @@
     <item quantity="many">"%d апавяшчэнняў"</item>
   </plurals>
   <string name="notification_fallback_content">"Апавяшчэнне"</string>
-  <string name="notification_incoming_call">"Уваходны званок"</string>
+  <string name="notification_incoming_call">"📹 Уваходны выклік"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
   <string name="notification_invitation_action_join">"Далучыцца"</string>
   <string name="notification_invitation_action_reject">"Адхіліць"</string>
@@ -40,6 +40,7 @@
   <string name="notification_room_invite_body">"Запрасіў(-ла) вас далучыцца да пакоя"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s запрасіў(-ла) вас далучыцца да пакоя"</string>
   <string name="notification_sender_me">"Я"</string>
+  <string name="notification_sender_mention_reply">"%1$s згадаў ці адказаў"</string>
   <string name="notification_test_push_notification_content">"Вы праглядаеце апавяшчэнне! Націсніце мяне!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

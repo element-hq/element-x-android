@@ -261,6 +261,7 @@ Raison : %1$s."</string>
   <string name="common_shared_location">"Position partagée"</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
+  <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>

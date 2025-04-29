@@ -6,4 +6,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Απόρριψη συνομιλίας"</string>
   <string name="screen_invites_empty_list">"Χωρίς προσκλήσεις"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) σέ προσκάλεσε"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ναι, απόρριψη και αποκλεισμός"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Είστε βέβαιοι ότι θέλετε να απορρίψετε την πρόσκληση συμμετοχής σε αυτό το δωμάτιο; Αυτό θα εμποδίσει επίσης το χρήστη %1$s να επικοινωνήσει μαζί σας ή να σας προσκαλέσει σε δωμάτια."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Απόρριψη πρόσκλησης και αποκλεισμός"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Απόρριψη και αποκλεισμός"</string>
 </resources>

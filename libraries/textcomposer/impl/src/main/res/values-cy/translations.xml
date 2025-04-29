@@ -24,4 +24,5 @@
   <string name="rich_text_editor_remove_link">"Dileu dolen"</string>
   <string name="rich_text_editor_unindent">"Dadmewnoli"</string>
   <string name="rich_text_editor_url_placeholder">"Dolen"</string>
+  <string name="screen_room_voice_message_tooltip">"Daliwch i recordio"</string>
 </resources>

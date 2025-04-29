@@ -8,7 +8,7 @@ jobs:
   triage-new-issues:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@main
+      - uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/orgs/element-hq/projects/91
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

@@ -261,6 +261,7 @@ Anledning:%1$s."</string>
   <string name="common_shared_location">"Delade plats"</string>
   <string name="common_signing_out">"Loggar ut"</string>
   <string name="common_something_went_wrong">"Något gick fel"</string>
+  <string name="common_something_went_wrong_message">"Vi stötte på ett problem. Vänligen försök igen."</string>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
