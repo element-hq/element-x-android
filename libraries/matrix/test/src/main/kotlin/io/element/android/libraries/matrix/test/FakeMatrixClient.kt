@@ -78,7 +78,7 @@ class FakeMatrixClient(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
     },
-    private val getNotJoinedRoomResult: (RoomIdOrAlias, List<String>) -> Result<NotJoinedRoom> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val getNotJoinedRoomResult: (RoomIdOrAlias, List<String>) -> Result<NotJoinedRoom> = { _, _ -> lambdaError() },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },

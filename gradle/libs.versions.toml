@@ -27,7 +27,7 @@ composecompiler = "1.5.15"
 coroutines = "1.10.2"
 
 # Accompanist
-accompanist = "0.37.2"
+accompanist = "0.37.3"
 
 # Test
 test_core = "1.6.1"
@@ -165,7 +165,7 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.19.1"
+jsoup = "org.jsoup:jsoup:1.20.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.1.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
@@ -191,7 +191,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.3.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.14.1"
-sentry = "io.sentry:sentry-android:8.10.0"
+sentry = "io.sentry:sentry-android:8.11.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.28.0"
 

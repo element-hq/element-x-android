@@ -109,20 +109,25 @@ class JoinRoomPresenter @AssistedInject constructor(
             when {
                 isDismissingContent -> value = ContentState.Dismissing
                 roomInfo.isPresent -> {
+                    val notJoinedRoom = matrixClient.getRoomPreview(roomIdOrAlias, serverNames).getOrNull()
                     val (sender, reason) = when (roomInfo.get().currentUserMembership) {
                         CurrentUserMembership.BANNED -> {
                             // Workaround to get info about the sender for banned rooms
                             // TODO re-do this once we have a better API in the SDK
-                            val preview = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
-                            val membershipDetalis = preview.getOrNull()?.membershipDetails()?.getOrNull()
-                            membershipDetalis?.senderMember to membershipDetalis?.currentUserMember?.membershipChangeReason
+                            val membershipDetails = notJoinedRoom?.membershipDetails()?.getOrNull()
+                            membershipDetails?.senderMember to membershipDetails?.currentUserMember?.membershipChangeReason
                         }
                         CurrentUserMembership.INVITED -> {
                             roomInfo.get().inviter to null
                         }
                         else -> null to null
                     }
-                    value = roomInfo.get().toContentState(sender, reason)
+                    val joinedMembersCountOverride = notJoinedRoom?.previewInfo?.numberOfJoinedMembers
+                    value = roomInfo.get().toContentState(
+                        membershipSender = sender,
+                        joinedMembersCountOverride = joinedMembersCountOverride,
+                        reason = reason,
+                    )
                 }
                 roomDescription.isPresent -> {
                     value = roomDescription.get().toContentState()
@@ -301,13 +306,17 @@ internal fun RoomDescription.toContentState(): ContentState {
 }
 
 @VisibleForTesting
-internal fun RoomInfo.toContentState(membershipSender: RoomMember?, reason: String?): ContentState {
+internal fun RoomInfo.toContentState(
+    membershipSender: RoomMember?,
+    joinedMembersCountOverride: Long?,
+    reason: String?,
+): ContentState {
     return ContentState.Loaded(
         roomId = id,
         name = name,
         topic = topic,
         alias = canonicalAlias,
-        numberOfMembers = joinedMembersCount,
+        numberOfMembers = joinedMembersCountOverride ?: joinedMembersCount,
         isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
