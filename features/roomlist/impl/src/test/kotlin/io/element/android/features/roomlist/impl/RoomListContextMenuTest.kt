@@ -31,6 +31,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
                 onReportRoomClick = EnsureNeverCalledWithParam(),
@@ -52,6 +53,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
                 onReportRoomClick = EnsureNeverCalledWithParam(),
@@ -73,6 +75,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
                 onReportRoomClick = EnsureNeverCalledWithParam(),
@@ -95,6 +98,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = true,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
                 onReportRoomClick = callback,
@@ -113,6 +117,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = callback,
                 onReportRoomClick = EnsureNeverCalledWithParam(),
@@ -131,6 +136,7 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = callback,
                 onReportRoomClick = EnsureNeverCalledWithParam(),

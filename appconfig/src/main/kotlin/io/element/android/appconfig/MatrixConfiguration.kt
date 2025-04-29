@@ -12,5 +12,5 @@ object MatrixConfiguration {
     val clientPermalinkBaseUrl: String? = null
 
     // TODO remove this when report is fixed
-    const val CAN_REPORT_ROOM = true
+    const val CAN_REPORT_ROOM = false
 }

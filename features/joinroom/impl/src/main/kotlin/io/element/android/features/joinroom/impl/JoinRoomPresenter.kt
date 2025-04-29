@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -206,6 +207,7 @@ class JoinRoomPresenter @AssistedInject constructor(
             applicationName = buildMeta.applicationName,
             knockMessage = knockMessage,
             hideInviteAvatars = hideInviteAvatars,
+            canReportRoom = MatrixConfiguration.CAN_REPORT_ROOM,
             eventSink = ::handleEvents
         )
     }

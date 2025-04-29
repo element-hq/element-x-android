@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -35,6 +34,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
+    canReportRoom: Boolean,
     eventSink: (RoomListEvents.ContextMenuEvents) -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit
@@ -44,6 +44,7 @@ fun RoomListContextMenu(
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
+            canReportRoom = canReportRoom,
             onRoomMarkReadClick = {
                 eventSink(RoomListEvents.HideContextMenu)
                 eventSink(RoomListEvents.MarkAsRead(contextMenu.roomId))
@@ -78,6 +79,7 @@ fun RoomListContextMenu(
 @Composable
 private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
+    canReportRoom: Boolean,
     onRoomSettingsClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
@@ -164,7 +166,7 @@ private fun RoomListModalBottomSheetContent(
             ),
             style = ListItemStyle.Primary,
         )
-        if (MatrixConfiguration.CAN_REPORT_ROOM) {
+        if (canReportRoom) {
             ListItem(
                 headlineContent = {
                     Text(text = stringResource(CommonStrings.action_report_room))
@@ -216,6 +218,7 @@ internal fun RoomListModalBottomSheetContentPreview(
 ) = ElementPreview {
     RoomListModalBottomSheetContent(
         contextMenu = contextMenu,
+        canReportRoom = true,
         onRoomMarkReadClick = {},
         onRoomMarkUnreadClick = {},
         onRoomSettingsClick = {},

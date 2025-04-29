@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
@@ -257,6 +256,7 @@ fun RoomDetailsView(
             }
 
             OtherActionsSection(
+                canReportRoom = state.canReportRoom,
                 onReportRoomClick = onReportRoomClick,
                 onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
             )
@@ -672,11 +672,12 @@ private fun MediaGalleryItem(
 
 @Composable
 private fun OtherActionsSection(
+    canReportRoom: Boolean,
     onReportRoomClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
 ) {
     PreferenceCategory(showTopDivider = true) {
-        if (MatrixConfiguration.CAN_REPORT_ROOM) {
+        if (canReportRoom) {
             ListItem(
                 headlineContent = {
                     Text(stringResource(CommonStrings.action_report_room))

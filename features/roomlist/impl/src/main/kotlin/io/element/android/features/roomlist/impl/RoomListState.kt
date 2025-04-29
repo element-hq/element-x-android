@@ -37,6 +37,7 @@ data class RoomListState(
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val directLogoutState: DirectLogoutState,
     val hideInvitesAvatars: Boolean,
+    val canReportRoom: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms

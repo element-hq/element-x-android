@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -35,6 +34,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListDeclineInviteMenu(
     menu: RoomListState.DeclineInviteMenu.Shown,
+    canReportRoom: Boolean,
     onDeclineAndBlockClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
 ) {
@@ -49,7 +49,7 @@ fun RoomListDeclineInviteMenu(
             },
             onDeclineAndBlockClick = {
                 eventSink(RoomListEvents.HideDeclineInviteMenu)
-                if (MatrixConfiguration.CAN_REPORT_ROOM) {
+                if (canReportRoom) {
                     onDeclineAndBlockClick(menu.roomSummary)
                 } else {
                     eventSink(RoomListEvents.DeclineInvite(menu.roomSummary, true))

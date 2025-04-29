@@ -181,6 +181,7 @@ fun aJoinRoomState(
     cancelKnockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     knockMessage: String = "",
     hideInviteAvatars: Boolean = false,
+    canReportRoom: Boolean = true,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     roomIdOrAlias = roomIdOrAlias,
@@ -193,6 +194,7 @@ fun aJoinRoomState(
     applicationName = "AppName",
     knockMessage = knockMessage,
     hideInviteAvatars = hideInviteAvatars,
+    canReportRoom = canReportRoom,
     eventSink = eventSink
 )
 

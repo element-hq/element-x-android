@@ -10,7 +10,6 @@ package io.element.android.features.roomlist.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
@@ -32,6 +31,7 @@ class RoomListDeclineInviteMenuTest {
         rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
+                canReportRoom = false,
                 onDeclineAndBlockClick = EnsureNeverCalledWithParam(),
                 eventSink = eventsRecorder,
             )
@@ -46,31 +46,39 @@ class RoomListDeclineInviteMenuTest {
     }
 
     @Test
-    fun `clicking on decline and block emits the expected Events`() {
+    fun `clicking on decline and block when canReportRoom=true, it emits the expected Events and callback`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
         rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
-                onDeclineAndBlockClick = if (MatrixConfiguration.CAN_REPORT_ROOM) {
-                    EnsureCalledOnceWithParam(menu.roomSummary, Unit)
-                } else {
-                    EnsureNeverCalledWithParam()
-                },
+                canReportRoom = true,
+                onDeclineAndBlockClick = EnsureCalledOnceWithParam(menu.roomSummary, Unit),
                 eventSink = eventsRecorder,
             )
         }
         rule.clickOn(CommonStrings.action_decline_and_block)
-        val expectedEvents = if (MatrixConfiguration.CAN_REPORT_ROOM) {
-            listOf(
-                RoomListEvents.HideDeclineInviteMenu,
-            )
-        } else {
-            listOf(
-                RoomListEvents.HideDeclineInviteMenu,
-                RoomListEvents.DeclineInvite(menu.roomSummary, blockUser = true),
+        val expectedEvents = listOf(RoomListEvents.HideDeclineInviteMenu)
+        eventsRecorder.assertList(expectedEvents)
+    }
+
+    @Test
+    fun `clicking on decline and block when canReportRoom=false, it emits the expected Events`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val menu = RoomListState.DeclineInviteMenu.Shown(roomSummary = aRoomListRoomSummary())
+        rule.setContent {
+            RoomListDeclineInviteMenu(
+                menu = menu,
+                canReportRoom = false,
+                onDeclineAndBlockClick = EnsureNeverCalledWithParam(),
+                eventSink = eventsRecorder,
             )
         }
+        rule.clickOn(CommonStrings.action_decline_and_block)
+        val expectedEvents = listOf(
+            RoomListEvents.HideDeclineInviteMenu,
+            RoomListEvents.DeclineInvite(menu.roomSummary, blockUser = true),
+        )
         eventsRecorder.assertList(expectedEvents)
     }
 
@@ -81,6 +89,7 @@ class RoomListDeclineInviteMenuTest {
         rule.setContent {
             RoomListDeclineInviteMenu(
                 menu = menu,
+                canReportRoom = false,
                 onDeclineAndBlockClick = EnsureNeverCalledWithParam(),
                 eventSink = eventsRecorder,
             )
