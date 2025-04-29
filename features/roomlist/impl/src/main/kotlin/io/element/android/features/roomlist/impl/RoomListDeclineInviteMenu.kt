@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.compound.theme.ElementTheme
@@ -42,7 +41,7 @@ fun RoomListDeclineInviteMenu(
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvents.HideDeclineInviteMenu) },
     ) {
-        BottomSheetContent(
+        RoomListDeclineInviteMenuContent(
             roomName = menu.roomSummary.name ?: menu.roomSummary.roomId.value,
             onDeclineClick = {
                 eventSink(RoomListEvents.HideDeclineInviteMenu)
@@ -64,7 +63,7 @@ fun RoomListDeclineInviteMenu(
 }
 
 @Composable
-private fun BottomSheetContent(
+private fun RoomListDeclineInviteMenuContent(
     roomName: String,
     onDeclineClick: () -> Unit,
     onDeclineAndBlockClick: () -> Unit,
@@ -116,8 +115,8 @@ private fun BottomSheetContent(
 // Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
-    BottomSheetContent(
+internal fun RoomListDeclineInviteMenuContentPreview() = ElementPreview {
+    RoomListDeclineInviteMenuContent(
         roomName = "Room name",
         onCancelClick = {},
         onDeclineClick = {},
