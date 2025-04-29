@@ -55,7 +55,6 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -64,7 +63,7 @@ import org.junit.Test
 import java.util.Optional
 
 @Suppress("LargeClass")
-class JoinBaseRoomPresenterTest {
+class JoinRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -85,7 +84,9 @@ class JoinBaseRoomPresenterTest {
     @Test
     fun `present - when room is joined then content state is filled with his data`() = runTest {
         val roomSummary = aRoomSummary()
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -94,7 +95,7 @@ class JoinBaseRoomPresenterTest {
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 val contentState = state.contentState as ContentState.Loaded
                 assertThat(contentState.roomId).isEqualTo(A_ROOM_ID)
@@ -111,7 +112,9 @@ class JoinBaseRoomPresenterTest {
     @Test
     fun `present - when room is invited then join authorization is equal to invited`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -123,7 +126,7 @@ class JoinBaseRoomPresenterTest {
         )
         assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(null))
             }
@@ -138,9 +141,12 @@ class JoinBaseRoomPresenterTest {
         val expectedInviteSender = inviter.toInviteSender()
         val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED,
+            joinedMembersCount = 5,
             inviter = inviter,
         )
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -149,9 +155,43 @@ class JoinBaseRoomPresenterTest {
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(expectedInviteSender))
+                assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(5)
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is invited read the number of member from the room preview`() = runTest {
+        val roomSummary = aRoomSummary(
+            currentUserMembership = CurrentUserMembership.INVITED,
+            // It seems that the SDK does not provide this value.
+            joinedMembersCount = 0,
+        )
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            numberOfJoinedMembers = 10,
+                        )
+                    )
+                )
+            },
+        ).apply {
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat((state.contentState as ContentState.Loaded).numberOfMembers).isEqualTo(10)
             }
         }
     }
@@ -197,7 +237,11 @@ class JoinBaseRoomPresenterTest {
         val joinRoomLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
         val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
             trigger = aTrigger,
             serverNames = A_SERVER_LIST,
             joinRoomLambda = joinRoomLambda,
@@ -221,7 +265,11 @@ class JoinBaseRoomPresenterTest {
 
     @Test
     fun `present - when room is joined with error, it is possible to clear the error`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
         val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
             joinRoomLambda = { _, _, _ ->
                 Result.failure(AN_EXCEPTION)
             },
@@ -268,7 +316,6 @@ class JoinBaseRoomPresenterTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - when room is banned, then join authorization is equal to IsBanned`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.BANNED, joinRule = JoinRule.Public)
@@ -317,7 +364,9 @@ class JoinBaseRoomPresenterTest {
     @Test
     fun `present - when room is left and public then join authorization is equal to canJoin`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, joinRule = JoinRule.Public)
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -326,7 +375,7 @@ class JoinBaseRoomPresenterTest {
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.CanJoin)
             }
@@ -336,7 +385,9 @@ class JoinBaseRoomPresenterTest {
     @Test
     fun `present - when room is left and join rule null then join authorization is equal to Unknown`() = runTest {
         val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, joinRule = null)
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        ).apply {
             getRoomSummaryFlowLambda = { _ ->
                 flowOf(Optional.of(roomSummary))
             }
@@ -345,7 +396,7 @@ class JoinBaseRoomPresenterTest {
             matrixClient = matrixClient
         )
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
             }
@@ -439,7 +490,13 @@ class JoinBaseRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to knock room $roomIdOrAlias"))
         }
         val fakeKnockRoom = FakeKnockRoom(knockRoomSuccess)
-        val presenter = createJoinRoomPresenter(knockRoom = fakeKnockRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            knockRoom = fakeKnockRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
@@ -478,7 +535,13 @@ class JoinBaseRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to knock room $roomId"))
         }
         val cancelKnockRoom = FakeCancelKnockRoom(cancelKnockRoomSuccess)
-        val presenter = createJoinRoomPresenter(cancelKnockRoom = cancelKnockRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            cancelKnockRoom = cancelKnockRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
@@ -516,7 +579,13 @@ class JoinBaseRoomPresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to forget room"))
         }
         val fakeForgetRoom = FakeForgetRoom(forgetRoomSuccess)
-        val presenter = createJoinRoomPresenter(forgetRoom = fakeForgetRoom)
+        val matrixClient = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ -> Result.failure(AN_EXCEPTION) },
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient,
+            forgetRoom = fakeForgetRoom,
+        )
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
