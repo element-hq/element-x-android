@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.invite.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -64,7 +65,7 @@ fun DeclineAndBlockView(
             TopAppBar(
                 title = {
                     Text(
-                        stringResource(CommonStrings.screen_decline_and_block_title),
+                        stringResource(R.string.screen_decline_and_block_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -87,10 +88,10 @@ fun DeclineAndBlockView(
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
                 headlineContent = {
-                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_title))
+                    Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_title))
                 },
                 supportingContent = {
-                    Text(text = stringResource(CommonStrings.screen_decline_and_block_block_user_option_description))
+                    Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_description))
                 },
                 onClick = {
                     state.eventSink(DeclineAndBlockEvents.ToggleBlockUser)
@@ -105,7 +106,7 @@ fun DeclineAndBlockView(
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 supportingContent = {
-                    Text(text = stringResource(CommonStrings.screen_decline_and_block_report_user_option_description))
+                    Text(text = stringResource(R.string.screen_decline_and_block_report_user_option_description))
                 },
                 onClick = {
                     state.eventSink(DeclineAndBlockEvents.ToggleReportRoom)
@@ -118,7 +119,7 @@ fun DeclineAndBlockView(
                 TextField(
                     value = state.reportReason,
                     onValueChange = { state.eventSink(DeclineAndBlockEvents.UpdateReportReason(it)) },
-                    placeholder = stringResource(CommonStrings.screen_decline_and_block_report_user_reason_placeholder),
+                    placeholder = stringResource(R.string.screen_decline_and_block_report_user_reason_placeholder),
                     minLines = 3,
                     enabled = !isDeclining,
                     modifier = Modifier

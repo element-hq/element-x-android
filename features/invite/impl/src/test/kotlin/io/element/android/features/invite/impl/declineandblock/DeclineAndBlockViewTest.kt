@@ -13,6 +13,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.invite.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -78,7 +79,7 @@ class DeclineAndBlockViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.screen_decline_and_block_block_user_option_title)
+        rule.clickOn(R.string.screen_decline_and_block_block_user_option_title)
         eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleBlockUser)
     }
 

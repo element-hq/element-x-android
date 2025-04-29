@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Zablokovat uživatele"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Nahlaste tuto místnost svému poskytovateli účtu."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Popište důvod nahlášení…"</string>
+  <string name="screen_decline_and_block_title">"Odmítnout a zablokovat"</string>
   <string name="screen_invites_decline_chat_message">"Opravdu chcete odmítnout pozvánku do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odmítnout pozvání"</string>
   <string name="screen_invites_decline_direct_chat_message">"Opravdu chcete odmítnout tuto soukromou konverzaci s %1$s?"</string>

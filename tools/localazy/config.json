@@ -57,7 +57,8 @@
       "name" : ":features:invite:impl",
       "includeRegex" : [
         "screen_invites_.*",
-        "screen\\.join_room\\.decline_and_block_.*"
+        "screen\\.join_room\\.decline_and_block_.*",
+        "screen\\.decline_and_block\\..*"
       ]
     },
     {

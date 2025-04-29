@@ -351,11 +351,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Poista huoneesta"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Poistetaanko jäsen huoneesta ja kielletäänkö heitä liittymästä tulevaisuudessa?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Poistetaan käyttäjää %1$s huoneesta…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Et tule näkemään viestejä tai kutsuja tältä käyttäjältä"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Estä käyttäjä"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"Ilmoita tästä huoneesta palveluntarjoajallesi."</string>
-  <string name="screen_decline_and_block_report_user_reason_placeholder">"Kerro syy ilmoittamiseen…"</string>
-  <string name="screen_decline_and_block_title">"Hylkää ja estä"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Median käsittely epäonnistui, yritä uudelleen."</string>
@@ -367,11 +362,6 @@ Haluatko varmasti jatkaa?"</string>
     <item quantity="other">"%1$d kiinnitettyä viestiä"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Kiinnitetyt viestit"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"Ilmoituksesi lähetettiin onnistuneesti, mutta kohtasimme ongelman yrittäessämme poistua huoneesta. Yritä uudelleen."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Huoneesta poistuminen epäonnistui"</string>
-  <string name="screen_report_room_reason_footer">"Ilmoita tästä huoneesta palvelimesi ylläpitäjälle. Jos viestit on salattu, ylläpitäjäsi ei voi lukea niitä."</string>
-  <string name="screen_report_room_reason_placeholder">"Kuvaile syytä…"</string>
-  <string name="screen_report_room_title">"Ilmoita huoneesta"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Olet siirtymässä %1$s -tilillesi nollaamaan identiteettisi. Tämän jälkeen sinut ohjataan takaisin sovellukseen."</string>
   <string name="screen_reset_identity_confirmation_title">"Etkö voi vahvistaa? Siirry tilillesi ja nollaa identiteettisi."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Peruuta vahvistus ja lähetä"</string>

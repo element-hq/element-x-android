@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultReportRoomTest {
-
     private val roomId = A_ROOM_ID
     private val successLeaveRoomLambda = lambdaRecorder<Result<Unit>> { -> Result.success(Unit) }
     private val successReportRoomLambda =
@@ -148,5 +147,4 @@ class DefaultReportRoomTest {
         assert(successLeaveRoomLambda).isNeverCalled()
         assert(failureReportRoomLambda).isCalledOnce()
     }
-
 }

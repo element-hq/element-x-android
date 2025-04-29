@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Δε θα δείτε μηνύματα ή προσκλήσεις δωματίου από αυτόν τον χρήστη"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Αποκλεισμός χρήστη"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Αναφέρετε αυτό το δωμάτιο στον πάροχο του λογαριασμού σας."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Περιγράψτε τον λόγο αναφοράς…"</string>
+  <string name="screen_decline_and_block_title">"Απόρριψη και αποκλεισμός"</string>
   <string name="screen_invites_decline_chat_message">"Σίγουρα θες να απορρίψεις την πρόσκληση συμμετοχής στο %1$s;"</string>
   <string name="screen_invites_decline_chat_title">"Απόρριψη πρόσκλησης"</string>
   <string name="screen_invites_decline_direct_chat_message">"Σίγουρα θες να απορρίψεις την ιδιωτική συνομιλία με τον χρήστη %1$s;"</string>

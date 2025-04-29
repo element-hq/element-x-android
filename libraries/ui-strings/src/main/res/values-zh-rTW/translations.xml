@@ -345,10 +345,6 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"踢出聊天室"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"移除成員並禁止未來再度加入？"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"正在踢出 %1$s…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"您將不會看到來自此使用者的任何訊息或聊天室邀請"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"封鎖使用者"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"向您的帳號提供者回報此聊天室。"</string>
-  <string name="screen_decline_and_block_title">"拒絕並封鎖"</string>
   <string name="screen_media_picker_error_failed_selection">"選取媒體失敗，請再試一次。"</string>
   <string name="screen_media_upload_preview_caption_warning">"使用舊應用程式的使用者可能看不到標題。"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"無法處理要上傳的媒體，請再試一次。"</string>
@@ -359,10 +355,6 @@
     <item quantity="other">"%1$d 則釘選的訊息"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"釘選訊息"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"您的回報已成功遞交，但我們嘗試離開聊天室時遇到了問題。請再試一次。"</string>
-  <string name="screen_report_room_leave_failed_alert_title">"無法離開聊天室"</string>
-  <string name="screen_report_room_reason_footer">"將此聊天室回報給您的管理員。若訊息已加密，您的管理員將無法讀取它們。"</string>
-  <string name="screen_report_room_title">"回報聊天室"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"您將要前往您的 %1$s 帳號重設身份。然後您將會被帶回應用程式。"</string>
   <string name="screen_reset_identity_confirmation_title">"無法確認？前往您的帳號以重設您的身份。"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回驗證並傳送"</string>
