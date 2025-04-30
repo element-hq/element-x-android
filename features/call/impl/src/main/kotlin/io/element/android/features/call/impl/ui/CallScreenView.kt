@@ -269,6 +269,30 @@ private fun OutputAudioDeviceSelector() {
                         audioManager?.setCommunicationDevice(device)
                         selected = device
                         expanded = false
+                    } else {
+                        when (device.type) {
+                            AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> {
+                                audioManager?.isSpeakerphoneOn = true
+                                selected = device
+                            }
+                            AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> {
+                                audioManager?.isSpeakerphoneOn = false
+                                selected = device
+                            }
+                            AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> {
+                                audioManager?.isBluetoothScoOn = true
+                                selected = device
+                            }
+                            AudioDeviceInfo.TYPE_WIRED_HEADSET, AudioDeviceInfo.TYPE_WIRED_HEADPHONES, AudioDeviceInfo.TYPE_USB_HEADSET -> {
+                                Timber.d("Audio device selected but it's not compatible, type: ${device.type}")
+                                // TODO use MediaRouter maybe?
+
+                            }
+                            else -> {
+                                Timber.d("Audio device selected but it's not compatible, type: ${device.type}")
+                            }
+                        }
+                        expanded = false
                     }
                 })
             }
