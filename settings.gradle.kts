@@ -25,6 +25,7 @@ dependencyResolutionManagement {
                 includeModule("org.matrix.rustcomponents", "sdk-android")
                 includeModule("io.element.android", "wysiwyg")
                 includeModule("io.element.android", "wysiwyg-compose")
+                includeModule("io.element.android", "element-call-embedded")
             }
         }
         // To have immediate access to Rust SDK versions without a sync with Maven Central
@@ -32,6 +33,7 @@ dependencyResolutionManagement {
             url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
             content {
                 includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeModule("io.element.android", "element-call-embedded")
             }
         }
         google()
