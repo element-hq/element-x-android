@@ -8,10 +8,12 @@
 package io.element.android.libraries.mediaviewer.impl.details
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -101,13 +103,15 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     onDismiss: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
-        MediaDetailsBottomSheet(
-            state = state,
-            onViewInTimeline = onViewInTimeline,
-            onShare = onShare,
-            onDownload = onDownload,
-            onDelete = onDelete,
-            onDismiss = onDismiss,
-        )
+        CompositionLocalProvider(LocalUiTestMode provides true) {
+            MediaDetailsBottomSheet(
+                state = state,
+                onViewInTimeline = onViewInTimeline,
+                onShare = onShare,
+                onDownload = onDownload,
+                onDelete = onDelete,
+                onDismiss = onDismiss,
+            )
+        }
     }
 }
