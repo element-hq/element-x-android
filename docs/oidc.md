@@ -11,7 +11,7 @@ Server list: https://github.com/element-hq/oidc-playground
 Metadata iOS: (from https://github.com/element-hq/element-x-ios/blob/5f9d07377cebc4f21d9668b1a25f6e3bb22f64a1/ElementX/Sources/Services/Authentication/AuthenticationServiceProxy.swift#L28)
 
 clientName: InfoPlistReader.main.bundleDisplayName,
-redirectUri: "io.element:/callback",
+redirectUri: "io.element.android:/",
 clientUri: "https://element.io",
 tosUri: "https://element.io/user-terms-of-service",
 policyUri: "https://element.io/privacy"
@@ -19,7 +19,7 @@ policyUri: "https://element.io/privacy"
 
 Android:
 clientName = "Element",
-redirectUri = "io.element:/callback",
+redirectUri = "io.element.android:/",
 clientUri = "https://element.io",
 tosUri = "https://element.io/user-terms-of-service",
 policyUri = "https://element.io/privacy"
