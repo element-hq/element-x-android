@@ -29,14 +29,20 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
  */
 
 private const val versionYear = 25
-private const val versionMonth = 4
+private const val versionMonth = 5
 
 // Note: must be in [0,99]
-private const val versionReleaseNumber = 3
+private const val versionReleaseNumber = 0
+
+private val versionReleaseSuffix: String? = "test-element-call"
 
 object Versions {
     const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
-    val VERSION_NAME = "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber"
+    val VERSION_NAME = if (!versionReleaseSuffix.isNullOrBlank()) {
+        "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber-$versionReleaseSuffix"
+    } else {
+        "$versionYear.${versionMonth.toString().padStart(2, '0')}.$versionReleaseNumber"
+    }
 
     const val COMPILE_SDK = 35
     const val TARGET_SDK = 35
