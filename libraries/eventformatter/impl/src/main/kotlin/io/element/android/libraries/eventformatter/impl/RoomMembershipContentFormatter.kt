@@ -26,6 +26,7 @@ class RoomMembershipContentFormatter @Inject constructor(
         val userId = membershipContent.userId
         val memberIsYou = matrixClient.isMe(userId)
         val userDisplayNameOrId = membershipContent.userDisplayName ?: userId.value
+        val reason = membershipContent.reason?.takeIf { it.isNotBlank() }
         return when (membershipContent.change) {
             MembershipChange.JOINED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_join_by_you)
@@ -38,9 +39,17 @@ class RoomMembershipContentFormatter @Inject constructor(
                 sp.getString(R.string.state_event_room_leave, senderDisambiguatedDisplayName)
             }
             MembershipChange.BANNED, MembershipChange.KICKED_AND_BANNED -> if (senderIsYou) {
-                sp.getString(R.string.state_event_room_ban_by_you, userDisplayNameOrId)
+                if (reason != null) {
+                    sp.getString(R.string.state_event_room_ban_by_you_with_reason, userDisplayNameOrId, reason)
+                } else {
+                    sp.getString(R.string.state_event_room_ban_by_you, userDisplayNameOrId)
+                }
             } else {
-                sp.getString(R.string.state_event_room_ban, senderDisambiguatedDisplayName, userDisplayNameOrId)
+                if (reason != null) {
+                    sp.getString(R.string.state_event_room_ban_with_reason, senderDisambiguatedDisplayName, userDisplayNameOrId, reason)
+                } else {
+                    sp.getString(R.string.state_event_room_ban, senderDisambiguatedDisplayName, userDisplayNameOrId)
+                }
             }
             MembershipChange.UNBANNED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_unban_by_you, userDisplayNameOrId)
@@ -48,9 +57,17 @@ class RoomMembershipContentFormatter @Inject constructor(
                 sp.getString(R.string.state_event_room_unban, senderDisambiguatedDisplayName, userDisplayNameOrId)
             }
             MembershipChange.KICKED -> if (senderIsYou) {
-                sp.getString(R.string.state_event_room_remove_by_you, userDisplayNameOrId)
+                if (reason != null) {
+                    sp.getString(R.string.state_event_room_remove_by_you_with_reason, userDisplayNameOrId, reason)
+                } else {
+                    sp.getString(R.string.state_event_room_remove_by_you, userDisplayNameOrId)
+                }
             } else {
-                sp.getString(R.string.state_event_room_remove, senderDisambiguatedDisplayName, userDisplayNameOrId)
+                if (reason != null) {
+                    sp.getString(R.string.state_event_room_remove_with_reason, senderDisambiguatedDisplayName, userDisplayNameOrId, reason)
+                } else {
+                    sp.getString(R.string.state_event_room_remove, senderDisambiguatedDisplayName, userDisplayNameOrId)
+                }
             }
             MembershipChange.INVITED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_invite_by_you, userDisplayNameOrId)
