@@ -262,6 +262,10 @@ private fun OutputAudioDeviceSelector() {
                     Text(device.description())
                 }, onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        // Workaround for Android 12, otherwise changing the audio device doesn't work
+                        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
+                            audioManager?.mode = AudioManager.MODE_NORMAL
+                        }
                         audioManager?.setCommunicationDevice(device)
                         selected = device
                         expanded = false
@@ -316,7 +320,9 @@ fun AudioDeviceInfo.description(): String {
 private fun Context.setupAudioConfiguration(): AudioDeviceCallback? {
     val audioManager = getSystemService<AudioManager>() ?: return null
     // Set 'voice call' mode so volume keys actually control the call volume
-    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+    }
     audioManager.enableExternalAudioDevice()
     return object : AudioDeviceCallback() {
         override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
