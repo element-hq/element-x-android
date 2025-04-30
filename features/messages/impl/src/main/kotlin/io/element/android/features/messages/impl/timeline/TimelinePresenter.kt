@@ -131,7 +131,7 @@ class TimelinePresenter @AssistedInject constructor(
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
                         }
-                        println("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
+                        Timber.d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
                         appScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
