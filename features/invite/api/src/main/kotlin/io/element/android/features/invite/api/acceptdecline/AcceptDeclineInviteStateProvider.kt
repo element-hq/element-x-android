@@ -19,14 +19,20 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
             anAcceptDeclineInviteState(
                 declineAction = ConfirmingDeclineInvite(
                     InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
-                    blockUser = false
+                    blockUser = false,
                 ),
             ),
             anAcceptDeclineInviteState(
-                acceptAction = AsyncAction.Failure(Throwable("Whoops")),
+                declineAction = ConfirmingDeclineInvite(
+                    InviteData(roomId = RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                    blockUser = true,
+                ),
             ),
             anAcceptDeclineInviteState(
-                declineAction = AsyncAction.Failure(Throwable("Whoops")),
+                acceptAction = AsyncAction.Failure(Throwable("Error while accepting invite")),
+            ),
+            anAcceptDeclineInviteState(
+                declineAction = AsyncAction.Failure(Throwable("Error while declining invite")),
             ),
         )
 }
