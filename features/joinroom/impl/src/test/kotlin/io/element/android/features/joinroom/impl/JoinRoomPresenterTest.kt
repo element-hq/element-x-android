@@ -9,6 +9,7 @@ package io.element.android.features.joinroom.impl
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -22,6 +23,8 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -47,6 +50,7 @@ import io.element.android.libraries.matrix.test.room.aRoomPreview
 import io.element.android.libraries.matrix.test.room.aRoomPreviewInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
+import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
@@ -615,7 +619,7 @@ class JoinRoomPresenterTest {
     }
 
     @Test
-    fun `present - when room is not known RoomPreview is loaded`() = runTest {
+    fun `present - when room is not known RoomPreview is loaded - membership null`() = runTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->
                 Result.success(
@@ -653,6 +657,193 @@ class JoinRoomPresenterTest {
                         roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is not known RoomPreview is loaded - membership INVITED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = "Room name",
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.INVITED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = "Room name",
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(
+                            inviteData = InviteData(
+                                roomId = A_ROOM_ID,
+                                roomName = "Room name",
+                                isDm = false,
+                            ),
+                            inviteSender = InviteSender(
+                                userId = A_USER_ID_2,
+                                displayName = "Bob",
+                                avatarData = AvatarData(
+                                    id = A_USER_ID_2.value,
+                                    name = "Bob",
+                                    size = AvatarSize.InviteSender,
+                                ),
+                                membershipChangeReason = null,
+                            ),
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is not known RoomPreview is loaded - membership BANNED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = null,
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.BANNED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = null,
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
+                            banSender = InviteSender(
+                                userId = A_USER_ID_2,
+                                displayName = "Bob",
+                                avatarData = AvatarData(
+                                    id = A_USER_ID_2.value,
+                                    name = "Bob",
+                                    size = AvatarSize.InviteSender,
+                                ),
+                                membershipChangeReason = null,
+                            ),
+                            reason = null,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is not known RoomPreview is loaded - membership KNOCKED`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            roomId = A_ROOM_ID,
+                            canonicalAlias = RoomAlias("#alias:matrix.org"),
+                            name = "Room name",
+                            topic = "Room topic",
+                            avatarUrl = "avatarUrl",
+                            numberOfJoinedMembers = 2,
+                            isSpace = false,
+                            isHistoryWorldReadable = false,
+                            joinRule = JoinRule.Public,
+                            currentUserMembership = CurrentUserMembership.KNOCKED,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(
+                                RoomMembershipDetails(
+                                    currentUserMember = aRoomMember(userId = A_USER_ID, displayName = "Alice"),
+                                    senderMember = aRoomMember(userId = A_USER_ID_2, displayName = "Bob"),
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Loaded(
+                        roomId = A_ROOM_ID,
+                        name = "Room name",
+                        topic = "Room topic",
+                        alias = RoomAlias("#alias:matrix.org"),
+                        numberOfMembers = 2,
+                        isDm = false,
+                        roomType = RoomType.Room,
+                        roomAvatarUrl = "avatarUrl",
+                        joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked
                     )
                 )
             }
