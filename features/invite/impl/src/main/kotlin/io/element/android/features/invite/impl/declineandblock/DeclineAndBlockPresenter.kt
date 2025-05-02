@@ -43,7 +43,7 @@ class DeclineAndBlockPresenter @AssistedInject constructor(
         var reportReason by rememberSaveable { mutableStateOf("") }
         var blockUser by rememberSaveable { mutableStateOf(true) }
         var reportRoom by rememberSaveable { mutableStateOf(false) }
-        var declineAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val declineAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val coroutineScope = rememberCoroutineScope()
 
