@@ -810,6 +810,31 @@ class JoinRoomPresenterTest {
     }
 
     @Test
+    fun `present - when room is not known RoomPreview is loaded with error - dismiss`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.failure(AN_EXCEPTION)
+            }
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(
+                    ContentState.Failure(error = AN_EXCEPTION)
+                )
+                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
+            }
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(ContentState.Dismissing)
+            }
+        }
+    }
+
+    @Test
     fun `present - when room is not known RoomPreview is loaded with error Forbidden`() = runTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->
