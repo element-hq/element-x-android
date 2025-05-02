@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.features.roomdirectory.api)
     implementation(projects.services.analytics.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.appconfig)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

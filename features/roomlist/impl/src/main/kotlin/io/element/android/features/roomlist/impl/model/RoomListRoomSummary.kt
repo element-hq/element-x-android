@@ -8,6 +8,7 @@
 package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -45,4 +46,10 @@ data class RoomListRoomSummary(
         numberOfUnreadMentions > 0 ||
         numberOfUnreadNotifications > 0 ||
         isMarkedUnread
+
+    fun toInviteData() = InviteData(
+        roomId = roomId,
+        roomName = name ?: roomId.value,
+        isDm = isDm,
+    )
 }

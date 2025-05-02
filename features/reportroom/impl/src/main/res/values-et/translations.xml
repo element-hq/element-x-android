@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Jututoast haldajale teatamine õnnestus, kuid jututost lahkumisel tekkis viga. Palun proovi uuesti lahkuda."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Pole võimalik lahkuda jututoast"</string>
+  <string name="screen_report_room_reason_footer">"Teata sellest jututoast süsteemi haldajale. Kui sõnumid on krüptitud, ei saa haldaja neid lugeda."</string>
+  <string name="screen_report_room_reason_placeholder">"Kirjelda põhjust…"</string>
+  <string name="screen_report_room_title">"Teata jututoast"</string>
+</resources>

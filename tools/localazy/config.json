@@ -57,7 +57,8 @@
       "name" : ":features:invite:impl",
       "includeRegex" : [
         "screen_invites_.*",
-        "screen\\.join_room\\.decline_and_block_.*"
+        "screen\\.join_room\\.decline_and_block_.*",
+        "screen\\.decline_and_block\\..*"
       ]
     },
     {
@@ -317,6 +318,12 @@
         "screen\\.knock_requests_list\\..*",
         "screen\\.room\\.single_knock_request.*",
         "screen\\.room\\.multiple_knock_requests.*"
+      ]
+    },
+    {
+      "name" : ":features:reportroom:impl",
+      "includeRegex" : [
+        "screen\\.report_room\\..*"
       ]
     }
   ]

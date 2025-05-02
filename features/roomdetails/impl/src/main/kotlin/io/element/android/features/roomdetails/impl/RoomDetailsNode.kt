@@ -53,6 +53,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openSecurityAndPrivacy()
         fun openDmUserProfile(userId: UserId)
         fun onJoinCall()
+        fun openReportRoom()
     }
 
     private val callbacks = plugins<Callback>()
@@ -132,6 +133,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openDmUserProfile(userId) }
     }
 
+    private fun onReportRoomClick() {
+        callbacks.forEach { it.openReportRoom() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -166,6 +171,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onKnockRequestsClick = ::openKnockRequestsLists,
             onSecurityAndPrivacyClick = ::openSecurityAndPrivacy,
             onProfileClick = ::onProfileClick,
+            onReportRoomClick = ::onReportRoomClick,
         )
     }
 }

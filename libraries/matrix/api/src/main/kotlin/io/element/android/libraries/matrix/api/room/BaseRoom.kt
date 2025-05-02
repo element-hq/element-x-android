@@ -223,6 +223,13 @@ interface BaseRoom : Closeable {
     suspend fun clearComposerDraft(): Result<Unit>
 
     /**
+     * Reports a room as inappropriate to the server.
+     * The caller is not required to be joined to the room to report it.
+     * @param reason - The reason the room is being reported.
+     */
+    suspend fun reportRoom(reason: String?): Result<Unit>
+
+    /**
      * Destroy the room and release all resources associated to it.
      */
     fun destroy()

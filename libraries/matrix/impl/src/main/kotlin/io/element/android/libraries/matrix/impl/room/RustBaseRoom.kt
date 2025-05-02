@@ -264,4 +264,11 @@ class RustBaseRoom(
             innerRoom.clearComposerDraft()
         }
     }
+
+    override suspend fun reportRoom(reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            Timber.d("reportRoom $roomId")
+            innerRoom.reportRoom(reason)
+        }
+    }
 }

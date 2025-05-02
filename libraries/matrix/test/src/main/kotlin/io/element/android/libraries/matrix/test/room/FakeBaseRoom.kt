@@ -64,6 +64,7 @@ class FakeBaseRoom(
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
     private val getRoomVisibilityResult: () -> Result<RoomVisibility> = { lambdaError() },
     private val forgetResult: () -> Result<Unit> = { lambdaError() },
+    private val reportRoomResult: (String?) -> Result<Unit> = { lambdaError() },
 ) : BaseRoom {
     private val _roomInfoFlow: MutableStateFlow<RoomInfo> = MutableStateFlow(initialRoomInfo)
     override val roomInfoFlow: StateFlow<RoomInfo> = _roomInfoFlow
@@ -206,6 +207,8 @@ class FakeBaseRoom(
     override suspend fun clearEventCacheStorage(): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
 }
 
 fun defaultRoomPowerLevels() = RoomPowerLevels(

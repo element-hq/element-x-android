@@ -351,11 +351,6 @@
   <string name="screen_bottom_sheet_manage_room_member_remove">"Αφαίρεση από το δωμάτιο"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Αφαίρεση %1$s…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Δε θα δείτε μηνύματα ή προσκλήσεις δωματίου από αυτόν τον χρήστη"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Αποκλεισμός χρήστη"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"Αναφέρετε αυτό το δωμάτιο στον πάροχο του λογαριασμού σας."</string>
-  <string name="screen_decline_and_block_report_user_reason_placeholder">"Περιγράψτε τον λόγο αναφοράς…"</string>
-  <string name="screen_decline_and_block_title">"Απόρριψη και αποκλεισμός"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
@@ -367,11 +362,6 @@
     <item quantity="other">"%1$d Καρφιτσωμένα μηνύματα"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Καρφιτσωμένα μηνύματα"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"Η αναφορά σας υποβλήθηκε με επιτυχία, αλλά αντιμετωπίσαμε πρόβλημα κατά την προσπάθεια αποχώρησης από το δωμάτιο. Παρακαλώ προσπαθήστε ξανά."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Δεν είναι δυνατή η αποχώρηση από το δωμάτιο"</string>
-  <string name="screen_report_room_reason_footer">"Αναφέρετε αυτό το δωμάτιο στον διαχειριστή σας. Εάν τα μηνύματα είναι κρυπτογραφημένα, ο διαχειριστής σας δε θα μπορεί να τα διαβάσει."</string>
-  <string name="screen_report_room_reason_placeholder">"Περιγράψτε τον λόγο αναφοράς…"</string>
-  <string name="screen_report_room_title">"Αναφορά δωματίου"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Πρόκειται να μεταβείς στον λογαριασμό σου %1$s για να επαναφέρεις την ταυτότητά σου. Στη συνέχεια, θα επιστρέψεις στην εφαρμογή."</string>
   <string name="screen_reset_identity_confirmation_title">"Δεν μπορείς να επιβεβαιώσεις; Πήγαινε στον λογαριασμό σου για να επαναφέρεις την ταυτότητά σου."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ανάκληση επαλήθευσης και αποστολή"</string>

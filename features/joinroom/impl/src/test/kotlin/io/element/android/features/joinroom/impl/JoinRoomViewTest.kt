@@ -11,13 +11,19 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.test.anInviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import org.junit.Rule
 import org.junit.Test
@@ -141,40 +147,61 @@ class JoinRoomViewTest {
     @Test
     fun `clicking on Accept when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val inviteData = anInviteData()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, null)),
                 eventSink = eventsRecorder,
             ),
         )
         rule.clickOn(CommonStrings.action_accept)
-        eventsRecorder.assertSingle(JoinRoomEvents.AcceptInvite)
+        eventsRecorder.assertSingle(JoinRoomEvents.AcceptInvite(inviteData))
     }
 
     @Test
     fun `clicking on Decline when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val inviteData = anInviteData()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, null)),
                 eventSink = eventsRecorder,
             ),
         )
         rule.clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(false))
+        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, false))
     }
 
     @Test
-    fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
-        rule.setJoinRoomView(
-            aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
-                eventSink = eventsRecorder,
-            ),
+    fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited and can report room, the expected callback is invoked`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        val inviteData = anInviteData()
+        val joinRoomState = aJoinRoomState(
+            contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, aRoomMember().toInviteSender())),
+            canReportRoom = true,
+            eventSink = eventsRecorder,
         )
-        rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(true))
+        ensureCalledOnceWithParam(inviteData) {
+            rule.setJoinRoomView(
+                state = joinRoomState,
+                onDeclineInviteAndBlockUser = it,
+            )
+            rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
+        }
+    }
+
+    @Test
+    fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited and cant report room, emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val inviteData = anInviteData()
+        val joinRoomState = aJoinRoomState(
+            contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, aRoomMember().toInviteSender())),
+            canReportRoom = false,
+            eventSink = eventsRecorder,
+        )
+            rule.setJoinRoomView(state = joinRoomState,)
+            rule.clickOn(R.string.screen_join_room_decline_and_block_button_title)
+            eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, true))
     }
 
     @Test
@@ -242,6 +269,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
     onKnockSuccess: () -> Unit = EnsureNeverCalled(),
     onCancelKnockSuccess: () -> Unit = EnsureNeverCalled(),
     onForgetSuccess: () -> Unit = EnsureNeverCalled(),
+    onDeclineInviteAndBlockUser: (InviteData) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         JoinRoomView(
@@ -251,6 +279,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
             onKnockSuccess = onKnockSuccess,
             onForgetSuccess = onForgetSuccess,
             onCancelKnockSuccess = onCancelKnockSuccess,
+            onDeclineInviteAndBlockUser = onDeclineInviteAndBlockUser,
         )
     }
 }

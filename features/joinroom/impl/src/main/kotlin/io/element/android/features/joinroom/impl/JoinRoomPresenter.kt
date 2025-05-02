@@ -23,10 +23,11 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
 import io.element.android.features.joinroom.impl.di.ForgetRoom
 import io.element.android.features.joinroom.impl.di.KnockRoom
@@ -170,16 +171,14 @@ class JoinRoomPresenter @AssistedInject constructor(
             when (event) {
                 JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
                 is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
-                JoinRoomEvents.AcceptInvite -> {
-                    val inviteData = contentState.toInviteData()
+                is JoinRoomEvents.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.AcceptInvite(inviteData)
+                        AcceptDeclineInviteEvents.AcceptInvite(event.inviteData)
                     )
                 }
                 is JoinRoomEvents.DeclineInvite -> {
-                    val inviteData = contentState.toInviteData()
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(invite = inviteData, blockUser = event.blockUser)
+                        AcceptDeclineInviteEvents.DeclineInvite(invite = event.inviteData, blockUser = event.blockUser, shouldConfirm = true)
                     )
                 }
                 is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
@@ -213,6 +212,7 @@ class JoinRoomPresenter @AssistedInject constructor(
             applicationName = buildMeta.applicationName,
             knockMessage = knockMessage,
             hideInviteAvatars = hideInviteAvatars,
+            canReportRoom = MatrixConfiguration.CAN_REPORT_ROOM,
             eventSink = ::handleEvents
         )
     }
@@ -273,7 +273,12 @@ private fun RoomPreviewInfo.toContentState(senderMember: RoomMember?, reason: St
         roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (membership) {
-            CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(senderMember?.toInviteSender())
+            CurrentUserMembership.INVITED -> {
+                JoinAuthorisationStatus.IsInvited(
+                    inviteData = toInviteData(),
+                    inviteSender = senderMember?.toInviteSender()
+                )
+            }
             CurrentUserMembership.BANNED -> JoinAuthorisationStatus.IsBanned(senderMember?.toInviteSender(), reason)
             CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
             else -> joinRule.toJoinAuthorisationStatus()
@@ -317,7 +322,8 @@ internal fun RoomInfo.toContentState(
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (currentUserMembership) {
             CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
-                inviteSender = membershipSender?.toInviteSender()
+                inviteData = toInviteData(),
+                inviteSender = membershipSender?.toInviteSender(),
             )
             CurrentUserMembership.BANNED -> JoinAuthorisationStatus.IsBanned(
                 banSender = membershipSender?.toInviteSender(),
@@ -338,25 +344,5 @@ private fun JoinRule?.toJoinAuthorisationStatus(): JoinAuthorisationStatus {
         is JoinRule.Restricted -> JoinAuthorisationStatus.Restricted
         JoinRule.Public -> JoinAuthorisationStatus.CanJoin
         else -> JoinAuthorisationStatus.Unknown
-    }
-}
-
-@VisibleForTesting
-internal fun ContentState.toInviteData(): InviteData? {
-    return when (this) {
-        is ContentState.Loaded -> {
-            if (joinAuthorisationStatus is JoinAuthorisationStatus.IsInvited && joinAuthorisationStatus.inviteSender != null) {
-                InviteData(
-                    roomId = roomId,
-                    // Note: name should not be null at this point, but use Id just in case...
-                    roomName = name ?: roomId.value,
-                    senderId = joinAuthorisationStatus.inviteSender.userId,
-                    isDm = isDm
-                )
-            } else {
-                null
-            }
-        }
-        else -> null
     }
 }

@@ -28,6 +28,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
+import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
@@ -71,6 +72,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val mediaGalleryEntryPoint: MediaGalleryEntryPoint,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val reportRoomEntryPoint: ReportRoomEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -127,6 +129,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class VerifyUser(val userId: UserId) : NavTarget
+
+        @Parcelize
+        data object ReportRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -188,6 +193,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
+                    }
+
+                    override fun openReportRoom() {
+                        backstack.push(NavTarget.ReportRoom)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -339,6 +348,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         }
                     })
                     .build()
+            }
+            is NavTarget.ReportRoom -> {
+                reportRoomEntryPoint.createNode(this, buildContext, room.roomId)
             }
         }
     }

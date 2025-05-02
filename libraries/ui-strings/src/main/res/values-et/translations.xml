@@ -351,11 +351,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Eemalda kasutaja jututoast"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Kas eemaldama kasutaja ja seame talle tulevikuks suhtluskeelu?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Eemaldame kasutajat %1$s…"</string>
-  <string name="screen_decline_and_block_block_user_option_description">"Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid"</string>
-  <string name="screen_decline_and_block_block_user_option_title">"Blokeeri kasutaja"</string>
-  <string name="screen_decline_and_block_report_user_option_description">"Teata sellest jututoast oma teenusepakkujale."</string>
-  <string name="screen_decline_and_block_report_user_reason_placeholder">"Kirjelda teatamise põhjust…"</string>
-  <string name="screen_decline_and_block_title">"Keeldu ja blokeeri"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
@@ -367,11 +362,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
     <item quantity="other">"%1$d esiletõstetud sõnumit"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
-  <string name="screen_report_room_leave_failed_alert_message">"Jututoast haldajale teatamine õnnestus, kuid jututost lahkumisel tekkis viga. Palun proovi uuesti lahkuda."</string>
-  <string name="screen_report_room_leave_failed_alert_title">"Pole võimalik lahkuda jututoast"</string>
-  <string name="screen_report_room_reason_footer">"Teata sellest jututoast süsteemi haldajale. Kui sõnumid on krüptitud, ei saa haldaja neid lugeda."</string>
-  <string name="screen_report_room_reason_placeholder">"Kirjelda põhjust…"</string>
-  <string name="screen_report_room_title">"Teata jututoast"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Oma võrguidentiteedi lähtestamiseks suuname sind %1$s kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde."</string>
   <string name="screen_reset_identity_confirmation_title">"Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>
