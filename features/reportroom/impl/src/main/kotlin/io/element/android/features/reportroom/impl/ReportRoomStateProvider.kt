@@ -11,13 +11,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 
 open class ReportRoomStateProvider : PreviewParameterProvider<ReportRoomState> {
+    companion object {
+        private const val A_REPORT_ROOM_REASON = "Inappropriate content"
+    }
+
     override val values: Sequence<ReportRoomState>
         get() = sequenceOf(
             aReportRoomState(),
-            aReportRoomState(reason = "Inappropriate content"),
+            aReportRoomState(reason = A_REPORT_ROOM_REASON),
             aReportRoomState(leaveRoom = true),
-            aReportRoomState(reportAction = AsyncAction.Loading),
-            aReportRoomState(reportAction = AsyncAction.Failure(Exception("Failed to report"))),
+            aReportRoomState(reason = A_REPORT_ROOM_REASON, reportAction = AsyncAction.Loading),
+            aReportRoomState(reason = A_REPORT_ROOM_REASON, reportAction = AsyncAction.Failure(Exception("Failed to report"))),
         )
 }
 
