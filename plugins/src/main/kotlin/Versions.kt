@@ -34,7 +34,7 @@ private const val versionMonth = 5
 // Note: must be in [0,99]
 private const val versionReleaseNumber = 0
 
-private val versionReleaseSuffix: String? = "test-element-call-2"
+private val versionReleaseSuffix: String? = "test-element-call-3"
 
 object Versions {
     const val VERSION_CODE = (2000 + versionYear) * 10_000 + versionMonth * 100 + versionReleaseNumber
