@@ -21,8 +21,10 @@ import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,8 +65,11 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
@@ -97,12 +102,15 @@ internal fun CallScreenView(
         topBar = {
             if (!pipState.isInPictureInPicture) {
                 TopAppBar(
-                    title = { Text(stringResource(R.string.element_call)) },
+                    title = {},
                     navigationIcon = {
                         BackButton(
                             imageVector = if (pipState.supportPip) CompoundIcons.ArrowLeft() else CompoundIcons.Close(),
                             onClick = ::handleBack,
                         )
+                    },
+                    actions = {
+                        AudioDeviceSelector()
                     }
                 )
             }
@@ -173,8 +181,6 @@ private fun CallWebView(
         Column(modifier = modifier) {
             var audioDeviceCallback: AudioDeviceCallback? by remember { mutableStateOf(null) }
 
-            OutputAudioDeviceSelector()
-
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
                 factory = { context ->
@@ -200,14 +206,21 @@ private fun CallWebView(
 }
 
 @Composable
-private fun OutputAudioDeviceSelector() {
+private fun AudioDeviceSelector(
+    modifier: Modifier = Modifier,
+) {
+    // For now don't display the audio device selector in unsupported Android versions
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        return
+    }
     val context = LocalContext.current
     val audioManager = remember { context.getSystemService<AudioManager>() }
 
     val audioDevices = remember { mutableStateListOf<AudioDeviceInfo>() }
     var expanded by remember { mutableStateOf(false) }
+    val isInEditMode = LocalInspectionMode.current
     var selected by remember(audioDevices) {
-        val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !isInEditMode) {
             audioManager?.communicationDevice
         } else {
             null
@@ -215,51 +228,58 @@ private fun OutputAudioDeviceSelector() {
         mutableStateOf(device)
     }
 
-    DisposableEffect(Unit) {
-        audioDevices.addAll(audioManager?.loadOutputAudioDevices().orEmpty())
+    if (!LocalInspectionMode.current) {
+        DisposableEffect(Unit) {
+            audioDevices.addAll(audioManager?.loadCommunicationAudioDevices().orEmpty())
 
-        val onCommunicationDeviceChangedListener = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            OnCommunicationDeviceChangedListener { selected = audioManager?.communicationDevice }
-                .also { audioManager?.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), it) }
-        } else {
-            null
-        }
-
-        val audioDeviceCallback = object : AudioDeviceCallback() {
-            override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
-                audioDevices.clear()
-                audioDevices.addAll(audioManager?.loadOutputAudioDevices().orEmpty())
+            val onCommunicationDeviceChangedListener = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                OnCommunicationDeviceChangedListener { selected = audioManager?.communicationDevice }
+                    .also { audioManager?.addOnCommunicationDeviceChangedListener(Executors.newSingleThreadExecutor(), it) }
+            } else {
+                null
             }
 
-            override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
-                audioDevices.clear()
-                audioDevices.addAll(audioManager?.loadOutputAudioDevices().orEmpty())
+            val audioDeviceCallback = object : AudioDeviceCallback() {
+                override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
+                    audioDevices.clear()
+                    audioDevices.addAll(audioManager?.loadCommunicationAudioDevices().orEmpty())
+                }
+
+                override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
+                    audioDevices.clear()
+                    audioDevices.addAll(audioManager?.loadCommunicationAudioDevices().orEmpty())
+                }
             }
-        }
-        audioManager?.registerAudioDeviceCallback(audioDeviceCallback, null)
+            audioManager?.registerAudioDeviceCallback(audioDeviceCallback, null)
 
-        onDispose {
-            audioManager?.unregisterAudioDeviceCallback(audioDeviceCallback)
+            onDispose {
+                audioManager?.unregisterAudioDeviceCallback(audioDeviceCallback)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                onCommunicationDeviceChangedListener?.let { audioManager?.removeOnCommunicationDeviceChangedListener(it) }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    onCommunicationDeviceChangedListener?.let { audioManager?.removeOnCommunicationDeviceChangedListener(it) }
+                }
             }
         }
     }
 
-    Box(Modifier.padding(horizontal = 16.dp)) {
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Audio output: ${selected?.description() ?: "-"}",
+    Box(modifier.padding(horizontal = 16.dp)) {
+        TextButton(
+            text = "Audio device",
             onClick = {
                 expanded = !expanded
-            }
+            },
+            leadingIcon = IconSource.Vector(CompoundIcons.ChevronDown()),
         )
 
         DropdownMenu(expanded, onDismissRequest = { expanded = false }) {
             for (device in audioDevices) {
                 DropdownMenuItem(text = {
-                    Text(device.description())
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(device.description())
+                        if (selected == device) {
+                            Icon(imageVector = CompoundIcons.Check(), contentDescription = null)
+                        }
+                    }
                 }, onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         // Workaround for Android 12, otherwise changing the audio device doesn't work
@@ -300,7 +320,7 @@ private fun OutputAudioDeviceSelector() {
     }
 }
 
-private fun AudioManager.loadOutputAudioDevices(): List<AudioDeviceInfo> {
+private fun AudioManager.loadCommunicationAudioDevices(): List<AudioDeviceInfo> {
     val wantedDeviceTypes = listOf(
         // Paired bluetooth device with microphone
         AudioDeviceInfo.TYPE_BLUETOOTH_SCO,
@@ -328,7 +348,7 @@ private fun AudioManager.loadOutputAudioDevices(): List<AudioDeviceInfo> {
 
 fun AudioDeviceInfo.description(): String {
     val type = when (type) {
-        AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "Bluetooth SCO"
+        AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "Bluetooth"
         AudioDeviceInfo.TYPE_USB_ACCESSORY -> "USB accessory"
         AudioDeviceInfo.TYPE_USB_DEVICE -> "USB device"
         AudioDeviceInfo.TYPE_USB_HEADSET -> "USB headset"
@@ -338,8 +358,24 @@ fun AudioDeviceInfo.description(): String {
         AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "Built-in earpiece"
         else -> "Unknown device type: $type"
     }
-    return "$productName - $type"
+    return if (isBuiltIn()) {
+        type
+    } else {
+        val name = if (productName.length > 10) {
+            productName.substring(0, 10) + "…"
+        } else {
+            productName
+        }
+        "$name - $type"
+    }
 }
+
+private fun AudioDeviceInfo.isBuiltIn(): Boolean = when (type) {
+    AudioDeviceInfo.TYPE_BUILTIN_SPEAKER,
+    AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
+    AudioDeviceInfo.TYPE_BUILTIN_MIC,
+    AudioDeviceInfo.TYPE_BUILTIN_SPEAKER_SAFE -> true
+    else -> false}
 
 private fun Context.setupAudioConfiguration(): AudioDeviceCallback? {
     val audioManager = getSystemService<AudioManager>() ?: return null
