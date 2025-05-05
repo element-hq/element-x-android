@@ -86,6 +86,7 @@ class SharePresenter @AssistedInject constructor(
                                         ).isSuccess
                                     }
                                     .all { it }
+                                    .also { room.destroy() }
                             }
                             .all { it }
                     }

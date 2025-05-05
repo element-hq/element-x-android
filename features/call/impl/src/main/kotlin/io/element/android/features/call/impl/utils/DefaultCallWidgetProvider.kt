@@ -47,8 +47,11 @@ class DefaultCallWidgetProvider @Inject constructor(
             theme = theme,
         ).getOrThrow()
 
+        val driver = room.getWidgetDriver(widgetSettings).getOrThrow()
+        room.destroy()
+
         CallWidgetProvider.GetWidgetResult(
-            driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
+            driver = driver,
             url = callUrl,
         )
     }
