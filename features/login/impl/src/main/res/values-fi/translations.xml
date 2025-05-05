@@ -16,8 +16,9 @@
   <string name="screen_change_server_error_invalid_homeserver">"Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync ei ole saatavilla well-known tiedostossa olevan ongelman vuoksi:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$s -sovelluksen käyttämiseen."</string>
   <string name="screen_change_server_form_header">"Kotipalvelimen osoite"</string>
-  <string name="screen_change_server_form_notice">"Voit yhdistää vain olemassa olevaan palvelimeen, joka tukee sliding syncia. Kotipalvelimesi ylläpitäjän on otettava se käyttöön. %1$s"</string>
+  <string name="screen_change_server_form_notice">"Anna verkkotunnuksen osoite."</string>
   <string name="screen_change_server_subtitle">"Mikä on palvelimesi osoite?"</string>
   <string name="screen_change_server_title">"Valitse palvelimesi"</string>
   <string name="screen_create_account_title">"Luo tili"</string>
