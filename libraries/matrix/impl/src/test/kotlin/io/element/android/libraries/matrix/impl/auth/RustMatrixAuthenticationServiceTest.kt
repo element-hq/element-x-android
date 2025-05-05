@@ -11,6 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import io.element.android.libraries.matrix.test.auth.FakeOidcRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
@@ -49,7 +50,10 @@ class RustMatrixAuthenticationServiceTest {
             sessionStore = sessionStore,
             rustMatrixClientFactory = rustMatrixClientFactory,
             passphraseGenerator = FakePassphraseGenerator(),
-            oidcConfigurationProvider = OidcConfigurationProvider(aBuildMeta()),
+            oidcConfigurationProvider = OidcConfigurationProvider(
+                buildMeta = aBuildMeta(),
+                oidcRedirectUrlProvider = FakeOidcRedirectUrlProvider(),
+            ),
         )
     }
 }

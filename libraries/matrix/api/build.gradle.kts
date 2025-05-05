@@ -28,13 +28,6 @@ android {
             value = BuildTimeConfig.URL_WEBSITE ?: "https://element.io"
         )
         buildConfigFieldStr(
-            name = "REDIRECT_URI",
-            value = buildString {
-                append(BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element")
-                append(":/callback")
-            }
-        )
-        buildConfigFieldStr(
             name = "LOGO_URI",
             value = BuildTimeConfig.URL_LOGO ?: "https://element.io/mobile-icon.png"
         )

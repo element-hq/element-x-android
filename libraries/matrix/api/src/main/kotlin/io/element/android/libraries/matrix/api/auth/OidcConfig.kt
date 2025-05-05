@@ -12,11 +12,6 @@ import io.element.android.libraries.matrix.api.BuildConfig
 object OidcConfig {
     const val CLIENT_URI = BuildConfig.CLIENT_URI
 
-    // Notes:
-    // 1. the scheme must match the value declared in the AndroidManifest.xml
-    // 2. the scheme must be the reverse of the host of CLIENT_URI
-    const val REDIRECT_URI = BuildConfig.REDIRECT_URI
-
     // Note: host must match with the host of CLIENT_URI
     const val LOGO_URI = BuildConfig.LOGO_URI
 

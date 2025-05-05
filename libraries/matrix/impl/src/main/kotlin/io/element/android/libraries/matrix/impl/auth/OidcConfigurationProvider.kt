@@ -9,15 +9,17 @@ package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.OidcConfig
+import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import org.matrix.rustcomponents.sdk.OidcConfiguration
 import javax.inject.Inject
 
 class OidcConfigurationProvider @Inject constructor(
     private val buildMeta: BuildMeta,
+    private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
 ) {
     fun get(): OidcConfiguration = OidcConfiguration(
         clientName = buildMeta.applicationName,
-        redirectUri = OidcConfig.REDIRECT_URI,
+        redirectUri = oidcRedirectUrlProvider.provide(),
         clientUri = OidcConfig.CLIENT_URI,
         logoUri = OidcConfig.LOGO_URI,
         tosUri = OidcConfig.TOS_URI,
