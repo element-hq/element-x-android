@@ -17,7 +17,6 @@
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync недаступны з-за праблемы ў вядомым файле:
 %1$s"</string>
   <string name="screen_change_server_form_header">"URL хатняга сервера"</string>
-  <string name="screen_change_server_form_notice">"Вы можаце падключыцца толькі да існуючага сервера, які падтрымлівае sliding sync. Адміністратару хатняга сервера запатрабуецца наладзіць яго. %1$s"</string>
   <string name="screen_change_server_subtitle">"Які адрас вашага сервера?"</string>
   <string name="screen_change_server_title">"Выберыце свой сервер"</string>
   <string name="screen_create_account_title">"Стварыць уліковы запіс"</string>

@@ -14,7 +14,7 @@
   <string name="screen_change_account_provider_subtitle">"استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری."</string>
   <string name="screen_change_account_provider_title">"تغییر فراهم کنندهٔ حساب"</string>
   <string name="screen_change_server_form_header">"نشانی کارساز خانگی"</string>
-  <string name="screen_change_server_form_notice">"تنها می‌توانید به کارسازهای موجودی که از هم‌گام سازی اسلاید پشتیبانی می‌کنند وصل شود. مدیر کارساز خانگیتان باید پیکربندیش کند. %1$s"</string>
+  <string name="screen_change_server_form_notice">"ورود نشانی دامنه."</string>
   <string name="screen_change_server_subtitle">"نشانی کارسازتان چیست؟"</string>
   <string name="screen_change_server_title">"کارسازتان را برگزینید"</string>
   <string name="screen_create_account_title">"ایجاد حساب"</string>

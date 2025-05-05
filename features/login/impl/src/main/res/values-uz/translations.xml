@@ -15,7 +15,6 @@
   <string name="screen_change_account_provider_title">"Hisob provayderini o\'zgartiring"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Bu uy serveriga kira olmadik. Iltimos, uy serverining URL manzilini to\'ri kiritganingizni tekshiring. Agar URL toʻgʻri boʻlsa, qoʻshimcha yordam olish uchun uy serveri administratoriga murojaat qiling."</string>
   <string name="screen_change_server_form_header">"Uy serverining URL manzili"</string>
-  <string name="screen_change_server_form_notice">"Siz faqat siljish sinxronlashni qo\'llab-quvvatlaydigan mavjud serverga ulanishingiz mumkin. Uy serveringiz administratori uni sozlashi kerak.%1$s"</string>
   <string name="screen_change_server_subtitle">"Serveringizning manzili nima?"</string>
   <string name="screen_change_server_title">"Serveringizni tanlang"</string>
   <string name="screen_create_account_title">"Hisob yaratish"</string>

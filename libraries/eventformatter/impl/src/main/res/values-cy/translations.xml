@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Rydych chi wedi tynnu afatar yr ystafell"</string>
   <string name="state_event_room_ban">"Mae %1$s wedi gwahardd %2$s"</string>
   <string name="state_event_room_ban_by_you">"Rydych wedi gwahardd %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Rydych wedi gwahardd %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"Mae %1$s wedi gwahardd %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s greodd yr ystafell"</string>
   <string name="state_event_room_created_by_you">"Chi greodd yr ystafell"</string>
   <string name="state_event_room_invite">"Mae %1$s wedi gwahodd %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Rydych chi wedi gwrthod y gwahoddiad"</string>
   <string name="state_event_room_remove">"Mae %1$s wedi tynnu %2$s"</string>
   <string name="state_event_room_remove_by_you">"Rydych wedi dileu %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Rydych wedi dileu %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"Mae %1$s wedi tynnu %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"Anfonodd %1$s wahoddiad at %2$s i ymuno â\'r ystafell"</string>
   <string name="state_event_room_third_party_invite_by_you">"Rydych wedi anfon gwahoddiad i %1$s i ymuno â\'r ystafell"</string>
   <string name="state_event_room_third_party_revoked_invite">"Dirymodd %1$s y gwahoddiad i %2$s ymuno â\'r ystafell"</string>

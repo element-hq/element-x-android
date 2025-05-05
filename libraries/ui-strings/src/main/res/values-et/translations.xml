@@ -138,7 +138,7 @@
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>
   <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd väldid hilisemat sundkorras uuendust."</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd, väldid hilisemat sundkorras uuendust."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Saadaval on uuendus"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>

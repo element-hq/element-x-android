@@ -17,7 +17,6 @@
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync, iyi bilinen dosyadaki bir sorun nedeniyle kullanılamıyor:
 %1$s"</string>
   <string name="screen_change_server_form_header">"Ana sunucu URL\'si"</string>
-  <string name="screen_change_server_form_notice">"Yalnızca sliding sync destekleyen mevcut bir sunucuya bağlanabilirsiniz. Ana sunucu yöneticinizin bunu yapılandırması gerekecektir. %1$s"</string>
   <string name="screen_change_server_subtitle">"Sunucunuzun adresi nedir?"</string>
   <string name="screen_change_server_title">"Sunucunuzu seçin"</string>
   <string name="screen_create_account_title">"Hesap oluştur"</string>
