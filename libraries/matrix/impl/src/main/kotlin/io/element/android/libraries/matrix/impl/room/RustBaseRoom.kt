@@ -94,6 +94,8 @@ class RustBaseRoom(
         }
     }
 
+    override fun close() = destroy()
+
     override fun destroy() {
         innerRoom.destroy()
     }
