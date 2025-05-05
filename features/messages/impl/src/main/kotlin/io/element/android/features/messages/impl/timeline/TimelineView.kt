@@ -290,7 +290,7 @@ private fun BoxScope.TimelineScrollHelper(
         coroutineScope.launch {
             if (lazyListState.firstVisibleItemIndex > 10) {
                 lazyListState.scrollToItem(0)
-            } else if (lazyListState.firstVisibleItemIndex != 0) {
+            } else {
                 lazyListState.animateScrollToItem(0)
             }
         }
