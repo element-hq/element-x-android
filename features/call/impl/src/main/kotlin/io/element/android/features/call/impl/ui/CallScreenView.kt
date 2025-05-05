@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.getSystemService
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
@@ -62,7 +61,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -292,10 +290,12 @@ private fun AudioDeviceSelector(
                     } else {
                         when (device.type) {
                             AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> {
+                                @Suppress("DEPRECATION")
                                 audioManager?.isSpeakerphoneOn = true
                                 selected = device
                             }
                             AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> {
+                                @Suppress("DEPRECATION")
                                 audioManager?.isSpeakerphoneOn = false
                                 selected = device
                             }
@@ -306,7 +306,6 @@ private fun AudioDeviceSelector(
                             AudioDeviceInfo.TYPE_WIRED_HEADSET, AudioDeviceInfo.TYPE_WIRED_HEADPHONES, AudioDeviceInfo.TYPE_USB_HEADSET -> {
                                 Timber.d("Audio device selected but it's not compatible, type: ${device.type}")
                                 // TODO use MediaRouter maybe?
-
                             }
                             else -> {
                                 Timber.d("Audio device selected but it's not compatible, type: ${device.type}")
@@ -375,7 +374,8 @@ private fun AudioDeviceInfo.isBuiltIn(): Boolean = when (type) {
     AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
     AudioDeviceInfo.TYPE_BUILTIN_MIC,
     AudioDeviceInfo.TYPE_BUILTIN_SPEAKER_SAFE -> true
-    else -> false}
+    else -> false
+}
 
 private fun Context.setupAudioConfiguration(): AudioDeviceCallback? {
     val audioManager = getSystemService<AudioManager>() ?: return null
