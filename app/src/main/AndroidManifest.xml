@@ -60,7 +60,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="io.element" />
+                <data android:scheme="@string/login_redirect_scheme" />
             </intent-filter>
             <!--
               Element web links

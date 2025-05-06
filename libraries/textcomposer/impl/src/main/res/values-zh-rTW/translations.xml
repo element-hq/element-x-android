@@ -5,7 +5,9 @@
   <string name="rich_text_editor_close_formatting_options">"關閉格式化選項"</string>
   <string name="rich_text_editor_code_block">"切換程式碼區塊"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"新增標題"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"已加密的訊息……"</string>
   <string name="rich_text_editor_composer_placeholder">"訊息"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"未加密的訊息……"</string>
   <string name="rich_text_editor_create_link">"建立連結"</string>
   <string name="rich_text_editor_edit_link">"編輯連結"</string>
   <string name="rich_text_editor_format_bold">"套用粗體"</string>

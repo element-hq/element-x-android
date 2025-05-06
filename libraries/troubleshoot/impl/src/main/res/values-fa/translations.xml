@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"تاریخچهٔ فرستادن"</string>
   <string name="troubleshoot_notifications_screen_action">"اجرای آزمون‌ها"</string>
   <string name="troubleshoot_notifications_screen_action_again">"اجرای دوبارهٔ آزمون‌ها"</string>
   <string name="troubleshoot_notifications_screen_failure">"برخی آزمون‌ها شکست خوردند. بررسی جزییات."</string>

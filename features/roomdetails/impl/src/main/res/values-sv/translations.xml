@@ -86,7 +86,7 @@
   <string name="screen_room_notification_settings_allow_custom">"Tillåt anpassad inställning"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Om du aktiverar detta åsidosätts din standardinställning"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Meddela mig i den här chatten för"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Du kan ändra det i dina %1$s ."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Du kan ändra det i dina %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"globala inställningar"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Standardinställning"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Ta bort anpassad inställning"</string>

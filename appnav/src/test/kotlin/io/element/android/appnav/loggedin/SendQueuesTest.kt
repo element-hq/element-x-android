@@ -10,7 +10,7 @@ package io.element.android.appnav.loggedin
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -35,8 +35,8 @@ class SendQueuesTest {
         matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
         matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
         val setRoomSendQueueEnabledLambda = lambdaRecorder { _: Boolean -> }
-        val room = FakeMatrixRoom(
-            setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
+        val room = FakeJoinedRoom(
+            setSendQueueEnabledResult = setRoomSendQueueEnabledLambda
         )
         matrixClient.givenGetRoomResult(room.roomId, room)
         sut.launchIn(backgroundScope)
@@ -61,8 +61,8 @@ class SendQueuesTest {
         matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
         syncService.emitSyncState(SyncState.Offline)
         val setRoomSendQueueEnabledLambda = lambdaRecorder { _: Boolean -> }
-        val room = FakeMatrixRoom(
-            setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
+        val room = FakeJoinedRoom(
+            setSendQueueEnabledResult = setRoomSendQueueEnabledLambda
         )
         matrixClient.givenGetRoomResult(room.roomId, room)
 

@@ -7,25 +7,34 @@
 
 package io.element.android.libraries.oidc.impl
 
-import io.element.android.libraries.matrix.api.auth.OidcConfig
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.libraries.oidc.api.OidcAction
 import javax.inject.Inject
+
+fun interface OidcUrlParser {
+    fun parse(url: String): OidcAction?
+}
 
 /**
  * Simple parser for oidc url interception.
  * TODO Find documentation about the format.
  */
-class OidcUrlParser @Inject constructor() {
+@ContributesBinding(AppScope::class)
+class DefaultOidcUrlParser @Inject constructor(
+    private val oidcRedirectUrlProvider: OidcRedirectUrlProvider,
+) : OidcUrlParser {
     /**
      * Return a OidcAction, or null if the url is not a OidcUrl.
      * Note:
      * When user press button "Cancel", we get the url:
-     * `io.element:/callback?error=access_denied&state=IFF1UETGye2ZA8pO`
+     * `io.element.android:/?error=access_denied&state=IFF1UETGye2ZA8pO`
      * On success, we get:
-     * `io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
+     * `io.element.android:/?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
      */
-    fun parse(url: String): OidcAction? {
-        if (url.startsWith(OidcConfig.REDIRECT_URI).not()) return null
+    override fun parse(url: String): OidcAction? {
+        if (url.startsWith(oidcRedirectUrlProvider.provide()).not()) return null
         if (url.contains("error=access_denied")) return OidcAction.GoBack
         if (url.contains("code=")) return OidcAction.Success(url)
 

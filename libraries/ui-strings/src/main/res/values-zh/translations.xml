@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"头像"</string>
   <string name="a11y_delete">"删除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
   </plurals>
   <string name="a11y_hide_password">"隐藏密码"</string>
+  <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
   <string name="a11y_page_n">"第 %1$d 页"</string>
   <string name="a11y_pause">"暂停"</string>
+  <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
   <string name="a11y_pin_field">"PIN 字段"</string>
   <string name="a11y_play">"播放"</string>
   <string name="a11y_poll">"投票"</string>
@@ -28,7 +31,8 @@
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
   <string name="a11y_view_details">"查看详情"</string>
-  <string name="a11y_voice_message_record">"录制语音消息。"</string>
+  <string name="a11y_voice_message">"语音消息，时长：%1$s"</string>
+  <string name="a11y_voice_message_record">"录制语音消息"</string>
   <string name="a11y_voice_message_stop_recording">"停止录制"</string>
   <string name="action_accept">"接受"</string>
   <string name="action_add_caption">"添加标题"</string>
@@ -57,6 +61,7 @@
   <string name="action_delete_poll">"删除投票"</string>
   <string name="action_disable">"禁用"</string>
   <string name="action_discard">"丢弃"</string>
+  <string name="action_dismiss">"关闭"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"编辑"</string>
   <string name="action_edit_caption">"编辑标题"</string>
@@ -70,8 +75,8 @@
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀请"</string>
   <string name="action_invite_friends">"邀请朋友"</string>
-  <string name="action_invite_friends_to_app">"邀请朋友加入 %1$s"</string>
-  <string name="action_invite_people_to_app">"邀请人们加入 %1$s"</string>
+  <string name="action_invite_friends_to_app">"邀请别人加入 %1$s"</string>
+  <string name="action_invite_people_to_app">"邀请别人加入 %1$s"</string>
   <string name="action_invites_list">"邀请"</string>
   <string name="action_join">"加入"</string>
   <string name="action_learn_more">"了解更多"</string>
@@ -143,7 +148,9 @@
   <string name="common_copied_to_clipboard">"已复制到剪贴板"</string>
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建聊天室…"</string>
+  <string name="common_current_user_canceled_knock">"请求已取消"</string>
   <string name="common_current_user_left_room">"离开聊天室"</string>
+  <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密错误"</string>
   <string name="common_developer_options">"开发者选项"</string>
@@ -156,6 +163,7 @@
   <string name="common_editing">"编辑中"</string>
   <string name="common_editing_caption">"编辑标题"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"空文件"</string>
   <string name="common_encryption">"加密"</string>
   <string name="common_encryption_enabled">"已启用加密"</string>
   <string name="common_enter_your_pin">"输入 PIN 码"</string>
@@ -180,6 +188,7 @@
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能无法收到邀请。"</string>
   <string name="common_leaving_room">"正在离开聊天室"</string>
   <string name="common_light">"浅色"</string>
+  <string name="common_line_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_link_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_loading">"正在加载…"</string>
   <string name="common_loading_more">"正在加载更多……"</string>
@@ -195,6 +204,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
   <string name="common_no_room_name">"无聊天室名"</string>
+  <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"离线"</string>
   <string name="common_open_source_licenses">"开源许可证"</string>
   <string name="common_or">"或"</string>
@@ -214,6 +224,7 @@
   <string name="common_privacy_policy">"隐私政策"</string>
   <string name="common_reaction">"回应"</string>
   <string name="common_reactions">"回应"</string>
+  <string name="common_reason">"理由"</string>
   <string name="common_recovery_key">"恢复密钥"</string>
   <string name="common_refreshing">"正在刷新…"</string>
   <string name="common_replying_to">"正在回复 %1$s"</string>
@@ -223,7 +234,7 @@
   <string name="common_rich_text_editor">"富文本编辑器"</string>
   <string name="common_room">"聊天室"</string>
   <string name="common_room_name">"聊天室名称"</string>
-  <string name="common_room_name_placeholder">"例如：项目名称"</string>
+  <string name="common_room_name_placeholder">"例如：您的项目名称"</string>
   <string name="common_saved_changes">"保存的更改"</string>
   <string name="common_saving">"正在保存"</string>
   <string name="common_screen_lock">"屏幕锁定"</string>
@@ -269,6 +280,7 @@
   <string name="common_verified">"已验证"</string>
   <string name="common_verify_device">"验证设备"</string>
   <string name="common_verify_identity">"验证身份"</string>
+  <string name="common_verify_user">"验证用户"</string>
   <string name="common_video">"视频"</string>
   <string name="common_voice_message">"语音消息"</string>
   <string name="common_waiting">"等待…"</string>
@@ -277,8 +289,13 @@
   <string name="crypto_identity_change_pin_violation">"%1$s 的身份似乎已经改变。%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 身份似乎已经改变。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s 的身份已重置。"</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 已验证身份已发生改变。%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回验证"</string>
+  <string name="dialog_confirm_link_message">"链接 %1$s 将跳转至外部网站 %2$s
+
+确定要继续吗？"</string>
+  <string name="dialog_confirm_link_title">"请再次确认链接"</string>
   <string name="dialog_title_confirmation">"确认"</string>
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>
@@ -295,6 +312,7 @@
   <string name="error_missing_location_auth_android">"%1$s 没有权限访问您的位置。您可以在设置中启用位置权限。"</string>
   <string name="error_missing_location_rationale_android">"%1$s 没有权限访问您的位置。在下方启用位置权限。"</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s 没有权限访问您的麦克风。启用录制语音消息的权限。"</string>
+  <string name="error_network_or_server_issue">"这可能是由于网络或服务器问题导致"</string>
   <string name="error_room_address_already_exists">"此房间地址已存在。请尝试编辑房间地址字段或更改房间名称"</string>
   <string name="error_room_address_invalid_symbols">"不允许使用某些字符。仅支持字母、数字和以下符号 $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"某些信息尚未发送"</string>
@@ -314,6 +332,9 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"即使受到邀请，他们也无法再次加入聊天室。"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"您确定要封禁该成员吗？"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"封禁 %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"移除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"如果受到邀请，他们可以重新加入聊天室。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"您确定要移除此成员吗？"</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"查看个人资料"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"从聊天室移除"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"删除成员并禁止重新加入？"</string>

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"大頭貼"</string>
   <string name="a11y_delete">"刪除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已輸入 %1$d 個位數"</item>
   </plurals>
   <string name="a11y_hide_password">"隱藏密碼"</string>
+  <string name="a11y_join_call">"加入通話"</string>
   <string name="a11y_jump_to_bottom">"跳至底部"</string>
   <string name="a11y_notifications_mentions_only">"僅限提及"</string>
   <string name="a11y_notifications_muted">"已關閉通知"</string>
   <string name="a11y_page_n">"第 %1$d 頁"</string>
   <string name="a11y_pause">"暫停"</string>
+  <string name="a11y_paused_voice_message">"語音訊息，時長：%1$s，目前位置：%2$s"</string>
   <string name="a11y_pin_field">"PIN 碼欄位"</string>
   <string name="a11y_play">"播放"</string>
   <string name="a11y_poll">"投票"</string>
@@ -28,6 +31,7 @@
   <string name="a11y_start_call">"開始通話"</string>
   <string name="a11y_user_menu">"使用者選單"</string>
   <string name="a11y_view_details">"檢視詳細資訊"</string>
+  <string name="a11y_voice_message">"語音訊息，時長：%1$s"</string>
   <string name="a11y_voice_message_record">"錄製語音訊息。"</string>
   <string name="a11y_voice_message_stop_recording">"停止錄音"</string>
   <string name="action_accept">"接受"</string>
@@ -54,9 +58,11 @@
   <string name="action_deactivate">"停用"</string>
   <string name="action_deactivate_account">"停用帳號"</string>
   <string name="action_decline">"拒絕"</string>
+  <string name="action_decline_and_block">"拒絕並封鎖"</string>
   <string name="action_delete_poll">"刪除投票"</string>
   <string name="action_disable">"停用"</string>
   <string name="action_discard">"捨棄"</string>
+  <string name="action_dismiss">"關閉"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
   <string name="action_edit_caption">"編輯標題"</string>
@@ -98,8 +104,10 @@
   <string name="action_remove_message">"移除訊息"</string>
   <string name="action_reply">"回覆"</string>
   <string name="action_reply_in_thread">"在討論串中回覆"</string>
+  <string name="action_report">"回報"</string>
   <string name="action_report_bug">"回報程式錯誤"</string>
   <string name="action_report_content">"檢舉內容"</string>
+  <string name="action_report_room">"回報聊天室"</string>
   <string name="action_reset">"重設"</string>
   <string name="action_reset_identity">"重設身份"</string>
   <string name="action_retry">"再試一次"</string>
@@ -143,7 +151,9 @@
   <string name="common_copied_to_clipboard">"已複製到剪貼簿"</string>
   <string name="common_copyright">"著作權"</string>
   <string name="common_creating_room">"正在建立聊天室…"</string>
+  <string name="common_current_user_canceled_knock">"請求已取消"</string>
   <string name="common_current_user_left_room">"已離開聊天室"</string>
+  <string name="common_current_user_rejected_invite">"邀請被拒絕"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密錯誤"</string>
   <string name="common_developer_options">"開發者選項"</string>
@@ -156,6 +166,7 @@
   <string name="common_editing">"編輯中"</string>
   <string name="common_editing_caption">"編輯標題"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"空檔案"</string>
   <string name="common_encryption">"加密"</string>
   <string name="common_encryption_enabled">"已啟用加密"</string>
   <string name="common_enter_your_pin">"輸入您的 PIN 碼"</string>
@@ -180,6 +191,7 @@
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
   <string name="common_light">"淺色"</string>
+  <string name="common_line_copied_to_clipboard">"行已複製到剪貼簿"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
   <string name="common_loading">"載入中…"</string>
   <string name="common_loading_more">"載入更多……"</string>
@@ -195,6 +207,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"查無結果"</string>
   <string name="common_no_room_name">"無聊天室名稱"</string>
+  <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"離線"</string>
   <string name="common_open_source_licenses">"開放原始碼授權條款"</string>
   <string name="common_or">"或"</string>
@@ -203,6 +216,7 @@
   <string name="common_permalink">"永久連結"</string>
   <string name="common_permission">"權限"</string>
   <string name="common_pinned">"已釘選"</string>
+  <string name="common_please_check_internet_connection">"請檢查您的網際網路連線"</string>
   <string name="common_please_wait">"請稍等…"</string>
   <string name="common_poll_end_confirmation">"您確定要結束這項投票嗎？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
@@ -214,6 +228,7 @@
   <string name="common_privacy_policy">"隱私權政策"</string>
   <string name="common_reaction">"回應"</string>
   <string name="common_reactions">"回應"</string>
+  <string name="common_reason">"理由"</string>
   <string name="common_recovery_key">"復原金鑰"</string>
   <string name="common_refreshing">"重新整理中…"</string>
   <string name="common_replying_to">"正在回覆%1$s"</string>
@@ -255,7 +270,7 @@
   <string name="common_unable_to_decrypt">"無法解密"</string>
   <string name="common_unable_to_decrypt_insecure_device">"從不安全的裝置傳送"</string>
   <string name="common_unable_to_decrypt_no_access">"您無法存取此則訊息"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"傳送者的驗證身份已變更"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"傳送者的驗證身份已重設"</string>
   <string name="common_unable_to_invite_message">"無法發送邀請給一或多個使用者。"</string>
   <string name="common_unable_to_invite_title">"無法發送邀請"</string>
   <string name="common_unlock">"解鎖"</string>
@@ -275,12 +290,18 @@
   <string name="common_waiting">"等待中…"</string>
   <string name="common_waiting_for_decryption_key">"等待此則訊息"</string>
   <string name="common_you">"您"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s 的身份似乎已變更。%2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 身份似乎已變更。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s 的身份似乎已重設。%2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 身份似乎已重設。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"（%1$s）"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$s 的已驗證身份變更了。"</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 驗證身份已變更。%3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s 的已驗證身份被重設。"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 驗證身份已重設。  %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回驗證"</string>
+  <string name="dialog_confirm_link_message">"連結 %1$s 會將您帶往其他網站 %2$s
+
+您確定您想要繼續嗎？"</string>
+  <string name="dialog_confirm_link_title">"仔細檢查此連結"</string>
+  <string name="dialog_room_reported">"聊天室已回報"</string>
+  <string name="dialog_room_reported_and_left">"回報並離開聊天室"</string>
   <string name="dialog_title_confirmation">"確認"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
@@ -317,6 +338,9 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"即使收到邀請，他們仍然無法加入聊天室。"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"您確定要將此成員加入黑名單？"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"正在將 %1$s 加入黑名單"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"移除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"若收到邀請，他們可以再次加入此聊天室。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"您真的想要移除此成員嗎？"</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"查看個人檔案"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"踢出聊天室"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"移除成員並禁止未來再度加入？"</string>
@@ -335,7 +359,7 @@
   <string name="screen_reset_identity_confirmation_title">"無法確認？前往您的帳號以重設您的身份。"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回驗證並傳送"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"您可以撤回您的驗證並仍傳送此訊息，或者您也可以立刻取消並在重新驗證 %1$s 後再試一次。"</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"因為 %1$s 的驗證身份已變更，因此未傳送您的訊息。"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"因為 %1$s 的驗證身份已重設，因此未傳送您的訊息。"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"仍要傳送訊息"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s 正在使用一個或多個未經驗證的裝置。您仍然可以傳送訊息，也可以立刻取消並在 %2$s 驗證其所有裝置後再試一次。"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"未傳送您的訊息，因為 %1$s 尚未驗證所有裝置。"</string>
@@ -343,6 +367,7 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"因為您尚未驗證一個或多個裝置，因為未傳送您的訊息"</string>
   <string name="screen_room_error_failed_processing_media">"無法處理要上傳的媒體，請再試一次。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"無法擷取使用者詳細資訊"</string>
+  <string name="screen_room_event_pill">"%1$s 中的訊息"</string>
   <string name="screen_room_pinned_banner_indicator">"第 %1$s 個，共 %2$s 個"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 個釘選訊息"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在載入訊息……"</string>
@@ -355,7 +380,7 @@
   <string name="screen_share_open_google_maps">"在 Google Maps 中開啟"</string>
   <string name="screen_share_open_osm_maps">"在開放街圖（OpenStreetMap） 中開啟"</string>
   <string name="screen_share_this_location_action">"分享這個位置"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已變更，因此未傳送訊息。"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已重設，因此未傳送訊息。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"因為您尚未驗證一個或多個裝置，因此未傳送訊息"</string>
   <string name="screen_view_location_title">"位置"</string>

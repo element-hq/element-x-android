@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Вам был запрещен доступ в комнату %1$s ."</string>
+  <string name="screen_join_room_ban_by_message">"Вам был запрещен доступ в комнату %1$s."</string>
   <string name="screen_join_room_ban_message">"Вам был запрещен доступ в эту комнату"</string>
   <string name="screen_join_room_ban_reason">"Причина: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Отменить запрос"</string>

@@ -8,14 +8,14 @@
 package io.element.android.libraries.matrix.api.notificationsettings
 
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsState
 import kotlinx.coroutines.flow.SharedFlow
 
 interface NotificationSettingsService {
     /**
-     * State of the current room notification settings flow ([MatrixRoomNotificationSettingsState.Unknown] if not started).
+     * State of the current room notification settings flow ([RoomNotificationSettingsState.Unknown] if not started).
      */
     val notificationSettingsChangeFlow: SharedFlow<Unit>
     suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings>

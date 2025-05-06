@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
@@ -78,6 +79,7 @@ fun JoinRoomView(
     onKnockSuccess: () -> Unit,
     onForgetSuccess: () -> Unit,
     onCancelKnockSuccess: () -> Unit,
+    onDeclineInviteAndBlockUser: (InviteData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -104,11 +106,15 @@ fun JoinRoomView(
             footer = {
                 JoinRoomFooter(
                     joinAuthorisationStatus = state.joinAuthorisationStatus,
-                    onAcceptInvite = {
-                        state.eventSink(JoinRoomEvents.AcceptInvite)
+                    onAcceptInvite = { inviteData ->
+                        state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
                     },
-                    onDeclineInvite = { blockUser ->
-                        state.eventSink(JoinRoomEvents.DeclineInvite(blockUser))
+                    onDeclineInvite = { inviteData, blockUser ->
+                        if (state.canReportRoom && blockUser) {
+                            onDeclineInviteAndBlockUser(inviteData)
+                        } else {
+                            state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, blockUser = blockUser))
+                        }
                     },
                     onJoinRoom = {
                         state.eventSink(JoinRoomEvents.JoinRoom)
@@ -184,8 +190,8 @@ fun JoinRoomView(
 @Composable
 private fun JoinRoomFooter(
     joinAuthorisationStatus: JoinAuthorisationStatus,
-    onAcceptInvite: () -> Unit,
-    onDeclineInvite: (Boolean) -> Unit,
+    onAcceptInvite: (InviteData) -> Unit,
+    onDeclineInvite: (InviteData, Boolean) -> Unit,
     onJoinRoom: () -> Unit,
     onKnockRoom: () -> Unit,
     onCancelKnock: () -> Unit,
@@ -204,13 +210,13 @@ private fun JoinRoomFooter(
                     ButtonRowMolecule(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                         OutlinedButton(
                             text = stringResource(CommonStrings.action_decline),
-                            onClick = { onDeclineInvite(false) },
+                            onClick = { onDeclineInvite(joinAuthorisationStatus.inviteData, false) },
                             modifier = Modifier.weight(1f),
                             size = ButtonSize.LargeLowPadding,
                         )
                         Button(
                             text = stringResource(CommonStrings.action_accept),
-                            onClick = onAcceptInvite,
+                            onClick = { onAcceptInvite(joinAuthorisationStatus.inviteData) },
                             modifier = Modifier.weight(1f),
                             size = ButtonSize.LargeLowPadding,
                         )
@@ -218,7 +224,7 @@ private fun JoinRoomFooter(
                     Spacer(modifier = Modifier.height(24.dp))
                     TextButton(
                         text = stringResource(R.string.screen_join_room_decline_and_block_button_title),
-                        onClick = { onDeclineInvite(true) },
+                        onClick = { onDeclineInvite(joinAuthorisationStatus.inviteData, true) },
                         modifier = Modifier.fillMaxWidth(),
                         destructive = true
                     )
@@ -585,5 +591,6 @@ internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class)
         onKnockSuccess = { },
         onForgetSuccess = { },
         onCancelKnockSuccess = { },
+        onDeclineInviteAndBlockUser = { },
     )
 }

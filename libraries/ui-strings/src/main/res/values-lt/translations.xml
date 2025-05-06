@@ -134,6 +134,7 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepavyko įkelti laikmenos, pabandykite dar kartą."</string>
   <string name="screen_room_error_failed_processing_media">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nepavyko gauti naudotojo išsamios informacijos."</string>
   <string name="settings_version_number">"Versija: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"lt"</string>
 </resources>

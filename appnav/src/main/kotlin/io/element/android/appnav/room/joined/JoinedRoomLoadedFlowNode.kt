@@ -35,7 +35,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     }
 
     data class Inputs(
-        val room: MatrixRoom,
+        val room: JoinedRoom,
         val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
@@ -95,6 +95,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             },
             onDestroy = {
                 Timber.v("OnDestroy")
+                inputs.room.destroy()
                 appNavigationStateService.onLeavingRoom(id)
             }
         )

@@ -16,9 +16,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync недоступен из-за проблемы в известном файле:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"К сожалению данный сервер не поддерживает sliding sync."</string>
   <string name="screen_change_server_form_header">"URL-адрес домашнего сервера"</string>
-  <string name="screen_change_server_form_notice">"Вы можете подключиться только к существующему серверу, поддерживающему sliding sync. Администратору домашнего сервера потребуется настроить его. %1$s"</string>
   <string name="screen_change_server_subtitle">"Какой адрес у вашего сервера?"</string>
   <string name="screen_change_server_title">"Выберите свой сервер"</string>
   <string name="screen_create_account_title">"Создать учетную запись"</string>

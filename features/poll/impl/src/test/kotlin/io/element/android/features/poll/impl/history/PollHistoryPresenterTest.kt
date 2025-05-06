@@ -22,12 +22,11 @@ import io.element.android.features.poll.impl.model.DefaultPollContentStateFactor
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -57,7 +56,7 @@ class PollHistoryPresenterTest {
         ),
         backwardPaginationStatus = backwardPaginationStatus
     )
-    private val room = FakeMatrixRoom(
+    private val room = FakeJoinedRoom(
         liveTimeline = timeline
     )
 
@@ -155,7 +154,7 @@ class PollHistoryPresenterTest {
     }
 
     private fun TestScope.createPollHistoryPresenter(
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(),
         appCoroutineScope: CoroutineScope = this,
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),

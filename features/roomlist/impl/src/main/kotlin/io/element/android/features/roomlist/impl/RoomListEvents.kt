@@ -15,9 +15,12 @@ sealed interface RoomListEvents {
     data object DismissRequestVerificationPrompt : RoomListEvents
     data object DismissBanner : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
-    data class AcceptInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
-    data class DeclineInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
-    data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
+    data class ShowContextMenu(val roomSummary: RoomListRoomSummary) : RoomListEvents
+
+    data class AcceptInvite(val roomSummary: RoomListRoomSummary) : RoomListEvents
+    data class DeclineInvite(val roomSummary: RoomListRoomSummary, val blockUser: Boolean) : RoomListEvents
+    data class ShowDeclineInviteMenu(val roomSummary: RoomListRoomSummary) : RoomListEvents
+    data object HideDeclineInviteMenu : RoomListEvents
 
     sealed interface ContextMenuEvents : RoomListEvents
     data object HideContextMenu : ContextMenuEvents

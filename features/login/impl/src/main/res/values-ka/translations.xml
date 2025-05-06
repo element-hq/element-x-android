@@ -15,9 +15,7 @@
   <string name="screen_change_account_provider_title">"შეცვალეთ ანგარიშის მომწოდებელი"</string>
   <string name="screen_change_server_error_invalid_homeserver">"ჩვენ ვერ მივაღწიეთ ამ სახლის სერვერს. გთხოვთ, შეამოწმოთ, რომ სწორად შეიყვანეთ სახლის სერვერის URL. თუ URL სწორია, დაუკავშირდით თქვენი სახლის სერვერის ადმინისტრატორს დამატებითი დახმარებისთვის."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding sync არ არის ხელმისაწვდომი well-known ფაილში პრობლემის გამო: %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"ამჟამად ეს სერვერი მხარს არ უჭერს \"sliding sync\"-ს."</string>
   <string name="screen_change_server_form_header">"სახლის სერვერის URL"</string>
-  <string name="screen_change_server_form_notice">"თქვენ შეგიძლიათ დაუკავშირდეთ მხოლოდ იმ სერვერს, რომელიც მხარს უჭერს \"sliding sync\"-ს. თქვენი სახლის სერვერის ადმინისტრატორს დასჭირდება მისი კონფიგურაცია.%1$s"</string>
   <string name="screen_change_server_subtitle">"რა არის თქვენი სერვერის მისამართი?"</string>
   <string name="screen_change_server_title">"აირჩიეთ თქვენი სერვერი"</string>
   <string name="screen_create_account_title">"ანგარიშის შექმნა"</string>

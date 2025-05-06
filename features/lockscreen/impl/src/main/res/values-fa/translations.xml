@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"هویت‌سنجی زیستی"</string>
   <string name="screen_app_lock_biometric_unlock">"قفل‌گشایی زیست‌سنجی"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"قفل‌گشایی با زیست‌سنجی"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"تأیید زیست‌سنجی"</string>
   <string name="screen_app_lock_forgot_pin">"فراموشی پین؟"</string>
   <string name="screen_app_lock_settings_change_pin">"تغییر کد پین"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"احازه به قفل گشایی زیست‌سنجی"</string>

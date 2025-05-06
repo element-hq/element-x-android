@@ -86,7 +86,7 @@
   <string name="screen_room_notification_settings_allow_custom">"Tillat egendefinert innstilling"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Hvis du slår på dette, overstyrer du standardinnstillingen"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Varsle meg i denne chatten om"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Du kan endre det i din %1$s ."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Du kan endre det i din %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"globale innstillinger"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Standard innstilling"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Fjern egendefinert innstilling"</string>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Et tule näkemään viestejä tai kutsuja tältä käyttäjältä"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Estä käyttäjä"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Ilmoita tästä huoneesta palveluntarjoajallesi."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Kerro syy ilmoittamiseen…"</string>
+  <string name="screen_decline_and_block_title">"Hylkää ja estä"</string>
   <string name="screen_invites_decline_chat_message">"Haluatko varmasti hylätä kutsun liittyä %1$s -huoneeseen?"</string>
   <string name="screen_invites_decline_chat_title">"Hylkää kutsu"</string>
   <string name="screen_invites_decline_direct_chat_message">"Haluatko varmasti hylätä kutsun yksityiseen keskusteluun käyttäjän %1$s kanssa?"</string>

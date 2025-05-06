@@ -65,10 +65,10 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomInfo
+import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
@@ -90,7 +90,7 @@ import timber.log.Timber
 
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
@@ -279,7 +279,7 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun MatrixRoomInfo.avatarData(): AvatarData {
+    private fun RoomInfo.avatarData(): AvatarData {
         return AvatarData(
             id = id.value,
             name = name,
@@ -288,7 +288,7 @@ class MessagesPresenter @AssistedInject constructor(
         )
     }
 
-    private fun MatrixRoomInfo.heroes(): List<AvatarData> {
+    private fun RoomInfo.heroes(): List<AvatarData> {
         return heroes.map { user ->
             user.getAvatarData(size = AvatarSize.TimelineRoom)
         }
@@ -382,8 +382,8 @@ class MessagesPresenter @AssistedInject constructor(
         inviteProgress.value = AsyncData.Loading()
         runCatching {
             val memberList = when (val memberState = room.membersStateFlow.value) {
-                is MatrixRoomMembersState.Ready -> memberState.roomMembers
-                is MatrixRoomMembersState.Error -> memberState.prevRoomMembers.orEmpty()
+                is RoomMembersState.Ready -> memberState.roomMembers
+                is RoomMembersState.Error -> memberState.prevRoomMembers.orEmpty()
                 else -> emptyList()
             }
 

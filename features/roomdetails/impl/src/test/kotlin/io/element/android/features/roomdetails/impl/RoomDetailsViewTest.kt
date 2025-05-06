@@ -283,6 +283,20 @@ class RoomDetailsViewTest {
         eventsRecorder.assertSingle(RoomDetailsEvent.LeaveRoom)
     }
 
+    @Config(qualifiers = "h1500dp")
+    @Test
+    fun `click on report room  invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                ),
+                onReportRoomClick = callback,
+            )
+            rule.clickOn(CommonStrings.action_report_room)
+        }
+    }
+
     @Config(qualifiers = "h1024dp")
     @Test
     fun `click on knock requests invokes expected callback`() {
@@ -333,6 +347,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     onKnockRequestsClick: () -> Unit = EnsureNeverCalled(),
     onSecurityAndPrivacyClick: () -> Unit = EnsureNeverCalled(),
     onProfileClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
+    onReportRoomClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -352,6 +367,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             onKnockRequestsClick = onKnockRequestsClick,
             onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
             onProfileClick = onProfileClick,
+            onReportRoomClick = onReportRoomClick,
         )
     }
 }

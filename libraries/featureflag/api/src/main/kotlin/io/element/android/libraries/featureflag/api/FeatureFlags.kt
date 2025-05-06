@@ -163,5 +163,5 @@ enum class FeatureFlags(
         defaultValue = { buildMeta -> buildMeta.buildType != BuildType.RELEASE },
         // False so it's displayed in the developer options screen
         isFinished = false,
-    )
+    ),
 }

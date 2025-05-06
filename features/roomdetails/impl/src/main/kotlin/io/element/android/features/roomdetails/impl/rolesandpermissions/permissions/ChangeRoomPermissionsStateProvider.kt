@@ -10,7 +10,7 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions.permiss
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import kotlinx.collections.immutable.toPersistentList
 
 class ChangeRoomPermissionsStateProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
@@ -36,7 +36,7 @@ class ChangeRoomPermissionsStateProvider : PreviewParameterProvider<ChangeRoomPe
 
 internal fun aChangeRoomPermissionsState(
     section: ChangeRoomPermissionsSection,
-    currentPermissions: MatrixRoomPowerLevels = previewPermissions(),
+    currentPermissions: RoomPowerLevels = previewPermissions(),
     items: List<RoomPermissionType> = ChangeRoomPermissionsPresenter.itemsForSection(section),
     hasChanges: Boolean = false,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -52,8 +52,8 @@ internal fun aChangeRoomPermissionsState(
     eventSink = eventSink,
 )
 
-private fun previewPermissions(): MatrixRoomPowerLevels {
-    return MatrixRoomPowerLevels(
+private fun previewPermissions(): RoomPowerLevels {
+    return RoomPowerLevels(
         // MembershipModeration section
         invite = RoomMember.Role.ADMIN.powerLevel,
         kick = RoomMember.Role.MODERATOR.powerLevel,

@@ -31,8 +31,10 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
+                onReportRoomClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(R.string.screen_roomlist_mark_as_read)
@@ -51,8 +53,10 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
+                onReportRoomClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(R.string.screen_roomlist_mark_as_unread)
@@ -65,34 +69,16 @@ class RoomListContextMenuTest {
     }
 
     @Test
-    fun `clicking on Leave dm generates expected Events`() {
-        val eventsRecorder = EventsRecorder<RoomListEvents>()
-        val contextMenu = aContextMenuShown(isDm = true)
-        rule.setContent {
-            RoomListContextMenu(
-                contextMenu = contextMenu,
-                eventSink = eventsRecorder,
-                onRoomSettingsClick = EnsureNeverCalledWithParam(),
-            )
-        }
-        rule.clickOn(CommonStrings.action_leave_conversation)
-        eventsRecorder.assertList(
-            listOf(
-                RoomListEvents.HideContextMenu,
-                RoomListEvents.LeaveRoom(contextMenu.roomId),
-            )
-        )
-    }
-
-    @Test
     fun `clicking on Leave room generates expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown(isDm = false)
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = EnsureNeverCalledWithParam(),
+                onReportRoomClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(CommonStrings.action_leave_room)
@@ -105,6 +91,25 @@ class RoomListContextMenuTest {
     }
 
     @Test
+    fun `clicking on Report room invokes the expected callback and generates expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val contextMenu = aContextMenuShown()
+        val callback = EnsureCalledOnceWithParam(contextMenu.roomId, Unit)
+        rule.setContent {
+            RoomListContextMenu(
+                contextMenu = contextMenu,
+                canReportRoom = true,
+                eventSink = eventsRecorder,
+                onRoomSettingsClick = EnsureNeverCalledWithParam(),
+                onReportRoomClick = callback,
+            )
+        }
+        rule.clickOn(CommonStrings.action_report_room)
+        eventsRecorder.assertSingle(RoomListEvents.HideContextMenu)
+        callback.assertSuccess()
+    }
+
+    @Test
     fun `clicking on Settings invokes the expected callback and generates expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown()
@@ -112,8 +117,10 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = callback,
+                onReportRoomClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(CommonStrings.common_settings)
@@ -129,8 +136,10 @@ class RoomListContextMenuTest {
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
+                canReportRoom = false,
                 eventSink = eventsRecorder,
                 onRoomSettingsClick = callback,
+                onReportRoomClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(CommonStrings.common_favourite)

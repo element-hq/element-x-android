@@ -24,7 +24,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class SendLocationPresenter @Inject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
-    private val room: MatrixRoom,
+    private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,
     private val locationActions: LocationActions,

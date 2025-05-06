@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.analytics
 
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import kotlinx.coroutines.flow.first
 
@@ -24,7 +24,7 @@ private fun Long.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
     }
 }
 
-suspend fun MatrixRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
+suspend fun BaseRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     val roomInfo = roomInfoFlow.first()
     return JoinedRoom(
         isDM = roomInfo.isDm,

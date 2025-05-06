@@ -39,5 +39,5 @@ fun aBuildMeta(
     gitRevision = gitRevision,
     gitBranchName = gitBranchName,
     flavorDescription = flavorDescription,
-    flavorShortDescription = flavorShortDescription
+    flavorShortDescription = flavorShortDescription,
 )

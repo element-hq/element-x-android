@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
@@ -73,6 +73,7 @@ import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.UploadParameters
+import org.matrix.rustcomponents.sdk.UploadSource
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPaginationStatus
@@ -86,7 +87,7 @@ class RustTimeline(
     private val inner: InnerTimeline,
     mode: Timeline.Mode,
     systemClock: SystemClock,
-    private val matrixRoom: MatrixRoom,
+    private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
@@ -137,7 +138,10 @@ class RustTimeline(
     )
 
     init {
-        coroutineScope.fetchMembers()
+        if (mode != Timeline.Mode.PINNED_EVENTS) {
+            coroutineScope.fetchMembers()
+        }
+
         if (mode == Timeline.Mode.LIVE) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
@@ -186,10 +190,10 @@ class RustTimeline(
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {
-                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
+                    Timber.d("Can't paginate $direction on room ${joinedRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
                 } else {
                     updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-                    Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
+                    Timber.e(error, "Error paginating $direction on room ${joinedRoom.roomId}")
                 }
             }.onSuccess { hasReachedEnd ->
                 updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
@@ -209,7 +213,7 @@ class RustTimeline(
         _timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        matrixRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
+        joinedRoom.roomInfoFlow.map { it.creator to it.isDm }.distinctUntilChanged(),
         isTimelineInitialized,
     ) { timelineItems,
         backwardPaginationStatus,
@@ -261,7 +265,7 @@ class RustTimeline(
         try {
             inner.fetchMembers()
         } catch (exception: Exception) {
-            Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
+            Timber.e(exception, "Error fetching members for room ${joinedRoom.roomId}")
         }
     }
 
@@ -358,7 +362,7 @@ class RustTimeline(
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 params = UploadParameters(
-                    filename = file.path,
+                    source = UploadSource.File(file.path),
                     caption = caption,
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
@@ -387,7 +391,7 @@ class RustTimeline(
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 params = UploadParameters(
-                    filename = file.path,
+                    source = UploadSource.File(file.path),
                     caption = caption,
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
@@ -415,7 +419,7 @@ class RustTimeline(
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 params = UploadParameters(
-                    filename = file.path,
+                    source = UploadSource.File(file.path),
                     caption = caption,
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
@@ -442,7 +446,7 @@ class RustTimeline(
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 params = UploadParameters(
-                    filename = file.path,
+                    source = UploadSource.File(file.path),
                     caption = caption,
                     formattedCaption = formattedCaption?.let {
                         FormattedBody(body = it, format = MessageFormat.Html)
@@ -503,7 +507,7 @@ class RustTimeline(
         return sendAttachment(listOf(file)) {
             inner.sendVoiceMessage(
                 params = UploadParameters(
-                    filename = file.path,
+                    source = UploadSource.File(file.path),
                     // Maybe allow a caption in the future?
                     caption = null,
                     formattedCaption = null,

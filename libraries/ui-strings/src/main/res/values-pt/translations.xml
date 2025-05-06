@@ -329,6 +329,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Não poderão voltar a entrar nesta sala, mesmo se forem convidados."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Tens a certeza que queres banir este participante?"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"A banir %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Poderão entrar na sala novamente se convidados."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Remover da sala"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Remover participante e proibir que entre no futuro?"</string>

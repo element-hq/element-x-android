@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -227,7 +227,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `observeRingingCalls - will cancel the active ringing call if the call is cancelled`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val client = FakeMatrixClient().apply {
@@ -254,7 +254,7 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `observeRingingCalls - will do nothing if either the session or the room are not found`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeBaseRoom().apply {
             givenRoomInfo(aRoomInfo())
         }
         val client = FakeMatrixClient().apply {
@@ -325,5 +325,6 @@ class DefaultActiveCallManagerTest {
         matrixClientProvider = matrixClientProvider,
         defaultCurrentCallService = DefaultCurrentCallService(),
         appForegroundStateService = FakeAppForegroundStateService(),
+        imageLoaderHolder = FakeImageLoaderHolder(),
     )
 }

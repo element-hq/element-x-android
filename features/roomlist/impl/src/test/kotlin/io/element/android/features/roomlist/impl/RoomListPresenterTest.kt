@@ -13,9 +13,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
+import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
@@ -64,8 +64,9 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -275,7 +276,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - show context menu`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeBaseRoom()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -353,7 +354,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - hide context menu`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeBaseRoom()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -463,7 +464,7 @@ class RoomListPresenterTest {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val setIsFavoriteResult = lambdaRecorder { _: Boolean -> Result.success(Unit) }
-        val room = FakeMatrixRoom(
+        val room = FakeBaseRoom(
             setIsFavoriteResult = setIsFavoriteResult
         )
         val analyticsService = FakeAnalyticsService()
@@ -510,9 +511,9 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
-        val room = FakeMatrixRoom()
-        val room2 = FakeMatrixRoom(roomId = A_ROOM_ID_2)
-        val room3 = FakeMatrixRoom(roomId = A_ROOM_ID_3)
+        val room = FakeBaseRoom()
+        val room2 = FakeBaseRoom(roomId = A_ROOM_ID_2)
+        val room3 = FakeBaseRoom(roomId = A_ROOM_ID_3)
         val allRooms = setOf(room, room2, room3)
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val matrixClient = FakeMatrixClient().apply {
@@ -577,7 +578,8 @@ class RoomListPresenterTest {
             roomListService = roomListService,
         )
         val roomSummary = aRoomSummary(
-            currentUserMembership = CurrentUserMembership.INVITED
+            currentUserMembership = CurrentUserMembership.INVITED,
+            inviter = aRoomMember(),
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         roomListService.postAllRooms(listOf(roomSummary))
@@ -593,16 +595,16 @@ class RoomListPresenterTest {
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
                 it.id == roomSummary.roomId.value
             }
+
             state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
-            state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))
+            state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary, blockUser = false))
 
             val inviteData = roomListRoomSummary.toInviteData()
-
             assert(eventSinkRecorder)
                 .isCalledExactly(2)
                 .withSequence(
                     listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
+                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
                 )
         }
     }
