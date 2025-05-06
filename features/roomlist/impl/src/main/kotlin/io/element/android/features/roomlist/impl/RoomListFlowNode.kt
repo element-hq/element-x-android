@@ -32,6 +32,7 @@ import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
@@ -67,6 +68,8 @@ class RoomListFlowNode @AssistedInject constructor(
         )
     }
 
+    private val firstThrottler = FirstThrottler(300)
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
@@ -79,14 +82,17 @@ class RoomListFlowNode @AssistedInject constructor(
     }
 
     private fun onRoomClick(roomId: RoomId) {
+        if (firstThrottler.canHandleAsBoolean().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClick(roomId) }
     }
 
     private fun onOpenSettings() {
+        if (firstThrottler.canHandleAsBoolean().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onSettingsClick() }
     }
 
     private fun onCreateRoomClick() {
+        if (firstThrottler.canHandleAsBoolean().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClick() }
     }
 

@@ -38,4 +38,8 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
         // Too early
         return CanHandleResult.No(minimumInterval - delaySinceLast)
     }
+
+    fun canHandleAsBoolean(): Boolean {
+        return canHandle() == CanHandleResult.Yes
+    }
 }
