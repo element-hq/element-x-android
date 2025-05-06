@@ -95,12 +95,14 @@ class OutgoingVerificationPresenter @AssistedInject constructor(
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 // Just relay the event to the state machine
-                OutgoingVerificationViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification(verificationRequest))
-                OutgoingVerificationViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
-                OutgoingVerificationViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
-                OutgoingVerificationViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
-                OutgoingVerificationViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
-                OutgoingVerificationViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
+                OutgoingVerificationViewEvents.RequestVerification -> StateMachineEvent.RequestVerification(verificationRequest)
+                OutgoingVerificationViewEvents.StartSasVerification -> StateMachineEvent.StartSasVerification
+                OutgoingVerificationViewEvents.ConfirmVerification -> StateMachineEvent.AcceptChallenge
+                OutgoingVerificationViewEvents.DeclineVerification -> StateMachineEvent.DeclineChallenge
+                OutgoingVerificationViewEvents.Cancel -> StateMachineEvent.Cancel
+                OutgoingVerificationViewEvents.Reset -> StateMachineEvent.Reset
+            }.let { stateMachineEvent ->
+                stateAndDispatch.dispatchAction(stateMachineEvent)
             }
         }
         return OutgoingVerificationState(
