@@ -94,7 +94,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                     }
 
                     override fun onLearnMoreAboutEncryption() {
-                        learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
+                        learnMoreUrl.value = LearnMoreConfig.DEVICE_VERIFICATION_URL
                     }
                 }
 
@@ -116,7 +116,8 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                         }
 
                         override fun onLearnMoreAboutEncryption() {
-                            learnMoreUrl.value = LearnMoreConfig.ENCRYPTION_URL
+                            // Note that this callback is never called. The "Learn more" link is not displayed
+                            // for the self session interactive verification.
                         }
                     })
                     .build()
