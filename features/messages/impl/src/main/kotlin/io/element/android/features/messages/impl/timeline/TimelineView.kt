@@ -321,7 +321,8 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldScrollToBottom = isScrollFinished && ((canAutoScroll && newEventState == NewEventState.FromOther) || newEventState == NewEventState.FromMe)
+        val shouldScrollToBottom = isScrollFinished &&
+            (canAutoScroll && newEventState == NewEventState.FromOther || newEventState == NewEventState.FromMe)
         if (shouldScrollToBottom) {
             scrollToBottom(force = true)
         }
