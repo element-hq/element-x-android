@@ -15,7 +15,10 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.NotificationClient
+import org.matrix.rustcomponents.sdk.NotificationItemRequest
+import org.matrix.rustcomponents.sdk.NotificationResult
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 
 class RustNotificationService(
     private val notificationClient: NotificationClient,
@@ -32,6 +35,34 @@ class RustNotificationService(
             val item = notificationClient.getNotification(roomId.value, eventId.value)
             item?.use {
                 notificationMapper.map(eventId, roomId, it)
+            }
+        }
+    }
+
+    override suspend fun getNotifications(
+        ids: Map<RoomId, List<EventId>>
+    ): Result<Map<EventId, NotificationData?>> = withContext(dispatchers.io) {
+        runCatching {
+            val requests = ids.map { (roomId, eventIds) ->
+                NotificationItemRequest(
+                    roomId = roomId.value,
+                    eventIds = eventIds.map { it.value }
+                )
+            }
+            val items = notificationClient.getNotifications(requests)
+            buildMap {
+                for ((id, item) in items) {
+                    item.use {
+                        val eventId = EventId(id)
+                        when (it) {
+                            is NotificationResult.Ok -> {
+                                val roomId = RoomId(requests.find { it.eventIds.contains(eventId.value) }?.roomId!!)
+                                put(eventId, notificationMapper.map(eventId, roomId, it.v1))
+                            }
+                            is NotificationResult.Err -> Timber.e(it.v1, "Could not retrieve event for notification with $eventId")
+                        }
+                    }
+                }
             }
         }
     }
