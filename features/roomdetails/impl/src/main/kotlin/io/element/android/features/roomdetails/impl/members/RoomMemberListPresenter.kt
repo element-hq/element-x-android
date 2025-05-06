@@ -19,8 +19,9 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
+import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -34,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.room.canInviteAsState
+import io.element.android.libraries.matrix.ui.room.isDmAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -48,7 +50,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
     private val room: JoinedRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomMembersModerationPresenter: Presenter<RoomMembersModerationState>,
+    private val roomMembersModerationPresenter: Presenter<RoomMemberModerationState>,
     private val encryptionService: EncryptionService,
     @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
@@ -69,7 +71,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val canInvite by room.canInviteAsState(syncUpdateFlow.value)
-
+        val isDm = room.isDmAsState()
         val roomModerationState = roomMembersModerationPresenter.present()
 
         val roomMemberIdentityStates by produceState(persistentMapOf<UserId, IdentityState>()) {
@@ -163,8 +165,10 @@ class RoomMemberListPresenter @AssistedInject constructor(
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is RoomMemberListEvents.RoomMemberSelected ->
-                    if (roomModerationState.canDisplayModerationActions) {
-                        roomModerationState.eventSink(RoomMembersModerationEvents.SelectRoomMember(event.roomMember))
+                    if (event.roomMember.membership == RoomMembershipState.BAN) {
+                        roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser(event.roomMember)))
+                    } else if (!isDm.value && (roomModerationState.canBan || roomModerationState.canKick)) {
+                        roomModerationState.eventSink(RoomMemberModerationEvents.RenderActions(event.roomMember))
                     } else {
                         navigator.openRoomMemberDetails(event.roomMember.userId)
                     }

@@ -18,6 +18,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.services.analytics.api.AnalyticsService
@@ -28,6 +31,7 @@ class RoomMemberListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomMemberListPresenter.Factory,
     private val analyticsService: AnalyticsService,
+    private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), RoomMemberListNavigator {
     interface Callback : Plugin {
         fun openRoomMemberDetails(roomMemberId: UserId)
@@ -68,6 +72,16 @@ class RoomMemberListNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             navigator = this,
+        )
+        roomMemberModerationRenderer.Render(
+            state = state.moderationState,
+            onSelectAction = { action ->
+                when (action) {
+                    is ModerationAction.DisplayProfile -> openRoomMemberDetails(action.member.userId)
+                    else -> state.moderationState.eventSink(RoomMemberModerationEvents.ProcessAction(action))
+                }
+            },
+            modifier = Modifier,
         )
     }
 }

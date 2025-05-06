@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Eltávolítás és a tag kitiltása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Kitiltás"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Biztos, hogy kitiltja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s kitiltása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Eltávolítás"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Biztos, hogy eltávolítja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profil megtekintése"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Eltávolítás a szobából"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s eltávolítása…"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eltávolítás és a tag kitiltása"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Csak a tag eltávolítása"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Tiltás feloldása"</string>
+  <string name="screen_room_member_list_manage_member_unban_message">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Felhasználó tiltásának feloldása"</string>
+  <string name="screen_room_member_list_unbanning_user">"%1$s tiltásának feloldása"</string>
+</resources>

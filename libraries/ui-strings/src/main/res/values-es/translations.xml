@@ -316,15 +316,6 @@ Motivo: %1$s."</string>
   <string name="invite_friends_text">"Hola, puedes hablar conmigo en %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban">"Sacar y vetar a un miembro"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Vetar"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"No podrán volver a unirse a esta sala si son invitados."</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"¿Estás seguro de que quieres vetar a este miembro?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Vetando a %1$s"</string>
-  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ver perfil"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"Sacar de la sala"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"¿Sacar al miembro y prohibirle unirse en el futuro?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Eliminando %1$s…"</string>
   <string name="screen_media_picker_error_failed_selection">"Error al seleccionar archivos multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_media_upload_preview_caption_warning">"Es posible que las leyendas no sean visibles para las personas que usan aplicaciones más antiguas."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>

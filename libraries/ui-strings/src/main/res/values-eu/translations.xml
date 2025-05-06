@@ -312,14 +312,6 @@ Arrazoia: %1$s."</string>
   <string name="invite_friends_rich_title">"🔐️ Zatoz nirekin %1$s(e)ra"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Astindu erroreen berri emateko"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban">"Kendu kidea eta ezarri debekua"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Ezarri debekua"</string>
-  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ziur kide honi debekua ezarri nahi diozula?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s(r)i debekua ezartzen"</string>
-  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Ikusi profila"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"Kendu gelatik"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Kidea kendu eta etorkizunean sartzea debekatu?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s kentzen…"</string>
   <string name="screen_media_picker_error_failed_selection">"Huts egin du multimedia aukeratzeak, saiatu berriro."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Huts egin du multimedia igotzeak, saiatu berriro."</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Finkatutako mezuak"</string>

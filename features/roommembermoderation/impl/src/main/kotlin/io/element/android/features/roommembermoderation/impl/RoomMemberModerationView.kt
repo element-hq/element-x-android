@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.roomdetails.impl.members.moderation
+package io.element.android.features.roommembermoderation.impl
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +32,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.roomdetails.impl.R
+import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
@@ -47,7 +49,6 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -57,31 +58,26 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
-fun RoomMembersModerationView(
-    state: RoomMembersModerationState,
-    onDisplayMemberProfile: (UserId) -> Unit,
+fun RoomMemberModerationView(
+    state: InternalRoomMemberModerationState,
+    onSelectAction: (ModerationAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val selectedRoomMember = state.selectedRoomMember.dataOrNull()
     Box(modifier = modifier) {
-        if (state.selectedRoomMember != null && state.actions.isNotEmpty()) {
+        if (selectedRoomMember != null && state.canDisplayActions) {
             RoomMemberActionsBottomSheet(
-                roomMember = state.selectedRoomMember,
+                roomMember = selectedRoomMember,
                 actions = state.actions,
-                onSelectAction = { action ->
-                    when (action) {
-                        is ModerationAction.DisplayProfile -> {
-                            onDisplayMemberProfile(action.userId)
-                        }
-                        is ModerationAction.KickUser -> {
-                            state.eventSink(RoomMembersModerationEvents.KickUser)
-                        }
-                        is ModerationAction.BanUser -> {
-                            state.eventSink(RoomMembersModerationEvents.BanUser)
-                        }
-                    }
-                },
-                onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                onSelectAction = onSelectAction,
+                onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
             )
+        }
+        val onSelectAction by rememberUpdatedState(onSelectAction)
+        LaunchedEffect(state.canOnlyDisplayProfile) {
+            if (state.canOnlyDisplayProfile) {
+                onSelectAction(state.actions.first())
+            }
         }
 
         val asyncIndicatorState = rememberAsyncIndicatorState()
@@ -90,23 +86,23 @@ fun RoomMembersModerationView(
         when (val action = state.kickUserAsyncAction) {
             is AsyncAction.Confirming -> {
                 TextFieldDialog(
-                    title = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_kick_member_confirmation_title),
-                    submitText = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action),
+                    title = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_title),
+                    submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action),
                     onSubmit = { reason ->
-                        state.eventSink(RoomMembersModerationEvents.DoKickUser(reason = reason))
+                        state.eventSink(InternalRoomMemberModerationEvents.DoKickUser(reason = reason))
                     },
-                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     label = stringResource(id = CommonStrings.common_reason),
-                    content = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_kick_member_confirmation_description),
+                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_description),
                     value = "",
                 )
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
-                    val userDisplayName = state.selectedRoomMember?.getBestName().orEmpty()
+                    val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
                     asyncIndicatorState.enqueue {
-                        AsyncIndicator.Loading(text = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_removing_user, userDisplayName))
+                        AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_removing_user, userDisplayName))
                     }
                 }
             }
@@ -129,23 +125,23 @@ fun RoomMembersModerationView(
         when (val action = state.banUserAsyncAction) {
             is AsyncAction.Confirming -> {
                 TextFieldDialog(
-                    title = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_ban_member_confirmation_title),
-                    submitText = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action),
+                    title = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_title),
+                    submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action),
                     onSubmit = { reason ->
-                        state.eventSink(RoomMembersModerationEvents.DoBanUser(reason = reason))
+                        state.eventSink(InternalRoomMemberModerationEvents.DoBanUser(reason = reason))
                     },
-                    onDismissRequest = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     label = stringResource(id = CommonStrings.common_reason),
-                    content = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_ban_member_confirmation_description),
+                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_description),
                     value = "",
                 )
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
-                    val userDisplayName = state.selectedRoomMember?.getBestName().orEmpty()
+                    val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
                     asyncIndicatorState.enqueue {
-                        AsyncIndicator.Loading(text = stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_banning_user, userDisplayName))
+                        AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_banning_user, userDisplayName))
                     }
                 }
             }
@@ -164,24 +160,21 @@ fun RoomMembersModerationView(
             }
             else -> Unit
         }
-
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                if (action is ConfirmingRoomMemberAction) {
-                    ConfirmationDialog(
-                        title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
-                        content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
-                        submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
-                        onSubmitClick = {
-                            val userDisplayName = action.roomMember.getBestName()
-                            asyncIndicatorState.enqueue {
-                                AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
-                            }
-                            state.eventSink(RoomMembersModerationEvents.UnbanUser(action.roomMember.userId))
-                        },
-                        onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
-                    )
-                }
+                ConfirmationDialog(
+                    title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
+                    content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
+                    submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
+                    onSubmitClick = {
+                        val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
+                        asyncIndicatorState.enqueue {
+                            AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
+                        }
+                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser)
+                    },
+                    onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                )
             }
             is AsyncAction.Failure -> {
                 Timber.e(action.error, "Failed to unban user.")
@@ -260,7 +253,7 @@ private fun RoomMemberActionsBottomSheet(
                 when (action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_member_user_info)) },
+                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
                             onClick = {
                                 coroutineScope.launch {
@@ -272,7 +265,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.KickUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(CommonStrings.screen_bottom_sheet_manage_room_member_remove)) },
+                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             onClick = {
                                 coroutineScope.launch {
@@ -284,7 +277,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.BanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_remove_confirmation_ban)) },
+                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -295,6 +288,7 @@ private fun RoomMemberActionsBottomSheet(
                             }
                         )
                     }
+                    is ModerationAction.UnbanUser -> Unit
                 }
             }
         }
@@ -303,16 +297,16 @@ private fun RoomMemberActionsBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMembersModerationStateProvider::class) state: RoomMembersModerationState) {
+internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMemberModerationStateProvider::class) state: InternalRoomMemberModerationState) {
     ElementPreview {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 64.dp)
         ) {
-            RoomMembersModerationView(
+            RoomMemberModerationView(
                 state = state,
-                onDisplayMemberProfile = {},
+                onSelectAction = {},
             )
         }
     }

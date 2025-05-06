@@ -325,6 +325,14 @@
       "includeRegex" : [
         "screen\\.report_room\\..*"
       ]
+    },
+    {
+      "name" : ":features:roommembermoderation:impl",
+      "includeRegex" : [
+        "screen\\.bottom_sheet\\.manage_room_member\\..*",
+        "screen_room_member_list_manage_member.*",
+        "screen_room_member_list_unbanning_user"
+      ]
     }
   ]
 }

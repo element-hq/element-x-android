@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationView
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -99,7 +99,7 @@ fun RoomMemberListView(
         }
     ) { padding ->
         var selectedSection by remember { mutableStateOf(SelectedSection.entries[initialSelectedSectionIndex]) }
-        if (!state.moderationState.canDisplayBannedUsers && selectedSection == SelectedSection.BANNED) {
+        if (!state.moderationState.canBan && selectedSection == SelectedSection.BANNED) {
             SideEffect {
                 selectedSection = SelectedSection.MEMBERS
             }
@@ -127,7 +127,7 @@ fun RoomMemberListView(
                 RoomMemberList(
                     roomMembers = state.roomMembers,
                     showMembersCount = true,
-                    canDisplayBannedUsersControls = state.moderationState.canDisplayBannedUsers,
+                    canDisplayBannedUsersControls = state.moderationState.canBan,
                     selectedSection = selectedSection,
                     onSelectedSectionChange = { selectedSection = it },
                     onSelectUser = ::onSelectUser,
@@ -135,11 +135,6 @@ fun RoomMemberListView(
             }
         }
     }
-
-    RoomMembersModerationView(
-        state = state.moderationState,
-        onDisplayMemberProfile = navigator::openRoomMemberDetails
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
