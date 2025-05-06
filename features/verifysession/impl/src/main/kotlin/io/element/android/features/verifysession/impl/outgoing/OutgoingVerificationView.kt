@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.verifysession.impl.R
-import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionState.Step
+import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationState.Step
 import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
 import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
 import io.element.android.libraries.architecture.AsyncData
@@ -49,8 +49,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VerifySelfSessionView(
-    state: VerifySelfSessionState,
+fun OutgoingVerificationView(
+    state: OutgoingVerificationState,
     onLearnMoreClick: () -> Unit,
     onFinish: () -> Unit,
     onBack: () -> Unit,
@@ -59,12 +59,12 @@ fun VerifySelfSessionView(
     val step = state.step
     fun cancelOrResetFlow() {
         when (step) {
-            is Step.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            is Step.Canceled -> state.eventSink(OutgoingVerificationViewEvents.Reset)
             Step.Initial, Step.Completed -> onBack()
-            Step.Ready, is Step.AwaitingOtherDeviceResponse -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            Step.Ready, is Step.AwaitingOtherDeviceResponse -> state.eventSink(OutgoingVerificationViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
-                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
+                    state.eventSink(OutgoingVerificationViewEvents.DeclineVerification)
                 }
             }
             else -> Unit
@@ -98,10 +98,10 @@ fun VerifySelfSessionView(
                 )
             },
             header = {
-                VerifySelfSessionHeader(step = step, request = state.request)
+                OutgoingVerificationHeader(step = step, request = state.request)
             },
             footer = {
-                VerifySelfSessionBottomMenu(
+                OutgoingVerificationViewBottomMenu(
                     screenState = state,
                     onCancelClick = ::cancelOrResetFlow,
                     onContinueClick = onFinish,
@@ -109,7 +109,7 @@ fun VerifySelfSessionView(
             },
             isScrollable = true,
         ) {
-            VerifySelfSessionContent(
+            OutgoingVerificationContent(
                 flowState = step,
                 request = state.request,
                 onLearnMoreClick = onLearnMoreClick,
@@ -119,7 +119,7 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Outgoing) {
+private fun OutgoingVerificationHeader(step: Step, request: VerificationRequest.Outgoing) {
     val iconStyle = when (step) {
         Step.Loading -> error("Should not happen")
         Step.Initial -> when (request) {
@@ -189,7 +189,7 @@ private fun VerifySelfSessionHeader(step: Step, request: VerificationRequest.Out
 }
 
 @Composable
-private fun VerifySelfSessionContent(
+private fun OutgoingVerificationContent(
     flowState: Step,
     request: VerificationRequest.Outgoing,
     onLearnMoreClick: () -> Unit,
@@ -227,8 +227,8 @@ private fun ContentInitial(
 }
 
 @Composable
-private fun VerifySelfSessionBottomMenu(
-    screenState: VerifySelfSessionState,
+private fun OutgoingVerificationViewBottomMenu(
+    screenState: OutgoingVerificationState,
     onCancelClick: () -> Unit,
     onContinueClick: () -> Unit,
 ) {
@@ -244,7 +244,7 @@ private fun VerifySelfSessionBottomMenu(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_start_verification),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                    onClick = { eventSink(OutgoingVerificationViewEvents.RequestVerification) },
                 )
                 InvisibleButton()
             }
@@ -264,7 +264,7 @@ private fun VerifySelfSessionBottomMenu(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_start),
-                    onClick = { eventSink(VerifySelfSessionViewEvents.StartSasVerification) },
+                    onClick = { eventSink(OutgoingVerificationViewEvents.StartSasVerification) },
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -287,14 +287,14 @@ private fun VerifySelfSessionBottomMenu(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_session_verification_they_match),
                         onClick = {
-                            eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
+                            eventSink(OutgoingVerificationViewEvents.ConfirmVerification)
                         },
                     )
 
                     TextButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_session_verification_they_dont_match),
-                        onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
+                        onClick = { eventSink(OutgoingVerificationViewEvents.DeclineVerification) },
                     )
                 }
             }
@@ -315,8 +315,8 @@ private fun VerifySelfSessionBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) = ElementPreview {
-    VerifySelfSessionView(
+internal fun OutgoingVerificationViewPreview(@PreviewParameter(OutgoingVerificationStateProvider::class) state: OutgoingVerificationState) = ElementPreview {
+    OutgoingVerificationView(
         state = state,
         onLearnMoreClick = {},
         onFinish = {},

@@ -26,7 +26,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.ftue.impl.sessionverification.choosemode.ChooseSelfVerificationModeNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -40,7 +40,7 @@ import kotlinx.parcelize.Parcelize
 class FtueSessionVerificationFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val outgoingVerificationEntryPoint: OutgoingVerificationEntryPoint,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
 ) : BaseFlowNode<FtueSessionVerificationFlowNode.NavTarget>(
     backstack = BackStack(
@@ -101,12 +101,12 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                 createNode<ChooseSelfVerificationModeNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.UseAnotherDevice -> {
-                verifySessionEntryPoint.nodeBuilder(this, buildContext)
-                    .params(VerifySessionEntryPoint.Params(
+                outgoingVerificationEntryPoint.nodeBuilder(this, buildContext)
+                    .params(OutgoingVerificationEntryPoint.Params(
                         showDeviceVerifiedScreen = true,
                         verificationRequest = VerificationRequest.Outgoing.CurrentSession,
                     ))
-                    .callback(object : VerifySessionEntryPoint.Callback {
+                    .callback(object : OutgoingVerificationEntryPoint.Callback {
                         override fun onDone() {
                             plugins<Callback>().forEach { it.onDone() }
                         }
