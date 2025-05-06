@@ -8,6 +8,7 @@
 package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProvider
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -18,6 +19,7 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
             aChangeServerState(),
             aChangeServerState(changeServerAction = AsyncData.Failure(ChangeServerError.Error(CommonStrings.error_unknown))),
             aChangeServerState(changeServerAction = AsyncData.Failure(ChangeServerError.SlidingSyncAlert)),
+            aChangeServerState(changeServerAction = AsyncData.Failure(ChangeServerError.UnauthorizedAccountProvider(anAccountProvider()))),
         )
 }
 

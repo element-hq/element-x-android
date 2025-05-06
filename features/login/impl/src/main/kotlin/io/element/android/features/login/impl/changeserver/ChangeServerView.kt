@@ -12,7 +12,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.AsyncData
@@ -20,6 +22,7 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 
 @Composable
 fun ChangeServerView(
@@ -31,7 +34,7 @@ fun ChangeServerView(
     val eventSink = state.eventSink
     when (state.changeServerAction) {
         is AsyncData.Failure -> {
-            when (val error = state.changeServerAction.error) {
+            when (val error = state.changeServerAction.error as? ChangeServerError) {
                 is ChangeServerError.Error -> {
                     ErrorDialog(
                         modifier = modifier,
@@ -53,6 +56,20 @@ fun ChangeServerView(
                         }
                     )
                 }
+                is ChangeServerError.UnauthorizedAccountProvider -> {
+                    ErrorDialog(
+                        modifier = modifier,
+                        content = stringResource(
+                            id = R.string.screen_change_server_error_unauthorized_homeserver,
+                            LocalBuildMeta.current.applicationName,
+                            error.accountProvider.title,
+                        ),
+                        onSubmit = {
+                            eventSink.invoke(ChangeServerEvents.ClearError)
+                        }
+                    )
+                }
+                null -> Unit
             }
         }
         is AsyncData.Loading -> ProgressDialog()
