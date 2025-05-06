@@ -286,11 +286,11 @@ private fun BoxScope.TimelineScrollHelper(
     }
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
-    fun scrollToBottom() {
+    fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
             if (lazyListState.firstVisibleItemIndex > 10) {
                 lazyListState.scrollToItem(0)
-            } else {
+            } else if (force || lazyListState.firstVisibleItemIndex != 0) {
                 lazyListState.animateScrollToItem(0)
             }
         }
@@ -298,7 +298,7 @@ private fun BoxScope.TimelineScrollHelper(
 
     fun jumpToBottom() {
         if (isLive) {
-            scrollToBottom()
+            scrollToBottom(force = false)
         } else {
             jumpToLiveHandled = false
             onJumpToLive()
@@ -321,9 +321,9 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldScrollToBottom = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        val shouldScrollToBottom = isScrollFinished && ((canAutoScroll && newEventState == NewEventState.FromOther) || newEventState == NewEventState.FromMe)
         if (shouldScrollToBottom) {
-            scrollToBottom()
+            scrollToBottom(force = true)
         }
     }
 
