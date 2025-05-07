@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
-fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = then(
+fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = this.then(
     if (onClick != null) {
         Modifier.clickable { onClick() }
     } else {

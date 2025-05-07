@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.IntOffset
  * Horizontally aligns the content to the center of the space.
  * Vertically aligns the bottom edge of the content to the center of the space.
  */
-fun Modifier.centerBottomEdge(scope: BoxScope): Modifier = with(scope) {
-    then(
+fun Modifier.centerBottomEdge(scope: BoxScope): Modifier = this.then(
+    with(scope) {
         Modifier.align { size, space, _ ->
             IntOffset(
                 x = (space.width - size.width) / 2,
                 y = space.height / 2 - size.height,
             )
         }
-    )
-}
+    }
+)
