@@ -1,3 +1,18 @@
+Changes in Element X v25.05.1
+=============================
+
+## What's Changed
+### 🐛 Bugfixes
+* Fix broken Element Call in 25.05.0 by @bmarty in https://github.com/element-hq/element-x-android/pull/4694
+### Dependency upgrades
+* fix(deps): update android.gradle.plugin to v8.10.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4687
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.5.8 by @renovate in https://github.com/element-hq/element-x-android/pull/4696
+### Others
+* Let EnterpriseService prevent usage of homeserver by @bmarty in https://github.com/element-hq/element-x-android/pull/4682
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.05.0...v25.05.1
+
 Changes in Element X v25.05.0
 =============================
 
