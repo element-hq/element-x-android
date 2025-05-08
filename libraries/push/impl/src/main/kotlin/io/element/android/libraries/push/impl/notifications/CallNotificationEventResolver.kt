@@ -20,8 +20,11 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Helper to resolve a valid [NotifiableEvent] from a [NotificationData].
@@ -55,13 +58,29 @@ class DefaultCallNotificationEventResolver @Inject constructor(
         val content = notificationData.content as? NotificationContent.MessageLike.CallNotify
             ?: throw ResolvingException("content is not a call notify")
 
-        appForegroundStateService.updateHasRingingCall(true)
+        val previousRingingCallStatus = appForegroundStateService.hasRingingCall.value
+        // We need the sync service working to get the updated room info
+        val isRoomCallActive = runCatching {
+            if (content.type == CallNotifyType.RING) {
+                appForegroundStateService.updateHasRingingCall(true)
 
-        val client = clientProvider.getOrNull(sessionId) ?: error("Session $sessionId not found")
-        val room = client.getRoom(notificationData.roomId) ?: error("Room ${notificationData.roomId} not found")
-        val isRoomCallActive = room.roomInfoFlow.value.hasRoomCall
+                val client = clientProvider.getOrRestore(sessionId).getOrNull() ?: throw ResolvingException("Session $sessionId not found")
+                val room = client.getRoom(notificationData.roomId) ?: throw ResolvingException("Room ${notificationData.roomId} not found")
+                // Give a few seconds for the room info flow to catch up with the sync, if needed - this is usually instant
+                val isActive = withTimeoutOrNull(3.seconds) { room.roomInfoFlow.firstOrNull { it.hasRoomCall } }?.hasRoomCall ?: false
 
-        appForegroundStateService.updateHasRingingCall(false)
+                // We no longer need the sync service to be active because of a call notification.
+                appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)
+
+                isActive
+            } else {
+                // If the call notification is not of ringing type, we don't need to check if the call is active
+                false
+            }
+        }.onFailure {
+            // Make sure to reset the hasRingingCall state in case of failure
+            appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)
+        }.getOrDefault(false)
 
         notificationData.run {
             if (content.type == CallNotifyType.RING && isRoomCallActive && !forceNotify) {
@@ -83,9 +102,7 @@ class DefaultCallNotificationEventResolver @Inject constructor(
                     senderAvatarUrl = senderAvatarUrl,
                 )
             } else {
-                val now = System.currentTimeMillis()
-                val elapsed = now - timestamp
-                Timber.d("Event $eventId is call notify but should not ring: $timestamp vs $now ($elapsed ms elapsed), notify: ${content.type}")
+                Timber.d("Event $eventId is call notify but should not ring: $isRoomCallActive, notify: ${content.type}")
                 // Create a simple message notification event
                 buildNotifiableMessageEvent(
                     sessionId = sessionId,
