@@ -8,7 +8,6 @@
 package io.element.android.libraries.matrix.ui.room
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -26,14 +25,6 @@ sealed interface LoadingRoomState {
     data object Loading : LoadingRoomState
     data object Error : LoadingRoomState
     data class Loaded(val room: JoinedRoom) : LoadingRoomState
-}
-
-open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState> {
-    override val values: Sequence<LoadingRoomState>
-        get() = sequenceOf(
-            LoadingRoomState.Loading,
-            LoadingRoomState.Error
-        )
 }
 
 class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {

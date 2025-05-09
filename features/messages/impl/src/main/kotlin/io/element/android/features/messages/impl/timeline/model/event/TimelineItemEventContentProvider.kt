@@ -7,11 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import android.graphics.Typeface
-import android.text.style.StyleSpan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import org.jsoup.nodes.Document
 
@@ -39,25 +35,6 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
 }
 
 const val AN_EMOJI_ONLY_TEXT = "😁"
-
-class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
-    private fun buildSpanned(text: String) = buildSpannedString {
-        inSpans(StyleSpan(Typeface.BOLD)) {
-            append("Rich Text")
-        }
-        append(" ")
-        append(text)
-    }
-
-    override val values = sequenceOf(
-        aTimelineItemEmoteContent(),
-        aTimelineItemEmoteContent().copy(formattedBody = buildSpanned("Emote")),
-        aTimelineItemNoticeContent(),
-        aTimelineItemNoticeContent().copy(formattedBody = buildSpanned("Notice")),
-        aTimelineItemTextContent(),
-        aTimelineItemTextContent().copy(formattedBody = buildSpanned("Text")),
-    )
-}
 
 fun aTimelineItemEmoteContent(
     body: String = "Emote",

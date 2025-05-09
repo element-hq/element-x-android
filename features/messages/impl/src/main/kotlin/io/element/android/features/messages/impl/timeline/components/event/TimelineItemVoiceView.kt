@@ -34,13 +34,11 @@ import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -52,7 +50,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
-import io.element.android.libraries.voiceplayer.api.VoiceMessageStateProvider
 import kotlinx.coroutines.delay
 
 @Composable
@@ -240,25 +237,6 @@ private fun CustomIconButton(
         content = content,
     )
 }
-
-open class TimelineItemVoiceViewParametersProvider : PreviewParameterProvider<TimelineItemVoiceViewParameters> {
-    private val voiceMessageStateProvider = VoiceMessageStateProvider()
-    private val timelineItemVoiceContentProvider = TimelineItemVoiceContentProvider()
-    override val values: Sequence<TimelineItemVoiceViewParameters>
-        get() = timelineItemVoiceContentProvider.values.flatMap { content ->
-            voiceMessageStateProvider.values.map { state ->
-                TimelineItemVoiceViewParameters(
-                    state = state,
-                    content = content,
-                )
-            }
-        }
-}
-
-data class TimelineItemVoiceViewParameters(
-    val state: VoiceMessageState,
-    val content: TimelineItemVoiceContent,
-)
 
 @PreviewsDayNight
 @Composable

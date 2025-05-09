@@ -27,9 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -115,13 +113,4 @@ internal fun EditableAvatarViewPreview(
         avatarSize = AvatarSize.EditRoomDetails,
         onAvatarClick = {},
     )
-}
-
-open class EditableAvatarViewUriProvider : PreviewParameterProvider<Uri?> {
-    override val values: Sequence<Uri?>
-        get() = sequenceOf(
-            null,
-            "mxc://matrix.org/123456".toUri(),
-            "https://example.com/avatar.jpg".toUri(),
-        )
 }

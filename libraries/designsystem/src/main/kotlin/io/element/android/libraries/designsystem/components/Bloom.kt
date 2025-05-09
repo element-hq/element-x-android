@@ -72,7 +72,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -528,11 +527,6 @@ internal fun BloomPreview() {
             }
         }
     }
-}
-
-class InitialsColorIntProvider : PreviewParameterProvider<Int> {
-    override val values: Sequence<Int>
-        get() = sequenceOf(0, 1, 2, 3, 4, 5, 6, 7)
 }
 
 @PreviewsDayNight

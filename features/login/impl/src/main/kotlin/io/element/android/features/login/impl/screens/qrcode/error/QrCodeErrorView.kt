@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.impl.R
@@ -135,16 +134,4 @@ internal fun QrCodeErrorViewPreview(@PreviewParameter(QrCodeErrorScreenTypeProvi
             onRetry = {}
         )
     }
-}
-
-class QrCodeErrorScreenTypeProvider : PreviewParameterProvider<QrCodeErrorScreenType> {
-    override val values: Sequence<QrCodeErrorScreenType> = sequenceOf(
-        QrCodeErrorScreenType.Cancelled,
-        QrCodeErrorScreenType.Declined,
-        QrCodeErrorScreenType.Expired,
-        QrCodeErrorScreenType.ProtocolNotSupported,
-        QrCodeErrorScreenType.InsecureChannelDetected,
-        QrCodeErrorScreenType.SlidingSyncNotAvailable,
-        QrCodeErrorScreenType.UnknownError
-    )
 }

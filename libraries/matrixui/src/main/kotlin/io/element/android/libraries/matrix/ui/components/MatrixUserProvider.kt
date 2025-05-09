@@ -41,12 +41,3 @@ fun aMatrixUserList() = listOf(
     aMatrixUser("@victor:server.org", "Victor"),
     aMatrixUser("@walter:server.org", "Walter"),
 )
-
-open class MatrixUserWithNullProvider : PreviewParameterProvider<MatrixUser?> {
-    override val values: Sequence<MatrixUser?>
-        get() = sequenceOf(
-            aMatrixUser(),
-            aMatrixUser().copy(displayName = null),
-            null,
-        )
-}

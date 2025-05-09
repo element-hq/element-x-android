@@ -19,38 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
-
-internal class CompoundIconChunkProvider : PreviewParameterProvider<IconChunk> {
-    override val values: Sequence<IconChunk>
-        get() {
-            val chunks = CompoundIcons.allResIds.chunked(36)
-            return chunks.mapIndexed { index, chunk ->
-                IconChunk(index = index + 1, total = chunks.size, icons = chunk.toPersistentList())
-            }
-                .asSequence()
-        }
-}
-
-internal class OtherIconChunkProvider : PreviewParameterProvider<IconChunk> {
-    override val values: Sequence<IconChunk>
-        get() {
-            val chunks = iconsOther.chunked(36)
-            return chunks.mapIndexed { index, chunk ->
-                IconChunk(index = index + 1, total = chunks.size, icons = chunk.toPersistentList())
-            }
-                .asSequence()
-        }
-}
 
 internal data class IconChunk(
     val index: Int,

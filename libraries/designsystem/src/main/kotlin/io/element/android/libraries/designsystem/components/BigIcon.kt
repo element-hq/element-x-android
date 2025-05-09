@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -27,7 +25,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -183,17 +180,4 @@ internal fun BigIconPreview() = ElementPreview {
             }
         }
     }
-}
-
-internal class BigIconStyleProvider : PreviewParameterProvider<BigIcon.Style> {
-    override val values: Sequence<BigIcon.Style>
-        get() = sequenceOf(
-            BigIcon.Style.Default(Icons.Filled.CatchingPokemon),
-            BigIcon.Style.Alert,
-            BigIcon.Style.AlertSolid,
-            BigIcon.Style.Default(Icons.Filled.CatchingPokemon, useCriticalTint = true),
-            BigIcon.Style.Success,
-            BigIcon.Style.SuccessSolid,
-            BigIcon.Style.Loading,
-        )
 }
