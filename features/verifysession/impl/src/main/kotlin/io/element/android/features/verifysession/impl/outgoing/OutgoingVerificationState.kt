@@ -14,10 +14,10 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 @Immutable
-data class VerifySelfSessionState(
+data class OutgoingVerificationState(
     val step: Step,
     val request: VerificationRequest.Outgoing,
-    val eventSink: (VerifySelfSessionViewEvents) -> Unit,
+    val eventSink: (OutgoingVerificationViewEvents) -> Unit,
 ) {
     @Stable
     sealed interface Step {

@@ -9,7 +9,7 @@ package io.element.android.features.verifysession.impl.outgoing
 
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionState.Step
+import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationState.Step
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -31,13 +31,13 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class VerifySelfSessionPresenterTest {
+class OutgoingVerificationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - Initial state is received`() = runTest {
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = unverifiedSessionService(),
         )
         presenter.test {
@@ -55,7 +55,7 @@ class VerifySelfSessionPresenterTest {
             requestSessionVerificationLambda = requestSessionVerificationRecorder,
             startVerificationLambda = startVerificationRecorder,
         )
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = service,
             verificationRequest = anOutgoingSessionVerificationRequest(),
         )
@@ -75,7 +75,7 @@ class VerifySelfSessionPresenterTest {
             requestUserVerificationLambda = requestUserVerificationRecorder,
             startVerificationLambda = startVerificationRecorder,
         )
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = service,
             verificationRequest = anOutgoingUserVerificationRequest(),
         )
@@ -89,14 +89,14 @@ class VerifySelfSessionPresenterTest {
 
     @Test
     fun `present - Cancellation on initial state moves to Exit state`() = runTest {
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = unverifiedSessionService(),
         )
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(Step.Initial)
             val eventSink = initialState.eventSink
-            eventSink(VerifySelfSessionViewEvents.Cancel)
+            eventSink(OutgoingVerificationViewEvents.Cancel)
 
             assertThat(awaitItem().step).isEqualTo(Step.Exit)
         }
@@ -109,10 +109,10 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
             approveVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
+            state.eventSink(OutgoingVerificationViewEvents.ConfirmVerification)
             // Cancelling
             assertThat(awaitItem().step).isInstanceOf(Step.Verifying::class.java)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
@@ -126,9 +126,9 @@ class VerifySelfSessionPresenterTest {
         val service = unverifiedSessionService(
             requestSessionVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
-            awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
+            awaitItem().eventSink(OutgoingVerificationViewEvents.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
@@ -142,10 +142,10 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
             cancelVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            state.eventSink(OutgoingVerificationViewEvents.Cancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
         }
     }
@@ -156,7 +156,7 @@ class VerifySelfSessionPresenterTest {
             requestSessionVerificationLambda = { },
             startVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             requestVerificationAndAwaitVerifyingState(service)
             service.emitVerificationFlowState(VerificationFlowState.DidReceiveVerificationData(SessionVerificationData.Emojis(emptyList())))
@@ -170,12 +170,12 @@ class VerifySelfSessionPresenterTest {
             requestSessionVerificationLambda = { },
             startVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.emitVerificationFlowState(VerificationFlowState.DidCancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.Reset)
+            state.eventSink(OutgoingVerificationViewEvents.Reset)
             // Went back to initial state
             assertThat(awaitItem().step).isEqualTo(Step.Initial)
             cancelAndIgnoreRemainingEvents()
@@ -192,13 +192,13 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
             approveVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(
                 service,
                 SessionVerificationData.Emojis(emojis)
             )
-            state.eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
+            state.eventSink(OutgoingVerificationViewEvents.ConfirmVerification)
             assertThat(awaitItem().step).isEqualTo(
                 Step.Verifying(
                     SessionVerificationData.Emojis(emojis),
@@ -217,10 +217,10 @@ class VerifySelfSessionPresenterTest {
             startVerificationLambda = { },
             declineVerificationLambda = { },
         )
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
+            state.eventSink(OutgoingVerificationViewEvents.DeclineVerification)
             assertThat(awaitItem().step).isEqualTo(
                 Step.Verifying(
                     SessionVerificationData.Emojis(emptyList()),
@@ -241,7 +241,7 @@ class VerifySelfSessionPresenterTest {
             emitVerifiedStatus(SessionVerifiedStatus.Verified)
             emitVerificationFlowState(VerificationFlowState.DidFinish)
         }
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = service,
             showDeviceVerifiedScreen = true,
         )
@@ -259,7 +259,7 @@ class VerifySelfSessionPresenterTest {
             emitVerifiedStatus(SessionVerifiedStatus.Verified)
             emitVerificationFlowState(VerificationFlowState.DidFinish)
         }
-        val presenter = createVerifySelfSessionPresenter(
+        val presenter = createOutgoingVerificationPresenter(
             service = service,
             showDeviceVerifiedScreen = false,
         )
@@ -269,13 +269,13 @@ class VerifySelfSessionPresenterTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<VerifySelfSessionState>.requestVerificationAndAwaitVerifyingState(
+    private suspend fun ReceiveTurbine<OutgoingVerificationState>.requestVerificationAndAwaitVerifyingState(
         fakeService: FakeSessionVerificationService,
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
-    ): VerifySelfSessionState {
+    ): OutgoingVerificationState {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial)
-        state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
+        state.eventSink(OutgoingVerificationViewEvents.RequestVerification)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
         state = awaitItem()
@@ -283,7 +283,7 @@ class VerifySelfSessionPresenterTest {
         // Await for the state to be Ready
         state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Ready)
-        state.eventSink(VerifySelfSessionViewEvents.StartSasVerification)
+        state.eventSink(OutgoingVerificationViewEvents.StartSasVerification)
         // Await for other device response (again):
         fakeService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
         state = awaitItem()
@@ -321,13 +321,13 @@ class VerifySelfSessionPresenterTest {
         }
     }
 
-    private fun createVerifySelfSessionPresenter(
+    private fun createOutgoingVerificationPresenter(
         service: SessionVerificationService,
         verificationRequest: VerificationRequest.Outgoing = anOutgoingSessionVerificationRequest(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         showDeviceVerifiedScreen: Boolean = false,
-    ): VerifySelfSessionPresenter {
-        return VerifySelfSessionPresenter(
+    ): OutgoingVerificationPresenter {
+        return OutgoingVerificationPresenter(
             showDeviceVerifiedScreen = showDeviceVerifiedScreen,
             verificationRequest = verificationRequest,
             sessionVerificationService = service,

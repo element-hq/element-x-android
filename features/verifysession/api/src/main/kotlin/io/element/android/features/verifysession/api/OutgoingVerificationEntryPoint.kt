@@ -14,7 +14,7 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
-interface VerifySessionEntryPoint : FeatureEntryPoint {
+interface OutgoingVerificationEntryPoint : FeatureEntryPoint {
     data class Params(
         val showDeviceVerifiedScreen: Boolean,
         val verificationRequest: VerificationRequest.Outgoing,

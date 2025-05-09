@@ -31,30 +31,30 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionStateMachine.Event as StateMachineEvent
-import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionStateMachine.State as StateMachineState
+import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.Event as StateMachineEvent
+import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationStateMachine.State as StateMachineState
 
-class VerifySelfSessionPresenter @AssistedInject constructor(
+class OutgoingVerificationPresenter @AssistedInject constructor(
     @Assisted private val showDeviceVerifiedScreen: Boolean,
     @Assisted private val verificationRequest: VerificationRequest.Outgoing,
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
-) : Presenter<VerifySelfSessionState> {
+) : Presenter<OutgoingVerificationState> {
     @AssistedFactory
     interface Factory {
         fun create(
             verificationRequest: VerificationRequest.Outgoing,
             showDeviceVerifiedScreen: Boolean,
-        ): VerifySelfSessionPresenter
+        ): OutgoingVerificationPresenter
     }
 
-    private val stateMachine = VerifySelfSessionStateMachine(
+    private val stateMachine = OutgoingVerificationStateMachine(
         sessionVerificationService = sessionVerificationService,
         encryptionService = encryptionService,
     )
 
     @Composable
-    override fun present(): VerifySelfSessionState {
+    override fun present(): OutgoingVerificationState {
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
 
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
@@ -63,17 +63,17 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
                 when (verificationRequest) {
                     is VerificationRequest.Outgoing.CurrentSession -> {
                         when (sessionVerifiedStatus) {
-                            SessionVerifiedStatus.Unknown -> VerifySelfSessionState.Step.Loading
+                            SessionVerifiedStatus.Unknown -> OutgoingVerificationState.Step.Loading
                             SessionVerifiedStatus.NotVerified -> {
                                 stateAndDispatch.state.value.toVerificationStep()
                             }
                             SessionVerifiedStatus.Verified -> {
                                 if (stateAndDispatch.state.value != StateMachineState.Initial || showDeviceVerifiedScreen) {
                                     // The user has verified the session, we need to show the success screen
-                                    VerifySelfSessionState.Step.Completed
+                                    OutgoingVerificationState.Step.Completed
                                 } else {
                                     // Automatic verification, which can happen on freshly created account, in this case, skip the screen
-                                    VerifySelfSessionState.Step.Exit
+                                    OutgoingVerificationState.Step.Exit
                                 }
                             }
                         }
@@ -91,42 +91,44 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
             observeVerificationService()
         }
 
-        fun handleEvents(event: VerifySelfSessionViewEvents) {
+        fun handleEvents(event: OutgoingVerificationViewEvents) {
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 // Just relay the event to the state machine
-                VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification(verificationRequest))
-                VerifySelfSessionViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
-                VerifySelfSessionViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
-                VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
-                VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
-                VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
+                OutgoingVerificationViewEvents.RequestVerification -> StateMachineEvent.RequestVerification(verificationRequest)
+                OutgoingVerificationViewEvents.StartSasVerification -> StateMachineEvent.StartSasVerification
+                OutgoingVerificationViewEvents.ConfirmVerification -> StateMachineEvent.AcceptChallenge
+                OutgoingVerificationViewEvents.DeclineVerification -> StateMachineEvent.DeclineChallenge
+                OutgoingVerificationViewEvents.Cancel -> StateMachineEvent.Cancel
+                OutgoingVerificationViewEvents.Reset -> StateMachineEvent.Reset
+            }.let { stateMachineEvent ->
+                stateAndDispatch.dispatchAction(stateMachineEvent)
             }
         }
-        return VerifySelfSessionState(
+        return OutgoingVerificationState(
             step = step,
             request = verificationRequest,
             eventSink = ::handleEvents,
         )
     }
 
-    private fun StateMachineState?.toVerificationStep(): VerifySelfSessionState.Step =
+    private fun StateMachineState?.toVerificationStep(): OutgoingVerificationState.Step =
         when (val machineState = this) {
             StateMachineState.Initial, null -> {
-                VerifySelfSessionState.Step.Initial
+                OutgoingVerificationState.Step.Initial
             }
             is StateMachineState.RequestingVerification,
             is StateMachineState.StartingSasVerification,
             StateMachineState.SasVerificationStarted -> {
-                VerifySelfSessionState.Step.AwaitingOtherDeviceResponse
+                OutgoingVerificationState.Step.AwaitingOtherDeviceResponse
             }
 
             StateMachineState.VerificationRequestAccepted -> {
-                VerifySelfSessionState.Step.Ready
+                OutgoingVerificationState.Step.Ready
             }
 
             is StateMachineState.Canceled -> {
-                VerifySelfSessionState.Step.Canceled
+                OutgoingVerificationState.Step.Canceled
             }
 
             is StateMachineState.Verifying -> {
@@ -134,15 +136,15 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
                     is StateMachineState.Verifying.Replying -> AsyncData.Loading()
                     else -> AsyncData.Uninitialized
                 }
-                VerifySelfSessionState.Step.Verifying(machineState.data, async)
+                OutgoingVerificationState.Step.Verifying(machineState.data, async)
             }
 
             StateMachineState.Completed -> {
-                VerifySelfSessionState.Step.Completed
+                OutgoingVerificationState.Step.Completed
             }
 
             StateMachineState.Exit -> {
-                VerifySelfSessionState.Step.Exit
+                OutgoingVerificationState.Step.Exit
             }
         }
 

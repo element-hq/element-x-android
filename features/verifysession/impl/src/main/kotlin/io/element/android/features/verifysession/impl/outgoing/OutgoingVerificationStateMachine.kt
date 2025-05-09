@@ -29,10 +29,10 @@ import kotlin.time.Duration.Companion.seconds
 import com.freeletics.flowredux.dsl.State as MachineState
 
 @OptIn(FlowPreview::class)
-class VerifySelfSessionStateMachine(
+class OutgoingVerificationStateMachine(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
-) : FlowReduxStateMachine<VerifySelfSessionStateMachine.State, VerifySelfSessionStateMachine.Event>(
+) : FlowReduxStateMachine<OutgoingVerificationStateMachine.State, OutgoingVerificationStateMachine.Event>(
     initialState = State.Initial,
 ) {
     init {

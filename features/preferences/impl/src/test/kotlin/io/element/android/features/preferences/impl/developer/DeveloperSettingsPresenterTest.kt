@@ -25,7 +25,6 @@ import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test

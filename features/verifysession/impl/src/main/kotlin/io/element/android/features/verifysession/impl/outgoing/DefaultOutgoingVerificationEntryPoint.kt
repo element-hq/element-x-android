@@ -11,29 +11,29 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultVerifySessionEntryPoint @Inject constructor() : VerifySessionEntryPoint {
-    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): VerifySessionEntryPoint.NodeBuilder {
+class DefaultOutgoingVerificationEntryPoint @Inject constructor() : OutgoingVerificationEntryPoint {
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): OutgoingVerificationEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 
-        return object : VerifySessionEntryPoint.NodeBuilder {
-            override fun callback(callback: VerifySessionEntryPoint.Callback): VerifySessionEntryPoint.NodeBuilder {
+        return object : OutgoingVerificationEntryPoint.NodeBuilder {
+            override fun callback(callback: OutgoingVerificationEntryPoint.Callback): OutgoingVerificationEntryPoint.NodeBuilder {
                 plugins += callback
                 return this
             }
 
-            override fun params(params: VerifySessionEntryPoint.Params): VerifySessionEntryPoint.NodeBuilder {
+            override fun params(params: OutgoingVerificationEntryPoint.Params): OutgoingVerificationEntryPoint.NodeBuilder {
                 plugins += params
                 return this
             }
 
             override fun build(): Node {
-                return parentNode.createNode<VerifySelfSessionNode>(buildContext, plugins)
+                return parentNode.createNode<OutgoingVerificationNode>(buildContext, plugins)
             }
         }
     }
