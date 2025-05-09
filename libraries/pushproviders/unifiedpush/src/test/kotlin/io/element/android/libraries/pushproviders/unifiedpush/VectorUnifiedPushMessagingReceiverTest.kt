@@ -32,6 +32,10 @@ import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.unifiedpush.android.connector.FailedReason
+import org.unifiedpush.android.connector.data.PublicKeySet
+import org.unifiedpush.android.connector.data.PushEndpoint
+import org.unifiedpush.android.connector.data.PushMessage
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUnifiedPushMessagingReceiverTest {
@@ -56,7 +60,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `onRegistrationFailed does nothing`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
-        vectorUnifiedPushMessagingReceiver.onRegistrationFailed(context, A_SECRET)
+        vectorUnifiedPushMessagingReceiver.onRegistrationFailed(context, FailedReason.NETWORK, A_SECRET)
     }
 
     @Test
@@ -68,7 +72,7 @@ class VectorUnifiedPushMessagingReceiverTest {
                 handleResult = pushHandlerResult
             ),
         )
-        vectorUnifiedPushMessagingReceiver.onMessage(context, UnifiedPushParserTest.UNIFIED_PUSH_DATA.toByteArray(), A_SECRET)
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(), A_SECRET)
         advanceUntilIdle()
         pushHandlerResult.assertions()
             .isCalledOnce()
@@ -96,7 +100,7 @@ class VectorUnifiedPushMessagingReceiverTest {
                 handleInvalidResult = handleInvalidResult,
             ),
         )
-        vectorUnifiedPushMessagingReceiver.onMessage(context, "".toByteArray(), A_SECRET)
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(""), A_SECRET)
         advanceUntilIdle()
         handleInvalidResult.assertions().isCalledOnce()
     }
@@ -127,7 +131,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,
         )
         endpointRegistrationHandler.state.test {
-            vectorUnifiedPushMessagingReceiver.onNewEndpoint(context, "anEndpoint", A_SECRET)
+            vectorUnifiedPushMessagingReceiver.onNewEndpoint(context, aPushEndpoint("anEndpoint"), A_SECRET)
             advanceUntilIdle()
             assertThat(awaitItem()).isEqualTo(
                 RegistrationResult(
@@ -170,7 +174,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             unifiedPushNewGatewayHandler = unifiedPushNewGatewayHandler,
         )
         endpointRegistrationHandler.state.test {
-            vectorUnifiedPushMessagingReceiver.onNewEndpoint(context, "anEndpoint", A_SECRET)
+            vectorUnifiedPushMessagingReceiver.onNewEndpoint(context, aPushEndpoint(), A_SECRET)
             advanceUntilIdle()
             assertThat(awaitItem()).isEqualTo(
                 RegistrationResult(
@@ -207,3 +211,19 @@ class VectorUnifiedPushMessagingReceiverTest {
         }
     }
 }
+
+private fun aPushMessage(
+    data: String = UnifiedPushParserTest.UNIFIED_PUSH_DATA,
+    decrypted: Boolean = true,
+) = PushMessage(
+    content = data.toByteArray(),
+    decrypted = decrypted,
+)
+
+private fun aPushEndpoint(
+    url: String = "anEndpoint",
+    pubKeySet: PublicKeySet? = null,
+) = PushEndpoint(
+    url = url,
+    pubKeySet = pubKeySet,
+)
