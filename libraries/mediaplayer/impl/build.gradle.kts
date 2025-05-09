@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
 
     implementation(libs.dagger)
+    implementation(projects.libraries.audio.api)
     implementation(projects.libraries.di)
 
     implementation(libs.coroutines.core)
