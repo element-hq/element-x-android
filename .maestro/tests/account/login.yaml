@@ -8,6 +8,11 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     id: "login-continue"
 ## MAS page
+- runFlow:
+    when:
+      visible: 'Use without an account'
+    commands:
+      - tapOn: "Use without an account"
 - tapOn:
    id: "form-1"
 - inputText: ${MAESTRO_USERNAME}
