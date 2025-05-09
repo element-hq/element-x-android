@@ -7,22 +7,17 @@ appId: ${MAESTRO_APP_ID}
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - tapOn:
     id: "login-continue"
+## MAS page
 - tapOn:
-    id: "login-email_username"
+   id: "form-1"
 - inputText: ${MAESTRO_USERNAME}
 - pressKey: Enter
 - tapOn:
-    id: "login-password"
-- inputText: "wrong-password"
-- pressKey: Enter
-- tapOn: "Continue"
-- tapOn: "OK"
-- tapOn:
-    id: "login-password"
-- eraseText: 20
+    id: "form-3"
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
+## Back to native world
 - runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
 - runFlow: ./verifySession.yaml
 - runFlow: ../assertions/assertAnalyticsDisplayed.yaml
