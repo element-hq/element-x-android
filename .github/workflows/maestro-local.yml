@@ -56,7 +56,7 @@ jobs:
   maestro-cloud:
     name: Maestro test suite
     runs-on: ubuntu-latest
-    needs: [build-apk]
+    needs: [ build-apk ]
     # Allow one per PR.
     concurrency:
       group: ${{ format('maestro-{0}', github.ref) }}
@@ -80,6 +80,7 @@ jobs:
       - name: Install maestro
         run: curl -fsSL "https://get.maestro.mobile.dev" | bash
       - name: Run Maestro tests in emulator
+        id: maestro_test
         uses: reactivecircus/android-emulator-runner@v2
         continue-on-error: true
         env:
@@ -109,3 +110,8 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
+      - name: Fail the workflow in case of error in test
+        if: steps.maestro_test.outcome != 'success'
+        run: |
+          echo "Maestro tests failed. Please check the logs."
+          exit 1
