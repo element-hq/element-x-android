@@ -18,49 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 
-internal data class IconChunk(
-    val index: Int,
-    val total: Int,
-    val icons: ImmutableList<Int>,
-)
-
-@PreviewsDayNight
 @Composable
-internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconChunkProvider::class) chunk: IconChunk) = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_compound_* ${chunk.index}/${chunk.total}",
-        iconsList = chunk.icons,
-        iconNameTransform = { name ->
-            name.removePrefix("ic_compound_")
-                .replace("_", " ")
-        }
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun IconsOtherPreview(@PreviewParameter(OtherIconChunkProvider::class) iconChunk: IconChunk) = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_*  ${iconChunk.index}/${iconChunk.total}",
-        iconsList = iconChunk.icons,
-        iconNameTransform = { name ->
-            name.removePrefix("ic_")
-                .replace("_", " ")
-        }
-    )
-}
-
-@Composable
-private fun IconsPreview(
+internal fun IconsPreview(
     title: String,
     iconsList: ImmutableList<Int>,
     iconNameTransform: (String) -> String,
