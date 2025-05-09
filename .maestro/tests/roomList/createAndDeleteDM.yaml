@@ -7,8 +7,9 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     text: ${MAESTRO_INVITEE1_MXID}
     index: 1
+- tapOn: "Send invite"
 - takeScreenshot: build/maestro/330-createAndDeleteDM
 - tapOn: "maestroelement2"
 - scroll
-- tapOn: "Leave conversation"
+- tapOn: "Leave room"
 - tapOn: "Leave"
