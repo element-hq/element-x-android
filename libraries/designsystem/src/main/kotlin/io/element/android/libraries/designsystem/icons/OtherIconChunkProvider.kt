@@ -18,6 +18,7 @@ internal class OtherIconChunkProvider : PreviewParameterProvider<IconChunk> {
         R.drawable.ic_notification,
         R.drawable.ic_stop,
         R.drawable.pin,
+        R.drawable.ic_winner,
     )
 
     override val values: Sequence<IconChunk>
