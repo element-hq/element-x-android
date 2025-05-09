@@ -49,10 +49,9 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
+import io.element.android.libraries.push.test.notifications.FakeCallNotificationEventResolver
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
-import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import kotlinx.coroutines.test.runTest
@@ -606,80 +605,8 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
-    fun `resolve CallNotify - ringing`() = runTest {
-        val timestamp = DefaultSystemClock().epochMillis()
-        val sut = createDefaultNotifiableEventResolver(
-            notificationResult = Result.success(
-                aNotificationData(
-                    content = NotificationContent.MessageLike.CallNotify(
-                        A_USER_ID_2,
-                        CallNotifyType.RING
-                    ),
-                    timestamp = timestamp,
-                )
-            )
-        )
-        val expectedResult = ResolvedPushEvent.Event(
-            NotifiableRingingCallEvent(
-                sessionId = A_SESSION_ID,
-                roomId = A_ROOM_ID,
-                eventId = AN_EVENT_ID,
-                senderId = A_USER_ID_2,
-                roomName = A_ROOM_NAME,
-                editedEventId = null,
-                description = "📹 Incoming call",
-                timestamp = timestamp,
-                canBeReplaced = true,
-                isRedacted = false,
-                isUpdated = false,
-                senderDisambiguatedDisplayName = A_USER_NAME_2,
-                senderAvatarUrl = null,
-                callNotifyType = CallNotifyType.RING,
-            )
-        )
-        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result.getOrNull()).isEqualTo(expectedResult)
-    }
-
-    @Test
-    fun `resolve CallNotify - ring but timed out displays the same as notify`() = runTest {
-        val sut = createDefaultNotifiableEventResolver(
-            notificationResult = Result.success(
-                aNotificationData(
-                    content = NotificationContent.MessageLike.CallNotify(
-                        A_USER_ID_2,
-                        CallNotifyType.RING
-                    ),
-                    timestamp = 0L,
-                )
-            )
-        )
-        val expectedResult = ResolvedPushEvent.Event(
-            NotifiableMessageEvent(
-                sessionId = A_SESSION_ID,
-                eventId = AN_EVENT_ID,
-                editedEventId = null,
-                noisy = true,
-                timestamp = 0L,
-                senderDisambiguatedDisplayName = A_USER_NAME_2,
-                senderId = A_USER_ID_2,
-                body = "📹 Incoming call",
-                roomId = A_ROOM_ID,
-                threadId = null,
-                roomName = A_ROOM_NAME,
-                canBeReplaced = false,
-                isRedacted = false,
-                imageUriString = null,
-                imageMimeType = null,
-                type = EventType.CALL_NOTIFY,
-            )
-        )
-        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        assertThat(result.getOrNull()).isEqualTo(expectedResult)
-    }
-
-    @Test
-    fun `resolve CallNotify - notify`() = runTest {
+    fun `resolve CallNotify - goes through CallNotificationEventResolver`() = runTest {
+        val callNotificationEventResolver = FakeCallNotificationEventResolver()
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 aNotificationData(
@@ -688,7 +615,8 @@ class DefaultNotifiableEventResolverTest {
                         CallNotifyType.NOTIFY
                     ),
                 )
-            )
+            ),
+            callNotificationEventResolver = callNotificationEventResolver,
         )
         val expectedResult = ResolvedPushEvent.Event(
             NotifiableMessageEvent(
@@ -710,6 +638,7 @@ class DefaultNotifiableEventResolverTest {
                 type = EventType.CALL_NOTIFY,
             )
         )
+        callNotificationEventResolver.resolveEventLambda = { _, _, _ -> Result.success(expectedResult.notifiableEvent) }
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
@@ -804,6 +733,7 @@ class DefaultNotifiableEventResolverTest {
         notificationService: FakeNotificationService? = FakeNotificationService(),
         notificationResult: Result<NotificationData?> = Result.success(null),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        callNotificationEventResolver: FakeCallNotificationEventResolver = FakeCallNotificationEventResolver(),
     ): DefaultNotifiableEventResolver {
         val context = RuntimeEnvironment.getApplication() as Context
         notificationService?.givenGetNotificationResult(notificationResult)
@@ -824,9 +754,7 @@ class DefaultNotifiableEventResolverTest {
             notificationMediaRepoFactory = notificationMediaRepoFactory,
             context = context,
             permalinkParser = FakePermalinkParser(),
-            callNotificationEventResolver = DefaultCallNotificationEventResolver(
-                stringProvider = AndroidStringProvider(context.resources)
-            ),
+            callNotificationEventResolver = callNotificationEventResolver,
             appPreferencesStore = appPreferencesStore,
         )
     }
