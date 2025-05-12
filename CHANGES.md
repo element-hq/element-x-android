@@ -1,3 +1,27 @@
+Changes in Element X v25.05.3
+=============================
+
+Version 25.05.2 was skipped.
+
+## What's Changed
+### 🐛 Bugfixes
+* Disable Continue button when the login field is cleared. by @bmarty in https://github.com/element-hq/element-x-android/pull/4699
+* Revert "fix(deps): update dependency io.element.android:element-call-embedded to v0.10.0", which caused an issue with to-device events in the latest version by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4706
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/4703
+### 🧱 Build
+* Update Gradle Wrapper from 8.13 to 8.14 by @ElementBot in https://github.com/element-hq/element-x-android/pull/4645
+### Dependency upgrades
+* fix(deps): update datastore to v1.1.6 by @renovate in https://github.com/element-hq/element-x-android/pull/4630
+* fix(deps): update lifecycle to v2.9.0 by @renovate in https://github.com/element-hq/element-x-android/pull/4693
+* fix(deps): update dependency androidx.sqlite:sqlite-ktx to v2.5.1 by @renovate in https://github.com/element-hq/element-x-android/pull/4692
+### Others
+* Update "Learn more" link by @bmarty in https://github.com/element-hq/element-x-android/pull/4686
+* Keep call notification ringing while a call is present in the room by @jmartinesp in https://github.com/element-hq/element-x-android/pull/4634
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.05.1...v25.05.3
+
 Changes in Element X v25.05.1
 =============================
 
