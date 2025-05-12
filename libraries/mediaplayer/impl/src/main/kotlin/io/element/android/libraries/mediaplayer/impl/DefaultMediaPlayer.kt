@@ -122,7 +122,14 @@ class DefaultMediaPlayer @Inject constructor(
     }
 
     override fun play() {
-        audioFocus.requestAudioFocus(AudioFocusRequester.VoiceMessage)
+        audioFocus.requestAudioFocus(
+            mode = AudioFocusRequester.VoiceMessage,
+            onFocusLost = {
+                if (player.isPlaying()) {
+                    player.pause()
+                }
+            },
+        )
         if (player.playbackState == Player.STATE_ENDED) {
             // There's a bug with some ogg files that somehow report to
             // have no duration.

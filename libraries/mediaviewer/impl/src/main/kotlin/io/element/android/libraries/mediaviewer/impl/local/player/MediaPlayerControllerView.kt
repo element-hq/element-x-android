@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 @Composable
 fun MediaPlayerControllerView(
@@ -57,7 +58,13 @@ fun MediaPlayerControllerView(
     if (audioFocus != null) {
         LaunchedEffect(state.isPlaying) {
             if (state.isPlaying) {
-                audioFocus.requestAudioFocus(AudioFocusRequester.MediaViewer)
+                audioFocus.requestAudioFocus(
+                    mode = AudioFocusRequester.MediaViewer,
+                    onFocusLost = {
+                        Timber.w("Audio focus lost")
+                        onTogglePlay()
+                    },
+                )
             } else {
                 audioFocus.releaseAudioFocus()
             }

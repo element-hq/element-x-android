@@ -14,6 +14,10 @@ enum class AudioFocusRequester {
 }
 
 interface AudioFocus {
-    fun requestAudioFocus(mode: AudioFocusRequester)
+    fun requestAudioFocus(
+        mode: AudioFocusRequester,
+        onFocusLost: () -> Unit,
+    )
+
     fun releaseAudioFocus()
 }

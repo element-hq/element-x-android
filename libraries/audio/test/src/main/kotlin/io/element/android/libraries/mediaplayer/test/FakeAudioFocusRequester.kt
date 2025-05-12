@@ -12,11 +12,14 @@ import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeAudioFocusRequester(
-    private val requestAudioFocusResult: (AudioFocusRequester) -> Unit = { lambdaError() },
+    private val requestAudioFocusResult: (AudioFocusRequester, () -> Unit) -> Unit = { _, _ -> lambdaError() },
     private val releaseAudioFocusResult: () -> Unit = { lambdaError() },
 ) : AudioFocus {
-    override fun requestAudioFocus(mode: AudioFocusRequester) {
-        requestAudioFocusResult(mode)
+    override fun requestAudioFocus(
+        mode: AudioFocusRequester,
+        onFocusLost: () -> Unit,
+    ) {
+        requestAudioFocusResult(mode, onFocusLost)
     }
 
     override fun releaseAudioFocus() {

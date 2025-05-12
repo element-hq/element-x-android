@@ -126,7 +126,13 @@ class ElementCallActivity :
     }
 
     private fun setCallIsActive() {
-        audioFocus.requestAudioFocus(AudioFocusRequester.ElementCall)
+        audioFocus.requestAudioFocus(
+            mode = AudioFocusRequester.ElementCall,
+            onFocusLost = {
+                // If the audio focus is lost, we do not stop the call.
+                Timber.tag(loggerTag.value).w("Audio focus lost")
+            }
+        )
         CallForegroundService.start(this)
     }
 
