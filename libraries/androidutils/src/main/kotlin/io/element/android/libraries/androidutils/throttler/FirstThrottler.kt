@@ -6,40 +6,29 @@
  */
 package io.element.android.libraries.androidutils.throttler
 
-import android.os.SystemClock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Simple ThrottleFirst
  * See https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/throttleFirst.png
  */
-class FirstThrottler(private val minimumInterval: Long = 800) {
-    private var lastDate = 0L
-
-    sealed interface CanHandleResult {
-        data object Yes : CanHandleResult
-        data class No(val shouldWaitMillis: Long) : CanHandleResult
-
-        fun waitMillis(): Long {
-            return when (this) {
-                Yes -> 0
-                is No -> shouldWaitMillis
-            }
-        }
-    }
-
-    fun getResult(): CanHandleResult {
-        val now = SystemClock.elapsedRealtime()
-        val delaySinceLast = now - lastDate
-        if (delaySinceLast > minimumInterval) {
-            lastDate = now
-            return CanHandleResult.Yes
-        }
-
-        // Too early
-        return CanHandleResult.No(minimumInterval - delaySinceLast)
-    }
+class FirstThrottler(
+    private val minimumInterval: Long = 800,
+    private val coroutineScope: CoroutineScope,
+) {
+    private val canHandle = AtomicBoolean(true)
 
     fun canHandle(): Boolean {
-        return getResult() == CanHandleResult.Yes
+        return canHandle.getAndSet(false).also { result ->
+            if (result) {
+                coroutineScope.launch {
+                    delay(minimumInterval)
+                    canHandle.set(true)
+                }
+            }
+        }
     }
 }

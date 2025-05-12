@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.roomlist.impl
 
 import androidx.activity.ComponentActivity
@@ -27,6 +29,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -165,6 +168,29 @@ class RoomListViewTest {
             rule.onNodeWithText(room0.lastMessage!!.toString()).performClick()
         }
 
+        eventsRecorder.assertEmpty()
+    }
+
+    @Test
+    fun `clicking on a room twice invokes the expected callback only once`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val state = aRoomListState(
+            eventSink = eventsRecorder,
+        )
+        val room0 = state.contentAsRooms().summaries.first {
+            it.displayType == RoomSummaryDisplayType.ROOM
+        }
+        ensureCalledOnceWithParam(room0.roomId) { callback ->
+            rule.setRoomListView(
+                state = state,
+                onRoomClick = callback,
+            )
+            // Remove automatic initial events
+            eventsRecorder.clear()
+            rule.onNodeWithText(room0.lastMessage!!.toString())
+                .performClick()
+                .performClick()
+        }
         eventsRecorder.assertEmpty()
     }
 
