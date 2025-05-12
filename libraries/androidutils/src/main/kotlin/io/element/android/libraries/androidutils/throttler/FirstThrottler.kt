@@ -27,7 +27,7 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
         }
     }
 
-    fun canHandle(): CanHandleResult {
+    fun getResult(): CanHandleResult {
         val now = SystemClock.elapsedRealtime()
         val delaySinceLast = now - lastDate
         if (delaySinceLast > minimumInterval) {
@@ -39,7 +39,7 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
         return CanHandleResult.No(minimumInterval - delaySinceLast)
     }
 
-    fun canHandleAsBoolean(): Boolean {
-        return canHandle() == CanHandleResult.Yes
+    fun canHandle(): Boolean {
+        return getResult() == CanHandleResult.Yes
     }
 }

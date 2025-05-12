@@ -82,17 +82,17 @@ class RoomListFlowNode @AssistedInject constructor(
     }
 
     private fun onRoomClick(roomId: RoomId) {
-        if (firstThrottler.canHandleAsBoolean().not()) return
+        if (firstThrottler.canHandle().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClick(roomId) }
     }
 
     private fun onOpenSettings() {
-        if (firstThrottler.canHandleAsBoolean().not()) return
+        if (firstThrottler.canHandle().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onSettingsClick() }
     }
 
     private fun onCreateRoomClick() {
-        if (firstThrottler.canHandleAsBoolean().not()) return
+        if (firstThrottler.canHandle().not()) return
         plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClick() }
     }
 
