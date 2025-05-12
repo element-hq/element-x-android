@@ -9,12 +9,14 @@ package io.element.android.libraries.designsystem.atomic.pages
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -94,6 +96,8 @@ fun HeaderFooterPage(
                         .run {
                             if (isScrollable) {
                                 verticalScroll(rememberScrollState())
+                                    // Make sure the scrollable content takes the full available height
+                                    .height(IntrinsicSize.Max)
                             } else {
                                 Modifier
                             }
