@@ -1,2 +1,0 @@
-Main changes in this version: TODO.
-Full changelog: https://github.com/element-hq/element-x-android/releases
