@@ -17,6 +17,7 @@
   <string name="screen_change_server_error_invalid_well_known">"Server pole saadaval vea tõttu well-known failis:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$s kasutamiseks on vaja serverit uuendada."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s ei saa kasutada %2$s koduserverit."</string>
   <string name="screen_change_server_form_header">"Koduserveri url"</string>
   <string name="screen_change_server_form_notice">"Sisesta domeeni aadress."</string>
   <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>

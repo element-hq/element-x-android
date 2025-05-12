@@ -17,6 +17,7 @@
   <string name="screen_change_server_error_invalid_well_known">"Server nie je k dispozícii kvôli problému v známom súbore:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Vybraný poskytovateľ účtu nepodporuje kĺzavú synchronizáciu. Na používanie aplikácie %1$s je potrebná aktualizácia servera,"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nemá dovolené pripojiť sa k %2$s."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
   <string name="screen_change_server_form_notice">"Zadajte adresu domény."</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
