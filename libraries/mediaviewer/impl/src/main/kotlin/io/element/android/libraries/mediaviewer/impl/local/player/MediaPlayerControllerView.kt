@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,13 +57,14 @@ fun MediaPlayerControllerView(
     modifier: Modifier = Modifier,
 ) {
     if (audioFocus != null) {
+        val latestOnTogglePlay by rememberUpdatedState(onTogglePlay)
         LaunchedEffect(state.isPlaying) {
             if (state.isPlaying) {
                 audioFocus.requestAudioFocus(
                     mode = AudioFocusRequester.MediaViewer,
                     onFocusLost = {
                         Timber.w("Audio focus lost")
-                        onTogglePlay()
+                        latestOnTogglePlay()
                     },
                 )
             } else {
