@@ -201,6 +201,7 @@ private fun LoginForm(
                 {
                     Box(Modifier.clickable {
                         loginFieldState = ""
+                        eventSink(LoginPasswordEvents.SetLogin(""))
                     }) {
                         Icon(
                             imageVector = CompoundIcons.Close(),

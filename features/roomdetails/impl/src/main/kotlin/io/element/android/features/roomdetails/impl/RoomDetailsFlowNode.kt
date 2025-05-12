@@ -38,7 +38,7 @@ import io.element.android.features.roomdetails.impl.notificationsettings.RoomNot
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.roomdetails.impl.securityandprivacy.SecurityAndPrivacyFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -71,7 +71,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val mediaGalleryEntryPoint: MediaGalleryEntryPoint,
-    private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val outgoingVerificationEntryPoint: OutgoingVerificationEntryPoint,
     private val reportRoomEntryPoint: ReportRoomEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
@@ -328,13 +328,13 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<SecurityAndPrivacyFlowNode>(buildContext)
             }
             is NavTarget.VerifyUser -> {
-                val params = VerifySessionEntryPoint.Params(
+                val params = OutgoingVerificationEntryPoint.Params(
                     showDeviceVerifiedScreen = true,
                     verificationRequest = VerificationRequest.Outgoing.User(userId = navTarget.userId,)
                 )
-                verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                outgoingVerificationEntryPoint.nodeBuilder(this, buildContext)
                     .params(params)
-                    .callback(object : VerifySessionEntryPoint.Callback {
+                    .callback(object : OutgoingVerificationEntryPoint.Callback {
                         override fun onDone() {
                             backstack.pop()
                         }

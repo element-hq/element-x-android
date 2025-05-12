@@ -14,7 +14,7 @@
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur de compte"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Sliding sync n’est pas disponible en raison d’un problème dans le well-known file :
+  <string name="screen_change_server_error_invalid_well_known">"Ce fournisseur de compte n’est pas disponible en raison d’un problème dans le fichier .well-known:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Le fournisseur de compte sélectionné ne prend pas en charge le sliding sync. Une mise à jour du serveur est nécessaire pour pouvoir utiliser %1$s."</string>
   <string name="screen_change_server_form_header">"URL du serveur d’accueil"</string>

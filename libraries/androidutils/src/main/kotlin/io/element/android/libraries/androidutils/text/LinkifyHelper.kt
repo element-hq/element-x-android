@@ -16,8 +16,6 @@ import androidx.core.text.util.LinkifyCompat
 import timber.log.Timber
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.isNotEmpty
-import kotlin.collections.iterator
 
 /**
  * Helper class to linkify text while preserving existing URL spans.

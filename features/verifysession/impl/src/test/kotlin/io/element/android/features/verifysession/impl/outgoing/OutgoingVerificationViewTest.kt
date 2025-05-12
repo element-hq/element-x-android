@@ -26,54 +26,54 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class VerifySelfSessionViewTest {
+class OutgoingVerificationViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun `back key pressed - when canceled resets the flow`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Canceled,
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Canceled,
                 eventSink = eventsRecorder
             ),
         )
         rule.pressBackKey()
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Reset)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Reset)
     }
 
     @Test
     fun `back key pressed - when awaiting response cancels the verification`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.AwaitingOtherDeviceResponse,
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.AwaitingOtherDeviceResponse,
                 eventSink = eventsRecorder
             ),
         )
         rule.pressBackKey()
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Cancel)
     }
 
     @Test
     fun `back key pressed - when ready to verify cancels the verification`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Ready,
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Ready,
                 eventSink = eventsRecorder
             ),
         )
         rule.pressBackKey()
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Cancel)
     }
 
     @Test
     fun `back key pressed - when verifying and not loading declines the verification`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Verifying(
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -81,15 +81,15 @@ class VerifySelfSessionViewTest {
             ),
         )
         rule.pressBackKey()
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.DeclineVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.DeclineVerification)
     }
 
     @Test
     fun `back key pressed - when verifying and loading does nothing`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Verifying(
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Loading(),
                 ),
@@ -103,10 +103,10 @@ class VerifySelfSessionViewTest {
     @Test
     fun `back key pressed - on Completed exits the flow`() {
         ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
+            rule.setOutgoingVerificationView(
                 onBack = callback,
-                state = aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Completed,
+                state = anOutgoingVerificationState(
+                    step = OutgoingVerificationState.Step.Completed,
                 ),
             )
             rule.pressBackKey()
@@ -115,11 +115,11 @@ class VerifySelfSessionViewTest {
 
     @Test
     fun `when flow is completed and the user clicks on the continue button, the expected callback is invoked`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
-                aVerifySelfSessionState(
-                    step = VerifySelfSessionState.Step.Completed,
+            rule.setOutgoingVerificationView(
+                anOutgoingVerificationState(
+                    step = OutgoingVerificationState.Step.Completed,
                     eventSink = eventsRecorder
                 ),
                 onFinished = callback,
@@ -130,10 +130,10 @@ class VerifySelfSessionViewTest {
 
     @Test
     fun `clicking on they match emits the expected event`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Verifying(
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -141,15 +141,15 @@ class VerifySelfSessionViewTest {
             ),
         )
         rule.clickOn(R.string.screen_session_verification_they_match)
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.ConfirmVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.ConfirmVerification)
     }
 
     @Test
     fun `clicking on they do not match emits the expected event`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setVerifySelfSessionView(
-            aVerifySelfSessionState(
-                step = VerifySelfSessionState.Step.Verifying(
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        rule.setOutgoingVerificationView(
+            anOutgoingVerificationState(
+                step = OutgoingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
                     state = AsyncData.Uninitialized,
                 ),
@@ -157,17 +157,17 @@ class VerifySelfSessionViewTest {
             ),
         )
         rule.clickOn(R.string.screen_session_verification_they_dont_match)
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.DeclineVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.DeclineVerification)
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
-        state: VerifySelfSessionState,
+    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOutgoingVerificationView(
+        state: OutgoingVerificationState,
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
         onBack: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
-            VerifySelfSessionView(
+            OutgoingVerificationView(
                 state = state,
                 onLearnMoreClick = onLearnMoreClick,
                 onFinish = onFinished,

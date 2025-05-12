@@ -27,8 +27,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
-import kotlin.collections.orEmpty
 
 @ContributesMultibinding(AppScope::class)
 class SentryAnalyticsProvider @Inject constructor(

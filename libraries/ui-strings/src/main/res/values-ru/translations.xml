@@ -111,6 +111,7 @@
   <string name="action_report">"Отчет"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
   <string name="action_report_content">"Пожаловаться на содержание"</string>
+  <string name="action_report_dm">"Пожаловаться на беседу"</string>
   <string name="action_report_room">"Комната отчетов"</string>
   <string name="action_reset">"Сбросить"</string>
   <string name="action_reset_identity">"Сбросить идентификацию"</string>
@@ -264,6 +265,7 @@
   <string name="common_shared_location">"Поделился местоположением"</string>
   <string name="common_signing_out">"Выход…"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
+  <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
   <string name="common_starting_chat">"Чат запускается…"</string>
   <string name="common_sticker">"Стикер"</string>
   <string name="common_success">"Успешно"</string>

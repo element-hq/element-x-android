@@ -8,64 +8,64 @@
 package io.element.android.features.verifysession.impl.outgoing
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.verifysession.impl.outgoing.VerifySelfSessionState.Step
+import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificationState.Step
 import io.element.android.features.verifysession.impl.ui.aDecimalsSessionVerificationData
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
-open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
-    override val values: Sequence<VerifySelfSessionState>
+open class OutgoingVerificationStateProvider : PreviewParameterProvider<OutgoingVerificationState> {
+    override val values: Sequence<OutgoingVerificationState>
         get() = sequenceOf(
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Initial,
                 request = anOutgoingSessionVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Initial,
                 request = anOutgoingUserVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.AwaitingOtherDeviceResponse,
                 request = anOutgoingSessionVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.AwaitingOtherDeviceResponse,
                 request = anOutgoingUserVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized),
                 request = anOutgoingSessionVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized),
                 request = anOutgoingUserVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Canceled
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Ready
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Completed,
                 request = anOutgoingSessionVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Completed,
                 request = anOutgoingUserVerificationRequest(),
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Loading
             ),
-            aVerifySelfSessionState(
+            anOutgoingVerificationState(
                 step = Step.Exit
             ),
             // Add other state here
@@ -75,11 +75,11 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
 internal fun anOutgoingUserVerificationRequest() = VerificationRequest.Outgoing.User(userId = UserId("@alice:example.com"))
 internal fun anOutgoingSessionVerificationRequest() = VerificationRequest.Outgoing.CurrentSession
 
-internal fun aVerifySelfSessionState(
+internal fun anOutgoingVerificationState(
     step: Step = Step.Initial,
     request: VerificationRequest.Outgoing = anOutgoingSessionVerificationRequest(),
-    eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
-) = VerifySelfSessionState(
+    eventSink: (OutgoingVerificationViewEvents) -> Unit = {},
+) = OutgoingVerificationState(
     step = step,
     request = request,
     eventSink = eventSink,

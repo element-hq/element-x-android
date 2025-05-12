@@ -1,5 +1,4 @@
 import extension.setupAnvil
-import org.gradle.kotlin.dsl.test
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
