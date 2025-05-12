@@ -12,6 +12,7 @@ import android.app.PictureInPictureParams
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Rational
 import android.view.WindowManager
 import android.webkit.PermissionRequest
@@ -28,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
+import androidx.core.content.getSystemService
 import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
@@ -76,6 +78,12 @@ class ElementCallActivity :
 
     private var eventSink: ((CallScreenEvents) -> Unit)? = null
 
+    private val proximitySensorWakeLock: PowerManager.WakeLock? by lazy {
+        getSystemService<PowerManager>()
+            ?.takeIf { it.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) }
+            ?.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "$packageName:ProximitySensorCallWakeLock")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,6 +96,13 @@ class ElementCallActivity :
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
 
         setCallType(intent)
         // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
@@ -122,6 +137,26 @@ class ElementCallActivity :
                     }
                 )
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (proximitySensorWakeLock?.isHeld == false) {
+            val proximitySensorEnabled = proximitySensorWakeLock?.acquire()
+            Timber.d("Proximity sensor wake lock acquired: $proximitySensorEnabled")
+        } else {
+            Timber.d("Proximity sensor wakelock does not exist or is already held")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (proximitySensorWakeLock?.isHeld == true) {
+            proximitySensorWakeLock?.release()
+            Timber.d("Proximity sensor wake lock released")
         }
     }
 
