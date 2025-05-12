@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Выдаліць"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Уведзеная лічба %1$d"</item>
@@ -7,6 +8,7 @@
     <item quantity="many">"Уведзена %1$d лічб"</item>
   </plurals>
   <string name="a11y_hide_password">"Схаваць пароль"</string>
+  <string name="a11y_join_call">"Далучыцца да выкліку"</string>
   <string name="a11y_jump_to_bottom">"Перайсці ўніз"</string>
   <string name="a11y_notifications_mentions_only">"Толькі згадкі"</string>
   <string name="a11y_notifications_muted">"Гук адключаны"</string>
@@ -31,6 +33,7 @@
   <string name="a11y_show_password">"Паказаць пароль"</string>
   <string name="a11y_start_call">"Пазваніць"</string>
   <string name="a11y_user_menu">"Меню карыстальніка"</string>
+  <string name="a11y_view_details">"Паглядзець падрабязнасці"</string>
   <string name="a11y_voice_message_record">"Запісаць галасавое паведамленне."</string>
   <string name="a11y_voice_message_stop_recording">"Спыніць запіс"</string>
   <string name="action_accept">"Прыняць"</string>
@@ -57,6 +60,7 @@
   <string name="action_delete_poll">"Выдаліць апытанне"</string>
   <string name="action_disable">"Адключыць"</string>
   <string name="action_discard">"Адмяніць"</string>
+  <string name="action_dismiss">"Aдхіліць"</string>
   <string name="action_done">"Гатова"</string>
   <string name="action_edit">"Рэдагаваць"</string>
   <string name="action_edit_poll">"Рэдагаваць апытанне"</string>
