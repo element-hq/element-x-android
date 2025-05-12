@@ -8,6 +8,8 @@
 package io.element.android.features.login.impl.screens.qrcode.scan
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
@@ -19,6 +21,7 @@ open class QrCodeScanStateProvider : PreviewParameterProvider<QrCodeScanState> {
             aQrCodeScanState(isScanning = false, authenticationAction = AsyncAction.Loading),
             aQrCodeScanState(isScanning = false, authenticationAction = AsyncAction.Failure(Exception("Error"))),
             aQrCodeScanState(isScanning = false, authenticationAction = AsyncAction.Failure(QrLoginException.OtherDeviceNotSignedIn)),
+            aQrCodeScanState(isScanning = false, authenticationAction = AsyncAction.Failure(UnauthorizedAccountProviderException(anAccountProvider()))),
             // Add other state here
         )
 }

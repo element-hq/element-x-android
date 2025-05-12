@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -42,6 +43,7 @@ import io.element.android.libraries.designsystem.modifiers.cornerBorder
 import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -158,6 +160,13 @@ private fun ColumnScope.Buttons(
                         text = when (error) {
                             is QrLoginException.OtherDeviceNotSignedIn -> {
                                 stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_description)
+                            }
+                            is UnauthorizedAccountProviderException -> {
+                                stringResource(
+                                    id = R.string.screen_change_server_error_unauthorized_homeserver,
+                                    LocalBuildMeta.current.applicationName,
+                                    error.accountProvider.title,
+                                )
                             }
                             else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_description)
                         },
