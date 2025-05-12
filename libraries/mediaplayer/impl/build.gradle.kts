@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.coroutines.core)
 
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.audio.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.mockk)
