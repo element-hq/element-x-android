@@ -33,7 +33,7 @@ class DefaultAudioFocus @Inject constructor(
     override fun requestAudioFocus(mode: AudioFocusRequester) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                .setUsage(mode.toAudioUsage())
                 .build()
             val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                 .setAudioAttributes(audioAttributes)
@@ -44,7 +44,7 @@ class DefaultAudioFocus @Inject constructor(
             val listener = AudioManager.OnAudioFocusChangeListener { }
             audioManager.requestAudioFocus(
                 listener,
-                AudioManager.STREAM_VOICE_CALL,
+                mode.toAudioStream(),
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE,
             )
             audioFocusChangeListener = listener
@@ -58,5 +58,21 @@ class DefaultAudioFocus @Inject constructor(
         } else {
             audioFocusChangeListener?.let { audioManager.abandonAudioFocus(it) }
         }
+    }
+}
+
+private fun AudioFocusRequester.toAudioUsage(): Int {
+    return when (this) {
+        AudioFocusRequester.ElementCall,
+        AudioFocusRequester.VoiceMessage -> AudioAttributes.USAGE_VOICE_COMMUNICATION
+        AudioFocusRequester.MediaViewer -> AudioAttributes.USAGE_MEDIA
+    }
+}
+
+private fun AudioFocusRequester.toAudioStream(): Int {
+    return when (this) {
+        AudioFocusRequester.ElementCall,
+        AudioFocusRequester.VoiceMessage -> AudioManager.STREAM_VOICE_CALL
+        AudioFocusRequester.MediaViewer -> AudioManager.STREAM_MUSIC
     }
 }

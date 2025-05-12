@@ -19,6 +19,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ForcedDarkElementTheme
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,6 +45,7 @@ class MediaViewerNode @AssistedInject constructor(
     systemClock: SystemClock,
     pagerKeysHandler: PagerKeysHandler,
     private val textFileViewer: TextFileViewer,
+    private val audioFocus: AudioFocus,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val inputs = inputs<MediaViewerEntryPoint.Params>()
@@ -129,7 +131,8 @@ class MediaViewerNode @AssistedInject constructor(
                 state = state,
                 textFileViewer = textFileViewer,
                 modifier = modifier,
-                onBackClick = ::onDone
+                audioFocus = audioFocus,
+                onBackClick = ::onDone,
             )
         }
     }

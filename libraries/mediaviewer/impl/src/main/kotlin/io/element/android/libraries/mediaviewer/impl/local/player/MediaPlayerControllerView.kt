@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -48,8 +51,19 @@ fun MediaPlayerControllerView(
     onTogglePlay: () -> Unit,
     onSeekChange: (Float) -> Unit,
     onToggleMute: () -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
+    if (audioFocus != null) {
+        LaunchedEffect(state.isPlaying) {
+            if (state.isPlaying) {
+                audioFocus.requestAudioFocus(AudioFocusRequester.MediaViewer)
+            } else {
+                audioFocus.releaseAudioFocus()
+            }
+        }
+    }
+
     AnimatedVisibility(
         visible = state.isVisible,
         modifier = modifier,
@@ -167,5 +181,6 @@ internal fun MediaPlayerControllerViewPreview(
         onTogglePlay = {},
         onSeekChange = {},
         onToggleMute = {},
+        audioFocus = null,
     )
 }
