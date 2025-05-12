@@ -8,23 +8,38 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.SessionId
 
 open class LoginPasswordStateProvider : PreviewParameterProvider<LoginPasswordState> {
     override val values: Sequence<LoginPasswordState>
         get() = sequenceOf(
             aLoginPasswordState(),
             // Loading
-            aLoginPasswordState().copy(loginAction = AsyncData.Loading()),
+            aLoginPasswordState(loginAction = AsyncData.Loading()),
             // Error
-            aLoginPasswordState().copy(loginAction = AsyncData.Failure(Exception("An error occurred"))),
+            aLoginPasswordState(loginAction = AsyncData.Failure(Exception("An error occurred"))),
         )
 }
 
-fun aLoginPasswordState() = LoginPasswordState(
-    accountProvider = anAccountProvider(),
-    formState = LoginFormState.Default,
-    loginAction = AsyncData.Uninitialized,
-    eventSink = {}
+fun aLoginPasswordState(
+    accountProvider: AccountProvider = anAccountProvider(),
+    formState: LoginFormState = LoginFormState.Default,
+    loginAction: AsyncData<SessionId> = AsyncData.Uninitialized,
+    eventSink: (LoginPasswordEvents) -> Unit = {},
+) = LoginPasswordState(
+    accountProvider = accountProvider,
+    formState = formState,
+    loginAction = loginAction,
+    eventSink = eventSink,
+)
+
+fun aLoginFormState(
+    login: String = "",
+    password: String = "",
+) = LoginFormState(
+    login = login,
+    password = password,
 )

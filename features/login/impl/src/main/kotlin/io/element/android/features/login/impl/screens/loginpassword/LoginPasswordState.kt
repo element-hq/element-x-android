@@ -28,7 +28,7 @@ data class LoginPasswordState(
 @Parcelize
 data class LoginFormState(
     val login: String,
-    val password: String
+    val password: String,
 ) : Parcelable {
     companion object {
         val Default = LoginFormState("", "")
