@@ -209,7 +209,7 @@ class AndroidMediaPreProcessor @Inject constructor(
             )
         } else {
             // If the video could not be compressed, just use the original one, but send it as a file
-            return processFile(uri, mimeType ?: MimeTypes.OctetStream)
+            return processFile(uri, MimeTypes.OctetStream)
         }
     }
 
