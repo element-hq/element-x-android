@@ -47,7 +47,7 @@ class DefaultAudioFocus @Inject constructor(
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(requester.toAudioUsage())
                 .build()
