@@ -41,7 +41,7 @@ class AccountProviderDataSourceTest {
     @Test
     fun `present - initial state - matrix org`() = runTest {
         val sut = AccountProviderDataSource(FakeEnterpriseService(
-            defaultHomeserverResult = { AuthenticationConfig.MATRIX_ORG_URL }
+            defaultHomeserverListResult = { listOf(AuthenticationConfig.MATRIX_ORG_URL) }
         ))
         sut.flow.test {
             val initialState = awaitItem()
