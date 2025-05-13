@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AsyncAction
@@ -100,9 +99,8 @@ class QrCodeScanPresenter @Inject constructor(
                 val serverName = data.serverName()
                 if (serverName != null && enterpriseService.isAllowedToConnectToHomeserver(serverName).not()) {
                     throw UnauthorizedAccountProviderException(
-                        AccountProvider(
-                            url = serverName,
-                        )
+                        unauthorisedAccountProviderTitle = serverName,
+                        authorisedAccountProviderTitles = listOfNotNull(enterpriseService.defaultHomeserver())
                     )
                 }
                 data

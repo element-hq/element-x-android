@@ -82,6 +82,7 @@ class QrCodeScanPresenterTest {
             qrCodeLoginDataFactory = qrCodeLoginDataFactory,
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { false },
+                defaultHomeserverResult = { "element.io" }
             )
         )
         presenter.test {
@@ -89,9 +90,12 @@ class QrCodeScanPresenterTest {
             initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
             assertThat(awaitItem().isScanning).isFalse()
             assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
-            assertThat((awaitItem().authenticationAction.errorOrNull() as UnauthorizedAccountProviderException).accountProvider.url).isEqualTo(
-                "example.com"
-            )
+            awaitItem().also { state ->
+                assertThat((state.authenticationAction.errorOrNull() as UnauthorizedAccountProviderException).unauthorisedAccountProviderTitle)
+                    .isEqualTo("example.com")
+                assertThat((state.authenticationAction.errorOrNull() as UnauthorizedAccountProviderException).authorisedAccountProviderTitles)
+                    .containsExactly("element.io")
+            }
         }
     }
 

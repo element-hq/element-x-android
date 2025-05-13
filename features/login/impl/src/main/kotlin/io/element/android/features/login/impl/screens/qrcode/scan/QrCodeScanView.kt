@@ -43,7 +43,6 @@ import io.element.android.libraries.designsystem.modifiers.cornerBorder
 import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -146,6 +145,12 @@ private fun ColumnScope.Buttons(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = when (error) {
+                                is UnauthorizedAccountProviderException -> {
+                                    stringResource(
+                                        id = R.string.screen_change_server_error_unauthorized_homeserver_title,
+                                        error.unauthorisedAccountProviderTitle,
+                                    )
+                                }
                                 is QrLoginException.OtherDeviceNotSignedIn -> {
                                     stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_subtitle)
                                 }
@@ -158,15 +163,14 @@ private fun ColumnScope.Buttons(
                     }
                     Text(
                         text = when (error) {
-                            is QrLoginException.OtherDeviceNotSignedIn -> {
-                                stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_description)
-                            }
                             is UnauthorizedAccountProviderException -> {
                                 stringResource(
-                                    id = R.string.screen_change_server_error_unauthorized_homeserver,
-                                    LocalBuildMeta.current.applicationName,
-                                    error.accountProvider.title,
+                                    id = R.string.screen_change_server_error_unauthorized_homeserver_content,
+                                    error.authorisedAccountProviderTitles.joinToString(),
                                 )
+                            }
+                            is QrLoginException.OtherDeviceNotSignedIn -> {
+                                stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_description)
                             }
                             else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_description)
                         },

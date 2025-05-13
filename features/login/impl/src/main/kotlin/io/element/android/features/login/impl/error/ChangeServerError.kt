@@ -11,7 +11,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.changeserver.UnauthorizedAccountProviderException
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -26,7 +25,8 @@ sealed class ChangeServerError : Throwable() {
     }
 
     data class UnauthorizedAccountProvider(
-        val accountProvider: AccountProvider,
+        val unauthorisedAccountProviderTitle: String,
+        val authorisedAccountProviderTitles: List<String>,
     ) : ChangeServerError()
 
     data object SlidingSyncAlert : ChangeServerError()
@@ -35,7 +35,10 @@ sealed class ChangeServerError : Throwable() {
         fun from(error: Throwable): ChangeServerError = when (error) {
             is AuthenticationException.SlidingSyncVersion -> SlidingSyncAlert
             is AuthenticationException.Oidc -> Error(messageStr = error.message)
-            is UnauthorizedAccountProviderException -> UnauthorizedAccountProvider(error.accountProvider)
+            is UnauthorizedAccountProviderException -> UnauthorizedAccountProvider(
+                unauthorisedAccountProviderTitle = error.unauthorisedAccountProviderTitle,
+                authorisedAccountProviderTitles = error.authorisedAccountProviderTitles,
+            )
             else -> Error(messageId = R.string.screen_change_server_error_invalid_homeserver)
         }
     }
