@@ -127,7 +127,7 @@ class ElementCallActivity :
 
     private fun setCallIsActive() {
         audioFocus.requestAudioFocus(
-            mode = AudioFocusRequester.ElementCall,
+            requester = AudioFocusRequester.ElementCall,
             onFocusLost = {
                 // If the audio focus is lost, we do not stop the call.
                 Timber.tag(loggerTag.value).w("Audio focus lost")

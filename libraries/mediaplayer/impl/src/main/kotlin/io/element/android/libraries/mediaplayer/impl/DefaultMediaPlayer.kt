@@ -123,7 +123,7 @@ class DefaultMediaPlayer @Inject constructor(
 
     override fun play() {
         audioFocus.requestAudioFocus(
-            mode = AudioFocusRequester.VoiceMessage,
+            requester = AudioFocusRequester.VoiceMessage,
             onFocusLost = {
                 if (player.isPlaying()) {
                     player.pause()

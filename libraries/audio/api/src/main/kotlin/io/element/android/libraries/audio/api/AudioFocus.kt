@@ -14,10 +14,19 @@ enum class AudioFocusRequester {
 }
 
 interface AudioFocus {
+    /**
+     * Request audio focus for the given requester.
+     * @param requester The mode for which to request audio focus.
+     * @param onFocusLost Callback to be invoked when the audio focus is lost.
+     * @return true if the audio focus was successfully requested, false otherwise.
+     */
     fun requestAudioFocus(
-        mode: AudioFocusRequester,
+        requester: AudioFocusRequester,
         onFocusLost: () -> Unit,
     )
 
+    /**
+     * Release the audio focus.
+     */
     fun releaseAudioFocus()
 }

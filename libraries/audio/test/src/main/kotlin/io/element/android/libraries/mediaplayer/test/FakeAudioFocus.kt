@@ -16,10 +16,10 @@ class FakeAudioFocus(
     private val releaseAudioFocusResult: () -> Unit = { lambdaError() },
 ) : AudioFocus {
     override fun requestAudioFocus(
-        mode: AudioFocusRequester,
+        requester: AudioFocusRequester,
         onFocusLost: () -> Unit,
     ) {
-        requestAudioFocusResult(mode, onFocusLost)
+        requestAudioFocusResult(requester, onFocusLost)
     }
 
     override fun releaseAudioFocus() {

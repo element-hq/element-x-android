@@ -61,7 +61,7 @@ fun MediaPlayerControllerView(
         LaunchedEffect(state.isPlaying) {
             if (state.isPlaying) {
                 audioFocus.requestAudioFocus(
-                    mode = AudioFocusRequester.MediaViewer,
+                    requester = AudioFocusRequester.MediaViewer,
                     onFocusLost = {
                         Timber.w("Audio focus lost")
                         latestOnTogglePlay()

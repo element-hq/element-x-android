@@ -31,7 +31,7 @@ class DefaultAudioFocus @Inject constructor(
 
     @Suppress("DEPRECATION")
     override fun requestAudioFocus(
-        mode: AudioFocusRequester,
+        requester: AudioFocusRequester,
         onFocusLost: () -> Unit,
     ) {
         val listener = AudioManager.OnAudioFocusChangeListener {
@@ -49,19 +49,19 @@ class DefaultAudioFocus @Inject constructor(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
             val audioAttributes = AudioAttributes.Builder()
-                .setUsage(mode.toAudioUsage())
+                .setUsage(requester.toAudioUsage())
                 .build()
             val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                 .setAudioAttributes(audioAttributes)
                 .setOnAudioFocusChangeListener(listener)
-                .setWillPauseWhenDucked(mode.willPausedWhenDucked())
+                .setWillPauseWhenDucked(requester.willPausedWhenDucked())
                 .build()
             audioManager.requestAudioFocus(request)
             audioFocusRequest = request
         } else {
             audioManager.requestAudioFocus(
                 listener,
-                mode.toAudioStream(),
+                requester.toAudioStream(),
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE,
             )
             audioFocusChangeListener = listener
