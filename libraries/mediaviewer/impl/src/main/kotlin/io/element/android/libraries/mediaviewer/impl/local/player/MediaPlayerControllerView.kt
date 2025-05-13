@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +34,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -41,6 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 @Composable
 fun MediaPlayerControllerView(
@@ -48,8 +53,26 @@ fun MediaPlayerControllerView(
     onTogglePlay: () -> Unit,
     onSeekChange: (Float) -> Unit,
     onToggleMute: () -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
+    if (audioFocus != null) {
+        val latestOnTogglePlay by rememberUpdatedState(onTogglePlay)
+        LaunchedEffect(state.isPlaying) {
+            if (state.isPlaying) {
+                audioFocus.requestAudioFocus(
+                    requester = AudioFocusRequester.MediaViewer,
+                    onFocusLost = {
+                        Timber.w("Audio focus lost")
+                        latestOnTogglePlay()
+                    },
+                )
+            } else {
+                audioFocus.releaseAudioFocus()
+            }
+        }
+    }
+
     AnimatedVisibility(
         visible = state.isVisible,
         modifier = modifier,
@@ -167,5 +190,6 @@ internal fun MediaPlayerControllerViewPreview(
         onTogglePlay = {},
         onSeekChange = {},
         onToggleMute = {},
+        audioFocus = null,
     )
 }

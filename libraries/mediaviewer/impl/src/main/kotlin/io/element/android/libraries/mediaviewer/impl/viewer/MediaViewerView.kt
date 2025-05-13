@@ -51,6 +51,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -91,6 +92,7 @@ fun MediaViewerView(
     state: MediaViewerState,
     textFileViewer: TextFileViewer,
     onBackClick: () -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -163,6 +165,7 @@ fun MediaViewerView(
                             onShowOverlayChange = {
                                 showOverlay = it
                             },
+                            audioFocus = audioFocus,
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
@@ -284,6 +287,7 @@ private fun MediaViewerPage(
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
+    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
@@ -336,6 +340,7 @@ private fun MediaViewerPage(
                         }
                     },
                     isUserSelected = isUserSelected,
+                    audioFocus = audioFocus,
                 )
                 ThumbnailView(
                     mediaInfo = data.mediaInfo,
@@ -578,7 +583,8 @@ private fun ErrorView(
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
+        audioFocus = null,
         textFileViewer = { _, _ -> },
-        onBackClick = {}
+        onBackClick = {},
     )
 }
