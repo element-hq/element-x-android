@@ -47,13 +47,14 @@ class DefaultAudioFocus @Inject constructor(
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(mode.toAudioUsage())
                 .build()
             val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                 .setAudioAttributes(audioAttributes)
                 .setOnAudioFocusChangeListener(listener)
+                .setWillPauseWhenDucked(mode.willPausedWhenDucked())
                 .build()
             audioManager.requestAudioFocus(request)
             audioFocusRequest = request
@@ -90,5 +91,16 @@ private fun AudioFocusRequester.toAudioStream(): Int {
         AudioFocusRequester.ElementCall,
         AudioFocusRequester.VoiceMessage -> AudioManager.STREAM_VOICE_CALL
         AudioFocusRequester.MediaViewer -> AudioManager.STREAM_MUSIC
+    }
+}
+
+private fun AudioFocusRequester.willPausedWhenDucked(): Boolean {
+    return when (this) {
+        /* (note that for Element Call, there is no action when the focus is lost) */
+        AudioFocusRequester.ElementCall,
+        AudioFocusRequester.VoiceMessage -> true
+        // For the MediaViewer, we let the system automatically handle the ducking
+        // https://developer.android.com/media/optimize/audio-focus#automatic-ducking
+        AudioFocusRequester.MediaViewer -> false
     }
 }
