@@ -7,9 +7,9 @@
 
 package io.element.android.features.roommembermoderation.api
 
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 interface RoomMemberModerationEvents {
-    data class RenderActions(val roomMember: RoomMember) : RoomMemberModerationEvents
-    data class ProcessAction(val action: ModerationAction): RoomMemberModerationEvents
+    data class ShowActionsForUser(val user: MatrixUser) : RoomMemberModerationEvents
+    data class ProcessAction(val action: ModerationAction) : RoomMemberModerationEvents
 }

@@ -15,26 +15,28 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.toMatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.toPersistentList
 
 class RoomMemberModerationStateProvider : PreviewParameterProvider<InternalRoomMemberModerationState> {
     override val values: Sequence<InternalRoomMemberModerationState>
         get() = sequenceOf(
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 actions = listOf(
                     ModerationAction.DisplayProfile(anAlice()),
                 ),
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 actions = listOf(
                     ModerationAction.DisplayProfile(anAlice()),
                     ModerationAction.KickUser(anAlice()),
                 ),
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 actions = listOf(
                     ModerationAction.DisplayProfile(anAlice()),
                     ModerationAction.KickUser(anAlice()),
@@ -42,41 +44,34 @@ class RoomMemberModerationStateProvider : PreviewParameterProvider<InternalRoomM
                     ),
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 kickUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 kickUserAsyncAction = AsyncAction.Loading,
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             ),
             aRoomMembersModerationState(
-                selectedRoomMember = AsyncData.Success(anAlice()),
+                selectedUser = anAlice(),
                 banUserAsyncAction = AsyncAction.Loading,
             ),
         )
 }
 
-fun anAlice() = RoomMember(
+fun anAlice() = MatrixUser(
     UserId(value = "@alice:server.org"),
     displayName = "Alice",
     avatarUrl = null,
-    role = RoomMember.Role.forPowerLevel(100L),
-    membership = RoomMembershipState.JOIN,
-    isNameAmbiguous = false,
-    powerLevel = 100L,
-    normalizedPowerLevel = 100L,
-    isIgnored = false,
-    membershipChangeReason = null,
 )
 
 fun aRoomMembersModerationState(
     canKick: Boolean = false,
     canBan: Boolean = false,
-    selectedRoomMember: AsyncData<RoomMember> = AsyncData.Uninitialized,
+    selectedUser: MatrixUser? = null,
     actions: List<ModerationAction> = emptyList(),
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -85,7 +80,7 @@ fun aRoomMembersModerationState(
 ) = InternalRoomMemberModerationState(
     canKick = canKick,
     canBan = canBan,
-    selectedRoomMember = selectedRoomMember,
+    selectedUser = selectedUser,
     actions = actions.toPersistentList(),
     kickUserAsyncAction = kickUserAsyncAction,
     banUserAsyncAction = banUserAsyncAction,

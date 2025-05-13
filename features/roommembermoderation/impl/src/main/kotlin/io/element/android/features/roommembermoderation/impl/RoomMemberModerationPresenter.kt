@@ -20,13 +20,14 @@ import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.toMatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.room.canBanAsState
 import io.element.android.libraries.matrix.ui.room.canKickAsState
 import io.element.android.libraries.matrix.ui.room.userPowerLevelAsState
@@ -45,7 +46,6 @@ class RoomMemberModerationPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
 ) : Presenter<RoomMemberModerationState> {
-    private var selectedMember by mutableStateOf<AsyncData<RoomMember>>(AsyncData.Uninitialized)
 
     @Composable
     override fun present(): RoomMemberModerationState {
@@ -61,60 +61,68 @@ class RoomMemberModerationPresenter @Inject constructor(
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
         val unbanUserAsyncAction =
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
-
+        var selectedUser by remember {
+            mutableStateOf<MatrixUser?>(null)
+        }
         val moderationActions = remember { mutableStateOf(persistentListOf<ModerationAction>()) }
 
         fun handleEvent(event: RoomMemberModerationEvents) {
             when (event) {
-                is RoomMemberModerationEvents.RenderActions -> {
-                    selectedMember = AsyncData.Success(event.roomMember)
-                    moderationActions.value = computeModerationActions(
-                        member = event.roomMember,
-                        canKick = canKick.value,
-                        canBan = canBan.value,
-                        currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
-                    )
+                is RoomMemberModerationEvents.ShowActionsForUser -> {
+                    coroutineScope.launch {
+                        selectedUser = event.user
+                        moderationActions.value = persistentListOf(ModerationAction.DisplayProfile(event.user))
+                        room.getUpdatedMember(event.user.userId)
+                            .onSuccess {
+                                moderationActions.value = computeModerationActions(
+                                    member = it,
+                                    canKick = canKick.value,
+                                    canBan = canBan.value,
+                                    currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
+                                )
+                            }
+                    }
                 }
                 is RoomMemberModerationEvents.ProcessAction -> {
-                    when(val action = event.action) {
+                    when (val action = event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
-                            selectedMember = AsyncData.Success(action.member)
+                            selectedUser = action.user
                             kickUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                         is ModerationAction.BanUser -> {
-                            selectedMember = AsyncData.Success(action.member)
+                            selectedUser = action.user
                             banUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                         is ModerationAction.UnbanUser -> {
-                            selectedMember = AsyncData.Success(action.member)
+                            selectedUser = action.user
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                     }
                 }
                 is InternalRoomMemberModerationEvents.DoKickUser -> {
-                    selectedMember.dataOrNull()?.let {
+                    selectedUser?.let {
                         coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                     }
-                    selectedMember = AsyncData.Uninitialized
+                    selectedUser = null
                 }
                 is InternalRoomMemberModerationEvents.DoBanUser -> {
-                    selectedMember.dataOrNull()?.let {
+                    selectedUser?.let {
                         coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
                     }
-                    selectedMember = AsyncData.Uninitialized
+                    selectedUser = null
                 }
                 is InternalRoomMemberModerationEvents.Reset -> {
-                    selectedMember = AsyncData.Uninitialized
+                    selectedUser = null
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized
                 }
                 is InternalRoomMemberModerationEvents.DoUnbanUser -> {
-                    selectedMember.dataOrNull()?.let {
+                    selectedUser?.let {
                         coroutineScope.unbanUser(it.userId, unbanUserAsyncAction)
                     }
-                    selectedMember = AsyncData.Uninitialized
+                    selectedUser = null
                 }
             }
         }
@@ -122,7 +130,7 @@ class RoomMemberModerationPresenter @Inject constructor(
         return InternalRoomMemberModerationState(
             canKick = canKick.value,
             canBan = canBan.value,
-            selectedRoomMember = selectedMember,
+            selectedUser = selectedUser,
             actions = moderationActions.value,
             kickUserAsyncAction = kickUserAsyncAction.value,
             banUserAsyncAction = banUserAsyncAction.value,
@@ -137,13 +145,15 @@ class RoomMemberModerationPresenter @Inject constructor(
         canBan: Boolean,
         currentUserMemberPowerLevel: Long,
     ): PersistentList<ModerationAction> {
+        val memberAsUser = member.toMatrixUser()
         return buildList {
-            add(ModerationAction.DisplayProfile(member))
-            if (canKick && member.powerLevel < currentUserMemberPowerLevel) {
-                add(ModerationAction.KickUser(member))
+            add(ModerationAction.DisplayProfile(memberAsUser))
+            val canModerateThisUser = member.powerLevel < currentUserMemberPowerLevel && member.membership.isActive()
+            if (canKick && canModerateThisUser) {
+                add(ModerationAction.KickUser(memberAsUser))
             }
-            if (canBan && member.powerLevel < currentUserMemberPowerLevel) {
-                add(ModerationAction.BanUser(member))
+            if (canBan && canModerateThisUser) {
+                add(ModerationAction.BanUser(memberAsUser))
             }
         }.toPersistentList()
     }
@@ -194,4 +204,5 @@ class RoomMemberModerationPresenter @Inject constructor(
             }
         }
     }
+
 }

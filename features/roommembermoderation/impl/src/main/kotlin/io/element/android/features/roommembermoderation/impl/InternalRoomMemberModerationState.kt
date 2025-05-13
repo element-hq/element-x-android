@@ -13,20 +13,19 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class InternalRoomMemberModerationState(
     override val canKick: Boolean,
     override val canBan: Boolean,
-    val selectedRoomMember: AsyncData<RoomMember>,
+    val selectedUser: MatrixUser?,
     val actions: ImmutableList<ModerationAction>,
     val kickUserAsyncAction: AsyncAction<Unit>,
     val banUserAsyncAction: AsyncAction<Unit>,
     val unbanUserAsyncAction: AsyncAction<Unit>,
     override val eventSink: (RoomMemberModerationEvents) -> Unit,
 ) : RoomMemberModerationState {
-
-    val canOnlyDisplayProfile = actions.size == 1 && actions.first() is ModerationAction.DisplayProfile
-    val canDisplayActions = actions.isNotEmpty() && !canOnlyDisplayProfile
+    val canDisplayActions = actions.isNotEmpty()
 }
 

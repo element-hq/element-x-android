@@ -20,9 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -49,9 +47,9 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -63,23 +61,27 @@ fun RoomMemberModerationView(
     onSelectAction: (ModerationAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val selectedRoomMember = state.selectedRoomMember.dataOrNull()
     Box(modifier = modifier) {
-        if (selectedRoomMember != null && state.canDisplayActions) {
+        val selectedUser = state.selectedUser
+        if (selectedUser != null && state.canDisplayActions) {
             RoomMemberActionsBottomSheet(
-                roomMember = selectedRoomMember,
+                user = selectedUser,
                 actions = state.actions,
                 onSelectAction = onSelectAction,
                 onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
             )
         }
-        val onSelectAction by rememberUpdatedState(onSelectAction)
-        LaunchedEffect(state.canOnlyDisplayProfile) {
-            if (state.canOnlyDisplayProfile) {
-                onSelectAction(state.actions.first())
-            }
-        }
+        RoomMemberAsyncActions(state = state)
+    }
+}
 
+@Composable
+private fun RoomMemberAsyncActions(
+    state: InternalRoomMemberModerationState,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        val selectedUser = state.selectedUser
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), state = asyncIndicatorState)
 
@@ -100,7 +102,7 @@ fun RoomMemberModerationView(
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
-                    val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
+                    val userDisplayName = selectedUser?.getBestName().orEmpty()
                     asyncIndicatorState.enqueue {
                         AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_removing_user, userDisplayName))
                     }
@@ -139,7 +141,7 @@ fun RoomMemberModerationView(
             }
             is AsyncAction.Loading -> {
                 LaunchedEffect(action) {
-                    val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
+                    val userDisplayName = selectedUser?.getBestName().orEmpty()
                     asyncIndicatorState.enqueue {
                         AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_banning_user, userDisplayName))
                     }
@@ -167,7 +169,7 @@ fun RoomMemberModerationView(
                     content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
                     submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
                     onSubmitClick = {
-                        val userDisplayName = selectedRoomMember?.getBestName().orEmpty()
+                        val userDisplayName = selectedUser?.getBestName().orEmpty()
                         asyncIndicatorState.enqueue {
                             AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
                         }
@@ -198,7 +200,7 @@ fun RoomMemberModerationView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomMemberActionsBottomSheet(
-    roomMember: RoomMember,
+    user: MatrixUser,
     actions: ImmutableList<ModerationAction>,
     onSelectAction: (ModerationAction) -> Unit,
     onDismiss: () -> Unit,
@@ -219,12 +221,12 @@ private fun RoomMemberActionsBottomSheet(
             modifier = Modifier.padding(vertical = 16.dp)
         ) {
             Avatar(
-                avatarData = roomMember.getAvatarData(size = AvatarSize.RoomListManageUser),
+                avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
                 modifier = Modifier
                     .padding(bottom = 28.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            roomMember.displayName?.let {
+            user.displayName?.let {
                 Text(
                     text = it,
                     style = ElementTheme.typography.fontHeadingLgBold,
@@ -237,7 +239,7 @@ private fun RoomMemberActionsBottomSheet(
                 )
             }
             Text(
-                text = roomMember.userId.toString(),
+                text = user.userId.toString(),
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,

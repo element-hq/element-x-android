@@ -77,7 +77,7 @@ class RoomMemberListNode @AssistedInject constructor(
             state = state.moderationState,
             onSelectAction = { action ->
                 when (action) {
-                    is ModerationAction.DisplayProfile -> openRoomMemberDetails(action.member.userId)
+                    is ModerationAction.DisplayProfile -> openRoomMemberDetails(action.user.userId)
                     else -> state.moderationState.eventSink(RoomMemberModerationEvents.ProcessAction(action))
                 }
             },

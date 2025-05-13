@@ -37,11 +37,14 @@ import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMe
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomcall.api.anOngoingCallState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
@@ -116,6 +119,7 @@ fun aMessagesState(
     roomCallState: RoomCallState = aStandByCallState(),
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     dmUserVerificationState: IdentityState? = null,
+    roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -143,8 +147,19 @@ fun aMessagesState(
     appName = "Element",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     dmUserVerificationState = dmUserVerificationState,
+    roomMemberModerationState = roomMemberModerationState,
     eventSink = eventSink,
 )
+
+fun aRoomMemberModerationState(
+    canKick: Boolean = false,
+    canBan: Boolean = false,
+
+) = object : RoomMemberModerationState {
+    override val canKick: Boolean = canKick
+    override val canBan: Boolean = canBan
+    override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
+}
 
 fun aUserEventPermissions(
     canRedactOwn: Boolean = false,

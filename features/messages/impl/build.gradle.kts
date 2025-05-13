@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.matrix.emojibase.bindings)
     implementation(projects.features.knockrequests.api)
+    implementation(projects.features.roommembermoderation.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

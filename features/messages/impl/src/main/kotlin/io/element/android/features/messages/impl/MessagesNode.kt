@@ -39,6 +39,9 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.androidutils.system.toast
@@ -76,7 +79,8 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
-    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer
+    private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
+    private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(
         navigator = this,
@@ -256,6 +260,16 @@ class MessagesNode @AssistedInject constructor(
                     )
                 },
                 modifier = modifier,
+            )
+            roomMemberModerationRenderer.Render(
+                state = state.roomMemberModerationState,
+                onSelectAction = { action ->
+                    when (action) {
+                        is ModerationAction.DisplayProfile -> onUserDataClick(action.user.userId)
+                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action))
+                    }
+                },
+                modifier = Modifier,
             )
 
             var focusedEventId by rememberSaveable {
