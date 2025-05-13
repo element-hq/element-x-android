@@ -96,7 +96,7 @@ private fun AudioFocusRequester.toAudioStream(): Int {
 
 private fun AudioFocusRequester.willPausedWhenDucked(): Boolean {
     return when (this) {
-        /* (note that for Element Call, there is no action when the focus is lost) */
+        // (note that for Element Call, there is no action when the focus is lost)
         AudioFocusRequester.ElementCall,
         AudioFocusRequester.VoiceMessage -> true
         // For the MediaViewer, we let the system automatically handle the ducking
