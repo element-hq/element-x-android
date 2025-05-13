@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.RoomTombstone
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
@@ -51,7 +52,7 @@ fun aRoomSummary(
     isEncrypted: Boolean = false,
     joinRule: JoinRule? = JoinRule.Public,
     isSpace: Boolean = false,
-    isTombstoned: Boolean = false,
+    tombstone: RoomTombstone? = null,
     isFavorite: Boolean = false,
     canonicalAlias: RoomAlias? = null,
     alternativeAliases: List<RoomAlias> = emptyList(),
@@ -87,7 +88,7 @@ fun aRoomSummary(
         isEncrypted = isEncrypted,
         joinRule = joinRule,
         isSpace = isSpace,
-        isTombstoned = isTombstoned,
+        tombstone = tombstone,
         isFavorite = isFavorite,
         canonicalAlias = canonicalAlias,
         alternativeAliases = alternativeAliases.toPersistentList(),

@@ -32,7 +32,7 @@ data class RoomInfo(
     val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
     val isSpace: Boolean,
-    val isTombstoned: Boolean,
+    val tombstone: RoomTombstone?,
     val isFavorite: Boolean,
     val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<RoomAlias>,
@@ -78,3 +78,8 @@ data class RoomInfo(
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases
 }
+
+data class RoomTombstone(
+    val body: String,
+    val replacementRoomId: RoomId,
+)

@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.RoomTombstone
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
@@ -46,7 +47,9 @@ class RoomInfoMapper {
             },
             joinRule = it.joinRule?.map(),
             isSpace = it.isSpace,
-            isTombstoned = it.isTombstoned,
+            tombstone = it.tombstone?.let {
+                RoomTombstone(it.body, RoomId(it.replacementRoomId))
+            },
             isFavorite = it.isFavourite,
             canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
             alternativeAliases = it.alternativeAliases.map(::RoomAlias).toImmutableList(),

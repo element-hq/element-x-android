@@ -41,7 +41,6 @@ class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     override fun slidingSyncVersionBuilder(versionBuilder: SlidingSyncVersionBuilder) = this
     override fun userAgent(userAgent: String) = this
     override fun username(username: String) = this
-    override fun useEventCachePersistentStorage(value: Boolean) = this
 
     override suspend fun buildWithQrCode(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener): Client {
         return FakeRustClient()
