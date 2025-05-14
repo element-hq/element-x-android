@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -62,8 +61,6 @@ import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -71,12 +68,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
-import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
 import org.matrix.rustcomponents.sdk.TimelineFilter
@@ -93,7 +88,6 @@ import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
-import org.matrix.rustcomponents.sdk.RoomInfo as InnerRoomInfo
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 class JoinedRustRoom(
@@ -101,7 +95,6 @@ class JoinedRustRoom(
     private val liveInnerTimeline: InnerTimeline,
     private val notificationSettingsService: NotificationSettingsService,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomInfoMapper: RoomInfoMapper,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
     private val featureFlagService: FeatureFlagService,
@@ -111,14 +104,6 @@ class JoinedRustRoom(
     private val innerRoom = baseRoom.innerRoom
 
     override val syncUpdateFlow = MutableStateFlow(0L)
-
-    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {
-        innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
-            override fun call(roomInfo: InnerRoomInfo) {
-                channel.trySend(roomInfoMapper.map(roomInfo))
-            }
-        })
-    }.stateIn(roomCoroutineScope, started = SharingStarted.Lazily, initialValue = baseRoom.info())
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         val initial = emptyList<UserId>()

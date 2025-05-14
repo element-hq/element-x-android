@@ -44,6 +44,7 @@ class RustBaseRoomTest {
             ),
             roomMembershipObserver = RoomMembershipObserver(),
             sessionCoroutineScope = sessionCoroutineScope,
+            roomInfoMapper = RoomInfoMapper(),
             initialRoomInfo = aRoomInfo(),
         )
     }
