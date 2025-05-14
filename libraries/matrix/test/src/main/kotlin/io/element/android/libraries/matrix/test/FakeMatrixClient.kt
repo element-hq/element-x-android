@@ -88,6 +88,7 @@ class FakeMatrixClient(
     private val availableSlidingSyncVersionsLambda: () -> Result<List<SlidingSyncVersion>> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
+    private val canReportRoomLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -328,5 +329,9 @@ class FakeMatrixClient(
 
     override suspend fun availableSlidingSyncVersions(): Result<List<SlidingSyncVersion>> {
         return availableSlidingSyncVersionsLambda()
+    }
+
+    override suspend fun canReportRoom(): Boolean {
+        return canReportRoomLambda()
     }
 }

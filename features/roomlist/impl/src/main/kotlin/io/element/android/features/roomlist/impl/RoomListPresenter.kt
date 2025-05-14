@@ -23,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.AcceptInvite
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.DeclineInvite
@@ -165,6 +164,8 @@ class RoomListPresenter @Inject constructor(
 
         val contentState = roomListContentState(securityBannerDismissed)
 
+        val canReportRoom by produceState(false) { value = client.canReportRoom() }
+
         return RoomListState(
             matrixUser = matrixUser.value,
             showAvatarIndicator = showAvatarIndicator,
@@ -180,7 +181,7 @@ class RoomListPresenter @Inject constructor(
             acceptDeclineInviteState = acceptDeclineInviteState,
             directLogoutState = directLogoutState,
             hideInvitesAvatars = hideInvitesAvatar,
-            canReportRoom = MatrixConfiguration.CAN_REPORT_ROOM,
+            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }
