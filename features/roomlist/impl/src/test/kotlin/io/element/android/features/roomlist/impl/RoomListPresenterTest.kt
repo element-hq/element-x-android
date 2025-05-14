@@ -298,6 +298,7 @@ class RoomListPresenterTest {
                             isFavorite = false,
                             markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
+                            displayClearRoomCacheAction = false,
                         )
                     )
             }
@@ -315,6 +316,7 @@ class RoomListPresenterTest {
                             isFavorite = true,
                             markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
+                            displayClearRoomCacheAction = false,
                         )
                     )
             }
@@ -343,6 +345,7 @@ class RoomListPresenterTest {
                             markAsUnreadFeatureFlagEnabled = true,
                             // true here.
                             hasNewContent = false,
+                            displayClearRoomCacheAction = true,
                         )
                     )
             }
@@ -373,6 +376,7 @@ class RoomListPresenterTest {
                         isFavorite = false,
                         markAsUnreadFeatureFlagEnabled = true,
                         hasNewContent = false,
+                        displayClearRoomCacheAction = false,
                     )
                 )
 

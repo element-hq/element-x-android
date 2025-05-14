@@ -193,16 +193,18 @@ private fun RoomListModalBottomSheetContent(
             ),
             style = ListItemStyle.Destructive,
         )
-        ListItem(
-            headlineContent = {
-                Text(text = "Clear cache for this room")
-            },
-            modifier = Modifier.clickable { onClearCacheRoomClick() },
-            leadingContent = ListItemContent.Icon(
-                iconSource = IconSource.Vector(CompoundIcons.Delete())
-            ),
-            style = ListItemStyle.Primary,
-        )
+        if (contextMenu.displayClearRoomCacheAction) {
+            ListItem(
+                headlineContent = {
+                    Text(text = "Clear cache for this room")
+                },
+                modifier = Modifier.clickable { onClearCacheRoomClick() },
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(CompoundIcons.Delete())
+                ),
+                style = ListItemStyle.Primary,
+            )
+        }
     }
 }
 
