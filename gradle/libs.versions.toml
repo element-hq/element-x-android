@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.10.0"
-kotlin = "2.1.20"
+kotlin = "2.1.21"
 kotlinpoet = "2.1.0"
-ksp = "2.1.20-2.0.1"
+ksp = "2.1.21-2.0.1"
 firebaseAppDistribution = "5.1.1"
 
 # AndroidX
@@ -162,7 +162,7 @@ coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 compound = { module = "io.element.android:compound-android", version = "25.4.4" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.20.1"
