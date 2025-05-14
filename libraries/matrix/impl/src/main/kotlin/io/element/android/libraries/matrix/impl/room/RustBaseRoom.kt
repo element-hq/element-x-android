@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -98,6 +99,7 @@ class RustBaseRoom(
 
     override fun destroy() {
         innerRoom.destroy()
+        roomCoroutineScope.cancel()
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {

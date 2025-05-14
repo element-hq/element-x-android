@@ -60,7 +60,6 @@ import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -646,7 +645,6 @@ class JoinedRustRoom(
     override fun destroy() {
         baseRoom.destroy()
         liveInnerTimeline.destroy()
-        roomCoroutineScope.cancel()
     }
 
     private fun InnerTimeline.map(
