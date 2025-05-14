@@ -263,8 +263,6 @@ class RoomListPresenter @Inject constructor(
             isFavorite = event.roomSummary.isFavorite,
             markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
             hasNewContent = event.roomSummary.hasNewContent,
-            eventCacheFeatureFlagEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first() &&
-                featureFlagService.isFeatureEnabled(FeatureFlags.EventCache),
         )
         contextMenuState.value = initialState
 

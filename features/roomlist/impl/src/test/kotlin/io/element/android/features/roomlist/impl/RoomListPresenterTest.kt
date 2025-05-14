@@ -297,7 +297,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = false,
                             markAsUnreadFeatureFlagEnabled = true,
-                            eventCacheFeatureFlagEnabled = false,
                             hasNewContent = false,
                         )
                     )
@@ -315,7 +314,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = true,
                             markAsUnreadFeatureFlagEnabled = true,
-                            eventCacheFeatureFlagEnabled = false,
                             hasNewContent = false,
                         )
                     )
@@ -344,7 +342,6 @@ class RoomListPresenterTest {
                             isFavorite = false,
                             markAsUnreadFeatureFlagEnabled = true,
                             // true here.
-                            eventCacheFeatureFlagEnabled = true,
                             hasNewContent = false,
                         )
                     )
@@ -375,7 +372,6 @@ class RoomListPresenterTest {
                         isDm = false,
                         isFavorite = false,
                         markAsUnreadFeatureFlagEnabled = true,
-                        eventCacheFeatureFlagEnabled = false,
                         hasNewContent = false,
                     )
                 )
