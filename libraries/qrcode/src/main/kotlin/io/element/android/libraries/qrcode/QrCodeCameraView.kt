@@ -62,9 +62,11 @@ fun QrCodeCameraView(
         var cameraProvider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
         val previewUseCase = remember { Preview.Builder().build() }
         var lastFrame by remember { mutableStateOf<Bitmap?>(null) }
-        val imageAnalysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
+        val imageAnalysis = remember {
+            ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+        }
 
         LaunchedEffect(Unit) {
             cameraProvider = localContext.getCameraProvider()
