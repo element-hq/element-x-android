@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
@@ -112,7 +113,7 @@ class JoinedRustRoom(
 
     override val syncUpdateFlow = MutableStateFlow(0L)
 
-    override val roomInfoFlow: StateFlow<io.element.android.libraries.matrix.api.room.RoomInfo> = mxCallbackFlow {
+    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: InnerRoomInfo) {
                 channel.trySend(roomInfoMapper.map(roomInfo))
