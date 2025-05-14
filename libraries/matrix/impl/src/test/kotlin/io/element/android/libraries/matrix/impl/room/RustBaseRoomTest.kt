@@ -1,0 +1,50 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.matrix.impl.room
+
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
+import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+
+class RustBaseRoomTest {
+    @Test
+    fun `RustBaseRoom should cancel the room coroutine scope when it is destroyed`() = runTest {
+        val rustBaseRoom = createRustBaseRoom(
+            // Not using backgroundScope here, but the test scope
+            sessionCoroutineScope = this
+        )
+        rustBaseRoom.destroy()
+    }
+
+    private fun TestScope.createRustBaseRoom(
+        sessionCoroutineScope: CoroutineScope,
+    ): RustBaseRoom {
+        val dispatchers = testCoroutineDispatchers()
+        return RustBaseRoom(
+            sessionId = A_SESSION_ID,
+            deviceId = A_DEVICE_ID,
+            innerRoom = FakeRustRoom(),
+            coroutineDispatchers = dispatchers,
+            roomSyncSubscriber = RoomSyncSubscriber(
+                roomListService = FakeRustRoomListService(),
+                dispatchers = dispatchers,
+            ),
+            roomMembershipObserver = RoomMembershipObserver(),
+            sessionCoroutineScope = sessionCoroutineScope,
+            initialRoomInfo = aRoomInfo(),
+        )
+    }
+}
