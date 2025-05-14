@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.push
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -33,6 +34,37 @@ class SyncOnNotifiableEvent @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val activeRoomsHolder: ActiveRoomsHolder,
 ) {
+    suspend fun batch(notifiableEvents: List<NotifiableEvent>) = withContext(dispatchers.io) {
+        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
+            return@withContext
+        }
+
+        try {
+            val eventsBySession = notifiableEvents.groupBy { it.sessionId }
+
+            appForegroundStateService.updateIsSyncingNotificationEvent(true)
+
+            for ((sessionId, events) in eventsBySession) {
+                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: continue
+                val eventsByRoomId = events.groupBy { it.roomId }
+
+                client.roomListService.subscribeToVisibleRooms(eventsByRoomId.keys.toList())
+
+                if (!appForegroundStateService.isInForeground.value) {
+                    for ((roomId, eventsInRoom) in eventsByRoomId) {
+                        client.getJoinedRoom(roomId)?.use { room ->
+                            eventsInRoom.parallelMap { event ->
+                                room.waitsUntilEventIsKnown(event.eventId, timeout = 10.seconds)
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            appForegroundStateService.updateIsSyncingNotificationEvent(false)
+        }
+    }
+
     suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
         val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush) && !isRingingCallEvent) {
