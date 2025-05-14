@@ -21,7 +21,6 @@ import io.element.android.libraries.push.impl.history.onInvalidPushReceived
 import io.element.android.libraries.push.impl.history.onSuccess
 import io.element.android.libraries.push.impl.history.onUnableToResolveEvent
 import io.element.android.libraries.push.impl.history.onUnableToRetrieveSession
-import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels

@@ -25,7 +25,7 @@ interface OnNotifiableEventReceived {
 class DefaultOnNotifiableEventReceived @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val coroutineScope: CoroutineScope,
-//    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
+    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         coroutineScope.launch {
@@ -38,6 +38,7 @@ class DefaultOnNotifiableEventReceived @Inject constructor(
 
     override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
         coroutineScope.launch {
+            launch { syncOnNotifiableEvent.batch(notifiableEvents) }
             defaultNotificationDrawerManager.onNotifiableEventsReceived((notifiableEvents.filter { it !is NotifiableRingingCallEvent }))
         }
     }
