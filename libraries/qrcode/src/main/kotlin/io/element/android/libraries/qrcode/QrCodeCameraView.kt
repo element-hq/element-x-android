@@ -44,8 +44,8 @@ import kotlin.coroutines.suspendCoroutine
 @Composable
 fun QrCodeCameraView(
     onScanQrCode: (ByteArray) -> Unit,
+    renderPreview: Boolean,
     modifier: Modifier = Modifier,
-    renderPreview: Boolean = true,
 ) {
     if (LocalInspectionMode.current) {
         Box(
