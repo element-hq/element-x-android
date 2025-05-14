@@ -11,7 +11,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -49,18 +48,9 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 
@@ -71,7 +61,10 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 interface NotifiableEventResolver {
-    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent>
+    suspend fun resolveEvents(
+        sessionId: SessionId,
+        notificationEventRequests: List<NotificationEventRequest>
+    ): Result<Map<EventId, ResolvedPushEvent?>>
 }
 
 @ContributesBinding(AppScope::class)
@@ -85,30 +78,21 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val appPreferencesStore: AppPreferencesStore,
-    private val appCoroutineScope: CoroutineScope,
 ) : NotifiableEventResolver {
-
-    private val resolver = NotificationResolver(
-        matrixClientProvider = matrixClientProvider,
-        coroutineScope = appCoroutineScope,
-    )
-
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent> {
-        Timber.d("Queueing notification for $sessionId: $roomId, $eventId")
-        resolver.queue(NotificationEventRequest(sessionId, eventId, roomId))
-        val notificationData = runCatching {
-            withTimeout(30.seconds) { resolver.results.map { it[eventId] }.first() }
-        }
+    override suspend fun resolveEvents(
+        sessionId: SessionId,
+        notificationEventRequests: List<NotificationEventRequest>
+    ): Result<Map<EventId, ResolvedPushEvent?>> {
+        Timber.d("Queueing notifications: $notificationEventRequests")
+        // TODO fix throw
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+        val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
+        val notifications = client.notificationService().getNotifications(sessionId, ids)
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        return notificationData.flatMap {
-            if (it == null) {
-                Timber.tag(loggerTag.value).d("No notification data found for event $eventId")
-                return@flatMap Result.failure(ResolvingException("Unable to resolve event $eventId"))
-            } else {
-                Timber.tag(loggerTag.value).d("Found notification item for $eventId")
-                val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
-                it.asNotifiableEvent(client, sessionId)
+        return notifications.mapCatching { map ->
+            map.mapValues { (_, notificationData) ->
+                notificationData?.asNotifiableEvent(client, sessionId)?.getOrNull()
             }
         }
     }
@@ -412,53 +396,4 @@ internal fun buildNotifiableMessageEvent(
     isUpdated = isUpdated,
     type = type,
     hasMentionOrReply = hasMentionOrReply,
-)
-
-class NotificationResolver(
-    private val matrixClientProvider: MatrixClientProvider,
-    private val coroutineScope: CoroutineScope,
-) {
-    private val requests = Channel<NotificationEventRequest>(capacity = 100)
-
-    val results = MutableSharedFlow<Map<EventId, NotificationData?>>()
-
-    init {
-        coroutineScope.launch {
-            while (coroutineScope.isActive) {
-                delay(250)
-                val ids = buildList {
-                    while (!requests.isEmpty) {
-                        add(requests.receive())
-                    }
-                }.groupBy { it.sessionId }
-
-                val sessionIds = ids.keys
-                for (sessionId in sessionIds) {
-                    val client = matrixClientProvider.getOrRestore(sessionId).getOrNull()
-                    if (client != null) {
-                        val notificationService = client.notificationService()
-                        val requestsByRoom = ids[sessionId].orEmpty().groupBy { it.roomId }.mapValues { it.value.map { it.eventId } }
-                        Timber.d("Fetching notifications for $sessionId: $requestsByRoom. Pending requests: ${!requests.isEmpty}")
-
-                        coroutineScope.launch {
-                            val results = notificationService.getNotifications(requestsByRoom).getOrNull().orEmpty()
-                            if (results.isNotEmpty()) {
-                                this@NotificationResolver.results.emit(results)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    suspend fun queue(request: NotificationEventRequest) {
-        requests.send(request)
-    }
-}
-
-data class NotificationEventRequest(
-    val sessionId: SessionId,
-    val eventId: EventId,
-    val roomId: RoomId,
 )

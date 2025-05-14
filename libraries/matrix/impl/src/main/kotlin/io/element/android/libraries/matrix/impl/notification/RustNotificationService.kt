@@ -10,13 +10,13 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.NotificationClient
-import org.matrix.rustcomponents.sdk.NotificationItemRequest
-import org.matrix.rustcomponents.sdk.NotificationResult
+import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 
@@ -28,39 +28,44 @@ class RustNotificationService(
     private val notificationMapper: NotificationMapper = NotificationMapper(clock)
 
     override suspend fun getNotification(
+        sessionId: SessionId,
         roomId: RoomId,
         eventId: EventId,
     ): Result<NotificationData?> = withContext(dispatchers.io) {
         runCatching {
             val item = notificationClient.getNotification(roomId.value, eventId.value)
             item?.use {
-                notificationMapper.map(eventId, roomId, it)
+                notificationMapper.map(
+                    sessionId = sessionId,
+                    eventId = eventId,
+                    roomId = roomId,
+                    notificationItem = it
+                )
             }
         }
     }
 
     override suspend fun getNotifications(
+        sessionId: SessionId,
         ids: Map<RoomId, List<EventId>>
     ): Result<Map<EventId, NotificationData?>> = withContext(dispatchers.io) {
         runCatching {
             val requests = ids.map { (roomId, eventIds) ->
-                NotificationItemRequest(
+                NotificationItemsRequest(
                     roomId = roomId.value,
                     eventIds = eventIds.map { it.value }
                 )
             }
             val items = notificationClient.getNotifications(requests)
             buildMap {
-                for ((id, item) in items) {
-                    item.use {
-                        val eventId = EventId(id)
-                        when (it) {
-                            is NotificationResult.Ok -> {
-                                val roomId = RoomId(requests.find { it.eventIds.contains(eventId.value) }?.roomId!!)
-                                put(eventId, notificationMapper.map(eventId, roomId, it.v1))
-                            }
-                            is NotificationResult.Err -> Timber.e(it.v1, "Could not retrieve event for notification with $eventId")
-                        }
+                val eventIds = requests.flatMap { it.eventIds }
+                for (eventId in eventIds) {
+                    val item = items[eventId]
+                    if (item != null) {
+                        val roomId = RoomId(requests.find { it.eventIds.contains(eventId) }?.roomId!!)
+                        put(EventId(eventId), notificationMapper.map(sessionId, EventId(eventId), roomId, item))
+                    } else {
+                        Timber.e("Could not retrieve event for notification with $eventId")
                     }
                 }
             }
