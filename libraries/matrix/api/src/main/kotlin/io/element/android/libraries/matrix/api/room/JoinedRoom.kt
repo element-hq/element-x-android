@@ -51,12 +51,6 @@ interface JoinedRoom : BaseRoom {
     val knockRequestsFlow: Flow<List<KnockRequest>>
 
     /**
-     * A one-to-one is a room with exactly 2 members.
-     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
-     */
-    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
-
-    /**
      * The live timeline of the room. Must be used to send Event to a room.
      */
     val liveTimeline: Timeline

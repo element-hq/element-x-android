@@ -56,6 +56,12 @@ interface BaseRoom : Closeable {
     fun info(): RoomInfo = roomInfoFlow.value
 
     /**
+     * A one-to-one is a room with exactly 2 members.
+     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
+     */
+    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
+
+    /**
      * Try to load the room members and update the membersFlow.
      */
     suspend fun updateMembers()
