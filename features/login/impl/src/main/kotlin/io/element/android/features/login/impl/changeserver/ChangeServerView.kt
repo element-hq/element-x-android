@@ -62,7 +62,7 @@ fun ChangeServerView(
                         content = stringResource(
                             id = R.string.screen_change_server_error_unauthorized_homeserver,
                             LocalBuildMeta.current.applicationName,
-                            error.accountProvider.title,
+                            error.unauthorisedAccountProviderTitle,
                         ),
                         onSubmit = {
                             eventSink.invoke(ChangeServerEvents.ClearError)

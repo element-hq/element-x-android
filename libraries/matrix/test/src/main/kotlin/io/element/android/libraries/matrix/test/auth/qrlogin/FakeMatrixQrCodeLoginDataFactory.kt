@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.test.auth.qrlogin
 
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeMatrixQrCodeLoginDataFactory(
@@ -20,4 +21,8 @@ class FakeMatrixQrCodeLoginDataFactory(
     }
 }
 
-class FakeMatrixQrCodeLoginData : MatrixQrCodeLoginData
+class FakeMatrixQrCodeLoginData(
+    private val serverNameResult: () -> String? = { lambdaError() },
+) : MatrixQrCodeLoginData {
+    override fun serverName() = serverNameResult()
+}

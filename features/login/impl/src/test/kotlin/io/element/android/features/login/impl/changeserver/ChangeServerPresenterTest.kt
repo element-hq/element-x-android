@@ -84,6 +84,7 @@ class ChangeServerPresenterTest {
         createPresenter(
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = isAllowedToConnectToHomeserverResult,
+                defaultHomeserverResult = { "element.io" },
             ),
         ).test {
             val initialState = awaitItem()
@@ -94,8 +95,11 @@ class ChangeServerPresenterTest {
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
             assertThat(
-                (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).accountProvider
-            ).isEqualTo(anAccountProvider)
+                (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).unauthorisedAccountProviderTitle
+            ).isEqualTo(anAccountProvider.title)
+            assertThat(
+                (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).authorisedAccountProviderTitles
+            ).containsExactly("element.io")
             isAllowedToConnectToHomeserverResult.assertions()
                 .isCalledOnce()
                 .with(value(A_HOMESERVER_URL))

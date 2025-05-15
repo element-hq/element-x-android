@@ -7,8 +7,7 @@
 
 package io.element.android.features.login.impl.changeserver
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
-
 class UnauthorizedAccountProviderException(
-    val accountProvider: AccountProvider,
+    val unauthorisedAccountProviderTitle: String,
+    val authorisedAccountProviderTitles: List<String>,
 ) : Exception()
