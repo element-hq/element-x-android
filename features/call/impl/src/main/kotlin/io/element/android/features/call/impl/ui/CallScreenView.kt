@@ -17,6 +17,7 @@ import android.os.Build
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
+import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -36,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,8 +72,11 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.Executors
+import kotlin.time.Duration.Companion.seconds
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
 
@@ -179,6 +184,7 @@ private fun CallWebView(
         Column(modifier = modifier) {
             var audioDeviceCallback: AudioDeviceCallback? by remember { mutableStateOf(null) }
 
+            val coroutinScope = rememberCoroutineScope()
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
                 factory = { context ->
@@ -192,11 +198,47 @@ private fun CallWebView(
                     if (url is AsyncData.Success && webView.url != url.data) {
                         webView.loadUrl(url.data)
 
-                        val audioManager = webView.context.getSystemService<AudioManager>()!!
-                        val devices = audioManager.loadCommunicationAudioDevices()
-                        webView.evaluateJavascript("""
-                            controls.setOutputDevices([${devices.joinToString(",") { "{ 'id': '${it.id}', 'name': '${it.description()}' }" } }])
-                        """.trimIndent(), null)
+                        val setAudioOutputCallback = object {
+                            @JavascriptInterface
+                            fun setOutputDevice(id: String) {
+                                val audioManager = webView.context.getSystemService<AudioManager>()!!
+                                val audioDevices = audioManager.loadCommunicationAudioDevices()
+                                val selectedDevice = audioDevices.find { it.id.toString() == id }
+                                if (selectedDevice != null) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                        audioManager.setCommunicationDevice(selectedDevice)
+                                    } else {
+                                        when (selectedDevice.type) {
+                                            AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> {
+                                                @Suppress("DEPRECATION")
+                                                audioManager.isSpeakerphoneOn = true
+                                            }
+                                            AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> {
+                                                @Suppress("DEPRECATION")
+                                                audioManager.isSpeakerphoneOn = false
+                                            }
+                                            AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> {
+                                                audioManager.isBluetoothScoOn = true
+                                            }
+                                            else -> Timber.d("Audio device selected but it's not compatible, type: ${selectedDevice.type}")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        webView.addJavascriptInterface(setAudioOutputCallback, "setOutputDeviceCallback")
+
+                        coroutinScope.launch {
+                            delay(4.seconds)
+                            val audioManager = webView.context.getSystemService<AudioManager>()!!
+                            val devices = audioManager.loadCommunicationAudioDevices()
+                            val setDevicesScript = """
+                                controls.setOutputDevices([${devices.joinToString(",") { "{ 'id': '${it.id}', 'name': '${it.description()}' }" } }]);
+                                controls.onOutputDeviceSelect = (id) => { setOutputDeviceCallback.setOutputDevice(id); };
+                            """.trimIndent()
+                            webView.evaluateJavascript(setDevicesScript, null)
+                        }
                     }
                 },
                 onRelease = { webView ->
