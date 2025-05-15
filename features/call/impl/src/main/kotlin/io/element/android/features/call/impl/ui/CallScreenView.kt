@@ -191,6 +191,12 @@ private fun CallWebView(
                 update = { webView ->
                     if (url is AsyncData.Success && webView.url != url.data) {
                         webView.loadUrl(url.data)
+
+                        val audioManager = webView.context.getSystemService<AudioManager>()!!
+                        val devices = audioManager.loadCommunicationAudioDevices()
+                        webView.evaluateJavascript("""
+                            controls.setOutputDevices([${devices.joinToString(",") { "{ 'id': '${it.id}', 'name': '${it.description()}' }" } }])
+                        """.trimIndent(), null)
                     }
                 },
                 onRelease = { webView ->
