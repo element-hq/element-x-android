@@ -8,11 +8,13 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     id: "login-continue"
 ## MAS page
+## Conditional workflow to pass the Chrome first launch welcome page.
 - runFlow:
     when:
       visible: 'Use without an account'
     commands:
       - tapOn: "Use without an account"
+## Working when running Maestro locally, but not on the CI yet.
 - tapOn:
    id: "form-1"
 - inputText: ${MAESTRO_USERNAME}
