@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.push.impl.notifications.ResolvingException
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
@@ -50,6 +51,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.Instant
@@ -493,7 +495,7 @@ class DefaultPushHandlerTest {
                 .isCalledOnce()
         }
 
-    private fun createDefaultPushHandler(
+    private fun TestScope.createDefaultPushHandler(
         onNotifiableEventReceived: (NotifiableEvent) -> Unit = { lambdaError() },
         onRedactedEventReceived: (ResolvedPushEvent.Redaction) -> Unit = { lambdaError() },
         notifiableEventResult: (SessionId, RoomId, EventId) -> Result<ResolvedPushEvent> = { _, _, _ -> lambdaError() },
@@ -510,7 +512,6 @@ class DefaultPushHandlerTest {
         return DefaultPushHandler(
             onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceived),
             onRedactedEventReceived = FakeOnRedactedEventReceived(onRedactedEventReceived),
-            notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventResult),
             incrementPushDataStore = object : IncrementPushDataStore {
                 override suspend fun incrementPushCounter() {
                     incrementPushCounterResult()
@@ -524,6 +525,8 @@ class DefaultPushHandlerTest {
             elementCallEntryPoint = elementCallEntryPoint,
             notificationChannels = notificationChannels,
             pushHistoryService = pushHistoryService,
+            resolverQueue = NotificationResolverQueue(notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventResult), backgroundScope),
+            appCoroutineScope = backgroundScope,
         )
     }
 }

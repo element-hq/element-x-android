@@ -191,8 +191,8 @@ class DefaultPushHandler @Inject constructor(
             appCoroutineScope.launch {
                 val notificationEventRequest = NotificationEventRequest(
                     sessionId = userId,
-                    eventId = pushData.eventId,
                     roomId = pushData.roomId,
+                    eventId = pushData.eventId,
                     providerInfo = providerInfo,
                 )
                 Timber.d("Queueing notification: $notificationEventRequest")

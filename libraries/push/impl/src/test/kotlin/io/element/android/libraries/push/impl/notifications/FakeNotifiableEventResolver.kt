@@ -16,7 +16,13 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeNotifiableEventResolver(
     private val notifiableEventResult: (SessionId, RoomId, EventId) -> Result<ResolvedPushEvent> = { _, _, _ -> lambdaError() }
 ) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): Result<ResolvedPushEvent> {
-        return notifiableEventResult(sessionId, roomId, eventId)
+    override suspend fun resolveEvents(sessionId: SessionId, notificationEventRequests: List<NotificationEventRequest>): Result<Map<EventId, ResolvedPushEvent?>> {
+        return notificationEventRequests.associate {
+            val eventId = it.eventId
+            val roomId = it.roomId
+            eventId to notifiableEventResult(sessionId, roomId, eventId).getOrNull()
+        }.let { resolvedEvents ->
+            Result.success(resolvedEvents)
+        }
     }
 }

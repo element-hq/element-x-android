@@ -16,4 +16,10 @@ class FakeOnNotifiableEventReceived(
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         onNotifiableEventReceivedResult(notifiableEvent)
     }
+
+    override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
+        for (event in notifiableEvents) {
+            onNotifiableEventReceived(event)
+        }
+    }
 }
