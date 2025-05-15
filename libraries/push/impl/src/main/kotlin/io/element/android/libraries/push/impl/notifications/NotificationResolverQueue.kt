@@ -33,7 +33,7 @@ class NotificationResolverQueue @Inject constructor(
     private val coroutineScope: CoroutineScope,
 ) {
     companion object {
-        private const val BATCH_WINDOW_MS = 2000L
+        private const val BATCH_WINDOW_MS = 250L
     }
     private val requestQueue = Channel<NotificationEventRequest>(capacity = 100)
 
@@ -75,8 +75,8 @@ class NotificationResolverQueue @Inject constructor(
 
 data class NotificationEventRequest(
     val sessionId: SessionId,
-    val eventId: EventId,
     val roomId: RoomId,
+    val eventId: EventId,
     val providerInfo: String,
     val timestamp: LocalTime = LocalTime.now(),
 )
