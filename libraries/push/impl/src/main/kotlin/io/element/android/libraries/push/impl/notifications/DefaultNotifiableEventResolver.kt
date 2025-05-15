@@ -84,8 +84,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
         notificationEventRequests: List<NotificationEventRequest>
     ): Result<Map<EventId, ResolvedPushEvent?>> {
         Timber.d("Queueing notifications: $notificationEventRequests")
-        // TODO fix throw
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
+            return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
+        }
         val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
         val notifications = client.notificationService().getNotifications(sessionId, ids)
 

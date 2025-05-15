@@ -11,15 +11,9 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeOnNotifiableEventReceived(
-    private val onNotifiableEventReceivedResult: (NotifiableEvent) -> Unit = { lambdaError() },
+    private val onNotifiableEventsReceivedResult: (List<NotifiableEvent>) -> Unit = { lambdaError() },
 ) : OnNotifiableEventReceived {
-    override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        onNotifiableEventReceivedResult(notifiableEvent)
-    }
-
     override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
-        for (event in notifiableEvents) {
-            onNotifiableEventReceived(event)
-        }
+        onNotifiableEventsReceivedResult(notifiableEvents)
     }
 }

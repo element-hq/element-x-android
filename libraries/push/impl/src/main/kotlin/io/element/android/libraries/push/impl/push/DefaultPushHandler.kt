@@ -60,7 +60,6 @@ class DefaultPushHandler @Inject constructor(
     private val resolverQueue: NotificationResolverQueue,
     private val appCoroutineScope: CoroutineScope,
 ) : PushHandler {
-
     init {
         resolverQueue.results
             .map { (requests, resolvedEvents) ->
@@ -90,7 +89,9 @@ class DefaultPushHandler @Inject constructor(
                     val userPushStore = userPushStoreFactory.getOrCreate(event.sessionId)
                     val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
                     // If notifications are disabled for this session and device, we don't want to show the notification
-                    if (!areNotificationsEnabled) continue
+                    // But if it's a ringing call, we want to show it anyway
+                    val isRingingCall = (event as? ResolvedPushEvent.Event)?.notifiableEvent is NotifiableRingingCallEvent
+                    if (!areNotificationsEnabled && !isRingingCall) continue
 
                     when (event) {
                         is ResolvedPushEvent.Event -> {

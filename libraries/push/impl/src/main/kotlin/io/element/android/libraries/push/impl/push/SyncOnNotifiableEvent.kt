@@ -13,11 +13,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.first
@@ -34,7 +32,7 @@ class SyncOnNotifiableEvent @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val activeRoomsHolder: ActiveRoomsHolder,
 ) {
-    suspend fun batch(notifiableEvents: List<NotifiableEvent>) = withContext(dispatchers.io) {
+    suspend operator fun invoke(notifiableEvents: List<NotifiableEvent>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
         }
@@ -52,68 +50,24 @@ class SyncOnNotifiableEvent @Inject constructor(
 
                 if (!appForegroundStateService.isInForeground.value) {
                     for ((roomId, eventsInRoom) in eventsByRoomId) {
-                        client.getJoinedRoom(roomId)?.use { room ->
+                        val activeRoom = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
+                        val room = activeRoom ?: client.getJoinedRoom(roomId)
+
+                        if (room != null) {
                             eventsInRoom.parallelMap { event ->
                                 room.waitsUntilEventIsKnown(event.eventId, timeout = 10.seconds)
                             }
+                        }
+
+                        if (room != null && activeRoom == null) {
+                            // Destroy the room we just instantiated to reset its live timeline
+                            room.destroy()
                         }
                     }
                 }
             }
         } finally {
             appForegroundStateService.updateIsSyncingNotificationEvent(false)
-        }
-    }
-
-    suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
-        val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
-        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush) && !isRingingCallEvent) {
-            return@withContext
-        }
-
-        val activeRoom = activeRoomsHolder.getActiveRoomMatching(notifiableEvent.sessionId, notifiableEvent.roomId)
-
-        if (activeRoom != null) {
-            // If the room is already active, we can use it directly
-            activeRoom.subscribeToSyncAndWait(notifiableEvent, isRingingCallEvent)
-        } else {
-            // Otherwise, we need to get the room from the matrix client
-            val room = matrixClientProvider
-                .getOrRestore(notifiableEvent.sessionId)
-                .mapCatching { it.getJoinedRoom(notifiableEvent.roomId) }
-                .getOrNull()
-
-            room?.use { it.subscribeToSyncAndWait(notifiableEvent, isRingingCallEvent) }
-        }
-    }
-
-    private suspend fun JoinedRoom.subscribeToSyncAndWait(notifiableEvent: NotifiableEvent, isRingingCallEvent: Boolean) {
-        subscribeToSync()
-
-        // If the app is in foreground, sync is already running, so we just add the subscription above.
-        if (!appForegroundStateService.isInForeground.value) {
-            if (isRingingCallEvent) {
-                waitsUntilUserIsInTheCall(timeout = 60.seconds)
-            } else {
-                try {
-                    appForegroundStateService.updateIsSyncingNotificationEvent(true)
-                    waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
-                } finally {
-                    appForegroundStateService.updateIsSyncingNotificationEvent(false)
-                }
-            }
-        }
-    }
-
-    /**
-     * User can be in the call if they answer using another session.
-     * If the user does not join the call, the timeout will be reached.
-     */
-    private suspend fun BaseRoom.waitsUntilUserIsInTheCall(timeout: Duration) {
-        withTimeoutOrNull(timeout) {
-            roomInfoFlow.first {
-                sessionId in it.activeRoomCallParticipants
-            }
         }
     }
 

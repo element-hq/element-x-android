@@ -354,8 +354,8 @@ class NotificationBroadcastReceiverHandlerTest {
                 )
             )
         }
-        val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
-        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
+        val onNotifiableEventsReceivedResult = lambdaRecorder<List<NotifiableEvent>, Unit> { _ -> }
+        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceivedResult = onNotifiableEventsReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(
             joinedRoom = joinedRoom,
             onNotifiableEventReceived = onNotifiableEventReceived,
@@ -371,7 +371,7 @@ class NotificationBroadcastReceiverHandlerTest {
         sendMessage.assertions()
             .isCalledOnce()
             .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))
-        onNotifiableEventReceivedResult.assertions()
+        onNotifiableEventsReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
             .isNeverCalled()
@@ -421,8 +421,8 @@ class NotificationBroadcastReceiverHandlerTest {
                 )
             )
         }
-        val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
-        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
+        val onNotifiableEventsReceivedResult = lambdaRecorder<List<NotifiableEvent>, Unit> { _ -> }
+        val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceivedResult = onNotifiableEventsReceivedResult)
         val sut = createNotificationBroadcastReceiverHandler(
             joinedRoom = joinedRoom,
             onNotifiableEventReceived = onNotifiableEventReceived,
@@ -439,7 +439,7 @@ class NotificationBroadcastReceiverHandlerTest {
         runCurrent()
         sendMessage.assertions()
             .isNeverCalled()
-        onNotifiableEventReceivedResult.assertions()
+        onNotifiableEventsReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
             .isCalledOnce()

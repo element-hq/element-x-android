@@ -29,7 +29,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface OnRedactedEventReceived {
-    fun onRedactedEventReceived(redaction: ResolvedPushEvent.Redaction)
     fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>)
 }
 
@@ -41,52 +40,6 @@ class DefaultOnRedactedEventReceived @Inject constructor(
     @ApplicationContext private val context: Context,
     private val stringProvider: StringProvider,
 ) : OnRedactedEventReceived {
-    override fun onRedactedEventReceived(redaction: ResolvedPushEvent.Redaction) {
-        coroutineScope.launch {
-            val notifications = activeNotificationsProvider.getMessageNotificationsForRoom(
-                redaction.sessionId,
-                redaction.roomId,
-            )
-            if (notifications.isEmpty()) {
-                Timber.d("No notifications found for redacted event")
-            }
-            notifications.forEach { statusBarNotification ->
-                val notification = statusBarNotification.notification
-                val messagingStyle = MessagingStyle.extractMessagingStyleFromNotification(notification)
-                if (messagingStyle == null) {
-                    Timber.w("Unable to retrieve messaging style from notification")
-                    return@forEach
-                }
-                val messageToRedactIndex = messagingStyle.messages.indexOfFirst { message ->
-                    message.extras.getString(DefaultNotificationCreator.MESSAGE_EVENT_ID) == redaction.redactedEventId.value
-                }
-                if (messageToRedactIndex == -1) {
-                    Timber.d("Unable to find the message to remove from notification")
-                    return@forEach
-                }
-                val oldMessage = messagingStyle.messages[messageToRedactIndex]
-                val content = buildSpannedString {
-                    inSpans(StyleSpan(Typeface.ITALIC)) {
-                        append(stringProvider.getString(CommonStrings.common_message_removed))
-                    }
-                }
-                val newMessage = MessagingStyle.Message(
-                    content,
-                    oldMessage.timestamp,
-                    oldMessage.person
-                )
-                messagingStyle.messages[messageToRedactIndex] = newMessage
-                notificationDisplayer.showNotificationMessage(
-                    statusBarNotification.tag,
-                    statusBarNotification.id,
-                    NotificationCompat.Builder(context, notification)
-                        .setStyle(messagingStyle)
-                        .build()
-                )
-            }
-        }
-    }
-
     override fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
         coroutineScope.launch {
             val redactionsBySessionIdAndRoom = redactions.groupBy { redaction ->
