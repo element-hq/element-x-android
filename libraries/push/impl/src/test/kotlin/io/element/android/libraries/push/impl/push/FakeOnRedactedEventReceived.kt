@@ -16,4 +16,10 @@ class FakeOnRedactedEventReceived(
     override fun onRedactedEventReceived(redaction: ResolvedPushEvent.Redaction) {
         onRedactedEventReceivedResult(redaction)
     }
+
+    override fun onRedactedEventsReceived(redactions: List<ResolvedPushEvent.Redaction>) {
+        for (redaction in redactions) {
+            onRedactedEventReceived(redaction)
+        }
+    }
 }

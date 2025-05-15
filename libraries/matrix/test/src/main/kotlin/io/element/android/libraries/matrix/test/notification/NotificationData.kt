@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_NAME_2
 
@@ -27,6 +28,7 @@ fun aNotificationData(
     roomDisplayName: String? = A_ROOM_NAME
 ): NotificationData {
     return NotificationData(
+        sessionId = A_SESSION_ID,
         eventId = AN_EVENT_ID,
         threadId = threadId,
         roomId = A_ROOM_ID,
