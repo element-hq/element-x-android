@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
@@ -15,6 +16,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -26,7 +28,9 @@ class RustBaseRoomTest {
             // Not using backgroundScope here, but the test scope
             sessionCoroutineScope = this
         )
+        assertThat(rustBaseRoom.roomCoroutineScope.isActive).isTrue()
         rustBaseRoom.destroy()
+        assertThat(rustBaseRoom.roomCoroutineScope.isActive).isFalse()
     }
 
     private fun TestScope.createRustBaseRoom(
