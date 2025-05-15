@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.LocalTime
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -59,9 +58,7 @@ class NotificationResolverQueue @Inject constructor(
                     launch {
                         // No need for a Mutex since the SDK already has one internally
                         val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                        if (notifications.isNotEmpty()) {
-                            (results as MutableSharedFlow).emit(requests to notifications.values.filterNotNull())
-                        }
+                        (results as MutableSharedFlow).emit(requests to notifications.values.filterNotNull())
                     }
                 }
             }
@@ -78,5 +75,4 @@ data class NotificationEventRequest(
     val roomId: RoomId,
     val eventId: EventId,
     val providerInfo: String,
-    val timestamp: LocalTime = LocalTime.now(),
 )

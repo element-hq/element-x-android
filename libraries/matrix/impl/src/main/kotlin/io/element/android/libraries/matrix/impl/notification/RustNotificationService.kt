@@ -17,7 +17,6 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationItemsRequest
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 
 class RustNotificationService(
@@ -26,24 +25,6 @@ class RustNotificationService(
     clock: SystemClock,
 ) : NotificationService {
     private val notificationMapper: NotificationMapper = NotificationMapper(clock)
-
-    override suspend fun getNotification(
-        sessionId: SessionId,
-        roomId: RoomId,
-        eventId: EventId,
-    ): Result<NotificationData?> = withContext(dispatchers.io) {
-        runCatching {
-            val item = notificationClient.getNotification(roomId.value, eventId.value)
-            item?.use {
-                notificationMapper.map(
-                    sessionId = sessionId,
-                    eventId = eventId,
-                    roomId = roomId,
-                    notificationItem = it
-                )
-            }
-        }
-    }
 
     override suspend fun getNotifications(
         sessionId: SessionId,
