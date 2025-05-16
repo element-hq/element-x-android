@@ -102,8 +102,8 @@ import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -133,7 +133,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -148,7 +148,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - toggle fullscreen`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -164,7 +164,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change message`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -187,7 +187,6 @@ class MessageComposerPresenterTest {
             this.saveDraftLambda = updateDraftLambda
         }
         val presenter = createPresenter(
-            coroutineScope = this,
             draftService = draftService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -230,7 +229,6 @@ class MessageComposerPresenterTest {
             this.saveDraftLambda = updateDraftLambda
         }
         val presenter = createPresenter(
-            coroutineScope = this,
             draftService = draftService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -274,7 +272,6 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = joinedRoom,
             isRichTextEditorEnabled = false,
         )
@@ -315,7 +312,6 @@ class MessageComposerPresenterTest {
             this.saveDraftLambda = updateDraftLambda
         }
         val presenter = createPresenter(
-            coroutineScope = this,
             draftService = draftService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -347,7 +343,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to reply`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -363,7 +359,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - cancel reply`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -383,7 +379,6 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - send message with rich text enabled`() = runTest {
         val presenter = createPresenter(
-            coroutineScope = this,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendMessageLambda = { _, _, _ -> Result.success(Unit) }
@@ -418,7 +413,6 @@ class MessageComposerPresenterTest {
     fun `present - send message with plain text enabled`() = runTest {
         val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
         val presenter = createPresenter(
-            coroutineScope = this,
             isRichTextEditorEnabled = false,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
@@ -465,7 +459,6 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
-            this,
             joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -521,7 +514,6 @@ class MessageComposerPresenterTest {
             editMessageLambda = roomEditMessageLambda,
         )
         val presenter = createPresenter(
-            this,
             joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -577,7 +569,6 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
         )
         val presenter = createPresenter(
-            this,
             joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -629,7 +620,6 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(
-            this,
             joinedRoom,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -667,7 +657,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Open attachments menu`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -680,7 +670,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Dismiss attachments menu`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -703,7 +693,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             navigator = navigator,
         )
@@ -744,7 +733,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             navigator = navigator,
         )
@@ -778,7 +766,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick media from gallery & cancel does nothing`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         with(pickerProvider) {
             givenResult(null) // Simulate a user canceling the flow
             givenMimeType(MimeTypes.Images)
@@ -802,7 +790,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             navigator = navigator,
         )
@@ -820,7 +807,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val presenter = createPresenter(this, room = room)
+        val presenter = createPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -839,7 +826,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val presenter = createPresenter(this, room = room)
+        val presenter = createPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -864,7 +851,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             permissionPresenter = permissionPresenter,
             navigator = navigator,
@@ -889,7 +875,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             permissionPresenter = permissionPresenter,
             navigator = navigator,
@@ -916,7 +901,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             permissionPresenter = permissionPresenter,
             navigator = navigator,
@@ -941,7 +925,6 @@ class MessageComposerPresenterTest {
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
         val presenter = createPresenter(
-            coroutineScope = this,
             room = room,
             permissionPresenter = permissionPresenter,
             navigator = navigator,
@@ -962,7 +945,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - errors are tracked`() = runTest {
         val testException = Exception("Test error")
-        val presenter = createPresenter(this)
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -974,7 +957,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - ToggleTextFormatting toggles text formatting`() = runTest {
-        val presenter = createPresenter(this, isRichTextEditorEnabled = false)
+        val presenter = createPresenter(isRichTextEditorEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1018,7 +1001,7 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val presenter = createPresenter(this, room)
+        val presenter = createPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1079,7 +1062,7 @@ class MessageComposerPresenterTest {
                 )
             )
         }
-        val presenter = createPresenter(this, room)
+        val presenter = createPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1095,7 +1078,6 @@ class MessageComposerPresenterTest {
 
     fun `present - InsertSuggestion`() = runTest {
         val presenter = createPresenter(
-            coroutineScope = this,
             permalinkBuilder = FakePermalinkBuilder(
                 permalinkForUserLambda = {
                     Result.success("https://matrix.to/#/${A_USER_ID_2.value}")
@@ -1135,7 +1117,7 @@ class MessageComposerPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
-        val presenter = createPresenter(room = room, coroutineScope = this)
+        val presenter = createPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1199,7 +1181,6 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - send uri`() = runTest {
         val presenter = createPresenter(
-            this,
             room = FakeJoinedRoom(
                 typingNoticeResult = { Result.success(Unit) },
                 liveTimeline = FakeTimeline().apply {
@@ -1225,7 +1206,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = typingNoticeResult,
         )
-        val presenter = createPresenter(room = room, coroutineScope = this)
+        val presenter = createPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1251,7 +1232,7 @@ class MessageComposerPresenterTest {
         val store = InMemorySessionPreferencesStore(
             isSendTypingNotificationsEnabled = false
         )
-        val presenter = createPresenter(room = room, sessionPreferencesStore = store, coroutineScope = this)
+        val presenter = createPresenter(room = room, sessionPreferencesStore = store)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1269,7 +1250,7 @@ class MessageComposerPresenterTest {
         val composerDraftService = FakeComposerDraftService().apply {
             this.loadDraftLambda = loadDraftLambda
         }
-        val presenter = createPresenter(draftService = composerDraftService, coroutineScope = this)
+        val presenter = createPresenter(draftService = composerDraftService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1294,7 +1275,6 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
-            coroutineScope = this
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1328,7 +1308,6 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
-            coroutineScope = this
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1362,7 +1341,6 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
-            coroutineScope = this
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1409,7 +1387,6 @@ class MessageComposerPresenterTest {
             room = room,
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
-            coroutineScope = this
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1439,7 +1416,7 @@ class MessageComposerPresenterTest {
         val composerDraftService = FakeComposerDraftService().apply {
             this.saveDraftLambda = saveDraftLambda
         }
-        val presenter = createPresenter(draftService = composerDraftService, coroutineScope = this)
+        val presenter = createPresenter(draftService = composerDraftService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -1463,7 +1440,6 @@ class MessageComposerPresenterTest {
             isRichTextEditorEnabled = false,
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
-            coroutineScope = this
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -1539,18 +1515,17 @@ class MessageComposerPresenterTest {
         return normalState
     }
 
-    private fun createPresenter(
-        coroutineScope: CoroutineScope,
+    private fun TestScope.createPresenter(
         room: JoinedRoom = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         ),
         navigator: MessagesNavigator = FakeMessagesNavigator(),
-        pickerProvider: PickerProvider = this.pickerProvider,
-        featureFlagService: FeatureFlagService = this.featureFlagService,
+        pickerProvider: PickerProvider = this@MessageComposerPresenterTest.pickerProvider,
+        featureFlagService: FeatureFlagService = this@MessageComposerPresenterTest.featureFlagService,
         locationService: LocationService = FakeLocationService(true),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
-        mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
-        snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
+        mediaPreProcessor: MediaPreProcessor = this@MessageComposerPresenterTest.mediaPreProcessor,
+        snackbarDispatcher: SnackbarDispatcher = this@MessageComposerPresenterTest.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         permalinkParser: PermalinkParser = FakePermalinkParser(),
@@ -1564,7 +1539,7 @@ class MessageComposerPresenterTest {
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
-        appCoroutineScope = coroutineScope,
+        appCoroutineScope = this,
         room = room,
         mediaPickerProvider = pickerProvider,
         featureFlagService = featureFlagService,

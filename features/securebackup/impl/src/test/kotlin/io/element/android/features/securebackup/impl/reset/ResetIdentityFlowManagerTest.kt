@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.encryption.FakeIdentityPasswordResetHandle
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -132,11 +131,10 @@ class ResetIdentityFlowManagerTest {
     private fun TestScope.createFlowManager(
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         client: FakeMatrixClient = FakeMatrixClient(encryptionService = encryptionService),
-        sessionCoroutineScope: CoroutineScope = this,
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     ) = ResetIdentityFlowManager(
         matrixClient = client,
-        sessionCoroutineScope = sessionCoroutineScope,
+        sessionCoroutineScope = this,
         sessionVerificationService = sessionVerificationService,
     )
 }
