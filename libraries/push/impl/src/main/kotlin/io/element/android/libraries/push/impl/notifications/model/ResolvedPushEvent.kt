@@ -12,12 +12,22 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 
 sealed interface ResolvedPushEvent {
-    data class Event(val notifiableEvent: NotifiableEvent) : ResolvedPushEvent
+    val sessionId: SessionId
+    val roomId: RoomId
+    val eventId: EventId
+
+    data class Event(val notifiableEvent: NotifiableEvent) : ResolvedPushEvent {
+        override val sessionId: SessionId = notifiableEvent.sessionId
+        override val roomId: RoomId = notifiableEvent.roomId
+        override val eventId: EventId = notifiableEvent.eventId
+    }
 
     data class Redaction(
-        val sessionId: SessionId,
-        val roomId: RoomId,
+        override val sessionId: SessionId,
+        override val roomId: RoomId,
         val redactedEventId: EventId,
         val reason: String?,
-    ) : ResolvedPushEvent
+    ) : ResolvedPushEvent {
+        override val eventId: EventId = redactedEventId
+    }
 }

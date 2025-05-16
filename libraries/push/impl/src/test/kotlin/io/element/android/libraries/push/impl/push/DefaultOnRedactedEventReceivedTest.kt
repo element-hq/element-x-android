@@ -34,7 +34,7 @@ class DefaultOnRedactedEventReceivedTest {
         val sut = createDefaultOnRedactedEventReceived(
             getMessageNotificationsForRoomResult = { _, _ -> emptyList() }
         )
-        sut.onRedactedEventReceived(ResolvedPushEvent.Redaction(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, null))
+        sut.onRedactedEventsReceived(listOf(ResolvedPushEvent.Redaction(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, null)))
     }
 
     @Test
@@ -48,7 +48,7 @@ class DefaultOnRedactedEventReceivedTest {
                 )
             }
         )
-        sut.onRedactedEventReceived(ResolvedPushEvent.Redaction(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, null))
+        sut.onRedactedEventsReceived(listOf(ResolvedPushEvent.Redaction(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, null)))
     }
 
     private fun TestScope.createDefaultOnRedactedEventReceived(

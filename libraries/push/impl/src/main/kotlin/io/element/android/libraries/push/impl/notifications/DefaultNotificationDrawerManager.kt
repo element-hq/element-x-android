@@ -113,6 +113,11 @@ class DefaultNotificationDrawerManager @Inject constructor(
         renderEvents(listOf(notifiableEvent))
     }
 
+    suspend fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
+        val eventsToNotify = notifiableEvents.filter { !it.shouldIgnoreEventInRoom(appNavigationStateService.appNavigationState.value) }
+        renderEvents(eventsToNotify)
+    }
+
     /**
      * Clear all known message events for a [sessionId].
      */
