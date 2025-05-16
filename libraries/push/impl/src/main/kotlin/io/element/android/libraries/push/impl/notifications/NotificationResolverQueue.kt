@@ -25,6 +25,10 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
+/**
+ * This class is responsible for periodically batching notification requests and resolving them in a single call,
+ * so that we can avoid having to resolve each notification individually in the SDK.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 @SingleIn(AppScope::class)
 class NotificationResolverQueue @Inject constructor(
@@ -36,6 +40,10 @@ class NotificationResolverQueue @Inject constructor(
     }
     private val requestQueue = Channel<NotificationEventRequest>(capacity = 100)
 
+    /**
+     * A flow that emits pairs of a list of notification event requests and a map of the resolved events.
+     * The map contains the original request as the key and the resolved event as the value.
+     */
     val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> = MutableSharedFlow()
 
     init {
@@ -65,6 +73,12 @@ class NotificationResolverQueue @Inject constructor(
         }
     }
 
+    /**
+     * Enqueues a notification event request to be resolved.
+     * The request will be processed in batches, so it may not be resolved immediately.
+     *
+     * @param request The notification event request to enqueue.
+     */
     suspend fun enqueue(request: NotificationEventRequest) {
         requestQueue.send(request)
     }
