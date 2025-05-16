@@ -50,6 +50,7 @@ import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.Fa
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.matching
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -536,6 +537,59 @@ class DefaultPushHandlerTest {
             onPushReceivedResult.assertions()
                 .isCalledOnce()
         }
+
+    @Test
+    fun `when receiving several push notifications at the same time, those are batched before being processed`() = runTest {
+        val aNotifiableMessageEvent = aNotifiableMessageEvent()
+        val notifiableEventResult =
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
+            }
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val incrementPushCounterResult = lambdaRecorder<Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = onPushReceivedResult,
+        )
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val anotherPushData = PushData(
+            eventId = AN_EVENT_ID_2,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val defaultPushHandler = createDefaultPushHandler(
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+            notifiableEventsResult = notifiableEventResult,
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+            incrementPushCounterResult = incrementPushCounterResult,
+            pushHistoryService = pushHistoryService,
+        )
+        defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+        defaultPushHandler.handle(anotherPushData, A_PUSHER_INFO)
+
+        advanceTimeBy(300.milliseconds)
+
+        incrementPushCounterResult.assertions()
+            .isCalledExactly(2)
+        notifiableEventResult.assertions()
+            .isCalledOnce()
+            .with(value(A_USER_ID), matching<List<NotificationEventRequest>> { requests ->
+                requests.size == 2 && requests.first().eventId == AN_EVENT_ID && requests.last().eventId == AN_EVENT_ID_2
+            })
+        onNotifiableEventsReceived.assertions()
+            .isCalledOnce()
+        onPushReceivedResult.assertions()
+            .isCalledExactly(2)
+    }
 
     private fun TestScope.createDefaultPushHandler(
         onNotifiableEventsReceived: (List<NotifiableEvent>) -> Unit = { lambdaError() },
