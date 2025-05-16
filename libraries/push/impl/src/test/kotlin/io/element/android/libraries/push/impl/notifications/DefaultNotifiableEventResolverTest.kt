@@ -77,17 +77,9 @@ class DefaultNotifiableEventResolverTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.failure(AN_EXCEPTION)
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.isFailure).isTrue()
-    }
-
-    @Test
-    fun `resolve event null`() = runTest {
-        val sut = createDefaultNotifiableEventResolver(
-            notificationResult = Result.success(emptyMap())
-        )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.isEmpty()).isTrue()
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)?.isFailure).isTrue()
     }
 
     @Test
@@ -104,11 +96,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -127,11 +120,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world", hasMentionOrReply = true)
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -154,11 +148,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -181,11 +176,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Hello world")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -202,11 +198,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Audio")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -223,11 +220,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Video")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -244,11 +242,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Voice message")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -265,11 +264,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Image")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -286,11 +286,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Sticker")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -307,11 +308,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "File")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -328,11 +330,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Location")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -349,11 +352,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Notice")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -370,11 +374,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "* Bob is happy")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -391,11 +396,12 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Poll: A question")
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -413,8 +419,9 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isNull()
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)?.getOrNull()).isNull()
     }
 
     @Test
@@ -431,7 +438,8 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             InviteNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -450,7 +458,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -467,7 +475,8 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             InviteNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -486,7 +495,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -504,7 +513,8 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             InviteNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -523,7 +533,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -541,7 +551,8 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             InviteNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -560,7 +571,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false,
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -577,8 +588,9 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isNull()
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)?.getOrNull()).isNull()
     }
 
     @Test
@@ -588,7 +600,8 @@ class DefaultNotifiableEventResolverTest {
                 mapOf(AN_EVENT_ID to aNotificationData(content = NotificationContent.MessageLike.RoomEncrypted))
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             FallbackNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -602,7 +615,7 @@ class DefaultNotifiableEventResolverTest {
                 timestamp = A_FAKE_TIMESTAMP,
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -616,7 +629,8 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             NotifiableMessageEvent(
                 sessionId = A_SESSION_ID,
@@ -642,7 +656,7 @@ class DefaultNotifiableEventResolverTest {
                 isUpdated = false
             )
         )
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -682,8 +696,9 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         callNotificationEventResolver.resolveEventLambda = { _, _, _ -> Result.success(expectedResult.notifiableEvent) }
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -706,8 +721,9 @@ class DefaultNotifiableEventResolverTest {
             redactedEventId = AN_EVENT_ID_2,
             reason = A_REDACTION_REASON,
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isEqualTo(expectedResult)
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -724,8 +740,9 @@ class DefaultNotifiableEventResolverTest {
                 )
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isNull()
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)?.getOrNull()).isNull()
     }
 
     @Test
@@ -770,13 +787,20 @@ class DefaultNotifiableEventResolverTest {
                 mapOf(AN_EVENT_ID to aNotificationData(content = content))
             )
         )
-        val result = sut.resolveEvents(A_SESSION_ID, listOf(NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")))
-        assertThat(result.getOrNull()?.get(AN_EVENT_ID)).isNull()
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        assertThat(result.getEvent(request)?.getOrNull()).isNull()
+    }
+
+    private fun Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>.getEvent(
+        request: NotificationEventRequest
+    ): Result<ResolvedPushEvent>? {
+        return getOrNull()?.get(request)
     }
 
     private fun createDefaultNotifiableEventResolver(
         notificationService: FakeNotificationService? = FakeNotificationService(),
-        notificationResult: Result<Map<EventId, NotificationData?>> = Result.success(emptyMap()),
+        notificationResult: Result<Map<EventId, NotificationData>> = Result.success(emptyMap()),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callNotificationEventResolver: FakeCallNotificationEventResolver = FakeCallNotificationEventResolver(),
     ): DefaultNotifiableEventResolver {

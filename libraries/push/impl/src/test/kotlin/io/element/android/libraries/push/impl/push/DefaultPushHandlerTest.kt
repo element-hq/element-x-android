@@ -85,8 +85,9 @@ class DefaultPushHandlerTest {
     fun `when classical PushData is received, the notification drawer is informed`() = runTest {
         val aNotifiableMessageEvent = aNotifiableMessageEvent()
         val notifiableEventResult =
-            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<EventId, ResolvedPushEvent?>>> { _, _, ->
-                Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableMessageEvent)))
+            lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _, ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
             }
         val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -130,8 +131,9 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<EventId, ResolvedPushEvent?>>> { _, _ ->
-                    Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableMessageEvent)))
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
             val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -176,8 +178,9 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<EventId, ResolvedPushEvent?>>> { _, _ ->
-                    Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableMessageEvent)))
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
             val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -224,8 +227,9 @@ class DefaultPushHandlerTest {
         runTest {
             val aNotifiableMessageEvent = aNotifiableMessageEvent()
             val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<EventId, ResolvedPushEvent?>>> { _, _ ->
-                    Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableMessageEvent)))
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
+                    val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                    Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent))))
                 }
             val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -266,7 +270,7 @@ class DefaultPushHandlerTest {
     fun `when classical PushData is received, but not able to resolve the event, nothing happen`() =
         runTest {
             val notifiableEventResult =
-                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<EventId, ResolvedPushEvent?>>> { _, _ ->
+                lambdaRecorder<SessionId, List<NotificationEventRequest>, Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> { _, _ ->
                     Result.failure(ResolvingException("Unable to resolve"))
                 }
             val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
@@ -338,10 +342,13 @@ class DefaultPushHandlerTest {
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
             notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
                 Result.success(
                     mapOf(
-                        AN_EVENT_ID to ResolvedPushEvent.Event(
-                        aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli())
+                        request to Result.success(
+                            ResolvedPushEvent.Event(
+                                aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli())
+                            )
                         )
                     )
                 )
@@ -391,7 +398,8 @@ class DefaultPushHandlerTest {
             elementCallEntryPoint = elementCallEntryPoint,
             onNotifiableEventsReceived = onNotifiableEventsReceived,
             notifiableEventsResult = { _, _ ->
-                Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY))))
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent(type = EventType.CALL_NOTIFY)))))
             },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(
@@ -437,7 +445,8 @@ class DefaultPushHandlerTest {
             elementCallEntryPoint = elementCallEntryPoint,
             onNotifiableEventsReceived = onNotifiableEventsReceived,
             notifiableEventsResult = { _, _ ->
-                Result.success(mapOf(AN_EVENT_ID to ResolvedPushEvent.Event(aNotifiableCallEvent())))
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(ResolvedPushEvent.Event(aNotifiableCallEvent()))))
             },
             incrementPushCounterResult = {},
             userPushStore = FakeUserPushStore().apply {
@@ -480,7 +489,10 @@ class DefaultPushHandlerTest {
         val defaultPushHandler = createDefaultPushHandler(
             onRedactedEventsReceived = onRedactedEventReceived,
             incrementPushCounterResult = incrementPushCounterResult,
-            notifiableEventsResult = { _, _ -> Result.success(mapOf(AN_EVENT_ID to aRedaction)) },
+            notifiableEventsResult = { _, _ ->
+                val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, A_PUSHER_INFO)
+                Result.success(mapOf(request to Result.success(aRedaction)))
+            },
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }
             ),
@@ -528,7 +540,8 @@ class DefaultPushHandlerTest {
     private fun TestScope.createDefaultPushHandler(
         onNotifiableEventsReceived: (List<NotifiableEvent>) -> Unit = { lambdaError() },
         onRedactedEventsReceived: (List<ResolvedPushEvent.Redaction>) -> Unit = { lambdaError() },
-        notifiableEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<EventId, ResolvedPushEvent?>> = { _, _, -> lambdaError() },
+        notifiableEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> =
+            { _, _, -> lambdaError() },
         incrementPushCounterResult: () -> Unit = { lambdaError() },
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
