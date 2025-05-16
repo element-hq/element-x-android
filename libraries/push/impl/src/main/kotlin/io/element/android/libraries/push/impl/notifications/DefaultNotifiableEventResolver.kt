@@ -102,6 +102,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 if (notificationData != null) {
                     it to notificationData
                 } else {
+                    // TODO once the SDK can actually return what went wrong, we should return it here instead of this generic error
                     it to Result.failure(ResolvingException("No notification data for ${it.roomId} - ${it.eventId}"))
                 }
             }

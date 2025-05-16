@@ -61,9 +61,17 @@ class DefaultPushHandler @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
 ) : PushHandler {
     init {
+        processPushEventResults()
+    }
+
+    /**
+     * Process the push notification event results emitted by the [resolverQueue].
+     */
+    private fun processPushEventResults() {
         resolverQueue.results
             .map { (requests, resolvedEvents) ->
                 for (request in requests) {
+                    // Log the result of the push notification event
                     val result = resolvedEvents[request]
                     if (result?.isSuccess == true) {
                         pushHistoryService.onSuccess(
@@ -97,6 +105,7 @@ class DefaultPushHandler @Inject constructor(
                     val isRingingCall = (event as? ResolvedPushEvent.Event)?.notifiableEvent is NotifiableRingingCallEvent
                     if (!areNotificationsEnabled && !isRingingCall) continue
 
+                    // We categorise each result into either a NotifiableEvent or a Redaction
                     when (event) {
                         is ResolvedPushEvent.Event -> {
                             events.add(event.notifiableEvent)
@@ -107,16 +116,19 @@ class DefaultPushHandler @Inject constructor(
                     }
                 }
 
+                // Process redactions of messages
                 if (redactions.isNotEmpty()) {
                     onRedactedEventReceived.onRedactedEventsReceived(redactions)
                 }
 
+                // Find and process ringing call notifications separately
                 val (ringingCallEvents, nonRingingCallEvents) = events.partition { it is NotifiableRingingCallEvent }
                 for (ringingCallEvent in ringingCallEvents) {
                     Timber.tag(loggerTag.value).d("Ringing call event: $ringingCallEvent")
                     handleRingingCallEvent(ringingCallEvent as NotifiableRingingCallEvent)
                 }
 
+                // Finally, process other notifications (messages, invites, generic notifications, etc.)
                 if (nonRingingCallEvents.isNotEmpty()) {
                     onNotifiableEventReceived.onNotifiableEventsReceived(nonRingingCallEvents)
                 }
