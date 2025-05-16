@@ -37,7 +37,17 @@ class MediaSenderTest {
     @Test
     fun `given an attachment when sending it the preprocessor always runs`() = runTest {
         val preProcessor = FakeMediaPreProcessor()
-        val sender = createMediaSender(preProcessor)
+        val sender = createMediaSender(
+            preProcessor = preProcessor,
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendFileLambda =
+                        lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
+                            Result.success(FakeMediaUploadHandler())
+                        }
+                },
+            )
+        )
 
         val uri = Uri.parse("content://image.jpg")
         sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
