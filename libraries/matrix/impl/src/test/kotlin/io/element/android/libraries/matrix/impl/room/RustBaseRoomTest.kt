@@ -24,17 +24,13 @@ import org.junit.Test
 class RustBaseRoomTest {
     @Test
     fun `RustBaseRoom should cancel the room coroutine scope when it is destroyed`() = runTest {
-        val rustBaseRoom = createRustBaseRoom(
-            // Not using backgroundScope here, but the test scope
-            sessionCoroutineScope = this
-        )
+        val rustBaseRoom = createRustBaseRoom()
         assertThat(rustBaseRoom.roomCoroutineScope.isActive).isTrue()
         rustBaseRoom.destroy()
         assertThat(rustBaseRoom.roomCoroutineScope.isActive).isFalse()
     }
 
     private fun TestScope.createRustBaseRoom(
-        sessionCoroutineScope: CoroutineScope,
     ): RustBaseRoom {
         val dispatchers = testCoroutineDispatchers()
         return RustBaseRoom(
@@ -47,7 +43,8 @@ class RustBaseRoomTest {
                 dispatchers = dispatchers,
             ),
             roomMembershipObserver = RoomMembershipObserver(),
-            sessionCoroutineScope = sessionCoroutineScope,
+            // Not using backgroundScope here, but the test scope
+            sessionCoroutineScope = this,
             roomInfoMapper = RoomInfoMapper(),
             initialRoomInfo = aRoomInfo(),
         )
