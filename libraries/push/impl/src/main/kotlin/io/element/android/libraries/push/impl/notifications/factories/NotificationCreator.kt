@@ -14,7 +14,6 @@ import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.content.res.ResourcesCompat
 import coil3.ImageLoader
@@ -42,7 +41,6 @@ import io.element.android.libraries.push.impl.notifications.model.InviteNotifiab
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 interface NotificationCreator {
@@ -180,11 +178,7 @@ class DefaultNotificationCreator @Inject constructor(
             // 'importance' which is set in the NotificationChannel. The integers representing
             // 'priority' are different from 'importance', so make sure you don't mix them.
             .apply {
-                val notificationManager = NotificationManagerCompat.from(context)
-                val previousNotification = notificationManager.activeNotifications.find { it.tag == roomInfo.roomId.value }
-                val elapsed = System.currentTimeMillis() - (previousNotification?.postTime ?: 0L)
-                Timber.d("Creating noisy notification for room ${roomInfo.roomId.value} with elapsed time $elapsed")
-                if (roomInfo.shouldBing && elapsed > 1000L) {
+                if (roomInfo.shouldBing) {
                     // Compat
                     priority = NotificationCompat.PRIORITY_DEFAULT
                     /*
@@ -194,7 +188,6 @@ class DefaultNotificationCreator @Inject constructor(
                      */
                     setLights(accentColor, 500, 500)
                 } else {
-                    Timber.d("Creating low priority notification")
                     priority = NotificationCompat.PRIORITY_LOW
                 }
                 // Clear existing actions since we might be updating an existing notification
