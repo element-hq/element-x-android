@@ -64,7 +64,8 @@ class DefaultPushHandler @Inject constructor(
         resolverQueue.results
             .map { (requests, resolvedEvents) ->
                 for (request in requests) {
-                    if (resolvedEvents.any { it.sessionId == request.sessionId && it.roomId == it.roomId && it.eventId == request.eventId }) {
+                    val result = resolvedEvents[request]
+                    if (result?.isSuccess == true) {
                         pushHistoryService.onSuccess(
                             providerInfo = request.providerInfo,
                             eventId = request.eventId,
@@ -85,7 +86,10 @@ class DefaultPushHandler @Inject constructor(
 
                 val events = mutableListOf<NotifiableEvent>()
                 val redactions = mutableListOf<ResolvedPushEvent.Redaction>()
-                for (event in resolvedEvents) {
+
+                @Suppress("LoopWithTooManyJumpStatements")
+                for (result in resolvedEvents.values) {
+                    val event = result.getOrNull() ?: continue
                     val userPushStore = userPushStoreFactory.getOrCreate(event.sessionId)
                     val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
                     // If notifications are disabled for this session and device, we don't want to show the notification

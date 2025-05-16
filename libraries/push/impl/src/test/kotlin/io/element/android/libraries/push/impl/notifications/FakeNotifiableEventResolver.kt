@@ -7,18 +7,18 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeNotifiableEventResolver(
-    private val resolveEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<EventId, ResolvedPushEvent?>> = { _, _ -> lambdaError() }
+    private val resolveEventsResult: (SessionId, List<NotificationEventRequest>) -> Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> =
+        { _, _ -> lambdaError() }
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
         notificationEventRequests: List<NotificationEventRequest>
-    ): Result<Map<EventId, ResolvedPushEvent?>> {
+    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> {
         return resolveEventsResult(sessionId, notificationEventRequests)
     }
 }

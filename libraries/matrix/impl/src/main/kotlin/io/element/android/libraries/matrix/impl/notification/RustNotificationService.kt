@@ -29,7 +29,7 @@ class RustNotificationService(
     override suspend fun getNotifications(
         sessionId: SessionId,
         ids: Map<RoomId, List<EventId>>
-    ): Result<Map<EventId, NotificationData?>> = withContext(dispatchers.io) {
+    ): Result<Map<EventId, NotificationData>> = withContext(dispatchers.io) {
         runCatching {
             val requests = ids.map { (roomId, eventIds) ->
                 NotificationItemsRequest(

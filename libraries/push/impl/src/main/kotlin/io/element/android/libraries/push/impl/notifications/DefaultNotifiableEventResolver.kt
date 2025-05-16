@@ -64,7 +64,7 @@ interface NotifiableEventResolver {
     suspend fun resolveEvents(
         sessionId: SessionId,
         notificationEventRequests: List<NotificationEventRequest>
-    ): Result<Map<EventId, ResolvedPushEvent?>>
+    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
 }
 
 @ContributesBinding(AppScope::class)
@@ -82,20 +82,30 @@ class DefaultNotifiableEventResolver @Inject constructor(
     override suspend fun resolveEvents(
         sessionId: SessionId,
         notificationEventRequests: List<NotificationEventRequest>
-    ): Result<Map<EventId, ResolvedPushEvent?>> {
+    ): Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>> {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
             return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
         }
         val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
-        val notifications = client.notificationService().getNotifications(sessionId, ids)
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        return notifications.mapCatching { map ->
+        val notifications = client.notificationService().getNotifications(sessionId, ids).mapCatching { map ->
             map.mapValues { (_, notificationData) ->
-                notificationData?.asNotifiableEvent(client, sessionId)?.getOrNull()
+                notificationData.asNotifiableEvent(client, sessionId)
             }
         }
+
+        return Result.success(
+            notificationEventRequests.associate {
+                val notificationData = notifications.getOrNull()?.get(it.eventId)
+                if (notificationData != null) {
+                    it to notificationData
+                } else {
+                    it to Result.failure(ResolvingException("No notification data for ${it.roomId} - ${it.eventId}"))
+                }
+            }
+        )
     }
 
     private suspend fun NotificationData.asNotifiableEvent(

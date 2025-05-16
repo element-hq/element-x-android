@@ -36,7 +36,7 @@ class NotificationResolverQueue @Inject constructor(
     }
     private val requestQueue = Channel<NotificationEventRequest>(capacity = 100)
 
-    val results: SharedFlow<Pair<List<NotificationEventRequest>, List<ResolvedPushEvent>>> = MutableSharedFlow()
+    val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> = MutableSharedFlow()
 
     init {
         coroutineScope.launch {
@@ -58,7 +58,7 @@ class NotificationResolverQueue @Inject constructor(
                     launch {
                         // No need for a Mutex since the SDK already has one internally
                         val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                        (results as MutableSharedFlow).emit(requests to notifications.values.filterNotNull())
+                        (results as MutableSharedFlow).emit(requests to notifications)
                     }
                 }
             }
