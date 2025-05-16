@@ -94,7 +94,7 @@ class SharePresenter @AssistedInject constructor(
                 onPlainText = { text ->
                     roomIds
                         .map { roomId ->
-                            matrixClient.getJoinedRoom(roomId)?.sendMessage(
+                            matrixClient.getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
                                 body = text,
                                 htmlBody = null,
                                 intentionalMentions = emptyList(),

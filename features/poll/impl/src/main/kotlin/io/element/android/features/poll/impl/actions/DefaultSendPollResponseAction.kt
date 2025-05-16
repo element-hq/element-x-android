@@ -22,7 +22,7 @@ class DefaultSendPollResponseAction @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
     override suspend fun execute(pollStartId: EventId, answerId: String): Result<Unit> {
-        return room.sendPollResponse(
+        return room.liveTimeline.sendPollResponse(
             pollStartId = pollStartId,
             answers = listOf(answerId),
         ).onSuccess {

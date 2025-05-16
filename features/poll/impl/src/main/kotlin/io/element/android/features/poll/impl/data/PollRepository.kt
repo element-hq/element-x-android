@@ -41,7 +41,7 @@ class PollRepository @Inject constructor(
         pollKind: PollKind,
         maxSelections: Int,
     ): Result<Unit> = when (existingPollId) {
-        null -> room.createPoll(
+        null -> room.liveTimeline.createPoll(
             question = question,
             answers = answers,
             maxSelections = maxSelections,

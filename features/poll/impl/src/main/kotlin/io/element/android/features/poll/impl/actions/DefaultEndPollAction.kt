@@ -22,7 +22,7 @@ class DefaultEndPollAction @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : EndPollAction {
     override suspend fun execute(pollStartId: EventId): Result<Unit> {
-        return room.endPoll(
+        return room.liveTimeline.endPoll(
             pollStartId = pollStartId,
             text = "The poll with event id: $pollStartId has ended."
         ).onSuccess {

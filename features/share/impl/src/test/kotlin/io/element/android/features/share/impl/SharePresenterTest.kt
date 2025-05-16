@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -91,7 +92,9 @@ class SharePresenterTest {
     @Test
     fun `present - send text ok`() = runTest {
         val joinedRoom = FakeJoinedRoom(
-            sendMessageResult = { _, _, _ -> Result.success(Unit) },
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, joinedRoom)
@@ -122,7 +125,9 @@ class SharePresenterTest {
             Result.success(FakeMediaUploadHandler())
         }
         val joinedRoom = FakeJoinedRoom(
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, joinedRoom)

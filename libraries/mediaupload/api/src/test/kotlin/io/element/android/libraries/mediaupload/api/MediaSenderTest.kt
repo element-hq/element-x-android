@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -51,7 +52,9 @@ class MediaSenderTest {
                 Result.success(FakeMediaUploadHandler())
             }
         val room = FakeJoinedRoom(
-            sendImageResult = sendImageResult
+            liveTimeline = FakeTimeline().apply {
+                sendImageLambda = sendImageResult
+            },
         )
         val sender = createMediaSender(room = room)
 
@@ -74,14 +77,22 @@ class MediaSenderTest {
 
     @Test
     fun `given a failure in the media upload when sending the whole process fails`() = runTest {
+        val preProcessor = FakeMediaPreProcessor().apply {
+            givenImageResult()
+        }
         val sendImageResult =
             lambdaRecorder { _: File, _: File?, _: ImageInfo, _: String?, _: String?, _: ProgressCallback?, _: ReplyParameters? ->
                 Result.failure<FakeMediaUploadHandler>(Exception())
             }
         val room = FakeJoinedRoom(
-            sendImageResult = sendImageResult
+            liveTimeline = FakeTimeline().apply {
+                sendImageLambda = sendImageResult
+            },
         )
-        val sender = createMediaSender(room = room)
+        val sender = createMediaSender(
+            preProcessor = preProcessor,
+            room = room,
+        )
 
         val uri = Uri.parse("content://image.jpg")
         val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg)
@@ -94,10 +105,12 @@ class MediaSenderTest {
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+                Result.success(FakeMediaUploadHandler())
+            }
         val room = FakeJoinedRoom(
-            sendFileResult = sendFileResult
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val sender = createMediaSender(room = room)
         val sendJob = launch {

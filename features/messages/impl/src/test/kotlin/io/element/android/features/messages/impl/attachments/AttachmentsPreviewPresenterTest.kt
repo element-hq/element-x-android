@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -108,15 +109,18 @@ class AttachmentsPreviewPresenterTest {
     fun `present - send media success scenario`() = runTest {
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+                Result.success(FakeMediaUploadHandler())
+            }
         val room = FakeJoinedRoom(
-            progressCallbackValues = listOf(
-                Pair(0, 10),
-                Pair(5, 10),
-                Pair(10, 10)
-            ),
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline(
+                progressCallbackValues = listOf(
+                    Pair(0, 10),
+                    Pair(5, 10),
+                    Pair(10, 10)
+                ),
+            ).apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
@@ -146,10 +150,12 @@ class AttachmentsPreviewPresenterTest {
     fun `present - send media after pre-processing success scenario`() = runTest {
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+                Result.success(FakeMediaUploadHandler())
+            }
         val room = FakeJoinedRoom(
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
@@ -182,10 +188,12 @@ class AttachmentsPreviewPresenterTest {
     fun `present - send media before pre-processing success scenario`() = runTest {
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.success(FakeMediaUploadHandler())
-        }
+                Result.success(FakeMediaUploadHandler())
+            }
         val room = FakeJoinedRoom(
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val processLatch = CompletableDeferred<Unit>()
@@ -298,7 +306,9 @@ class AttachmentsPreviewPresenterTest {
             givenImageResult()
         }
         val room = FakeJoinedRoom(
-            sendImageResult = sendImageResult,
+            liveTimeline = FakeTimeline().apply {
+                sendImageLambda = sendImageResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
@@ -340,7 +350,9 @@ class AttachmentsPreviewPresenterTest {
             givenVideoResult()
         }
         val room = FakeJoinedRoom(
-            sendVideoResult = sendVideoResult,
+            liveTimeline = FakeTimeline().apply {
+                sendVideoLambda = sendVideoResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
@@ -382,7 +394,9 @@ class AttachmentsPreviewPresenterTest {
             givenAudioResult()
         }
         val room = FakeJoinedRoom(
-            sendAudioResult = sendAudioResult,
+            liveTimeline = FakeTimeline().apply {
+                sendAudioLambda = sendAudioResult
+            },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
@@ -416,10 +430,12 @@ class AttachmentsPreviewPresenterTest {
         val failure = MediaPreProcessor.Failure(null)
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.failure(failure)
-        }
+                Result.failure(failure)
+            }
         val room = FakeJoinedRoom(
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -445,11 +461,13 @@ class AttachmentsPreviewPresenterTest {
         val failure = MediaPreProcessor.Failure(null)
         val sendFileResult =
             lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-            Result.failure(failure)
-        }
+                Result.failure(failure)
+            }
         val onDoneListenerResult = lambdaRecorder<Unit> {}
         val room = FakeJoinedRoom(
-            sendFileResult = sendFileResult,
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, mediaUploadOnSendQueueEnabled = true, onDoneListener = onDoneListenerResult)
         moleculeFlow(RecompositionMode.Immediate) {

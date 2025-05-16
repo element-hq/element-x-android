@@ -366,7 +366,7 @@ class NotificationBroadcastReceiverHandlerTest {
                 roomId = A_ROOM_ID,
             ),
         )
-        runCurrent()
+        advanceUntilIdle()
         sendMessage.assertions()
             .isCalledOnce()
             .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))

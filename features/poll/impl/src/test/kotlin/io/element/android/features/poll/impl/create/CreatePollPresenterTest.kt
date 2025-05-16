@@ -121,7 +121,9 @@ class CreatePollPresenterTest {
         val createPollResult = lambdaRecorder<String, List<String>, Int, PollKind, Result<Unit>> { _, _, _, _ -> Result.success(Unit) }
         val presenter = createCreatePollPresenter(
             room = FakeJoinedRoom(
-                createPollResult = createPollResult
+                liveTimeline = FakeTimeline().apply {
+                    createPollLambda = createPollResult
+                },
             ),
             mode = CreatePollMode.NewPoll,
         )
@@ -169,7 +171,9 @@ class CreatePollPresenterTest {
         }
         val presenter = createCreatePollPresenter(
             room = FakeJoinedRoom(
-                createPollResult = createPollResult
+                liveTimeline = FakeTimeline().apply {
+                    createPollLambda = createPollResult
+                },
             ),
             mode = CreatePollMode.NewPoll,
         )
@@ -253,12 +257,8 @@ class CreatePollPresenterTest {
     @Test
     fun `when edit poll fails, error is tracked`() = runTest {
         val error = Exception("cause")
-        val editPollResult = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
-            Result.failure<Unit>(error)
-        }
         val presenter = createCreatePollPresenter(
             room = FakeJoinedRoom(
-                editPollResult = editPollResult,
                 liveTimeline = timeline,
             ),
             mode = CreatePollMode.EditPoll(pollEventId),
@@ -276,7 +276,7 @@ class CreatePollPresenterTest {
             awaitPollLoaded().eventSink(CreatePollEvents.SetAnswer(0, "A"))
             awaitPollLoaded(newAnswer1 = "A").eventSink(CreatePollEvents.Save)
             advanceUntilIdle() // Wait for the coroutine to finish
-            assert(editPollLambda).isCalledOnce()
+            editPollLambda.assertions().isCalledOnce()
             assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
             assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
             assertThat(fakeAnalyticsService.trackedErrors).containsExactly(

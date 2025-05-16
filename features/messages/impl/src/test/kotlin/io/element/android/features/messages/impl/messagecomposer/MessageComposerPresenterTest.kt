@@ -384,7 +384,9 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             coroutineScope = this,
             room = FakeJoinedRoom(
-                sendMessageResult = { _, _, _ -> Result.success(Unit) },
+                liveTimeline = FakeTimeline().apply {
+                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                },
                 typingNoticeResult = { Result.success(Unit) }
             ),
         )
@@ -418,7 +420,9 @@ class MessageComposerPresenterTest {
             coroutineScope = this,
             isRichTextEditorEnabled = false,
             room = FakeJoinedRoom(
-                sendMessageResult = { _, _, _ -> Result.success(Unit) },
+                liveTimeline = FakeTimeline().apply {
+                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                },
                 typingNoticeResult = { Result.success(Unit) }
             ),
         )
@@ -1118,16 +1122,16 @@ class MessageComposerPresenterTest {
         val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val timeline = FakeTimeline().apply {
-            this.replyMessageLambda = replyMessageLambda
-            this.editMessageLambda = editMessageLambda
-        }
         val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
+        val timeline = FakeTimeline().apply {
+            this.replyMessageLambda = replyMessageLambda
+            this.editMessageLambda = editMessageLambda
+            sendMessageLambda = sendMessageResult
+        }
         val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            sendMessageResult = sendMessageResult,
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(room = room, coroutineScope = this)

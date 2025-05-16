@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -26,6 +27,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,23 +50,31 @@ class FakeTimeline(
         )
     ),
     override val membershipChangeEventReceived: Flow<Unit> = MutableSharedFlow(),
+    private val progressCallbackValues: List<Pair<Long, Long>> = emptyList(),
+    private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
 ) : Timeline {
     var sendMessageLambda: (
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
+    }
+
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = simulateLongTask {
+        cancelSendResult(transactionId)
     }
 
     override suspend fun sendMessage(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ): Result<Unit> = sendMessageLambda(body, htmlBody, intentionalMentions)
+    ): Result<Unit> = simulateLongTask {
+        sendMessageLambda(body, htmlBody, intentionalMentions)
+    }
 
     var redactEventLambda: (eventOrTransactionId: EventOrTransactionId, reason: String?) -> Result<Unit> = { _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun redactEvent(
@@ -77,7 +88,7 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun editMessage(
@@ -117,7 +128,7 @@ class FakeTimeline(
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ) -> Result<Unit> = { _, _, _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun replyMessage(
@@ -154,15 +165,18 @@ class FakeTimeline(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = sendImageLambda(
-        file,
-        thumbnailFile,
-        imageInfo,
-        caption,
-        formattedCaption,
-        progressCallback,
-        replyParameters,
-    )
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendImageLambda(
+            file,
+            thumbnailFile,
+            imageInfo,
+            caption,
+            formattedCaption,
+            progressCallback,
+            replyParameters,
+        )
+    }
 
     var sendVideoLambda: (
         file: File,
@@ -184,15 +198,18 @@ class FakeTimeline(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = sendVideoLambda(
-        file,
-        thumbnailFile,
-        videoInfo,
-        caption,
-        formattedCaption,
-        progressCallback,
-        replyParameters,
-    )
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendVideoLambda(
+            file,
+            thumbnailFile,
+            videoInfo,
+            caption,
+            formattedCaption,
+            progressCallback,
+            replyParameters,
+        )
+    }
 
     var sendAudioLambda: (
         file: File,
@@ -212,14 +229,17 @@ class FakeTimeline(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = sendAudioLambda(
-        file,
-        audioInfo,
-        caption,
-        formattedCaption,
-        progressCallback,
-        replyParameters,
-    )
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendAudioLambda(
+            file,
+            audioInfo,
+            caption,
+            formattedCaption,
+            progressCallback,
+            replyParameters,
+        )
+    }
 
     var sendFileLambda: (
         file: File,
@@ -239,14 +259,17 @@ class FakeTimeline(
         formattedCaption: String?,
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = sendFileLambda(
-        file,
-        fileInfo,
-        caption,
-        formattedCaption,
-        progressCallback,
-        replyParameters,
-    )
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendFileLambda(
+            file,
+            fileInfo,
+            caption,
+            formattedCaption,
+            progressCallback,
+            replyParameters,
+        )
+    }
 
     var sendVoiceMessageLambda: (
         file: File,
@@ -264,13 +287,16 @@ class FakeTimeline(
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
         replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = sendVoiceMessageLambda(
-        file,
-        audioInfo,
-        waveform,
-        progressCallback,
-        replyParameters,
-    )
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        simulateSendMediaProgress(progressCallback)
+        sendVoiceMessageLambda(
+            file,
+            audioInfo,
+            waveform,
+            progressCallback,
+            replyParameters,
+        )
+    }
 
     var sendLocationLambda: (
         body: String,
@@ -279,7 +305,7 @@ class FakeTimeline(
         zoomLevel: Int?,
         assetType: AssetType?,
     ) -> Result<Unit> = { _, _, _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun sendLocation(
@@ -288,24 +314,30 @@ class FakeTimeline(
         description: String?,
         zoomLevel: Int?,
         assetType: AssetType?,
-    ): Result<Unit> = sendLocationLambda(
-        body,
-        geoUri,
-        description,
-        zoomLevel,
-        assetType
-    )
+    ): Result<Unit> = simulateLongTask {
+        sendLocationLambda(
+            body,
+            geoUri,
+            description,
+            zoomLevel,
+            assetType,
+        )
+    }
 
-    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+    var toggleReactionLambda: (emoji: String, eventOrTransactionId: EventOrTransactionId) -> Result<Unit> = { _, _ -> lambdaError() }
 
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = toggleReactionLambda(
-        emoji,
-        eventOrTransactionId
-    )
+    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = simulateLongTask {
+        toggleReactionLambda(
+            emoji,
+            eventOrTransactionId,
+        )
+    }
 
-    var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+    var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() }
 
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = simulateLongTask {
+        forwardEventLambda(eventId, roomIds)
+    }
 
     var createPollLambda: (
         question: String,
@@ -313,20 +345,17 @@ class FakeTimeline(
         maxSelections: Int,
         pollKind: PollKind,
     ) -> Result<Unit> = { _, _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
-    override suspend fun createPoll(
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit> = createPollLambda(
-        question,
-        answers,
-        maxSelections,
-        pollKind
-    )
+    override suspend fun createPoll(question: String, answers: List<String>, maxSelections: Int, pollKind: PollKind): Result<Unit> = simulateLongTask {
+        createPollLambda(
+            question,
+            answers,
+            maxSelections,
+            pollKind,
+        )
+    }
 
     var editPollLambda: (
         pollStartId: EventId,
@@ -335,7 +364,7 @@ class FakeTimeline(
         maxSelections: Int,
         pollKind: PollKind,
     ) -> Result<Unit> = { _, _, _, _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun editPoll(
@@ -343,44 +372,56 @@ class FakeTimeline(
         question: String,
         answers: List<String>,
         maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit> = editPollLambda(
-        pollStartId,
-        question,
-        answers,
-        maxSelections,
-        pollKind
-    )
+        pollKind: PollKind
+    ): Result<Unit> = simulateLongTask {
+        editPollLambda(
+            pollStartId,
+            question,
+            answers,
+            maxSelections,
+            pollKind,
+        )
+    }
 
     var sendPollResponseLambda: (
         pollStartId: EventId,
         answers: List<String>,
     ) -> Result<Unit> = { _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun sendPollResponse(
         pollStartId: EventId,
         answers: List<String>,
-    ): Result<Unit> = sendPollResponseLambda(pollStartId, answers)
+    ): Result<Unit> = simulateLongTask {
+        sendPollResponseLambda(
+            pollStartId,
+            answers,
+        )
+    }
 
     var endPollLambda: (
         pollStartId: EventId,
         text: String,
     ) -> Result<Unit> = { _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun endPoll(
         pollStartId: EventId,
         text: String,
-    ): Result<Unit> = endPollLambda(pollStartId, text)
+    ): Result<Unit> = simulateLongTask {
+        endPollLambda(
+            pollStartId,
+            text,
+        )
+    }
 
     var sendReadReceiptLambda: (
         eventId: EventId,
         receiptType: ReceiptType,
     ) -> Result<Unit> = { _, _ ->
-        Result.success(Unit)
+        lambdaError()
     }
 
     override suspend fun sendReadReceipt(
@@ -415,6 +456,13 @@ class FakeTimeline(
 
     override fun close() {
         closeCounter++
+    }
+
+    private suspend fun simulateSendMediaProgress(progressCallback: ProgressCallback?) {
+        progressCallbackValues.forEach { (current, total) ->
+            progressCallback?.onProgress(current, total)
+            delay(1)
+        }
     }
 
     override fun toString() = "FakeTimeline: $name"
