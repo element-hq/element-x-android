@@ -167,7 +167,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is RoomMemberListEvents.RoomMemberSelected ->
                     if (event.roomMember.membership == RoomMembershipState.BAN) {
-                        roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser(event.roomMember.toMatrixUser())))
+                        roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser, event.roomMember.toMatrixUser()))
                     } else if (!isDm.value && (roomModerationState.canBan || roomModerationState.canKick)) {
                         roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
                     } else {

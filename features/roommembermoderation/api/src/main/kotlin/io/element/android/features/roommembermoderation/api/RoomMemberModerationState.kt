@@ -7,17 +7,20 @@
 
 package io.element.android.features.roommembermoderation.api
 
-import io.element.android.libraries.matrix.api.user.MatrixUser
-
 interface RoomMemberModerationState {
     val canKick: Boolean
     val canBan: Boolean
     val eventSink: (RoomMemberModerationEvents) -> Unit
 }
 
+data class ModerationActionState(
+    val action: ModerationAction,
+    val isEnabled: Boolean,
+)
+
 sealed interface ModerationAction {
-    data class DisplayProfile(val user: MatrixUser) : ModerationAction
-    data class KickUser(val user: MatrixUser) : ModerationAction
-    data class BanUser(val user: MatrixUser) : ModerationAction
-    data class UnbanUser(val user: MatrixUser) : ModerationAction
+    data object DisplayProfile : ModerationAction
+    data object KickUser : ModerationAction
+    data object BanUser : ModerationAction
+    data object UnbanUser : ModerationAction
 }

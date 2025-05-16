@@ -9,6 +9,7 @@ package io.element.android.features.roommembermoderation.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -25,23 +26,31 @@ class RoomMemberModerationStateProvider : PreviewParameterProvider<InternalRoomM
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
                 actions = listOf(
-                    ModerationAction.DisplayProfile(anAlice()),
+                    ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
                 ),
             ),
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
                 actions = listOf(
-                    ModerationAction.DisplayProfile(anAlice()),
-                    ModerationAction.KickUser(anAlice()),
+                    ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                    ModerationActionState(action = ModerationAction.KickUser, isEnabled = true),
                 ),
             ),
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
                 actions = listOf(
-                    ModerationAction.DisplayProfile(anAlice()),
-                    ModerationAction.KickUser(anAlice()),
-                    ModerationAction.BanUser(anAlice()),
+                    ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                    ModerationActionState(action = ModerationAction.KickUser, isEnabled = false),
+                    ModerationActionState(action = ModerationAction.BanUser, isEnabled = true),
                     ),
+            ),
+            aRoomMembersModerationState(
+                selectedUser = anAlice(),
+                actions = listOf(
+                    ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                    ModerationActionState(action = ModerationAction.KickUser, isEnabled = false),
+                    ModerationActionState(action = ModerationAction.UnbanUser, isEnabled = true),
+                ),
             ),
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -72,7 +81,7 @@ fun aRoomMembersModerationState(
     canKick: Boolean = false,
     canBan: Boolean = false,
     selectedUser: MatrixUser? = null,
-    actions: List<ModerationAction> = emptyList(),
+    actions: List<ModerationActionState> = emptyList(),
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     unbanUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,

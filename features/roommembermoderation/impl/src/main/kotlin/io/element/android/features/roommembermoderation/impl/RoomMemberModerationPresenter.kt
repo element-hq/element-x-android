@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -26,7 +27,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.toMatrixUser
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.room.canBanAsState
 import io.element.android.libraries.matrix.ui.room.canKickAsState
@@ -64,38 +66,37 @@ class RoomMemberModerationPresenter @Inject constructor(
         var selectedUser by remember {
             mutableStateOf<MatrixUser?>(null)
         }
-        val moderationActions = remember { mutableStateOf(persistentListOf<ModerationAction>()) }
+        val moderationActions = remember { mutableStateOf(persistentListOf<ModerationActionState>()) }
 
         fun handleEvent(event: RoomMemberModerationEvents) {
             when (event) {
                 is RoomMemberModerationEvents.ShowActionsForUser -> {
                     coroutineScope.launch {
                         selectedUser = event.user
-                        moderationActions.value = persistentListOf(ModerationAction.DisplayProfile(event.user))
-                        room.getUpdatedMember(event.user.userId)
-                            .onSuccess {
-                                moderationActions.value = computeModerationActions(
-                                    member = it,
-                                    canKick = canKick.value,
-                                    canBan = canBan.value,
-                                    currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
-                                )
-                            }
+                        val member = room.membersStateFlow.value.roomMembers()?.firstOrNull {
+                            it.userId == event.user.userId
+                        }
+                        moderationActions.value = computeModerationActions(
+                            member = member,
+                            canKick = canKick.value,
+                            canBan = canBan.value,
+                            currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
+                        )
                     }
                 }
                 is RoomMemberModerationEvents.ProcessAction -> {
                     when (val action = event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
-                            selectedUser = action.user
+                            selectedUser = event.targetUser
                             kickUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                         is ModerationAction.BanUser -> {
-                            selectedUser = action.user
+                            selectedUser = event.targetUser
                             banUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                         is ModerationAction.UnbanUser -> {
-                            selectedUser = action.user
+                            selectedUser = event.targetUser
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                     }
@@ -112,17 +113,17 @@ class RoomMemberModerationPresenter @Inject constructor(
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.Reset -> {
-                    selectedUser = null
-                    kickUserAsyncAction.value = AsyncAction.Uninitialized
-                    banUserAsyncAction.value = AsyncAction.Uninitialized
-                    unbanUserAsyncAction.value = AsyncAction.Uninitialized
-                }
                 is InternalRoomMemberModerationEvents.DoUnbanUser -> {
                     selectedUser?.let {
                         coroutineScope.unbanUser(it.userId, unbanUserAsyncAction)
                     }
                     selectedUser = null
+                }
+                is InternalRoomMemberModerationEvents.Reset -> {
+                    selectedUser = null
+                    kickUserAsyncAction.value = AsyncAction.Uninitialized
+                    banUserAsyncAction.value = AsyncAction.Uninitialized
+                    unbanUserAsyncAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -140,20 +141,27 @@ class RoomMemberModerationPresenter @Inject constructor(
     }
 
     private fun computeModerationActions(
-        member: RoomMember,
+        member: RoomMember?,
         canKick: Boolean,
         canBan: Boolean,
         currentUserMemberPowerLevel: Long,
-    ): PersistentList<ModerationAction> {
-        val memberAsUser = member.toMatrixUser()
+    ): PersistentList<ModerationActionState> {
         return buildList {
-            add(ModerationAction.DisplayProfile(memberAsUser))
-            val canModerateThisUser = member.powerLevel < currentUserMemberPowerLevel && member.membership.isActive()
-            if (canKick && canModerateThisUser) {
-                add(ModerationAction.KickUser(memberAsUser))
+            add(ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true))
+            // Assume the member is a regular user when it's unknown
+            val canModerateThisUser = (member?.powerLevel ?: 0) < currentUserMemberPowerLevel
+            // Assume the member is joined when it's unknown
+            val membership = member?.membership ?: RoomMembershipState.JOIN
+            if (canKick) {
+                val isKickEnabled = canModerateThisUser && membership.isActive()
+                add(ModerationActionState(action = ModerationAction.KickUser, isEnabled = isKickEnabled))
             }
-            if (canBan && canModerateThisUser) {
-                add(ModerationAction.BanUser(memberAsUser))
+            if (canBan) {
+                if (membership == RoomMembershipState.BAN) {
+                    add(ModerationActionState(action = ModerationAction.UnbanUser, isEnabled = canModerateThisUser))
+                } else {
+                    add(ModerationActionState(action = ModerationAction.BanUser, isEnabled = canModerateThisUser))
+                }
             }
         }.toPersistentList()
     }
@@ -204,5 +212,4 @@ class RoomMemberModerationPresenter @Inject constructor(
             }
         }
     }
-
 }

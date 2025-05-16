@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
@@ -58,7 +59,7 @@ import timber.log.Timber
 @Composable
 fun RoomMemberModerationView(
     state: InternalRoomMemberModerationState,
-    onSelectAction: (ModerationAction) -> Unit,
+    onSelectAction: (ModerationAction, MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -201,8 +202,8 @@ private fun RoomMemberAsyncActions(
 @Composable
 private fun RoomMemberActionsBottomSheet(
     user: MatrixUser,
-    actions: ImmutableList<ModerationAction>,
-    onSelectAction: (ModerationAction) -> Unit,
+    actions: ImmutableList<ModerationActionState>,
+    onSelectAction: (ModerationAction, MatrixUser) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -223,8 +224,8 @@ private fun RoomMemberActionsBottomSheet(
             Avatar(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
                 modifier = Modifier
-                    .padding(bottom = 28.dp)
-                    .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 28.dp)
+                        .align(Alignment.CenterHorizontally)
             )
             user.displayName?.let {
                 Text(
@@ -234,8 +235,8 @@ private fun RoomMemberActionsBottomSheet(
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                        .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                            .fillMaxWidth()
                 )
             }
             Text(
@@ -246,35 +247,38 @@ private fun RoomMemberActionsBottomSheet(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(32.dp))
 
-            for (action in actions) {
-                when (action) {
+            for (actionState in actions) {
+                when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
                             headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
                             onClick = {
                                 coroutineScope.launch {
-                                    onSelectAction(action)
+                                    onSelectAction(action, user)
                                     bottomSheetState.hide()
                                 }
-                            }
+                            },
+                            enabled = actionState.isEnabled
                         )
                     }
                     is ModerationAction.KickUser -> {
                         ListItem(
                             headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
-                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
+                            style = ListItemStyle.Destructive,
                             onClick = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
-                                    onSelectAction(action)
+                                    onSelectAction(action, user)
                                 }
-                            }
+                            },
+                            enabled = actionState.isEnabled
                         )
                     }
                     is ModerationAction.BanUser -> {
@@ -285,12 +289,26 @@ private fun RoomMemberActionsBottomSheet(
                             onClick = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
-                                    onSelectAction(action)
+                                    onSelectAction(action, user)
                                 }
-                            }
+                            },
+                            enabled = actionState.isEnabled
                         )
                     }
-                    is ModerationAction.UnbanUser -> Unit
+                    is ModerationAction.UnbanUser -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_unban_action)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
+                            style = ListItemStyle.Destructive,
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action, user)
+                                }
+                            },
+                            enabled = actionState.isEnabled
+                        )
+                    }
                 }
             }
         }
@@ -303,12 +321,14 @@ internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMemberModera
     ElementPreview {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
+                    .fillMaxWidth()
+                    .heightIn(min = 64.dp)
         ) {
             RoomMemberModerationView(
                 state = state,
-                onSelectAction = {},
+                onSelectAction = { _, _ ->
+
+                },
             )
         }
     }

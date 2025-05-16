@@ -15,6 +15,7 @@ import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ class DefaultRoomMemberModerationRenderer @Inject constructor() : RoomMemberMode
     @Composable
     override fun Render(
         state: RoomMemberModerationState,
-        onSelectAction: (ModerationAction) -> Unit,
+        onSelectAction: (ModerationAction, MatrixUser) -> Unit,
         modifier: Modifier
     ) {
         if (state is InternalRoomMemberModerationState) {

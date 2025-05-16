@@ -8,6 +8,7 @@
 package io.element.android.features.roommembermoderation.impl
 
 import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -20,7 +21,7 @@ data class InternalRoomMemberModerationState(
     override val canKick: Boolean,
     override val canBan: Boolean,
     val selectedUser: MatrixUser?,
-    val actions: ImmutableList<ModerationAction>,
+    val actions: ImmutableList<ModerationActionState>,
     val kickUserAsyncAction: AsyncAction<Unit>,
     val banUserAsyncAction: AsyncAction<Unit>,
     val unbanUserAsyncAction: AsyncAction<Unit>,

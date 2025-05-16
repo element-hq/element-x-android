@@ -263,10 +263,10 @@ class MessagesNode @AssistedInject constructor(
             )
             roomMemberModerationRenderer.Render(
                 state = state.roomMemberModerationState,
-                onSelectAction = { action ->
+                onSelectAction = { action, target ->
                     when (action) {
-                        is ModerationAction.DisplayProfile -> onUserDataClick(action.user.userId)
-                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action))
+                        is ModerationAction.DisplayProfile -> onUserDataClick(target.userId)
+                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
                     }
                 },
                 modifier = Modifier,

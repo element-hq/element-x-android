@@ -9,12 +9,13 @@ package io.element.android.features.roommembermoderation.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 interface RoomMemberModerationRenderer {
     @Composable
     fun Render(
         state: RoomMemberModerationState,
-        onSelectAction: (ModerationAction) -> Unit,
+        onSelectAction: (ModerationAction, MatrixUser) -> Unit,
         modifier: Modifier,
     )
 }
