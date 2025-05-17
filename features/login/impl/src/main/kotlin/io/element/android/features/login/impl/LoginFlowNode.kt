@@ -139,8 +139,9 @@ class LoginFlowNode @AssistedInject constructor(
                                 oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
                             }
                         } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
+                            activity?.let {
+                                oidcEntryPoint.openUrlInExternalApp(it, oidcDetails.url)
+                            }
                         }
                     }
 
