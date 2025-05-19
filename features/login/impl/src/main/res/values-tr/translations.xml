@@ -29,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix, güvenli, merkezi olmayan iletişim için açık bir ağdır."</string>
   <string name="screen_login_title">"Tekrar hoş geldiniz!"</string>
   <string name="screen_login_title_with_homeserver">"%1$s adresinde oturum aç"</string>
+  <string name="screen_onboarding_sign_in_manually">"Manuel olarak oturum aç"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"QR kodu ile giriş yap"</string>
+  <string name="screen_onboarding_sign_up">"Hesap oluştur"</string>
+  <string name="screen_onboarding_welcome_message">"Şimdiye kadarki en hızlı %1$s hoş geldiniz. Hız ve basitlik için güçlendirildi."</string>
+  <string name="screen_onboarding_welcome_subtitle">"%1$s\'e hoş geldiniz. Hız ve basitlik için süper şarjlı."</string>
+  <string name="screen_onboarding_welcome_title">"Kendi elementinizde olun"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Güvenli bir bağlantı kuruluyor"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Yeni cihaza güvenli bir bağlantı kurulamadı. Mevcut cihazlarınız hala güvende ve onlar için endişelenmenize gerek yok."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Şimdi ne olacak?"</string>

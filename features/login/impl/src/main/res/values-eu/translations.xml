@@ -20,6 +20,12 @@
   <string name="screen_login_subtitle">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
   <string name="screen_login_title">"Ongi etorri!"</string>
   <string name="screen_login_title_with_homeserver">"Hasi saioa %1$s(e)n"</string>
+  <string name="screen_onboarding_sign_in_manually">"Hasi saioa eskuz"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Hasi saioa QR kodearekin"</string>
+  <string name="screen_onboarding_sign_up">"Sortu kontua"</string>
+  <string name="screen_onboarding_welcome_message">"Ongi etorri inoizko %1$s azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Ongi etorri %1$s-ra. Abiaduraz eta sinpletasunez gainezka."</string>
+  <string name="screen_onboarding_welcome_title">"Egon zure saltsan"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Konexio segurua ezartzen"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Orain zer?"</string>

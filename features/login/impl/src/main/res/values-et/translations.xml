@@ -34,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
   <string name="screen_login_title">"Tere tulemast tagasi!"</string>
   <string name="screen_login_title_with_homeserver">"Logi sisse serverisse %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Logi sisse käsitsi"</string>
+  <string name="screen_onboarding_sign_in_to">"Logi sisse teenusesse %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Logi sisse QR-koodi alusel"</string>
+  <string name="screen_onboarding_sign_up">"Loo kasutajakonto"</string>
+  <string name="screen_onboarding_welcome_message">"Läbi aegade kiireim ja mugavaim %1$s."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Tere tulemast kasutama kiiret ja lihtsat suhtlusrakendust %1$s."</string>
+  <string name="screen_onboarding_welcome_title">"Ole oma elemendis"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Loome turvalist ühendust"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Mida järgmiseks teeme?"</string>

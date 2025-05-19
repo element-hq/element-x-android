@@ -29,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix è una rete aperta per comunicazioni sicure e decentralizzate."</string>
   <string name="screen_login_title">"Bentornato!"</string>
   <string name="screen_login_title_with_homeserver">"Accedi a %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Accedi manualmente"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Accedi con codice QR"</string>
+  <string name="screen_onboarding_sign_up">"Crea account"</string>
+  <string name="screen_onboarding_welcome_message">"Benvenuti nell\'%1$s più veloce di sempre. Potenziato per velocità e semplicità."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Benvenuto su %1$s. Potenziato in velocità e semplicità."</string>
+  <string name="screen_onboarding_welcome_title">"Sii nel tuo elemento"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Stabilendo la connessione"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Non è stato possibile stabilire una connessione sicura con il nuovo dispositivo. I tuoi dispositivi esistenti sono ancora al sicuro e non devi preoccuparti di loro."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"E adesso?"</string>
