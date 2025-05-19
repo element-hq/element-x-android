@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -21,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
+import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +33,6 @@ import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomListItem
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
-import org.matrix.rustcomponents.sdk.Room as SdkRoom
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 class RustRoomFactory(
@@ -55,11 +54,6 @@ class RustRoomFactory(
     private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
     private val isDestroyed: AtomicBoolean = AtomicBoolean(false)
-
-    private data class RustRoomReferences(
-        val roomListItem: RoomListItem,
-        val room: SdkRoom,
-    )
 
     private val roomInfoMapper = RoomInfoMapper()
 
@@ -84,17 +78,23 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val roomReferences = awaitRoomReferences(roomId) ?: return@withContext null
+            val roomReferences = awaitRoomListItem(roomId) ?: return@withContext null
             getBaseRoom(roomReferences)
         }
     }
 
-    private suspend fun getBaseRoom(roomReferences: RustRoomReferences): RustBaseRoom? {
-        val initialRoomInfo = roomReferences.room.roomInfo()
+    private suspend fun getBaseRoom(roomListItem: RoomListItem): RustBaseRoom? {
+        val room = if (roomListItem.isTimelineInitialized()) {
+            roomListItem.fullRoom()
+        } else {
+            innerClient.getRoom(roomListItem.id())
+        } ?: return null
+
+        val initialRoomInfo = room.roomInfo()
         return RustBaseRoom(
             sessionId = sessionId,
             deviceId = deviceId,
-            innerRoom = roomReferences.room,
+            innerRoom = room,
             coroutineDispatchers = dispatchers,
             roomSyncSubscriber = roomSyncSubscriber,
             roomMembershipObserver = roomMembershipObserver,
@@ -110,14 +110,16 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val roomReferences = awaitRoomReferences(roomId) ?: return@withContext null
+            val roomListItem = awaitRoomListItem(roomId) ?: return@withContext null
 
-            if (roomReferences.room.membership() == Membership.JOINED) {
-                val baseRoom = getBaseRoom(roomReferences) ?: return@withContext null
+            if (roomListItem.membership() == Membership.JOINED) {
+                val baseRoom = getBaseRoom(roomListItem) ?: return@withContext null
 
                 // Init the live timeline in the SDK from the RoomListItem
-                if (!roomReferences.roomListItem.isTimelineInitialized()) {
-                    roomReferences.roomListItem.initTimeline(eventFilters, "LIVE")
+                val room = if (!roomListItem.isTimelineInitialized()) {
+                    roomListItem.fullRoomWithTimeline(eventFilters)
+                } else {
+                    roomListItem.fullRoom()
                 }
 
                 GetRoomResult.Joined(
@@ -125,7 +127,7 @@ class RustRoomFactory(
                         baseRoom = baseRoom,
                         notificationSettingsService = notificationSettingsService,
                         roomContentForwarder = roomContentForwarder,
-                        liveInnerTimeline = roomReferences.room.timeline(),
+                        liveInnerTimeline = room.timeline(),
                         coroutineDispatchers = dispatchers,
                         systemClock = systemClock,
                         featureFlagService = featureFlagService,
@@ -133,7 +135,7 @@ class RustRoomFactory(
                 )
             } else {
                 val preview = try {
-                    roomReferences.roomListItem.previewRoom(via = emptyList())
+                    roomListItem.previewRoom(via = emptyList())
                 } catch (e: Exception) {
                     Timber.e(e, "Failed to get room preview for $roomId")
                     return@withContext null
@@ -142,7 +144,7 @@ class RustRoomFactory(
                 GetRoomResult.NotJoined(
                     NotJoinedRustRoom(
                         sessionId = sessionId,
-                        localRoom = getBaseRoom(roomReferences),
+                        localRoom = getBaseRoom(roomListItem),
                         previewInfo = RoomPreviewInfoMapper.map(preview.info()),
                     )
                 )
@@ -150,36 +152,23 @@ class RustRoomFactory(
         }
     }
 
-    private fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
-        val roomListItem = innerRoomListService.roomOrNull(roomId.value)
+    /**
+     * Get the Rust room list item for a room, retrying after the room list is loaded if necessary.
+     */
+    private suspend fun awaitRoomListItem(roomId: RoomId): RoomListItem? {
+        var roomListItem = innerRoomListService.roomOrNull(roomId.value)
+        if (roomListItem == null) {
+            // ... otherwise, lets wait for the SS to load all rooms and check again.
+            roomListService.allRooms.awaitLoaded()
+            roomListItem = innerRoomListService.roomOrNull(roomId.value)
+        }
+
         if (roomListItem == null) {
             Timber.d("Room not found for $roomId")
             return null
         }
-        val room = tryOrNull {
-            innerClient.getRoom(roomId.value)
-        } ?: error("Failed to get room for room id: $roomId")
 
-        Timber.d("Got room for $roomId")
-        return RustRoomReferences(
-            roomListItem = roomListItem,
-            room = room,
-        )
-    }
-
-    /**
-     * Get the Rust room references for a room, retrying after the room list is loaded if necessary.
-     */
-    private suspend fun awaitRoomReferences(roomId: RoomId): RustRoomReferences? {
-        var roomReferences = getRoomReferences(roomId)
-
-        if (roomReferences == null) {
-            // ... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms.awaitLoaded()
-            roomReferences = getRoomReferences(roomId)
-        }
-
-        return roomReferences
+        return roomListItem
     }
 }
 
