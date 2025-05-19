@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,38 +41,13 @@ class NotificationResolverQueue @Inject constructor(
     }
     private val requestQueue = Channel<NotificationEventRequest>(capacity = 100)
 
+    private var currentProcessingJob: Job? = null
+
     /**
      * A flow that emits pairs of a list of notification event requests and a map of the resolved events.
      * The map contains the original request as the key and the resolved event as the value.
      */
     val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>> = MutableSharedFlow()
-
-    init {
-        coroutineScope.launch {
-            while (coroutineScope.isActive) {
-                // Wait for a batch of requests to be received in a specified time window
-                delay(BATCH_WINDOW_MS.milliseconds)
-
-                val groupedRequestsById = buildList {
-                    while (!requestQueue.isEmpty) {
-                        requestQueue.receiveCatching().getOrNull()?.let(this::add)
-                    }
-                }.groupBy { it.sessionId }
-
-                val sessionIds = groupedRequestsById.keys
-                for (sessionId in sessionIds) {
-                    val requests = groupedRequestsById[sessionId].orEmpty()
-                    Timber.d("Fetching notifications for $sessionId: $requests. Pending requests: ${!requestQueue.isEmpty}")
-
-                    launch {
-                        // No need for a Mutex since the SDK already has one internally
-                        val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                        (results as MutableSharedFlow).emit(requests to notifications)
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Enqueues a notification event request to be resolved.
@@ -80,7 +56,44 @@ class NotificationResolverQueue @Inject constructor(
      * @param request The notification event request to enqueue.
      */
     suspend fun enqueue(request: NotificationEventRequest) {
+        // Cancel previous processing job if it exists, acting as a debounce operation
+        Timber.d("Cancelling job: $currentProcessingJob")
+        currentProcessingJob?.cancel()
+
+        // Enqueue the request and start a delayed processing job
         requestQueue.send(request)
+        currentProcessingJob = processQueue()
+        Timber.d("Starting processing job for request: $request")
+    }
+
+    private fun processQueue() = coroutineScope.launch {
+        if (!isActive) return@launch
+
+        delay(BATCH_WINDOW_MS.milliseconds)
+
+        if (!isActive) return@launch
+
+        // If this job is still active (so this is the latest job), we launch a separate one that won't be cancelled when enqueueing new items
+        // to process the existing queued items.
+        coroutineScope.launch {
+            val groupedRequestsById = buildList {
+                while (!requestQueue.isEmpty) {
+                    requestQueue.receiveCatching().getOrNull()?.let(this::add)
+                }
+            }.groupBy { it.sessionId }
+
+            val sessionIds = groupedRequestsById.keys
+            for (sessionId in sessionIds) {
+                val requests = groupedRequestsById[sessionId].orEmpty()
+                Timber.d("Fetching notifications for $sessionId: $requests. Pending requests: ${!requestQueue.isEmpty}")
+                // Resolving the events in parallel should improve performance since each session id will query a different Client
+                launch {
+                    // No need for a Mutex since the SDK already has one internally
+                    val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
+                    (results as MutableSharedFlow).emit(requests to notifications)
+                }
+            }
+        }
     }
 }
 
