@@ -14,9 +14,12 @@
   <string name="screen_change_account_provider_subtitle">"Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith."</string>
   <string name="screen_change_account_provider_title">"Newid darparwr cyfrif"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Doedd dim modd i ni gyrraedd y gweinydd cartref hwn. Gwiriwch eich bod wedi rhoi URL y gweinydd cartref yn gywir. Os yw\'r URL yn gywir, cysylltwch â gweinyddwr eich gweinydd cartref am ragor o help."</string>
-  <string name="screen_change_server_error_invalid_well_known">"Nid yw cydweddu llithrig ar gael oherwydd problem yn y ffeil adnabyddus:
+  <string name="screen_change_server_error_invalid_well_known">"Dyw cydweddu llithrig ddim ar gael oherwydd problem yn y ffeil .well-known:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Dyw\'r darparwr cyfrif hwn ddim yn cefnogi cydweddu llithro. Mae angen uwchraddio\'r gweinydd i ddefnyddio %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"Does dim caniatâd i %1$s gysylltu â %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Mae\'r ap hwn wedi\'i ffurfweddu i ganiatáu: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Dyw darparwr cyfrif %1$s dddim yn cael ei ganiatáu."</string>
   <string name="screen_change_server_form_header">"URL y Gweinydd Cartref"</string>
   <string name="screen_change_server_form_notice">"Rhowch gyfeiriad parth."</string>
   <string name="screen_change_server_subtitle">"Beth yw cyfeiriad eich gweinydd?"</string>

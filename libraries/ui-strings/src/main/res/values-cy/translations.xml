@@ -3,12 +3,12 @@
   <string name="a11y_avatar">"Afatar"</string>
   <string name="a11y_delete">"Dileu"</string>
   <plurals name="a11y_digits_entered">
-    <item quantity="zero">"%1$d nodau wedi eu cynnig"</item>
-    <item quantity="one">"%1$d nod wedi ei gynnig"</item>
-    <item quantity="two">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="few">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="many">"%1$d nod wedi eu cynnig"</item>
-    <item quantity="other">"%1$d nod wedi eu cynnig"</item>
+    <item quantity="%1$d nodau wedi eu cynnig">"zero"</item>
+    <item quantity="%1$d nod wedi ei gynnig">"one"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"two"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"few"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"many"</item>
+    <item quantity="%1$d nod wedi eu cynnig">"other"</item>
   </plurals>
   <string name="a11y_hide_password">"Cuddio cyfrinair"</string>
   <string name="a11y_join_call">"Ymuno â galwad"</string>
@@ -26,12 +26,12 @@
   <string name="a11y_react_with_other_emojis">"Ymateb gydag emojis eraill"</string>
   <string name="a11y_read_receipts_multiple">"Wedi\'i ddarllen gan %1$s a %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="zero">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="one">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="two">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="few">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="many">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
-    <item quantity="other">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"zero"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"one"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"two"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"few"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"many"</item>
+    <item quantity="Wedi'i ddarllen gan %1$s a %2$d arall">"other"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
@@ -206,13 +206,21 @@ Rheswm: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Dolen wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_loading">"Yn Llwytho…"</string>
   <string name="common_loading_more">"Wrthi\'n llwytho mwy…"</string>
+  <plurals name="common_many_members">
+    <item quantity="%d arall">"zero"</item>
+    <item quantity="%d arall">"one"</item>
+    <item quantity="%d arall">"two"</item>
+    <item quantity="%d arall">"few"</item>
+    <item quantity="%d arall">"many"</item>
+    <item quantity="%d arall">"other"</item>
+  </plurals>
   <plurals name="common_member_count">
-    <item quantity="zero">"%1$d aelodau"</item>
-    <item quantity="one">"%1$d aelod"</item>
-    <item quantity="two">"%1$d aelod"</item>
-    <item quantity="few">"%1$d aelod"</item>
-    <item quantity="many">"%1$d aelod"</item>
-    <item quantity="other">"%1$d aelod"</item>
+    <item quantity="%1$d aelodau">"zero"</item>
+    <item quantity="%1$d aelod">"one"</item>
+    <item quantity="%1$d aelod">"two"</item>
+    <item quantity="%1$d aelod">"few"</item>
+    <item quantity="%1$d aelod">"many"</item>
+    <item quantity="%1$d aelod">"other"</item>
   </plurals>
   <string name="common_message">"Neges"</string>
   <string name="common_message_actions">"Gweithredoedd neges"</string>
@@ -239,12 +247,12 @@ Rheswm: %1$s."</string>
   <string name="common_poll_total_votes">"Cyfanswm y pleidleisiau: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Bydd y canlyniadau\'n dangos ar ôl i\'r bleidlais ddod i ben"</string>
   <plurals name="common_poll_votes_count">
-    <item quantity="zero">"%d pleidleisiau"</item>
-    <item quantity="one">"%d pleidlais"</item>
-    <item quantity="two">"%d pleidlais"</item>
-    <item quantity="few">"%d pleidlais"</item>
-    <item quantity="many">"%d pleidlais"</item>
-    <item quantity="other">"%d pleidlais"</item>
+    <item quantity="%d pleidleisiau">"zero"</item>
+    <item quantity="%d pleidlais">"one"</item>
+    <item quantity="%d pleidlais">"two"</item>
+    <item quantity="%d pleidlais">"few"</item>
+    <item quantity="%d pleidlais">"many"</item>
+    <item quantity="%d pleidlais">"other"</item>
   </plurals>
   <string name="common_privacy_policy">"Polisi preifatrwydd"</string>
   <string name="common_reaction">"Adwaith"</string>
@@ -367,6 +375,11 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Tynnu o\'r ystafell"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Dileu aelod a\'u gwahardd rhag ymuno yn y dyfodol?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Wrthi\'n dileu %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Dad-wahardd o\'r ystafell"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Dad-wahardd"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Bydden nhw\'n gallu ymuno â\'r ystafell eto os fydd rhywun yn eu gwahodd"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Ydych chi\'n siŵr eich bod chi eisiau dadwahardd yr aelod hwn?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Dad-wahardd %1$s"</string>
   <string name="screen_media_picker_error_failed_selection">"Wedi methu dewis cyfrwng, ceisiwch eto."</string>
   <string name="screen_media_upload_preview_caption_warning">"Efallai na fydd capsiynau yn weladwy i bobl sy\'n defnyddio apiau hŷn."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
@@ -374,12 +387,12 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pwyswch ar neges a dewis “%1$s” i\'w cynnwys yma."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd"</string>
   <plurals name="screen_pinned_timeline_screen_title">
-    <item quantity="zero">"%1$d Negeseuon wedi\'u pinio"</item>
-    <item quantity="one">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="two">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="few">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="many">"%1$d Neges wedi\'i phinio"</item>
-    <item quantity="other">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="%1$d Negeseuon wedi'u pinio">"zero"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"one"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"two"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"few"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"many"</item>
+    <item quantity="%1$d Neges wedi'i phinio">"other"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Negeseuon wedi\'u pinio"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Rydych chi ar fin mynd i\'ch cyfrif %1$s i ailosod eich hunaniaeth. Wedi hynny byddwch yn cael eich tywys yn ôl i\'r ap."</string>

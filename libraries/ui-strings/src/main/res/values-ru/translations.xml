@@ -200,6 +200,11 @@
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_loading_more">"Загрузить больше…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d"</item>
+    <item quantity="few">"%d другие"</item>
+    <item quantity="many">"%d другие"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>
     <item quantity="few">"%1$d участников"</item>

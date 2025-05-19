@@ -198,6 +198,10 @@
   <string name="common_link_copied_to_clipboard">"Ο σύνδεσμος αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_loading">"Φόρτωση…"</string>
   <string name="common_loading_more">"Φόρτωση περισσότερων…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d ακόμη"</item>
+    <item quantity="other">"%d ακόμη"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d μέλος"</item>
     <item quantity="other">"%1$d μέλη"</item>

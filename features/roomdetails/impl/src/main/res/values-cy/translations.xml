@@ -68,12 +68,12 @@
   <string name="screen_room_details_updating_room">"Wrthi\'n diweddaru ystafell…"</string>
   <string name="screen_room_member_list_banned_empty">"Nid oes unrhyw ddefnyddwyr gwaharddedig yn yr ystafell hon."</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="zero">"%1$d personau"</item>
-    <item quantity="one">"%1$d person"</item>
-    <item quantity="two">"%1$d berson"</item>
-    <item quantity="few">"%1$d person"</item>
-    <item quantity="many">"%1$d pherson"</item>
-    <item quantity="other">"%1$d person"</item>
+    <item quantity="%1$d personau">"zero"</item>
+    <item quantity="%1$d person">"one"</item>
+    <item quantity="%1$d berson">"two"</item>
+    <item quantity="%1$d person">"few"</item>
+    <item quantity="%1$d pherson">"many"</item>
+    <item quantity="%1$d person">"other"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Gwahardd o ystafell"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Dileu aelod yn unig"</string>

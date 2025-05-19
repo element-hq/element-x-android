@@ -26,12 +26,12 @@
   <string name="screen_knock_requests_list_initial_loading_title">"Yn llwytho ceisiadau i ymuno…"</string>
   <string name="screen_knock_requests_list_title">"Ceisiadau i ymuno"</string>
   <plurals name="screen_room_multiple_knock_requests_title">
-    <item quantity="zero">"Dyw %1$s na +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
-    <item quantity="one">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
-    <item quantity="two">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
-    <item quantity="few">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
-    <item quantity="many">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
-    <item quantity="other">"Mae %1$s +%2$d arall eisiau ymuno â\'r ystafell hon"</item>
+    <item quantity="Dyw %1$s na +%2$d arall eisiau ymuno â'r ystafell hon">"zero"</item>
+    <item quantity="Mae %1$s +%2$d arall eisiau ymuno â'r ystafell hon">"one"</item>
+    <item quantity="Mae %1$s +%2$d arall eisiau ymuno â'r ystafell hon">"two"</item>
+    <item quantity="Mae %1$s +%2$d arall eisiau ymuno â'r ystafell hon">"few"</item>
+    <item quantity="Mae %1$s +%2$d arall eisiau ymuno â'r ystafell hon">"many"</item>
+    <item quantity="Mae %1$s +%2$d arall eisiau ymuno â'r ystafell hon">"other"</item>
   </plurals>
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Gweld y cyfan"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Derbyn"</string>

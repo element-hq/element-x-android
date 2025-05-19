@@ -188,6 +188,10 @@ Arrazoia: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Esteka arbelean kopiatu da"</string>
   <string name="common_loading">"Kargatzen…"</string>
   <string name="common_loading_more">"Gehiago kargatzen…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"beste %d"</item>
+    <item quantity="other">"beste %d"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"Kide %1$d"</item>
     <item quantity="other">"%1$d kide"</item>

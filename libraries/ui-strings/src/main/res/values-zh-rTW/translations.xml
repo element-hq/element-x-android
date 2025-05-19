@@ -195,6 +195,9 @@
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
   <string name="common_loading">"載入中…"</string>
   <string name="common_loading_more">"載入更多……"</string>
+  <plurals name="common_many_members">
+    <item quantity="other">"其他 %d 個人"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 位成員"</item>
   </plurals>

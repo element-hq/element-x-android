@@ -125,6 +125,10 @@
   <string name="common_light">"Светъл"</string>
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d друг"</item>
+    <item quantity="other">"%d други"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d член"</item>
     <item quantity="other">"%1$d членове"</item>

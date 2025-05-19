@@ -25,20 +25,20 @@ Dewiswch rywbeth cofiadwy. Os byddwch chi\'n anghofio\'r PIN hwn, byddwch chi\'n
   <string name="screen_app_lock_signout_alert_message">"Bydd angen i chi ail-fewngofnodi a chreu PIN newydd i barhau"</string>
   <string name="screen_app_lock_signout_alert_title">"Rydych chi\'n cael eich allgofnodi"</string>
   <plurals name="screen_app_lock_subtitle">
-    <item quantity="zero">"Does gennych %1$d ceisiadau i ddatgloi"</item>
-    <item quantity="one">"Mae gennych %1$d cais i ddatgloi"</item>
-    <item quantity="two">"Mae gennych %1$d gais i ddatgloi"</item>
-    <item quantity="few">"Mae gennych %1$d chais i ddatgloi"</item>
-    <item quantity="many">"Mae gennych %1$d chais i ddatgloi"</item>
-    <item quantity="other">"Mae gennych %1$d cais i ddatgloi"</item>
+    <item quantity="Does gennych %1$d ceisiadau i ddatgloi">"zero"</item>
+    <item quantity="Mae gennych %1$d cais i ddatgloi">"one"</item>
+    <item quantity="Mae gennych %1$d gais i ddatgloi">"two"</item>
+    <item quantity="Mae gennych %1$d chais i ddatgloi">"few"</item>
+    <item quantity="Mae gennych %1$d chais i ddatgloi">"many"</item>
+    <item quantity="Mae gennych %1$d cais i ddatgloi">"other"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="zero">"PIN anghywir. Does gennych %1$d cais arall"</item>
-    <item quantity="one">"PIN anghywir. Mae gennych %1$d cais arall"</item>
-    <item quantity="two">"PIN anghywir. Mae gennych %1$d gais arall"</item>
-    <item quantity="few">"PIN anghywir. Mae gennych %1$d chais arall"</item>
-    <item quantity="many">"PIN anghywir. Mae gennych %1$d chais arall"</item>
-    <item quantity="other">"PIN anghywir. Mae gennych %1$d cais arall"</item>
+    <item quantity="PIN anghywir. Does gennych %1$d cais arall">"zero"</item>
+    <item quantity="PIN anghywir. Mae gennych %1$d cais arall">"one"</item>
+    <item quantity="PIN anghywir. Mae gennych %1$d gais arall">"two"</item>
+    <item quantity="PIN anghywir. Mae gennych %1$d chais arall">"few"</item>
+    <item quantity="PIN anghywir. Mae gennych %1$d chais arall">"many"</item>
+    <item quantity="PIN anghywir. Mae gennych %1$d cais arall">"other"</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Defnyddio biometreg"</string>
   <string name="screen_app_lock_use_pin_android">"Defnyddio PIN"</string>
