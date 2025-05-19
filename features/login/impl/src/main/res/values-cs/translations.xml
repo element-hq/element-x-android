@@ -17,6 +17,9 @@
   <string name="screen_change_server_error_invalid_well_known">"Server není k dispozici kvůli problému se souborem well-known:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Vybraný poskytovatel účtu nepodporuje klouzavou synchronizaci. Pro použití %1$s je nutná aktualizace serveru."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"Uživateli %1$s není dovoleno se připojit do %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Tato aplikace byla nakonfigurována tak, aby umožňovala: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Poskytovatel účtu %1$s není povolen."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského serveru"</string>
   <string name="screen_change_server_form_notice">"Zadejte adresu domény."</string>
   <string name="screen_change_server_subtitle">"Jaká je adresa vašeho serveru?"</string>

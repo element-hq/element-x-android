@@ -178,6 +178,10 @@
   <string name="common_light">"Claro"</string>
   <string name="common_link_copied_to_clipboard">"Link copiado para área de transferência"</string>
   <string name="common_loading">"Carregando…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d outro"</item>
+    <item quantity="other">"%d outros"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membros"</item>

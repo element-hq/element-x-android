@@ -17,6 +17,9 @@
   <string name="screen_change_server_error_invalid_well_known">"A kiszolgáló a well-known fájl problémája miatt nem érhető el:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"A kiválasztott fiókszolgáltató nem támogatja a csúszóablakos szinkronizálást. Az %1$s használatához kiszolgálófrissítés szükséges."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nem csatlakozhat ide: %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Ezt az alkalmazást úgy konfigurálták, hogy engedélyezi ezt: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"A(z) %1$s fiókszolgáltató nem engedélyezett."</string>
   <string name="screen_change_server_form_header">"Matrix-kiszolgáló webcíme"</string>
   <string name="screen_change_server_form_notice">"Adjon meg egy domaincímet."</string>
   <string name="screen_change_server_subtitle">"Mi a kiszolgálója címe?"</string>

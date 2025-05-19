@@ -198,6 +198,10 @@ Grund: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d weitere"</item>
+    <item quantity="other">"%d weitere"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Mitglied"</item>
     <item quantity="other">"%1$d Mitglieder"</item>

@@ -17,6 +17,9 @@
   <string name="screen_change_server_error_invalid_well_known">"Serveren er ikke tilgjengelig på grunn av et problem i den velkjente filen:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Den valgte kontoleverandøren støtter ikke sliding sync. En oppgradering av serveren er nødvendig for å bruke %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s har ikke lov til å koble seg til %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Denne appen er konfigurert til å tillate: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Kontoleverandør %1$s er ikke tillatt."</string>
   <string name="screen_change_server_form_header">"URL til hjemmeserver"</string>
   <string name="screen_change_server_form_notice">"Skriv inn en domeneadresse."</string>
   <string name="screen_change_server_subtitle">"Hva er adressen til serveren din?"</string>

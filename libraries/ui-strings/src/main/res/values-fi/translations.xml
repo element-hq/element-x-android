@@ -198,6 +198,10 @@ Syy: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Linkki kopioitu leikepöydälle"</string>
   <string name="common_loading">"Ladataan…"</string>
   <string name="common_loading_more">"Ladataan lisää…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d muu"</item>
+    <item quantity="other">"%d muuta"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d jäsen"</item>
     <item quantity="other">"%1$d jäsentä"</item>

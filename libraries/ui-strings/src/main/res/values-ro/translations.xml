@@ -171,6 +171,11 @@ Motiv:%1$s."</string>
   <string name="common_light">"Deschis"</string>
   <string name="common_link_copied_to_clipboard">"Linkul a fost copiat în clipboard"</string>
   <string name="common_loading">"Se încarcă…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d altul"</item>
+    <item quantity="few">"%d alții"</item>
+    <item quantity="other">"%d alții"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membru"</item>
     <item quantity="few">"%1$d membri"</item>
