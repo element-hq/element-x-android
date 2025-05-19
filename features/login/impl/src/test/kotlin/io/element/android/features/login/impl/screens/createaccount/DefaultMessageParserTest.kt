@@ -8,6 +8,7 @@
 package io.element.android.features.login.impl.screens.createaccount
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
@@ -60,7 +61,7 @@ class DefaultMessageParserTest {
         // missing homeServer
         assertThat(sut.parse(validMessage.replace(""""home_server": "home_server",""", ""))).isEqualTo(
             anExternalSession(
-                homeserverUrl = FakeEnterpriseService.A_FAKE_HOMESERVER,
+                homeserverUrl = AuthenticationConfig.MATRIX_ORG_URL,
             )
         )
     }
