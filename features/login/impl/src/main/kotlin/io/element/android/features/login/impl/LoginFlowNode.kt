@@ -18,6 +18,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
@@ -25,8 +26,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.login.api.LoginFlowType
+import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
@@ -35,9 +37,7 @@ import io.element.android.features.login.impl.screens.loginpassword.LoginPasswor
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
-import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.oidc.api.OidcAction
@@ -57,7 +57,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = NavTarget.OnBoarding,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -65,12 +65,6 @@ class LoginFlowNode @AssistedInject constructor(
 ) {
     private var activity: Activity? = null
     private var darkTheme: Boolean = false
-
-    data class Inputs(
-        val flowType: LoginFlowType,
-    ) : NodeInputs
-
-    private val inputs: Inputs = inputs()
 
     private var customChromeTabStarted = false
 
@@ -96,10 +90,15 @@ class LoginFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Root : NavTarget
+        data object OnBoarding : NavTarget
 
         @Parcelize
-        data object ConfirmAccountProvider : NavTarget
+        data object QrCode : NavTarget
+
+        @Parcelize
+        data class ConfirmAccountProvider(
+            val isAccountCreation: Boolean,
+        ) : NavTarget
 
         @Parcelize
         data object ChangeAccountProvider : NavTarget
@@ -119,16 +118,36 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> {
-                if (inputs.flowType == LoginFlowType.SIGN_IN_QR_CODE) {
-                    createNode<QrCodeLoginFlowNode>(buildContext)
-                } else {
-                    resolve(NavTarget.ConfirmAccountProvider, buildContext)
+            NavTarget.OnBoarding -> {
+                val callback = object : OnBoardingNode.Callback {
+                    override fun onSignUp() {
+                        backstack.push(
+                            NavTarget.ConfirmAccountProvider(isAccountCreation = true)
+                        )
+                    }
+
+                    override fun onSignIn() {
+                        backstack.push(
+                            NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                        )
+                    }
+
+                    override fun onSignInWithQrCode() {
+                        backstack.push(NavTarget.QrCode)
+                    }
+
+                    override fun onReportProblem() {
+                        plugins<LoginEntryPoint.Callback>().forEach { it.onReportProblem() }
+                    }
                 }
+                createNode<OnBoardingNode>(buildContext, listOf(callback))
             }
-            NavTarget.ConfirmAccountProvider -> {
+            NavTarget.QrCode -> {
+                createNode<QrCodeLoginFlowNode>(buildContext)
+            }
+            is NavTarget.ConfirmAccountProvider -> {
                 val inputs = ConfirmAccountProviderNode.Inputs(
-                    isAccountCreation = inputs.flowType == LoginFlowType.SIGN_UP,
+                    isAccountCreation = navTarget.isAccountCreation,
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
@@ -162,7 +181,10 @@ class LoginFlowNode @AssistedInject constructor(
                 val callback = object : ChangeAccountProviderNode.Callback {
                     override fun onDone() {
                         // Go back to the Account Provider screen
-                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
+                            it.key.navTarget is NavTarget.ConfirmAccountProvider
+                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                        backstack.singleTop(confirmAccountProvider)
                     }
 
                     override fun onOtherClick() {
@@ -176,7 +198,10 @@ class LoginFlowNode @AssistedInject constructor(
                 val callback = object : SearchAccountProviderNode.Callback {
                     override fun onDone() {
                         // Go back to the Account Provider screen
-                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
+                            it.key.navTarget is NavTarget.ConfirmAccountProvider
+                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
+                        backstack.singleTop(confirmAccountProvider)
                     }
                 }
 
