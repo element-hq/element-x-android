@@ -90,7 +90,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
         val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        val notifications = client.notificationService().getNotifications(sessionId, ids).mapCatching { map ->
+        val notifications = client.notificationService().getNotifications(ids).mapCatching { map ->
             map.mapValues { (_, notificationData) ->
                 notificationData.asNotifiableEvent(client, sessionId)
             }

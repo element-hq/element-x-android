@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.test.notification
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 
@@ -20,7 +19,7 @@ class FakeNotificationService : NotificationService {
         getNotificationsResult = result
     }
 
-    override suspend fun getNotifications(sessionId: SessionId, ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>> {
+    override suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>> {
         return getNotificationsResult
     }
 }

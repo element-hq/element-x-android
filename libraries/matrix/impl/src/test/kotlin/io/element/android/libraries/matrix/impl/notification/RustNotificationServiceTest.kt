@@ -34,7 +34,7 @@ class RustNotificationServiceTest {
         val sut = createRustNotificationService(
             notificationClient = notificationClient,
         )
-        val result = sut.getNotifications(A_SESSION_ID, mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!
         assertThat(result.isEncrypted).isTrue()
         assertThat(result.content).isEqualTo(
             NotificationContent.MessageLike.RoomMessage(
@@ -52,6 +52,7 @@ class RustNotificationServiceTest {
         clock: SystemClock = FakeSystemClock(),
     ) =
         RustNotificationService(
+            sessionId = A_SESSION_ID,
             notificationClient = notificationClient,
             dispatchers = testCoroutineDispatchers(),
             clock = clock,
