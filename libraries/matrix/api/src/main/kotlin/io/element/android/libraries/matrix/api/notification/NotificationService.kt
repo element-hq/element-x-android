@@ -9,8 +9,7 @@ package io.element.android.libraries.matrix.api.notification
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 
 interface NotificationService {
-    suspend fun getNotifications(sessionId: SessionId, ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>>
+    suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): Result<Map<EventId, NotificationData>>
 }

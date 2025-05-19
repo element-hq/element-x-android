@@ -20,6 +20,7 @@ import org.matrix.rustcomponents.sdk.NotificationItemsRequest
 import timber.log.Timber
 
 class RustNotificationService(
+    private val sessionId: SessionId,
     private val notificationClient: NotificationClient,
     private val dispatchers: CoroutineDispatchers,
     clock: SystemClock,
@@ -27,7 +28,6 @@ class RustNotificationService(
     private val notificationMapper: NotificationMapper = NotificationMapper(clock)
 
     override suspend fun getNotifications(
-        sessionId: SessionId,
         ids: Map<RoomId, List<EventId>>
     ): Result<Map<EventId, NotificationData>> = withContext(dispatchers.io) {
         runCatching {
