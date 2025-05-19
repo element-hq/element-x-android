@@ -38,29 +38,5 @@
   <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>
   <string name="screen_room_timeline_reactions_show_more">"Dangos rhagor"</string>
   <string name="screen_room_timeline_read_marker_title">"Newydd"</string>
-  <plurals name="screen_room_timeline_state_changes">
-    <item quantity="%1$d newid ystafelloedd">"zero"</item>
-    <item quantity="%1$d newid ystafell">"one"</item>
-    <item quantity="%1$d newid ystafell">"two"</item>
-    <item quantity="%1$d newid ystafell">"few"</item>
-    <item quantity="%1$d newid ystafell">"many"</item>
-    <item quantity="%1$d newid ystafell">"other"</item>
-  </plurals>
-  <plurals name="screen_room_typing_many_members">
-    <item quantity="%1$s, %2$s a %3$d arall">"zero"</item>
-    <item quantity="%1$s, %2$s a %3$d arall">"one"</item>
-    <item quantity="%1$s, %2$s a %3$d arall">"two"</item>
-    <item quantity="%1$s, %2$s a %3$d arall">"few"</item>
-    <item quantity="%1$s, %2$s a %3$d arall">"many"</item>
-    <item quantity="%1$s, %2$s a %3$d arall">"other"</item>
-  </plurals>
-  <plurals name="screen_room_typing_notification">
-    <item quantity="Mae %1$s yn teipio">"zero"</item>
-    <item quantity="Mae %1$s yn teipio">"one"</item>
-    <item quantity="Mae %1$s yn teipio">"two"</item>
-    <item quantity="Mae %1$s yn teipio">"few"</item>
-    <item quantity="Mae %1$s yn teipio">"many"</item>
-    <item quantity="Mae %1$s yn teipio">"other"</item>
-  </plurals>
   <string name="screen_room_typing_two_members">"%1$s a %2$s"</string>
 </resources>

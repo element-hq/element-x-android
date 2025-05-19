@@ -2,13 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="troubleshoot_notifications_test_unified_push_description">"Sicrhewch fod dosbarthwyr UnifiedPush ar gael."</string>
   <string name="troubleshoot_notifications_test_unified_push_failure">"Heb ganfod dosbarthwyr gwthio."</string>
-  <plurals name="troubleshoot_notifications_test_unified_push_success">
-    <item quantity="Wedi canfod %1$d dosbarthwyr: %2$s">"zero"</item>
-    <item quantity="Wedi canfod %1$d dosbarthwr: %2$s">"one"</item>
-    <item quantity="Wedi canfod %1$d dosbarthwr: %2$s">"two"</item>
-    <item quantity="Wedi canfod %1$d dosbarthwr: %2$s">"few"</item>
-    <item quantity="Wedi canfod %1$d dosbarthwr: %2$s">"many"</item>
-    <item quantity="Wedi canfod %1$d dosbarthwr: %2$s">"other"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_unified_push_title">"Gwiriwch UnifiedPush"</string>
 </resources>
