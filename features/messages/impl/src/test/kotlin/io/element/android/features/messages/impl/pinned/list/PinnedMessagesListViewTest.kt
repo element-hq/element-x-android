@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -99,7 +100,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
     state: PinnedMessagesListState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onEventClick: (event: TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
-    onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
+    onUserDataClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {

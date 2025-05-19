@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -175,7 +176,7 @@ class TimelineViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimelineView(
     state: TimelineState,
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
-    onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
+    onUserDataClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onMessageClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onMessageLongClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),

@@ -12,15 +12,11 @@ import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.toPersistentList
 
-class RoomMemberModerationStateProvider : PreviewParameterProvider<InternalRoomMemberModerationState> {
+class InternalRoomMemberModerationStateProvider : PreviewParameterProvider<InternalRoomMemberModerationState> {
     override val values: Sequence<InternalRoomMemberModerationState>
         get() = sequenceOf(
             aRoomMembersModerationState(

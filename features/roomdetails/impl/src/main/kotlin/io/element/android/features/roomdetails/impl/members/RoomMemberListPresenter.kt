@@ -16,8 +16,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
@@ -53,12 +51,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomMembersModerationPresenter: Presenter<RoomMemberModerationState>,
     private val encryptionService: EncryptionService,
-    @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
-    @AssistedFactory
-    interface Factory {
-        fun create(navigator: RoomMemberListNavigator): RoomMemberListPresenter
-    }
 
     @Composable
     override fun present(): RoomMemberListState {
@@ -168,10 +161,8 @@ class RoomMemberListPresenter @AssistedInject constructor(
                 is RoomMemberListEvents.RoomMemberSelected ->
                     if (event.roomMember.membership == RoomMembershipState.BAN) {
                         roomModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(ModerationAction.UnbanUser, event.roomMember.toMatrixUser()))
-                    } else if (!isDm.value && (roomModerationState.canBan || roomModerationState.canKick)) {
-                        roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
                     } else {
-                        navigator.openRoomMemberDetails(event.roomMember.userId)
+                        roomModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.roomMember.toMatrixUser()))
                     }
             }
         }

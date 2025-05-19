@@ -29,7 +29,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: RoomMemberListPresenter.Factory,
+    private val presenter: RoomMemberListPresenter,
     private val analyticsService: AnalyticsService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), RoomMemberListNavigator {
@@ -39,7 +39,6 @@ class RoomMemberListNode @AssistedInject constructor(
     }
 
     private val callbacks = plugins<Callback>()
-    private val presenter = presenterFactory.create(this)
 
     init {
         lifecycle.subscribe(

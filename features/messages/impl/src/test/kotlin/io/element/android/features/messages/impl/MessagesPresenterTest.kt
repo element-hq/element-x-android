@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -1182,6 +1183,9 @@ class MessagesPresenterTest {
                 textEditorState = aTextEditorStateMarkdown(initialText = "", initialFocus = false)
             )
         },
+        roomMemberModerationPresenter: Presenter<RoomMemberModerationState> = Presenter {
+            aRoomMemberModerationState()
+        },
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         actionListEventSink: (ActionListEvents) -> Unit = {},
     ): MessagesPresenter {
@@ -1199,6 +1203,7 @@ class MessagesPresenterTest {
             linkPresenter = { aLinkState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             roomCallStatePresenter = { aStandByCallState() },
+            roomMemberModerationPresenter = roomMemberModerationPresenter,
             syncService = FakeSyncService(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
