@@ -16,6 +16,7 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.features.login.impl.screens.onboarding.createLoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_OIDC
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.oidc.impl.customtab.DefaultOidcActionFlow
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
@@ -353,15 +355,17 @@ class ConfirmAccountProviderPresenterTest {
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        defaultOidcActionFlow: DefaultOidcActionFlow = DefaultOidcActionFlow(),
+        defaultOidcActionFlow: OidcActionFlow = DefaultOidcActionFlow(),
         defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
         webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
-        authenticationService = matrixAuthenticationService,
-        oidcActionFlow = defaultOidcActionFlow,
-        defaultLoginUserStory = defaultLoginUserStory,
-        webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever
+        loginHelper = createLoginHelper(
+            authenticationService = matrixAuthenticationService,
+            oidcActionFlow = defaultOidcActionFlow,
+            defaultLoginUserStory = defaultLoginUserStory,
+            webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
+        ),
     )
 }

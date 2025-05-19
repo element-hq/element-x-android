@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.onboarding
+package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -16,13 +17,17 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.util.openLearnMorePage
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
 class OnBoardingNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: OnBoardingPresenter,
+    presenterFactory: OnBoardingPresenter.Factory,
 ) : Node(
     buildContext = buildContext,
     plugins = plugins
@@ -32,7 +37,21 @@ class OnBoardingNode @AssistedInject constructor(
         fun onSignIn()
         fun onSignInWithQrCode()
         fun onReportProblem()
+        fun onLoginPasswordNeeded()
+        fun onOidcDetails(oidcDetails: OidcDetails)
+        fun onCreateAccountContinue(url: String)
     }
+
+    data class Params(
+        val accountProvider: String?,
+        val loginHint: String?,
+    ) : NodeInputs
+
+    private val params = inputs<Params>()
+
+    private val presenter = presenterFactory.create(
+        params = params,
+    )
 
     private fun onSignIn() {
         plugins<Callback>().forEach { it.onSignIn() }
@@ -50,9 +69,22 @@ class OnBoardingNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onReportProblem() }
     }
 
+    private fun onOidcDetails(data: OidcDetails) {
+        plugins<Callback>().forEach { it.onOidcDetails(data) }
+    }
+
+    private fun onLoginPasswordNeeded() {
+        plugins<Callback>().forEach { it.onLoginPasswordNeeded() }
+    }
+
+    private fun onCreateAccountContinue(url: String) {
+        plugins<Callback>().forEach { it.onCreateAccountContinue(url) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val context = LocalContext.current
         OnBoardingView(
             state = state,
             modifier = modifier,
@@ -60,6 +92,10 @@ class OnBoardingNode @AssistedInject constructor(
             onCreateAccount = ::onSignUp,
             onSignInWithQrCode = ::onSignInWithQrCode,
             onReportProblem = ::onReportProblem,
+            onOidcDetails = ::onOidcDetails,
+            onNeedLoginPassword = ::onLoginPasswordNeeded,
+            onLearnMoreClick = { openLearnMorePage(context) },
+            onCreateAccountContinue = ::onCreateAccountContinue,
         )
     }
 }
