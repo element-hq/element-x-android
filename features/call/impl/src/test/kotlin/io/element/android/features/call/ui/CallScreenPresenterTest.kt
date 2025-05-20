@@ -81,19 +81,12 @@ import kotlin.time.Duration.Companion.seconds
     }
 
     @Test
-    fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
-        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(SyncState.Running)
-        val fakeRoom = FakeJoinedRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
-        val client = FakeMatrixClient(syncService = syncService).apply {
-            givenGetRoomResult(A_ROOM_ID, fakeRoom)
-        }
+    fun `present - with CallType RoomCall sets call as active, loads URL, and runs WidgetDriver`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
         val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
         val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
@@ -115,7 +108,6 @@ import kotlin.time.Duration.Companion.seconds
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
             analyticsLambda.assertions().isCalledOnce().with(value(MobileScreen.ScreenName.RoomCall))
-            sendCallNotificationIfNeededLambda.assertions().isCalledOnce()
 
             // Wait until the WidgetDriver is loaded
             skipItems(1)
