@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
 const val A_USER_NAME_2 = "Bob"
