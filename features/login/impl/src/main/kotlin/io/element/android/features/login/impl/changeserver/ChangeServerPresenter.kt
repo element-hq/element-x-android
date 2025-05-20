@@ -58,7 +58,7 @@ class ChangeServerPresenter @Inject constructor(
             if (enterpriseService.isAllowedToConnectToHomeserver(data.url).not()) {
                 throw UnauthorizedAccountProviderException(
                     unauthorisedAccountProviderTitle = data.title,
-                    authorisedAccountProviderTitles = listOfNotNull(enterpriseService.defaultHomeserver())
+                    authorisedAccountProviderTitles = enterpriseService.defaultHomeserverList(),
                 )
             }
             authenticationService.setHomeserver(data.url).map {

@@ -100,7 +100,7 @@ class QrCodeScanPresenter @Inject constructor(
                 if (serverName != null && enterpriseService.isAllowedToConnectToHomeserver(serverName).not()) {
                     throw UnauthorizedAccountProviderException(
                         unauthorisedAccountProviderTitle = serverName,
-                        authorisedAccountProviderTitles = listOfNotNull(enterpriseService.defaultHomeserver())
+                        authorisedAccountProviderTitles = enterpriseService.defaultHomeserverList(),
                     )
                 }
                 data
