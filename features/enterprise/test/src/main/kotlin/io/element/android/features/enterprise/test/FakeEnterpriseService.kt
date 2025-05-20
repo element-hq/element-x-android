@@ -16,7 +16,7 @@ import io.element.android.tests.testutils.simulateLongTask
 class FakeEnterpriseService(
     override val isEnterpriseBuild: Boolean = false,
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
-    private val defaultHomeserverResult: () -> String? = { A_FAKE_HOMESERVER },
+    private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
     private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
     private val semanticColorsLightResult: () -> SemanticColors = { lambdaError() },
     private val semanticColorsDarkResult: () -> SemanticColors = { lambdaError() },
@@ -27,8 +27,8 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override fun defaultHomeserver(): String? {
-        return defaultHomeserverResult()
+    override fun defaultHomeserverList(): List<String> {
+        return defaultHomeserverListResult()
     }
 
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean = simulateLongTask {
