@@ -9,4 +9,4 @@
 # https://mobile.element.io/element?account_provider=example.org&login_hint=mxid:@alice:example.org
 
 adb shell am start -a android.intent.action.VIEW \
-    -d https://mobile.element.io/element?account_provider=element.io&login_hint=mxid:@alice:element.io
+    -d "https://mobile.element.io/element?account_provider=element.io\\&login_hint=mxid:@alice:element.io"
