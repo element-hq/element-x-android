@@ -84,12 +84,7 @@ class RustRoomFactory(
     }
 
     private suspend fun getBaseRoom(roomListItem: RoomListItem): RustBaseRoom? {
-        val room = if (roomListItem.isTimelineInitialized()) {
-            roomListItem.fullRoom()
-        } else {
-            innerClient.getRoom(roomListItem.id())
-        } ?: return null
-
+        val room = innerClient.getRoom(roomListItem.id()) ?: return null
         val initialRoomInfo = room.roomInfo()
         return RustBaseRoom(
             sessionId = sessionId,
