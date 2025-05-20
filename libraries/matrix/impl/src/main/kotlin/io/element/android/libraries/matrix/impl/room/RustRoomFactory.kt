@@ -114,11 +114,7 @@ class RustRoomFactory(
 
             if (roomListItem.membership() == Membership.JOINED) {
                 // Init the live timeline in the SDK from the RoomListItem
-                val sdkRoom = if (!roomListItem.isTimelineInitialized()) {
-                    roomListItem.fullRoomWithTimeline(eventFilters)
-                } else {
-                    roomListItem.fullRoom()
-                }
+                val sdkRoom = roomListItem.fullRoomWithTimeline(eventFilters)
 
                 GetRoomResult.Joined(
                     JoinedRustRoom(
