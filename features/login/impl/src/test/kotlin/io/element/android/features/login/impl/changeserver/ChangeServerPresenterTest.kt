@@ -84,7 +84,7 @@ class ChangeServerPresenterTest {
         createPresenter(
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = isAllowedToConnectToHomeserverResult,
-                defaultHomeserverResult = { "element.io" },
+                defaultHomeserverListResult = { listOf("element.io") },
             ),
         ).test {
             val initialState = awaitItem()
