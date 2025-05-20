@@ -13,20 +13,11 @@ import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SendHandle
-import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.media.AudioInfo
-import io.element.android.libraries.matrix.api.media.FileInfo
-import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
@@ -35,14 +26,11 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsStat
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
@@ -84,7 +72,6 @@ import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
-import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
@@ -249,10 +236,6 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit> {
-        return liveTimeline.sendMessage(body, htmlBody, intentionalMentions)
-    }
-
     override suspend fun editMessage(
         eventId: EventId,
         body: String,
@@ -266,157 +249,10 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun sendImage(
-        file: File,
-        thumbnailFile: File?,
-        imageInfo: ImageInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendImage(
-            file = file,
-            thumbnailFile = thumbnailFile,
-            imageInfo = imageInfo,
-            caption = caption,
-            formattedCaption = formattedCaption,
-            progressCallback = progressCallback,
-            replyParameters = replyParameters
-        )
-    }
-
-    override suspend fun sendVideo(
-        file: File,
-        thumbnailFile: File?,
-        videoInfo: VideoInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVideo(
-            file = file,
-            thumbnailFile = thumbnailFile,
-            videoInfo = videoInfo,
-            caption = caption,
-            formattedCaption = formattedCaption,
-            progressCallback = progressCallback,
-            replyParameters = replyParameters
-        )
-    }
-
-    override suspend fun sendAudio(
-        file: File,
-        audioInfo: AudioInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendAudio(
-            file = file,
-            audioInfo = audioInfo,
-            caption = caption,
-            formattedCaption = formattedCaption,
-            progressCallback = progressCallback,
-            replyParameters = replyParameters,
-        )
-    }
-
-    override suspend fun sendFile(
-        file: File,
-        fileInfo: FileInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendFile(
-            file = file,
-            fileInfo = fileInfo,
-            caption = caption,
-            formattedCaption = formattedCaption,
-            progressCallback = progressCallback,
-            replyParameters = replyParameters,
-        )
-    }
-
-    override suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> {
-        return liveTimeline.sendVoiceMessage(
-            file = file,
-            audioInfo = audioInfo,
-            waveform = waveform,
-            progressCallback = progressCallback,
-            replyParameters = replyParameters,
-        )
-    }
-
-    override suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String?,
-        zoomLevel: Int?,
-        assetType: AssetType?,
-    ): Result<Unit> {
-        return liveTimeline.sendLocation(body, geoUri, description, zoomLevel, assetType)
-    }
-
-    override suspend fun createPoll(
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit> {
-        return liveTimeline.createPoll(question, answers, maxSelections, pollKind)
-    }
-
-    override suspend fun editPoll(
-        pollStartId: EventId,
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit> {
-        return liveTimeline.editPoll(pollStartId, question, answers, maxSelections, pollKind)
-    }
-
-    override suspend fun sendPollResponse(
-        pollStartId: EventId,
-        answers: List<String>
-    ): Result<Unit> {
-        return liveTimeline.sendPollResponse(pollStartId, answers)
-    }
-
-    override suspend fun endPoll(
-        pollStartId: EventId,
-        text: String
-    ): Result<Unit> {
-        return liveTimeline.endPoll(pollStartId, text)
-    }
-
     override suspend fun typingNotice(isTyping: Boolean) = withContext(roomDispatcher) {
         runCatching {
             innerRoom.typingNotice(isTyping)
         }
-    }
-
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> {
-        return liveTimeline.toggleReaction(emoji, eventOrTransactionId)
-    }
-
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {
-        return liveTimeline.forwardEvent(eventId, roomIds)
-    }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.cancelSend(transactionId)
     }
 
     override suspend fun inviteUserById(id: UserId): Result<Unit> = withContext(roomDispatcher) {

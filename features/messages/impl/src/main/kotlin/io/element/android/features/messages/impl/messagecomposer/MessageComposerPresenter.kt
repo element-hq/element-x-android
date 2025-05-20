@@ -424,7 +424,7 @@ class MessageComposerPresenter @AssistedInject constructor(
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
             is MessageComposerMode.Attachment,
-            is MessageComposerMode.Normal -> room.sendMessage(
+            is MessageComposerMode.Normal -> room.liveTimeline.sendMessage(
                 body = message.markdown,
                 htmlBody = message.html,
                 intentionalMentions = message.intentionalMentions

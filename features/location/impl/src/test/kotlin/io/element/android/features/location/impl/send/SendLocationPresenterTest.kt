@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTran
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -266,7 +267,9 @@ class SendLocationPresenterTest {
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
-            sendLocationResult = sendLocationResult,
+            liveTimeline = FakeTimeline().apply {
+                sendLocationLambda = sendLocationResult
+            },
         )
         val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
@@ -327,7 +330,9 @@ class SendLocationPresenterTest {
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
-            sendLocationResult = sendLocationResult,
+            liveTimeline = FakeTimeline().apply {
+                sendLocationLambda = sendLocationResult
+            },
         )
         val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
@@ -388,7 +393,9 @@ class SendLocationPresenterTest {
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
-            sendLocationResult = sendLocationResult,
+            liveTimeline = FakeTimeline().apply {
+                sendLocationLambda = sendLocationResult
+            },
         )
         val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
