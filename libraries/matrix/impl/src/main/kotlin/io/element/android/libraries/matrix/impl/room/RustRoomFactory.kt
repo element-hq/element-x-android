@@ -78,8 +78,8 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            val roomReferences = awaitRoomListItem(roomId) ?: return@withContext null
-            getBaseRoom(roomReferences)
+            val roomListItem = awaitRoomListItem(roomId) ?: return@withContext null
+            getBaseRoom(roomListItem)
         }
     }
 
