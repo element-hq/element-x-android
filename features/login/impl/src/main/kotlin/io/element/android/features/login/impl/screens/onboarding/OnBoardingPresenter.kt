@@ -23,10 +23,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 
-/**
- * Note: this Presenter is ignored regarding code coverage because it cannot reach the coverage threshold.
- * When this presenter get more code in it, please remove the ignore rule in the kover configuration.
- */
 class OnBoardingPresenter @AssistedInject constructor(
     @Assisted private val params: OnBoardingNode.Params,
     private val buildMeta: BuildMeta,
