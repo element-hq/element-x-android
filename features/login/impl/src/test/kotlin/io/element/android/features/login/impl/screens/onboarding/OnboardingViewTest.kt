@@ -11,12 +11,16 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.R
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import org.junit.Rule
@@ -74,6 +78,34 @@ class OnboardingViewTest {
             )
             rule.clickOn(CommonStrings.action_continue)
         }
+    }
+
+    @Test
+    fun `when sign in to pre defined account provider - clicking on button emits the expected event`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>()
+        rule.setOnboardingView(
+            state = anOnBoardingState(
+                defaultAccountProvider = "element.io",
+                eventSink = eventSink,
+            ),
+        )
+        val buttonText = rule.activity.getString(R.string.screen_onboarding_sign_in_to, "element.io")
+        rule.onNodeWithText(buttonText).performClick()
+        eventSink.assertSingle(OnBoardingEvents.OnSignIn("element.io"))
+    }
+
+    @Test
+    fun `when error is displayed - closing the dialog emits the expected event`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>()
+        rule.setOnboardingView(
+            state = anOnBoardingState(
+                defaultAccountProvider = "element.io",
+                loginFlow = AsyncData.Failure(AN_EXCEPTION),
+                eventSink = eventSink,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventSink.assertSingle(OnBoardingEvents.ClearError)
     }
 
     @Test

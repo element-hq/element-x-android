@@ -69,6 +69,16 @@ fun OnBoardingView(
         modifier = modifier,
         content = {
             OnBoardingContent(state = state)
+            LoginFlowView(
+                state.loginFlow,
+                onClearError = {
+                    state.eventSink(OnBoardingEvents.ClearError)
+                },
+                onLearnMoreClick,
+                onOidcDetails,
+                onNeedLoginPassword,
+                onCreateAccountContinue,
+            )
         },
         footer = {
             OnBoardingButtons(
@@ -77,10 +87,6 @@ fun OnBoardingView(
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
                 onReportProblem = onReportProblem,
-                onOidcDetails = onOidcDetails,
-                onNeedLoginPassword = onNeedLoginPassword,
-                onLearnMoreClick = onLearnMoreClick,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     )
@@ -140,10 +146,6 @@ private fun OnBoardingButtons(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
-    onOidcDetails: (OidcDetails) -> Unit,
-    onNeedLoginPassword: () -> Unit,
-    onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
 ) {
     val isLoading by remember(state.loginFlow) {
         derivedStateOf {
@@ -184,16 +186,6 @@ private fun OnBoardingButtons(
                 enabled = state.submitEnabled || isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-            )
-            LoginFlowView(
-                state.loginFlow,
-                onClearError = {
-                    state.eventSink(OnBoardingEvents.ClearError)
-                },
-                onLearnMoreClick,
-                onOidcDetails,
-                onNeedLoginPassword,
-                onCreateAccountContinue,
             )
         }
         if (state.canCreateAccount) {
