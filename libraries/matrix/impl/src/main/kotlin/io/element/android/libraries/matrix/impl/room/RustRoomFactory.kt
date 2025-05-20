@@ -30,6 +30,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -84,12 +85,16 @@ class RustRoomFactory(
     }
 
     private suspend fun getBaseRoom(roomListItem: RoomListItem): RustBaseRoom? {
-        val room = innerClient.getRoom(roomListItem.id()) ?: return null
-        val initialRoomInfo = room.roomInfo()
+        val sdkRoom = innerClient.getRoom(roomListItem.id()) ?: return null
+        return getBaseRoom(sdkRoom)
+    }
+
+    private suspend fun getBaseRoom(sdkRoom: Room): RustBaseRoom {
+        val initialRoomInfo = sdkRoom.roomInfo()
         return RustBaseRoom(
             sessionId = sessionId,
             deviceId = deviceId,
-            innerRoom = room,
+            innerRoom = sdkRoom,
             coroutineDispatchers = dispatchers,
             roomSyncSubscriber = roomSyncSubscriber,
             roomMembershipObserver = roomMembershipObserver,
@@ -108,10 +113,8 @@ class RustRoomFactory(
             val roomListItem = awaitRoomListItem(roomId) ?: return@withContext null
 
             if (roomListItem.membership() == Membership.JOINED) {
-                val baseRoom = getBaseRoom(roomListItem) ?: return@withContext null
-
                 // Init the live timeline in the SDK from the RoomListItem
-                val room = if (!roomListItem.isTimelineInitialized()) {
+                val sdkRoom = if (!roomListItem.isTimelineInitialized()) {
                     roomListItem.fullRoomWithTimeline(eventFilters)
                 } else {
                     roomListItem.fullRoom()
@@ -119,10 +122,10 @@ class RustRoomFactory(
 
                 GetRoomResult.Joined(
                     JoinedRustRoom(
-                        baseRoom = baseRoom,
+                        baseRoom = getBaseRoom(sdkRoom),
                         notificationSettingsService = notificationSettingsService,
                         roomContentForwarder = roomContentForwarder,
-                        liveInnerTimeline = room.timeline(),
+                        liveInnerTimeline = sdkRoom.timeline(),
                         coroutineDispatchers = dispatchers,
                         systemClock = systemClock,
                         featureFlagService = featureFlagService,
