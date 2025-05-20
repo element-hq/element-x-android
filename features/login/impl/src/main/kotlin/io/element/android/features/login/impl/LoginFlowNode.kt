@@ -148,16 +148,7 @@ class LoginFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (oidcEntryPoint.canUseCustomTab()) {
-                            // In this case open a Chrome Custom tab
-                            activity?.let {
-                                customChromeTabStarted = true
-                                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
-                            }
-                        } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
-                        }
+                        navigateToMas(oidcDetails)
                     }
 
                     override fun onCreateAccountContinue(url: String) {
@@ -184,16 +175,7 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (oidcEntryPoint.canUseCustomTab()) {
-                            // In this case open a Chrome Custom tab
-                            activity?.let {
-                                customChromeTabStarted = true
-                                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
-                            }
-                        } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
-                        }
+                        navigateToMas(oidcDetails)
                     }
 
                     override fun onCreateAccountContinue(url: String) {
@@ -252,6 +234,19 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 createNode<CreateAccountNode>(buildContext, listOf(inputs))
             }
+        }
+    }
+
+    private fun navigateToMas(oidcDetails: OidcDetails) {
+        if (oidcEntryPoint.canUseCustomTab()) {
+            // In this case open a Chrome Custom tab
+            activity?.let {
+                customChromeTabStarted = true
+                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
+            }
+        } else {
+            // Fallback to WebView mode
+            backstack.push(NavTarget.OidcView(oidcDetails))
         }
     }
 
