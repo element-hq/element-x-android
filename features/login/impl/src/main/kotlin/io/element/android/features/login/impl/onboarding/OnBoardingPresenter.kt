@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.features.login.impl.onboarding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

@@ -5,13 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.features.login.impl.onboarding
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.clickOn

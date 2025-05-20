@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.features.login.impl.onboarding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +16,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -28,20 +27,27 @@ class OnBoardingNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    interface Callback : Plugin {
+        fun onSignUp()
+        fun onSignIn()
+        fun onSignInWithQrCode()
+        fun onReportProblem()
+    }
+
     private fun onSignIn() {
-        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignIn() }
+        plugins<Callback>().forEach { it.onSignIn() }
     }
 
     private fun onSignUp() {
-        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignUp() }
+        plugins<Callback>().forEach { it.onSignUp() }
     }
 
     private fun onSignInWithQrCode() {
-        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignInWithQrCode() }
+        plugins<Callback>().forEach { it.onSignInWithQrCode() }
     }
 
     private fun onReportProblem() {
-        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onReportProblem() }
+        plugins<Callback>().forEach { it.onReportProblem() }
     }
 
     @Composable

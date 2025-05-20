@@ -27,6 +27,12 @@
   <string name="screen_login_subtitle">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
   <string name="screen_login_title">"Bem-vindo de volta!"</string>
   <string name="screen_login_title_with_homeserver">"Iniciar sessão em %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Iniciar sessão manualmente"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Iniciar sessão com código QR"</string>
+  <string name="screen_onboarding_sign_up">"Criar conta"</string>
+  <string name="screen_onboarding_welcome_message">"Bem-vindo ao mais rápido %1$s de todos os tempos. Turbinado para velocidade e simplicidade."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Bem-vindo ao %1$s. Turbinado, para velocidade e simplicidade"</string>
+  <string name="screen_onboarding_welcome_title">"Esteja no seu elemento"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Tente novamente"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Você deve permitir ao %1$s usar a câmera do seu dispositivo para continuar."</string>
   <string name="screen_qr_code_login_verify_code_title">"Seu código de verificação"</string>

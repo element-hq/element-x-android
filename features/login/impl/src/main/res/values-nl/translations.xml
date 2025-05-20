@@ -29,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_login_title">"Welkom terug!"</string>
   <string name="screen_login_title_with_homeserver">"Inloggen bij %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Handmatig inloggen"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Inloggen met QR-code"</string>
+  <string name="screen_onboarding_sign_up">"Account aanmaken"</string>
+  <string name="screen_onboarding_welcome_message">"Welkom bij de snelste %1$s ooit. Supercharged, voor snelheid en eenvoud."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Welkom bij %1$s. Supercharged, voor snelheid en eenvoud."</string>
+  <string name="screen_onboarding_welcome_title">"Wees in je element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Een beveiligde verbinding tot stand brengen"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Er kon geen beveiligde verbinding worden gemaakt met het nieuwe apparaat. Je bestaande apparaten zijn nog steeds veilig en je hoeft je daarover geen zorgen te maken."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Wat nu?"</string>
