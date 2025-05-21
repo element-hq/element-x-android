@@ -111,12 +111,12 @@ class OnBoardingPresenterTest {
 
                 // Check an error was returned
                 val submittedState = awaitItem()
-                assertThat(submittedState.loginFlow).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
                 submittedState.eventSink(OnBoardingEvents.ClearError)
                 val clearedState = awaitItem()
-                assertThat(clearedState.loginFlow).isEqualTo(AsyncData.Uninitialized)
+                assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }
         }
     }

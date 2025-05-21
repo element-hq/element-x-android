@@ -50,7 +50,7 @@ class OnBoardingPresenter @AssistedInject constructor(
         }
         val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
 
-        val loginFlow by loginHelper.collectLoginFlow()
+        val loginMode by loginHelper.collectLoginMode()
 
         fun handleEvent(event: OnBoardingEvents) {
             when (event) {
@@ -70,7 +70,7 @@ class OnBoardingPresenter @AssistedInject constructor(
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = defaultAccountProvider == null && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug,
-            loginFlow = loginFlow,
+            loginMode = loginMode,
             eventSink = ::handleEvent,
         )
     }

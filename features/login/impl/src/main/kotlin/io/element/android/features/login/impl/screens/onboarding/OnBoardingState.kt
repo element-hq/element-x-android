@@ -7,7 +7,7 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
-import io.element.android.features.login.impl.screens.confirmaccountprovider.LoginFlow
+import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
 
 data class OnBoardingState(
@@ -16,9 +16,9 @@ data class OnBoardingState(
     val canLoginWithQrCode: Boolean,
     val canCreateAccount: Boolean,
     val canReportBug: Boolean,
-    val loginFlow: AsyncData<LoginFlow>,
+    val loginMode: AsyncData<LoginMode>,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {
     val submitEnabled: Boolean
-        get() = defaultAccountProvider != null && (loginFlow is AsyncData.Uninitialized || loginFlow is AsyncData.Loading)
+        get() = defaultAccountProvider != null && (loginMode is AsyncData.Uninitialized || loginMode is AsyncData.Loading)
 }

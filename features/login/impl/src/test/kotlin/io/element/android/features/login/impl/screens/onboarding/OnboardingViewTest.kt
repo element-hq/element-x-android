@@ -100,7 +100,7 @@ class OnboardingViewTest {
         rule.setOnboardingView(
             state = anOnBoardingState(
                 defaultAccountProvider = "element.io",
-                loginFlow = AsyncData.Failure(AN_EXCEPTION),
+                loginMode = AsyncData.Failure(AN_EXCEPTION),
                 eventSink = eventSink,
             ),
         )

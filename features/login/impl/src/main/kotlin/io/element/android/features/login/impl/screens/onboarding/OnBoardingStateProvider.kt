@@ -8,7 +8,7 @@
 package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.screens.confirmaccountprovider.LoginFlow
+import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
 
 open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
@@ -29,7 +29,7 @@ fun anOnBoardingState(
     canLoginWithQrCode: Boolean = false,
     canCreateAccount: Boolean = false,
     canReportBug: Boolean = false,
-    loginFlow: AsyncData<LoginFlow> = AsyncData.Uninitialized,
+    loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
     eventSink: (OnBoardingEvents) -> Unit = {},
 ) = OnBoardingState(
     productionApplicationName = productionApplicationName,
@@ -37,6 +37,6 @@ fun anOnBoardingState(
     canLoginWithQrCode = canLoginWithQrCode,
     canCreateAccount = canCreateAccount,
     canReportBug = canReportBug,
-    loginFlow = loginFlow,
+    loginMode = loginMode,
     eventSink = eventSink,
 )

@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
-import io.element.android.features.login.impl.screens.confirmaccountprovider.LoginFlow
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
@@ -40,10 +39,10 @@ class LoginHelper @Inject constructor(
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) {
-    private val loginFlowAction: MutableState<AsyncData<LoginFlow>> = mutableStateOf(AsyncData.Uninitialized)
+    private val loginModeState: MutableState<AsyncData<LoginMode>> = mutableStateOf(AsyncData.Uninitialized)
 
     @Composable
-    fun collectLoginFlow(): State<AsyncData<LoginFlow>> {
+    fun collectLoginMode(): State<AsyncData<LoginMode>> {
         LaunchedEffect(Unit) {
             oidcActionFlow.collect { oidcAction ->
                 if (oidcAction != null) {
@@ -51,11 +50,11 @@ class LoginHelper @Inject constructor(
                 }
             }
         }
-        return loginFlowAction
+        return loginModeState
     }
 
     fun clearError() {
-        loginFlowAction.value = AsyncData.Uninitialized
+        loginModeState.value = AsyncData.Uninitialized
     }
 
     fun submit(
@@ -70,20 +69,20 @@ class LoginHelper @Inject constructor(
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     val oidcPrompt = if (isAccountCreation) OidcPrompt.Create else OidcPrompt.Login
-                    LoginFlow.OidcFlow(
+                    LoginMode.Oidc(
                         authenticationService.getOidcUrl(prompt = oidcPrompt, loginHint = loginHint).getOrThrow()
                     )
                 } else if (isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
-                    LoginFlow.AccountCreationFlow(url)
+                    LoginMode.AccountCreation(url)
                 } else if (matrixHomeServerDetails.supportsPasswordLogin) {
-                    LoginFlow.PasswordLogin
+                    LoginMode.PasswordLogin
                 } else {
                     error("Unsupported login flow")
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(
-            state = loginFlowAction,
+            state = loginModeState,
             errorTransform = {
                 when (it) {
                     is AccountCreationNotSupported -> it
@@ -94,15 +93,15 @@ class LoginHelper @Inject constructor(
     }
 
     private suspend fun onOidcAction(oidcAction: OidcAction) {
-        loginFlowAction.value = AsyncData.Loading()
+        loginModeState.value = AsyncData.Loading()
         when (oidcAction) {
             OidcAction.GoBack -> {
                 authenticationService.cancelOidcLogin()
                     .onSuccess {
-                        loginFlowAction.value = AsyncData.Uninitialized
+                        loginModeState.value = AsyncData.Uninitialized
                     }
                     .onFailure { failure ->
-                        loginFlowAction.value = AsyncData.Failure(failure)
+                        loginModeState.value = AsyncData.Failure(failure)
                     }
             }
             is OidcAction.Success -> {
@@ -111,7 +110,7 @@ class LoginHelper @Inject constructor(
                         defaultLoginUserStory.setLoginFlowIsDone(true)
                     }
                     .onFailure { failure ->
-                        loginFlowAction.value = AsyncData.Failure(failure)
+                        loginModeState.value = AsyncData.Failure(failure)
                     }
             }
         }
