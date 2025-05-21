@@ -20,9 +20,11 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.services.appnavstate.api.ActiveRoomHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -33,6 +35,7 @@ class SharePresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val activeRoomHolder: ActiveRoomHolder,
 ) : Presenter<ShareState> {
     @AssistedFactory
     interface Factory {
@@ -59,6 +62,12 @@ class SharePresenter @AssistedInject constructor(
         )
     }
 
+    private suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
+        return activeRoomHolder.getActiveRoom(matrixClient.sessionId)
+            ?.takeIf { it.roomId == roomId }
+            ?: matrixClient.getJoinedRoom(roomId)
+    }
+
     private fun CoroutineScope.share(
         intent: Intent,
         roomIds: List<RoomId>,
@@ -72,7 +81,7 @@ class SharePresenter @AssistedInject constructor(
                     } else {
                         roomIds
                             .map { roomId ->
-                                val room = matrixClient.getJoinedRoom(roomId) ?: return@map false
+                                val room = getJoinedRoom(roomId) ?: return@map false
                                 val mediaSender = MediaSender(
                                     preProcessor = mediaPreProcessor,
                                     room = room,
@@ -94,7 +103,7 @@ class SharePresenter @AssistedInject constructor(
                 onPlainText = { text ->
                     roomIds
                         .map { roomId ->
-                            matrixClient.getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
+                            getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
                                 body = text,
                                 htmlBody = null,
                                 intentionalMentions = emptyList(),

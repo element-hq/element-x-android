@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
+import io.element.android.services.appnavstate.api.ActiveRoomHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -30,15 +31,18 @@ class SyncOnNotifiableEvent @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
+    private val activeRoomHolder: ActiveRoomHolder,
 ) {
     suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
         val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush) && !isRingingCallEvent) {
             return@withContext
         }
-        val client = matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull() ?: return@withContext
 
-        client.getJoinedRoom(notifiableEvent.roomId)?.use { room ->
+        val notifiedRoom = activeRoomHolder.getActiveRoom(sessionId = notifiableEvent.sessionId)
+            ?: matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull()?.getJoinedRoom(notifiableEvent.roomId)
+            ?: return@withContext
+        notifiedRoom.use { room ->
             room.subscribeToSync()
 
             // If the app is in foreground, sync is already running, so we just add the subscription above.
