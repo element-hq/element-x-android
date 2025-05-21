@@ -71,21 +71,19 @@ class RoomMemberModerationPresenter @Inject constructor(
         fun handleEvent(event: RoomMemberModerationEvents) {
             when (event) {
                 is RoomMemberModerationEvents.ShowActionsForUser -> {
-                    coroutineScope.launch {
-                        selectedUser = event.user
-                        val member = room.membersStateFlow.value.roomMembers()?.firstOrNull {
-                            it.userId == event.user.userId
-                        }
-                        moderationActions.value = computeModerationActions(
-                            member = member,
-                            canKick = canKick.value,
-                            canBan = canBan.value,
-                            currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
-                        )
+                    selectedUser = event.user
+                    val member = room.membersStateFlow.value.roomMembers()?.firstOrNull {
+                        it.userId == event.user.userId
                     }
+                    moderationActions.value = computeModerationActions(
+                        member = member,
+                        canKick = canKick.value,
+                        canBan = canBan.value,
+                        currentUserMemberPowerLevel = currentUserMemberPowerLevel.value,
+                    )
                 }
                 is RoomMemberModerationEvents.ProcessAction -> {
-                    when (val action = event.action) {
+                    when (event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
                             selectedUser = event.targetUser
