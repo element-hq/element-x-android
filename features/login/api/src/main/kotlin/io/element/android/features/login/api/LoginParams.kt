@@ -10,6 +10,10 @@ package io.element.android.features.login.api
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+/**
+ * Parameters to start the login flow, when the application is opened
+ * from a mobile.element.io link.
+ */
 @Parcelize
 data class LoginParams(
     val accountProvider: String,
