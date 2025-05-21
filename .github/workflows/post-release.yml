@@ -1,0 +1,28 @@
+name: Post-release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  post-release:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-android'
+
+    steps:
+      - name: Trigger pipeline
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ENTERPRISE_ACTIONS_TOKEN }}
+          script: |
+            const tag = context.ref.replace('refs/tags/', '');
+            const inputs = { git_tag: tag };
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'element-hq',
+              repo: 'element-enterprise',
+              workflow_id: 'pipeline-android.yml',
+              ref: 'main',
+              inputs: inputs
+            });

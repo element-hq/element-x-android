@@ -11,7 +11,10 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.TimeoutCancellationException
@@ -50,8 +53,15 @@ class DefaultMediaPlayerTest {
             playLambda = playLambda,
             pauseLambda = pauseLambda,
         )
+        val requestAudioFocusResult = lambdaRecorder<AudioFocusRequester, () -> Unit, Unit> { _, _ -> }
+        val releaseAudioFocusResult = lambdaRecorder<Unit> {}
+        val audioFocus = FakeAudioFocus(
+            requestAudioFocusResult = requestAudioFocusResult,
+            releaseAudioFocusResult = releaseAudioFocusResult
+        )
         val sut = createDefaultMediaPlayer(
             simplePlayer = player,
+            audioFocus = audioFocus,
         )
         sut.state.test {
             val initialState = awaitItem()
@@ -67,6 +77,7 @@ class DefaultMediaPlayerTest {
             )
             sut.play()
             playLambda.assertions().isCalledOnce()
+            requestAudioFocusResult.assertions().isCalledOnce()
             player.durationResult = 123L
             player.simulateIsPlayingChanged(true)
             val playingState = awaitItem()
@@ -105,6 +116,7 @@ class DefaultMediaPlayerTest {
             player.pause()
             pauseLambda.assertions().isCalledOnce()
             player.simulateIsPlayingChanged(false)
+            releaseAudioFocusResult.assertions().isCalledOnce()
             assertThat(awaitItem()).isEqualTo(
                 MediaPlayer.State(
                     isReady = false,
@@ -126,8 +138,13 @@ class DefaultMediaPlayerTest {
             playLambda = playLambda,
             getCurrentMediaItemLambda = getCurrentMediaItemLambda,
         )
+        val requestAudioFocusResult = lambdaRecorder<AudioFocusRequester, () -> Unit, Unit> { _, _ -> }
+        val audioFocus = FakeAudioFocus(
+            requestAudioFocusResult = requestAudioFocusResult,
+        )
         val sut = createDefaultMediaPlayer(
             simplePlayer = player,
+            audioFocus = audioFocus,
         )
         sut.state.test {
             val initialState = awaitItem()
@@ -144,6 +161,7 @@ class DefaultMediaPlayerTest {
             player.playbackStateResult = Player.STATE_ENDED
             sut.play()
             playLambda.assertions().isCalledOnce()
+            requestAudioFocusResult.assertions().isCalledOnce()
         }
     }
 
@@ -153,6 +171,10 @@ class DefaultMediaPlayerTest {
         val prepareLambda = lambdaRecorder<Unit> { }
         val getCurrentMediaItemLambda = lambdaRecorder<MediaItem?> { aMediaItem }
         val setMediaItemLambda = lambdaRecorder<MediaItem, Long, Unit> { _, _ -> }
+        val requestAudioFocusResult = lambdaRecorder<AudioFocusRequester, () -> Unit, Unit> { _, _ -> }
+        val audioFocus = FakeAudioFocus(
+            requestAudioFocusResult = requestAudioFocusResult,
+        )
         val player = FakeSimplePlayer(
             playLambda = playLambda,
             prepareLambda = prepareLambda,
@@ -161,6 +183,7 @@ class DefaultMediaPlayerTest {
         )
         val sut = createDefaultMediaPlayer(
             simplePlayer = player,
+            audioFocus = audioFocus,
         )
         sut.state.test {
             val initialState = awaitItem()
@@ -182,6 +205,7 @@ class DefaultMediaPlayerTest {
             )
             prepareLambda.assertions().isCalledOnce()
             playLambda.assertions().isCalledOnce()
+            requestAudioFocusResult.assertions().isCalledOnce()
         }
     }
 
@@ -395,8 +419,10 @@ class DefaultMediaPlayerTest {
 
     private fun TestScope.createDefaultMediaPlayer(
         simplePlayer: SimplePlayer = FakeSimplePlayer(),
+        audioFocus: AudioFocus = FakeAudioFocus(),
     ): DefaultMediaPlayer = DefaultMediaPlayer(
-        simplePlayer,
-        backgroundScope,
+        player = simplePlayer,
+        coroutineScope = backgroundScope,
+        audioFocus = audioFocus,
     )
 }

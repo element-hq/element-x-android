@@ -22,8 +22,8 @@ class DefaultLoginEntryPoint @Inject constructor() : LoginEntryPoint {
         val plugins = ArrayList<Plugin>()
 
         return object : LoginEntryPoint.NodeBuilder {
-            override fun params(params: LoginEntryPoint.Params): LoginEntryPoint.NodeBuilder {
-                plugins += LoginFlowNode.Inputs(flowType = params.flowType)
+            override fun callback(callback: LoginEntryPoint.Callback): LoginEntryPoint.NodeBuilder {
+                plugins += callback
                 return this
             }
 

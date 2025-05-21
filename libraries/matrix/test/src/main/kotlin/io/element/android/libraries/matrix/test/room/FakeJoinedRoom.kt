@@ -12,17 +12,9 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SendHandle
-import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.media.AudioInfo
-import io.element.android.libraries.matrix.api.media.FileInfo
-import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.media.VideoInfo
-import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
@@ -33,16 +25,12 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsStat
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -53,7 +41,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestScope
-import java.io.File
 
 class FakeJoinedRoom(
     val baseRoom: FakeBaseRoom = FakeBaseRoom(),
@@ -63,35 +50,16 @@ class FakeJoinedRoom(
     override val roomTypingMembersFlow: Flow<List<UserId>> = MutableStateFlow(emptyList()),
     override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = MutableStateFlow(emptyList()),
     override val roomNotificationSettingsStateFlow: StateFlow<RoomNotificationSettingsState> =
-    MutableStateFlow(RoomNotificationSettingsState.Unknown),
+        MutableStateFlow(RoomNotificationSettingsState.Unknown),
     override val knockRequestsFlow: Flow<List<KnockRequest>> = MutableStateFlow(emptyList()),
     private val roomNotificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private var createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
-    private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
-    private val sendImageResult: (File, File?, ImageInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _, _, _ -> lambdaError() },
-    private val sendVideoResult: (File, File?, VideoInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _, _, _ -> lambdaError() },
-    private val sendFileResult: (File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _, _ -> lambdaError() },
-    private val sendAudioResult: (File, AudioInfo, String?, String?, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _, _ -> lambdaError() },
-    private val sendVoiceMessageResult: (File, AudioInfo, List<Float>, ProgressCallback?, ReplyParameters?) -> Result<FakeMediaUploadHandler> =
-        { _, _, _, _, _ -> lambdaError() },
-    private val sendLocationResult: (String, String, String?, Int?, AssetType?) -> Result<Unit> = { _, _, _, _, _ -> lambdaError() },
     private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },
     private val progressCallbackValues: List<Pair<Long, Long>> = emptyList(),
-    private val createPollResult: (String, List<String>, Int, PollKind) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
-    private val editPollResult: (EventId, String, List<String>, Int, PollKind) -> Result<Unit> = { _, _, _, _, _ -> lambdaError() },
-    private val sendPollResponseResult: (EventId, List<String>) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val endPollResult: (EventId, String) -> Result<Unit> = { _, _ -> lambdaError() },
     private val generateWidgetWebViewUrlResult: (MatrixWidgetSettings, String, String?, String?) -> Result<String> = { _, _, _, _ -> lambdaError() },
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
     private val typingNoticeResult: (Boolean) -> Result<Unit> = { lambdaError() },
-    private val toggleReactionResult: (String, EventOrTransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val inviteUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val setNameResult: (String) -> Result<Unit> = { lambdaError() },
     private val setTopicResult: (String) -> Result<Unit> = { lambdaError() },
@@ -127,10 +95,6 @@ class FakeJoinedRoom(
         createTimelineResult(createTimelineParams)
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit> = simulateLongTask {
-        sendMessageResult(body, htmlBody, intentionalMentions)
-    }
-
     override suspend fun editMessage(
         eventId: EventId,
         body: String,
@@ -140,172 +104,8 @@ class FakeJoinedRoom(
         editMessageLambda(eventId, body, htmlBody, intentionalMentions)
     }
 
-    override suspend fun sendImage(
-        file: File,
-        thumbnailFile: File?,
-        imageInfo: ImageInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendImageResult(
-            file,
-            thumbnailFile,
-            imageInfo,
-            caption,
-            formattedCaption,
-            progressCallback,
-            replyParameters,
-        )
-    }
-
-    override suspend fun sendVideo(
-        file: File,
-        thumbnailFile: File?,
-        videoInfo: VideoInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendVideoResult(
-            file,
-            thumbnailFile,
-            videoInfo,
-            caption,
-            formattedCaption,
-            progressCallback,
-            replyParameters,
-        )
-    }
-
-    override suspend fun sendAudio(
-        file: File,
-        audioInfo: AudioInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendAudioResult(
-            file,
-            audioInfo,
-            caption,
-            formattedCaption,
-            progressCallback,
-            replyParameters,
-        )
-    }
-
-    override suspend fun sendFile(
-        file: File,
-        fileInfo: FileInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendFileResult(
-            file,
-            fileInfo,
-            caption,
-            formattedCaption,
-            progressCallback,
-            replyParameters,
-        )
-    }
-
-    override suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler> = simulateLongTask {
-        simulateSendMediaProgress(progressCallback)
-        sendVoiceMessageResult(
-            file,
-            audioInfo,
-            waveform,
-            progressCallback,
-            replyParameters,
-        )
-    }
-
-    override suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String?,
-        zoomLevel: Int?,
-        assetType: AssetType?,
-    ): Result<Unit> = simulateLongTask {
-        return sendLocationResult(
-            body,
-            geoUri,
-            description,
-            zoomLevel,
-            assetType,
-        )
-    }
-
-    override suspend fun createPoll(question: String, answers: List<String>, maxSelections: Int, pollKind: PollKind): Result<Unit> = simulateLongTask {
-        return createPollResult(
-            question,
-            answers,
-            maxSelections,
-            pollKind,
-        )
-    }
-
-    override suspend fun editPoll(
-        pollStartId: EventId,
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind
-    ): Result<Unit> = simulateLongTask {
-        return editPollResult(
-            pollStartId,
-            question,
-            answers,
-            maxSelections,
-            pollKind,
-        )
-    }
-
-    override suspend fun sendPollResponse(pollStartId: EventId, answers: List<String>): Result<Unit> = simulateLongTask {
-        return sendPollResponseResult(
-            pollStartId,
-            answers,
-        )
-    }
-
-    override suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit> = simulateLongTask {
-        endPollResult(
-            pollStartId,
-            text,
-        )
-    }
-
     override suspend fun typingNotice(isTyping: Boolean): Result<Unit> = simulateLongTask {
         typingNoticeResult(isTyping)
-    }
-
-    override suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit> = simulateLongTask {
-        toggleReactionResult(emoji, eventOrTransactionId)
-    }
-
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = simulateLongTask {
-        forwardEventResult(eventId, roomIds)
-    }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = simulateLongTask {
-        cancelSendResult(transactionId)
     }
 
     override suspend fun inviteUserById(id: UserId): Result<Unit> = simulateLongTask {

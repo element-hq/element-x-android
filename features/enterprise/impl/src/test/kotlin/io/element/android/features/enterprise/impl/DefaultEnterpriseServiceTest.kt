@@ -21,9 +21,9 @@ class DefaultEnterpriseServiceTest {
     }
 
     @Test
-    fun `defaultHomeserver should return null`() {
+    fun `defaultHomeserverList should return empty list`() {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        assertThat<String?>(defaultEnterpriseService.defaultHomeserver()).isNull()
+        assertThat(defaultEnterpriseService.defaultHomeserverList()).isEmpty()
     }
 
     @Test

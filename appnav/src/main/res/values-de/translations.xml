@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"Abmelden und aktualisieren"</string>
-  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$sunterstützt das alte Protokoll nicht mehr. Bitte melden Sie sich ab und wieder an, um die App weiter nutzen zu können."</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s unterstützt das alte Protokoll nicht mehr. Bitte melden Sie sich ab und wieder an, um die App weiter nutzen zu können."</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Dein Homeserver unterstützt das alte Protokoll nicht mehr. Bitte logge dich aus und melde dich wieder an, um die App weiter zu nutzen."</string>
 </resources>

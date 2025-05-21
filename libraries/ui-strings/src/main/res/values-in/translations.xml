@@ -181,6 +181,9 @@ Alasan: %1$s."</string>
   <string name="common_light">"Terang"</string>
   <string name="common_link_copied_to_clipboard">"Tautan disalin ke papan klip"</string>
   <string name="common_loading">"Memuat…"</string>
+  <plurals name="common_many_members">
+    <item quantity="other">"%d lainnya"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d anggota"</item>
   </plurals>

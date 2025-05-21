@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
-    fun defaultHomeserver(): String?
+    fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
     fun semanticColorsLight(): SemanticColors

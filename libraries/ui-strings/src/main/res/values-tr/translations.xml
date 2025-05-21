@@ -185,6 +185,10 @@ Neden: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Bağlantı panoya kopyalandı"</string>
   <string name="common_loading">"Yükleniyor…"</string>
   <string name="common_loading_more">"Daha fazla yükleniyor…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d diğer"</item>
+    <item quantity="other">"%d diğer"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d üye"</item>
     <item quantity="other">"%1$d üye"</item>

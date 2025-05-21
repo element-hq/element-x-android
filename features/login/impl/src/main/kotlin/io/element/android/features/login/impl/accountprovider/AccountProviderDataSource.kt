@@ -20,14 +20,15 @@ import javax.inject.Inject
 class AccountProviderDataSource @Inject constructor(
     enterpriseService: EnterpriseService,
 ) {
-    private val defaultAccountProvider = (enterpriseService.defaultHomeserver() ?: AuthenticationConfig.MATRIX_ORG_URL).let { url ->
-        AccountProvider(
-            url = url,
-            subtitle = null,
-            isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
-            isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
-        )
-    }
+    private val defaultAccountProvider = (enterpriseService.defaultHomeserverList().firstOrNull() ?: AuthenticationConfig.MATRIX_ORG_URL)
+        .let { url ->
+            AccountProvider(
+                url = url,
+                subtitle = null,
+                isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
+                isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
+            )
+        }
 
     private val accountProvider: MutableStateFlow<AccountProvider> = MutableStateFlow(
         defaultAccountProvider

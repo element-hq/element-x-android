@@ -188,20 +188,29 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
-        val resultFile = videoCompressor.compress(uri, shouldBeCompressed)
-            .onEach {
-                // TODO handle progress
-            }
-            .filterIsInstance<VideoTranscodingEvent.Completed>()
-            .first()
-            .file
-        val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
-        val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
-        return MediaUploadInfo.Video(
-            file = resultFile,
-            videoInfo = videoInfo,
-            thumbnailFile = thumbnailInfo?.file
-        )
+        val resultFile = runCatching {
+            videoCompressor.compress(uri, shouldBeCompressed)
+                .onEach {
+                    // TODO handle progress
+                }
+                .filterIsInstance<VideoTranscodingEvent.Completed>()
+                .first()
+                .file
+        }
+            .getOrNull()
+
+        if (resultFile != null) {
+            val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
+            val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
+            return MediaUploadInfo.Video(
+                file = resultFile,
+                videoInfo = videoInfo,
+                thumbnailFile = thumbnailInfo?.file
+            )
+        } else {
+            // If the video could not be compressed, just use the original one, but send it as a file
+            return processFile(uri, MimeTypes.OctetStream)
+        }
     }
 
     private suspend fun processAudio(uri: Uri, mimeType: String?): MediaUploadInfo {

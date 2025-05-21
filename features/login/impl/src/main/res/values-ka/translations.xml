@@ -28,6 +28,12 @@
   <string name="screen_login_subtitle">"Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის."</string>
   <string name="screen_login_title">"კეთილი იყოს თქვენი მობრძანება!"</string>
   <string name="screen_login_title_with_homeserver">"შესვლა %1$s-ში"</string>
+  <string name="screen_onboarding_sign_in_manually">"ხელით შესვლა"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"შესვლა QR კოდით"</string>
+  <string name="screen_onboarding_sign_up">"ანგარიშის შექმნა"</string>
+  <string name="screen_onboarding_welcome_message">"კეთილი იყოს თქვენი მობრძანება უსწრაფეს %1$s-ში. დამუხტულია სიჩქარისა და სიმარტივისათვის."</string>
+  <string name="screen_onboarding_welcome_subtitle">"კეთილი იყოს თქვენი მობრძანება %1$s-ში! დამუხტული სიჩქარისა და სიმარტივისთვის."</string>
+  <string name="screen_onboarding_welcome_title">"იყავი შენს element-ში"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"ხელახლა ცდა"</string>
   <string name="screen_server_confirmation_change_server">"შეცვალეთ ანგარიშის მომწოდებელი"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"კერძო სერვერი Element-ის თანამშრომლებისთვის."</string>

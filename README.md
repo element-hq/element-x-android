@@ -87,7 +87,7 @@ Just clone the project and open it in Android Studio. Make sure to select the
 `app` configuration when building (as we also have sample apps in the project).
 
 To build against a local copy of the Rust SDK, see the [Developer
-onboarding](docs/_developer_onboarding.md#build-the-sdk-locally) instructions.
+onboarding](docs/_developer_onboarding.md#building-the-sdk-locally) instructions.
 
 ## Support
 

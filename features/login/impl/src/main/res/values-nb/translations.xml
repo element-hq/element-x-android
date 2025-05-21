@@ -17,6 +17,9 @@
   <string name="screen_change_server_error_invalid_well_known">"Serveren er ikke tilgjengelig på grunn av et problem i den velkjente filen:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Den valgte kontoleverandøren støtter ikke sliding sync. En oppgradering av serveren er nødvendig for å bruke %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s har ikke lov til å koble seg til %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Denne appen er konfigurert til å tillate: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Kontoleverandør %1$s er ikke tillatt."</string>
   <string name="screen_change_server_form_header">"URL til hjemmeserver"</string>
   <string name="screen_change_server_form_notice">"Skriv inn en domeneadresse."</string>
   <string name="screen_change_server_subtitle">"Hva er adressen til serveren din?"</string>
@@ -31,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon."</string>
   <string name="screen_login_title">"Velkommen tilbake!"</string>
   <string name="screen_login_title_with_homeserver">"Logg inn på %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Logg på manuelt"</string>
+  <string name="screen_onboarding_sign_in_to">"Logg inn på %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Logg inn med QR-kode"</string>
+  <string name="screen_onboarding_sign_up">"Opprett konto"</string>
+  <string name="screen_onboarding_welcome_message">"Velkommen til den raskeste %1$s noensinne. Superladet for hastighet og enkelhet."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Velkommen til %1$s. Supercharged, for hastighet og enkelhet."</string>
+  <string name="screen_onboarding_welcome_title">"Vær i ditt rette element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Etablere en sikker forbindelse"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"En sikker tilkobling kunne ikke opprettes til den nye enheten. Dine eksisterende enheter er fortsatt trygge, og du trenger ikke å bekymre deg for dem."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Hva nå?"</string>

@@ -21,11 +21,13 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
 
     implementation(libs.dagger)
+    implementation(projects.libraries.audio.api)
     implementation(projects.libraries.di)
 
     implementation(libs.coroutines.core)
 
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.audio.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.mockk)

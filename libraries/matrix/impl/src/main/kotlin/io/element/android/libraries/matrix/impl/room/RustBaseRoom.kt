@@ -31,10 +31,14 @@ import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_base.EncryptionState
@@ -48,6 +52,7 @@ class RustBaseRoom(
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val roomMembershipObserver: RoomMembershipObserver,
     sessionCoroutineScope: CoroutineScope,
+    roomInfoMapper: RoomInfoMapper,
     initialRoomInfo: RoomInfo,
 ) : BaseRoom {
     override val roomId = RoomId(innerRoom.id())
@@ -62,9 +67,15 @@ class RustBaseRoom(
 
     override val membersStateFlow: StateFlow<RoomMembersState> = roomMemberListFetcher.membersFlow
 
-    override val roomInfoFlow: StateFlow<RoomInfo> = MutableStateFlow(initialRoomInfo)
-
     override val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
+
+    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {
+        innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
+            override fun call(roomInfo: org.matrix.rustcomponents.sdk.RoomInfo) {
+                channel.trySend(roomInfoMapper.map(roomInfo))
+            }
+        })
+    }.stateIn(roomCoroutineScope, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
@@ -98,6 +109,7 @@ class RustBaseRoom(
 
     override fun destroy() {
         innerRoom.destroy()
+        roomCoroutineScope.cancel()
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {

@@ -29,6 +29,12 @@
   <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
   <string name="screen_login_title">"Selamat datang kembali!"</string>
   <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Masuk secara manual"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Masuk dengan kode QR"</string>
+  <string name="screen_onboarding_sign_up">"Buat akun"</string>
+  <string name="screen_onboarding_welcome_message">"Selamat datang di %1$s tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Selamat datang di %1$s. Berdaya penuh, untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_title">"Berada di elemen Anda"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Membuat koneksi aman"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Koneksi aman tidak dapat dibuat ke perangkat baru. Perangkat Anda yang ada masih aman dan Anda tidak perlu khawatir tentang mereka."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Apa sekarang?"</string>

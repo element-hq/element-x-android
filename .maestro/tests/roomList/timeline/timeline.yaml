@@ -6,5 +6,6 @@ appId: ${MAESTRO_APP_ID}
 - runFlow: messages/text.yaml
 - runFlow: messages/location.yaml
 - runFlow: messages/poll.yaml
+- runFlow: call/call.yaml
 - back
 - runFlow: ../../assertions/assertHomeDisplayed.yaml
