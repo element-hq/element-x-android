@@ -34,11 +34,17 @@
                 android:value='androidx.startup' />
         </provider>
 
+        <!--
+        Using launchMode singleTask to avoid multiple instances of the Activity
+        when the app is already open. This is important for incoming share (see
+        https://github.com/element-hq/element-x-android/issues/4074) and for opening
+        the application from a mobile.element.io link.
+        -->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.ElementX.Splash"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
