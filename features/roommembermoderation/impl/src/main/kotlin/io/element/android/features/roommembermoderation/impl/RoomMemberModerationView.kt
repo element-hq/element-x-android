@@ -166,13 +166,13 @@ private fun RoomMemberAsyncActions(
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
                 ConfirmationDialog(
-                    title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
-                    content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
-                    submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
+                    title = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_title),
+                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
+                    submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_action),
                     onSubmitClick = {
                         val userDisplayName = selectedUser?.getBestName().orEmpty()
                         asyncIndicatorState.enqueue {
-                            AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
+                            AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_unbanning_user, userDisplayName))
                         }
                         state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser)
                     },
@@ -297,7 +297,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.UnbanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_room_member_list_manage_member_unban_action)) },
+                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
                             style = ListItemStyle.Destructive,
                             onClick = {
