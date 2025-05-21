@@ -187,14 +187,17 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
 
-    override suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails> {
+    override suspend fun getOidcUrl(
+        prompt: OidcPrompt,
+        loginHint: String?,
+    ): Result<OidcDetails> {
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val oAuthAuthorizationData = client.urlForOidc(
                     oidcConfiguration = oidcConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
-                    loginHint = null,
+                    loginHint = loginHint,
                 )
                 val url = oAuthAuthorizationData.loginUrl()
                 pendingOAuthAuthorizationData = oAuthAuthorizationData

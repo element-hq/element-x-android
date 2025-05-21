@@ -28,16 +28,18 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
+import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.oidc.api.OidcAction
@@ -63,6 +65,11 @@ class LoginFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    data class Params(
+        val accountProvider: String?,
+        val loginHint: String?,
+    ) : NodeInputs
+
     private var activity: Activity? = null
     private var darkTheme: Boolean = false
 
@@ -139,8 +146,25 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onReportProblem() {
                         plugins<LoginEntryPoint.Callback>().forEach { it.onReportProblem() }
                     }
+
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        navigateToMas(oidcDetails)
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
+                    }
+
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPassword)
+                    }
                 }
-                createNode<OnBoardingNode>(buildContext, listOf(callback))
+                val params = inputs<Params>()
+                val inputs = OnBoardingNode.Params(
+                    accountProvider = params.accountProvider,
+                    loginHint = params.loginHint,
+                )
+                createNode<OnBoardingNode>(buildContext, listOf(callback, inputs))
             }
             NavTarget.QrCode -> {
                 createNode<QrCodeLoginFlowNode>(buildContext)
@@ -151,16 +175,7 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (oidcEntryPoint.canUseCustomTab()) {
-                            // In this case open a Chrome Custom tab
-                            activity?.let {
-                                customChromeTabStarted = true
-                                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
-                            }
-                        } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
-                        }
+                        navigateToMas(oidcDetails)
                     }
 
                     override fun onCreateAccountContinue(url: String) {
@@ -219,6 +234,19 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 createNode<CreateAccountNode>(buildContext, listOf(inputs))
             }
+        }
+    }
+
+    private fun navigateToMas(oidcDetails: OidcDetails) {
+        if (oidcEntryPoint.canUseCustomTab()) {
+            // In this case open a Chrome Custom tab
+            activity?.let {
+                customChromeTabStarted = true
+                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
+            }
+        } else {
+            // Fallback to WebView mode
+            backstack.push(NavTarget.OidcView(oidcDetails))
         }
     }
 

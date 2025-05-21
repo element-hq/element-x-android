@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
 const val A_USER_NAME_2 = "Bob"
@@ -73,7 +72,6 @@ const val A_HOMESERVER_URL_2 = "matrix-client.org"
 val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = true, supportsOidcLogin = false)
 val A_HOMESERVER_OIDC = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = false, supportsOidcLogin = true)
 val A_ROOM_NOTIFICATION_MODE = RoomNotificationMode.MUTE
-val A_ROOM_NOTIFICATION_SETTINGS = RoomNotificationSettings(mode = A_ROOM_NOTIFICATION_MODE, isDefault = false)
 
 const val AN_AVATAR_URL = "mxc://data"
 
@@ -88,3 +86,5 @@ val A_SERVER_LIST = listOf("server1", "server2")
 
 const val A_TIMESTAMP = 567L
 const val A_FORMATTED_DATE = "April 6, 1980 at 6:35 PM"
+
+const val A_LOGIN_HINT = "mxid:@alice:example.org"
