@@ -11,7 +11,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
   ARCH: x86_64
   DEVICE: pixel_7_pro
-  API_LEVEL: 30
+  API_LEVEL: 33
   TARGET: google_apis
 
 jobs:
