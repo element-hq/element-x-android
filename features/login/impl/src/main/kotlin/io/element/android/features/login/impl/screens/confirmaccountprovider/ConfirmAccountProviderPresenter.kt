@@ -37,7 +37,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         val accountProvider by accountProviderDataSource.flow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
 
-        loginHelper.Start()
+        val loginFlow by loginHelper.collectLoginFlow()
 
         fun handleEvents(event: ConfirmAccountProviderEvents) {
             when (event) {
@@ -56,7 +56,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         return ConfirmAccountProviderState(
             accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
-            loginFlow = loginHelper.loginFlow,
+            loginFlow = loginFlow,
             eventSink = ::handleEvents
         )
     }

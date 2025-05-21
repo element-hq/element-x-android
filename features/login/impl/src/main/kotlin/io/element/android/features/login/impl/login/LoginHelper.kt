@@ -10,12 +10,14 @@ package io.element.android.features.login.impl.login
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
 import io.element.android.features.login.impl.screens.confirmaccountprovider.LoginFlow
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -27,23 +29,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * This class is responsible for managing the login flow, including handling OIDC actions and
+ * submitting login requests.
+ * It's an helper to avoid code duplication. It is used by [OnBoardingPresenter] and [ConfirmAccountProviderPresenter].
+ */
 class LoginHelper @Inject constructor(
     private val oidcActionFlow: OidcActionFlow,
     private val authenticationService: MatrixAuthenticationService,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) {
-    private lateinit var loginFlowAction: MutableState<AsyncData<LoginFlow>>
-
-    val loginFlow: AsyncData<LoginFlow>
-        get() = loginFlowAction.value
+    private val loginFlowAction: MutableState<AsyncData<LoginFlow>> = mutableStateOf(AsyncData.Uninitialized)
 
     @Composable
-    fun Start() {
-        loginFlowAction = remember {
-            mutableStateOf(AsyncData.Uninitialized)
-        }
-
+    fun collectLoginFlow(): State<AsyncData<LoginFlow>> {
         LaunchedEffect(Unit) {
             oidcActionFlow.collect { oidcAction ->
                 if (oidcAction != null) {
@@ -51,6 +51,7 @@ class LoginHelper @Inject constructor(
                 }
             }
         }
+        return loginFlowAction
     }
 
     fun clearError() {
