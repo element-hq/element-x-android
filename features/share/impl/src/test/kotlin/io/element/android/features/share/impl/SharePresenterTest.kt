@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.services.appnavstate.api.ActiveRoomHolder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.TestScope
@@ -163,7 +164,8 @@ class SharePresenterTest {
         intent: Intent = Intent(),
         shareIntentHandler: ShareIntentHandler = FakeShareIntentHandler(),
         matrixClient: MatrixClient = FakeMatrixClient(),
-        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor()
+        mediaPreProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
+        activeRoomHolder: ActiveRoomHolder = ActiveRoomHolder(),
     ): SharePresenter {
         return SharePresenter(
             intent = intent,
@@ -171,7 +173,8 @@ class SharePresenterTest {
             shareIntentHandler = shareIntentHandler,
             matrixClient = matrixClient,
             mediaPreProcessor = mediaPreProcessor,
-            InMemorySessionPreferencesStore(),
+            sessionPreferencesStore = InMemorySessionPreferencesStore(),
+            activeRoomHolder = activeRoomHolder,
         )
     }
 }
