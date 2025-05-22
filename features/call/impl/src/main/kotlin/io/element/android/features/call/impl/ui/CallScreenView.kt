@@ -123,6 +123,7 @@ internal fun CallScreenView(
                 onWebViewCreate = { webView ->
                     val interceptor = WebViewWidgetMessageInterceptor(
                         webView = webView,
+                        onUrlLoaded = {},
                         onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
                     )
                     state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
