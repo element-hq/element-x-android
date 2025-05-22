@@ -95,7 +95,11 @@ class SharePresenter @AssistedInject constructor(
                                         ).isSuccess
                                     }
                                     .all { it }
-                                    .also { room.destroy() }
+                                    .also {
+                                        if (activeRoomHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
+                                            room.destroy()
+                                        }
+                                    }
                             }
                             .all { it }
                     }
