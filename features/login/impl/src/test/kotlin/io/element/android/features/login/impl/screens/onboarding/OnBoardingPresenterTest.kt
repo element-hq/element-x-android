@@ -9,6 +9,8 @@ package io.element.android.features.login.impl.screens.onboarding
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.OnBoardingConfig
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
@@ -36,6 +38,23 @@ class OnBoardingPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
+    companion object {
+        private const val ACCOUNT_PROVIDER_FROM_LINK = "matrix.org"
+        private const val ACCOUNT_PROVIDER_FROM_CONFIG = "element.io"
+        private const val ACCOUNT_PROVIDER_FROM_CONFIG_2 = "other.io"
+    }
+
+    @Test
+    fun `present - ensure initial conditions`() {
+        assertThat(
+            setOf(
+                ACCOUNT_PROVIDER_FROM_LINK,
+                ACCOUNT_PROVIDER_FROM_CONFIG,
+                ACCOUNT_PROVIDER_FROM_CONFIG_2,
+            ).size
+        ).isEqualTo(3)
+    }
+
     @Test
     fun `present - initial state`() = runTest {
         val buildMeta = aBuildMeta(
@@ -50,10 +69,14 @@ class OnBoardingPresenterTest {
         val presenter = createPresenter(
             buildMeta = buildMeta,
             featureFlagService = featureFlagService,
+            enterpriseService = FakeEnterpriseService(
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, "*") },
+            ),
             rageshakeFeatureAvailability = { true },
         )
         presenter.test {
             val initialState = awaitItem()
+            assertThat(initialState.defaultAccountProvider).isNull()
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
@@ -74,17 +97,74 @@ class OnBoardingPresenterTest {
     }
 
     @Test
-    fun `present - default account provider`() = runTest {
+    fun `present - opening the app using link with allowed account provider, and the app does not force account provider`() = runTest {
         val presenter = createPresenter(
             params = OnBoardingNode.Params(
-                accountProvider = A_HOMESERVER_URL,
+                accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
+            ),
+            enterpriseService = FakeEnterpriseService(
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, "*") },
+                isAllowedToConnectToHomeserverResult = { true },
             ),
         )
         presenter.test {
+            skipItems(3)
             awaitItem().also {
-                assertThat(it.defaultAccountProvider).isEqualTo(A_HOMESERVER_URL)
+                assertThat(it.defaultAccountProvider).isEqualTo(ACCOUNT_PROVIDER_FROM_LINK)
                 assertThat(it.canLoginWithQrCode).isFalse()
+                assertThat(it.canCreateAccount).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - opening the app using link with not allowed account provider, and the app does not force account provider`() = runTest {
+        val presenter = createPresenter(
+            params = OnBoardingNode.Params(
+                accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
+                loginHint = null,
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
+            ),
+            enterpriseService = FakeEnterpriseService(
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
+                isAllowedToConnectToHomeserverResult = { false },
+            ),
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also {
+                assertThat(it.defaultAccountProvider).isNull()
+                assertThat(it.canLoginWithQrCode).isTrue()
+                assertThat(it.canCreateAccount).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - opening the app using link, and the app forces account provider`() = runTest {
+        val presenter = createPresenter(
+            params = OnBoardingNode.Params(
+                accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
+                loginHint = null,
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
+            ),
+            enterpriseService = FakeEnterpriseService(
+                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG) },
+            )
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also {
+                assertThat(it.defaultAccountProvider).isEqualTo(ACCOUNT_PROVIDER_FROM_CONFIG)
+                assertThat(it.canLoginWithQrCode).isTrue()
                 assertThat(it.canCreateAccount).isFalse()
             }
         }
@@ -98,11 +178,15 @@ class OnBoardingPresenterTest {
                 accountProvider = A_HOMESERVER_URL,
                 loginHint = A_LOGIN_HINT,
             ),
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+            ),
             loginHelper = createLoginHelper(
                 authenticationService = authenticationService,
             ),
         )
         presenter.test {
+            skipItems(3)
             awaitItem().also {
                 assertThat(it.defaultAccountProvider).isEqualTo(A_HOMESERVER_URL)
                 authenticationService.givenChangeServerError(A_THROWABLE)
@@ -126,12 +210,14 @@ private fun createPresenter(
     params: OnBoardingNode.Params = OnBoardingNode.Params(null, null),
     buildMeta: BuildMeta = aBuildMeta(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+    enterpriseService: EnterpriseService = FakeEnterpriseService(),
     rageshakeFeatureAvailability: () -> Boolean = { true },
     loginHelper: LoginHelper = createLoginHelper(),
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
     featureFlagService = featureFlagService,
+    enterpriseService = enterpriseService,
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginHelper = loginHelper,
 )
