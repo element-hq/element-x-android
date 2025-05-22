@@ -22,15 +22,12 @@ class RoomMembershipObserver {
     private val _updates = MutableSharedFlow<RoomMembershipUpdate>(extraBufferCapacity = 10)
     val updates = _updates.asSharedFlow()
 
-    suspend fun notifyUserLeftRoom(roomId: RoomId) {
-        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.LEFT))
-    }
-
-    suspend fun notifyUserDeclinedInvite(roomId: RoomId) {
-        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.INVITATION_REJECTED))
-    }
-
-    suspend fun notifyUserCanceledKnock(roomId: RoomId) {
-        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.KNOCK_RETRACTED))
+    suspend fun notifyUserLeftRoom(roomId: RoomId, membershipBeforeLeft: CurrentUserMembership) {
+        val membershipChange = when (membershipBeforeLeft) {
+            CurrentUserMembership.INVITED -> MembershipChange.INVITATION_REJECTED
+            CurrentUserMembership.KNOCKED -> MembershipChange.KNOCK_RETRACTED
+            else -> MembershipChange.LEFT
+        }
+        _updates.emit(RoomMembershipUpdate(roomId, false, membershipChange))
     }
 }
