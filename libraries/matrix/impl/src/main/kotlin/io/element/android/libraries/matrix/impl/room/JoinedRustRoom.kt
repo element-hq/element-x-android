@@ -416,7 +416,6 @@ class JoinedRustRoom(
             RustWidgetDriver(
                 widgetSettings = widgetSettings,
                 room = innerRoom,
-                joinedRustRoom = this,
                 widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                     override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
                         return getElementCallRequiredPermissions(sessionId.value, baseRoom.deviceId.value)

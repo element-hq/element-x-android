@@ -25,7 +25,6 @@ import kotlin.coroutines.coroutineContext
 class RustWidgetDriver(
     widgetSettings: MatrixWidgetSettings,
     private val room: Room,
-    private val joinedRustRoom: JoinedRustRoom,
     private val widgetCapabilitiesProvider: WidgetCapabilitiesProvider,
 ) : MatrixWidgetDriver {
     // It's important to have extra capacity here to make sure we don't drop any messages
@@ -71,6 +70,5 @@ class RustWidgetDriver(
     override fun close() {
         receiveMessageJob?.cancel()
         driverAndHandle.driver.close()
-        joinedRustRoom.destroy()
     }
 }
