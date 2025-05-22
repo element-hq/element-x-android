@@ -26,7 +26,6 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - tapOn: "No thanks"
 ## Working when running Maestro locally, but not on the CI yet.
-- scroll
 - extendedWaitUntil:
       visible:
         id: "form-1"
