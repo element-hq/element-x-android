@@ -66,7 +66,7 @@ fun AccountProviderView(
                 } else {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Medium,
-                        imageVector = CompoundIcons.Search(),
+                        imageVector = CompoundIcons.Host(),
                         tint = ElementTheme.colors.iconPrimary,
                     )
                 }

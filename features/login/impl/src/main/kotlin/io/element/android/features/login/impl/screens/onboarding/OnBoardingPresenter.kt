@@ -17,6 +17,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
@@ -48,9 +49,7 @@ class OnBoardingPresenter @AssistedInject constructor(
             enterpriseService.defaultHomeserverList().singleOrNull()
         }
         val canConnectToAnyHomeserver = remember {
-            enterpriseService.defaultHomeserverList().let {
-                it.isEmpty() || it.contains("*")
-            }
+            enterpriseService.canConnectToAnyHomeserver()
         }
         val linkAccountProvider by produceState<String?>(initialValue = null) {
             // Account provider from the link, if allowed by the enterprise service

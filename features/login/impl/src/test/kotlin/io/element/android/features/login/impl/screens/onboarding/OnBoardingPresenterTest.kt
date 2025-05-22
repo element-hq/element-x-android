@@ -21,6 +21,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
+import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
+import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_3
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_LOGIN_HINT
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -39,9 +42,9 @@ class OnBoardingPresenterTest {
     val warmUpRule = WarmUpRule()
 
     companion object {
-        private const val ACCOUNT_PROVIDER_FROM_LINK = "matrix.org"
-        private const val ACCOUNT_PROVIDER_FROM_CONFIG = "element.io"
-        private const val ACCOUNT_PROVIDER_FROM_CONFIG_2 = "other.io"
+        private const val ACCOUNT_PROVIDER_FROM_LINK = AN_ACCOUNT_PROVIDER
+        private const val ACCOUNT_PROVIDER_FROM_CONFIG = AN_ACCOUNT_PROVIDER_2
+        private const val ACCOUNT_PROVIDER_FROM_CONFIG_2 = AN_ACCOUNT_PROVIDER_3
     }
 
     @Test

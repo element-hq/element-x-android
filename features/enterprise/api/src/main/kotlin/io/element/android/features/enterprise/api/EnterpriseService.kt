@@ -22,3 +22,9 @@ interface EnterpriseService {
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?
 }
+
+fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
+    return defaultHomeserverList().let {
+        it.isEmpty() || it.contains("*")
+    }
+}
