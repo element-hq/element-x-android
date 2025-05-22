@@ -39,23 +39,35 @@ class SyncOnNotifiableEvent @Inject constructor(
             return@withContext
         }
 
-        val notifiedRoom = activeRoomHolder.getActiveRoom(sessionId = notifiableEvent.sessionId)
-            ?: matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull()?.getJoinedRoom(notifiableEvent.roomId)
-            ?: return@withContext
-        notifiedRoom.use { room ->
-            room.subscribeToSync()
+        val activeRoom = activeRoomHolder.getActiveRoomMatching(notifiableEvent.sessionId, notifiableEvent.roomId)
 
-            // If the app is in foreground, sync is already running, so we just add the subscription above.
-            if (!appForegroundStateService.isInForeground.value) {
-                if (isRingingCallEvent) {
-                    room.waitsUntilUserIsInTheCall(timeout = 60.seconds)
-                } else {
-                    try {
-                        appForegroundStateService.updateIsSyncingNotificationEvent(true)
-                        room.waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
-                    } finally {
-                        appForegroundStateService.updateIsSyncingNotificationEvent(false)
-                    }
+        if (activeRoom != null) {
+            // If the room is already active, we can use it directly
+            activeRoom.subscribeToSyncAndWait(notifiableEvent, isRingingCallEvent)
+        } else {
+            // Otherwise, we need to get the room from the matrix client
+            val room = matrixClientProvider
+                .getOrRestore(notifiableEvent.sessionId)
+                .mapCatching { it.getJoinedRoom(notifiableEvent.roomId) }
+                .getOrNull()
+
+            room?.use { it.subscribeToSyncAndWait(notifiableEvent, isRingingCallEvent) }
+        }
+    }
+
+    private suspend fun JoinedRoom.subscribeToSyncAndWait(notifiableEvent: NotifiableEvent, isRingingCallEvent: Boolean) {
+        subscribeToSync()
+
+        // If the app is in foreground, sync is already running, so we just add the subscription above.
+        if (!appForegroundStateService.isInForeground.value) {
+            if (isRingingCallEvent) {
+                waitsUntilUserIsInTheCall(timeout = 60.seconds)
+            } else {
+                try {
+                    appForegroundStateService.updateIsSyncingNotificationEvent(true)
+                    waitsUntilEventIsKnown(eventId = notifiableEvent.eventId, timeout = 10.seconds)
+                } finally {
+                    appForegroundStateService.updateIsSyncingNotificationEvent(false)
                 }
             }
         }

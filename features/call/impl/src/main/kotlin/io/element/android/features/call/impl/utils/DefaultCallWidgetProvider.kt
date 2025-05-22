@@ -35,7 +35,7 @@ class DefaultCallWidgetProvider @Inject constructor(
         theme: String?,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
-        val room = activeRoomHolder.getActiveRoom(sessionId)?.takeIf { it.roomId == roomId }
+        val room = activeRoomHolder.getActiveRoomMatching(sessionId, roomId)
             ?: matrixClient.getJoinedRoom(roomId)
             ?: error("Room not found")
 

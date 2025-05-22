@@ -243,12 +243,9 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
         if (!notifiedCallStart) {
-            val activeRoomForSession = activeRoomHolder.getActiveRoom(sessionId)
-            val sendCallNotificationResult = if (activeRoomForSession?.roomId == roomId) {
-                activeRoomForSession.sendCallNotificationIfNeeded()
-            } else {
-                getJoinedRoom(roomId)?.use { it.sendCallNotificationIfNeeded() }
-            }
+            val activeRoomForSession = activeRoomHolder.getActiveRoomMatching(sessionId, roomId)
+            val sendCallNotificationResult = activeRoomForSession?.sendCallNotificationIfNeeded()
+                ?: getJoinedRoom(roomId)?.use { it.sendCallNotificationIfNeeded() }
             sendCallNotificationResult?.onSuccess { notifiedCallStart = true }
         }
     }

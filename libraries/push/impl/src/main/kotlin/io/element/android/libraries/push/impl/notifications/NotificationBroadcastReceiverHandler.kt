@@ -119,9 +119,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             return@launch
         }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        val room = activeRoomHolder.getActiveRoom(sessionId)
-            ?.takeIf { it.roomId == roomId }
-            ?: client.getJoinedRoom(roomId)
+        val room = activeRoomHolder.getActiveRoomMatching(sessionId, roomId) ?: client.getJoinedRoom(roomId)
 
         room?.let {
             sendMatrixEvent(
