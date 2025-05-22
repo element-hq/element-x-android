@@ -51,6 +51,9 @@ class OnBoardingPresenter @AssistedInject constructor(
         val canConnectToAnyHomeserver = remember {
             enterpriseService.canConnectToAnyHomeserver()
         }
+        val mustChooseAccountProvider = remember {
+            !canConnectToAnyHomeserver && enterpriseService.defaultHomeserverList().size > 1
+        }
         val linkAccountProvider by produceState<String?>(initialValue = null) {
             // Account provider from the link, if allowed by the enterprise service
             value = params.accountProvider?.takeIf {
@@ -63,7 +66,7 @@ class OnBoardingPresenter @AssistedInject constructor(
             forcedAccountProvider ?: linkAccountProvider
         }
         val canLoginWithQrCode by produceState(initialValue = false, linkAccountProvider) {
-            value = (linkAccountProvider == null) &&
+            value = linkAccountProvider == null &&
                 featureFlagService.isFeatureEnabled(FeatureFlags.QrCodeLogin)
         }
         val canReportBug = remember { rageshakeFeatureAvailability.isAvailable() }
@@ -85,6 +88,7 @@ class OnBoardingPresenter @AssistedInject constructor(
         return OnBoardingState(
             productionApplicationName = buildMeta.productionApplicationName,
             defaultAccountProvider = defaultAccountProvider,
+            mustChooseAccountProvider = mustChooseAccountProvider,
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug,

@@ -13,6 +13,7 @@ import io.element.android.libraries.architecture.AsyncData
 data class OnBoardingState(
     val productionApplicationName: String,
     val defaultAccountProvider: String?,
+    val mustChooseAccountProvider: Boolean,
     val canLoginWithQrCode: Boolean,
     val canCreateAccount: Boolean,
     val canReportBug: Boolean,
