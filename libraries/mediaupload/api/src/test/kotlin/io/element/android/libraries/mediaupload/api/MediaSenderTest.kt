@@ -41,10 +41,17 @@ class MediaSenderTest {
             preProcessor = preProcessor,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendFileLambda =
-                        lambdaRecorder<File, FileInfo, String?, String?, ProgressCallback?, ReplyParameters?, Result<FakeMediaUploadHandler>> { _, _, _, _, _, _ ->
-                            Result.success(FakeMediaUploadHandler())
-                        }
+                    sendFileLambda = lambdaRecorder<
+                        File,
+                        FileInfo,
+                        String?,
+                        String?,
+                        ProgressCallback?,
+                        ReplyParameters?,
+                        Result<FakeMediaUploadHandler>,
+                        > { _, _, _, _, _, _ ->
+                        Result.success(FakeMediaUploadHandler())
+                    }
                 },
             )
         )

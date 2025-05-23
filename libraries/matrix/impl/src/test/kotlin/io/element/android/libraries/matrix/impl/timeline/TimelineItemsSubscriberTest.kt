@@ -105,8 +105,7 @@ class TimelineItemsSubscriberTest {
 
     @Test
     fun `multiple subscriptions does not have side effect`() = runTest {
-        val timelineItemsSubscriber = createTimelineItemsSubscriber(
-        )
+        val timelineItemsSubscriber = createTimelineItemsSubscriber()
         timelineItemsSubscriber.subscribeIfNeeded()
         timelineItemsSubscriber.subscribeIfNeeded()
         timelineItemsSubscriber.unsubscribeIfNeeded()

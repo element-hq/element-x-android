@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -30,8 +29,7 @@ class RustBaseRoomTest {
         assertThat(rustBaseRoom.roomCoroutineScope.isActive).isFalse()
     }
 
-    private fun TestScope.createRustBaseRoom(
-    ): RustBaseRoom {
+    private fun TestScope.createRustBaseRoom(): RustBaseRoom {
         val dispatchers = testCoroutineDispatchers()
         return RustBaseRoom(
             sessionId = A_SESSION_ID,
