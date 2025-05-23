@@ -17,18 +17,16 @@ import javax.inject.Inject
 
 /**
  * Holds the active rooms for a given session so they can be reused instead of instantiating new ones.
- *
- * This works as a FILO (First In Last Out) stack, meaning that the last room added for a session will be the first one to be removed.
  */
 @SingleIn(AppScope::class)
 class ActiveRoomsHolder @Inject constructor() {
-    private val rooms = ConcurrentHashMap<SessionId, MutableList<JoinedRoom>>()
+    private val rooms = ConcurrentHashMap<SessionId, MutableSet<JoinedRoom>>()
 
     /**
      * Adds a new held room for the given sessionId.
      */
     fun addRoom(room: JoinedRoom) {
-        val roomsForSessionId = rooms.getOrPut(key = room.sessionId, defaultValue = { mutableListOf() })
+        val roomsForSessionId = rooms.getOrPut(key = room.sessionId, defaultValue = { mutableSetOf() })
         if (roomsForSessionId.none { it.roomId == room.roomId }) {
             // We don't want to add the same room multiple times
             roomsForSessionId.add(room)
