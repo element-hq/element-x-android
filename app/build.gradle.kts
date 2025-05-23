@@ -337,3 +337,12 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
         }
     }
 }
+
+configurations.all {
+    resolutionStrategy {
+        dependencySubstitution {
+            val tink = libs.google.tink.get()
+            substitute(module("com.google.crypto.tink:tink")).using(module("${tink.group}:${tink.name}:${tink.version}"))
+        }
+    }
+}
