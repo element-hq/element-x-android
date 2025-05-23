@@ -50,11 +50,13 @@ class ActiveRoomsHolder @Inject constructor() {
     }
 
     /**
-     * Removes the last room added for the given [sessionId] and returns it or null if there weren't any.
+     * Removes any room matching the provided [sessionId] and [roomId].
+     *
+     * @return true if a room was removed, false otherwise.
      */
-    fun removeRoom(sessionId: SessionId): JoinedRoom? {
-        val roomsForSessionId = rooms[sessionId] ?: return null
-        return roomsForSessionId.removeLastOrNull()
+    fun removeRoom(sessionId: SessionId, roomId: RoomId): Boolean {
+        val roomsForSessionId = rooms[sessionId] ?: return false
+        return roomsForSessionId.removeIf { it.roomId == roomId }
     }
 
     /**

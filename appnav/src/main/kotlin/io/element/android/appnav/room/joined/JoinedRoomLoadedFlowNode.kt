@@ -98,8 +98,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             },
             onDestroy = {
                 Timber.v("OnDestroy")
-                activeRoomHolder.removeRoom(inputs.room.sessionId)
-                activeRoomsHolder.removeRoom(inputs.room.sessionId)
+                activeRoomsHolder.removeRoom(inputs.room.sessionId, inputs.room.roomId)
                 inputs.room.destroy()
                 appNavigationStateService.onLeavingRoom(id)
             }
