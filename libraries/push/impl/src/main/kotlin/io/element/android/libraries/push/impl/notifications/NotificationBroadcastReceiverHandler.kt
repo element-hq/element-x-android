@@ -23,7 +23,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +45,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val stringProvider: StringProvider,
     private val replyMessageExtractor: ReplyMessageExtractor,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) {
     fun onReceive(intent: Intent) {
         val sessionId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
@@ -119,7 +119,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             return@launch
         }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        val room = activeRoomHolder.getActiveRoomMatching(sessionId, roomId) ?: client.getJoinedRoom(roomId)
+        val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId) ?: client.getJoinedRoom(roomId)
 
         room?.let {
             sendMatrixEvent(

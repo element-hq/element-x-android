@@ -41,7 +41,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.push.FakeOnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -478,7 +478,7 @@ class NotificationBroadcastReceiverHandlerTest {
         onNotifiableEventReceived: OnNotifiableEventReceived = FakeOnNotifiableEventReceived(),
         stringProvider: StringProvider = FakeStringProvider(),
         replyMessageExtractor: ReplyMessageExtractor = FakeReplyMessageExtractor(),
-        activeRoomHolder: ActiveRoomHolder = ActiveRoomHolder(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): NotificationBroadcastReceiverHandler {
         return NotificationBroadcastReceiverHandler(
             appCoroutineScope = this,
@@ -496,7 +496,7 @@ class NotificationBroadcastReceiverHandlerTest {
             onNotifiableEventReceived = onNotifiableEventReceived,
             stringProvider = stringProvider,
             replyMessageExtractor = replyMessageExtractor,
-            activeRoomHolder = activeRoomHolder,
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

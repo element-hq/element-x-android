@@ -32,7 +32,7 @@ import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
@@ -368,7 +368,7 @@ import kotlin.time.Duration.Companion.seconds
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
         screenTracker: ScreenTracker = FakeScreenTracker(),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
-        activeRoomHolder: ActiveRoomHolder = ActiveRoomHolder(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -389,7 +389,7 @@ import kotlin.time.Duration.Companion.seconds
             languageTagProvider = FakeLanguageTagProvider("en-US"),
             appForegroundStateService = appForegroundStateService,
             appCoroutineScope = backgroundScope,
-            activeRoomHolder = activeRoomHolder,
+            activeRoomsHolder = activeRoomsHolder,
         )
     }
 }

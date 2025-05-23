@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.test.widget.FakeCallWidgetSettingsPro
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -85,13 +85,13 @@ class DefaultCallWidgetProviderTest {
             // No room from the client
             givenGetRoomResult(A_ROOM_ID, null)
         }
-        val activeRoomHolder = ActiveRoomHolder().apply {
+        val activeRoomsHolder = ActiveRoomsHolder().apply {
             // A current active room with the same room id
             addRoom(FakeJoinedRoom(baseRoom = FakeBaseRoom(roomId = A_ROOM_ID)))
         }
         val provider = createProvider(
             matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
-            activeRoomHolder = activeRoomHolder
+            activeRoomsHolder = activeRoomsHolder
         )
         assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
     }
@@ -123,11 +123,11 @@ class DefaultCallWidgetProviderTest {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callWidgetSettingsProvider: CallWidgetSettingsProvider = FakeCallWidgetSettingsProvider(),
-        activeRoomHolder: ActiveRoomHolder = ActiveRoomHolder(),
+        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
     ) = DefaultCallWidgetProvider(
         matrixClientsProvider = matrixClientProvider,
         appPreferencesStore = appPreferencesStore,
         callWidgetSettingsProvider = callWidgetSettingsProvider,
-        activeRoomHolder = activeRoomHolder,
+        activeRoomsHolder = activeRoomsHolder,
     )
 }

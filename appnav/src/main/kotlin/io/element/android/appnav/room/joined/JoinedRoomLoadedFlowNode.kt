@@ -36,7 +36,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     private val appNavigationStateService: AppNavigationStateService,
     private val appCoroutineScope: CoroutineScope,
     private val matrixClient: MatrixClient,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
     roomComponentFactory: RoomComponentFactory,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
@@ -87,7 +87,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             onCreate = {
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
-                activeRoomHolder.addRoom(inputs.room)
+                activeRoomsHolder.addRoom(inputs.room)
                 fetchRoomMembers()
                 trackVisitedRoom()
             },
@@ -99,6 +99,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             onDestroy = {
                 Timber.v("OnDestroy")
                 activeRoomHolder.removeRoom(inputs.room.sessionId)
+                activeRoomsHolder.removeRoom(inputs.room.sessionId)
                 inputs.room.destroy()
                 appNavigationStateService.onLeavingRoom(id)
             }

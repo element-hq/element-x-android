@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -31,7 +31,7 @@ class SyncOnNotifiableEvent @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) {
     suspend operator fun invoke(notifiableEvent: NotifiableEvent) = withContext(dispatchers.io) {
         val isRingingCallEvent = notifiableEvent is NotifiableRingingCallEvent
@@ -39,7 +39,7 @@ class SyncOnNotifiableEvent @Inject constructor(
             return@withContext
         }
 
-        val activeRoom = activeRoomHolder.getActiveRoomMatching(notifiableEvent.sessionId, notifiableEvent.roomId)
+        val activeRoom = activeRoomsHolder.getActiveRoomMatching(notifiableEvent.sessionId, notifiableEvent.roomId)
 
         if (activeRoom != null) {
             // If the room is already active, we can use it directly

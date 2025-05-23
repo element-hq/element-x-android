@@ -21,7 +21,7 @@ import javax.inject.Inject
  * This works as a FILO (First In Last Out) stack, meaning that the last room added for a session will be the first one to be removed.
  */
 @SingleIn(AppScope::class)
-class ActiveRoomHolder @Inject constructor() {
+class ActiveRoomsHolder @Inject constructor() {
     private val rooms = ConcurrentHashMap<SessionId, MutableList<JoinedRoom>>()
 
     /**

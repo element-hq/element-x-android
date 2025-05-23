@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class DefaultCallWidgetProvider @Inject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) : CallWidgetProvider {
     override suspend fun getWidget(
         sessionId: SessionId,
@@ -35,7 +35,7 @@ class DefaultCallWidgetProvider @Inject constructor(
         theme: String?,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
-        val room = activeRoomHolder.getActiveRoomMatching(sessionId, roomId)
+        val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
             ?: matrixClient.getJoinedRoom(roomId)
             ?: error("Room not found")
 

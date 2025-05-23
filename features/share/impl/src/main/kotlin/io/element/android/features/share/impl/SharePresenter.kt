@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ class SharePresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val mediaPreProcessor: MediaPreProcessor,
     private val sessionPreferencesStore: SessionPreferencesStore,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
 ) : Presenter<ShareState> {
     @AssistedFactory
     interface Factory {
@@ -63,7 +63,7 @@ class SharePresenter @AssistedInject constructor(
     }
 
     private suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
-        return activeRoomHolder.getActiveRoom(matrixClient.sessionId)
+        return activeRoomsHolder.getActiveRoom(matrixClient.sessionId)
             ?.takeIf { it.roomId == roomId }
             ?: matrixClient.getJoinedRoom(roomId)
     }
@@ -96,7 +96,7 @@ class SharePresenter @AssistedInject constructor(
                                     }
                                     .all { it }
                                     .also {
-                                        if (activeRoomHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
+                                        if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
                                             room.destroy()
                                         }
                                     }

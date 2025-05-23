@@ -39,7 +39,7 @@ import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
-import io.element.android.services.appnavstate.api.ActiveRoomHolder
+import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +63,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val activeCallManager: ActiveCallManager,
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
-    private val activeRoomHolder: ActiveRoomHolder,
+    private val activeRoomsHolder: ActiveRoomsHolder,
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
@@ -243,7 +243,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
         if (!notifiedCallStart) {
-            val activeRoomForSession = activeRoomHolder.getActiveRoomMatching(sessionId, roomId)
+            val activeRoomForSession = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)
             val sendCallNotificationResult = activeRoomForSession?.sendCallNotificationIfNeeded()
                 ?: getJoinedRoom(roomId)?.use { it.sendCallNotificationIfNeeded() }
             sendCallNotificationResult?.onSuccess { notifiedCallStart = true }
