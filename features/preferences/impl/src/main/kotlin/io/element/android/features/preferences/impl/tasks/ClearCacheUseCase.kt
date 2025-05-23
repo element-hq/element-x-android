@@ -42,8 +42,7 @@ class DefaultClearCacheUseCase @Inject constructor(
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Active rooms should be disposed of before clearing the cache
-        activeRoomHolder.removeRoom(matrixClient.sessionId)?.destroy()
-        activeRoomsHolder.removeRoom(matrixClient.sessionId)
+        activeRoomsHolder.clear(matrixClient.sessionId)
         // Clear Matrix cache
         matrixClient.clearCache()
         // Clear Coil cache

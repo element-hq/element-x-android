@@ -56,4 +56,15 @@ class ActiveRoomsHolder @Inject constructor() {
         val roomsForSessionId = rooms[sessionId] ?: return null
         return roomsForSessionId.removeLastOrNull()
     }
+
+    /**
+     * Clears all the rooms for the given sessionId.
+     */
+    fun clear(sessionId: SessionId) {
+        val activeRooms = rooms.remove(sessionId) ?: return
+        for (room in activeRooms) {
+            // Destroy the room to reset the live timelines
+            room.destroy()
+        }
+    }
 }
