@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.onboarding
+package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.login.LoginModeView
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -37,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -52,6 +58,10 @@ fun OnBoardingView(
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
+    onOidcDetails: (OidcDetails) -> Unit,
+    onNeedLoginPassword: () -> Unit,
+    onLearnMoreClick: () -> Unit,
+    onCreateAccountContinue: (url: String) -> Unit,
     onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,6 +69,16 @@ fun OnBoardingView(
         modifier = modifier,
         content = {
             OnBoardingContent(state = state)
+            LoginModeView(
+                loginMode = state.loginMode,
+                onClearError = {
+                    state.eventSink(OnBoardingEvents.ClearError)
+                },
+                onLearnMoreClick = onLearnMoreClick,
+                onOidcDetails = onOidcDetails,
+                onNeedLoginPassword = onNeedLoginPassword,
+                onCreateAccountContinue = onCreateAccountContinue,
+            )
         },
         footer = {
             OnBoardingButtons(
@@ -127,6 +147,12 @@ private fun OnBoardingButtons(
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
+    val isLoading by remember(state.loginMode) {
+        derivedStateOf {
+            state.loginMode is AsyncData.Loading
+        }
+    }
+
     ButtonColumnMolecule {
         val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
             R.string.screen_onboarding_sign_in_manually
@@ -141,13 +167,27 @@ private fun OnBoardingButtons(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        Button(
-            text = stringResource(id = signInButtonStringRes),
-            onClick = onSignIn,
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag(TestTags.onBoardingSignIn)
-        )
+        val defaultAccountProvider = state.defaultAccountProvider
+        if (defaultAccountProvider == null) {
+            Button(
+                text = stringResource(id = signInButtonStringRes),
+                onClick = onSignIn,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.onBoardingSignIn)
+            )
+        } else {
+            Button(
+                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider),
+                showProgress = isLoading,
+                onClick = {
+                    state.eventSink(OnBoardingEvents.OnSignIn(defaultAccountProvider))
+                },
+                enabled = state.submitEnabled || isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
         if (state.canCreateAccount) {
             TextButton(
                 text = stringResource(id = R.string.screen_onboarding_sign_up),
@@ -181,5 +221,9 @@ internal fun OnBoardingViewPreview(
         onSignIn = {},
         onCreateAccount = {},
         onReportProblem = {},
+        onOidcDetails = {},
+        onNeedLoginPassword = {},
+        onLearnMoreClick = {},
+        onCreateAccountContinue = {},
     )
 }

@@ -53,6 +53,7 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.features.login.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.impl)
     testImplementation(projects.libraries.preferences.test)
