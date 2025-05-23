@@ -192,6 +192,9 @@
   <string name="common_link_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_loading">"正在加载…"</string>
   <string name="common_loading_more">"正在加载更多……"</string>
+  <plurals name="common_many_members">
+    <item quantity="other">"其他 %d 人"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d个成员"</item>
   </plurals>

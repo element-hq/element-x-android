@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_onboarding_sign_in_manually">"Prisijunkite rankiniu būdu"</string>
-  <string name="screen_onboarding_sign_in_with_qr_code">"Prisijunkite naudodami QR kodą"</string>
-  <string name="screen_onboarding_sign_up">"Sukurti paskyrą"</string>
-  <string name="screen_onboarding_welcome_subtitle">"Sveiki atvykę į %1$s. Įkrautas greitumui ir paprastumui."</string>
-  <string name="screen_onboarding_welcome_title">"Būkite savo elemente"</string>
-</resources>

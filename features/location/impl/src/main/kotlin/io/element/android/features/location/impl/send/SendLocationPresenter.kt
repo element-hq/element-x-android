@@ -101,7 +101,7 @@ class SendLocationPresenter @Inject constructor(
         when (mode) {
             SendLocationState.Mode.PinLocation -> {
                 val geoUri = event.cameraPosition.toGeoUri()
-                room.sendLocation(
+                room.liveTimeline.sendLocation(
                     body = generateBody(geoUri),
                     geoUri = geoUri,
                     description = null,
@@ -119,7 +119,7 @@ class SendLocationPresenter @Inject constructor(
             }
             SendLocationState.Mode.SenderLocation -> {
                 val geoUri = event.toGeoUri()
-                room.sendLocation(
+                room.liveTimeline.sendLocation(
                     body = generateBody(geoUri),
                     geoUri = geoUri,
                     description = null,

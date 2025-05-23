@@ -8,6 +8,8 @@
 package io.element.android.appnav.intent
 
 import android.content.Intent
+import io.element.android.features.login.api.LoginIntentResolver
+import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -21,11 +23,13 @@ sealed interface ResolvedIntent {
     data class Navigation(val deeplinkData: DeeplinkData) : ResolvedIntent
     data class Oidc(val oidcAction: OidcAction) : ResolvedIntent
     data class Permalink(val permalinkData: PermalinkData) : ResolvedIntent
+    data class Login(val params: LoginParams) : ResolvedIntent
     data class IncomingShare(val intent: Intent) : ResolvedIntent
 }
 
 class IntentResolver @Inject constructor(
     private val deeplinkParser: DeeplinkParser,
+    private val loginIntentResolver: LoginIntentResolver,
     private val oidcIntentResolver: OidcIntentResolver,
     private val permalinkParser: PermalinkParser,
 ) {
@@ -40,10 +44,17 @@ class IntentResolver @Inject constructor(
         val oidcAction = oidcIntentResolver.resolve(intent)
         if (oidcAction != null) return ResolvedIntent.Oidc(oidcAction)
 
-        // External link clicked? (matrix.to, element.io, etc.)
-        val permalinkData = intent
+        val actionViewData = intent
             .takeIf { it.action == Intent.ACTION_VIEW }
             ?.dataString
+
+        // Mobile configuration link clicked? (mobile.element.io)
+        val mobileLoginData = actionViewData
+            ?.let { loginIntentResolver.parse(it) }
+        if (mobileLoginData != null) return ResolvedIntent.Login(mobileLoginData)
+
+        // External link clicked? (matrix.to, element.io, etc.)
+        val permalinkData = actionViewData
             ?.let { permalinkParser.parse(it) }
             ?.takeIf { it !is PermalinkData.FallbackLink }
         if (permalinkData != null) return ResolvedIntent.Permalink(permalinkData)

@@ -198,6 +198,10 @@ Ok: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
   <string name="common_loading">"Betöltés…"</string>
   <string name="common_loading_more">"Továbbiak betöltése…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d további felhasználó"</item>
+    <item quantity="other">"%d további felhasználó"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d tag"</item>
     <item quantity="other">"%1$d tag"</item>
@@ -351,6 +355,11 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Eltávolítás a szobából"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s eltávolítása…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Visszaengedés a szobába"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Kitiltás visszavonása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Újra beléphetnek a szobába, ha meghívják őket."</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Biztos, hogy feloldja a felhasználó kitiltását?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"%1$s kitiltásának feloldása"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>

@@ -18,6 +18,8 @@
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Vybraný poskytovateľ účtu nepodporuje kĺzavú synchronizáciu. Na používanie aplikácie %1$s je potrebná aktualizácia servera,"</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nemá dovolené pripojiť sa k %2$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Táto aplikácia bola nastavená tak, aby povoľovala: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Poskytovateľ účtu %1$s nie je povolený."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
   <string name="screen_change_server_form_notice">"Zadajte adresu domény."</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
@@ -32,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
   <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Prihlásiť sa manuálne"</string>
+  <string name="screen_onboarding_sign_in_to">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Prihlásiť sa pomocou QR kódu"</string>
+  <string name="screen_onboarding_sign_up">"Vytvoriť účet"</string>
+  <string name="screen_onboarding_welcome_message">"Vitajte v najrýchlejšom %1$s vôbec. Nadupaný pre rýchlosť a jednoduchosť."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Vitajte v %1$s. Nadupaný, pre rýchlosť a jednoduchosť."</string>
+  <string name="screen_onboarding_welcome_title">"Buďte vo svojom elemente"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Nadväzovanie bezpečného spojenia"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"K novému zariadeniu sa nepodarilo vytvoriť bezpečné pripojenie. Vaše existujúce zariadenia sú stále v bezpečí a nemusíte sa o ne obávať."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Čo teraz?"</string>

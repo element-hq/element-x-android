@@ -200,6 +200,11 @@ Powód: %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
   <string name="common_loading">"Ładowanie…"</string>
   <string name="common_loading_more">"Ładuję więcej…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d inny"</item>
+    <item quantity="few">"%d innych"</item>
+    <item quantity="many">"%d innych"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d członek"</item>
     <item quantity="few">"%1$d członki"</item>
