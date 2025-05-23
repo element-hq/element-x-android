@@ -53,7 +53,7 @@ fun Activity.openUrlInChromeCustomTab(
                 // Disable download button
                 intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_DOWNLOAD_BUTTON", true)
                 // Disable bookmark button
-                intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_START_BUTTON", true)
+                intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_STAR_BUTTON", true)
                 intent.putExtra(Browser.EXTRA_HEADERS, Bundle().apply {
                     putString("Accept-Language", Locale.getDefault().toLanguageTag())
                 })

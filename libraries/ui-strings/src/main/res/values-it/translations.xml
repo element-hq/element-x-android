@@ -190,6 +190,10 @@ Motivo:. %1$s"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_loading">"Caricamento…"</string>
   <string name="common_loading_more">"Caricamento in corso…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d altro"</item>
+    <item quantity="other">"altri %d"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membri"</item>

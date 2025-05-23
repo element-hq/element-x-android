@@ -29,6 +29,12 @@
   <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
   <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>
   <string name="screen_login_title_with_homeserver">"Συνδέσου στο %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Σύνδεση χειροκίνητα"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Συνδέσου με κωδικό QR"</string>
+  <string name="screen_onboarding_sign_up">"Δημιουργία λογαριασμού"</string>
+  <string name="screen_onboarding_welcome_message">"Καλώς ήλθατε στο γρηγορότερο %1$s όλων των εποχών. Υπερτροφοδοτούμενο με ταχύτητα και απλότητα."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Καλώς ήρθες στο %1$s. Υπερφορτισμένο, για ταχύτητα και απλότητα."</string>
+  <string name="screen_onboarding_welcome_title">"Μείνε στο element σου"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Εγκαθίδρυση ασφαλούς σύνδεσης"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Δεν ήταν δυνατή η πραγματοποίηση ασφαλούς σύνδεσης στη νέα συσκευή. Οι υπάρχουσες συσκευές σας εξακολουθούν να είναι ασφαλείς και δεν χρειάζεται να ανησυχείς για αυτές."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Τί είναι πάλι;"</string>

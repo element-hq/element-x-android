@@ -9,34 +9,21 @@ package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SendHandle
-import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
-import io.element.android.libraries.matrix.api.media.AudioInfo
-import io.element.android.libraries.matrix.api.media.FileInfo
-import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaUploadHandler
-import io.element.android.libraries.matrix.api.media.VideoInfo
-import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
-import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.message.ReplyParameters
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import java.io.File
 
 interface JoinedRoom : BaseRoom {
     val syncUpdateFlow: StateFlow<Long>
@@ -51,12 +38,6 @@ interface JoinedRoom : BaseRoom {
     val knockRequestsFlow: Flow<List<KnockRequest>>
 
     /**
-     * A one-to-one is a room with exactly 2 members.
-     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
-     */
-    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
-
-    /**
      * The live timeline of the room. Must be used to send Event to a room.
      */
     val liveTimeline: Timeline
@@ -69,134 +50,13 @@ interface JoinedRoom : BaseRoom {
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline>
 
-    suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
-
     suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
-
-    suspend fun sendImage(
-        file: File,
-        thumbnailFile: File?,
-        imageInfo: ImageInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler>
-
-    suspend fun sendVideo(
-        file: File,
-        thumbnailFile: File?,
-        videoInfo: VideoInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler>
-
-    suspend fun sendAudio(
-        file: File,
-        audioInfo: AudioInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler>
-
-    suspend fun sendFile(
-        file: File,
-        fileInfo: FileInfo,
-        caption: String?,
-        formattedCaption: String?,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler>
-
-    suspend fun sendVoiceMessage(
-        file: File,
-        audioInfo: AudioInfo,
-        waveform: List<Float>,
-        progressCallback: ProgressCallback?,
-        replyParameters: ReplyParameters?,
-    ): Result<MediaUploadHandler>
-
-    /**
-     * Share a location message in the room.
-     *
-     * @param body A human readable textual representation of the location.
-     * @param geoUri A geo URI (RFC 5870) representing the location e.g. `geo:51.5008,0.1247;u=35`.
-     *  Respectively: latitude, longitude, and (optional) uncertainty.
-     * @param description Optional description of the location to display to the user.
-     * @param zoomLevel Optional zoom level to display the map at.
-     * @param assetType Optional type of the location asset.
-     *  Set to SENDER if sharing own location. Set to PIN if sharing any location.
-     */
-    suspend fun sendLocation(
-        body: String,
-        geoUri: String,
-        description: String? = null,
-        zoomLevel: Int? = null,
-        assetType: AssetType? = null,
-    ): Result<Unit>
-
-    /**
-     * Create a poll in the room.
-     *
-     * @param question The question to ask.
-     * @param answers The list of answers.
-     * @param maxSelections The maximum number of answers that can be selected.
-     * @param pollKind The kind of poll to create.
-     */
-    suspend fun createPoll(
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit>
-
-    /**
-     * Edit a poll in the room.
-     *
-     * @param pollStartId The event ID of the poll start event.
-     * @param question The question to ask.
-     * @param answers The list of answers.
-     * @param maxSelections The maximum number of answers that can be selected.
-     * @param pollKind The kind of poll to create.
-     */
-    suspend fun editPoll(
-        pollStartId: EventId,
-        question: String,
-        answers: List<String>,
-        maxSelections: Int,
-        pollKind: PollKind,
-    ): Result<Unit>
-
-    /**
-     * Send a response to a poll.
-     *
-     * @param pollStartId The event ID of the poll start event.
-     * @param answers The list of answer ids to send.
-     */
-    suspend fun sendPollResponse(pollStartId: EventId, answers: List<String>): Result<Unit>
-
-    /**
-     * Ends a poll in the room.
-     *
-     * @param pollStartId The event ID of the poll start event.
-     * @param text Fallback text of the poll end event.
-     */
-    suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     /**
      * Send a typing notification.
      * @param isTyping True if the user is typing, false otherwise.
      */
     suspend fun typingNotice(isTyping: Boolean): Result<Unit>
-
-    suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Unit>
-
-    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
-
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
 
     suspend fun inviteUserById(id: UserId): Result<Unit>
 

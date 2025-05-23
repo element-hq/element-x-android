@@ -12,4 +12,8 @@ import org.matrix.rustcomponents.sdk.QrCodeData as RustQrCodeData
 
 class SdkQrCodeLoginData(
     internal val rustQrCodeData: RustQrCodeData,
-) : MatrixQrCodeLoginData
+) : MatrixQrCodeLoginData {
+    override fun serverName(): String? {
+        return rustQrCodeData.serverName()
+    }
+}

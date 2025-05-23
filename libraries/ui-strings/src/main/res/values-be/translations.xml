@@ -172,6 +172,11 @@
   <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Спасылка скапіравана ў буфер абмену"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d іншы"</item>
+    <item quantity="few">"%d іншыя"</item>
+    <item quantity="many">"%d іншых"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d удзельнік"</item>
     <item quantity="few">"%1$d удзельнікі"</item>

@@ -43,7 +43,10 @@ interface MatrixAuthenticationService {
     /**
      * Get the Oidc url to display to the user.
      */
-    suspend fun getOidcUrl(prompt: OidcPrompt): Result<OidcDetails>
+    suspend fun getOidcUrl(
+        prompt: OidcPrompt,
+        loginHint: String?,
+    ): Result<OidcDetails>
 
     /**
      * Cancel Oidc login sequence.

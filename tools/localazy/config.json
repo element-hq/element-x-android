@@ -42,12 +42,6 @@
       ]
     },
     {
-      "name" : ":features:onboarding:impl",
-      "includeRegex" : [
-        "screen_onboarding_.*"
-      ]
-    },
-    {
       "name" : ":features:signedout:impl",
       "includeRegex" : [
         "screen_signed_out_.*"
@@ -149,6 +143,7 @@
     {
       "name" : ":features:login:impl",
       "includeRegex" : [
+        "screen_onboarding_.*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
         "screen_change_server_.*",

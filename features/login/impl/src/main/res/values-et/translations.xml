@@ -18,6 +18,8 @@
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$s kasutamiseks on vaja serverit uuendada."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s ei saa kasutada %2$s koduserverit."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"See rakendus on seadistatud järgneva koduserveri kasutamiseks: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"%1$s teenusepakkuja pole lubatud."</string>
   <string name="screen_change_server_form_header">"Koduserveri url"</string>
   <string name="screen_change_server_form_notice">"Sisesta domeeni aadress."</string>
   <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>
@@ -32,6 +34,13 @@
   <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
   <string name="screen_login_title">"Tere tulemast tagasi!"</string>
   <string name="screen_login_title_with_homeserver">"Logi sisse serverisse %1$s"</string>
+  <string name="screen_onboarding_sign_in_manually">"Logi sisse käsitsi"</string>
+  <string name="screen_onboarding_sign_in_to">"Logi sisse teenusesse %1$s"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Logi sisse QR-koodi alusel"</string>
+  <string name="screen_onboarding_sign_up">"Loo kasutajakonto"</string>
+  <string name="screen_onboarding_welcome_message">"Läbi aegade kiireim ja mugavaim %1$s."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Tere tulemast kasutama kiiret ja lihtsat suhtlusrakendust %1$s."</string>
+  <string name="screen_onboarding_welcome_title">"Ole oma elemendis"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Loome turvalist ühendust"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Mida järgmiseks teeme?"</string>

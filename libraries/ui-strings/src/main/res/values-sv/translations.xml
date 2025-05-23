@@ -198,6 +198,10 @@ Anledning:%1$s."</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
   <string name="common_loading_more">"Laddar mer …"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d annan"</item>
+    <item quantity="other">"%d andra"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d medlem"</item>
     <item quantity="other">"%1$d medlemmar"</item>

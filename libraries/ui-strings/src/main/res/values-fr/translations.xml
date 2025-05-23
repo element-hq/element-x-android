@@ -198,6 +198,10 @@ Raison : %1$s."</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
   <string name="common_loading">"Chargement…"</string>
   <string name="common_loading_more">"Chargement…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d autre"</item>
+    <item quantity="other">"%d autres"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membre"</item>
     <item quantity="other">"%1$d membres"</item>
@@ -339,6 +343,23 @@ Raison : %1$s."</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Retirer et bannir ce membre"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Bannir"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Il ne pourra pas rejoindre le salon à nouveau, même si il est invité."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Êtes-vous certain de vouloir bannir ce membre ?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Bannissement de %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Retirer"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Cet utilisateur pourra rejoindre le salon à nouveau si il est invité."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Voulez-vous vraiment supprimer ce membre ?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Voir le profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Retirer le membre du salon"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Retirer le membre et interdire l’adhésion à l’avenir ?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Enlever %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Débannir du salon"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Débannir"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"L’utilisateur pourra à nouveau rejoindre le salon s’il est invité."</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Êtes-vous sûr de vouloir débannir cet utilisateur?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Débannissement de %1$s"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>

@@ -17,7 +17,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.Interaction
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
@@ -180,6 +179,8 @@ class RoomDetailsPresenter @Inject constructor(
                 .launchIn(this)
         }
 
+        val canReportRoom by produceState(false) { value = client.canReportRoom() }
+
         return RoomDetailsState(
             roomId = room.roomId,
             roomName = roomName,
@@ -208,7 +209,7 @@ class RoomDetailsPresenter @Inject constructor(
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
-            canReportRoom = MatrixConfiguration.CAN_REPORT_ROOM,
+            canReportRoom = canReportRoom,
             eventSink = ::handleEvents,
         )
     }
