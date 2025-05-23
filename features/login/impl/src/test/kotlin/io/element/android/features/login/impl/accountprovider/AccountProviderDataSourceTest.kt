@@ -62,7 +62,7 @@ class AccountProviderDataSourceTest {
     }
 
     @Test
-    fun `present - ensure that default homeserver is not start char`() = runTest {
+    fun `present - ensure that default homeserver is not star char`() = runTest {
         val sut = AccountProviderDataSource(
             FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(EnterpriseService.ANY_ACCOUNT_PROVIDER, AuthenticationConfig.MATRIX_ORG_URL) }
