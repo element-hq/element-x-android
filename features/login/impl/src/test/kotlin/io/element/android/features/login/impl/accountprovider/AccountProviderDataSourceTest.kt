@@ -61,6 +61,28 @@ class AccountProviderDataSourceTest {
     }
 
     @Test
+    fun `present - ensure that default homeserver is not start char`() = runTest {
+        val sut = AccountProviderDataSource(
+            FakeEnterpriseService(
+                defaultHomeserverListResult = { listOf("*", AuthenticationConfig.MATRIX_ORG_URL) }
+            )
+        )
+        sut.flow.test {
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(
+                AccountProvider(
+                    url = AuthenticationConfig.MATRIX_ORG_URL,
+                    title = "matrix.org",
+                    subtitle = null,
+                    isPublic = true,
+                    isMatrixOrg = true,
+                    isValid = false,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `present - user change and reset`() = runTest {
         val sut = AccountProviderDataSource(FakeEnterpriseService())
         sut.flow.test {

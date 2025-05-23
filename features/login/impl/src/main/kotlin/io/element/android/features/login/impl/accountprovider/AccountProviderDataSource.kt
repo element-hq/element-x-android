@@ -20,7 +20,7 @@ import javax.inject.Inject
 class AccountProviderDataSource @Inject constructor(
     enterpriseService: EnterpriseService,
 ) {
-    private val defaultAccountProvider = (enterpriseService.defaultHomeserverList().firstOrNull() ?: AuthenticationConfig.MATRIX_ORG_URL)
+    private val defaultAccountProvider = (enterpriseService.defaultHomeserverList().firstOrNull { it != "*" } ?: AuthenticationConfig.MATRIX_ORG_URL)
         .let { url ->
             AccountProvider(
                 url = url,
